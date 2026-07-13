@@ -1,0 +1,87 @@
+/* =============================================================================
+   Compatibility shim — rag-service's legacy token vocabulary.
+
+   Import AFTER tokens.css. This lets rag-service adopt the canonical core in one
+   commit WITHOUT touching its ~1300 lines of CSS: every legacy name keeps
+   resolving, but now it resolves THROUGH the shared tokens, so a brand change in
+   the package reaches it. Delete the aliases file-by-file afterwards; when this
+   import is gone, the migration is done.
+
+   ## The --s6 trap — read before touching the spacing block
+
+   The two products used the SAME-LOOKING names for DIFFERENT values:
+
+       marketing   --s-6  = 24px
+       rag-service --s6   = 32px
+
+   A hyphen apart, 8px different. This is the exact drift that killed the last
+   design system, and it is why the canonical scale is now named by its value
+   (--lw-space-24 is 24px, always). The mapping below is deliberately NOT
+   mechanical — each legacy name maps to the pixel value rag-service actually
+   meant, which is why --s5 → 24 and --s6 → 32.
+   ============================================================================= */
+
+:root {
+  /* ---- Surfaces / text / lines (rag's --paper/--ink/--line vocabulary) ---- */
+  --paper: var(--lw-bg-subtle);
+  --paper-2: var(--lw-bg-muted);
+  --surface: var(--lw-bg);
+  --surface-2: var(--lw-bg-subtle);
+
+  --ink: var(--lw-fg);
+  --ink-soft: var(--lw-fg-muted);
+  --ink-faint: var(--lw-fg-subtle);
+
+  --line: hsl(var(--lw-line-c));
+  --line-strong: hsl(var(--lw-line-strong-c));
+
+  --shadow: var(--lw-shadow-md);
+  --shadow-lg: var(--lw-shadow-lg);
+
+  /* ---- Accent / CTA ------------------------------------------------------
+     rag's --accent was the brand teal used for links, focus and citations —
+     i.e. what the canonical core calls "brand as text". It is NOT shadcn's
+     --accent (a hover surface); the collision of that one word across the two
+     systems is worth knowing about before you touch either. */
+  --accent: var(--lw-brand-500);
+  --accent-ink: var(--lw-fg);              /* navy on teal — 7.52, not white (2.49) */
+  --accent-soft: hsl(var(--lw-brand-500-c) / 0.14);
+  --accent-line: hsl(var(--lw-brand-500-c) / 0.34);
+
+  --cta: var(--lw-cta-500);
+  --cta-hover: var(--lw-cta-600);
+  --cta-ink: var(--lw-fg);                 /* navy on orange — 6.68, not white (2.80) */
+
+  /* ---- Status ------------------------------------------------------------ */
+  --danger: hsl(var(--lw-danger-on-c));
+  --ok: hsl(var(--lw-success-on-c));
+
+  /* ---- Type -------------------------------------------------------------- */
+  --font-display: var(--lw-font-sans);
+  --font-ui: var(--lw-font-sans);
+  --font-mono: var(--lw-font-mono);
+
+  /* ---- Spacing — see the --s6 trap above. Mapped by VALUE, not by number. -- */
+  --s1: var(--lw-space-4);    /* 4  */
+  --s2: var(--lw-space-8);    /* 8  */
+  --s3: var(--lw-space-12);   /* 12 */
+  --s4: var(--lw-space-16);   /* 16 */
+  --s5: var(--lw-space-24);   /* 24 — NOT 20 */
+  --s6: var(--lw-space-32);   /* 32 — NOT 24 */
+  --s7: var(--lw-space-48);   /* 48 */
+  --s8: var(--lw-space-64);   /* 64 */
+
+  /* ---- Radii (identical scale, identical names — the one thing that agreed) */
+  --r-sm: var(--lw-radius-sm);
+  --r-md: var(--lw-radius-md);
+  --r-lg: var(--lw-radius-lg);
+  --r-xl: var(--lw-radius-xl);
+  --r-pill: var(--lw-radius-pill);
+
+  /* rag referenced `var(--muted)` in .answer li::marker and blockquote, but never
+     defined it — a silent no-op that made those elements inherit. Give it the
+     value it plainly intended. */
+  --muted: var(--lw-fg-subtle);
+
+  --grain-opacity: 0;
+}

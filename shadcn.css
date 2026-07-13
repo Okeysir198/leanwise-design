@@ -1,0 +1,103 @@
+/* =============================================================================
+   LeanWise → shadcn/ui semantic bridge.
+   Import AFTER tokens.css. Emits only the names shadcn expects, pointing them at
+   LDS tokens. Nothing here holds a value of its own — change a color in tokens.css.
+
+     @import "@leanwise/design/tokens.css";
+     @import "@leanwise/design/shadcn.css";
+
+   ## --primary is TEAL, not orange
+
+   LDS says "orange = the one CTA per view". But shadcn's --primary drives the
+   DEFAULT Button and a dozen other primitives — mapping orange there would make
+   every ordinary button a screaming CTA and destroy the rule it was meant to
+   express. So --primary is teal (the workhorse), and orange is reachable only as
+   an explicit `<Button variant="cta">`. Rarity is enforced by lint, not by hope.
+
+   ## --accent is a SURFACE, not the brand
+
+   This trips everyone. In shadcn, --accent is the ghost-button hover and the
+   menu-item highlight — a faint background wash. It is NOT an accent color in
+   the branding sense. Setting it to a saturated brand color (VSS did) makes every
+   hover state shout. Per-tenant theming therefore overrides --primary/--ring,
+   and NEVER --accent.
+   ============================================================================= */
+
+:root {
+  --background: var(--lw-bg-c);
+  --foreground: var(--lw-fg-c);
+
+  /* Cards/popovers are the same as the page on light, and LIFT on dark. */
+  --card: var(--lw-bg-subtle-c);
+  --card-foreground: var(--lw-fg-c);
+  --popover: var(--lw-bg-subtle-c);
+  --popover-foreground: var(--lw-fg-c);
+
+  /* The workhorse. Tenant-themable at runtime (see lib/brand.ts::brandVars). */
+  --primary: var(--lw-brand-500-c);
+  --primary-foreground: var(--lw-on-brand-c);   /* navy — 7.52 on teal */
+
+  --secondary: var(--lw-bg-muted-c);
+  --secondary-foreground: var(--lw-fg-c);
+
+  --muted: var(--lw-bg-subtle-c);
+  --muted-foreground: var(--lw-fg-subtle-c);
+
+  /* A surface. See the header. */
+  --accent: var(--lw-brand-50-c);
+  --accent-foreground: var(--lw-fg-c);
+
+  --destructive: var(--lw-danger-c);
+  --destructive-foreground: var(--lw-on-danger-c);   /* white — the one exception */
+
+  --border: var(--lw-line-c);
+  --input: var(--lw-line-strong-c);
+  --ring: var(--lw-brand-500-c);
+
+  --radius: var(--lw-radius-md);   /* 10px, not shadcn's 8px */
+
+  /* --- Tokens shadcn has no concept of; registered in tailwind-preset.js --- */
+
+  /* The CTA. Orange. One per view. Never tenant-themed — the orange is
+     LeanWise's voice, not the customer's. */
+  --cta: var(--lw-cta-500-c);
+  --cta-foreground: var(--lw-on-cta-c);   /* navy — 6.68 on orange */
+  --cta-soft: var(--lw-cta-soft-c);
+
+  /* Status. Split fill/text because a good fill is unreadable as text:
+     #16A34A on white is 3.30 (fails AA); the -on variant is 5.02 (passes). */
+  --success: var(--lw-success-c);
+  --success-foreground: var(--lw-on-brand-c);
+  --success-soft: var(--lw-success-soft-c);
+  --success-on: var(--lw-success-on-c);
+
+  --warning: var(--lw-warning-c);
+  --warning-foreground: var(--lw-on-brand-c);
+  --warning-soft: var(--lw-warning-soft-c);
+  --warning-on: var(--lw-warning-on-c);
+
+  --danger-soft: var(--lw-danger-soft-c);
+  --danger-on: var(--lw-danger-on-c);
+
+  /* Brand as TEXT (links, active nav). brand-500 scores 2.49 on white — this is
+     brand-700 on light and brand-400 on dark. Use `text-brand` for a teal label. */
+  --brand: var(--lw-brand-text-c);
+
+  --navy: var(--lw-navy-900-c);
+}
+
+.dark,
+[data-theme="dark"] {
+  /* On dark, cards lift ABOVE the page rather than sitting flush. */
+  --card: var(--lw-bg-subtle-c);
+  --popover: var(--lw-bg-subtle-c);
+  --muted: var(--lw-bg-muted-c);
+
+  /* The hover/highlight surface becomes a lighter navy, not a teal wash. */
+  --accent: var(--lw-bg-muted-c);
+  --accent-foreground: var(--lw-fg-c);
+
+  --ring: var(--lw-brand-400-c);
+  --destructive: var(--lw-danger-on-c);        /* #F87171 — 6.77 on the dark ground */
+  --destructive-foreground: var(--lw-fg-c);
+}

@@ -1,0 +1,35 @@
+{
+  "name": "@leanwise/design",
+  "version": "0.1.0",
+  "description": "LeanWise Design System (LDS v4) — the canonical token core for every LeanWiseAI product.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "files": [
+    "*.css",
+    "compat",
+    "fonts",
+    "lib",
+    "bin",
+    "tailwind-preset.js"
+  ],
+  "exports": {
+    "./tokens.css": "./tokens.css",
+    "./shadcn.css": "./shadcn.css",
+    "./fonts.css": "./fonts.css",
+    "./lw.css": "./lw.css",
+    "./compat/legacy-rag.css": "./compat/legacy-rag.css",
+    "./tailwind-preset": "./tailwind-preset.js",
+    "./brand": "./lib/brand.ts",
+    "./fonts/*": "./fonts/*"
+  },
+  "bin": {
+    "lw-token-lint": "./bin/lw-token-lint.mjs",
+    "lw-contrast-check": "./bin/lw-contrast-check.mjs"
+  },
+  "scripts": {
+    "check": "node bin/lw-contrast-check.mjs"
+  }
+}
