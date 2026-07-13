@@ -1,0 +1,115 @@
+/* =============================================================================
+   Compatibility shim — the marketing site's legacy token vocabulary.
+
+   Import AFTER tokens.css and lw.css. Lets leanwise-ai adopt the canonical core
+   without rewriting its six component stylesheets (chrome/site/pages/resources/
+   optimizations/admin.css), which reference ~48 legacy names. Delete the aliases
+   file-by-file afterwards; when this import is gone, the migration is done.
+
+   ## About `--amber`
+
+   In the old system `--amber: var(--brand-500)` — i.e. the variable named "amber"
+   resolved to TEAL, a leftover from a palette change that was never carried through
+   the component CSS. It is preserved here (still teal) so the site renders correctly
+   today, but every `--amber` / `.lw-btn-amber` is misnamed and should be renamed to
+   `brand` as the files are touched. The canonical core deliberately has no `--amber`.
+   ============================================================================= */
+
+:root {
+  /* ---- Surfaces (the site's "paper" ramp) -------------------------------- */
+  --bg:      var(--lw-bg);
+  --paper:   var(--lw-bg-subtle);
+  --paper-2: var(--lw-bg-muted);
+  --paper-3: var(--lw-bg-inset);
+  --paper-4: var(--lw-line-strong);
+
+  /* ---- Text -------------------------------------------------------------- */
+  --ink:   var(--lw-fg);
+  --ink-2: var(--lw-fg-muted);
+  --ink-3: var(--lw-fg-subtle);
+  --ink-4: var(--lw-fg-faint);
+  --ink-5: hsl(var(--lw-text-4-c) / 0.65);   /* decorative hairline text */
+
+  /* ---- Lines ------------------------------------------------------------- */
+  --line:   var(--lw-line);
+  --line-2: var(--lw-line-strong);
+
+  /* ---- Brand. NOTE: "amber" is teal — see the header. -------------------- */
+  --brand-500: var(--lw-brand-500);
+  --brand-600: var(--lw-brand-600);
+  --brand-700: var(--lw-brand-700);
+  --amber:      var(--lw-brand-500);
+  --amber-2:    var(--lw-brand-700);
+  --amber-soft: var(--lw-brand-50);
+  --signal:      var(--lw-brand-500);
+  --signal-2:    var(--lw-brand-700);
+  --signal-soft: var(--lw-brand-50);
+
+  --navy-700:  var(--lw-navy-700);
+  --navy-900:  var(--lw-navy-900);
+  --navy-deep: var(--lw-navy-deep);
+
+  /* ---- On-dark overlays -------------------------------------------------- */
+  --on-dark:      var(--lw-on-dark);
+  --on-dark-1:    var(--lw-on-dark-1);
+  --on-dark-2:    var(--lw-on-dark-2);
+  --on-dark-3:    var(--lw-on-dark-3);
+  --on-dark-line: var(--lw-on-dark-line);
+  --on-dark-fill: var(--lw-on-dark-fill);
+
+  /* ---- Status (the audit-verdict vocabulary: pass / review / fail) -------- */
+  --ok:          var(--lw-success);
+  --pass:        var(--lw-success);
+  --pass-soft:   hsl(var(--lw-success-soft-c));
+  --review:      var(--lw-warning);
+  --review-soft: hsl(var(--lw-warning-soft-c));
+  --err:         var(--lw-danger);
+  --fail:        var(--lw-danger);
+  --fail-soft:   hsl(var(--lw-danger-soft-c));
+
+  /* ---- Type -------------------------------------------------------------- */
+  --font-sans: var(--lw-font-sans);
+  --font-mono: var(--lw-font-mono);
+  --text-body: var(--lw-text-body);
+
+  /* ---- Radii / shadows (the numeric aliases) ----------------------------- */
+  --r-2:    var(--lw-radius-sm);
+  --r-3:    var(--lw-radius-md);
+  --r-4:    var(--lw-radius-lg);
+  --r-pill: var(--lw-radius-pill);
+  --sh-1: var(--lw-shadow-sm);
+  --sh-2: var(--lw-shadow-md);
+  --sh-3: var(--lw-shadow-lg);
+}
+
+/* ---- Legacy class aliases -------------------------------------------------
+   `.lw-btn-amber` is the teal button (see the header) and `.lw-italic-amber` the
+   teal emphasis. Canonical names are `.lw-btn-brand` / `.lw-italic-brand`; these
+   keep the existing components rendering until they are renamed. */
+.lw-btn-amber {
+  background: var(--lw-brand-500);
+  color: hsl(var(--lw-on-brand-c));
+  box-shadow: 0 1px 2px hsl(var(--lw-brand-700-c) / 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.20);
+}
+.lw-btn-amber:hover {
+  background: var(--lw-brand-600);
+  color: hsl(var(--lw-on-brand-c));
+  transform: translateY(-1px);
+}
+
+.lw-italic-amber {
+  color: var(--lw-brand-text);
+  font-style: italic;
+  font-weight: var(--lw-fw-medium);
+}
+
+/* `.lw-pill.amber` — the teal pill. */
+.lw-pill.amber {
+  border-color: var(--lw-brand-200);
+  color: var(--lw-brand-text);
+  background: var(--lw-brand-50);
+}
+.lw-pill.amber .dot {
+  background: var(--lw-brand-500);
+  box-shadow: 0 0 0 3px hsl(var(--lw-brand-500-c) / 0.22);
+}
