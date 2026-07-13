@@ -48,8 +48,15 @@ const RULES = [
   },
   {
     id: "arbitrary-token",
-    re: /\[hsl\(var\(--/g,
-    msg: "arbitrary-value token access — use the registered utility (bg-primary, not bg-[hsl(var(--primary))])",
+    // Deliberately broader than `\[hsl\(var\(`: an escape can hide anywhere inside an
+    // arbitrary value, e.g. `[background:radial-gradient(…,hsl(var(--accent)/.25),…)]`,
+    // which the narrow pattern missed and which is how VSS's auth card kept pointing at
+    // --accent (a hover surface) instead of the brand. Match any var(--…) inside [ ].
+    re: /\[[^\]\s]*var\(--[a-z-]+/g,
+    msg: "token reached through an arbitrary value — prefer the registered utility (bg-primary). A gradient that genuinely needs var() should reference --primary/--cta, never --accent (a hover surface).",
+    // Gradients are the one legitimate case; they still must name the right token, so we
+    // allow them only where a reviewer has opted in with an explicit comment.
+    skipLine: /lw-token-lint-allow/,
   },
 ];
 

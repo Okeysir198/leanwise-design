@@ -125,7 +125,15 @@ module.exports = {
       transitionTimingFunction: { out: "var(--lw-ease-out)" },
       transitionDuration: { fast: "var(--lw-duration-fast)", DEFAULT: "var(--lw-duration)" },
 
-      backgroundImage: { "gradient-brand": "var(--lw-gradient-brand)" },
+      backgroundImage: {
+        // The hero/brand panel gradient (teal → navy).
+        "gradient-brand": "var(--lw-gradient-brand)",
+        // The soft radial brand glow behind auth cards and empty hero states. Registered
+        // as a real utility so nobody has to reach for an arbitrary value to get it —
+        // that escape hatch is exactly how VSS's auth card ended up keyed to --accent
+        // (a hover surface) instead of the brand, rendering an invisible grey wash.
+        "brand-wash": "radial-gradient(40rem at 50% -10%, hsl(var(--primary) / 0.18), transparent)",
+      },
 
       keyframes: {
         "accordion-down": { from: { height: "0" }, to: { height: "var(--radix-accordion-content-height)" } },
