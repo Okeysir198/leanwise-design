@@ -44,13 +44,17 @@
      --accent (a hover surface); the collision of that one word across the two
      systems is worth knowing about before you touch either. */
   --accent: var(--lw-brand-500);
-  --accent-ink: var(--lw-fg);              /* navy on teal — 7.52, not white (2.49) */
+  /* The ink on a FILL is theme-independent — the teal and the orange are the same
+     color in both themes, so their ink must be too. `var(--lw-fg)` would look right
+     on light and then flip to near-white on dark, putting white on #F97316 at 2.80.
+     `--lw-on-*` resolve to the navy palette token, which never re-points. */
+  --accent-ink: hsl(var(--lw-on-brand-c));  /* navy on teal — 7.52, not white (2.49) */
   --accent-soft: hsl(var(--lw-brand-500-c) / 0.14);
   --accent-line: hsl(var(--lw-brand-500-c) / 0.34);
 
   --cta: var(--lw-cta-500);
   --cta-hover: var(--lw-cta-600);
-  --cta-ink: var(--lw-fg);                 /* navy on orange — 6.68, not white (2.80) */
+  --cta-ink: hsl(var(--lw-on-cta-c));       /* navy on orange — 6.68, not white (2.80) */
 
   /* ---- Status ------------------------------------------------------------ */
   --danger: hsl(var(--lw-danger-on-c));
