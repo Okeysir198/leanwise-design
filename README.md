@@ -12,7 +12,7 @@ LeanWise brand at all. This package exists so consistency is a dependency, not a
 ```jsonc
 // package.json
 "dependencies": {
-  "@leanwise/design": "github:Vietsol-Co-Ltd/leanwise-design#v0.1.0"
+  "@leanwise/design": "github:Okeysir198/leanwise-design#v0.1.4"
 }
 ```
 
