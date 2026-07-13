@@ -139,13 +139,19 @@
 
   /* ---- Semantic status -------------------------------------------------- */
   --lw-success-c:      142.1 76.2% 36.3%;  /* #16A34A  fill */
-  --lw-success-text-c: 142.4 71.8% 29.2%;  /* #15803D  as text on white (5.02) */
-  --lw-success-soft-c: 140.6 84.2% 92.5%;  /* #DCFCE7 */
+  --lw-success-soft-c: 140.6 84.2% 92.5%;  /* #DCFCE7  chip tint */
   --lw-warning-c:      32.1  94.6% 43.7%;  /* #D97706  fill */
-  --lw-warning-text-c: 26.0  90.5% 37.1%;  /* #B45309  as text on white (5.02) */
-  --lw-warning-soft-c: 48.0  96.5% 88.8%;  /* #FEF3C7 */
+  --lw-warning-soft-c: 48.0  96.5% 88.8%;  /* #FEF3C7  chip tint */
   --lw-danger-c:       0     72.2% 50.6%;  /* #DC2626  fill — the one fill that takes WHITE ink */
-  --lw-danger-soft-c:  0     93.3% 94.1%;  /* #FEE2E2 */
+  --lw-danger-soft-c:  0     93.3% 94.1%;  /* #FEE2E2  chip tint */
+
+  /* Status AS TEXT. These must clear AA on BOTH the page (white) and their own soft
+     tint, because a badge is text on the tint. The lighter -700 shades (#15803D,
+     #B45309) clear white at 5.02 but only reach ~3.1 on the tint — so the darker
+     -800s are the real floor. This is why fill and text are separate tokens. */
+  --lw-success-text-c: 142.8 64.2% 24.1%;  /* #166534 — 7.13 on white, 6.49 on tint */
+  --lw-warning-text-c: 22.7  82.5% 31.4%;  /* #92400E — 7.09 on white, 6.37 on tint */
+  --lw-danger-text-c:  0     73.7% 41.8%;  /* #B91C1C — 6.47 on white, 5.30 on tint */
   --lw-success: hsl(var(--lw-success-c));
   --lw-warning: hsl(var(--lw-warning-c));
   --lw-danger:  hsl(var(--lw-danger-c));
@@ -211,7 +217,7 @@
   --lw-brand-text-c:   var(--lw-brand-700-c);
   --lw-success-on-c:   var(--lw-success-text-c);
   --lw-warning-on-c:   var(--lw-warning-text-c);
-  --lw-danger-on-c:    var(--lw-danger-c);
+  --lw-danger-on-c:    var(--lw-danger-text-c);
 
   /* Ink that sits ON a brand/cta fill. Navy, per the contrast table above. */
   --lw-on-brand-c: var(--lw-text-1-c);
@@ -259,6 +265,14 @@
   --lw-success-on-c: 158.1 64.4% 51.6%;    /* #34D399 */
   --lw-warning-on-c: 43.3  96.4% 56.3%;    /* #FBBF24 */
   --lw-danger-on-c:  0     90.6% 70.8%;    /* #F87171 — 6.77 on paper */
+
+  /* The soft tints MUST be re-pointed for dark. Left at their light values, a
+     success badge renders #34D399 text on #DCFCE7 — contrast 1.75, invisible.
+     (Shipped exactly that for one build; the contrast gate now covers these pairs.) */
+  --lw-success-soft-c: 153.3 47.4% 11.2%;  /* #0F2A1E — ink lands at 7.97 */
+  --lw-warning-soft-c: 38.9  67.3% 10.8%;  /* #2E2109 — 9.40 */
+  --lw-danger-soft-c:  0     53.2% 15.1%;  /* #3B1212 — 5.93 */
+  --lw-cta-soft-c:     24.8  65.7% 13.7%;  /* #3A1F0C — 6.72 */
 
   /* Navy-tinted shadows are invisible on a navy ground: go black, and lean on
      the hairline border for elevation instead. */
