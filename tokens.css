@@ -232,9 +232,30 @@
   --lw-fg-muted:  hsl(var(--lw-fg-muted-c));
   --lw-fg-subtle: hsl(var(--lw-fg-subtle-c));
   --lw-fg-faint:  hsl(var(--lw-fg-faint-c));
+  --lw-fg-ghost:  hsl(var(--lw-text-4-c) / 0.65);   /* decorative hairline text only */
   --lw-line:      hsl(var(--lw-line-c));
   --lw-line-strong: hsl(var(--lw-line-strong-c));
   --lw-brand-text: hsl(var(--lw-brand-text-c));
+
+  /* Ink that sits ON a fill, as a ready-to-use color. Theme-independent: the teal and
+     the orange are the same color in both themes, so their ink must be too — using
+     --lw-fg here would flip to near-white on dark and put white on #F97316 (2.80). */
+  --lw-on-brand:  hsl(var(--lw-on-brand-c));
+  --lw-on-cta:    hsl(var(--lw-on-cta-c));
+  --lw-on-danger: hsl(var(--lw-on-danger-c));
+
+  /* Brand tints — for chip backgrounds and hairlines keyed to the brand. */
+  --lw-brand-soft: hsl(var(--lw-brand-500-c) / 0.14);
+  --lw-brand-line: hsl(var(--lw-brand-500-c) / 0.34);
+
+  /* Status as ready-to-use colors. `-on` is the readable TEXT color (theme-aware);
+     the bare name is the FILL; `-soft` is the chip tint. */
+  --lw-success-on:   hsl(var(--lw-success-on-c));
+  --lw-success-soft: hsl(var(--lw-success-soft-c));
+  --lw-warning-on:   hsl(var(--lw-warning-on-c));
+  --lw-warning-soft: hsl(var(--lw-warning-soft-c));
+  --lw-danger-on:    hsl(var(--lw-danger-on-c));
+  --lw-danger-soft:  hsl(var(--lw-danger-soft-c));
 }
 
 /* =============================================================================

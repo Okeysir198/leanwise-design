@@ -45,7 +45,6 @@ export default {
 @import "@leanwise/design/fonts.css";
 @import "@leanwise/design/tokens.css";
 @import "@leanwise/design/lw.css";              /* marketing: the .lw-* classes */
-@import "@leanwise/design/compat/legacy-rag.css"; /* rag: keeps --paper/--ink alive */
 ```
 
 ## The three rules that are not obvious
@@ -114,7 +113,6 @@ tokens.css              the source of truth — HSL triples + derived colors, li
 shadcn.css              maps --primary/--background/… → tokens
 tailwind-preset.js      Tailwind v3 consumers
 lw.css                  .lw-* marketing layer (+ 44px touch targets, iOS zoom guard)
-compat/legacy-rag.css   rag-service's --paper/--ink vocabulary, incl. the --s6 trap
 fonts/ + fonts.css      Geist + Geist Mono, self-hosted, incl. Vietnamese subsets
 lib/brand.ts            brandVars() / inkOn() / monogram()
 bin/                    the contrast gate and the token lint
