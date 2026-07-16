@@ -107,6 +107,9 @@ module.exports = {
       // The fluid role scale. `text-h1` is a real utility, so a heading never
       // hand-rolls a clamp().
       fontSize: {
+        // Marketing/hero display — one notch above h1, weight 500 (lighter editorial
+        // voice than the 600 headings). `text-display` on a landing/auth hero headline.
+        display: ["var(--lw-text-display)", { lineHeight: "var(--lw-lh-tight)", letterSpacing: "var(--lw-tracking-tighter)", fontWeight: "500" }],
         h1: ["var(--lw-text-h1)", { lineHeight: "var(--lw-lh-tight)", letterSpacing: "var(--lw-tracking-tighter)", fontWeight: "600" }],
         h2: ["var(--lw-text-h2)", { lineHeight: "var(--lw-lh-snug)", letterSpacing: "var(--lw-tracking-tight)", fontWeight: "600" }],
         h3: ["var(--lw-text-h3)", { lineHeight: "1.18", letterSpacing: "var(--lw-tracking-tight)", fontWeight: "600" }],
@@ -123,7 +126,7 @@ module.exports = {
       },
 
       transitionTimingFunction: { out: "var(--lw-ease-out)" },
-      transitionDuration: { fast: "var(--lw-duration-fast)", DEFAULT: "var(--lw-duration)" },
+      transitionDuration: { fast: "var(--lw-duration-fast)", DEFAULT: "var(--lw-duration)", slow: "var(--lw-duration-slow)" },
 
       backgroundImage: {
         // The hero/brand panel gradient (teal → navy).
@@ -133,15 +136,34 @@ module.exports = {
         // that escape hatch is exactly how VSS's auth card ended up keyed to --accent
         // (a hover surface) instead of the brand, rendering an invisible grey wash.
         "brand-wash": "radial-gradient(40rem at 50% -10%, hsl(var(--primary) / 0.18), transparent)",
+        // The editorial auth/landing aside: two teal radial washes over the base. Keyed to
+        // --primary so it themes per tenant. `bg-hero-aside` — a real utility, no arbitrary
+        // value, so it stays lintable (the escape hatch is exactly the --accent footgun above).
+        "hero-aside":
+          "radial-gradient(60rem at 12% 8%, hsl(var(--primary) / 0.16), transparent 55%), radial-gradient(48rem at 88% 96%, hsl(var(--primary) / 0.12), transparent 55%)",
+        // A faint hairline lattice for texture over the aside, keyed to the border token so
+        // it disappears correctly in dark mode. Layer as `bg-hero-aside bg-hairline-grid`.
+        "hairline-grid":
+          "repeating-linear-gradient(0deg, hsl(var(--border) / 0.55) 0 1px, transparent 1px 88px), repeating-linear-gradient(90deg, hsl(var(--border) / 0.55) 0 1px, transparent 1px 88px)",
       },
 
       keyframes: {
         "accordion-down": { from: { height: "0" }, to: { height: "var(--radix-accordion-content-height)" } },
         "accordion-up": { from: { height: "var(--radix-accordion-content-height)" }, to: { height: "0" } },
+        // Editorial entrance motion. `fade-up` is the signature hero/message reveal (rise +
+        // fade); the two others are calmer variants for panels and cards. The global
+        // prefers-reduced-motion block in tokens.css neutralizes all of them — no per-use guard.
+        "fade-up": { from: { opacity: "0", transform: "translateY(10px)" }, to: { opacity: "1", transform: "none" } },
+        "fade-in": { from: { opacity: "0" }, to: { opacity: "1" } },
+        "scale-in": { from: { opacity: "0", transform: "scale(0.97) translateY(6px)" }, to: { opacity: "1", transform: "none" } },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        // `animate-rise` is the one to reach for on a hero block or a chat message.
+        rise: "fade-up var(--lw-duration-slow) var(--lw-ease-out) both",
+        "fade-in": "fade-in var(--lw-duration-slow) var(--lw-ease-out) both",
+        "scale-in": "scale-in var(--lw-duration-slow) var(--lw-ease-out) both",
       },
     },
   },

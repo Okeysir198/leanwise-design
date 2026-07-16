@@ -47,6 +47,9 @@
   --lw-font-sans: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
   --lw-font-mono: "Geist Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
 
+  /* One notch above h1 for marketing/hero display. Weight 500 (set in the preset),
+     a lighter editorial voice than the 600 headings carry. */
+  --lw-text-display: clamp(40px, 6vw, 84px);
   --lw-text-h1: clamp(38px, 5vw, 72px);
   --lw-text-h2: clamp(28px, 3.4vw, 48px);
   --lw-text-h3: clamp(20px, 2vw, 27px);
@@ -191,6 +194,9 @@
   --lw-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --lw-duration-fast: 120ms;
   --lw-duration: 180ms;
+  /* The editorial entrance timing — hero/aside/message rise. Longer than an
+     interaction (180ms) because it is a first-paint reveal, not a hover. */
+  --lw-duration-slow: 500ms;
 
   /* ---- Layout ----------------------------------------------------------- */
   --lw-col-max: 1200px;
