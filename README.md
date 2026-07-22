@@ -135,6 +135,18 @@ AND `prefers-reduced-motion: no-preference`; the static state is always complete
 - **`.lw-browser-frame`** — browser chrome around a screenshot: `.lw-browser-bar` with
   three `<i>` dots + `.lw-browser-url` address pill, `--lw-brand-glow` shadow. Pure CSS.
 
+## v0.5.0 SOTA interaction layer (`lw.css`)
+
+- **`.lw-spotlight`** — cursor-tracking radial brand highlight on cards; consumer sets
+  `--lw-mx`/`--lw-my` from pointermove. No JS → card unchanged.
+- **`.lw-shine`** — one-shot shine sweep across a button face on hover.
+- **`.lw-aurora`** — two slow counter-drifting brand blobs for dark grounds (sibling to
+  `.lw-wash`; pick one).
+- **`.lw-tilt-scene` / `.lw-tilt`** — subtle perspective lean + glow on hover for framed
+  screenshots.
+- **`::view-transition` defaults** — short fade timings for routers that opt into the
+  View Transitions API; disabled entirely under reduced motion.
+
 ## Enforcement
 
 ```bash

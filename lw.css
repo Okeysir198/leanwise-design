@@ -723,3 +723,106 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
   line-height: 1.4;
 }
 .lw-browser-frame img { display: block; width: 100%; height: auto; }
+
+/* ---- SOTA interaction layer (v0.5.0) ---------------------------------------
+   Linear/Vercel-class affordances, all token-driven and reduced-motion safe.
+   Static state is always complete; hover/scroll only ever add. */
+
+/* Cursor spotlight for cards. The consumer sets --lw-mx/--lw-my (px, relative
+   to the card) from a pointermove handler; without JS the card is unchanged. */
+.lw-spotlight { position: relative; overflow: hidden; }
+.lw-spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity var(--lw-duration) var(--lw-ease-out);
+  background: radial-gradient(240px circle at var(--lw-mx, 50%) var(--lw-my, 50%),
+    hsl(var(--lw-brand-500-c) / 0.12), transparent 65%);
+  pointer-events: none;
+}
+.lw-spotlight > * { position: relative; z-index: 1; }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .lw-spotlight:hover::before { opacity: 1; }
+}
+
+/* Shine sweep across a button face on hover. Pair with .lw-btn. */
+.lw-shine { position: relative; overflow: hidden; }
+.lw-shine::after {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0;
+  left: -60%;
+  width: 40%;
+  transform: skewX(-18deg);
+  background: linear-gradient(90deg, transparent,
+    hsl(var(--lw-surface-0-c) / 0.35), transparent);
+  pointer-events: none;
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .lw-shine:hover::after { animation: lwShine 0.7s var(--lw-ease-out); }
+}
+@keyframes lwShine { to { left: 120%; } }
+
+/* Aurora layer for dark grounds: two slow counter-drifting brand blobs behind
+   the content. Sibling to .lw-wash — use one or the other, not both. */
+.lw-aurora { position: relative; }
+.lw-aurora::before,
+.lw-aurora::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  width: 55%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+}
+.lw-aurora::before {
+  top: -25%; left: -12%;
+  background: radial-gradient(circle, hsl(var(--lw-brand-500-c) / 0.16), transparent 65%);
+}
+.lw-aurora::after {
+  bottom: -30%; right: -10%;
+  background: radial-gradient(circle, hsl(var(--lw-cta-500-c) / 0.07), transparent 65%);
+}
+.lw-aurora > * { position: relative; z-index: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  .lw-aurora::before { animation: lwAuroraA 26s ease-in-out infinite alternate; }
+  .lw-aurora::after  { animation: lwAuroraB 32s ease-in-out infinite alternate; }
+}
+@keyframes lwAuroraA {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(10%, 8%, 0) scale(1.15); }
+}
+@keyframes lwAuroraB {
+  from { transform: translate3d(0, 0, 0) scale(1.1); }
+  to   { transform: translate3d(-8%, -10%, 0) scale(1); }
+}
+
+/* Perspective tilt for framed screenshots: rests flat, leans back a touch on
+   hover. Wrap the frame in .lw-tilt-scene for the 3D context. */
+.lw-tilt-scene { perspective: 1200px; }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .lw-tilt {
+    transform-style: preserve-3d;
+    transition: transform var(--lw-duration-slow) var(--lw-ease-out),
+                box-shadow var(--lw-duration-slow) var(--lw-ease-out);
+  }
+  .lw-tilt:hover {
+    transform: rotateX(1.6deg) rotateY(-1.2deg) translateY(-4px);
+    box-shadow: var(--lw-shadow-lg), var(--lw-brand-glow);
+  }
+}
+
+/* Cross-document/page fade for the View Transitions API. The consumer opts the
+   router in; this only shapes the default snapshot animation. */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) { animation-duration: 160ms; }
+  ::view-transition-new(root) { animation-duration: 220ms; }
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation: none; }
+}
