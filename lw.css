@@ -301,6 +301,40 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
   letter-spacing: 0.06em;
 }
 
+/* ---- Console: log variant (v0.3.0) ---------------------------------------
+   A mono stream body for the browser-frame motif. Additive — the base
+   .lw-console classes above are untouched. */
+
+.lw-console.log .lw-console-body {
+  font-family: var(--lw-font-mono);
+  font-size: var(--lw-text-xs);
+  line-height: 1.7;
+  padding: var(--lw-space-12) var(--lw-space-16);
+}
+.lw-console-line {
+  display: flex;
+  align-items: baseline;
+  gap: var(--lw-space-8);
+  color: var(--lw-fg-muted);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.lw-console-line .t { color: var(--lw-fg-faint); }        /* timestamp/prefix */
+.lw-console-line.ok { color: var(--lw-success-on); }
+.lw-console-line.warn { color: var(--lw-warning-on); }
+.lw-console-line.err { color: var(--lw-danger-on); }
+
+/* Blinking caret — decorative; a solid block under reduced motion. */
+.lw-console-caret::after {
+  content: "▋";
+  color: var(--lw-brand-text);
+  animation: lwCaretBlink 1.1s steps(1) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lw-console-caret::after { animation: none; }
+}
+@keyframes lwCaretBlink { 0%, 60% { opacity: 1; } 61%, 100% { opacity: 0; } }
+
 /* ---- Sections ------------------------------------------------------------ */
 
 .lw-section { padding: clamp(64px, 8vw, 120px) 0; }
@@ -314,6 +348,134 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 .lw-section.dark .lw-lead { color: var(--lw-on-dark-2); }
 .lw-section.dark .lw-eyebrow { color: var(--lw-brand-300); }
 .lw-section.dark .lw-eyebrow::before { background: var(--lw-brand-300); }
+
+/* ---- Full-bleed dark hero (v0.3.0) ----------------------------------------
+   Deeper than the .lw-section.dark band: deep-navy ground, a masked hairline
+   grid for texture, and a subtle radial brand wash. Same on-dark text-role
+   conventions as .lw-section.dark. Brand accent text on dark = brand-400. */
+
+.lw-hero-dark {
+  position: relative;
+  background: var(--lw-navy-deep);
+  color: var(--lw-on-dark);
+  overflow: hidden;
+  isolation: isolate;
+}
+/* Hairline grid, masked so it fades out toward the lower edge. */
+.lw-hero-dark::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    repeating-linear-gradient(0deg, var(--lw-on-dark-line) 0 1px, transparent 1px 88px),
+    repeating-linear-gradient(90deg, var(--lw-on-dark-line) 0 1px, transparent 1px 88px);
+  -webkit-mask-image: radial-gradient(80rem at 50% 0%, #000 0%, transparent 75%);
+  mask-image: radial-gradient(80rem at 50% 0%, #000 0%, transparent 75%);
+  pointer-events: none;
+}
+/* Subtle radial brand wash rising from the top. */
+.lw-hero-dark::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(48rem at 50% -12%, hsl(var(--lw-brand-500-c) / 0.16), transparent 65%);
+  pointer-events: none;
+}
+.lw-hero-dark .lw-h1,
+.lw-hero-dark .lw-h2,
+.lw-hero-dark .lw-h3 { color: var(--lw-on-dark-1); }
+.lw-hero-dark .lw-lead { color: var(--lw-on-dark-2); }
+.lw-hero-dark .lw-eyebrow { color: var(--lw-brand-300); }
+.lw-hero-dark .lw-eyebrow::before { background: var(--lw-brand-300); }
+.lw-hero-dark .lw-italic-brand,
+.lw-hero-dark .lw-accent { color: var(--lw-brand-400); }
+
+/* ---- Data-viz bars (v0.3.0) -----------------------------------------------
+   Token-filled horizontal bar. Width via --lw-bar-value (a percentage) or an
+   inline width on .fill. Purely presentational — pair with visually-hidden
+   text or aria attributes in the consumer. */
+
+.lw-bar {
+  --lw-bar-value: 0%;
+  position: relative;
+  height: 8px;
+  border-radius: var(--lw-radius-pill);
+  background: var(--lw-border-1);
+  overflow: hidden;
+}
+.lw-bar .fill,
+.lw-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--lw-bar-value);
+  border-radius: inherit;
+  background: var(--lw-brand-500);
+  transition: width var(--lw-duration-slow) var(--lw-ease-out);
+}
+/* An explicit <i class="fill"> node wins over the ::after fill. */
+.lw-bar:has(.fill)::after { display: none; }
+
+/* Meter variant: thicker, inset track. */
+.lw-bar.lw-meter,
+.lw-meter { height: 12px; background: var(--lw-bg-inset); border: 1px solid var(--lw-border-1); }
+
+/* Dark context (inside .lw-section.dark / .lw-hero-dark): the light track
+   tokens vanish on navy — use the on-dark fills instead. */
+.lw-section.dark .lw-bar,
+.lw-hero-dark .lw-bar {
+  background: var(--lw-on-dark-fill);
+}
+.lw-section.dark .lw-meter,
+.lw-hero-dark .lw-meter {
+  background: var(--lw-on-dark-fill);
+  border-color: var(--lw-on-dark-line);
+}
+.lw-section.dark .lw-bar .fill, .lw-section.dark .lw-bar::after,
+.lw-hero-dark .lw-bar .fill, .lw-hero-dark .lw-bar::after {
+  background: var(--lw-brand-400);
+}
+
+/* ---- Logo rail (v0.3.0) ---------------------------------------------------
+   A logo wall. Default: static wrapping row. `.marquee`: a slow horizontal
+   loop — duplicate the track content ONCE in markup ([track][track]) so the
+   -50% translate lands seamlessly. Reduced motion falls back to the static
+   wrap layout (no animation, no overflow clip). */
+
+.lw-logo-rail {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--lw-space-32) var(--lw-space-48);
+}
+.lw-logo-rail.marquee {
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+.lw-logo-rail.marquee .lw-logo-track {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: var(--lw-space-48);
+  padding-right: var(--lw-space-48);
+  animation: lwMarquee 40s linear infinite;
+}
+@keyframes lwMarquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-100%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lw-logo-rail.marquee { flex-wrap: wrap; overflow: visible; }
+  .lw-logo-rail.marquee .lw-logo-track {
+    animation: none;
+    flex-wrap: wrap;
+    padding-right: 0;
+  }
+  /* With the duplicate track hidden, the rail reads as a plain logo wall. */
+  .lw-logo-rail.marquee .lw-logo-track + .lw-logo-track { display: none; }
+}
 
 /* ---- Stat / KPI ---------------------------------------------------------- */
 
@@ -332,6 +494,17 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
   letter-spacing: var(--lw-tracking-eyebrow);
   text-transform: uppercase;
   color: var(--lw-fg-subtle);
+}
+
+/* Animated count-up stat (v0.3.0). Extends the .lw-stat number look. The
+   CONTRACT: markup ships the FINAL value (SSR-safe, JS-free correct); the
+   `animateCounter` helper (@leanwise/design/counter) reads data-target and
+   animates from 0 only when invoked and reduced motion is not requested. */
+.lw-counter {
+  font-family: var(--lw-font-mono);
+  font-weight: var(--lw-fw-semibold);
+  letter-spacing: var(--lw-tracking-tight);
+  font-variant-numeric: tabular-nums;
 }
 
 /* ---- Spacing utilities --------------------------------------------------- */

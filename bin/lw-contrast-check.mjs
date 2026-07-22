@@ -51,6 +51,9 @@ const PAIRS = [
   ["cta-400", "d-paper", "orange as text on dark"],
   ["d-text-1", "d-surface", "text on a dark card"],
 
+  // The full-bleed dark hero (.lw-hero-dark) sits on navy-deep, not the dark paper.
+  ["brand-400", "navy-deep", "brand accent text on the dark hero"],
+
   // Badge/chip pairs: the -on text sitting on its own -soft tint. These are easy to
   // forget in the dark block — and forgetting them shipped #34D399 on #DCFCE7 (1.75).
   ["success-text", "success-soft", "success badge (light)"],

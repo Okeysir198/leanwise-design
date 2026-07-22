@@ -156,6 +156,9 @@ module.exports = {
         "fade-up": { from: { opacity: "0", transform: "translateY(10px)" }, to: { opacity: "1", transform: "none" } },
         "fade-in": { from: { opacity: "0" }, to: { opacity: "1" } },
         "scale-in": { from: { opacity: "0", transform: "scale(0.97) translateY(6px)" }, to: { opacity: "1", transform: "none" } },
+        // Logo-rail loop: duplicate the track once in markup so -100% is seamless.
+        // Neutralized by the global prefers-reduced-motion block in tokens.css.
+        marquee: { from: { transform: "translateX(0)" }, to: { transform: "translateX(-100%)" } },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -164,6 +167,7 @@ module.exports = {
         rise: "fade-up var(--lw-duration-slow) var(--lw-ease-out) both",
         "fade-in": "fade-in var(--lw-duration-slow) var(--lw-ease-out) both",
         "scale-in": "scale-in var(--lw-duration-slow) var(--lw-ease-out) both",
+        marquee: "marquee 40s linear infinite",
       },
     },
   },

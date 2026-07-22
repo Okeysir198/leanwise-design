@@ -14,7 +14,7 @@ consistency is a dependency, not a discipline.
 ```jsonc
 // package.json
 "dependencies": {
-  "@leanwise/design": "github:Okeysir198/leanwise-design#v0.2.3"
+  "@leanwise/design": "github:Okeysir198/leanwise-design#v0.3.0"
 }
 ```
 
@@ -99,6 +99,27 @@ hunt.
 **The logo is never tinted.** Do not run it through `--primary`, a CSS `filter`, tenant
 `brandVars()`, or any recolor — the mark ships in its own colors and stays that way, on
 light and dark alike.
+
+## v0.3.0 marketing primitives (`lw.css`)
+
+Five additive primitives, all token-driven:
+
+- **`.lw-hero-dark`** — full-bleed dark hero: deep-navy ground, masked hairline grid,
+  subtle radial brand wash; on-dark text roles for descendants. Brand accent text on
+  dark is `--lw-brand-400` (checked against `navy-deep` by the contrast gate).
+- **`.lw-counter`** — count-up stat number (mono, tabular-nums). The JS helper
+  `import { animateCounter } from "@leanwise/design/counter"` animates from 0 to
+  `data-target` when invoked; markup ships the FINAL value, so no JS (and any
+  reduced-motion preference) still renders the correct number.
+- **`.lw-bar` / `.lw-meter`** — horizontal token-filled bars; width via the
+  `--lw-bar-value` custom property (or an explicit `.fill` child). Dark-context
+  variants inside `.lw-section.dark` / `.lw-hero-dark`.
+- **`.lw-logo-rail`** — logo wall; add `.marquee` (with the track duplicated once as
+  two `.lw-logo-track`s) for a slow 40s loop. Reduced motion falls back to a static
+  wrap. Tailwind consumers get a matching `animate-marquee` utility from the preset.
+- **`.lw-console.log`** — mono stream rows (`.lw-console-line`, with `.ok/.warn/.err`
+  tones) inside the existing console frame; `.lw-console-caret` adds a blinking caret,
+  static under reduced motion.
 
 ## Enforcement
 

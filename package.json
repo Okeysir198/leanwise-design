@@ -1,6 +1,6 @@
 {
   "name": "@leanwise/design",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "LeanWise Design System (LDS v4) \u2014 the canonical token core for every LeanWiseAI product.",
   "license": "UNLICENSED",
   "type": "module",
@@ -21,6 +21,10 @@
     "./fonts.css": "./fonts.css",
     "./lw.css": "./lw.css",
     "./tailwind-preset": "./tailwind-preset.js",
+    "./counter": {
+      "types": "./lib/counter.d.ts",
+      "default": "./lib/counter.js"
+    },
     "./brand": {
       "types": "./lib/brand.d.ts",
       "default": "./lib/brand.js"
