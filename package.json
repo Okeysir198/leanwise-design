@@ -1,6 +1,6 @@
 {
   "name": "@leanwise/design",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "LeanWise Design System (LDS v4) \u2014 the canonical token core for every LeanWiseAI product.",
   "license": "UNLICENSED",
   "type": "module",

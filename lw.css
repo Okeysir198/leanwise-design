@@ -555,6 +555,54 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
    package means every product inherits them.
    ============================================================================= */
 
+/* ---- Motion utilities (v0.3.2) ---------------------------------------------
+   Interaction affordances shared across products. All motion is gated behind
+   prefers-reduced-motion: no-preference; the static state is complete. */
+
+/* Hover lift + brand glow for cards. Opt-in class beside .lw-card etc. */
+.lw-card-glow { transition: transform var(--lw-duration-fast) var(--lw-ease-out),
+                            border-color var(--lw-duration-fast) var(--lw-ease-out),
+                            box-shadow var(--lw-duration-fast) var(--lw-ease-out); }
+.lw-card-glow:hover {
+  border-color: hsl(var(--lw-brand-500-c) / 0.55);
+  box-shadow: var(--lw-shadow-md), var(--lw-brand-glow);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .lw-card-glow:hover { transform: translateY(-3px); }
+}
+
+/* Row highlight for data tables. */
+.lw-row-hover tbody tr { transition: background var(--lw-duration-fast) var(--lw-ease-out); }
+.lw-row-hover tbody tr:hover td { background: var(--lw-bg-subtle); }
+
+/* Flowing connector line — pair with an SVG path (fill none, stroke set by the
+   consumer). The dash drift reads as data moving along the line. */
+.lw-flow-line { stroke-dasharray: 6 6; }
+@media (prefers-reduced-motion: no-preference) {
+  .lw-flow-line { animation: lwDashFlow 1.2s linear infinite; }
+}
+@keyframes lwDashFlow { to { stroke-dashoffset: -12; } }
+
+/* Slow drifting brand wash for dark grounds. Layered as its own pseudo so the
+   ground's grid/wash stay put; transform-only, compositor-friendly. */
+.lw-wash { position: relative; }
+.lw-wash::before {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  z-index: 0;
+  background: radial-gradient(42rem at 30% 30%, hsl(var(--lw-brand-500-c) / 0.10), transparent 60%);
+  pointer-events: none;
+}
+.lw-wash > * { position: relative; z-index: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  .lw-wash::before { animation: lwDrift 32s ease-in-out infinite alternate; }
+}
+@keyframes lwDrift {
+  from { transform: translate3d(-4%, -3%, 0) scale(1); }
+  to   { transform: translate3d(5%, 4%, 0) scale(1.12); }
+}
+
 /* Grow a ≥44×44px tap target on small controls WITHOUT resizing them visually.
    Touch only — a mouse does not need it and it would eat hover areas. */
 @media (pointer: coarse) {
