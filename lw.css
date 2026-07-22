@@ -621,3 +621,105 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 @media (max-width: 860px) {
   input, textarea, select { font-size: 16px; }
 }
+
+/* ---- Scroll-driven motion (v0.4.0) -----------------------------------------
+   Progressive enhancement on CSS scroll timelines. Double-gated: browsers
+   without animation-timeline and readers who prefer reduced motion both get
+   the complete static state. These layer ON TOP of the consumer's own
+   IntersectionObserver reveal — never replace it. */
+
+/* Fade + small rise as the element scrolls into view. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .lw-scroll-fade {
+      animation: lwScrollFade linear both;
+      animation-timeline: view();
+      animation-range: entry 10% entry 90%;
+    }
+  }
+}
+@keyframes lwScrollFade {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Page/section scroll progress rail. Consumer sizes and positions the bar;
+   this only drives its scaleX from the document scroll. */
+.lw-scroll-progress {
+  transform-origin: 0 50%;
+  transform: scaleX(1);
+  background: var(--lw-brand-500);
+}
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .lw-scroll-progress {
+      animation: lwScrollGrow linear both;
+      animation-timeline: scroll(root block);
+    }
+  }
+}
+@keyframes lwScrollGrow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* SVG line-draw keyed to scroll. Apply to a path with a known length exported
+   as --lw-draw-len (px). Static state is FULLY DRAWN — SSR and non-supporting
+   browsers show the finished diagram. */
+.lw-draw { stroke-dashoffset: 0; }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .lw-draw {
+      stroke-dasharray: var(--lw-draw-len, 1000);
+      animation: lwDrawIn linear both;
+      animation-timeline: view();
+      animation-range: entry 20% cover 60%;
+    }
+  }
+}
+@keyframes lwDrawIn {
+  from { stroke-dashoffset: var(--lw-draw-len, 1000); }
+  to   { stroke-dashoffset: 0; }
+}
+
+/* ---- Browser frame (v0.4.0) ------------------------------------------------
+   Chrome around a product screenshot: toolbar dots + address pill, soft brand
+   glow. Pure CSS, token colors only. Markup:
+     <figure class="lw-browser-frame">
+       <div class="lw-browser-bar"><i></i><i></i><i></i>
+         <span class="lw-browser-url">app.example.com</span></div>
+       <img … />
+     </figure> */
+.lw-browser-frame {
+  margin: 0;
+  border: 1px solid var(--lw-line);
+  border-radius: var(--lw-radius-lg);
+  overflow: hidden;
+  background: var(--lw-surface-0);
+  box-shadow: var(--lw-shadow-md), var(--lw-brand-glow);
+}
+.lw-browser-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  background: var(--lw-bg-subtle);
+  border-bottom: 1px solid var(--lw-line);
+}
+.lw-browser-bar i {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--lw-radius-pill);
+  background: hsl(var(--lw-text-4-c) / 0.5);
+}
+.lw-browser-url {
+  margin-left: var(--lw-space-8);
+  padding: 3px 12px;
+  border-radius: var(--lw-radius-pill);
+  background: var(--lw-surface-2);
+  font-family: var(--lw-font-mono);
+  font-size: var(--lw-text-xs);
+  color: var(--lw-text-3);
+  line-height: 1.4;
+}
+.lw-browser-frame img { display: block; width: 100%; height: auto; }

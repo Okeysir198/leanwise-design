@@ -121,6 +121,20 @@ Five additive primitives, all token-driven:
   tones) inside the existing console frame; `.lw-console-caret` adds a blinking caret,
   static under reduced motion.
 
+## v0.4.0 scroll-driven motion + browser frame (`lw.css`)
+
+All progressive enhancement — double-gated behind `@supports (animation-timeline: …)`
+AND `prefers-reduced-motion: no-preference`; the static state is always complete:
+
+- **`.lw-scroll-fade`** — fade + 14px rise keyed to the element's own `view()` timeline.
+  Layer on top of an IO reveal, never instead of it.
+- **`.lw-scroll-progress`** — scaleX rail driven by root scroll (`scroll(root block)`).
+  Consumer sizes/positions the bar; static state is full.
+- **`.lw-draw`** — SVG line-draw on scroll. Set `--lw-draw-len` (path length in px) on
+  the path; unsupporting browsers and reduced motion get the fully drawn path.
+- **`.lw-browser-frame`** — browser chrome around a screenshot: `.lw-browser-bar` with
+  three `<i>` dots + `.lw-browser-url` address pill, `--lw-brand-glow` shadow. Pure CSS.
+
 ## Enforcement
 
 ```bash
