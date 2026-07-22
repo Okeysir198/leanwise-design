@@ -4,15 +4,17 @@ The canonical token core for every LeanWiseAI product. **Depend on it; never cop
 
 Its predecessor (`DESIGN-SYSTEM.md`) shared token *values* by asking humans to hand-sync
 two files. That failed: `--s-6` came to mean 24px in the marketing site and `--s6` 32px in
-rag-service — a hyphen apart, 8px different — and a third product (VSS) shipped with no
-LeanWise brand at all. This package exists so consistency is a dependency, not a discipline.
+rag-service — a hyphen apart, 8px different — and a third product (VSS) initially shipped
+with no LeanWise brand at all. This package remediated that: all three products — the
+marketing site, VSS/Ask (via the Tailwind preset), and rag-service — now consume it, so
+consistency is a dependency, not a discipline.
 
 ## Install
 
 ```jsonc
 // package.json
 "dependencies": {
-  "@leanwise/design": "github:Okeysir198/leanwise-design#v0.1.4"
+  "@leanwise/design": "github:Okeysir198/leanwise-design#v0.2.3"
 }
 ```
 
@@ -80,6 +82,24 @@ And the corollary that catches everyone: **shadcn's `--accent` is a hover *surfa
 brand color.** Overriding it with a saturated color makes every ghost-button hover shout.
 Per-tenant themes override `--primary` and `--ring`; never `--accent`.
 
+## Logo
+
+`assets/` holds the brand logo, and **this package is its source of truth**:
+
+```
+assets/logo-icon.png        the square icon mark
+assets/logo-leanwise.png    the full wordmark
+```
+
+Import it (`import logo from "@leanwise/design/assets/logo-leanwise.png"`) or copy the PNG
+into your app's `public/` — copying is fine, but **copy from here**, never from another app,
+so every product serves the same file and a logo update is a version bump, not a scavenger
+hunt.
+
+**The logo is never tinted.** Do not run it through `--primary`, a CSS `filter`, tenant
+`brandVars()`, or any recolor — the mark ships in its own colors and stays that way, on
+light and dark alike.
+
 ## Enforcement
 
 ```bash
@@ -114,7 +134,8 @@ shadcn.css              maps --primary/--background/… → tokens
 tailwind-preset.js      Tailwind v3 consumers
 lw.css                  .lw-* marketing layer (+ 44px touch targets, iOS zoom guard)
 fonts/ + fonts.css      Geist + Geist Mono, self-hosted, incl. Vietnamese subsets
-lib/brand.ts            brandVars() / inkOn() / monogram()
+assets/                 the brand logo PNGs — the source of truth (see Logo)
+lib/brand.js            brandVars() / inkOn() / monogram() (+ brand.d.ts)
 bin/                    the contrast gate and the token lint
 ```
 

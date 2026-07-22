@@ -23,8 +23,8 @@ module.exports = {
   theme: {
     container: {
       center: true,
-      padding: "2rem",
-      screens: { "2xl": "1400px" },
+      padding: "var(--lw-space-16)",
+      screens: { "2xl": "var(--lw-col-page)" },
     },
     extend: {
       colors: {

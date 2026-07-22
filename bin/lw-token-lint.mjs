@@ -43,7 +43,7 @@ const RULES = [
   },
   {
     id: "palette-escape",
-    re: /\b(?:bg|text|border|ring|fill|stroke|from|to|via)-(?:emerald|amber|sky|rose|indigo|violet|red|green|blue|yellow|orange|teal|zinc|slate|gray|neutral|stone)-\d{2,3}\b/g,
+    re: /\b(?:bg|text|border|ring|fill|stroke|from|to|via|accent|caret|divide|outline|decoration)-(?:emerald|amber|sky|rose|indigo|violet|red|green|blue|yellow|orange|teal|zinc|slate|gray|neutral|stone)-\d{2,3}\b/g,
     msg: "Tailwind palette color — use the semantic token (success/warning/destructive/primary)",
   },
   {

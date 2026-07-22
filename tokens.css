@@ -200,6 +200,10 @@
 
   /* ---- Layout ----------------------------------------------------------- */
   --lw-col-max: 1200px;
+  /* App-shell max (the `container` class). Wider than --lw-col-max on purpose:
+     the shell holds grids and rails, --lw-col-max is the reading column. Two
+     widths, not one — expressed as tokens so they stop looking like magic numbers. */
+  --lw-col-page: 1400px;
   --lw-pad-x: clamp(20px, 4vw, 56px);
   --lw-z-nav: 50;
   --lw-z-overlay: 90;
