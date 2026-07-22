@@ -348,6 +348,12 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 .lw-section.dark .lw-lead { color: var(--lw-on-dark-2); }
 .lw-section.dark .lw-eyebrow { color: var(--lw-brand-300); }
 .lw-section.dark .lw-eyebrow::before { background: var(--lw-brand-300); }
+/* Headings and links are universal text roles on a dark band, same as .lw-lead —
+   consumers were re-deriving these locally (v0.3.1). */
+.lw-section.dark .lw-h1,
+.lw-section.dark .lw-h2,
+.lw-section.dark .lw-h3 { color: var(--lw-on-dark-1); }
+.lw-section.dark a:not(.lw-btn) { color: var(--lw-brand-400); }
 
 /* ---- Full-bleed dark hero (v0.3.0) ----------------------------------------
    Deeper than the .lw-section.dark band: deep-navy ground, a masked hairline
@@ -390,7 +396,27 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 .lw-hero-dark .lw-eyebrow { color: var(--lw-brand-300); }
 .lw-hero-dark .lw-eyebrow::before { background: var(--lw-brand-300); }
 .lw-hero-dark .lw-italic-brand,
-.lw-hero-dark .lw-accent { color: var(--lw-brand-400); }
+.lw-hero-dark .lw-accent,
+/* A bare <em> in a dark-ground headline is the accent convention in practice —
+   style it here so consumers stop forking the ink (v0.3.1). */
+.lw-hero-dark h1 em,
+.lw-section.dark h1 em,
+.lw-hero-dark h2 em,
+.lw-section.dark h2 em { color: var(--lw-brand-400); }
+
+/* The ghost button on the package's own dark grounds: transparent fill,
+   on-dark ink, hairline that reads on navy (v0.3.1). */
+.lw-hero-dark .lw-btn-ghost,
+.lw-section.dark .lw-btn-ghost {
+  background: transparent;
+  color: var(--lw-on-dark-1);
+  border-color: var(--lw-on-dark-line);
+}
+.lw-hero-dark .lw-btn-ghost:hover,
+.lw-section.dark .lw-btn-ghost:hover {
+  background: hsl(var(--lw-navy-700-c) / 0.5);
+  border-color: var(--lw-on-dark-3);
+}
 
 /* ---- Data-viz bars (v0.3.0) -----------------------------------------------
    Token-filled horizontal bar. Width via --lw-bar-value (a percentage) or an
