@@ -63,6 +63,7 @@
   --cta: var(--lw-cta-500-c);
   --cta-foreground: var(--lw-on-cta-c);   /* navy — 6.68 on orange */
   --cta-soft: var(--lw-cta-soft-c);
+  --cta-on: var(--lw-cta-text-c);         /* orange AS TEXT — theme-aware (700 light / 400 dark) */
 
   /* Status. Split fill/text because a good fill is unreadable as text:
      #16A34A on white is 3.30 (fails AA); the -on variant is 5.02 (passes). */

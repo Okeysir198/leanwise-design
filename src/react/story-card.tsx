@@ -14,10 +14,12 @@ import { monogram as nameToMonogram } from '../../lib/brand';
    when ALL of quote / person / role are present and non-empty. A partial quote
    is how invented testimonials slip in; empty → renders nothing.
 
-   NOTE: `.lw-story` (the card's internal layout) is NOT in the package's lw.css
-   — it is site-local in leanwise-ai/src/styles/resources.css. Pass it via
-   `className` to get the full layout; without it the card renders a clean
-   default stack on the `.lw-card` surface. (Flagged to the foundation owner.)
+   NOTE: `.lw-story` (the card's internal layout) now ships IN the package's
+   lw.css — pass it via `className` to get the full layout. Without it the card
+   renders a clean default stack on the `.lw-card` surface, which is still a
+   valid look. Do NOT re-declare `.lw-story` in a consumer's own stylesheet; it
+   was site-local in leanwise-ai once, and a local copy will now shadow the
+   package and drift.
    ============================================================================= */
 
 export type StoryStatus = 'live' | 'pilot';
@@ -54,7 +56,7 @@ export type StoryCardProps = {
   kpiSub?: ReactNode;
   /** Wrap the card in a link. */
   href?: string;
-  /** Extra classes on the card (e.g. "lw-story" for the site's layout). */
+  /** Extra classes on the card (e.g. "lw-story" for the package's story layout). */
   className?: string;
   /** Click handler (use with href for analytics, etc.). */
   onClick?: () => void;

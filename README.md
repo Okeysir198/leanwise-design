@@ -93,7 +93,9 @@ button is too bright to read as text on white. Teal-500 as a link scores 2.49.
 <Button>Save</Button>          {/* bg-primary — the teal FILL */}
 <a className="text-brand">   {/* brand-700 — teal as TEXT (5.06) */}
 ```
-Same for `success` / `success-on` and `warning` / `warning-on`.
+Same for `success` / `success-on`, `warning` / `warning-on`, `destructive` / `destructive-on`,
+and — since v0.6.7 — `cta` / `cta-on`. Every one of those `-on` utilities is theme-aware: the
+dark shade on light, the 400-tier on dark, so you never hand-write a theme conditional for ink.
 
 **3. `--primary` is teal. Orange is a variant, not a token.** LDS says "one orange CTA per
 view", but shadcn's `--primary` drives the *default* Button — putting orange there would make

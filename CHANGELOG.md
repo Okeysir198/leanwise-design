@@ -12,6 +12,34 @@ change is a reviewable one-line bump on each consumer's schedule. Dates are comm
 
 _Nothing yet._
 
+## [0.6.7] — 2026-07-25
+
+### Added
+- **`--lw-cta-text` / `text-cta-on` — orange as TEXT is now reachable.** `--lw-cta-text-c`
+  had been authored since the palette landed but never derived to a usable color, and the
+  Tailwind preset had no `cta.on` key — unlike success/warning/danger, which each ship a
+  theme-aware `-on` token *and* a real utility. The documented rule "a fill color is not a
+  text color" was therefore unshippable for the CTA: the only way to render #92400E was
+  `text-[hsl(var(--lw-cta-text-c))]`, the arbitrary-token escape `lw-token-lint` rejects.
+  The palette literal is now `--lw-cta-700-c` (ramp-consistent with 400/500/600, and
+  `--lw-cta-700` is exposed), and `--lw-cta-text-c` becomes the theme-aware alias —
+  `cta-700` on light, `cta-400` on dark — exactly mirroring `--lw-brand-text-c`.
+- Two contrast-gate pairs covering the new alias by **role token** rather than literal, so
+  re-pointing `--lw-cta-text-c` fails the gate in the theme it breaks. 61 → 63 pairs.
+
+### Changed
+- `--lw-cta-text-c` still resolves to #92400E on light, so any consumer already reaching for
+  it keeps its current value; on dark it now correctly flips to #FB923C instead of staying
+  at the light shade. This is a behavior change only for dark-theme usage of that triple.
+
+### Fixed
+- **Docs:** `CLAUDE.md` claimed the contrast gate checks "26 pairs" — it has been
+  manifest-driven for several releases and now checks 63. Replaced the frozen count with a
+  description of how coverage is added, and noted why role-token entries beat literal ones.
+- **Docs:** `story-card.tsx` warned that `.lw-story` is *not* in the package and lives in
+  `leanwise-ai/src/styles/resources.css`. It ships in `lw.css` today, so the note was sending
+  consumers to duplicate CSS that already exists — now warns against the local copy instead.
+
 ## [0.6.6] — 2026-07-24
 
 ### Added

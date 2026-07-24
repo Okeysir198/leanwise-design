@@ -56,12 +56,18 @@ it before cutting the tag.
 `bin/lw-contrast-check.mjs` — the WCAG AA gate. Parses `tokens.css` for the authored triples,
 scoped per block (`:root` and `.dark` separately — scanning the whole file lets the last
 declaration win and silently resolves a light token to its dark value), and fails if any of the
-26 pairs drops under 4.5:1. **Run it on every token change.** It exists because white-on-teal
-(2.49) and white-on-orange (2.80) shipped in a doc for months; a number in CI catches what an
-eyeball doesn't.
+pair in the MANIFEST drops under 4.5:1 (63 pairs as of v0.6.7). **Run it on every token change.**
+It exists because white-on-teal (2.49) and white-on-orange (2.80) shipped in a doc for months; a
+number in CI catches what an eyeball doesn't.
+
+Coverage is manifest-driven: `MANIFEST` at the top of the script is the single place a pair is
+added, and the resolver supplies the color by chasing `var()` chains. That is what makes a
+**role-token entry** (`fg: "cta-text"`) worth more than a literal one (`fg: "cta-400"`) — it
+fails the moment someone re-points the alias, in the theme they broke it in. Prefer role tokens
+when adding coverage; keep the literal entry too when the palette value itself is load-bearing.
 
 ```bash
-node bin/lw-contrast-check.mjs     # 26 pairs ≥ AA
+node bin/lw-contrast-check.mjs     # all MANIFEST pairs ≥ AA
 npx lw-token-lint <consumer>/src   # run in each consumer
 ```
 

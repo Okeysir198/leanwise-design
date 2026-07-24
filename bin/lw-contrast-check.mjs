@@ -101,6 +101,9 @@ const MANIFEST = [
   { group: "text-on-dark", fg: "fg-muted",   bg: "bg-subtle", scope: "dark", label: "secondary text on a dark card" },
   { group: "text-on-dark", fg: "brand-400",  bg: "bg",        scope: "dark", label: "teal as text on dark" },
   { group: "text-on-dark", fg: "cta-400",    bg: "bg",        scope: "dark", label: "orange as text on dark" },
+  // The role token, not the literal — guards the cta-text alias re-pointing to
+  // cta-400 in dark. Without this, dark could silently keep the light #92400E.
+  { group: "text-on-dark", fg: "cta-text",   bg: "bg",        scope: "dark", label: "role: --lw-cta-text on dark (≡ cta-400)" },
   { group: "text-on-dark", fg: "success-on", bg: "bg",        scope: "dark", label: "success as text on dark" },
   { group: "text-on-dark", fg: "warning-on", bg: "bg",        scope: "dark", label: "warning as text on dark" },
   { group: "text-on-dark", fg: "danger-on",  bg: "bg",        scope: "dark", label: "danger as text on dark" },
@@ -117,6 +120,7 @@ const MANIFEST = [
   { group: "soft chips", fg: "warning-on",   bg: "warning-soft", scope: "dark",  label: "warning badge on dark tint" },
   { group: "soft chips", fg: "danger-on",    bg: "danger-soft",  scope: "dark",  label: "danger badge on dark tint" },
   { group: "soft chips", fg: "cta-400",      bg: "cta-soft",     scope: "dark",  label: "CTA badge on dark tint" },
+  { group: "soft chips", fg: "cta-text",     bg: "cta-soft",     scope: "dark",  label: "role: --lw-cta-text on the dark CTA tint" },
 
   // ── G. Always-dark navy-deep ground — the full-bleed dark hero AND the .lw-code
   //    mono surface (lw.css verifies .lw-code sits on this same navy-deep). Every

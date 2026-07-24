@@ -71,6 +71,9 @@ module.exports = {
           DEFAULT: "hsl(var(--cta) / <alpha-value>)",
           foreground: "hsl(var(--cta-foreground) / <alpha-value>)",
           soft: "hsl(var(--cta-soft) / <alpha-value>)",
+          // `text-cta-on` — orange as TEXT. NOT `text-cta`, which is the fill and
+          // scores 2.80 on white. Mirrors success/warning/danger `-on`.
+          on: "hsl(var(--cta-on) / <alpha-value>)",
         },
         // Teal as TEXT. `text-brand` for a link/active label — NOT `text-primary`,
         // which is the fill color and scores 2.49 on white.

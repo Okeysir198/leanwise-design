@@ -164,7 +164,7 @@ type StoryCardProps = {
     kpiSub?: ReactNode;
     /** Wrap the card in a link. */
     href?: string;
-    /** Extra classes on the card (e.g. "lw-story" for the site's layout). */
+    /** Extra classes on the card (e.g. "lw-story" for the package's story layout). */
     className?: string;
     /** Click handler (use with href for analytics, etc.). */
     onClick?: () => void;
