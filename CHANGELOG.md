@@ -12,6 +12,14 @@ change is a reviewable one-line bump on each consumer's schedule. Dates are comm
 
 _Nothing yet._
 
+## [0.6.3] — 2026-07-24
+
+### Fixed
+- **`CodeBlock` raw-code path** — the `<pre class="lw-code">` for the non-highlighted
+  `code` prop missed the `tabIndex={0}` added in v0.6.2 (only the `highlightedHtml` path
+  had it). Both code paths are now keyboard-scrollable. (The site only uses the highlighted
+  path; this keeps the package internally consistent.)
+
 ## [0.6.2] — 2026-07-24
 
 More axe-found a11y on the code surface, surfaced once `CodeBlock` carried a `filename`
@@ -268,7 +276,8 @@ predicted: `--s-6` came to mean 24px in one product and `--s6` 32px in another, 
   raw hex, Tailwind palette escapes, arbitrary-value token access, and >1 `variant="cta"`
   per view.
 
-[Unreleased]: https://github.com/Okeysir198/leanwise-design/compare/v0.6.2...HEAD
+[Unreleased]: https://github.com/Okeysir198/leanwise-design/compare/v0.6.3...HEAD
+[0.6.3]: https://github.com/Okeysir198/leanwise-design/releases/tag/v0.6.3
 [0.6.2]: https://github.com/Okeysir198/leanwise-design/releases/tag/v0.6.2
 [0.6.1]: https://github.com/Okeysir198/leanwise-design/releases/tag/v0.6.1
 [0.6.0]: https://github.com/Okeysir198/leanwise-design/releases/tag/v0.6.0

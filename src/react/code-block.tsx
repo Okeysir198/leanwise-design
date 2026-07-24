@@ -66,7 +66,7 @@ function CodeSurface({
     );
   }
   return (
-    <pre className="lw-code">
+    <pre className="lw-code" tabIndex={0}>
       <code dangerouslySetInnerHTML={{ __html: escapeHtml(code ?? '') }} />
     </pre>
   );
