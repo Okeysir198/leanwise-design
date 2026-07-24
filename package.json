@@ -1,7 +1,7 @@
 {
   "name": "@leanwise/design",
-  "version": "0.5.0",
-  "description": "LeanWise Design System (LDS v4) \u2014 the canonical token core for every LeanWiseAI product.",
+  "version": "0.6.0",
+  "description": "LeanWise Design System (LDS v4) — the canonical token core for every LeanWiseAI product.",
   "license": "UNLICENSED",
   "type": "module",
   "sideEffects": [
@@ -13,6 +13,7 @@
     "fonts",
     "lib",
     "bin",
+    "dist",
     "tailwind-preset.js"
   ],
   "exports": {
@@ -29,6 +30,11 @@
       "types": "./lib/brand.d.ts",
       "default": "./lib/brand.js"
     },
+    "./react": {
+      "types": "./dist/react/index.d.ts",
+      "import": "./dist/react/index.js",
+      "require": "./dist/react/index.cjs"
+    },
     "./fonts/*": "./fonts/*",
     "./assets/*": "./assets/*"
   },
@@ -37,6 +43,21 @@
     "lw-contrast-check": "./bin/lw-contrast-check.mjs"
   },
   "scripts": {
-    "check": "node bin/lw-contrast-check.mjs"
+    "check": "node bin/lw-contrast-check.mjs",
+    "build": "tsup",
+    "prepublishOnly": "pnpm build"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.2"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild"]
   }
 }

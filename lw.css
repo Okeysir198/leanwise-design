@@ -212,7 +212,7 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
   box-shadow: 0 0 0 3px hsl(var(--lw-success-c) / 0.20);
 }
 .lw-pill.live { border-color: hsl(var(--lw-success-c) / 0.40); color: hsl(var(--lw-success-on-c)); }
-.lw-pill.live .dot { animation: lwPulse 1.8s ease-in-out infinite; }
+.lw-pill.live .dot { animation: lwPulse var(--lw-dur-pulse) ease-in-out infinite; }
 .lw-pill.rd { color: var(--lw-fg-subtle); }
 .lw-pill.rd .dot {
   background: var(--lw-fg-faint);
@@ -328,7 +328,7 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 .lw-console-caret::after {
   content: "▋";
   color: var(--lw-brand-text);
-  animation: lwCaretBlink 1.1s steps(1) infinite;
+  animation: lwCaretBlink var(--lw-dur-caret) steps(1) infinite;
 }
 @media (prefers-reduced-motion: reduce) {
   .lw-console-caret::after { animation: none; }
@@ -486,7 +486,7 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
   flex: 0 0 auto;
   gap: var(--lw-space-48);
   padding-right: var(--lw-space-48);
-  animation: lwMarquee 40s linear infinite;
+  animation: lwMarquee var(--lw-dur-marquee) linear infinite;
 }
 @keyframes lwMarquee {
   from { transform: translateX(0); }
@@ -579,7 +579,7 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
    consumer). The dash drift reads as data moving along the line. */
 .lw-flow-line { stroke-dasharray: 6 6; }
 @media (prefers-reduced-motion: no-preference) {
-  .lw-flow-line { animation: lwDashFlow 1.2s linear infinite; }
+  .lw-flow-line { animation: lwDashFlow var(--lw-dur-dash) linear infinite; }
 }
 @keyframes lwDashFlow { to { stroke-dashoffset: -12; } }
 
@@ -590,13 +590,13 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
   content: "";
   position: absolute;
   inset: -30%;
-  z-index: 0;
+  z-index: var(--lw-z-base);
   background: radial-gradient(42rem at 30% 30%, hsl(var(--lw-brand-500-c) / 0.10), transparent 60%);
   pointer-events: none;
 }
-.lw-wash > * { position: relative; z-index: 1; }
+.lw-wash > * { position: relative; z-index: var(--lw-z-raised); }
 @media (prefers-reduced-motion: no-preference) {
-  .lw-wash::before { animation: lwDrift 32s ease-in-out infinite alternate; }
+  .lw-wash::before { animation: lwDrift var(--lw-dur-wash) ease-in-out infinite alternate; }
 }
 @keyframes lwDrift {
   from { transform: translate3d(-4%, -3%, 0) scale(1); }
@@ -735,14 +735,14 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
   content: "";
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: var(--lw-z-base);
   opacity: 0;
   transition: opacity var(--lw-duration) var(--lw-ease-out);
   background: radial-gradient(240px circle at var(--lw-mx, 50%) var(--lw-my, 50%),
     hsl(var(--lw-brand-500-c) / 0.12), transparent 65%);
   pointer-events: none;
 }
-.lw-spotlight > * { position: relative; z-index: 1; }
+.lw-spotlight > * { position: relative; z-index: var(--lw-z-raised); }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .lw-spotlight:hover::before { opacity: 1; }
 }
@@ -761,7 +761,7 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
   pointer-events: none;
 }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .lw-shine:hover::after { animation: lwShine 0.7s var(--lw-ease-out); }
+  .lw-shine:hover::after { animation: lwShine var(--lw-dur-shine) var(--lw-ease-out); }
 }
 @keyframes lwShine { to { left: 120%; } }
 
@@ -772,7 +772,7 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 .lw-aurora::after {
   content: "";
   position: absolute;
-  z-index: 0;
+  z-index: var(--lw-z-base);
   width: 55%;
   aspect-ratio: 1;
   border-radius: 50%;
@@ -787,10 +787,10 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
   bottom: -30%; right: -10%;
   background: radial-gradient(circle, hsl(var(--lw-cta-500-c) / 0.07), transparent 65%);
 }
-.lw-aurora > * { position: relative; z-index: 1; }
+.lw-aurora > * { position: relative; z-index: var(--lw-z-raised); }
 @media (prefers-reduced-motion: no-preference) {
-  .lw-aurora::before { animation: lwAuroraA 26s ease-in-out infinite alternate; }
-  .lw-aurora::after  { animation: lwAuroraB 32s ease-in-out infinite alternate; }
+  .lw-aurora::before { animation: lwAuroraA var(--lw-dur-aurora-a) ease-in-out infinite alternate; }
+  .lw-aurora::after  { animation: lwAuroraB var(--lw-dur-aurora-b) ease-in-out infinite alternate; }
 }
 @keyframes lwAuroraA {
   from { transform: translate3d(0, 0, 0) scale(1); }
@@ -819,10 +819,322 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 /* Cross-document/page fade for the View Transitions API. The consumer opts the
    router in; this only shapes the default snapshot animation. */
 @media (prefers-reduced-motion: no-preference) {
-  ::view-transition-old(root) { animation-duration: 160ms; }
-  ::view-transition-new(root) { animation-duration: 220ms; }
+  ::view-transition-old(root) { animation-duration: var(--lw-dur-vt-old); }
+  ::view-transition-new(root) { animation-duration: var(--lw-dur-vt-new); }
 }
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-old(root),
   ::view-transition-new(root) { animation: none; }
+}
+
+/* =============================================================================
+   Console surface primitives (v0.6.0).
+
+   Additive building blocks for the interactive product console (the marketing
+   hero's "see CONNECT run" device). Each is a shell only — pair with the
+   .lw-btn/.lw-pill/.lw-console families above. Every color is an existing
+   --lw-* token; the code surface and its token spans are an ALWAYS-DARK island
+   (like .lw-section.dark), so they read identically in both site themes.
+   ============================================================================= */
+
+/* ---- Code block surface ---------------------------------------------------
+   An always-dark mono surface (navy-deep) with syntax token spans. The spans
+   use theme-invariant brand/cta/on-dark tokens, so they clear AA on the
+   navy-deep ground regardless of the site theme — verified against the same
+   navy-deep the dark hero sits on. No raw fills-as-text anywhere. */
+.lw-code {
+  font-family: var(--lw-font-mono);
+  font-size: var(--lw-text-sm);
+  line-height: var(--lw-lh-relaxed);
+  tab-size: 2;
+  background: var(--lw-navy-deep);
+  color: var(--lw-on-dark-1);
+  padding: var(--lw-space-16);
+  border: 1px solid var(--lw-on-dark-line);
+  border-radius: var(--lw-radius-md);
+  overflow-x: auto;
+  -webkit-font-smoothing: antialiased;
+}
+.lw-code ::selection { background: hsl(var(--lw-brand-500-c) / 0.35); color: var(--lw-on-dark); }
+/* Token spans. comment = the muted tier (on-dark-3 ≈ 4.8:1 on navy-deep); the
+   accent tiers (brand-300/400, cta-400) are well above AA on the dark ground. */
+.lw-code .tok-comment      { color: var(--lw-on-dark-3); font-style: italic; }
+.lw-code .tok-keyword      { color: var(--lw-brand-300); }
+.lw-code .tok-string       { color: var(--lw-cta-400); }
+.lw-code .tok-number       { color: var(--lw-brand-300); }
+.lw-code .tok-function     { color: var(--lw-brand-400); }
+.lw-code .tok-punctuation  { color: var(--lw-on-dark-2); }
+.lw-code .tok-tag          { color: var(--lw-cta-400); }
+.lw-code .tok-attr-name    { color: var(--lw-brand-400); }
+.lw-code .tok-attr-value   { color: var(--lw-cta-400); }
+
+/* ---- Theme toggle (segmented control) -------------------------------------
+   A light/dark/system segmented switch. Children are <button>s; the active
+   segment carries aria-pressed="true". Reuses the pill radius + inset surface. */
+.lw-theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  background: var(--lw-bg-inset);
+  border: 1px solid var(--lw-line);
+  border-radius: var(--lw-radius-pill);
+}
+.lw-theme-toggle button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--lw-space-8);
+  min-height: 32px;
+  padding: 4px 12px;
+  font-family: var(--lw-font-mono);
+  font-size: var(--lw-text-xs);
+  font-weight: var(--lw-fw-medium);
+  letter-spacing: var(--lw-tracking-wide);
+  text-transform: uppercase;
+  color: var(--lw-fg-muted);
+  background: transparent;
+  border: 0;
+  border-radius: var(--lw-radius-pill);
+  transition: background var(--lw-dur-sm) var(--lw-ease-out),
+              color var(--lw-dur-sm) var(--lw-ease-out);
+}
+.lw-theme-toggle button:hover { color: var(--lw-fg); background: var(--lw-bg-subtle); }
+.lw-theme-toggle button[aria-pressed="true"] {
+  background: var(--lw-bg);
+  color: var(--lw-fg);
+  box-shadow: var(--lw-shadow-xs);
+}
+.lw-theme-toggle button:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
+
+/* ---- File tree (document explorer) ----------------------------------------
+   A vertical mono file list for the console's explorer pane. Rows are <li>;
+   the selected row carries data-active. Brand-soft tint + brand-text ink +
+   a left brand rail — all AA-checked pairs, no fill-as-text. */
+.lw-file-tree {
+  font-family: var(--lw-font-mono);
+  font-size: var(--lw-text-sm);
+  background: var(--lw-bg-subtle);
+  border: 1px solid var(--lw-line);
+  border-radius: var(--lw-radius-md);
+  padding: var(--lw-space-8) 0;
+}
+.lw-file-tree ul { list-style: none; margin: 0; padding: 0; }
+.lw-file-tree li {
+  display: flex;
+  align-items: center;
+  gap: var(--lw-space-8);
+  padding: 5px var(--lw-space-16);
+  color: var(--lw-fg-muted);
+  cursor: default;
+  transition: background var(--lw-dur-xs) var(--lw-ease-out),
+              color var(--lw-dur-xs) var(--lw-ease-out);
+}
+.lw-file-tree li:hover { background: var(--lw-bg-muted); color: var(--lw-fg); }
+.lw-file-tree li[data-active] {
+  background: var(--lw-brand-soft);
+  color: var(--lw-brand-text);
+  box-shadow: inset 2px 0 0 var(--lw-brand-500);
+}
+.lw-file-tree li:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
+
+/* ---- Code tabs (tablist row) ----------------------------------------------
+   A horizontal tab row above a code panel. Tabs are [role="tab"]; the active
+   tab carries aria-selected="true" and gets a brand underline. */
+.lw-code-tabs {
+  display: flex;
+  align-items: stretch;
+  gap: 2px;
+  padding: 0 var(--lw-space-8);
+  border-bottom: 1px solid var(--lw-line);
+  background: var(--lw-bg-subtle);
+  overflow-x: auto;
+}
+.lw-code-tabs [role="tab"] {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lw-space-8);
+  padding: 8px 14px;
+  font-family: var(--lw-font-mono);
+  font-size: var(--lw-text-xs);
+  letter-spacing: var(--lw-tracking-wide);
+  color: var(--lw-fg-muted);
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: color var(--lw-dur-sm) var(--lw-ease-out),
+              border-color var(--lw-dur-sm) var(--lw-ease-out);
+}
+.lw-code-tabs [role="tab"]:hover { color: var(--lw-fg); }
+.lw-code-tabs [role="tab"][aria-selected="true"] {
+  color: var(--lw-brand-text);
+  border-bottom-color: var(--lw-brand-500);
+}
+.lw-code-tabs [role="tab"]:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
+
+/* ---- Status chip (Live / Pilot) -------------------------------------------
+   A small status pill. Default is neutral; variants via data-variant. Uses the
+   semantic -soft fill + -on text pair ONLY (never a raw fill behind text). */
+.lw-status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  font-family: var(--lw-font-mono);
+  font-size: var(--lw-text-eyebrow);
+  font-weight: var(--lw-fw-medium);
+  letter-spacing: var(--lw-tracking-eyebrow);
+  text-transform: uppercase;
+  border-radius: var(--lw-radius-pill);
+  background: var(--lw-bg-inset);
+  color: var(--lw-fg-muted);
+}
+.lw-status-chip::before {
+  content: "";
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.lw-status-chip[data-variant="live"] {
+  background: var(--lw-success-soft);
+  color: var(--lw-success-on);
+}
+.lw-status-chip[data-variant="pilot"] {
+  background: var(--lw-warning-soft);
+  color: var(--lw-warning-on);
+}
+.lw-status-chip[data-variant="error"] {
+  background: var(--lw-danger-soft);
+  color: var(--lw-danger-on);
+}
+
+/* ---- Run controls (console playback) --------------------------------------
+   A row of console playback buttons (Run / Step / Scrub). This is the layout
+   shell only — children are .lw-btn elements (use .lw-btn-brand for the primary
+   Run action, .lw-btn-ghost for Step/Scrub). An optional range scrubber picks
+   up the brand accent-color. */
+.lw-run-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lw-space-8);
+  flex-wrap: wrap;
+}
+.lw-run-controls .lw-btn { min-height: 36px; }
+.lw-run-controls input[type="range"] { accent-color: var(--lw-brand-500); }
+.lw-run-controls :focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
+
+/* ===========================================================================
+   v0.6.0 layout primitives — the classes FeatureGrid / StoryCard / LogoRail
+   render. These lived site-local in leanwise-ai; they move into the package so
+   the components are self-contained (and so the Ladle docs site and other
+   consumers render them without each shipping a copy). Per-customer optical
+   sizing (`[data-mark='…']`) stays consumer-side: the package owns the base
+   cell, consumers tune their own marks.
+   =========================================================================== */
+
+/* ---- Feature grid — a 3-up hairline-divided grid (→ 1 col under 900px).
+   Each cell: optional mono index/eyebrow + optional icon, then heading + body. */
+.lw-features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--lw-line);
+  border: 1px solid var(--lw-line);
+  border-radius: var(--lw-radius-md);
+  overflow: hidden;
+}
+@media (max-width: 900px) { .lw-features { grid-template-columns: 1fr; } }
+.lw-feature {
+  background: var(--lw-bg);
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.lw-feature .num {
+  font-family: var(--lw-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--lw-brand-700);
+}
+.lw-feature .icon { color: var(--lw-brand-700); display: inline-flex; }
+.lw-feature h3 { font-size: 19px; font-weight: 600; letter-spacing: -0.015em; margin: 4px 0 0; }
+.lw-feature p { color: var(--lw-fg-subtle); font-size: 14px; line-height: 1.6; margin: 0; }
+
+/* ---- Story card — a square mark/monogram tile + body. Hover lift/glow comes
+   from .lw-card-glow on the same element; do NOT add a competing border/transform
+   hover here (it would fight the brand border). */
+.lw-story {
+  background: var(--lw-bg);
+  border: 1px solid var(--lw-line);
+  border-radius: var(--lw-radius-md);
+  padding: 32px;
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+.lw-story .logo,
+.lw-monogram {
+  width: 64px; height: 64px;
+  border-radius: var(--lw-radius-sm);
+  background: var(--lw-bg-muted);
+  border: 1px solid var(--lw-line);
+  display: grid; place-items: center;
+  font-family: var(--lw-font-mono); font-size: 11px;
+  color: var(--lw-fg-muted);
+}
+.lw-story .logo img,
+.lw-monogram img { max-width: 48px; max-height: 32px; }
+.lw-story h3 { font-size: 18px; font-weight: 600; letter-spacing: -0.012em; margin: 0 0 8px; line-height: 1.3; text-wrap: balance; }
+.lw-story p { font-size: 14px; color: var(--lw-fg-subtle); line-height: 1.55; margin: 0 0 16px; }
+.lw-story .lw-story-quote {
+  margin: 0 0 16px; padding: 0; border: 0;
+  font-size: 15px; line-height: 1.55; color: var(--lw-fg); font-style: normal;
+}
+.lw-story .lw-story-quote cite {
+  display: block; margin-top: 8px;
+  font-family: var(--lw-font-mono); font-size: 12px; letter-spacing: 0.12em;
+  color: var(--lw-fg-subtle); font-style: normal;
+}
+.lw-story .meta {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  font-family: var(--lw-font-mono); font-size: 12px; letter-spacing: 0.12em; color: var(--lw-fg-subtle);
+  padding-top: 12px; border-top: 1px solid var(--lw-line);
+}
+.lw-story .meta b { color: var(--lw-brand-text); font-weight: 500; }
+
+/* ---- Logo cell (trust rail) — the fixed-size optical box that makes
+   heterogeneous marks read as one system and lets a white-background JPEG
+   vanish into its own chip. Marks without an image degrade to their name. */
+.lw-logo-cell {
+  height: 52px; width: 148px; flex: none; min-width: 0;
+  display: grid; place-items: center;
+  padding: 0 10px;
+  background: var(--lw-surface-0);
+  border: 1px solid var(--lw-line);
+  border-radius: var(--lw-radius-sm);
+  transition: border-color var(--lw-dur-md) var(--lw-ease-out),
+              box-shadow var(--lw-dur-md) var(--lw-ease-out);
+}
+.lw-logo-cell img {
+  max-width: 76%; max-height: 32px;
+  width: auto; height: auto; object-fit: contain;
+  opacity: 0.55; filter: grayscale(1) contrast(0.9);
+  transition: opacity var(--lw-dur-md) var(--lw-ease-out),
+              filter var(--lw-dur-md) var(--lw-ease-out);
+}
+.lw-logo-cell .name {
+  font-family: var(--lw-font-mono); font-size: 12px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--lw-fg-subtle);
+  white-space: nowrap;
+  transition: color var(--lw-dur-md) var(--lw-ease-out);
+}
+.lw-logo-cell:hover { border-color: var(--lw-line-strong); box-shadow: var(--lw-shadow-sm); }
+.lw-logo-cell:hover img { opacity: 1; filter: grayscale(0); }
+.lw-logo-cell:hover .name { color: var(--lw-fg-muted); }
+@media (prefers-reduced-motion: reduce) {
+  .lw-logo-cell, .lw-logo-cell img, .lw-logo-cell .name { transition: none; }
 }

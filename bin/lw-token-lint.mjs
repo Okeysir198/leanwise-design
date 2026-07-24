@@ -7,9 +7,11 @@
  * exactly how the previous system died: the values were shared, the usage was not.
  * This turns the style guide's sentences into build failures.
  *
- *   npx lw-token-lint src            # exits non-zero on any violation
+ *   npx lw-token-lint src            # TSX mode: exits non-zero on any violation
+ *   npx lw-token-lint                # CSS mode: self-check the package's lw.css
+ *   npx lw-token-lint --css          #   (same thing, explicit)
  *
- * Rules, and why each one exists:
+ * TSX rules, and why each one exists:
  *   1. raw hex in components      — bypasses the token core entirely; unthemeable,
  *                                   invisible to the contrast gate.
  *   2. Tailwind palette escapes   — `bg-emerald-500/15` for a success chip means
@@ -20,12 +22,42 @@
  *                                   text colors. Use the real utility (`bg-primary`).
  *   4. >1 CTA per view            — "one orange per view" is the whole point of having
  *                                   an orange. A doc cannot enforce it; this can.
+ *
+ * CSS rules (self-check on lw.css):
+ *   5. raw duration               — a .lw-* rule using a raw <n>s/<n>ms instead of a
+ *                                   --lw-dur-* or --lw-ease-* token. Ambient loops have
+ *                                   their own named --lw-dur-* tokens, so there is no
+ *                                   legitimate reason to reach for a literal.
+ *   6. raw z-index                — a .lw-* rule using a positive z-index literal
+ *                                   instead of a --lw-z-* token. Negative (-1, the
+ *                                   behind-background pseudo pattern) is the one
+ *                                   exempt literal — there is no "behind" tier.
  */
 
-import { readdirSync, readFileSync, statSync } from "node:fs";
-import { join, relative, extname } from "node:path";
+import { readdirSync, readFileSync, statSync, existsSync } from "node:fs";
+import { join, relative, extname, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 
-const target = process.argv[2] ?? "src";
+const PKG_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
+const arg = process.argv[2];
+
+// CSS self-check mode: no arg, or --css. Runs against the package's own lw.css.
+// Function declaration is hoisted, so it is callable here despite being defined
+// at the bottom of the file.
+if (!arg || arg === "--css") {
+  const errs = cssSelfCheck();
+  if (errs.length) {
+    for (const e of errs) {
+      console.error(`lw.css  [${e.rule}]  ${e.hit}\n    in \`${e.selector}\` — ${e.msg}`);
+    }
+    console.error(`\n\x1b[31m${errs.length} CSS token violation(s).\x1b[0m See @leanwise/design/CLAUDE.md.\n`);
+    process.exit(1);
+  }
+  console.log(`\x1b[32mCSS self-check clean.\x1b[0m`);
+  process.exit(0);
+}
+
+const target = arg;
 const EXT = new Set([".tsx", ".ts", ".jsx", ".js"]);
 
 /** Files allowed to define the primitives (they legitimately name the raw tokens). */
@@ -107,3 +139,87 @@ if (violations) {
   process.exit(1);
 }
 console.log(`\x1b[32mToken lint clean.\x1b[0m`);
+
+/**
+ * CSS self-check — keeps lw.css honest about its own token contract. See the
+ * header for the two rules (raw-duration, raw-z-index). Returns an array of
+ * { rule, hit, selector, msg } objects; the caller prints and exits.
+ */
+function cssSelfCheck() {
+  const lwPath = join(PKG_ROOT, "lw.css");
+  if (!existsSync(lwPath)) {
+    return [{ rule: "no-lw-css", hit: "lw.css", selector: "-", msg: `not found at ${lwPath}` }];
+  }
+  const raw = readFileSync(lwPath, "utf8");
+  // Strip comments so prose mentioning `1.8s` or `z-index` does not trip a rule.
+  const src = raw.replace(/\/\*[\s\S]*?\*\//g, "");
+
+  // Walk the file with a brace-depth scanner and emit every (selector, body)
+  // pair. Nested rules (inside @media/@supports) surface as their own pairs; the
+  // outer at-rule's body is also emitted, but its selector lacks `.lw-` and is
+  // skipped, so declarations are not double-counted.
+  const rules = [];
+  const stack = [];
+  let buf = "";
+  for (let i = 0; i < src.length; i++) {
+    const c = src[i];
+    if (c === "{") {
+      stack.push({ selector: buf.trim(), start: i + 1 });
+      buf = "";
+    } else if (c === "}") {
+      const top = stack.pop();
+      if (top) rules.push({ selector: top.selector, body: src.slice(top.start, i) });
+      buf = "";
+    } else {
+      buf += c;
+    }
+  }
+
+  const errs = [];
+  const TIME_PROP = /^(animation|transition|animation-duration|transition-duration)$/;
+  const TIME_LIT = /\d+(?:\.\d+)?(?:ms|s)\b/g;
+
+  for (const { selector, body } of rules) {
+    if (!/\.lw-/.test(selector)) continue;
+    const decls = body.split(";");
+    for (const decl of decls) {
+      const colon = decl.indexOf(":");
+      if (colon < 0) continue;
+      const prop = decl.slice(0, colon).trim().toLowerCase();
+      const value = decl.slice(colon + 1);
+
+      // Rule 6: z-index must reference a --lw-z-* token. Negative (-1, the
+      // behind-background pseudo pattern) is the one exempt literal.
+      if (prop === "z-index") {
+        const v = value.trim();
+        if (/^-?\d/.test(v) && !v.includes("var(")) {
+          const n = parseFloat(v);
+          if (!Number.isNaN(n) && n >= 0) {
+            errs.push({
+              rule: "raw-z-index",
+              hit: `z-index: ${v}`,
+              selector,
+              msg: "use a --lw-z-* token (-1 behind-background is the only exempt literal)",
+            });
+          }
+        }
+      }
+
+      // Rule 5: animation/transition durations must come from a token. Strip
+      // var(...) first so a token-built shorthand passes; any remaining time
+      // literal is a raw duration bypassing the --lw-dur-* scale.
+      if (TIME_PROP.test(prop)) {
+        const varless = value.replace(/var\([^)]*\)/g, "");
+        for (const m of varless.matchAll(TIME_LIT)) {
+          errs.push({
+            rule: "raw-duration",
+            hit: `${prop}: …${m[0]}…`,
+            selector,
+            msg: "use a --lw-dur-* or --lw-ease-* token (ambient loops have named --lw-dur-* tokens)",
+          });
+        }
+      }
+    }
+  }
+  return errs;
+}

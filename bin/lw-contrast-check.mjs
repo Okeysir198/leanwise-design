@@ -1,17 +1,35 @@
 #!/usr/bin/env node
 /**
- * WCAG contrast gate for the token core.
+ * Derived WCAG 2.1 contrast gate for the token core.
  *
- * This exists because the obvious mapping was wrong and nobody noticed: white
- * text on the LeanWise orange (#F97316) scores 2.80, and on the teal (#14B8A6)
- * scores 2.49. Both fail AA. The design system shipped that pairing in a doc for
- * months. A number in CI would have caught it on day one; a human eyeballing a
- * mockup did not.
+ * WHY THIS EXISTS — white on the brand teal (#14B8A6) scores 2.49 and on the
+ * CTA orange (#F97316) 2.80. Both fail AA. The design system shipped that pairing
+ * for months; a human eyeballing a mockup did not catch it, a number in CI would
+ * have. This file is that number.
  *
- * Parses tokens.css for the authored HSL triples, resolves each pair below, and
- * fails the build if any drops under threshold. Run it whenever a token changes.
+ * DERIVED, NOT HAND-LISTED — the old gate hardcoded a PAIRS array of triples.
+ * This rewrite reads the color graph straight out of tokens.css:
  *
- *   node bin/lw-contrast-check.mjs
+ *   1. Parse every theme block (:root, .dark, :root[data-theme="dark"],
+ *      the @media dark inner rule, :where(.lw-band-dark/-light)) by brace-walking.
+ *   2. Per block, collect --lw-*-c channel declarations (HSL triples OR var()
+ *      references) plus the bare-name color literals (the --lw-on-dark* rgba
+ *      family). Resolve the var() chains to their final RGB within each scope.
+ *   3. Build two CANONICAL scopes — light (:root) and dark (:root ⊕ .dark).
+ *   4. Evaluate every pair in MANIFEST against the scope(s) it declares.
+ *
+ * The manifest is the SINGLE place coverage is added — append an entry and it is
+ * checked. The colors come from the parse, so re-pointing a role token (e.g.
+ * --lw-on-brand-c → var(--lw-fg-c)) is caught the moment it breaks a pair, in the
+ * theme it breaks it in. Alpha foregrounds (the --lw-on-dark* tier) are
+ * composited over their background before contrast is computed, so the check is
+ * honest about semi-transparent ink.
+ *
+ * The last-declaration-wins bug that once reported light badges at 2.14 is kept
+ * out by parsing per-block and resolving each scope independently — the file is
+ * never scanned whole.
+ *
+ *   node bin/lw-contrast-check.mjs         # CI invocation — exits non-zero on any fail
  */
 
 import { readFileSync } from "node:fs";
@@ -19,86 +37,159 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
+const TOKENS_PATH = join(ROOT, "tokens.css");
 
-const AA_TEXT = 4.5; // body text
-const AA_UI = 3.0; // large text, icons, UI boundaries
+const AA_TEXT = 4.5; // body text (normal)
+const AA_LARGE = 3.0; // large text / icons / UI boundaries — opt-in per pair via `large`
 
-/** Pairs that must hold. `ui: true` relaxes to 3.0 (icons / large type / borders). */
-const PAIRS = [
-  // The decision this file exists to defend: brand fills carry NAVY ink.
-  ["on-brand", "brand-500", "brand fill + its ink (default Button)"],
-  ["on-cta", "cta-500", "CTA fill + its ink (the one orange button)"],
-  ["on-danger", "danger", "destructive fill + its ink (white — the exception)"],
-  ["on-brand", "success", "success fill + its ink"],
-  ["on-brand", "warning", "warning fill + its ink"],
+/* =============================================================================
+   1. THE COMPOSITION MANIFEST — declare intent; the resolver supplies color.
+      `fg` / `bg` name a token by its BARE name (strip the --lw- prefix and the
+      trailing -c). The resolver chases var() chains, so role tokens (fg, bg,
+      on-brand, success-on …) and palette tokens (text-1, brand-500, surface-0 …)
+      both work. `scope` is "light" | "dark" | "both". `large: true` relaxes to 3:1
+      (icons / ≥18pt) — left off by default; the documented AA floor is 4.5.
+   ============================================================================= */
 
-  // Text on the light page.
-  ["text-1", "surface-0", "body text on page"],
-  ["text-2", "surface-0", "secondary text on page"],
-  ["text-3", "surface-0", "muted text on page (the floor)"],
-  ["brand-700", "surface-0", "teal AS TEXT — links (brand-500 would be 2.49)"],
-  ["success-text", "surface-0", "success as text"],
-  ["warning-text", "surface-0", "warning as text"],
-  ["danger-text", "surface-0", "danger as text"],
-  ["text-1", "surface-1", "body text on subtle surface"],
-  ["text-1", "brand-50", "text on the --accent hover surface"],
+const MANIFEST = [
+  // ── A. Brand / CTA fills + their ink. Theme-invariant: the fills and the navy
+  //    ink (--lw-on-brand-c → --lw-text-1-c, never re-pointed) are the same color
+  //    in both themes. Checked in BOTH so a future re-point onto --lw-fg is caught.
+  { group: "brand fills", fg: "on-brand",  bg: "brand-500", scope: "both", label: "teal fill + navy ink (default Button)" },
+  { group: "brand fills", fg: "on-brand",  bg: "brand-600", scope: "both", label: "teal hover + navy ink" },
+  { group: "brand fills", fg: "on-cta",    bg: "cta-500",   scope: "both", label: "orange CTA fill + navy ink (the one orange button)" },
+  { group: "brand fills", fg: "on-cta",    bg: "cta-600",   scope: "both", label: "orange CTA hover + navy ink" },
+  { group: "brand fills", fg: "on-danger", bg: "danger",    scope: "both", label: "destructive fill + WHITE ink (the documented exception)" },
 
-  // Text on the dark page. Names resolved from the .dark block.
-  ["d-text-1", "d-paper", "body text on dark"],
-  ["d-text-2", "d-paper", "secondary text on dark"],
-  ["d-text-3", "d-paper", "muted text on dark"],
-  ["brand-400", "d-paper", "teal as text on dark"],
-  ["cta-400", "d-paper", "orange as text on dark"],
-  ["d-text-1", "d-surface", "text on a dark card"],
+  // ── B. Semantic status fills + their ink. Navy sits on green/amber fills too.
+  { group: "status fills", fg: "on-brand", bg: "success",   scope: "both", label: "success fill + navy ink" },
+  { group: "status fills", fg: "on-brand", bg: "warning",   scope: "both", label: "warning fill + navy ink" },
 
-  // The full-bleed dark hero (.lw-hero-dark) sits on navy-deep, not the dark paper.
-  ["brand-400", "navy-deep", "brand accent text on the dark hero"],
+  // ── C. Brand / status / CTA AS TEXT on the LIGHT page. A fill is not a text
+  //    color — teal-500 as a link is 2.49, so links are brand-700. Same split for
+  //    every status and for the CTA.
+  { group: "text-on-light", fg: "brand-700",    bg: "surface-0", scope: "light", label: "teal AS TEXT — links (brand-500 would be 2.49)" },
+  { group: "text-on-light", fg: "success-text", bg: "surface-0", scope: "light", label: "success as text on page" },
+  { group: "text-on-light", fg: "warning-text", bg: "surface-0", scope: "light", label: "warning as text on page" },
+  { group: "text-on-light", fg: "danger-text",  bg: "surface-0", scope: "light", label: "danger as text on page" },
+  { group: "text-on-light", fg: "cta-text",     bg: "surface-0", scope: "light", label: "orange AS TEXT on page (#92400E)" },
 
-  // Badge/chip pairs: the -on text sitting on its own -soft tint. These are easy to
-  // forget in the dark block — and forgetting them shipped #34D399 on #DCFCE7 (1.75).
-  ["success-text", "success-soft", "success badge (light)"],
-  ["warning-text", "warning-soft", "warning badge (light)"],
-  ["danger-text", "danger-soft", "danger badge (light)"],
-  ["d-success-on", "d-success-soft", "success badge (dark)"],
-  ["d-warning-on", "d-warning-soft", "warning badge (dark)"],
-  ["d-danger-on", "d-danger-soft", "danger badge (dark)"],
+  // ── D. Text tiers on LIGHT surfaces (page, cards, inset, brand tint).
+  //    text-4 / fg-faint are deliberately EXCLUDED — documented "decorative only,
+  //    fails AA as body text". Adding them would test a pair the system never
+  //    claimed passes; that is noise, not coverage.
+  { group: "text-on-light", fg: "text-1", bg: "surface-0", scope: "light", label: "body text on page" },
+  { group: "text-on-light", fg: "text-2", bg: "surface-0", scope: "light", label: "secondary text on page" },
+  { group: "text-on-light", fg: "text-3", bg: "surface-0", scope: "light", label: "muted text on page (the floor)" },
+  { group: "text-on-light", fg: "text-1", bg: "surface-1", scope: "light", label: "body text on subtle surface" },
+  { group: "text-on-light", fg: "text-1", bg: "surface-2", scope: "light", label: "body text on muted surface" },
+  { group: "text-on-light", fg: "text-1", bg: "surface-3", scope: "light", label: "body text on inset surface" },
+  { group: "text-on-light", fg: "text-1", bg: "brand-50",  scope: "light", label: "text on the brand-50 accent surface" },
+  // Role-token sanity: --lw-fg must stay aliased to --lw-text-1 on --lw-bg = surface-0.
+  // If anyone re-points --lw-fg-c in :root, these flip and fail — exactly the guard.
+  { group: "text-on-light", fg: "fg",        bg: "bg",        scope: "light", label: "role: --lw-fg on --lw-bg (≡ text-1/surface-0)" },
+  { group: "text-on-light", fg: "fg-muted",  bg: "bg",        scope: "light", label: "role: --lw-fg-muted on --lw-bg" },
+  { group: "text-on-light", fg: "fg-subtle", bg: "bg",        scope: "light", label: "role: --lw-fg-subtle on --lw-bg" },
+
+  // ── E. Text tiers + accents on the DARK page. Names resolve via the .dark
+  //    overlay; the role tokens re-point here, the palette tokens (text-1 …) do
+  //    not, which is why the dark block re-declares --lw-fg-c as a literal triple.
+  { group: "text-on-dark", fg: "fg",         bg: "bg",        scope: "dark", label: "body text on dark" },
+  { group: "text-on-dark", fg: "fg-muted",   bg: "bg",        scope: "dark", label: "secondary text on dark" },
+  { group: "text-on-dark", fg: "fg-subtle",  bg: "bg",        scope: "dark", label: "muted text on dark" },
+  { group: "text-on-dark", fg: "fg",         bg: "bg-subtle", scope: "dark", label: "body text on a dark card" },
+  { group: "text-on-dark", fg: "fg-muted",   bg: "bg-subtle", scope: "dark", label: "secondary text on a dark card" },
+  { group: "text-on-dark", fg: "brand-400",  bg: "bg",        scope: "dark", label: "teal as text on dark" },
+  { group: "text-on-dark", fg: "cta-400",    bg: "bg",        scope: "dark", label: "orange as text on dark" },
+  { group: "text-on-dark", fg: "success-on", bg: "bg",        scope: "dark", label: "success as text on dark" },
+  { group: "text-on-dark", fg: "warning-on", bg: "bg",        scope: "dark", label: "warning as text on dark" },
+  { group: "text-on-dark", fg: "danger-on",  bg: "bg",        scope: "dark", label: "danger as text on dark" },
+
+  // ── F. Status soft chip tints + their -on text — the documented bug floor.
+  //    success-on on success-soft was 1.75 (#34D399 on #DCFCE7) for one build
+  //    because the dark block did not re-point the tint. Light uses the -text
+  //    shades; dark uses the theme-aware -on shades. CTA chip included on both.
+  { group: "soft chips", fg: "success-text", bg: "success-soft", scope: "light", label: "success badge on light tint" },
+  { group: "soft chips", fg: "warning-text", bg: "warning-soft", scope: "light", label: "warning badge on light tint" },
+  { group: "soft chips", fg: "danger-text",  bg: "danger-soft",  scope: "light", label: "danger badge on light tint" },
+  { group: "soft chips", fg: "cta-text",     bg: "cta-soft",     scope: "light", label: "CTA badge on light tint" },
+  { group: "soft chips", fg: "success-on",   bg: "success-soft", scope: "dark",  label: "success badge on dark tint" },
+  { group: "soft chips", fg: "warning-on",   bg: "warning-soft", scope: "dark",  label: "warning badge on dark tint" },
+  { group: "soft chips", fg: "danger-on",    bg: "danger-soft",  scope: "dark",  label: "danger badge on dark tint" },
+  { group: "soft chips", fg: "cta-400",      bg: "cta-soft",     scope: "dark",  label: "CTA badge on dark tint" },
+
+  // ── G. Always-dark navy-deep ground — the full-bleed dark hero AND the .lw-code
+  //    mono surface (lw.css verifies .lw-code sits on this same navy-deep). Every
+  //    row below is a .lw-code token span. The --lw-on-dark* family is rgba; the
+  //    resolver composites the alpha over navy-deep before measuring contrast, so
+  //    .tok-comment (white 0.48) is checked at its real rendered value (~4.8).
+  { group: "navy-deep ground", fg: "on-dark",   bg: "navy-deep", scope: "both", label: ".lw-code default text (opaque white on hero)" },
+  { group: "navy-deep ground", fg: "on-dark-1", bg: "navy-deep", scope: "both", label: ".lw-code strong / .tok- emphasis (white 0.92)" },
+  { group: "navy-deep ground", fg: "on-dark-2", bg: "navy-deep", scope: "both", label: ".lw-code .tok-punctuation (white 0.70)" },
+  { group: "navy-deep ground", fg: "on-dark-3", bg: "navy-deep", scope: "both", label: ".lw-code .tok-comment — the muted floor (white 0.48)" },
+  { group: "navy-deep ground", fg: "brand-400", bg: "navy-deep", scope: "both", label: ".tok-function / .tok-attr-name (teal)" },
+  { group: "navy-deep ground", fg: "brand-300", bg: "navy-deep", scope: "both", label: ".tok-keyword / .tok-number (light teal)" },
+  { group: "navy-deep ground", fg: "cta-400",   bg: "navy-deep", scope: "both", label: ".tok-string / .tok-tag / .tok-attr-value (orange)" },
 ];
 
-const css = readFileSync(join(ROOT, "tokens.css"), "utf8");
+/* =============================================================================
+   2. TOKENS.CSS PARSER
+   ============================================================================= */
+
+const cssRaw = readFileSync(TOKENS_PATH, "utf8");
+// Strip comments before brace-walking — prose mentioning `{` or a triple would
+// otherwise fool the splitter, and declarations inside `/* *\/` are inert.
+const css = cssRaw.replace(/\/\*[\s\S]*?\*\//g, "");
 
 /**
- * Pull every `--lw-<name>-c: <h> <s>% <l>%;` declaration from ONE block.
- *
- * Scoping matters: the dark block redefines the same names (that is the whole
- * point of it). Scanning the file as a whole lets the last declaration win, so a
- * light token silently resolves to its dark value and the checker compares pairs
- * that never co-occur. It reported light badges at 2.14 for exactly that reason.
+ * Split into (selector, body) rule pairs via a brace-depth walk. Nested rules
+ * (the `:root:not(…)` inside the @media block) surface as their OWN pair with
+ * their direct body, so each scope's declarations are extracted exactly once.
+ * Returns [{ selector, body }] in source order.
  */
-function triplesIn(src) {
+function splitRules(src) {
+  const rules = [];
+  const stack = [];
+  let buf = "";
+  for (let i = 0; i < src.length; i++) {
+    const c = src[i];
+    if (c === "{") {
+      stack.push({ selector: buf.trim(), start: i + 1 });
+      buf = "";
+    } else if (c === "}") {
+      const top = stack.pop();
+      if (top) rules.push({ selector: top.selector, body: src.slice(top.start, i) });
+      buf = "";
+    } else {
+      buf += c;
+    }
+  }
+  return rules;
+}
+
+/** First rule whose selector matches the regexp. Throws if absent. */
+function findRule(rules, re, label) {
+  const r = rules.find((r) => re.test(r.selector));
+  if (!r) throw new Error(`theme block not found: ${label} (no selector matched ${re})`);
+  return r;
+}
+
+/**
+ * Declarations in a block body, keyed by the FULL property suffix after --lw-.
+ * So `--lw-brand-500-c` → "brand-500-c", `--lw-bg-c` → "bg-c", `--lw-on-dark-3`
+ * → "on-dark-3". Values are the raw authored string (triple / var() / hex / rgba).
+ */
+function declarationsIn(body) {
   const out = {};
-  const re = /--lw-([a-z0-9-]+)-c:\s*([\d.]+)\s+([\d.]+)%\s+([\d.]+)%\s*;/gi;
+  const re = /--lw-([a-z0-9-]+)\s*:\s*([^;]+);/g;
   let m;
-  while ((m = re.exec(src))) out[m[1]] = [+m[2], +m[3], +m[4]];
+  while ((m = re.exec(body))) out[m[1]] = m[2].trim();
   return out;
 }
 
-/** Body of the first `<selector> { … }` block whose selector matches. */
-function block(src, selector) {
-  const i = src.indexOf(selector);
-  if (i < 0) throw new Error(`selector not found: ${selector}`);
-  const open = src.indexOf("{", i);
-  let depth = 0;
-  for (let j = open; j < src.length; j++) {
-    if (src[j] === "{") depth++;
-    else if (src[j] === "}" && --depth === 0) return src.slice(open + 1, j);
-  }
-  throw new Error(`unbalanced block: ${selector}`);
-}
-
-const light = triplesIn(block(css, ":root {"));
-const darkRaw = triplesIn(block(css, ".dark,"));
-// The dark block only re-points what CHANGES; everything else is inherited.
-const dark = { ...light, ...darkRaw };
+/* =============================================================================
+   3. COLOR VALUE PARSING + VAR() CHASE
+   ============================================================================= */
 
 function hslToRgb(h, s, l) {
   s /= 100;
@@ -106,71 +197,274 @@ function hslToRgb(h, s, l) {
   const k = (n) => (n + h / 30) % 12;
   const a = s * Math.min(l, 1 - l);
   const f = (n) => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
-  return [f(0), f(8), f(4)];
+  return { r: f(0), g: f(8), b: f(4) };
 }
+
+function hexToRgb(hex) {
+  const h = hex.length === 3 ? hex.split("").map((c) => c + c).join("") : hex;
+  return { r: parseInt(h.slice(0, 2), 16) / 255, g: parseInt(h.slice(2, 4), 16) / 255, b: parseInt(h.slice(4, 6), 16) / 255 };
+}
+
+/**
+ * Parse one declared value into one of:
+ *   { kind: "rgb", r, g, b, a }   — an opaque or alpha color ready to use
+ *   { kind: "ref", name }         — a var(--lw-<name>[-c]) reference to chase
+ *   { kind: "skip", raw }         — gradient / shadow / multiple-values; ignore
+ */
+function parseValue(raw) {
+  const v = raw.trim();
+  // HSL channel triple: "173.4 80.4% 40%"  (also "0 0% 100%")
+  const triple = v.match(/^(-?[\d.]+)\s+([\d.]+)%\s+([\d.]+)%$/);
+  if (triple) return { kind: "rgb", ...hslToRgb(+triple[1], +triple[2], +triple[3]), a: 1 };
+  // var() reference, optional fallback after a comma. The target's trailing -c is
+  // stripped so the ref name matches the BARE key the -c declaration is stored under.
+  const ref = v.match(/^var\(\s*--lw-([a-z0-9-]+)\s*(?:,[^)]*)?\)$/);
+  if (ref) {
+    let name = ref[1];
+    if (name.endsWith("-c")) name = name.slice(0, -2);
+    return { kind: "ref", name };
+  }
+  // hex literal (#FFFFFF — the --lw-on-dark family)
+  const hex = v.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
+  if (hex) return { kind: "rgb", ...hexToRgb(hex[1]), a: 1 };
+  // rgba() / rgb() — comma OR modern slash form. (rgba(255,255,255,0.70) etc.)
+  const rg = v.match(/^rgba?\(\s*([\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)\s*(?:[,/]\s*([\d.]+))?\s*\)$/i);
+  if (rg) return { kind: "rgb", r: +rg[1] / 255, g: +rg[2] / 255, b: +rg[3] / 255, a: rg[4] !== undefined ? +rg[4] : 1 };
+  // hsl()/hsla() derived lines, gradients, multi-value shadows: not solid colors.
+  return { kind: "skip", raw: v };
+}
+
+/**
+ * Build a resolved scope: bareName → { kind:"rgb", r, g, b, a }.
+ * Channels (-c declarations: triples + var refs) are collected first, then bare
+ * color literals (the rgba on-dark family); hsl() derived lines and gradients are
+ * skipped. var() refs are then chased to a concrete RGB within this same scope.
+ */
+function buildScope(decls) {
+  const scope = {};
+  for (const [k, v] of Object.entries(decls)) {
+    if (k.endsWith("-c")) {
+      const parsed = parseValue(v);
+      if (parsed.kind !== "skip") scope[k.slice(0, -2)] = parsed;
+    }
+  }
+  for (const [k, v] of Object.entries(decls)) {
+    if (k.endsWith("-c")) continue;
+    if (/^hsl\(/i.test(v) || /var\(/.test(v)) continue; // derived color / gradient ref
+    const parsed = parseValue(v);
+    if (parsed.kind === "rgb") scope[k] = parsed;
+  }
+  for (const k of Object.keys(scope)) {
+    scope[k] = chase(scope, k, new Set());
+  }
+  return scope;
+}
+
+/** Resolve a ref chain to a concrete RGB; detects cycles and missing targets. */
+function chase(scope, name, seen) {
+  if (seen.has(name)) return { kind: "cycle", name };
+  const v = scope[name];
+  if (!v) return { kind: "missing", name };
+  if (v.kind === "ref") {
+    seen.add(name);
+    return chase(scope, v.name, seen);
+  }
+  return v;
+}
+
+/* =============================================================================
+   4. SCOPE ASSEMBLY + DARK-BLOCK PARITY GUARD
+   ============================================================================= */
+
+const rules = splitRules(css);
+
+// Light defaults — the first bare :root. NOT :root[data-theme="dark"] / :root:not(…).
+const lightDecls = declarationsIn(findRule(rules, /^:root\s*$/, ":root (light defaults)").body);
+// The canonical dark overlay — the `.dark, [data-theme="dark"]` combined rule.
+const darkClassDecls = declarationsIn(findRule(rules, /^\.dark\s*,/, ".dark, [data-theme=\"dark\"]").body);
+
+// Dark = light ⊕ dark overlay (everything the dark block does NOT redeclare is
+// inherited from :root — e.g. --lw-text-1-c stays navy, which is the whole reason
+// --lw-on-brand-c points at it rather than at --lw-fg-c).
+const darkDecls = { ...lightDecls, ...darkClassDecls };
+
+const light = buildScope(lightDecls);
+const dark = buildScope(darkDecls);
+
+/**
+ * Parity guard — the design intent (documented at tokens.css ≈ line 400) is that
+ * every DARK context re-points the SAME set. The explicit attribute form
+ * (:root[data-theme="dark"]) and the dark band (:where(.lw-band-dark)) MUST agree
+ * with .dark declaration-for-declaration; a divergence here is a real drift bug
+ * and fails the gate. The @media (system-preference) block is a documented subset
+ * fallback — differences there are reported as WARNINGS, not failures, because
+ * they point at a tokens.css gap to fix, not a pair this gate measures.
+ *
+ * Likewise :where(.lw-band-light) must reproduce the light role set.
+ */
+function parity() {
+  const failPairs = []; // hard fails (explicit dark forms disagree)
+  const warnings = [];  // soft (media block / informational)
+
+  const want = [
+    { label: ":root[data-theme=\"dark\"]", re: /^:root\[data-theme="dark"\]\s*$/, here: declarationsIn(findRule(rules, /^:root\[data-theme="dark"\]\s*$/, ":root[data-theme=\"dark\"]").body), strict: true },
+    { label: ":where(.lw-band-dark)",     re: /^:where\(\.lw-band-dark\)\s*$/,    here: declarationsIn(findRule(rules, /^:where\(\.lw-band-dark\)\s*$/, ":where(.lw-band-dark)").body), strict: true },
+    { label: "@media (prefers-color-scheme: dark)", re: /^:root:not\(\.light\):not\(\[data-theme="light"\]\)\s*$/, here: declarationsIn(findRule(rules, /^:root:not\(\.light\):not\(\[data-theme="light"\]\)\s*$/, "@media dark inner").body), strict: false },
+  ];
+
+  // Compare COLOR declarations only (-c channels + the rgba on-dark family).
+  const isColorDecl = (k) => k.endsWith("-c") || /^on-dark(-[0-9])?$/.test(k);
+  // Collapse internal whitespace so "34.3  100%  91.8%" equals "34.3 100% 91.8%"
+  // (both blocks author the same triple; spacing is not a color difference).
+  const norm = (s) => s.replace(/\s+/g, " ").trim();
+
+  for (const { label, here, strict } of want) {
+    for (const k of Object.keys(darkClassDecls)) {
+      if (!isColorDecl(k)) continue;
+      const mine = here[k];
+      if (mine === undefined) {
+        const msg = `${label} is missing --lw-${k} (present in .dark)`;
+        (strict ? failPairs : warnings).push(msg);
+      } else if (norm(mine) !== norm(darkClassDecls[k])) {
+        const msg = `${label}: --lw-${k} = "${mine}" ≠ .dark "${darkClassDecls[k]}"`;
+        (strict ? failPairs : warnings).push(msg);
+      }
+    }
+  }
+
+  // Band-light must reproduce the light role set for color decls it shares.
+  const bandLightDecls = declarationsIn(findRule(rules, /^:where\(\.lw-band-light\)\s*$/, ":where(.lw-band-light)").body);
+  for (const k of Object.keys(bandLightDecls)) {
+    if (!isColorDecl(k)) continue;
+    const lightVal = lightDecls[k];
+    if (lightVal !== undefined && norm(bandLightDecls[k]) !== norm(lightVal)) {
+      failPairs.push(`:where(.lw-band-light): --lw-${k} = "${bandLightDecls[k]}" ≠ :root "${lightVal}"`);
+    }
+  }
+
+  return { failPairs, warnings };
+}
+
+/* =============================================================================
+   5. CONTRAST MATH (WCAG 2.1 relative luminance + alpha compositing)
+   ============================================================================= */
 
 function luminance([r, g, b]) {
   const lin = (v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
   return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
 }
 
-function contrast(a, b) {
-  const [l1, l2] = [luminance(a), luminance(b)].sort((x, y) => y - x);
-  return (l1 + 0.05) / (l2 + 0.05);
+/**
+ * Contrast between a foreground and its background. If the foreground has alpha
+ * (the --lw-on-dark* tier), it is composited OVER the background first — that is
+ * the color the viewer actually perceives, and the only honest basis for the ratio.
+ */
+function contrast(fg, bg) {
+  const a = fg.a ?? 1;
+  const eff = [
+    a * fg.r + (1 - a) * bg.r,
+    a * fg.g + (1 - a) * bg.g,
+    a * fg.b + (1 - a) * bg.b,
+  ];
+  const [hi, lo] = [luminance(eff), luminance([bg.r, bg.g, bg.b])].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
 }
 
-// Role aliases: names used in PAIRS that point at another token rather than
-// holding a value of their own. `d-*` resolves against the dark scope — and maps
-// to the ROLE token (--lw-fg-c), not the palette token (--lw-text-1-c), because
-// that is what actually re-points in the dark block.
-const ALIAS = {
-  "on-brand": ["light", "text-1"],
-  "on-cta": ["light", "text-1"],
-  "on-danger": ["light", "surface-0"],
-  "d-paper": ["dark", "bg"],
-  "d-surface": ["dark", "bg-subtle"],
-  "d-text-1": ["dark", "fg"],
-  "d-text-2": ["dark", "fg-muted"],
-  "d-text-3": ["dark", "fg-subtle"],
-  "d-success-on": ["dark", "success-on"],
-  "d-warning-on": ["dark", "warning-on"],
-  "d-danger-on": ["dark", "danger-on"],
-  "d-success-soft": ["dark", "success-soft"],
-  "d-warning-soft": ["dark", "warning-soft"],
-  "d-danger-soft": ["dark", "danger-soft"],
-};
+/* =============================================================================
+   6. EVALUATE THE MANIFEST
+   ============================================================================= */
 
-const resolve = (name) => {
-  const [scopeName, key] = ALIAS[name] ?? ["light", name];
-  return (scopeName === "dark" ? dark : light)[key];
+const C = { reset: "\x1b[0m", green: "\x1b[32m", red: "\x1b[31m", yellow: "\x1b[33m", dim: "\x1b[2m", bold: "\x1b[1m" };
+
+const resolveColor = (name, scopeName) => {
+  const scope = scopeName === "dark" ? dark : light;
+  const v = scope[name];
+  if (!v) return null;
+  if (v.kind === "rgb") return v;
+  return null; // cycle / missing — surfaced by chase() upstream; treat as unresolved here
 };
 
 let failed = 0;
 const rows = [];
 
-for (const [fgName, bgName, label] of PAIRS) {
-  const fg = resolve(fgName);
-  const bg = resolve(bgName);
-  if (!fg || !bg) {
-    console.error(`  ?? unresolved token in pair (${fgName} on ${bgName})`);
-    failed++;
-    continue;
+for (const entry of MANIFEST) {
+  const scopes = entry.scope === "both" ? ["light", "dark"] : [entry.scope];
+  for (const scopeName of scopes) {
+    const fg = resolveColor(entry.fg, scopeName);
+    const bg = resolveColor(entry.bg, scopeName);
+    if (!fg || !bg) {
+      rows.push({ scope: scopeName, group: entry.group, status: "MISS", ratio: "  ?  ", pair: `${entry.fg} on ${entry.bg}`, label: `unresolved token (${entry.fg || entry.bg})` });
+      failed++;
+      continue;
+    }
+    const ratio = contrast(fg, bg);
+    const threshold = entry.large ? AA_LARGE : AA_TEXT;
+    const ok = ratio >= threshold;
+    if (!ok) failed++;
+    rows.push({
+      scope: scopeName,
+      group: entry.group,
+      status: ok ? "PASS" : "FAIL",
+      ratio: ratio.toFixed(2),
+      pair: `${entry.fg} on ${entry.bg}`,
+      label: entry.label + (entry.scope === "both" ? "" : ""),
+      large: !!entry.large,
+    });
   }
-  const ratio = contrast(hslToRgb(...fg), hslToRgb(...bg));
-  const ok = ratio >= AA_TEXT;
-  if (!ok) failed++;
-  rows.push([ok ? "PASS" : "FAIL", ratio.toFixed(2), `${fgName} on ${bgName}`, label]);
 }
 
-const w = Math.max(...rows.map((r) => r[2].length));
-console.log("\nLeanWise Design System — WCAG contrast gate\n");
-for (const [status, ratio, pair, label] of rows) {
-  const mark = status === "PASS" ? "\x1b[32m✓\x1b[0m" : "\x1b[31m✗\x1b[0m";
-  console.log(`  ${mark} ${ratio.padStart(5)}  ${pair.padEnd(w)}  ${label}`);
+/* =============================================================================
+   7. REPORT
+   ============================================================================= */
+
+const { failPairs: parityFails, warnings: parityWarnings } = parity();
+
+console.log(`\n${C.bold}LeanWise Design System — derived WCAG contrast gate${C.reset}`);
+console.log(`${C.dim}canonical scopes: light (:root) + dark (:root ⊕ .dark)${C.reset}\n`);
+
+// Group rows for readability; emit a header per group.
+const groups = [];
+let last = null;
+for (const r of rows) {
+  if (r.group !== last) { groups.push([]); last = r.group; }
+  groups[groups.length - 1].push(r);
 }
+
+const w = Math.max(...rows.map((r) => r.pair.length));
+for (const grp of groups) {
+  console.log(`${C.dim}— ${grp[0].group} —${C.reset}`);
+  for (const r of grp) {
+    const mark = r.status === "PASS" ? `${C.green}✓${C.reset}` : r.status === "MISS" ? `${C.yellow}?${C.reset}` : `${C.red}✗${C.reset}`;
+    const ratioCol = (r.status === "MISS" ? r.ratio : r.ratio).padStart(5);
+    const scopeTag = `${C.dim}[${r.scope.padEnd(5)}]${C.reset}`;
+    console.log(`  ${mark} ${ratioCol}  ${scopeTag} ${r.pair.padEnd(w)}  ${C.dim}${r.label}${C.reset}`);
+  }
+  console.log();
+}
+
+if (parityFails.length) {
+  console.log(`${C.bold}Dark-block parity (hard fail — explicit dark forms disagree)${C.reset}`);
+  for (const m of parityFails) console.log(`  ${C.red}✗${C.reset} ${m}`);
+  console.log();
+  failed += parityFails.length;
+}
+
+if (parityWarnings.length) {
+  console.log(`${C.bold}Dark-block parity (warnings — @media system-preference path)${C.reset}`);
+  for (const m of parityWarnings) console.log(`  ${C.yellow}!${C.reset} ${m}`);
+  console.log(`${C.dim}  The .dark / [data-theme=\"dark\"] / .lw-band-dark forms (the ones this gate${C.reset}`);
+  console.log(`${C.dim}  measures) all agree and pass. The @media block above omits a re-point; under${C.reset}`);
+  console.log(`${C.dim}  pure system-dark preference a pair may break. Fix tokens.css, not this gate.${C.reset}\n`);
+}
+
+const pairCount = rows.filter((r) => r.status !== "MISS").length;
 
 if (failed) {
-  console.error(`\n\x1b[31m${failed} pair(s) below AA (${AA_TEXT}:1). Fix the token, not the test.\x1b[0m\n`);
+  console.error(`${C.red}${failed} pair(s) / parity check(s) below AA (${AA_TEXT}:1, or ${AA_LARGE}:1 large).${C.reset}`);
+  console.error(`${C.red}Fix the token, not the test.${C.reset}\n`);
   process.exit(1);
 }
-console.log(`\n\x1b[32mAll ${rows.length} pairs pass WCAG AA (≥ ${AA_TEXT}:1).\x1b[0m\n`);
+
+console.log(`${C.green}All ${pairCount} pairs pass WCAG AA (≥ ${AA_TEXT}:1).${C.reset}`);
+console.log(`${C.dim}Coverage is derived from tokens.css via the composition manifest — add a pair${C.reset}`);
+console.log(`${C.dim}to MANIFEST and it is checked in the scope(s) you declare.${C.reset}\n`);

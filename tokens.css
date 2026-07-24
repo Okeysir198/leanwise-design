@@ -184,21 +184,60 @@
   --lw-radius-2xl: 28px;
   --lw-radius-pill: 999px;
 
-  /* ---- Shadows (navy-tinted, not neutral black) ------------------------- */
+  /* ---- Elevation (navy-tinted, not neutral black) ------------------------
+     A five-step scale. Hairline (xs) is the faintest lift — a 1px ground line
+     that separates a surface from the page without casting. xl is a floating
+     popover/command-menu shadow. Navy-tinted so shadows read as depth on a
+     light page rather than as soot; the dark block below re-points them black. */
+  --lw-shadow-xs: 0 1px 0 rgba(11, 37, 69, 0.05);
   --lw-shadow-sm: 0 1px 2px rgba(11, 37, 69, 0.06);
   --lw-shadow-md: 0 6px 20px -8px rgba(11, 37, 69, 0.14), 0 1px 2px rgba(11, 37, 69, 0.05);
   --lw-shadow-lg: 0 24px 56px -22px rgba(11, 37, 69, 0.22), 0 2px 6px rgba(11, 37, 69, 0.06);
+  --lw-shadow-xl: 0 32px 64px -24px rgba(11, 37, 69, 0.30), 0 4px 12px rgba(11, 37, 69, 0.08);
   --lw-focus-ring: 0 0 0 3px hsl(var(--lw-brand-500-c) / 0.30);
   /* Soft brand halo for hover-glow surfaces (v0.3.2). */
   --lw-brand-glow: 0 8px 24px -6px hsl(var(--lw-brand-500-c) / 0.25);
 
-  /* ---- Motion ----------------------------------------------------------- */
-  --lw-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --lw-duration-fast: 120ms;
-  --lw-duration: 180ms;
-  /* The editorial entrance timing — hero/aside/message rise. Longer than an
-     interaction (180ms) because it is a first-paint reveal, not a hover. */
-  --lw-duration-slow: 500ms;
+  /* ---- Motion -----------------------------------------------------------
+     A richer scale (xs→xl) plus a small set of easings and a stagger. The
+     legacy --lw-duration-* names are kept as ALIASES onto this scale so every
+     existing consumer keeps working — do not remove them. Ambient loops
+     (aurora/marquee/wash/etc.) are longer than any interaction; their tokens
+     live just below and are referenced by name from lw.css. */
+  --lw-dur-xs: 100ms;   /* micro: a hover color swap                */
+  --lw-dur-sm: 180ms;   /* the default interaction                   */
+  --lw-dur-md: 300ms;   /* a panel sliding in                        */
+  --lw-dur-lg: 500ms;   /* an editorial entrance / first-paint rise  */
+  --lw-dur-xl: 800ms;   /* a slow, deliberate reveal                 */
+
+  --lw-ease-out:      cubic-bezier(0.22, 1, 0.36, 1);   /* the house curve */
+  --lw-ease-in:       cubic-bezier(0.4, 0, 1, 1);
+  --lw-ease-in-out:   cubic-bezier(0.4, 0, 0.2, 1);
+  --lw-ease-emphasis: cubic-bezier(0.16, 1, 0.3, 1);    /* long, patient decel */
+  --lw-ease-spring:   cubic-bezier(0.34, 1.56, 0.64, 1);  /* subtle overshoot */
+  --lw-stagger: 60ms;  /* per-sibling reveal delay */
+
+  /* Ambient / loop durations — longer than any interaction, named per-effect so
+     the timing is grep-able from lw.css. Kept bespoke (not on the xs→xl scale)
+     because their feel is calibrated to the effect, not to an interaction. */
+  --lw-dur-pulse:    1.8s;   /* .lw-pill.live dot blink            */
+  --lw-dur-caret:    1.1s;   /* .lw-console-caret blink            */
+  --lw-dur-dash:     1.2s;   /* .lw-flow-line drift                */
+  --lw-dur-shine:    700ms;  /* .lw-shine one-shot sweep           */
+  --lw-dur-marquee:  40s;    /* .lw-logo-rail.marquee loop         */
+  --lw-dur-wash:     32s;    /* .lw-wash drift                     */
+  --lw-dur-aurora-a: 26s;    /* .lw-aurora::before                 */
+  --lw-dur-aurora-b: 32s;    /* .lw-aurora::after                  */
+  --lw-dur-vt-old:   160ms;  /* view-transition old snapshot fade  */
+  --lw-dur-vt-new:   220ms;  /* view-transition new snapshot fade  */
+
+  /* Legacy aliases — DO NOT REMOVE. Consumers reference these by name; they
+     now point onto the scale above. --lw-duration-fast was 120ms and maps to
+     --lw-dur-xs (100ms); the 20ms on a fast interaction is imperceptible and
+     the new scale is the contract going forward. */
+  --lw-duration-fast: var(--lw-dur-xs);
+  --lw-duration:      var(--lw-dur-sm);
+  --lw-duration-slow: var(--lw-dur-lg);
 
   /* ---- Layout ----------------------------------------------------------- */
   --lw-col-max: 1200px;
@@ -207,9 +246,23 @@
      widths, not one — expressed as tokens so they stop looking like magic numbers. */
   --lw-col-page: 1400px;
   --lw-pad-x: clamp(20px, 4vw, 56px);
+  /* z-index — seven tiers, documented so a dropdown never guesses at 9999.
+     base    0    the default stacking context.
+     raised  10   small lifts: sticky column headers, sticky cells, or content
+                  above a decorative pseudo-element (the .lw-wash/.lw-aurora
+                  content-layer pattern in lw.css).
+     nav     50   the site header / app bar.
+     sticky  60   sticky in-page sub-bars (section tabs, reading-progress rail).
+     overlay 90   dropdowns, popovers, the mobile drawer.
+     toast   100  transient notifications.
+     modal   110  blocking dialogs, focus-trap surfaces. Always the top. */
+  --lw-z-base: 0;
+  --lw-z-raised: 10;
   --lw-z-nav: 50;
+  --lw-z-sticky: 60;
   --lw-z-overlay: 90;
   --lw-z-toast: 100;
+  --lw-z-modal: 110;
 
   /* ---- Resolved role tokens (LIGHT) -------------------------------------
      These are what apps actually consume. The dark block below re-points the
@@ -309,9 +362,11 @@
 
   /* Navy-tinted shadows are invisible on a navy ground: go black, and lean on
      the hairline border for elevation instead. */
+  --lw-shadow-xs: 0 1px 0 hsl(var(--lw-line-c) / 0.5);
   --lw-shadow-sm: 0 1px 0 hsl(var(--lw-line-c) / 0.6);
   --lw-shadow-md: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 8px 24px rgba(0, 0, 0, 0.45);
   --lw-shadow-lg: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 30px 60px -28px rgba(0, 0, 0, 0.85);
+  --lw-shadow-xl: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 40px 80px -32px rgba(0, 0, 0, 0.9);
   --lw-focus-ring: 0 0 0 3px hsl(var(--lw-brand-400-c) / 0.35);
 }
 
@@ -333,11 +388,156 @@
     --lw-success-on-c:  158.1 64.4% 51.6%;
     --lw-warning-on-c:  43.3  96.4% 56.3%;
     --lw-danger-on-c:   0     90.6% 70.8%;
+    /* Soft chip tints must re-point in EVERY dark form. A dark `-on` status text on the
+       light soft tint is 1.75:1 — the exact v0.1.2 regression. The `.dark`,
+       `[data-theme="dark"]` and `.lw-band-dark` blocks all re-point these; this media
+       query (the system-dark path) was the one that didn't, so a badge rendered at 1.75
+       for any visitor whose OS preferred dark and who hadn't set an explicit theme. */
+    --lw-success-soft-c: 153.3 47.4% 11.2%;  /* #0F2A1E — ink lands at 7.97 */
+    --lw-warning-soft-c: 38.9  67.3% 10.8%;  /* #2E2109 — 9.40 */
+    --lw-danger-soft-c:  0     53.2% 15.1%;  /* #3B1212 — 5.93 */
+    --lw-cta-soft-c:     24.8  65.7% 13.7%;  /* #3A1F0C — 6.72 */
+    --lw-shadow-xs: 0 1px 0 hsl(var(--lw-line-c) / 0.5);
     --lw-shadow-sm: 0 1px 0 hsl(var(--lw-line-c) / 0.6);
     --lw-shadow-md: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 8px 24px rgba(0, 0, 0, 0.45);
     --lw-shadow-lg: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 30px 60px -28px rgba(0, 0, 0, 0.85);
+    --lw-shadow-xl: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 40px 80px -32px rgba(0, 0, 0, 0.9);
     --lw-focus-ring: 0 0 0 3px hsl(var(--lw-brand-400-c) / 0.35);
   }
+}
+
+/* =============================================================================
+   Explicit theme choice (v0.6.0) — the three-layer model.
+
+     1. `:root`           — LIGHT defaults (the values at the top of the file).
+     2. the media query    — SYSTEM dark preference, UNLESS the user explicitly
+       just above            chose light via `.light` or `[data-theme="light"]`.
+                            The `:not(.light):not([data-theme="light"])` guard is
+                            what makes those resolve to light; `.light` is a
+                            deprecated alias kept so older markup that set
+                            `class="light"` still works. They do not need their
+                            own value block — the :root light defaults persist
+                            because the dark blocks are gated out by the :not().
+     3. the block below   — an EXPLICIT `[data-theme="dark"]` choice. It carries
+                            the SAME overrides as the `.dark`/media-query blocks
+                            and is emitted LAST so cascade order favors an
+                            explicit attribute over the system preference.
+
+   `.dark, [data-theme="dark"]` (further up) already covers the class + attribute
+   forms; the block below is the root-scoped, cascade-final reinforcement of the
+   attribute form. The values are identical to layer 2, so specificity is moot in
+   practice — this exists to make intent unambiguous and to keep an explicit dark
+   choice working even if the media query's `:not()` guard is ever loosened.
+   ============================================================================= */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --lw-bg-c:          220   48.8% 8.4%;
+  --lw-bg-subtle-c:   221.4 46.0% 12.4%;
+  --lw-bg-muted-c:    221.1 45.2% 16.5%;
+  --lw-bg-inset-c:    221.1 45.2% 16.5%;
+  --lw-fg-c:          215   33.3% 92.9%;
+  --lw-fg-muted-c:    218.7 21.7% 72.0%;
+  --lw-fg-subtle-c:   218.5 17.5% 56.3%;
+  --lw-fg-faint-c:    218.5 17.5% 46.0%;
+  --lw-line-c:        220.5 38.7% 21.8%;
+  --lw-line-strong-c: 220.5 38.7% 28.0%;
+  --lw-brand-text-c:  var(--lw-brand-400-c);
+  --lw-success-on-c:  158.1 64.4% 51.6%;
+  --lw-warning-on-c:  43.3  96.4% 56.3%;
+  --lw-danger-on-c:   0     90.6% 70.8%;
+  --lw-success-soft-c: 153.3 47.4% 11.2%;
+  --lw-warning-soft-c: 38.9  67.3% 10.8%;
+  --lw-danger-soft-c:  0     53.2% 15.1%;
+  --lw-cta-soft-c:     24.8  65.7% 13.7%;
+  --lw-shadow-xs: 0 1px 0 hsl(var(--lw-line-c) / 0.5);
+  --lw-shadow-sm: 0 1px 0 hsl(var(--lw-line-c) / 0.6);
+  --lw-shadow-md: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 8px 24px rgba(0, 0, 0, 0.45);
+  --lw-shadow-lg: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 30px 60px -28px rgba(0, 0, 0, 0.85);
+  --lw-shadow-xl: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 40px 80px -32px rgba(0, 0, 0, 0.9);
+  --lw-focus-ring: 0 0 0 3px hsl(var(--lw-brand-400-c) / 0.35);
+}
+
+/* =============================================================================
+   Band isolation (v0.6.0).
+
+   Always-dark / always-light LOCAL sections, independent of the site theme. A
+   hero that must read dark on a light page (or a light panel on a dark page)
+   gets the band class; descendants that use the semantic role tokens
+   (--lw-bg, --lw-fg, --lw-line, …) resolve to the BAND's theme, not the page's.
+
+   `:where()` gives the rule ZERO specificity, so a consumer rule on a child
+   (e.g. `color: var(--lw-brand-500)` on a link) still wins without fighting the
+   band. The band only re-points the inherited custom properties — it does not
+   pin any specific element's color.
+
+   `.lw-band-dark`  — the same navy surface + on-dark text roles as
+                      `.lw-section.dark` / `.lw-hero-dark`, but as a token
+                      re-point (so role-token consumers come along for free).
+   `.lw-band-light` — forces the light surface + roles; useful for an embedded
+                      light panel (e.g. a form card) inside a dark site theme.
+   ============================================================================= */
+:where(.lw-band-dark) {
+  color-scheme: dark;
+  --lw-bg-c:          220   48.8% 8.4%;
+  --lw-bg-subtle-c:   221.4 46.0% 12.4%;
+  --lw-bg-muted-c:    221.1 45.2% 16.5%;
+  --lw-bg-inset-c:    221.1 45.2% 16.5%;
+  --lw-fg-c:          215   33.3% 92.9%;
+  --lw-fg-muted-c:    218.7 21.7% 72.0%;
+  --lw-fg-subtle-c:   218.5 17.5% 56.3%;
+  --lw-fg-faint-c:    218.5 17.5% 46.0%;
+  --lw-line-c:        220.5 38.7% 21.8%;
+  --lw-line-strong-c: 220.5 38.7% 28.0%;
+  --lw-brand-text-c:  var(--lw-brand-400-c);
+  --lw-success-on-c:  158.1 64.4% 51.6%;
+  --lw-warning-on-c:  43.3  96.4% 56.3%;
+  --lw-danger-on-c:   0     90.6% 70.8%;
+  --lw-success-soft-c: 153.3 47.4% 11.2%;
+  --lw-warning-soft-c: 38.9  67.3% 10.8%;
+  --lw-danger-soft-c:  0     53.2% 15.1%;
+  --lw-cta-soft-c:     24.8  65.7% 13.7%;
+  --lw-shadow-xs: 0 1px 0 hsl(var(--lw-line-c) / 0.5);
+  --lw-shadow-sm: 0 1px 0 hsl(var(--lw-line-c) / 0.6);
+  --lw-shadow-md: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 8px 24px rgba(0, 0, 0, 0.45);
+  --lw-shadow-lg: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 30px 60px -28px rgba(0, 0, 0, 0.85);
+  --lw-shadow-xl: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 40px 80px -32px rgba(0, 0, 0, 0.9);
+  --lw-focus-ring: 0 0 0 3px hsl(var(--lw-brand-400-c) / 0.35);
+  background: var(--lw-bg);
+  color: var(--lw-fg);
+}
+
+:where(.lw-band-light) {
+  color-scheme: light;
+  /* Re-point onto the theme-invariant PALETTE tokens (never re-pointed by the
+     dark block), so the band is light regardless of the surrounding site theme. */
+  --lw-bg-c:          var(--lw-surface-0-c);
+  --lw-bg-subtle-c:   var(--lw-surface-1-c);
+  --lw-bg-muted-c:    var(--lw-surface-2-c);
+  --lw-bg-inset-c:    var(--lw-surface-3-c);
+  --lw-fg-c:          var(--lw-text-1-c);
+  --lw-fg-muted-c:    var(--lw-text-2-c);
+  --lw-fg-subtle-c:   var(--lw-text-3-c);
+  --lw-fg-faint-c:    var(--lw-text-4-c);
+  --lw-line-c:        var(--lw-border-1-c);
+  --lw-line-strong-c: var(--lw-border-2-c);
+  --lw-brand-text-c:  var(--lw-brand-700-c);
+  --lw-success-on-c:  var(--lw-success-text-c);
+  --lw-warning-on-c:  var(--lw-warning-text-c);
+  --lw-danger-on-c:   var(--lw-danger-text-c);
+  /* Soft tints + shadows have no underlying palette token (they ARE the value),
+     so the light triples are restated here to undo any dark-site-theme override. */
+  --lw-success-soft-c: 140.6 84.2% 92.5%;
+  --lw-warning-soft-c: 48.0  96.5% 88.8%;
+  --lw-danger-soft-c:  0     93.3% 94.1%;
+  --lw-cta-soft-c:     34.3  100%  91.8%;
+  --lw-shadow-xs: 0 1px 0 rgba(11, 37, 69, 0.05);
+  --lw-shadow-sm: 0 1px 2px rgba(11, 37, 69, 0.06);
+  --lw-shadow-md: 0 6px 20px -8px rgba(11, 37, 69, 0.14), 0 1px 2px rgba(11, 37, 69, 0.05);
+  --lw-shadow-lg: 0 24px 56px -22px rgba(11, 37, 69, 0.22), 0 2px 6px rgba(11, 37, 69, 0.06);
+  --lw-shadow-xl: 0 32px 64px -24px rgba(11, 37, 69, 0.30), 0 4px 12px rgba(11, 37, 69, 0.08);
+  --lw-focus-ring: 0 0 0 3px hsl(var(--lw-brand-500-c) / 0.30);
+  background: var(--lw-bg);
+  color: var(--lw-fg);
 }
 
 @media (prefers-reduced-motion: reduce) {
