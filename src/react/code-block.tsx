@@ -60,7 +60,7 @@ function CodeSurface({
 }) {
   if (highlightedHtml != null) {
     return (
-      <pre className="lw-code">
+      <pre className="lw-code" tabIndex={0}>
         <code dangerouslySetInnerHTML={{ __html: highlightedHtml }} />
       </pre>
     );

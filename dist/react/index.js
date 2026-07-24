@@ -354,7 +354,7 @@ function CodeSurface({
   highlightedHtml
 }) {
   if (highlightedHtml != null) {
-    return /* @__PURE__ */ jsx("pre", { className: "lw-code", children: /* @__PURE__ */ jsx("code", { dangerouslySetInnerHTML: { __html: highlightedHtml } }) });
+    return /* @__PURE__ */ jsx("pre", { className: "lw-code", tabIndex: 0, children: /* @__PURE__ */ jsx("code", { dangerouslySetInnerHTML: { __html: highlightedHtml } }) });
   }
   return /* @__PURE__ */ jsx("pre", { className: "lw-code", children: /* @__PURE__ */ jsx("code", { dangerouslySetInnerHTML: { __html: escapeHtml(code ?? "") } }) });
 }

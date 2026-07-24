@@ -277,7 +277,9 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
   background: var(--lw-bg-inset);
   padding: 4px 10px;
   border-radius: var(--lw-radius-pill);
-  color: var(--lw-fg-subtle);
+  /* fg-subtle on bg-inset measured below AA; fg-muted is the secondary-text token
+     and clears 4.5:1 on the inset surface in both themes. */
+  color: var(--lw-fg-muted);
   display: inline-flex;
   align-items: center;
   gap: 6px;

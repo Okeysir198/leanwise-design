@@ -12,6 +12,17 @@ change is a reviewable one-line bump on each consumer's schedule. Dates are comm
 
 _Nothing yet._
 
+## [0.6.2] — 2026-07-24
+
+More axe-found a11y on the code surface, surfaced once `CodeBlock` carried a `filename`
+on a scanned page.
+
+### Fixed
+- **`CodeBlock` filename pill failed `color-contrast`** — `.lw-console-h .url` used
+  `--lw-fg-subtle` on `--lw-bg-inset` (4.48, just under AA). Now `--lw-fg-muted` (7.40).
+- **`CodeBlock` scrollable `<pre>` failed `scrollable-region-focusable`** — the `.lw-code`
+  pre now carries `tabIndex={0}` so a keyboard reader can scroll long lines.
+
 ## [0.6.1] — 2026-07-24
 
 Accessibility fixes found by the site's axe e2e gate consuming v0.6.0.
@@ -257,7 +268,8 @@ predicted: `--s-6` came to mean 24px in one product and `--s6` 32px in another, 
   raw hex, Tailwind palette escapes, arbitrary-value token access, and >1 `variant="cta"`
   per view.
 
-[Unreleased]: https://github.com/Okeysir198/leanwise-design/compare/v0.6.1...HEAD
+[Unreleased]: https://github.com/Okeysir198/leanwise-design/compare/v0.6.2...HEAD
+[0.6.2]: https://github.com/Okeysir198/leanwise-design/releases/tag/v0.6.2
 [0.6.1]: https://github.com/Okeysir198/leanwise-design/releases/tag/v0.6.1
 [0.6.0]: https://github.com/Okeysir198/leanwise-design/releases/tag/v0.6.0
 [0.5.0]: https://github.com/Okeysir198/leanwise-design/releases/tag/v0.5.0
