@@ -100,22 +100,14 @@ samples to a **184–208° cyan/azure band**; until v0.7.0 the ramp sat at 173°
 `teal-500`, matching neither the mark nor the CONNECT deck. The navy anchor (209.4°) always
 matched. If you ever re-tune the brand, re-sample the mark first; don't pick from a palette.
 
-`assets/build-logo.py` regenerates the SVGs. Two things about it that will bite otherwise:
+`assets/build-logo.py` regenerates the SVGs — never hand-edit them. Its header documents the
+geometry caveats (fitted vertices, the two disagreeing source renditions, stroke-inclusive
+heights); read it before touching a coordinate.
 
-- **The mark is authored geometry, not an autotrace** — a regular pointy-top hexagon plus two
-  stroked polylines and two node dots. Vertex coordinates were fitted by coordinate descent
-  against `logo-4.png` (IoU 0.845). Measuring a thick stroke's centreline by a geodesic walk
-  *cuts the inside of every corner*, so a naive measurement makes the zigzag too shallow — the
-  fitted numbers in the script are the corrected ones. Only the wordmark is traced (it is type).
-- **The source renditions disagree.** The square art is ~5% x-stretched (hexagon ratio .912);
-  the lockup art is .869, a whisker off a true regular hexagon (.866). Everything is derived
-  from the lockup rendition and normalised to regular. Do not mix the two — that is what put
-  the chart out of register on the first attempt. Source art also states the mark's outer height
-  *including* stroke; scale the hexagon PATH to `height − stroke` or the ring draws oversize.
-
-Gradient stops in `logo-mark.svg` are **literal hexes on purpose**: CSS custom properties do not
-cascade into an SVG loaded through `<img>`, so `var()` there would silently always render its
-fallback. Recolouring is `logo-mark-mono.svg`'s job (`currentColor`), and it must be inlined.
+The one rule that lives here rather than there: the gradient stops are **literal hexes**, because
+CSS custom properties do not cascade into an SVG loaded through `<img>`. That is a second home
+for a brand value, so it is generated from `tokens.css` and **`lw-contrast-check` fails if the two
+disagree** — `lw-token-lint` cannot see inside `.svg`, so this is the only thing guarding it.
 
 ## Three rules that are not obvious (defended by the contrast gate)
 

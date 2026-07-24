@@ -14,7 +14,7 @@ consistency is a dependency, not a discipline.
 ```jsonc
 // package.json
 "dependencies": {
-  "@leanwise/design": "github:Okeysir198/leanwise-design#v0.6.5"
+  "@leanwise/design": "github:Okeysir198/leanwise-design#v0.7.1"
 }
 ```
 
@@ -97,12 +97,12 @@ Same for `success` / `success-on`, `warning` / `warning-on`, `destructive` / `de
 and — since v0.6.7 — `cta` / `cta-on`. Every one of those `-on` utilities is theme-aware: the
 dark shade on light, the 400-tier on dark, so you never hand-write a theme conditional for ink.
 
-**3. `--primary` is teal. Orange is a variant, not a token.** LDS says "one orange CTA per
+**3. `--primary` is cyan. Orange is a variant, not a token.** LDS says "one orange CTA per
 view", but shadcn's `--primary` drives the *default* Button — putting orange there would make
 every button a CTA. So:
 
 ```tsx
-<Button>Ask</Button>                       // teal, the default, use freely
+<Button>Ask</Button>                       // cyan, the default, use freely
 <Button variant="cta">Start free trial</Button>  // ORANGE — max ONE per view (linted)
 ```
 
@@ -115,18 +115,31 @@ Per-tenant themes override `--primary` and `--ring`; never `--accent`.
 `assets/` holds the brand logo, and **this package is its source of truth**:
 
 ```
-assets/logo-icon.png        the square icon mark
-assets/logo-leanwise.png    the full wordmark
+assets/logo-mark.svg        the hexagon mark, brand gradient — use on light grounds
+assets/logo-mark-mono.svg   the same geometry in currentColor — for dark grounds
+assets/logo-lockup.svg      mark + LEANWISE AI wordmark
+assets/logo-icon.png        raster fallback of the mark (favicons, apple-touch-icon)
+assets/logo-leanwise.png    raster fallback of the lockup (JSON-LD, crawlers)
 ```
 
-Import it (`import logo from "@leanwise/design/assets/logo-leanwise.png"`) or copy the PNG
-into your app's `public/` — copying is fine, but **copy from here**, never from another app,
-so every product serves the same file and a logo update is a version bump, not a scavenger
-hunt.
+Prefer the **SVG**: the raster was a 938px lockup being scaled to a 36px nav, which thins the
+hexagon's hairline to about 1.4 device pixels. Keep the PNGs only where a raster is required
+(iOS `apple-touch-icon` ignores SVG; Google's `Organization.logo` wants a raster URL).
 
-**The logo is never tinted.** Do not run it through `--primary`, a CSS `filter`, tenant
-`brandVars()`, or any recolor — the mark ships in its own colors and stays that way, on
-light and dark alike.
+Import it (`import logo from "@leanwise/design/assets/logo-mark.svg"`) or copy into your app's
+`public/` — copying is fine, but **copy from here**, never from another app, so every product
+serves the same file and a logo update is a version bump, not a scavenger hunt.
+
+**The gradient variant is never tinted.** Do not run `logo-mark.svg` through `--primary`, a
+CSS `filter`, or tenant `brandVars()`. When you need the mark to take the surrounding ink —
+a dark footer, a coloured band — use `logo-mark-mono.svg`, which is `currentColor` by design.
+Note it must be **inlined or used as a CSS `mask`**: `currentColor` inside an SVG loaded
+through `<img>` resolves against that SVG's own root, not your document, so it would paint
+black. `leanwise-ai/src/styles/chrome.css` (`.lw-logo .mark`) is the reference implementation.
+
+Regenerate with `python3 assets/build-logo.py` — never hand-edit the SVGs. The gradient stops
+are literals (CSS variables do not cascade into an `<img>`-loaded SVG) generated from
+`tokens.css`, and `bin/lw-contrast-check.mjs` fails if they drift from it.
 
 ## v0.3.0 marketing primitives (`lw.css`)
 
@@ -196,7 +209,7 @@ import { brandVars } from "@leanwise/design/brand";
 <div style={brandVars(org?.accent)}>…</div>   // scope to the workspace, not <html>
 ```
 
-Returns `{}` when there is no tenant color, so tokens fall through to LeanWise teal — **there
+Returns `{}` when there is no tenant color, so tokens fall through to LeanWise cyan — **there
 is no "no-brand" state**. Tenant hexes are clamped (lightness into a legible band, saturation
 floored) because a customer will eventually pick `#000000` or `#FFFF00`, and the ink on top is
 chosen from the *clamped* color by measured luminance.

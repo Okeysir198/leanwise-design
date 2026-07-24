@@ -76,18 +76,13 @@
   --lw-tracking-eyebrow: 0.14em;
 
   /* ---- Brand cyan ------------------------------------------------------- */
-  /* Anchored on the LOGO, not on a stock palette. Every rendition of the mark
-     samples to a 184–208° cyan/azure band (centre ≈196°); the logo's own cyan
-     is #00849C, which lands between brand-600 and brand-700 below — so the
-     mark's color IS the text tier, and the fill tier is a lightened version of
-     it. Until v0.7.0 this ramp sat at 173° (Tailwind's stock teal-500), which
-     matched neither the mark nor the CONNECT deck.
-     Lightness is NOT a straight rotation of the old teal: cyan carries less
-     luminance than teal at equal L (the green channel is weighted 0.7152 vs
-     blue's 0.0722), so a naive hue rotation drops navy-on-brand-600 to 3.63
-     and pushes brand-500 below inkOn()'s 0.35 crossover — flipping per-tenant
-     ink to WHITE on cyan. The L values below are corrected to hold the
-     contract; see the table under "Why brand fills carry NAVY ink". */
+  /* Anchored on the LOGO, not on a stock palette: every rendition of the mark
+     samples to a 184–208° cyan band, and the logo's own #00849C lands between
+     brand-600 and brand-700 below.
+     Lightness is NOT a straight hue rotation. Cyan carries less luminance than
+     teal at equal L, so rotating at fixed L drops navy-on-brand-600 to 3.63 and
+     pushes brand-500 under inkOn()'s 0.35 crossover — flipping per-tenant ink to
+     WHITE on cyan. The L values below are corrected to hold the contract. */
   --lw-brand-50-c:  189.4 70.0% 96.5%;   /* #F0FAFC */
   --lw-brand-100-c: 189.8 66.0% 89.8%;   /* #D4F1F6 */
   --lw-brand-200-c: 190.4 66.0% 80.0%;   /* #AAE2EE */

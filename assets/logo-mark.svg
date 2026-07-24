@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 112 128" role="img" aria-label="LeanWise AI">
   <title>LeanWise AI</title>
-  <!-- Stops mirror the lw-navy-700 and lw-brand-500 tokens as literals ON
-       PURPOSE: CSS custom properties do not cascade into an SVG loaded through
-       an img element, so a var() here would silently always render its
-       fallback. Recolouring is the job of logo-mark-mono.svg (currentColor),
-       which is meant to be inlined. If the brand ramp moves, regenerate with
-       assets/build-logo.py. -->
+  <!-- Stops are LITERALS on purpose: CSS custom properties do not cascade into
+       an SVG loaded through an img element, so a var() here would silently
+       always render its fallback. They are generated from tokens.css by
+       assets/build-logo.py and checked by bin/lw-contrast-check.mjs, so they
+       cannot drift. Recolouring is logo-mark-mono.svg's job (currentColor),
+       which must be inlined or used as a mask. -->
   <defs>
     <linearGradient id="lwBrand" x1="0" y1="1" x2="1" y2="0">
       <stop offset="0" stop-color="#1A4D7E"/>

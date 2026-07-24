@@ -2,7 +2,7 @@
 /**
  * Derived WCAG 2.1 contrast gate for the token core.
  *
- * WHY THIS EXISTS — white on the brand teal (#14B8A6) scores 2.49 and on the
+ * WHY THIS EXISTS — white on the brand cyan (#1AB0D5) scores 2.56 and on the
  * CTA orange (#F97316) 2.80. Both fail AA. The design system shipped that pairing
  * for months; a human eyeballing a mockup did not catch it, a number in CI would
  * have. This file is that number.
@@ -55,8 +55,8 @@ const MANIFEST = [
   // ── A. Brand / CTA fills + their ink. Theme-invariant: the fills and the navy
   //    ink (--lw-on-brand-c → --lw-text-1-c, never re-pointed) are the same color
   //    in both themes. Checked in BOTH so a future re-point onto --lw-fg is caught.
-  { group: "brand fills", fg: "on-brand",  bg: "brand-500", scope: "both", label: "teal fill + navy ink (default Button)" },
-  { group: "brand fills", fg: "on-brand",  bg: "brand-600", scope: "both", label: "teal hover + navy ink" },
+  { group: "brand fills", fg: "on-brand",  bg: "brand-500", scope: "both", label: "cyan fill + navy ink (default Button)" },
+  { group: "brand fills", fg: "on-brand",  bg: "brand-600", scope: "both", label: "cyan hover + navy ink" },
   { group: "brand fills", fg: "on-cta",    bg: "cta-500",   scope: "both", label: "orange CTA fill + navy ink (the one orange button)" },
   { group: "brand fills", fg: "on-cta",    bg: "cta-600",   scope: "both", label: "orange CTA hover + navy ink" },
   { group: "brand fills", fg: "on-danger", bg: "danger",    scope: "both", label: "destructive fill + WHITE ink (the documented exception)" },
@@ -66,9 +66,9 @@ const MANIFEST = [
   { group: "status fills", fg: "on-brand", bg: "warning",   scope: "both", label: "warning fill + navy ink" },
 
   // ── C. Brand / status / CTA AS TEXT on the LIGHT page. A fill is not a text
-  //    color — teal-500 as a link is 2.49, so links are brand-700. Same split for
+  //    color — cyan-500 as a link is 2.56, so links are brand-700. Same split for
   //    every status and for the CTA.
-  { group: "text-on-light", fg: "brand-700",    bg: "surface-0", scope: "light", label: "teal AS TEXT — links (brand-500 would be 2.49)" },
+  { group: "text-on-light", fg: "brand-700",    bg: "surface-0", scope: "light", label: "cyan AS TEXT — links (brand-500 would be 2.56)" },
   { group: "text-on-light", fg: "success-text", bg: "surface-0", scope: "light", label: "success as text on page" },
   { group: "text-on-light", fg: "warning-text", bg: "surface-0", scope: "light", label: "warning as text on page" },
   { group: "text-on-light", fg: "danger-text",  bg: "surface-0", scope: "light", label: "danger as text on page" },
@@ -99,7 +99,7 @@ const MANIFEST = [
   { group: "text-on-dark", fg: "fg-subtle",  bg: "bg",        scope: "dark", label: "muted text on dark" },
   { group: "text-on-dark", fg: "fg",         bg: "bg-subtle", scope: "dark", label: "body text on a dark card" },
   { group: "text-on-dark", fg: "fg-muted",   bg: "bg-subtle", scope: "dark", label: "secondary text on a dark card" },
-  { group: "text-on-dark", fg: "brand-400",  bg: "bg",        scope: "dark", label: "teal as text on dark" },
+  { group: "text-on-dark", fg: "brand-400",  bg: "bg",        scope: "dark", label: "cyan as text on dark" },
   { group: "text-on-dark", fg: "cta-400",    bg: "bg",        scope: "dark", label: "orange as text on dark" },
   // The role token, not the literal — guards the cta-text alias re-pointing to
   // cta-400 in dark. Without this, dark could silently keep the light #92400E.
@@ -131,8 +131,8 @@ const MANIFEST = [
   { group: "navy-deep ground", fg: "on-dark-1", bg: "navy-deep", scope: "both", label: ".lw-code strong / .tok- emphasis (white 0.92)" },
   { group: "navy-deep ground", fg: "on-dark-2", bg: "navy-deep", scope: "both", label: ".lw-code .tok-punctuation (white 0.70)" },
   { group: "navy-deep ground", fg: "on-dark-3", bg: "navy-deep", scope: "both", label: ".lw-code .tok-comment — the muted floor (white 0.48)" },
-  { group: "navy-deep ground", fg: "brand-400", bg: "navy-deep", scope: "both", label: ".tok-function / .tok-attr-name (teal)" },
-  { group: "navy-deep ground", fg: "brand-300", bg: "navy-deep", scope: "both", label: ".tok-keyword / .tok-number (light teal)" },
+  { group: "navy-deep ground", fg: "brand-400", bg: "navy-deep", scope: "both", label: ".tok-function / .tok-attr-name (cyan)" },
+  { group: "navy-deep ground", fg: "brand-300", bg: "navy-deep", scope: "both", label: ".tok-keyword / .tok-number (light cyan)" },
   { group: "navy-deep ground", fg: "cta-400",   bg: "navy-deep", scope: "both", label: ".tok-string / .tok-tag / .tok-attr-value (orange)" },
 ];
 
@@ -418,10 +418,64 @@ for (const entry of MANIFEST) {
 }
 
 /* =============================================================================
+   6b. LOGO GRADIENT — the one brand colour that lives OUTSIDE tokens.css
+
+   assets/logo-mark.svg and logo-lockup.svg must carry literal stops: CSS custom
+   properties do not cascade into an SVG loaded through <img>, so a var() there
+   would silently always render its fallback. That literal is a second home for
+   a brand value, which is exactly what this package exists to prevent — and
+   lw-token-lint cannot see it (it walks .ts/.tsx under a consumer's src/, not
+   .svg in this repo). So assert it here, where the resolver already lives.
+
+   Without this, moving the brand ramp ships a stale-coloured logo with every
+   gate green. v0.7.0 moved the hue 19°; the next move would have.
+   ============================================================================= */
+function logoStops() {
+  const fails = [];
+  const want = [
+    { offset: "0", token: "navy-700" },
+    { offset: "1", token: "brand-500" },
+  ];
+  const toHex = ({ r, g, b }) =>
+    "#" + [r, g, b].map((v) => Math.round(v * 255).toString(16).padStart(2, "0")).join("").toUpperCase();
+
+  for (const file of ["logo-mark.svg", "logo-lockup.svg"]) {
+    let svg;
+    try {
+      svg = readFileSync(join(ROOT, "assets", file), "utf8");
+    } catch {
+      fails.push(`assets/${file} is missing — regenerate with assets/build-logo.py`);
+      continue;
+    }
+    const found = [...svg.matchAll(/<stop offset="([\d.]+)"\s+stop-color="(#[0-9A-Fa-f]{3,6})"/g)];
+    if (found.length !== want.length) {
+      fails.push(`assets/${file}: expected ${want.length} gradient stops, found ${found.length}`);
+      continue;
+    }
+    found.forEach(([, offset, hex], i) => {
+      const { offset: wantOffset, token } = want[i];
+      const expect = resolveColor(token, "light");
+      if (!expect) { fails.push(`assets/${file}: --lw-${token}-c did not resolve`); return; }
+      if (offset !== wantOffset) {
+        fails.push(`assets/${file}: stop ${i} has offset ${offset}, expected ${wantOffset}`);
+      }
+      if (toHex(hexToRgb(hex.slice(1))) !== toHex(expect)) {
+        fails.push(
+          `assets/${file}: stop ${i} is ${hex.toUpperCase()}, but --lw-${token}-c resolves to ` +
+          `${toHex(expect)} — rerun assets/build-logo.py`,
+        );
+      }
+    });
+  }
+  return fails;
+}
+
+/* =============================================================================
    7. REPORT
    ============================================================================= */
 
 const { failPairs: parityFails, warnings: parityWarnings } = parity();
+const logoFails = logoStops();
 
 console.log(`\n${C.bold}LeanWise Design System — derived WCAG contrast gate${C.reset}`);
 console.log(`${C.dim}canonical scopes: light (:root) + dark (:root ⊕ .dark)${C.reset}\n`);
@@ -451,6 +505,13 @@ if (parityFails.length) {
   for (const m of parityFails) console.log(`  ${C.red}✗${C.reset} ${m}`);
   console.log();
   failed += parityFails.length;
+}
+
+if (logoFails.length) {
+  console.log(`${C.bold}Logo gradient (hard fail — the SVG's literal stops drifted from tokens.css)${C.reset}`);
+  for (const m of logoFails) console.log(`  ${C.red}✗${C.reset} ${m}`);
+  console.log();
+  failed += logoFails.length;
 }
 
 if (parityWarnings.length) {

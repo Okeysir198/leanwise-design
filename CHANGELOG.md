@@ -12,6 +12,40 @@ change is a reviewable one-line bump on each consumer's schedule. Dates are comm
 
 _Nothing yet._
 
+## [0.7.1] — 2026-07-25
+
+### Added
+- **The contrast gate now checks the logo's gradient stops against `tokens.css`.**
+  `logo-mark.svg` / `logo-lockup.svg` must carry literal stops — CSS custom properties do not
+  cascade into an SVG loaded through `<img>`, so a `var()` there silently always renders its
+  fallback. That literal was a second, unguarded home for a brand value: `lw-token-lint` walks
+  `.ts`/`.tsx` under a consumer's `src/`, so it cannot see a `.svg` in this repo. Moving the
+  ramp would have shipped a stale-coloured logo with every gate green — v0.7.0 moved the hue
+  19°, so the next move would have done exactly that. Reuses the existing tokens.css resolver;
+  fails with the offending file, the stop, and the value it should have.
+
+### Changed
+- **`assets/build-logo.py` derives the gradient from `tokens.css`** instead of hardcoding
+  `#1A4D7E` / `#1AB0D5`. The file's own instruction ("regenerate when the ramp moves") was
+  false while the generator held its own copy of the colour.
+- **`logo-lockup.svg` is 39% smaller — 19,085 → 11,617 bytes** (brotli ~4.0 KB → ~2.3 KB).
+  The traced wordmark carried two-decimal coordinates; it renders at `scale(0.24)` inside a
+  128-unit viewBox at 36px, so one hundredth of a unit is ~0.0007 CSS px — three orders of
+  magnitude below a device pixel. Rounded to integers; the mark is byte-identical and the
+  wordmark is visually unchanged.
+
+### Fixed
+- The teal→cyan sweep in v0.7.0 missed `bin/lw-contrast-check.mjs` — its header still cited
+  `#14B8A6`/2.49 and seven MANIFEST labels still said "teal". The tool whose job is to be
+  authoritative about the brand was naming the wrong colour in the output it prints on failure.
+  Also `README.md`'s rule 3, its `<Button>` example, the `brandVars()` note, and the install
+  pin (still `#v0.6.5`).
+- `README.md`'s Logo section listed only the two PNGs and stated "the logo is never tinted" —
+  both wrong since v0.7.0 added the SVGs and a `currentColor` mono variant that is *meant* to be
+  tinted (via inline or `mask`, never `<img>`).
+- Removed a dead `.lw-nav.scrolled .lw-logo .mark` rule in leanwise-ai: `.mark` is rendered only
+  by `<Logo onDark />` in the footer, so the selector could never match.
+
 ## [0.7.0] — 2026-07-25
 
 > **Visual breaking change.** The brand hue moves from teal to cyan. Nothing in the API changes
