@@ -100,6 +100,17 @@ function applyToDom(theme) {
   if (typeof document === "undefined") return;
   document.documentElement.dataset[ATTR] = theme;
 }
+function persist(theme) {
+  if (typeof localStorage !== "undefined") {
+    try {
+      localStorage.setItem(STORAGE_KEY, theme);
+    } catch {
+    }
+  }
+  if (typeof document !== "undefined") {
+    document.cookie = `${STORAGE_KEY}=${theme}; max-age=31536000; path=/; samesite=lax`;
+  }
+}
 if (typeof window !== "undefined" && typeof window.matchMedia === "function") {
   const mql = window.matchMedia("(prefers-color-scheme: dark)");
   const onSys = () => {
@@ -125,12 +136,7 @@ function useTheme() {
   }, []);
   const setTheme = useCallback((theme) => {
     applyToDom(theme);
-    if (typeof localStorage !== "undefined") {
-      try {
-        localStorage.setItem(STORAGE_KEY, theme);
-      } catch {
-      }
-    }
+    persist(theme);
     setState({ theme, resolved: resolveTheme(theme) });
   }, []);
   const toggle = useCallback(() => {

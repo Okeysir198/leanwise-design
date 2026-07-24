@@ -12,6 +12,14 @@ change is a reviewable one-line bump on each consumer's schedule. Dates are comm
 
 _Nothing yet._
 
+## [0.6.5] — 2026-07-24
+
+### Fixed
+- **`useTheme.setTheme` now persists the `lw-theme` cookie too**, not just `localStorage`.
+  The site's SSR resolves `<html data-theme>` from the cookie, so writing it on toggle
+  means the very next reload is SSR-correct — no reliance on the blocking head script and
+  no one-frame fixup of the toggle's active indicator.
+
 ## [0.6.4] — 2026-07-24
 
 ### Fixed
@@ -288,7 +296,8 @@ predicted: `--s-6` came to mean 24px in one product and `--s6` 32px in another, 
   raw hex, Tailwind palette escapes, arbitrary-value token access, and >1 `variant="cta"`
   per view.
 
-[Unreleased]: https://github.com/Okeysir198/leanwise-design/compare/v0.6.4...HEAD
+[Unreleased]: https://github.com/Okeysir198/leanwise-design/compare/v0.6.5...HEAD
+[0.6.5]: https://github.com/Okeysir198/leanwise-design/releases/tag/v0.6.5
 [0.6.4]: https://github.com/Okeysir198/leanwise-design/releases/tag/v0.6.4
 [0.6.3]: https://github.com/Okeysir198/leanwise-design/releases/tag/v0.6.3
 [0.6.2]: https://github.com/Okeysir198/leanwise-design/releases/tag/v0.6.2

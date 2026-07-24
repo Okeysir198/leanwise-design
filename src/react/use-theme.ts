@@ -85,6 +85,25 @@ function applyToDom(theme: Theme) {
   document.documentElement.dataset[ATTR] = theme;
 }
 
+/**
+ * Persist the choice to BOTH stores. `localStorage` is what `useTheme` re-reads; the
+ * `lw-theme` cookie is what the server reads on the NEXT full load (the site's SSR
+ * resolves `<html data-theme>` from it). Writing both means a reload right after a toggle
+ * is SSR-correct with no reliance on the blocking head script — no flash, no one-frame fixup.
+ */
+function persist(theme: Theme) {
+  if (typeof localStorage !== 'undefined') {
+    try {
+      localStorage.setItem(STORAGE_KEY, theme);
+    } catch {
+      /* private mode / disabled storage — the DOM attribute still applies */
+    }
+  }
+  if (typeof document !== 'undefined') {
+    document.cookie = `${STORAGE_KEY}=${theme}; max-age=31536000; path=/; samesite=lax`;
+  }
+}
+
 /** Track OS-level preference changes (only relevant while theme === 'system'). */
 if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {
   const mql = window.matchMedia('(prefers-color-scheme: dark)');
@@ -129,13 +148,7 @@ export function useTheme(): UseThemeResult {
 
   const setTheme = useCallback((theme: Theme) => {
     applyToDom(theme);
-    if (typeof localStorage !== 'undefined') {
-      try {
-        localStorage.setItem(STORAGE_KEY, theme);
-      } catch {
-        /* private mode / disabled storage — the DOM attribute still applies */
-      }
-    }
+    persist(theme);
     setState({ theme, resolved: resolveTheme(theme) });
   }, []);
 
