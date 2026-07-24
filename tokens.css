@@ -7,7 +7,7 @@
 
    Every color is declared twice, but authored ONCE:
 
-     --lw-brand-500-c: 173.4 80.4% 40%;            <- authored (the triple)
+     --lw-brand-500-c: 192.0 78% 47%;              <- authored (the triple)
      --lw-brand-500:   hsl(var(--lw-brand-500-c)); <- derived (a usable color)
 
    The triple exists because Tailwind/shadcn compose `hsl(var(--primary))` and
@@ -22,9 +22,9 @@
 
    Measured, not assumed (bin/lw-contrast-check.mjs re-verifies on every build):
 
-     white on teal #14B8A6 ....  2.49  FAILS AA
+     white on cyan #1AB0D5 ....  2.56  FAILS AA
      white on orange #F97316 ..  2.80  FAILS AA
-     navy  on teal ............  7.52  AAA
+     navy  on cyan ............  7.33  AAA
      navy  on orange ..........  6.68  AAA
 
    So a bright-brand fill takes near-black type. That is a deliberate look, and
@@ -33,8 +33,8 @@
    ## Fill colors and TEXT colors are different tokens
 
    A color bright enough to be a good fill is too bright to be readable AS text
-   on white. Teal-500 as link text scores 2.49; the brand text color is teal-700
-   (5.07). Same for success/warning. Hence every semantic ships:
+   on white. Cyan-500 as link text scores 2.56; the brand text color is cyan-700
+   (5.87). Same for success/warning. Hence every semantic ships:
 
      --lw-x        the FILL          (put --lw-x-fg on top of it)
      --lw-x-fg     ink for that fill (navy or white, whichever passes)
@@ -75,15 +75,27 @@
   --lw-tracking-wide: 0.02em;
   --lw-tracking-eyebrow: 0.14em;
 
-  /* ---- Brand teal ------------------------------------------------------- */
-  --lw-brand-50-c:  170.8 68.4% 96.3%;   /* #EFFCFA */
-  --lw-brand-100-c: 171.2 63.0% 89.4%;   /* #D3F5F0 */
-  --lw-brand-200-c: 171.8 62.3% 79.2%;   /* #A9EBE2 */
-  --lw-brand-300-c: 173.5 67.7% 62.4%;   /* #5EE0D2 */
-  --lw-brand-400-c: 172.9 66.3% 50.0%;   /* #2BD4C0 — fills the old ramp gap; = rag's dark accent */
-  --lw-brand-500-c: 173.4 80.4% 40.0%;   /* #14B8A6 — THE brand color */
-  --lw-brand-600-c: 174.6 82.7% 31.8%;   /* #0E9488 */
-  --lw-brand-700-c: 174.7 83.7% 26.5%;   /* #0B7C72 — the only teal readable AS TEXT on white (5.07) */
+  /* ---- Brand cyan ------------------------------------------------------- */
+  /* Anchored on the LOGO, not on a stock palette. Every rendition of the mark
+     samples to a 184–208° cyan/azure band (centre ≈196°); the logo's own cyan
+     is #00849C, which lands between brand-600 and brand-700 below — so the
+     mark's color IS the text tier, and the fill tier is a lightened version of
+     it. Until v0.7.0 this ramp sat at 173° (Tailwind's stock teal-500), which
+     matched neither the mark nor the CONNECT deck.
+     Lightness is NOT a straight rotation of the old teal: cyan carries less
+     luminance than teal at equal L (the green channel is weighted 0.7152 vs
+     blue's 0.0722), so a naive hue rotation drops navy-on-brand-600 to 3.63
+     and pushes brand-500 below inkOn()'s 0.35 crossover — flipping per-tenant
+     ink to WHITE on cyan. The L values below are corrected to hold the
+     contract; see the table under "Why brand fills carry NAVY ink". */
+  --lw-brand-50-c:  189.4 70.0% 96.5%;   /* #F0FAFC */
+  --lw-brand-100-c: 189.8 66.0% 89.8%;   /* #D4F1F6 */
+  --lw-brand-200-c: 190.4 66.0% 80.0%;   /* #AAE2EE */
+  --lw-brand-300-c: 192.1 70.0% 64.0%;   /* #63CAE3 */
+  --lw-brand-400-c: 191.5 72.0% 55.0%;   /* #3ABFDF — cyan as TEXT on dark (8.66) */
+  --lw-brand-500-c: 192.0 78.0% 47.0%;   /* #1AB0D5 — THE brand color */
+  --lw-brand-600-c: 193.0 84.0% 38.0%;   /* #108FB2 — hover fill (navy ink 4.99) */
+  --lw-brand-700-c: 193.3 86.0% 29.0%;   /* #0A6D8A — the only cyan readable AS TEXT on white (5.87) */
 
   --lw-brand-50:  hsl(var(--lw-brand-50-c));
   --lw-brand-100: hsl(var(--lw-brand-100-c));
@@ -101,7 +113,9 @@
   --lw-navy-700: hsl(var(--lw-navy-700-c));
   --lw-navy-900: hsl(var(--lw-navy-900-c));
   --lw-navy-deep: hsl(var(--lw-navy-deep-c));
-  --lw-gradient-brand: linear-gradient(135deg, hsl(var(--lw-brand-500-c)) 0%, hsl(var(--lw-navy-700-c)) 100%);
+  /* Stop order follows the MARK: the logo's hexagon runs navy at the lower-left
+     into cyan at the upper-right. 135deg starts top-left, so navy leads. */
+  --lw-gradient-brand: linear-gradient(135deg, hsl(var(--lw-navy-700-c)) 0%, hsl(var(--lw-brand-500-c)) 100%);
 
   /* ---- CTA orange — PRIMARY ACTIONS ONLY, one per view ------------------ */
   --lw-cta-400-c:  27.0 96.0% 61.0%;     /* #FB923C — orange as TEXT on dark (8.27) */
@@ -305,7 +319,7 @@
   --lw-brand-text: hsl(var(--lw-brand-text-c));
   --lw-cta-text:   hsl(var(--lw-cta-text-c));
 
-  /* Ink that sits ON a fill, as a ready-to-use color. Theme-independent: the teal and
+  /* Ink that sits ON a fill, as a ready-to-use color. Theme-independent: the cyan and
      the orange are the same color in both themes, so their ink must be too — using
      --lw-fg here would flip to near-white on dark and put white on #F97316 (2.80). */
   --lw-on-brand:  hsl(var(--lw-on-brand-c));

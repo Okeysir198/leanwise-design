@@ -81,17 +81,17 @@ at tag time; `pnpm build` (tsup) regenerates it. Full release notes live in `CHA
 
 | | white text | navy `#0B1220` text |
 |---|---|---|
-| teal `#14B8A6` | 2.49 ✗ | **7.52** ✓ |
+| cyan `#1AB0D5` | 2.56 ✗ | **7.33** ✓ |
 | orange `#F97316` | 2.80 ✗ | **6.68** ✓ |
 
 White-on-brand fails WCAG AA. `bin/lw-contrast-check.mjs` enforces this on every token change.
 
 **2. A fill color and a text color are different tokens.** A color bright enough to fill a
-button is too bright to read as text on white. Teal-500 as a link scores 2.49.
+button is too bright to read as text on white. Cyan-500 as a link scores 2.56.
 
 ```tsx
-<Button>Save</Button>          {/* bg-primary — the teal FILL */}
-<a className="text-brand">   {/* brand-700 — teal as TEXT (5.06) */}
+<Button>Save</Button>          {/* bg-primary — the cyan FILL */}
+<a className="text-brand">   {/* brand-700 — cyan as TEXT (5.87) */}
 ```
 Same for `success` / `success-on`, `warning` / `warning-on`, `destructive` / `destructive-on`,
 and — since v0.6.7 — `cta` / `cta-on`. Every one of those `-on` utilities is theme-aware: the

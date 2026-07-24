@@ -75,8 +75,8 @@ module.exports = {
           // scores 2.80 on white. Mirrors success/warning/danger `-on`.
           on: "hsl(var(--cta-on) / <alpha-value>)",
         },
-        // Teal as TEXT. `text-brand` for a link/active label — NOT `text-primary`,
-        // which is the fill color and scores 2.49 on white.
+        // Cyan as TEXT. `text-brand` for a link/active label — NOT `text-primary`,
+        // which is the fill color and scores 2.56 on white.
         brand: "hsl(var(--brand) / <alpha-value>)",
         success: {
           DEFAULT: "hsl(var(--success) / <alpha-value>)",
@@ -132,14 +132,14 @@ module.exports = {
       transitionDuration: { fast: "var(--lw-duration-fast)", DEFAULT: "var(--lw-duration)", slow: "var(--lw-duration-slow)" },
 
       backgroundImage: {
-        // The hero/brand panel gradient (teal → navy).
+        // The hero/brand panel gradient (navy → cyan, following the mark).
         "gradient-brand": "var(--lw-gradient-brand)",
         // The soft radial brand glow behind auth cards and empty hero states. Registered
         // as a real utility so nobody has to reach for an arbitrary value to get it —
         // that escape hatch is exactly how VSS's auth card ended up keyed to --accent
         // (a hover surface) instead of the brand, rendering an invisible grey wash.
         "brand-wash": "radial-gradient(40rem at 50% -10%, hsl(var(--primary) / 0.18), transparent)",
-        // The editorial auth/landing aside: two teal radial washes over the base. Keyed to
+        // The editorial auth/landing aside: two cyan radial washes over the base. Keyed to
         // --primary so it themes per tenant. `bg-hero-aside` — a real utility, no arbitrary
         // value, so it stays lintable (the escape hatch is exactly the --accent footgun above).
         "hero-aside":

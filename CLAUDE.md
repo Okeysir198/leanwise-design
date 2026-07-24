@@ -12,11 +12,11 @@ against. README is the user-facing doc; this file is the *maintainer* doc.
 
 ### Consumers (the suite — keep them in lockstep)
 
-| Consumer | Pin | Consumes | Package manager |
-|---|---|---|---|
-| `P20260707-vss/frontend` | `#v0.2.2` | `tokens.css` + `shadcn.css` + Tailwind preset + `./brand` | pnpm |
-| `leanwise-ai` | `#v0.2.2` | `tokens.css` + `lw.css` (the `.lw-*` marketing layer) | pnpm |
-| `P20260706-rag-service/frontend` | `#v0.2.2` | `tokens.css` (vanilla CSS, no preset) | npm |
+| Consumer | Pin | Installed | Consumes | Package manager |
+|---|---|---|---|---|
+| `leanwise-ai` | `#v0.7.0` | 0.7.0 | `tokens.css` + `lw.css` (the `.lw-*` marketing layer) + `./assets` | pnpm |
+| `P20260707-vss/frontend` | `#v0.2.3` | 0.2.3 | `tokens.css` + `shadcn.css` + Tailwind preset + `./brand` | pnpm |
+| `P20260706-rag-service/frontend` | `#v0.2.2` | **0.2.1 — drifted** | `tokens.css` (vanilla CSS, no preset) | npm |
 
 A token change is a reviewable one-line bump in each consumer, on that consumer's schedule.
 **Suite skew is the failure mode** — when one consumer lags, it re-hand-rolls the very patterns
@@ -24,13 +24,35 @@ the package factored out (leanwise-ai hand-composed `--lw-brand-500-c` radials f
 because `bg-hero-aside`/`bg-brand-wash` didn't exist at its pinned tag). After any release, bump
 all three; the lockfile-check gotcha below is how a "bump" silently no-ops.
 
+### The v0.2.x consumers — read before bumping them
+
+VSS and rag-service are ~5 minor versions behind and were **deliberately left on their pins**
+when v0.7.0 moved the brand hue. Do not bump them in one jump:
+
+1. **rag-service's install is drifted** — pinned `v0.2.2`, `node_modules` resolved `0.2.1`. Its
+   current build was never verified against its own pin, so any bug you see there may predate
+   the token change entirely. Fix the drift and rebuild *first*, in its own commit.
+2. **Then** bump each to current, and eyeball. VSS spreads brand utilities across ~63 sites in
+   *components* (`SourceViewer.tsx`, `ui/button.tsx`, `Landing.tsx`), not stylesheets, so its QA
+   is component-by-component. rag-service concentrates ~98 in `src/styles/chat.css` + `app.css`.
+3. rag-service also hardcodes the brand at `src/routes/admin/w.$slug.tsx:720,728`
+   (`draft.branding?.accent || "#14B8A6"` and the matching placeholder) — the only real brand
+   hardcode in any consumer. It must move to the new cyan or tenants inherit a stale default.
+4. Their `dist/` builds bake the old teal. A pin bump without a rebuild still serves teal.
+
+Sequence drift-fix → version bump → hue change, so breakage is attributable to one of the three.
+
 ## Layout
 
 ```
 tokens.css          THE source of truth — HSL channel triples + derived colors, light + dark.
-                      Authored once as a triple (--lw-brand-500-c: 173.4 80.4% 40%) and derived
+                      Authored once as a triple (--lw-brand-500-c: 192 78% 47%) and derived
                       (--lw-brand-500: hsl(var(--lw-brand-500-c))). Edit the triple; NEVER the
                       derived line; never a hex in a consumer.
+assets/             the logo. logo-mark.svg (gradient, for <img>), logo-mark-mono.svg
+                      (currentColor, for inlining on dark), logo-lockup.svg (mark + wordmark),
+                      plus PNG fallbacks re-exported FROM the SVGs. build-logo.py regenerates
+                      all of them — edit that, never the SVG by hand. See "The logo" below.
 shadcn.css          maps --primary/--background/--accent/… onto tokens (no values of its own).
 tailwind-preset.js  Tailwind v3 preset — registers cta/success/warning/brand/navy as REAL
                       utilities so devs never reach for the bg-[hsl(var(--x))] escape hatch.
@@ -57,7 +79,7 @@ it before cutting the tag.
 scoped per block (`:root` and `.dark` separately — scanning the whole file lets the last
 declaration win and silently resolves a light token to its dark value), and fails if any of the
 pair in the MANIFEST drops under 4.5:1 (63 pairs as of v0.6.7). **Run it on every token change.**
-It exists because white-on-teal (2.49) and white-on-orange (2.80) shipped in a doc for months; a
+It exists because white-on-brand (2.56) and white-on-orange (2.80) shipped in a doc for months; a
 number in CI catches what an eyeball doesn't.
 
 Coverage is manifest-driven: `MANIFEST` at the top of the script is the single place a pair is
@@ -71,14 +93,38 @@ node bin/lw-contrast-check.mjs     # all MANIFEST pairs ≥ AA
 npx lw-token-lint <consumer>/src   # run in each consumer
 ```
 
+## The logo (and why the brand is cyan)
+
+The palette is derived FROM the mark, not the other way round. Every rendition of the logo
+samples to a **184–208° cyan/azure band**; until v0.7.0 the ramp sat at 173° — Tailwind's stock
+`teal-500`, matching neither the mark nor the CONNECT deck. The navy anchor (209.4°) always
+matched. If you ever re-tune the brand, re-sample the mark first; don't pick from a palette.
+
+`assets/build-logo.py` regenerates the SVGs. Two things about it that will bite otherwise:
+
+- **The mark is authored geometry, not an autotrace** — a regular pointy-top hexagon plus two
+  stroked polylines and two node dots. Vertex coordinates were fitted by coordinate descent
+  against `logo-4.png` (IoU 0.845). Measuring a thick stroke's centreline by a geodesic walk
+  *cuts the inside of every corner*, so a naive measurement makes the zigzag too shallow — the
+  fitted numbers in the script are the corrected ones. Only the wordmark is traced (it is type).
+- **The source renditions disagree.** The square art is ~5% x-stretched (hexagon ratio .912);
+  the lockup art is .869, a whisker off a true regular hexagon (.866). Everything is derived
+  from the lockup rendition and normalised to regular. Do not mix the two — that is what put
+  the chart out of register on the first attempt. Source art also states the mark's outer height
+  *including* stroke; scale the hexagon PATH to `height − stroke` or the ring draws oversize.
+
+Gradient stops in `logo-mark.svg` are **literal hexes on purpose**: CSS custom properties do not
+cascade into an SVG loaded through `<img>`, so `var()` there would silently always render its
+fallback. Recolouring is `logo-mark-mono.svg`'s job (`currentColor`), and it must be inlined.
+
 ## Three rules that are not obvious (defended by the contrast gate)
 
-1. **Brand fills carry NAVY ink, not white.** White on teal is 2.49:1 (fails); navy `#0B1220` is
-   7.52:1. `--lw-on-brand` is navy. Same for CTA (orange) and the status fills.
-2. **A fill color is not a text color.** Teal-500 fills a button but scores 2.49 as a link. Use
-   `--lw-brand-700` for teal-as-text on light (5.06), `--lw-brand-400`/`--lw-cta-400` on dark.
+1. **Brand fills carry NAVY ink, not white.** White on cyan is 2.56:1 (fails); navy `#0B1220` is
+   7.33:1. `--lw-on-brand` is navy. Same for CTA (orange) and the status fills.
+2. **A fill color is not a text color.** Cyan-500 fills a button but scores 2.56 as a link. Use
+   `--lw-brand-700` for cyan-as-text on light (5.87), `--lw-brand-400`/`--lw-cta-400` on dark.
    This is the three-way `fill` / `text` / `ink` split — most systems conflate it.
-3. **`--primary` is teal; orange is the `cta` *variant*, one per view.** Shadcn's `--primary`
+3. **`--primary` is cyan; orange is the `cta` *variant*, one per view.** Shadcn's `--primary`
    drives the default Button; putting orange there makes every button a CTA. And `--accent` is a
    ghost-button **hover surface**, not a brand color — per-tenant theming overrides
    `--primary`/`--ring` only (via `brandVars()`), never `--accent`.

@@ -59,7 +59,7 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
   letter-spacing: var(--lw-tracking-wide);
 }
 
-/* The signature motif: mono, uppercase, wide-tracked, with a teal dot. */
+/* The signature motif: mono, uppercase, wide-tracked, with a cyan dot. */
 .lw-eyebrow {
   font-family: var(--lw-font-mono);
   font-size: var(--lw-text-eyebrow);
@@ -159,7 +159,7 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
   box-shadow: 0 10px 22px -10px hsl(var(--lw-cta-600-c) / 0.55);
 }
 
-/* BRAND = teal. Secondary emphasis, product accents. (Was `.lw-btn-amber`.) */
+/* BRAND = cyan. Secondary emphasis, product accents. (Was `.lw-btn-amber`.) */
 .lw-btn-brand {
   background: var(--lw-brand-500);
   color: var(--lw-fg);

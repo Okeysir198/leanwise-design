@@ -11,7 +11,7 @@
    LDS says "orange = the one CTA per view". But shadcn's --primary drives the
    DEFAULT Button and a dozen other primitives — mapping orange there would make
    every ordinary button a screaming CTA and destroy the rule it was meant to
-   express. So --primary is teal (the workhorse), and orange is reachable only as
+   express. So --primary is cyan (the workhorse), and orange is reachable only as
    an explicit `<Button variant="cta">`. Rarity is enforced by lint, not by hope.
 
    ## --accent is a SURFACE, not the brand
@@ -35,7 +35,7 @@
 
   /* The workhorse. Tenant-themable at runtime (see lib/brand.ts::brandVars). */
   --primary: var(--lw-brand-500-c);
-  --primary-foreground: var(--lw-on-brand-c);   /* navy — 7.52 on teal */
+  --primary-foreground: var(--lw-on-brand-c);   /* navy — 7.33 on cyan */
 
   --secondary: var(--lw-bg-muted-c);
   --secondary-foreground: var(--lw-fg-c);
@@ -80,8 +80,8 @@
   --danger-soft: var(--lw-danger-soft-c);
   --danger-on: var(--lw-danger-on-c);
 
-  /* Brand as TEXT (links, active nav). brand-500 scores 2.49 on white — this is
-     brand-700 on light and brand-400 on dark. Use `text-brand` for a teal label. */
+  /* Brand as TEXT (links, active nav). brand-500 scores 2.56 on white — this is
+     brand-700 on light and brand-400 on dark. Use `text-brand` for a cyan label. */
   --brand: var(--lw-brand-text-c);
 
   --navy: var(--lw-navy-900-c);
@@ -94,7 +94,7 @@
   --popover: var(--lw-bg-subtle-c);
   --muted: var(--lw-bg-muted-c);
 
-  /* The hover/highlight surface becomes a lighter navy, not a teal wash. */
+  /* The hover/highlight surface becomes a lighter navy, not a cyan wash. */
   --accent: var(--lw-bg-muted-c);
   --accent-foreground: var(--lw-fg-c);
 
