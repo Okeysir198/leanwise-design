@@ -12,6 +12,15 @@ change is a reviewable one-line bump on each consumer's schedule. Dates are comm
 
 _Nothing yet._
 
+## [0.6.6] — 2026-07-24
+
+### Added
+- **Ladle docs site** (`pnpm ladle` to serve, `pnpm ladle:build` for a static build). Stories
+  live in `.ladle/**.stories.tsx` and import the real token core + `.lw-*` layer via
+  `.ladle/css.ts`, so every primitive — Button/Eyebrow/Card, ThemeToggle, CodeBlock, Console,
+  StoryCard, FeatureGrid, LogoRail — renders against the live design system. Dev-only (not
+  shipped to consumers); `build/` is gitignored.
+
 ## [0.6.5] — 2026-07-24
 
 ### Fixed
@@ -296,7 +305,8 @@ predicted: `--s-6` came to mean 24px in one product and `--s6` 32px in another, 
   raw hex, Tailwind palette escapes, arbitrary-value token access, and >1 `variant="cta"`
   per view.
 
-[Unreleased]: https://github.com/Okeysir198/leanwise-design/compare/v0.6.5...HEAD
+[Unreleased]: https://github.com/Okeysir198/leanwise-design/compare/v0.6.6...HEAD
+[0.6.6]: https://github.com/Okeysir198/leanwise-design/releases/tag/v0.6.6
 [0.6.5]: https://github.com/Okeysir198/leanwise-design/releases/tag/v0.6.5
 [0.6.4]: https://github.com/Okeysir198/leanwise-design/releases/tag/v0.6.4
 [0.6.3]: https://github.com/Okeysir198/leanwise-design/releases/tag/v0.6.3

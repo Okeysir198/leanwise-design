@@ -1,6 +1,6 @@
 {
   "name": "@leanwise/design",
-  "version": "0.6.5",
+  "version": "0.6.6",
   "description": "LeanWise Design System (LDS v4) — the canonical token core for every LeanWiseAI product.",
   "license": "UNLICENSED",
   "type": "module",
@@ -45,19 +45,24 @@
   "scripts": {
     "check": "node bin/lw-contrast-check.mjs",
     "build": "tsup",
-    "prepublishOnly": "pnpm build"
+    "prepublishOnly": "pnpm build",
+    "ladle": "ladle serve",
+    "ladle:build": "ladle build"
   },
   "peerDependencies": {
     "react": ">=18",
     "react-dom": ">=18"
   },
   "devDependencies": {
+    "@ladle/react": "^5.1.1",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "tsup": "^8.5.1",
     "typescript": "^5.9.2"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["esbuild"]
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
   }
 }
