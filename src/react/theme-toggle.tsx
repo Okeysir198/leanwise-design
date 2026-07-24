@@ -70,6 +70,7 @@ export function ThemeToggle({
             type="button"
             data-lw-theme={value}
             aria-pressed={active}
+            aria-label={`${label} theme`}
             // Roving tabindex: the active segment is the one Tab reaches.
             tabIndex={active ? 0 : -1}
             onClick={() => setTheme(value)}

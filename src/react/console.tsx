@@ -228,14 +228,13 @@ function FileTree({
   };
 
   return (
-    <div
+    <ul
       className="lw-file-tree"
       role="listbox"
       aria-label="Documents"
       style={{ minWidth: 200, maxWidth: 260, flex: '0 0 auto' }}
     >
-      <ul>
-        {files.map((f, i) => {
+      {files.map((f, i) => {
           const selected = f.id === activeId;
           return (
             <li
@@ -256,7 +255,6 @@ function FileTree({
             </li>
           );
         })}
-      </ul>
-    </div>
+    </ul>
   );
 }

@@ -912,6 +912,11 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
    the selected row carries data-active. Brand-soft tint + brand-text ink +
    a left brand rail — all AA-checked pairs, no fill-as-text. */
 .lw-file-tree {
+  /* The element IS the <ul role="listbox"> (options are direct <li> children) — a
+     listbox must own its options with no wrapper between, so role="listbox" lives here,
+     not on a parent div. Reset the <ul> defaults so it reads as a panel, not a list. */
+  list-style: none;
+  margin: 0;
   font-family: var(--lw-font-mono);
   font-size: var(--lw-text-sm);
   background: var(--lw-bg-subtle);
@@ -919,7 +924,6 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
   border-radius: var(--lw-radius-md);
   padding: var(--lw-space-8) 0;
 }
-.lw-file-tree ul { list-style: none; margin: 0; padding: 0; }
 .lw-file-tree li {
   display: flex;
   align-items: center;

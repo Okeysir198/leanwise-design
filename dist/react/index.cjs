@@ -316,6 +316,7 @@ function ThemeToggle({
             type: "button",
             "data-lw-theme": value,
             "aria-pressed": active,
+            "aria-label": `${label} theme`,
             tabIndex: active ? 0 : -1,
             onClick: () => setTheme(value),
             onKeyDown: (e) => {
@@ -639,13 +640,13 @@ function FileTree({
     }
   };
   return /* @__PURE__ */ jsxRuntime.jsx(
-    "div",
+    "ul",
     {
       className: "lw-file-tree",
       role: "listbox",
       "aria-label": "Documents",
       style: { minWidth: 200, maxWidth: 260, flex: "0 0 auto" },
-      children: /* @__PURE__ */ jsxRuntime.jsx("ul", { children: files.map((f, i) => {
+      children: files.map((f, i) => {
         const selected = f.id === activeId;
         return /* @__PURE__ */ jsxRuntime.jsxs(
           "li",
@@ -667,7 +668,7 @@ function FileTree({
           },
           f.id
         );
-      }) })
+      })
     }
   );
 }

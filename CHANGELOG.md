@@ -12,6 +12,19 @@ change is a reviewable one-line bump on each consumer's schedule. Dates are comm
 
 _Nothing yet._
 
+## [0.6.1] — 2026-07-24
+
+Accessibility fixes found by the site's axe e2e gate consuming v0.6.0.
+
+### Fixed
+- **`ThemeToggle` segment buttons had no accessible name** — with `showLabels={false}` the
+  Light/Dark/System segments were icon-only and failed `button-name`. Each segment now carries
+  `aria-label="${label} theme"`.
+- **`Console` file-tree failed `aria-required-children`/`aria-required-parent`** — the
+  `role="listbox"` lived on a wrapper `<div>` around a `<ul>` of `<li role="option">`, so the
+  listbox did not directly own its options. The `<ul>` is now itself the `role="listbox"`
+  (options are direct children), and `.lw-file-tree` resets the `<ul>` defaults.
+
 ## [0.6.0] — 2026-07-24
 
 The first release with a **component layer** and a **derived contrast gate**. Still strictly
@@ -244,7 +257,8 @@ predicted: `--s-6` came to mean 24px in one product and `--s6` 32px in another, 
   raw hex, Tailwind palette escapes, arbitrary-value token access, and >1 `variant="cta"`
   per view.
 
-[Unreleased]: https://github.com/Okeysir198/leanwise-design/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/Okeysir198/leanwise-design/compare/v0.6.1...HEAD
+[0.6.1]: https://github.com/Okeysir198/leanwise-design/releases/tag/v0.6.1
 [0.6.0]: https://github.com/Okeysir198/leanwise-design/releases/tag/v0.6.0
 [0.5.0]: https://github.com/Okeysir198/leanwise-design/releases/tag/v0.5.0
 [0.4.0]: https://github.com/Okeysir198/leanwise-design/releases/tag/v0.4.0
