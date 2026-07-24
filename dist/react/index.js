@@ -66,16 +66,16 @@ var ATTR = "theme";
 function isValidTheme(v) {
   return v === "light" || v === "dark" || v === "system";
 }
-var currentState = readInitialState();
+var SSR_DEFAULT = { theme: "light", resolved: "light" };
+var currentState = SSR_DEFAULT;
 var listeners = /* @__PURE__ */ new Set();
 function readStoredTheme() {
-  if (typeof document !== "undefined") {
-    const attr = document.documentElement.getAttribute(`data-${ATTR}`);
-    if (isValidTheme(attr)) return attr;
-  }
   if (typeof localStorage !== "undefined") {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (isValidTheme(stored)) return stored;
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (isValidTheme(stored)) return stored;
+    } catch {
+    }
   }
   return "system";
 }
@@ -87,10 +87,6 @@ function systemResolved() {
 }
 function resolveTheme(theme) {
   return theme === "system" ? systemResolved() : theme;
-}
-function readInitialState() {
-  const theme = readStoredTheme();
-  return { theme, resolved: resolveTheme(theme) };
 }
 function setState(next) {
   currentState = next;
@@ -123,8 +119,9 @@ function useTheme() {
     // server snapshot (the initial 'system'/light guess)
   );
   useEffect(() => {
-    applyToDom(snapshot.theme);
-    setState({ theme: snapshot.theme, resolved: resolveTheme(snapshot.theme) });
+    const theme = readStoredTheme();
+    applyToDom(theme);
+    setState({ theme, resolved: resolveTheme(theme) });
   }, []);
   const setTheme = useCallback((theme) => {
     applyToDom(theme);

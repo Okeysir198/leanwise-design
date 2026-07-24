@@ -12,6 +12,18 @@ change is a reviewable one-line bump on each consumer's schedule. Dates are comm
 
 _Nothing yet._
 
+## [0.6.4] — 2026-07-24
+
+### Fixed
+- **`useTheme` aborted hydration** — the store read the DOM at module init, so the server
+  snapshot was `system` while the client's first snapshot read `<html data-theme>` and
+  differed. React then bailed on hydration, which left every JS handler on the page
+  unattached (form submit, CTA navigation). Now a fixed SSR default (`light`) is used for
+  BOTH the server snapshot and the client's first render, and the real stored value is read
+  in a mount effect (the toggle's active indicator corrects by one frame; the page theme is
+  already correct via the blocking head script). `readStoredTheme` now reads `localStorage`
+  (the user's choice, incl. `system`) rather than the resolved `<html>` attribute.
+
 ## [0.6.3] — 2026-07-24
 
 ### Fixed
@@ -276,7 +288,8 @@ predicted: `--s-6` came to mean 24px in one product and `--s6` 32px in another, 
   raw hex, Tailwind palette escapes, arbitrary-value token access, and >1 `variant="cta"`
   per view.
 
-[Unreleased]: https://github.com/Okeysir198/leanwise-design/compare/v0.6.3...HEAD
+[Unreleased]: https://github.com/Okeysir198/leanwise-design/compare/v0.6.4...HEAD
+[0.6.4]: https://github.com/Okeysir198/leanwise-design/releases/tag/v0.6.4
 [0.6.3]: https://github.com/Okeysir198/leanwise-design/releases/tag/v0.6.3
 [0.6.2]: https://github.com/Okeysir198/leanwise-design/releases/tag/v0.6.2
 [0.6.1]: https://github.com/Okeysir198/leanwise-design/releases/tag/v0.6.1

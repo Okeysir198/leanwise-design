@@ -31,17 +31,26 @@ function isValidTheme(v: unknown): v is Theme {
 
 type State = { theme: Theme; resolved: ResolvedTheme };
 
-let currentState: State = readInitialState();
+/* SSR-safe default. We deliberately do NOT read the DOM/localStorage here: the server
+   snapshot and the client's FIRST render must agree (both 'light'), or React aborts
+   hydration — and a failed hydration leaves every JS handler on the page unattached
+   (form submit, CTA navigation, …). The real stored value is read in the mount effect
+   below and the store re-emits; the toggle's active indicator may correct by one frame,
+   invisible against the blocking head script that already painted the right <html data-theme>. */
+const SSR_DEFAULT: State = { theme: 'light', resolved: 'light' };
+let currentState: State = SSR_DEFAULT;
 const listeners = new Set<() => void>();
 
 function readStoredTheme(): Theme {
-  if (typeof document !== 'undefined') {
-    const attr = document.documentElement.getAttribute(`data-${ATTR}`);
-    if (isValidTheme(attr)) return attr;
-  }
+  /* localStorage is the source of the user's CHOICE (incl. 'system'); <html data-theme>
+     is the resolved concrete value, so it is not consulted here. */
   if (typeof localStorage !== 'undefined') {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (isValidTheme(stored)) return stored;
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (isValidTheme(stored)) return stored;
+    } catch {
+      /* private mode / disabled storage */
+    }
   }
   return 'system';
 }
@@ -59,11 +68,6 @@ function systemResolved(): ResolvedTheme {
 
 function resolveTheme(theme: Theme): ResolvedTheme {
   return theme === 'system' ? systemResolved() : theme;
-}
-
-function readInitialState(): State {
-  const theme = readStoredTheme();
-  return { theme, resolved: resolveTheme(theme) };
 }
 
 function setState(next: State) {
@@ -114,12 +118,12 @@ export function useTheme(): UseThemeResult {
     () => currentState, // server snapshot (the initial 'system'/light guess)
   );
 
-  // On mount, reconcile the DOM attribute with the stored value (in case the
-  // SSR'd HTML didn't carry data-theme, or carried a stale one).
+  // On mount, reconcile to the REAL stored theme (the SSR default was a hydration
+  // placeholder). This runs once after hydration, so the DOM read is safe.
   useEffect(() => {
-    applyToDom(snapshot.theme);
-    // Re-resolve in case the OS preference changed since the snapshot was taken.
-    setState({ theme: snapshot.theme, resolved: resolveTheme(snapshot.theme) });
+    const theme = readStoredTheme();
+    applyToDom(theme);
+    setState({ theme, resolved: resolveTheme(theme) });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
