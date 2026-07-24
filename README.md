@@ -14,7 +14,7 @@ consistency is a dependency, not a discipline.
 ```jsonc
 // package.json
 "dependencies": {
-  "@leanwise/design": "github:Okeysir198/leanwise-design#v0.3.0"
+  "@leanwise/design": "github:Okeysir198/leanwise-design#v0.6.5"
 }
 ```
 
@@ -48,6 +48,32 @@ export default {
 @import "@leanwise/design/tokens.css";
 @import "@leanwise/design/lw.css";              /* marketing: the .lw-* classes */
 ```
+
+## Use it — React components (v0.6+)
+
+A compiled component layer renders the `.lw-*` classes above with correct, accessible
+behavior — `react`/`react-dom` are peer deps. The token/CSS layer is unchanged, so this
+is strictly additive; non-React apps keep consuming `tokens.css`/`lw.css` directly.
+
+```ts
+import { Button, ThemeToggle, CodeBlock, Console, StoryCard, FeatureGrid, LogoRail } from '@leanwise/design/react';
+```
+
+- **Primitives**: `Button`, `Eyebrow`, `Card` (ref-forwarding, native semantics, correct focus).
+- **Theme**: `ThemeToggle` + `useTheme` — an accessible segmented light/dark/system control.
+  `useTheme` drives the three-layer `[data-theme]` model, persists to `localStorage` AND the
+  `lw-theme` cookie, and is **SSR-safe** — the server snapshot and the client's first render
+  must agree (a fixed default), or React aborts hydration. See `src/react/use-theme.ts`.
+- **Code**: `CodeBlock` — the `.lw-code` surface; takes server-highlighted HTML (`tok-*`
+  spans from refractor) or raw code, optional filename header, accessible `tabs` mode.
+- **Console**: `Console` — `.lw-console.log` shell with a `.lw-file-tree` (`role=listbox`)
+  and `.lw-run-controls` for composable interactive demos; pair with `useDeterministicCascade`.
+- **Composites**: `StoryCard` (the optional testimonial quote renders **only** when quote +
+  person + role are all set — the no-fabrication rule, enforced at runtime), `FeatureGrid`,
+  `LogoRail`, plus an inline-SVG `icons` set and `useReveal`/`useSpotlight`/`useDeterministicCascade` hooks.
+
+`github:` installs run no lifecycle scripts, so the build output (`dist/react/`) is committed
+at tag time; `pnpm build` (tsup) regenerates it. Full release notes live in `CHANGELOG.md`.
 
 ## The three rules that are not obvious
 
