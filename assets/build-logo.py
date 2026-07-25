@@ -76,7 +76,11 @@ def _paths(part, fill, dx=0.0):
 
 
 def svg(view_w, view_h, body, defs=''):
+    # width/height as well as viewBox. A viewBox-only SVG has an intrinsic RATIO
+    # but no intrinsic SIZE, and `mask-size: contain` has nothing to resolve
+    # against — the dark-ground masked mark renders as nothing at all.
     return ('<svg xmlns="http://www.w3.org/2000/svg" '
+            f'width="{view_w:g}" height="{view_h:g}" '
             f'viewBox="0 0 {view_w:g} {view_h:g}" role="img" '
             'aria-label="LeanWise AI">'
             + (f'<defs>{defs}</defs>' if defs else '') + body + '</svg>\n')
