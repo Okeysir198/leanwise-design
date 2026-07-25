@@ -12,6 +12,36 @@ change is a reviewable one-line bump on each consumer's schedule. Dates are comm
 
 _Nothing yet._
 
+## [0.9.0] — 2026-07-25
+
+### Changed
+- **The CTA ramp is amber, not orange.** `--lw-cta-500` moves `24.6 95% 53.1%` (`#F97316`,
+  Tailwind's stock `orange-500`) → `43 98% 50%` (`#FCB603`), with the 400/600/700/soft tiers
+  re-hued to match. Cyan and navy are unchanged — this touches only the accent.
+
+  At 43° the amber sits ~144° from the logo cyan (187.6°), i.e. near-complementary. That
+  separation is the point: it is what keeps the accent legible as an *accent* rather than
+  reading as a second brand color. Lemon (55°+) was rejected on two counts — it goes flat
+  against the navy paper, and it cannot produce a 700 tier that holds AA as text on white
+  without turning olive.
+
+  The value is deliberately ~2° off `#EAB308`, which is what tss-app carried and which is
+  Tailwind's stock `yellow-500`. Shipping a stock palette value as the accent of a bespoke
+  system is the same mistake that left the brand teal on stock `teal-500` for five versions;
+  the 2° also buys a slightly better fill ratio (10.54 vs 9.76 under navy ink).
+
+  Amber is a light fill at every usable tier, so `--lw-on-cta` stays navy — the rule that ink
+  follows the fill's lightness is unchanged, and it still disagrees with brand (white ink).
+
+  All 64 MANIFEST pairs pass AA. Prose across `tokens.css`, `shadcn.css`, `lw.css` and both
+  bins was updated to say "amber" where it said "orange"; `lw-token-lint`'s `multiple-cta`
+  rule is unaffected and still enforces one CTA per file.
+
+### Migration
+Visual breaking change. Every `variant="cta"`, `bg-cta`, `.lw-btn-primary` and CTA badge
+changes hue. Eyeball each consumer before bumping; no API, token *name*, or utility changed,
+so nothing needs a code edit.
+
 ## [0.8.1] — 2026-07-25
 
 ### Fixed

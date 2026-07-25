@@ -6,12 +6,12 @@
      @import "@leanwise/design/tokens.css";
      @import "@leanwise/design/shadcn.css";
 
-   ## --primary is TEAL, not orange
+   ## --primary is TEAL, not amber
 
-   LDS says "orange = the one CTA per view". But shadcn's --primary drives the
-   DEFAULT Button and a dozen other primitives — mapping orange there would make
+   LDS says "amber = the one CTA per view". But shadcn's --primary drives the
+   DEFAULT Button and a dozen other primitives — mapping amber there would make
    every ordinary button a screaming CTA and destroy the rule it was meant to
-   express. So --primary is cyan (the workhorse), and orange is reachable only as
+   express. So --primary is cyan (the workhorse), and amber is reachable only as
    an explicit `<Button variant="cta">`. Rarity is enforced by lint, not by hope.
 
    ## --accent is a SURFACE, not the brand
@@ -58,12 +58,12 @@
 
   /* --- Tokens shadcn has no concept of; registered in tailwind-preset.js --- */
 
-  /* The CTA. Orange. One per view. Never tenant-themed — the orange is
+  /* The CTA. Amber. One per view. Never tenant-themed — the amber is
      LeanWise's voice, not the customer's. */
   --cta: var(--lw-cta-500-c);
-  --cta-foreground: var(--lw-on-cta-c);   /* navy — 6.68 on orange */
+  --cta-foreground: var(--lw-on-cta-c);   /* navy — 10.54 on amber */
   --cta-soft: var(--lw-cta-soft-c);
-  --cta-on: var(--lw-cta-text-c);         /* orange AS TEXT — theme-aware (700 light / 400 dark) */
+  --cta-on: var(--lw-cta-text-c);         /* amber AS TEXT — theme-aware (700 light / 400 dark) */
 
   /* Status. Split fill/text because a good fill is unreadable as text:
      #16A34A on white is 3.30 (fails AA); the -on variant is 5.02 (passes). */

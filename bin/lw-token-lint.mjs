@@ -20,8 +20,8 @@
  *                                   un-dedupable by tailwind-merge, and it is how VSS
  *                                   ended up with one element carrying two conflicting
  *                                   text colors. Use the real utility (`bg-primary`).
- *   4. >1 CTA per view            — "one orange per view" is the whole point of having
- *                                   an orange. A doc cannot enforce it; this can.
+ *   4. >1 CTA per view            — "one amber per view" is the whole point of having
+ *                                   an amber. A doc cannot enforce it; this can.
  *
  * CSS rules (self-check on lw.css):
  *   5. raw duration               — a .lw-* rule using a raw <n>s/<n>ms instead of a
@@ -123,12 +123,12 @@ for (const file of walk(target)) {
     });
   }
 
-  // Rule 4: the one-orange-per-view rule. Counted per file, since a route file
+  // Rule 4: the one-amber-per-view rule. Counted per file, since a route file
   // is a view. The Button definition itself is exempt.
   if (!ALLOW_CTA_DEF.test(rel)) {
     const ctas = (src.match(/variant=["']cta["']/g) ?? []).length;
     if (ctas > 1) {
-      console.error(`${rel}  [multiple-cta]  ${ctas} × variant="cta"\n    The orange CTA is the one high-energy action on a view. Demote the others to the default (teal) variant.`);
+      console.error(`${rel}  [multiple-cta]  ${ctas} × variant="cta"\n    The amber CTA is the one high-energy action on a view. Demote the others to the default (teal) variant.`);
       violations++;
     }
   }

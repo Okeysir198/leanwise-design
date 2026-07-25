@@ -23,9 +23,9 @@
    Measured, not assumed (bin/lw-contrast-check.mjs re-verifies on every build):
 
      white on cyan #1AB0D5 ....  2.56  FAILS AA
-     white on orange #F97316 ..  2.80  FAILS AA
+     white on amber  #FCB603 ..  1.65  FAILS AA
      navy  on cyan ............  7.33  AAA
-     navy  on orange ..........  6.68  AAA
+     navy  on amber ...........  10.54 AAA
 
    So a bright-brand fill takes near-black type. That is a deliberate look, and
    it is the only one that is accessible without changing the brand hexes.
@@ -142,12 +142,16 @@
      into cyan at the upper-right. 135deg starts top-left, so navy leads. */
   --lw-gradient-brand: linear-gradient(135deg, hsl(var(--lw-navy-700-c)) 0%, hsl(var(--lw-brand-500-c)) 100%);
 
-  /* ---- CTA orange — PRIMARY ACTIONS ONLY, one per view ------------------ */
-  --lw-cta-400-c:  27.0 96.0% 61.0%;     /* #FB923C — orange as TEXT on dark (8.27) */
-  --lw-cta-500-c:  24.6 95.0% 53.1%;     /* #F97316 — the CTA fill */
-  --lw-cta-600-c:  20.5 90.2% 48.2%;     /* #EA580C — hover */
-  --lw-cta-soft-c: 34.3 100%  91.8%;     /* #FFEDD5 */
-  --lw-cta-700-c:  22.7 82.5% 31.4%;     /* #92400E — orange as TEXT on white (7.09) */
+  /* ---- CTA amber — PRIMARY ACTIONS ONLY, one per view -------------------
+     Amber-gold, not lemon. At 43° it sits ~144° from the logo cyan (187.6°) —
+     near-complementary, so it reads as a deliberate accent rather than a second
+     brand color. Lemon (55°+) goes flat against navy paper and can't produce a
+     700 tier that holds AA as text on white without turning olive. */
+  --lw-cta-400-c:  44.0 96.0% 58.0%;     /* #FBC42D — amber as TEXT on dark (11.62) */
+  --lw-cta-500-c:  43.0 98.0% 50.0%;     /* #FCB603 — the CTA fill (navy ink, 10.54) */
+  --lw-cta-600-c:  38.0 95.0% 44.0%;     /* #DB8D06 — hover (navy ink, 6.97) */
+  --lw-cta-soft-c: 46.0 100%  90.0%;     /* #FFF3CC */
+  --lw-cta-700-c:  30.0 88.0% 27.0%;     /* #814508 — amber as TEXT on white (7.53) */
   --lw-cta-400: hsl(var(--lw-cta-400-c));
   --lw-cta-500: hsl(var(--lw-cta-500-c));
   --lw-cta-600: hsl(var(--lw-cta-600-c));
@@ -329,10 +333,10 @@
   --lw-danger-on-c:    var(--lw-danger-text-c);
 
   /* Ink that sits ON a fill. The brand fill is DARK since v0.8.0, so it takes
-     WHITE (5.68; navy would be 2.96). CTA orange and the status fills are still
+     WHITE (5.68; navy would be 2.96). CTA amber and the status fills are still
      light, so they keep navy — the split is by fill lightness, not by brand. */
   --lw-on-brand-c: var(--lw-surface-0-c);    /* white — the brand fill is dark */
-  --lw-on-cta-c:   var(--lw-text-1-c);       /* navy — orange is a LIGHT fill */
+  --lw-on-cta-c:   var(--lw-text-1-c);       /* navy — amber is a LIGHT fill */
   --lw-on-status-c: var(--lw-text-1-c);      /* navy — success/warning fills */
   --lw-on-danger-c: var(--lw-surface-0-c);   /* white */
 
@@ -351,7 +355,7 @@
   --lw-cta-text:   hsl(var(--lw-cta-text-c));
 
   /* Ink that sits ON a fill, as a ready-to-use color. Theme-independent: the cyan and
-     the orange are the same color in both themes, so their ink must be too — using
+     the amber is the same color in both themes, so its ink must be too — using
      --lw-fg here would flip to near-white on dark and put white on #F97316 (2.80). */
   --lw-on-brand:  hsl(var(--lw-on-brand-c));
   --lw-on-cta:    hsl(var(--lw-on-cta-c));
@@ -407,7 +411,7 @@
   --lw-success-soft-c: 153.3 47.4% 11.2%;  /* #0F2A1E — ink lands at 7.97 */
   --lw-warning-soft-c: 38.9  67.3% 10.8%;  /* #2E2109 — 9.40 */
   --lw-danger-soft-c:  0     53.2% 15.1%;  /* #3B1212 — 5.93 */
-  --lw-cta-soft-c:     24.8  65.7% 13.7%;  /* #3A1F0C — 6.72 */
+  --lw-cta-soft-c:     34.0  62.0% 13.0%;  /* #3A1F0C — 6.72 */
 
   /* Navy-tinted shadows are invisible on a navy ground: go black, and lean on
      the hairline border for elevation instead. */
@@ -446,7 +450,7 @@
     --lw-success-soft-c: 153.3 47.4% 11.2%;  /* #0F2A1E — ink lands at 7.97 */
     --lw-warning-soft-c: 38.9  67.3% 10.8%;  /* #2E2109 — 9.40 */
     --lw-danger-soft-c:  0     53.2% 15.1%;  /* #3B1212 — 5.93 */
-    --lw-cta-soft-c:     24.8  65.7% 13.7%;  /* #3A1F0C — 6.72 */
+    --lw-cta-soft-c:     34.0  62.0% 13.0%;  /* #3A1F0C — 6.72 */
     --lw-shadow-xs: 0 1px 0 hsl(var(--lw-line-c) / 0.5);
     --lw-shadow-sm: 0 1px 0 hsl(var(--lw-line-c) / 0.6);
     --lw-shadow-md: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 8px 24px rgba(0, 0, 0, 0.45);
@@ -499,7 +503,7 @@
   --lw-success-soft-c: 153.3 47.4% 11.2%;
   --lw-warning-soft-c: 38.9  67.3% 10.8%;
   --lw-danger-soft-c:  0     53.2% 15.1%;
-  --lw-cta-soft-c:     24.8  65.7% 13.7%;
+  --lw-cta-soft-c:     34.0  62.0% 13.0%;
   --lw-shadow-xs: 0 1px 0 hsl(var(--lw-line-c) / 0.5);
   --lw-shadow-sm: 0 1px 0 hsl(var(--lw-line-c) / 0.6);
   --lw-shadow-md: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 8px 24px rgba(0, 0, 0, 0.45);
@@ -547,7 +551,7 @@
   --lw-success-soft-c: 153.3 47.4% 11.2%;
   --lw-warning-soft-c: 38.9  67.3% 10.8%;
   --lw-danger-soft-c:  0     53.2% 15.1%;
-  --lw-cta-soft-c:     24.8  65.7% 13.7%;
+  --lw-cta-soft-c:     34.0  62.0% 13.0%;
   --lw-shadow-xs: 0 1px 0 hsl(var(--lw-line-c) / 0.5);
   --lw-shadow-sm: 0 1px 0 hsl(var(--lw-line-c) / 0.6);
   --lw-shadow-md: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 8px 24px rgba(0, 0, 0, 0.45);
@@ -582,7 +586,7 @@
   --lw-success-soft-c: 140.6 84.2% 92.5%;
   --lw-warning-soft-c: 48.0  96.5% 88.8%;
   --lw-danger-soft-c:  0     93.3% 94.1%;
-  --lw-cta-soft-c:     34.3  100%  91.8%;
+  --lw-cta-soft-c:     46.0  100%  90.0%;
   --lw-shadow-xs: 0 1px 0 rgba(11, 37, 69, 0.05);
   --lw-shadow-sm: 0 1px 2px rgba(11, 37, 69, 0.06);
   --lw-shadow-md: 0 6px 20px -8px rgba(11, 37, 69, 0.14), 0 1px 2px rgba(11, 37, 69, 0.05);

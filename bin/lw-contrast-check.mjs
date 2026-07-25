@@ -3,7 +3,7 @@
  * Derived WCAG 2.1 contrast gate for the token core.
  *
  * WHY THIS EXISTS — white on the brand cyan (#1AB0D5) scores 2.56 and on the
- * CTA orange (#F97316) 2.80. Both fail AA. The design system shipped that pairing
+ * CTA amber (#FCB603) 1.65. Both fail AA. The design system shipped that pairing
  * for months; a human eyeballing a mockup did not catch it, a number in CI would
  * have. This file is that number.
  *
@@ -55,11 +55,11 @@ const MANIFEST = [
   // ── A. Brand / CTA fills + their ink. Theme-invariant: fill and ink are the same
   //    color in both themes. Checked in BOTH so a future re-point is caught.
   //    Since v0.8.0 the ink differs BY FILL LIGHTNESS, not by brand: the teal fill
-  //    is dark and takes white; orange and the status fills are light and take navy.
+  //    is dark and takes white; amber and the status fills are light and take navy.
   { group: "brand fills", fg: "on-brand",  bg: "brand-500", scope: "both", label: "teal fill + WHITE ink (default Button)" },
   { group: "brand fills", fg: "on-brand",  bg: "brand-600", scope: "both", label: "teal hover + WHITE ink" },
-  { group: "brand fills", fg: "on-cta",    bg: "cta-500",   scope: "both", label: "orange CTA fill + navy ink (the one orange button)" },
-  { group: "brand fills", fg: "on-cta",    bg: "cta-600",   scope: "both", label: "orange CTA hover + navy ink" },
+  { group: "brand fills", fg: "on-cta",    bg: "cta-500",   scope: "both", label: "amber CTA fill + navy ink (the one CTA button)" },
+  { group: "brand fills", fg: "on-cta",    bg: "cta-600",   scope: "both", label: "amber CTA hover + navy ink" },
   { group: "brand fills", fg: "on-danger", bg: "danger",    scope: "both", label: "destructive fill + WHITE ink" },
 
   // ── B. Semantic status fills + their ink. Navy sits on green/amber fills.
@@ -74,7 +74,7 @@ const MANIFEST = [
   { group: "text-on-light", fg: "success-text", bg: "surface-0", scope: "light", label: "success as text on page" },
   { group: "text-on-light", fg: "warning-text", bg: "surface-0", scope: "light", label: "warning as text on page" },
   { group: "text-on-light", fg: "danger-text",  bg: "surface-0", scope: "light", label: "danger as text on page" },
-  { group: "text-on-light", fg: "cta-text",     bg: "surface-0", scope: "light", label: "orange AS TEXT on page (#92400E)" },
+  { group: "text-on-light", fg: "cta-text",     bg: "surface-0", scope: "light", label: "amber AS TEXT on page (#814508)" },
 
   // ── D. Text tiers on LIGHT surfaces (page, cards, inset, brand tint).
   //    text-4 / fg-faint are deliberately EXCLUDED — documented "decorative only,
@@ -102,7 +102,7 @@ const MANIFEST = [
   { group: "text-on-dark", fg: "fg",         bg: "bg-subtle", scope: "dark", label: "body text on a dark card" },
   { group: "text-on-dark", fg: "fg-muted",   bg: "bg-subtle", scope: "dark", label: "secondary text on a dark card" },
   { group: "text-on-dark", fg: "brand-400",  bg: "bg",        scope: "dark", label: "cyan as text on dark" },
-  { group: "text-on-dark", fg: "cta-400",    bg: "bg",        scope: "dark", label: "orange as text on dark" },
+  { group: "text-on-dark", fg: "cta-400",    bg: "bg",        scope: "dark", label: "amber as text on dark" },
   // The role token, not the literal — guards the cta-text alias re-pointing to
   // cta-400 in dark. Without this, dark could silently keep the light #92400E.
   { group: "text-on-dark", fg: "cta-text",   bg: "bg",        scope: "dark", label: "role: --lw-cta-text on dark (≡ cta-400)" },
@@ -135,7 +135,7 @@ const MANIFEST = [
   { group: "navy-deep ground", fg: "on-dark-3", bg: "navy-deep", scope: "both", label: ".lw-code .tok-comment — the muted floor (white 0.48)" },
   { group: "navy-deep ground", fg: "brand-400", bg: "navy-deep", scope: "both", label: ".tok-function / .tok-attr-name (cyan)" },
   { group: "navy-deep ground", fg: "brand-300", bg: "navy-deep", scope: "both", label: ".tok-keyword / .tok-number (light cyan)" },
-  { group: "navy-deep ground", fg: "cta-400",   bg: "navy-deep", scope: "both", label: ".tok-string / .tok-tag / .tok-attr-value (orange)" },
+  { group: "navy-deep ground", fg: "cta-400",   bg: "navy-deep", scope: "both", label: ".tok-string / .tok-tag / .tok-attr-value (amber)" },
 ];
 
 /* =============================================================================
