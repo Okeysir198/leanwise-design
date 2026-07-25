@@ -15,8 +15,8 @@ _Nothing yet._
 ## [0.8.1] — 2026-07-25
 
 ### Fixed
-- **The logo SVGs now carry / as well as .** A viewBox-only SVG has an
-  intrinsic *ratio* but no intrinsic *size*, so  has nothing to resolve
+- **The logo SVGs now carry `width`/`height` as well as `viewBox`.** A viewBox-only SVG has an
+  intrinsic *ratio* but no intrinsic *size*, so `mask-size: contain` has nothing to resolve
   against and the dark-ground masked mark rendered as nothing at all. The authored SVGs through
   v0.7.1 carried both; the v0.8.0 traced ones dropped them.
 
