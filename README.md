@@ -14,7 +14,7 @@ consistency is a dependency, not a discipline.
 ```jsonc
 // package.json
 "dependencies": {
-  "@leanwise/design": "github:Okeysir198/leanwise-design#v0.7.1"
+  "@leanwise/design": "github:Okeysir198/leanwise-design#v0.8.0"
 }
 ```
 
@@ -77,32 +77,39 @@ at tag time; `pnpm build` (tsup) regenerates it. Full release notes live in `CHA
 
 ## The three rules that are not obvious
 
-**1. Brand fills carry NAVY ink, not white.** Measured, not assumed:
+**1. Ink is chosen by the fill's LIGHTNESS, not by whether it's "the brand".** Measured, not
+assumed — and this reversed in v0.8.0, when brand-500 was re-sampled from the logo and came out
+20 points darker:
 
 | | white text | navy `#0B1220` text |
 |---|---|---|
-| cyan `#1AB0D5` | 2.56 ✗ | **7.33** ✓ |
-| orange `#F97316` | 2.80 ✗ | **6.68** ✓ |
+| teal `#0C727B` (brand) | **5.68** ✓ | 2.96 ✗ |
+| orange `#F97316` (CTA) | 2.80 ✗ | **6.68** ✓ |
+| green `#16A34A` (success) | 3.30 ✗ | **5.68** ✓ |
 
-White-on-brand fails WCAG AA. `bin/lw-contrast-check.mjs` enforces this on every token change.
+The dark brand fill takes WHITE; the light CTA and status fills take NAVY. Through v0.7.x the
+rule read "brand fills carry navy ink" — correct while brand-500 was a *light* cyan where white
+scored 2.56. The premise changed, not the reasoning. `bin/lw-contrast-check.mjs` enforces both.
 
-**2. A fill color and a text color are different tokens.** A color bright enough to fill a
-button is too bright to read as text on white. Cyan-500 as a link scores 2.56.
+**2. A fill color and a text color are usually different tokens.** A color bright enough to fill
+a button is normally too bright to read as text. Brand is the exception since v0.8.0 — the fill
+is dark enough to read on white at 5.68 — but the split still holds for every status and the CTA,
+so keep using the role token rather than reaching for a tier.
 
 ```tsx
-<Button>Save</Button>          {/* bg-primary — the cyan FILL */}
-<a className="text-brand">   {/* brand-700 — cyan as TEXT (5.87) */}
+<Button>Save</Button>        {/* bg-primary — the teal FILL, white label */}
+<a className="text-brand">   {/* theme-aware: brand-500 on light, brand-400 on dark */}
 ```
 Same for `success` / `success-on`, `warning` / `warning-on`, `destructive` / `destructive-on`,
 and — since v0.6.7 — `cta` / `cta-on`. Every one of those `-on` utilities is theme-aware: the
 dark shade on light, the 400-tier on dark, so you never hand-write a theme conditional for ink.
 
-**3. `--primary` is cyan. Orange is a variant, not a token.** LDS says "one orange CTA per
+**3. `--primary` is teal. Orange is a variant, not a token.** LDS says "one orange CTA per
 view", but shadcn's `--primary` drives the *default* Button — putting orange there would make
 every button a CTA. So:
 
 ```tsx
-<Button>Ask</Button>                       // cyan, the default, use freely
+<Button>Ask</Button>                       // teal, the default, use freely
 <Button variant="cta">Start free trial</Button>  // ORANGE — max ONE per view (linted)
 ```
 
@@ -115,6 +122,7 @@ Per-tenant themes override `--primary` and `--ring`; never `--accent`.
 `assets/` holds the brand logo, and **this package is its source of truth**:
 
 ```
+assets/logo-paths.json      the traced GEOMETRY (see below) — not hand-editable
 assets/logo-mark.svg        the hexagon mark, brand gradient — use on light grounds
 assets/logo-mark-mono.svg   the same geometry in currentColor — for dark grounds
 assets/logo-lockup.svg      mark + LEANWISE AI wordmark
@@ -122,24 +130,40 @@ assets/logo-icon.png        raster fallback of the mark (favicons, apple-touch-i
 assets/logo-leanwise.png    raster fallback of the lockup (JSON-LD, crawlers)
 ```
 
-Prefer the **SVG**: the raster was a 938px lockup being scaled to a 36px nav, which thins the
-hexagon's hairline to about 1.4 device pixels. Keep the PNGs only where a raster is required
-(iOS `apple-touch-icon` ignores SVG; Google's `Organization.logo` wants a raster URL).
+Geometry and colour are generated separately, and only one of them is cheap to change:
+
+- **Geometry** is an autotrace of `logo-4.png` (the rendition Truong pointed at), committed as
+  `logo-paths.json` so `build-logo.py` needs nothing but the stdlib. Through v0.7.x the mark was
+  *authored* — a regular hexagon plus fitted polylines — and topped out at **IoU 0.845**; the
+  trace reaches **0.991** for the mark and **0.975** for the wordmark. Re-run
+  `tools/trace-logo.py` (needs `vtracer`) **only when the art changes**.
+- **Colour** is resolved from `tokens.css` at build time. Run `python3 assets/build-logo.py` after
+  any brand/navy change — never hand-edit an SVG.
+
+Fidelity costs bytes: the traced mark is 29 KB (11 KB gzipped) against 1.3 KB for the old
+authored one. Settings were chosen where fidelity plateaus — a 4× trace buys +0.004 IoU for +60%
+bytes, which is not worth it.
+
+**The gradient stops are literal hexes.** CSS custom properties do not cascade into an SVG loaded
+through `<img>`, so a `var()` there renders its fallback forever. That makes the SVG a second home
+for a brand value, so `bin/lw-contrast-check.mjs` fails if the two disagree — `lw-token-lint`
+cannot see inside `.svg`, so that gate is the only thing guarding it.
+
+**The mark's cyan is not `brand-500`.** `--lw-logo-cyan` (`#0A8799`, 187.6° 88% 32%) is the only
+token that exists purely for artwork, and no UI rule may consume it: it is too dark to read on the
+navy paper (4.05) and too light to carry white ink (4.25). `brand-500` is deliberately ~5 points
+darker so white ink clears AA — a compromise the logo does not have to make, because a logo
+carries no text.
+
+**The gradient variant is never tinted.** Do not run `logo-mark.svg` through `--primary`, a CSS
+`filter`, or tenant `brandVars()`. When you need the mark to take the surrounding ink — a dark
+footer, a coloured band — use `logo-mark-mono.svg`, which is `currentColor` by design. Note it
+must be **inlined or used as a CSS `mask`**: `currentColor` inside an SVG loaded through `<img>`
+resolves against that SVG's own root, not your document, so it would paint black.
+`leanwise-ai/src/styles/chrome.css` (`.lw-logo .mark`) is the reference implementation.
 
 Import it (`import logo from "@leanwise/design/assets/logo-mark.svg"`) or copy into your app's
-`public/` — copying is fine, but **copy from here**, never from another app, so every product
-serves the same file and a logo update is a version bump, not a scavenger hunt.
-
-**The gradient variant is never tinted.** Do not run `logo-mark.svg` through `--primary`, a
-CSS `filter`, or tenant `brandVars()`. When you need the mark to take the surrounding ink —
-a dark footer, a coloured band — use `logo-mark-mono.svg`, which is `currentColor` by design.
-Note it must be **inlined or used as a CSS `mask`**: `currentColor` inside an SVG loaded
-through `<img>` resolves against that SVG's own root, not your document, so it would paint
-black. `leanwise-ai/src/styles/chrome.css` (`.lw-logo .mark`) is the reference implementation.
-
-Regenerate with `python3 assets/build-logo.py` — never hand-edit the SVGs. The gradient stops
-are literals (CSS variables do not cascade into an `<img>`-loaded SVG) generated from
-`tokens.css`, and `bin/lw-contrast-check.mjs` fails if they drift from it.
+`public/` — copying is fine, but **copy from here**, never from another app.
 
 ## v0.3.0 marketing primitives (`lw.css`)
 
@@ -222,7 +246,8 @@ shadcn.css              maps --primary/--background/… → tokens
 tailwind-preset.js      Tailwind v3 consumers
 lw.css                  .lw-* marketing layer (+ 44px touch targets, iOS zoom guard)
 fonts/ + fonts.css      Geist + Geist Mono, self-hosted, incl. Vietnamese subsets
-assets/                 the brand logo PNGs — the source of truth (see Logo)
+assets/                 the logo: traced geometry + generated SVG/PNG (see Logo)
+tools/                  trace-logo.py — re-traces the art (needs vtracer; rare)
 lib/brand.js            brandVars() / inkOn() / monogram() (+ brand.d.ts)
 bin/                    the contrast gate and the token lint
 ```
@@ -230,7 +255,7 @@ bin/                    the contrast gate and the token lint
 Colors are authored **once**, as an HSL triple, and derived into a usable color:
 
 ```css
---lw-brand-500-c: 173.4 80.4% 40%;            /* authored */
+--lw-brand-500-c: 185.0 82.0% 26.5%;          /* authored */
 --lw-brand-500:   hsl(var(--lw-brand-500-c)); /* derived  */
 ```
 

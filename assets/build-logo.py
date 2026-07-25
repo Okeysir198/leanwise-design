@@ -1,41 +1,43 @@
 #!/usr/bin/env python3
 """Regenerates the LeanWise logo SVGs. Never hand-edit the SVGs — edit this.
 
-The mark is AUTHORED geometry, not an autotrace: a regular pointy-top hexagon
-plus two stroked polylines and two node dots. Two things about the numbers below
-that will bite if you re-derive them:
-
-  * The source renditions disagree. logo-4.png's mark is 451x519 (ratio .8690,
-    a whisker off a true regular hexagon's .8660); the square rendition is ~5%
-    x-stretched at .912 AND places the interior art differently. Everything here
-    comes from the lockup rendition — mixing the two is what put the chart out
-    of register on the first pass.
-  * The source states the mark's outer height INCLUDING stroke, so the hexagon
-    PATH spans 519 - 26.5. Scaling by the outer height draws the ring oversize.
-  * Vertices were fitted by coordinate descent against the original raster
-    (IoU 0.845): measuring a thick stroke's centreline by a geodesic walk cuts
-    the inside of every corner, so a naive measurement makes the zigzag too
-    shallow. The values below are the corrected ones.
-
-The wordmark IS traced (wordmark-paths.txt) — it is type, not geometry.
-
     python3 assets/build-logo.py
+
+Geometry and colour are deliberately separated:
+
+  * GEOMETRY lives in logo-paths.json — an autotrace of logo-4.png, the rendition
+    Truong pointed at. Through v0.7.x the mark was AUTHORED (a regular hexagon
+    plus fitted polylines) and topped out around IoU 0.845; the trace reaches
+    0.9944 for the mark and 0.9854 for the wordmark, the residual being
+    anti-aliasing rather than shape. It is committed so this script needs nothing
+    but the stdlib. Re-run tools/trace-logo.py (which needs vtracer) only when the
+    ART changes — a colour change is just this script.
+
+  * COLOUR is resolved from tokens.css at build time. The emitted SVG must carry
+    LITERAL stops, because CSS custom properties do not cascade into an SVG loaded
+    through <img> — a var() there silently renders its fallback forever. That
+    makes the SVG a second home for a brand value, so bin/lw-contrast-check.mjs
+    fails if the two ever disagree. lw-token-lint cannot see inside .svg, so that
+    gate is the only thing guarding it.
+
+The lockup gives the mark and the wordmark their own gradients rather than one
+spanning both: in the source, the wordmark restarts at navy on the "L" instead of
+continuing the mark's sweep.
 """
-import math
+import json
 import os
 import re
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 TOKENS = os.path.join(HERE, os.pardir, 'tokens.css')
+PATHS = os.path.join(HERE, 'logo-paths.json')
 
 
 def token_hex(name):
     """Resolve an --lw-*-c HSL triple from tokens.css to a hex literal.
 
-    The emitted SVG must carry literal stops (see GRAD), but this generator must
-    NOT: hardcoding them here would make "regenerate when the ramp moves" a lie,
-    and v0.7.0 moved the brand hue 19 degrees. Only :root is scanned — the logo
-    is theme-independent, and the dark blocks re-point these same names.
+    Only :root is scanned — the logo is theme-independent, and the dark blocks
+    re-point these same names.
     """
     root = re.split(r'^\s*[.\[@:][^\n{]*\{', open(TOKENS).read(), flags=re.M)[1]
     m = re.search(rf'--lw-{name}-c:\s*([\d.]+)\s+([\d.]+)%\s+([\d.]+)%', root)
@@ -54,85 +56,57 @@ def _hsl_to_rgb(h, s, l):
     return [v + m for v in rgb]
 
 
-# --- geometry, in source pixels of logo-4.png's 451x519 mark -----------------
-CX, CY, R = 56.0, 64.0, 60.0                 # target: regular hexagon, 120 tall
-K = math.sqrt(3) / 2
-HEX = [(CX, CY - R), (CX + R * K, CY - R / 2), (CX + R * K, CY + R / 2),
-       (CX, CY + R), (CX - R * K, CY + R / 2), (CX - R * K, CY - R / 2)]
-S = 120.0 / (519.0 - 26.5)                   # units per source px
+ART = json.load(open(PATHS))
+NAVY = token_hex('navy-700')
+# The MARK's cyan, not brand-500 — see --lw-logo-cyan-c in tokens.css for why
+# the UI fill is deliberately darker than the artwork.
+CYAN = token_hex('logo-cyan')
 
-CHECK = [(117, 196), (189, 276), (307, 148)]
-ZIGZAG = [(41, 365), (117, 289), (182, 380), (226, 314), (247, 353), (368, 192)]
-R_DOT1, R_DOT2 = 27, 26                      # the dots terminate the two polylines
-SW_HEX, SW_ART, SW_LINK = 26.5 * S, 32.0 * S, 16.0 * S
-
-
-def T(x, y):
-    return ((x - 225.0) * S + CX, (y - 259.0) * S + CY)
+# The mark's sweep runs from the lower-left vertex to the upper-right one, which
+# is what x1/y1 -> x2/y2 describe in objectBoundingBox units.
+GRAD = ('<linearGradient id="{id}" x1="0" y1="1" x2="1" y2="0">'
+        f'<stop offset="0" stop-color="{NAVY}"/>'
+        f'<stop offset="1" stop-color="{CYAN}"/>'
+        '</linearGradient>')
 
 
-def pl(pts):
-    return 'M' + ' L'.join(f'{T(*p)[0]:.2f} {T(*p)[1]:.2f}' for p in pts)
+def _paths(part, fill, dx=0.0):
+    shift = f' transform="translate({dx:g},0)"' if dx else ''
+    return "".join(f'<path{shift} d="{d}" fill="{fill}"/>' for d in ART[part]['paths'])
 
 
-HEXPATH = 'M' + ' L'.join(f'{x:.2f} {y:.2f}' for x, y in HEX) + ' Z'
-D1, D2 = T(*CHECK[-1]), T(*ZIGZAG[-1])
+def svg(view_w, view_h, body, defs=''):
+    return ('<svg xmlns="http://www.w3.org/2000/svg" '
+            f'viewBox="0 0 {view_w:g} {view_h:g}" role="img" '
+            'aria-label="LeanWise AI">'
+            + (f'<defs>{defs}</defs>' if defs else '') + body + '</svg>\n')
 
 
-def art(paint):
-    """The mark. One paint for strokes and dots — they are never coloured apart."""
-    return f'''  <g fill="none" stroke="{paint}" stroke-linecap="round" stroke-linejoin="round">
-    <path d="{HEXPATH}" stroke-width="{SW_HEX:.2f}"/>
-    <path d="{pl(CHECK)}" stroke-width="{SW_ART:.2f}"/>
-    <path d="{pl(ZIGZAG)}" stroke-width="{SW_ART:.2f}"/>
-    <path d="M{D1[0]:.2f} {D1[1]:.2f} L{D2[0]:.2f} {D2[1]:.2f}" stroke-width="{SW_LINK:.2f}"/>
-  </g>
-  <circle cx="{D1[0]:.2f}" cy="{D1[1]:.2f}" r="{R_DOT1 * S:.2f}" fill="{paint}"/>
-  <circle cx="{D2[0]:.2f}" cy="{D2[1]:.2f}" r="{R_DOT2 * S:.2f}" fill="{paint}"/>'''
+def build():
+    mw, mh = ART['mark']['viewBox']
+    ww = ART['wordmark']['viewBox'][0]
+    gap = ART['gap']
+    out = {}
+
+    out['logo-mark.svg'] = svg(mw, mh, _paths('mark', 'url(#g)'), GRAD.format(id='g'))
+
+    # currentColor, for dark grounds. Must be INLINED or used as a CSS mask —
+    # through <img>, currentColor resolves against the SVG's own root and paints
+    # black. See leanwise-ai/src/styles/chrome.css (.lw-logo .mark).
+    out['logo-mark-mono.svg'] = svg(mw, mh, _paths('mark', 'currentColor'))
+
+    out['logo-lockup.svg'] = svg(
+        mw + gap + ww, mh,
+        _paths('mark', 'url(#gm)') + _paths('wordmark', 'url(#gw)', dx=mw + gap),
+        GRAD.format(id='gm') + GRAD.format(id='gw'))
+
+    for name, text in out.items():
+        p = os.path.join(HERE, name)
+        open(p, 'w').write(text)
+        print(f'{name:22} {len(text):7,d} B')
+    print(f'\ngradient  {NAVY} -> {CYAN}   (from tokens.css)')
+    print(f'fidelity  mark IoU {ART["iou"]["mark"]}, wordmark IoU {ART["iou"]["wordmark"]}')
 
 
-GRAD = f'''  <!-- Stops are LITERALS on purpose: CSS custom properties do not cascade into
-       an SVG loaded through an img element, so a var() here would silently
-       always render its fallback. They are generated from tokens.css by
-       assets/build-logo.py and checked by bin/lw-contrast-check.mjs, so they
-       cannot drift. Recolouring is logo-mark-mono.svg's job (currentColor),
-       which must be inlined or used as a mask. -->
-  <defs>
-    <linearGradient id="lwBrand" x1="0" y1="1" x2="1" y2="0">
-      <stop offset="0" stop-color="{token_hex('navy-700')}"/>
-      <stop offset="1" stop-color="{token_hex('brand-500')}"/>
-    </linearGradient>
-  </defs>'''
-
-
-def svg(vb_w, body):
-    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {vb_w} 128" '
-            f'role="img" aria-label="LeanWise AI">\n'
-            f'  <title>LeanWise AI</title>\n{body}\n</svg>\n')
-
-
-# --- lockup: mark + traced wordmark ------------------------------------------
-GAP = 59 * S
-WORD_W, WORD_H = 931 * S, 108 * S
-X0 = CX + R * K + SW_HEX / 2 + GAP
-VB_W = math.ceil(X0 + WORD_W) + 2        # +2 so the final I is not clipped
-Y0 = CY - WORD_H / 2
-
-# Integer coordinates: the wordmark is drawn at scale(S) inside a 128-unit box
-# rendered at 36px, so one wordmark unit is ~0.07 CSS px — two decimals encoded
-# detail three orders of magnitude below a device pixel, for ~40% of the file.
-with open(os.path.join(HERE, 'wordmark-paths.txt')) as fh:
-    paths = [re.sub(r'(\d+)\.\d+', r'\1', p) for p in fh.read().split('\n') if p.strip()]
-WORDMARK = (f'  <g fill="url(#lwBrand)" fill-rule="evenodd" '
-            f'transform="translate({X0:.2f} {Y0:.2f}) scale({S:.5f})">\n'
-            + '\n'.join(f'    <path d="{p}"/>' for p in paths) + '\n  </g>')
-
-for name, body, vb in (
-    ('logo-mark.svg', f'{GRAD}\n{art("url(#lwBrand)")}', 112),
-    ('logo-mark-mono.svg', art('currentColor'), 112),
-    ('logo-lockup.svg', f'{GRAD}\n{art("url(#lwBrand)")}\n{WORDMARK}', VB_W),
-):
-    path = os.path.join(HERE, name)
-    with open(path, 'w') as fh:
-        fh.write(svg(vb, body))
-    print(f'  {name}: {os.path.getsize(path)} bytes')
+if __name__ == '__main__':
+    build()

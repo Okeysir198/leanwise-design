@@ -52,23 +52,25 @@ const AA_LARGE = 3.0; // large text / icons / UI boundaries — opt-in per pair 
    ============================================================================= */
 
 const MANIFEST = [
-  // ── A. Brand / CTA fills + their ink. Theme-invariant: the fills and the navy
-  //    ink (--lw-on-brand-c → --lw-text-1-c, never re-pointed) are the same color
-  //    in both themes. Checked in BOTH so a future re-point onto --lw-fg is caught.
-  { group: "brand fills", fg: "on-brand",  bg: "brand-500", scope: "both", label: "cyan fill + navy ink (default Button)" },
-  { group: "brand fills", fg: "on-brand",  bg: "brand-600", scope: "both", label: "cyan hover + navy ink" },
+  // ── A. Brand / CTA fills + their ink. Theme-invariant: fill and ink are the same
+  //    color in both themes. Checked in BOTH so a future re-point is caught.
+  //    Since v0.8.0 the ink differs BY FILL LIGHTNESS, not by brand: the teal fill
+  //    is dark and takes white; orange and the status fills are light and take navy.
+  { group: "brand fills", fg: "on-brand",  bg: "brand-500", scope: "both", label: "teal fill + WHITE ink (default Button)" },
+  { group: "brand fills", fg: "on-brand",  bg: "brand-600", scope: "both", label: "teal hover + WHITE ink" },
   { group: "brand fills", fg: "on-cta",    bg: "cta-500",   scope: "both", label: "orange CTA fill + navy ink (the one orange button)" },
   { group: "brand fills", fg: "on-cta",    bg: "cta-600",   scope: "both", label: "orange CTA hover + navy ink" },
-  { group: "brand fills", fg: "on-danger", bg: "danger",    scope: "both", label: "destructive fill + WHITE ink (the documented exception)" },
+  { group: "brand fills", fg: "on-danger", bg: "danger",    scope: "both", label: "destructive fill + WHITE ink" },
 
-  // ── B. Semantic status fills + their ink. Navy sits on green/amber fills too.
-  { group: "status fills", fg: "on-brand", bg: "success",   scope: "both", label: "success fill + navy ink" },
-  { group: "status fills", fg: "on-brand", bg: "warning",   scope: "both", label: "warning fill + navy ink" },
+  // ── B. Semantic status fills + their ink. Navy sits on green/amber fills.
+  { group: "status fills", fg: "on-status", bg: "success",  scope: "both", label: "success fill + navy ink" },
+  { group: "status fills", fg: "on-status", bg: "warning",  scope: "both", label: "warning fill + navy ink" },
 
   // ── C. Brand / status / CTA AS TEXT on the LIGHT page. A fill is not a text
   //    color — cyan-500 as a link is 2.56, so links are brand-700. Same split for
   //    every status and for the CTA.
-  { group: "text-on-light", fg: "brand-700",    bg: "surface-0", scope: "light", label: "cyan AS TEXT — links (brand-500 would be 2.56)" },
+  { group: "text-on-light", fg: "brand-700",    bg: "surface-0", scope: "light", label: "deepest teal AS TEXT on page" },
+  { group: "text-on-light", fg: "brand-500",    bg: "surface-0", scope: "light", label: "teal AS TEXT — links. Since v0.8.0 the FILL reads too (5.68)" },
   { group: "text-on-light", fg: "success-text", bg: "surface-0", scope: "light", label: "success as text on page" },
   { group: "text-on-light", fg: "warning-text", bg: "surface-0", scope: "light", label: "warning as text on page" },
   { group: "text-on-light", fg: "danger-text",  bg: "surface-0", scope: "light", label: "danger as text on page" },
@@ -434,7 +436,10 @@ function logoStops() {
   const fails = [];
   const want = [
     { offset: "0", token: "navy-700" },
-    { offset: "1", token: "brand-500" },
+    // NOT brand-500. The artwork uses the mark's own cyan, which is ~5 points
+    // lighter than the UI fill — the fill had to darken so white ink clears AA,
+    // a constraint a logo does not carry. See --lw-logo-cyan-c in tokens.css.
+    { offset: "1", token: "logo-cyan" },
   ];
   const toHex = ({ r, g, b }) =>
     "#" + [r, g, b].map((v) => Math.round(v * 255).toString(16).padStart(2, "0")).join("").toUpperCase();
@@ -447,21 +452,24 @@ function logoStops() {
       fails.push(`assets/${file} is missing — regenerate with assets/build-logo.py`);
       continue;
     }
-    const found = [...svg.matchAll(/<stop offset="([\d.]+)"\s+stop-color="(#[0-9A-Fa-f]{3,6})"/g)];
-    if (found.length !== want.length) {
-      fails.push(`assets/${file}: expected ${want.length} gradient stops, found ${found.length}`);
+    // The lockup carries the same pair twice (mark and wordmark sweep separately),
+    // so compare each gradient's stops rather than assuming a single pair.
+    const found = [...svg.matchAll(/<stop offset="([\d.]+)"\s*stop-color="(#[0-9A-Fa-f]{3,6})"/g)];
+    if (found.length === 0 || found.length % want.length !== 0) {
+      fails.push(`assets/${file}: expected a multiple of ${want.length} gradient stops, found ${found.length}`);
       continue;
     }
-    found.forEach(([, offset, hex], i) => {
+    found.forEach(([, offset, hex], idx) => {
+      const i = idx % want.length;
       const { offset: wantOffset, token } = want[i];
       const expect = resolveColor(token, "light");
       if (!expect) { fails.push(`assets/${file}: --lw-${token}-c did not resolve`); return; }
       if (offset !== wantOffset) {
-        fails.push(`assets/${file}: stop ${i} has offset ${offset}, expected ${wantOffset}`);
+        fails.push(`assets/${file}: stop ${idx} has offset ${offset}, expected ${wantOffset}`);
       }
       if (toHex(hexToRgb(hex.slice(1))) !== toHex(expect)) {
         fails.push(
-          `assets/${file}: stop ${i} is ${hex.toUpperCase()}, but --lw-${token}-c resolves to ` +
+          `assets/${file}: stop ${idx} is ${hex.toUpperCase()}, but --lw-${token}-c resolves to ` +
           `${toHex(expect)} — rerun assets/build-logo.py`,
         );
       }

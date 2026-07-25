@@ -35,7 +35,7 @@
 
   /* The workhorse. Tenant-themable at runtime (see lib/brand.ts::brandVars). */
   --primary: var(--lw-brand-500-c);
-  --primary-foreground: var(--lw-on-brand-c);   /* navy — 7.33 on cyan */
+  --primary-foreground: var(--lw-on-brand-c);   /* WHITE — the brand fill is dark (5.68) */
 
   --secondary: var(--lw-bg-muted-c);
   --secondary-foreground: var(--lw-fg-c);
@@ -68,20 +68,21 @@
   /* Status. Split fill/text because a good fill is unreadable as text:
      #16A34A on white is 3.30 (fails AA); the -on variant is 5.02 (passes). */
   --success: var(--lw-success-c);
-  --success-foreground: var(--lw-on-brand-c);
+  --success-foreground: var(--lw-on-status-c);   /* navy — success/warning fills are LIGHT */
   --success-soft: var(--lw-success-soft-c);
   --success-on: var(--lw-success-on-c);
 
   --warning: var(--lw-warning-c);
-  --warning-foreground: var(--lw-on-brand-c);
+  --warning-foreground: var(--lw-on-status-c);
   --warning-soft: var(--lw-warning-soft-c);
   --warning-on: var(--lw-warning-on-c);
 
   --danger-soft: var(--lw-danger-soft-c);
   --danger-on: var(--lw-danger-on-c);
 
-  /* Brand as TEXT (links, active nav). brand-500 scores 2.56 on white — this is
-     brand-700 on light and brand-400 on dark. Use `text-brand` for a cyan label. */
+  /* Brand as TEXT (links, active nav). Since v0.8.0 brand-500 reads on white at
+     5.68, so on light this IS the fill colour; on dark it re-points to brand-400.
+     Use `text-brand` for a teal label rather than hand-writing a theme branch. */
   --brand: var(--lw-brand-text-c);
 
   --navy: var(--lw-navy-900-c);
@@ -99,6 +100,12 @@
   --accent-foreground: var(--lw-fg-c);
 
   --ring: var(--lw-brand-400-c);
-  --destructive: var(--lw-danger-on-c);        /* #F87171 — 6.77 on the dark ground */
-  --destructive-foreground: var(--lw-fg-c);
+
+  /* --destructive is a FILL, so on dark it must stay dark enough for white ink.
+     Through v0.7.1 it pointed at --lw-danger-on-c (#F87171, the TEXT tier) while
+     its foreground stayed near-white — 2.33:1 on every destructive confirm button
+     in dark mode. The gate missed it because the MANIFEST is written in --lw-*
+     names and never checked this shadcn alias pair; it does now. */
+  --destructive: var(--lw-danger-c);
+  --destructive-foreground: var(--lw-on-danger-c);
 }

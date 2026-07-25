@@ -75,22 +75,38 @@
   --lw-tracking-wide: 0.02em;
   --lw-tracking-eyebrow: 0.14em;
 
-  /* ---- Brand cyan ------------------------------------------------------- */
-  /* Anchored on the LOGO, not on a stock palette: every rendition of the mark
-     samples to a 184–208° cyan band, and the logo's own #00849C lands between
-     brand-600 and brand-700 below.
-     Lightness is NOT a straight hue rotation. Cyan carries less luminance than
-     teal at equal L, so rotating at fixed L drops navy-on-brand-600 to 3.63 and
-     pushes brand-500 under inkOn()'s 0.35 crossover — flipping per-tenant ink to
-     WHITE on cyan. The L values below are corrected to hold the contract. */
-  --lw-brand-50-c:  189.4 70.0% 96.5%;   /* #F0FAFC */
-  --lw-brand-100-c: 189.8 66.0% 89.8%;   /* #D4F1F6 */
-  --lw-brand-200-c: 190.4 66.0% 80.0%;   /* #AAE2EE */
-  --lw-brand-300-c: 192.1 70.0% 64.0%;   /* #63CAE3 */
-  --lw-brand-400-c: 191.5 72.0% 55.0%;   /* #3ABFDF — cyan as TEXT on dark (8.66) */
-  --lw-brand-500-c: 192.0 78.0% 47.0%;   /* #1AB0D5 — THE brand color */
-  --lw-brand-600-c: 193.0 84.0% 38.0%;   /* #108FB2 — hover fill (navy ink 4.99) */
-  --lw-brand-700-c: 193.3 86.0% 29.0%;   /* #0A6D8A — the only cyan readable AS TEXT on white (5.87) */
+  /* ---- Brand teal-cyan --------------------------------------------------- */
+  /* Sampled from the MARK, not from a stock palette and not by eye.
+     Measuring solid ink only (anti-aliased edges eroded first — they drift toward
+     black and drag the reading) across all five renditions in
+     leanwise-ai/feedbacks/.../Pictures gives a tight agreement:
+
+         cyan end  187.6° 88% 32%   #0A8799
+         navy end  205.2° 97% 23.5% #024576
+
+     v0.7.x sat at 192° 78% 47% — 4° too blue, 10 points flat, and 15 points TOO
+     LIGHT. That last one is what read as "pale sky" against the mark's deep teal.
+
+     The 500 is NOT the sampled cyan exactly, and the 5-point gap is deliberate.
+     At L=32% the colour lands on the ink crossover: white scores 4.24 and navy
+     4.39, so NEITHER ink clears AA, and any darker hover drops navy to 4.06.
+     Taking it ~5 points darker — which is independently where the CONNECT deck
+     put its --accent (#0C757C, presentation/leanwise-ai-presentation.html) —
+     puts white ink at 5.68 with headroom and lets hover darken normally. The
+     deck and the product now agree, which they never did before.
+
+     Consequence, and it reverses a documented rule: BRAND FILLS TAKE WHITE INK.
+     "Navy ink on brand" was correct while brand-500 was a LIGHT cyan where white
+     scored 2.56. The premise changed, not the reasoning — navy on the new 500 is
+     2.96. CTA and the status fills are still light, so they keep navy ink. */
+  --lw-brand-50-c:  186.0 68.0% 96.0%;   /* #EEFAFC */
+  --lw-brand-100-c: 185.5 66.0% 90.0%;   /* #D5F3F6 */
+  --lw-brand-200-c: 185.0 64.0% 80.0%;   /* #ABE7ED */
+  --lw-brand-300-c: 184.5 60.0% 64.0%;   /* #6CD2DA — on navy paper 10.59 */
+  --lw-brand-400-c: 183.5 62.0% 47.5%;   /* #2EBBC4 — teal as TEXT on dark (8.08); the deck's dark accent */
+  --lw-brand-500-c: 185.0 82.0% 26.5%;   /* #0C727B — THE brand color. WHITE ink, 5.68 */
+  --lw-brand-600-c: 186.0 86.0% 21.0%;   /* #075A64 — hover fill (white ink 7.87) */
+  --lw-brand-700-c: 187.0 88.0% 16.5%;   /* #05464F — deepest tier, on white 10.46 */
 
   --lw-brand-50:  hsl(var(--lw-brand-50-c));
   --lw-brand-100: hsl(var(--lw-brand-100-c));
@@ -102,9 +118,23 @@
   --lw-brand-700: hsl(var(--lw-brand-700-c));
 
   /* ---- Navy — dark surfaces, heading ink, depth ------------------------- */
-  --lw-navy-700-c:  209.4 65.8% 29.8%;   /* #1A4D7E */
-  --lw-navy-900-c:  213.1 72.5% 15.7%;   /* #0B2545 */
-  --lw-navy-deep-c: 213.3 78.9% 11.2%;   /* #061A33 */
+  /* Also re-sampled from the mark. The old ramp was 4° too blue and, more
+     visibly, 31 SATURATION POINTS flat — the mark's navy is close to pure
+     #024576, where v0.7.x rendered a washed slate. */
+  --lw-navy-700-c:  205.2 97.0% 23.5%;   /* #024576 — the mark's navy end */
+  --lw-navy-900-c:  207.0 96.0% 15.0%;   /* #022A4B */
+  --lw-navy-deep-c: 208.0 95.0% 10.5%;   /* #011C34 */
+  /* The mark's own cyan end, 187.6° 88% 32% — the ONLY token here that exists
+     purely for artwork, and the only one no UI rule may consume. It fits no role:
+     too dark to read on the navy paper (4.05, so it cannot be the on-dark text
+     tier) and too light to carry white ink (4.25, so it cannot be the fill).
+     brand-500 is deliberately ~5 points darker so white ink clears AA — a
+     compromise the logo does not have to make, because a logo carries no text.
+     Named rather than inlined so build-logo.py and lw-contrast-check share one
+     source of truth for the gradient stop. */
+  --lw-logo-cyan-c: 187.6 88.0% 32.0%;   /* #0A8799 */
+  --lw-logo-cyan: hsl(var(--lw-logo-cyan-c));
+
   --lw-navy-700: hsl(var(--lw-navy-700-c));
   --lw-navy-900: hsl(var(--lw-navy-900-c));
   --lw-navy-deep: hsl(var(--lw-navy-deep-c));
@@ -288,17 +318,23 @@
   --lw-line-c:        var(--lw-border-1-c);
   --lw-line-strong-c: var(--lw-border-2-c);
 
-  /* Brand-as-text (links, active labels). NOT brand-500 — that fails AA on white. */
-  --lw-brand-text-c:   var(--lw-brand-700-c);
+  /* Brand-as-text (links, active labels). Since v0.8.0 brand-500 IS readable on
+     white (5.68), so this is the same colour as the fill — the three-way
+     fill/text/ink split collapses to two for brand. Kept as its own name because
+     dark re-points it (to brand-400) and consumers reference the role, not the tier. */
+  --lw-brand-text-c:   var(--lw-brand-500-c);
   --lw-cta-text-c:     var(--lw-cta-700-c);
   --lw-success-on-c:   var(--lw-success-text-c);
   --lw-warning-on-c:   var(--lw-warning-text-c);
   --lw-danger-on-c:    var(--lw-danger-text-c);
 
-  /* Ink that sits ON a brand/cta fill. Navy, per the contrast table above. */
-  --lw-on-brand-c: var(--lw-text-1-c);
-  --lw-on-cta-c:   var(--lw-text-1-c);
-  --lw-on-danger-c: var(--lw-surface-0-c);   /* white — the exception */
+  /* Ink that sits ON a fill. The brand fill is DARK since v0.8.0, so it takes
+     WHITE (5.68; navy would be 2.96). CTA orange and the status fills are still
+     light, so they keep navy — the split is by fill lightness, not by brand. */
+  --lw-on-brand-c: var(--lw-surface-0-c);    /* white — the brand fill is dark */
+  --lw-on-cta-c:   var(--lw-text-1-c);       /* navy — orange is a LIGHT fill */
+  --lw-on-status-c: var(--lw-text-1-c);      /* navy — success/warning fills */
+  --lw-on-danger-c: var(--lw-surface-0-c);   /* white */
 
   --lw-bg:        hsl(var(--lw-bg-c));
   --lw-bg-subtle: hsl(var(--lw-bg-subtle-c));
@@ -536,7 +572,7 @@
   --lw-fg-faint-c:    var(--lw-text-4-c);
   --lw-line-c:        var(--lw-border-1-c);
   --lw-line-strong-c: var(--lw-border-2-c);
-  --lw-brand-text-c:  var(--lw-brand-700-c);
+  --lw-brand-text-c:  var(--lw-brand-500-c);
   --lw-cta-text-c:  var(--lw-cta-700-c);
   --lw-success-on-c:  var(--lw-success-text-c);
   --lw-warning-on-c:  var(--lw-warning-text-c);

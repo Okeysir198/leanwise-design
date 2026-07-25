@@ -79,7 +79,7 @@ it before cutting the tag.
 scoped per block (`:root` and `.dark` separately — scanning the whole file lets the last
 declaration win and silently resolves a light token to its dark value), and fails if any of the
 pair in the MANIFEST drops under 4.5:1 (63 pairs as of v0.6.7). **Run it on every token change.**
-It exists because white-on-brand (2.56) and white-on-orange (2.80) shipped in a doc for months; a
+It exists because white-on-orange (2.80) shipped in a doc for months; a
 number in CI catches what an eyeball doesn't.
 
 Coverage is manifest-driven: `MANIFEST` at the top of the script is the single place a pair is
@@ -93,16 +93,36 @@ node bin/lw-contrast-check.mjs     # all MANIFEST pairs ≥ AA
 npx lw-token-lint <consumer>/src   # run in each consumer
 ```
 
-## The logo (and why the brand is cyan)
+## The logo (and how the brand was sampled)
 
-The palette is derived FROM the mark, not the other way round. Every rendition of the logo
-samples to a **184–208° cyan/azure band**; until v0.7.0 the ramp sat at 173° — Tailwind's stock
-`teal-500`, matching neither the mark nor the CONNECT deck. The navy anchor (209.4°) always
-matched. If you ever re-tune the brand, re-sample the mark first; don't pick from a palette.
+The palette is derived FROM the mark, not the other way round — and getting that *approximately*
+right is not the same as getting it right. Two rounds of this:
 
-`assets/build-logo.py` regenerates the SVGs — never hand-edit them. Its header documents the
-geometry caveats (fitted vertices, the two disagreeing source renditions, stroke-inclusive
-heights); read it before touching a coordinate.
+- **v0.7.0** moved the ramp off Tailwind's stock `teal-500` (173°) into the mark's band, but
+  sampled by averaging across the whole gradient. That put brand-500 at 192° 78% **47%**.
+- **v0.8.0** re-sampled properly: solid ink only, **eroding anti-aliased edges first** (they drift
+  toward black and drag the reading), endpoints taken as percentiles along the gradient axis, and
+  cross-checked over all five renditions in `leanwise-ai/feedbacks/.../Pictures`. They agree
+  tightly — cyan **187.6° 88% 32%**, navy **205.2° 97% 23.5%**. v0.7.x was 4° too blue, 10 points
+  flat, and **15 points too light**; the navy was **31 saturation points** flat. It read as pale
+  sky against a deep teal mark, which is exactly what Truong reported.
+
+If you re-tune the brand again: re-sample the mark, erode the edges, and **check the CONNECT deck**
+(`presentation/leanwise-ai-presentation.html`, `--accent`). The deck independently landed on
+`#0C757C`, ~5 points darker than the mark — which is where white ink clears AA. That is not a
+coincidence, it is the constraint. Do not pick from a palette.
+
+**`--lw-logo-cyan` is not `brand-500`, on purpose.** The mark's own cyan fits no UI role: too dark
+to read on the navy paper (4.05), too light to carry white ink (4.25). brand-500 is ~5 points
+darker so the fill works. The logo carries no text, so it keeps the true colour. That is the only
+token here that exists purely for artwork, and no UI rule may consume it.
+
+`assets/build-logo.py` regenerates the SVGs — never hand-edit them. Geometry is an **autotrace**
+of `logo-4.png` committed as `assets/logo-paths.json` (mark IoU 0.991, wordmark 0.975); the old
+authored hexagon topped out at 0.845. `tools/trace-logo.py` re-traces, needs `vtracer`, and should
+run only when the ART changes — a colour change is just `build-logo.py`. Its docstring records the
+one bug worth remembering: **vtracer puts a `transform="translate(...)"` on every path**, and
+extracting only `d` silently stacks every subpath at the origin.
 
 The one rule that lives here rather than there: the gradient stops are **literal hexes**, because
 CSS custom properties do not cascade into an SVG loaded through `<img>`. That is a second home
@@ -111,10 +131,14 @@ disagree** — `lw-token-lint` cannot see inside `.svg`, so this is the only thi
 
 ## Three rules that are not obvious (defended by the contrast gate)
 
-1. **Brand fills carry NAVY ink, not white.** White on cyan is 2.56:1 (fails); navy `#0B1220` is
-   7.33:1. `--lw-on-brand` is navy. Same for CTA (orange) and the status fills.
-2. **A fill color is not a text color.** Cyan-500 fills a button but scores 2.56 as a link. Use
-   `--lw-brand-700` for cyan-as-text on light (5.87), `--lw-brand-400`/`--lw-cta-400` on dark.
+1. **Ink follows the fill's LIGHTNESS, not the brand.** v0.8.0 re-sampled brand-500 off the mark
+   and it came out 20 points darker, which flipped this: white on teal `#0C727B` is 5.68 and navy
+   is 2.96, so `--lw-on-brand` is now WHITE. CTA orange and the status fills are still light, so
+   they keep navy — that is `--lw-on-cta` / `--lw-on-status`. Do not "restore" the old rule; the
+   gate will fail.
+2. **A fill color is usually not a text color.** Still true for status and CTA. Brand is now the
+   exception: brand-500 reads on white at 5.68, so `--lw-brand-text-c` points at the fill on
+   light and at brand-400 on dark.
    This is the three-way `fill` / `text` / `ink` split — most systems conflate it.
 3. **`--primary` is cyan; orange is the `cta` *variant*, one per view.** Shadcn's `--primary`
    drives the default Button; putting orange there makes every button a CTA. And `--accent` is a

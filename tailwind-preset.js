@@ -76,7 +76,8 @@ module.exports = {
           on: "hsl(var(--cta-on) / <alpha-value>)",
         },
         // Cyan as TEXT. `text-brand` for a link/active label — NOT `text-primary`,
-        // which is the fill color and scores 2.56 on white.
+        // which is the fill color. Since v0.8.0 the brand fill also reads on white (5.68),
+        // but the role token stays because DARK re-points it to brand-400.
         brand: "hsl(var(--brand) / <alpha-value>)",
         success: {
           DEFAULT: "hsl(var(--success) / <alpha-value>)",

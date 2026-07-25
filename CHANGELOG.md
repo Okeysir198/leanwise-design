@@ -12,6 +12,54 @@ change is a reviewable one-line bump on each consumer's schedule. Dates are comm
 
 _Nothing yet._
 
+## [0.8.0] — 2026-07-25
+
+**Visual breaking change, and it reverses a documented rule.** Eyeball every consumer before
+bumping. `--lw-on-brand` is now WHITE, not navy.
+
+### Changed
+- **The brand ramp was re-sampled from the mark, properly this time.** v0.7.0 moved the hue into
+  the right band but sampled by averaging across the whole gradient, landing brand-500 at
+  `192° 78% 47%`. Measuring solid ink only — eroding anti-aliased edges first, since they drift
+  toward black and drag the reading — and taking endpoints as percentiles along the gradient axis
+  gives a tight agreement across all five source renditions: cyan `187.6° 88% 32%`, navy
+  `205.2° 97% 23.5%`. v0.7.x was 4° too blue, 10 saturation points flat, and **15 lightness points
+  too light**; the navy was **31 saturation points** flat. It rendered as pale sky against a deep
+  teal mark.
+
+  brand-500 is now `185° 82% 26.5%` (`#0C727B`) — the mark's colour taken ~5 points darker. That
+  gap is deliberate: at the mark's own L=32% the fill sits exactly on the ink crossover (white
+  4.24, navy 4.39 — *neither* clears AA) and any darker hover drops navy to 4.06. The CONNECT deck
+  had independently landed on `#0C757C` for the same reason.
+- **Ink is now chosen by the fill's lightness, not by whether it is "the brand".** White on the
+  new brand fill is 5.68; navy would be 2.96. CTA orange and the status fills are still light and
+  keep navy, via the new `--lw-on-status-c`. The old rule ("brand fills carry navy ink") was
+  correct while brand-500 was a *light* cyan where white scored 2.56 — the premise changed.
+- **`--lw-brand-text-c` now points at brand-500 on light** (5.68 on white), so the fill/text split
+  collapses for brand. It still re-points to brand-400 on dark, so keep using the role token.
+- **`inkOn()` measures both inks and returns the winner** instead of testing `luminance > 0.35`.
+  The real crossover is 0.190, so every fill in between picked white when navy was readable. It
+  never bit while brand-500 sat at 0.36 — and would have the moment this release moved it to 0.135.
+
+### Added
+- **`--lw-logo-cyan`** (`#0A8799`) — the mark's true cyan. The only token that exists purely for
+  artwork, and no UI rule may consume it: too dark to read on the navy paper (4.05), too light to
+  carry white ink (4.25). The logo keeps it because a logo carries no text; the gate checks the
+  SVG stops against this rather than brand-500.
+- **`--lw-on-status-c`** — navy ink for the success/warning fills, split out from `--lw-on-brand-c`
+  now that the two disagree.
+- `tools/trace-logo.py` + `assets/logo-paths.json`.
+
+### Fixed
+- **`--destructive` was unreadable in dark mode.** `shadcn.css`'s dark block pointed it at
+  `--lw-danger-on-c` (`#F87171`, the *text* tier) while its foreground stayed near-white —
+  **2.33:1** on every destructive confirm button. The gate missed it because the MANIFEST is
+  written in `--lw-*` names and never checked that shadcn alias pair.
+- **The logo is now an autotrace of `logo-4.png`** rather than authored geometry: mark IoU
+  **0.991** and wordmark **0.975**, against 0.845 for the hand-fitted hexagon. Costs bytes — the
+  mark is 29 KB (11 KB gzipped) vs 1.3 KB — and the trace settings sit where fidelity plateaus,
+  since a 4× trace buys +0.004 IoU for +60% bytes.
+
 ## [0.7.1] — 2026-07-25
 
 ### Added
