@@ -9,12 +9,25 @@ with no LeanWise brand at all. This package remediated that: all three products 
 marketing site, VSS/Ask (via the Tailwind preset), and rag-service — now consume it, so
 consistency is a dependency, not a discipline.
 
+## The brand: two anchors, one accent
+
+| | | |
+|---|---|---|
+| **cyan** `#0C727B` `--lw-brand-500` | the brand | every fill, `--primary`, the default button |
+| **navy** `#024576` `--lw-navy-700` | the ground | dark surfaces, heading ink on light |
+| **amber** `#FCB603` `--lw-cta-500` | the accent | one CTA per view, nothing else |
+
+Cyan and navy are the logo's own two gradient stops — the palette is derived from the mark, not
+picked from a swatch book. Amber is the one deliberate addition, placed ~144° from the cyan
+(near-complementary) so it can never read as a second brand color. See `assets/build-logo.py`
+and the Logo section below.
+
 ## Install
 
 ```jsonc
 // package.json
 "dependencies": {
-  "@leanwise/design": "github:Okeysir198/leanwise-design#v0.8.0"
+  "@leanwise/design": "github:Okeysir198/leanwise-design#v0.9.0"
 }
 ```
 
@@ -83,9 +96,9 @@ assumed — and this reversed in v0.8.0, when brand-500 was re-sampled from the 
 
 | | white text | navy `#0B1220` text |
 |---|---|---|
-| teal `#0C727B` (brand) | **5.68** ✓ | 2.96 ✗ |
-| orange `#F97316` (CTA) | 2.80 ✗ | **6.68** ✓ |
-| green `#16A34A` (success) | 3.30 ✗ | **5.68** ✓ |
+| cyan `#0C727B` (brand) | **5.66** ✓ | 3.31 ✗ |
+| amber `#FCB603` (CTA) | 1.77 ✗ | **10.54** ✓ |
+| green `#16A34A` (success) | 3.30 ✗ | **5.69** ✓ |
 
 The dark brand fill takes WHITE; the light CTA and status fills take NAVY. Through v0.7.x the
 rule read "brand fills carry navy ink" — correct while brand-500 was a *light* cyan where white
@@ -93,24 +106,24 @@ scored 2.56. The premise changed, not the reasoning. `bin/lw-contrast-check.mjs`
 
 **2. A fill color and a text color are usually different tokens.** A color bright enough to fill
 a button is normally too bright to read as text. Brand is the exception since v0.8.0 — the fill
-is dark enough to read on white at 5.68 — but the split still holds for every status and the CTA,
+is dark enough to read on white at 5.66 — but the split still holds for every status and the CTA,
 so keep using the role token rather than reaching for a tier.
 
 ```tsx
-<Button>Save</Button>        {/* bg-primary — the teal FILL, white label */}
+<Button>Save</Button>        {/* bg-primary — the cyan FILL, white label */}
 <a className="text-brand">   {/* theme-aware: brand-500 on light, brand-400 on dark */}
 ```
 Same for `success` / `success-on`, `warning` / `warning-on`, `destructive` / `destructive-on`,
-and — since v0.6.7 — `cta` / `cta-on`. Every one of those `-on` utilities is theme-aware: the
-dark shade on light, the 400-tier on dark, so you never hand-write a theme conditional for ink.
+and `cta` / `cta-on`. Every one of those `-on` utilities is theme-aware: the dark shade on
+light, the 400-tier on dark, so you never hand-write a theme conditional for ink.
 
-**3. `--primary` is teal. Orange is a variant, not a token.** LDS says "one orange CTA per
-view", but shadcn's `--primary` drives the *default* Button — putting orange there would make
+**3. `--primary` is cyan. Amber is a variant, not a token.** LDS says "one amber CTA per
+view", but shadcn's `--primary` drives the *default* Button — putting amber there would make
 every button a CTA. So:
 
 ```tsx
-<Button>Ask</Button>                       // teal, the default, use freely
-<Button variant="cta">Start free trial</Button>  // ORANGE — max ONE per view (linted)
+<Button>Ask</Button>                             // cyan, the default, use freely
+<Button variant="cta">Start free trial</Button>  // AMBER — max ONE per view (linted)
 ```
 
 And the corollary that catches everyone: **shadcn's `--accent` is a hover *surface*, not a
@@ -151,7 +164,7 @@ cannot see inside `.svg`, so that gate is the only thing guarding it.
 
 **The mark's cyan is not `brand-500`.** `--lw-logo-cyan` (`#0A8799`, 187.6° 88% 32%) is the only
 token that exists purely for artwork, and no UI rule may consume it: it is too dark to read on the
-navy paper (4.05) and too light to carry white ink (4.25). `brand-500` is deliberately ~5 points
+navy paper (4.06) and too light to carry white ink (4.25). `brand-500` is deliberately ~5 points
 darker so white ink clears AA — a compromise the logo does not have to make, because a logo
 carries no text.
 
@@ -165,9 +178,12 @@ resolves against that SVG's own root, not your document, so it would paint black
 Import it (`import logo from "@leanwise/design/assets/logo-mark.svg"`) or copy into your app's
 `public/` — copying is fine, but **copy from here**, never from another app.
 
-## v0.3.0 marketing primitives (`lw.css`)
+## The marketing layer (`lw.css`)
 
-Five additive primitives, all token-driven:
+Only the marketing site consumes this layer; apps take `shadcn.css` instead. Everything here
+is token-driven and additive. Release history is in `CHANGELOG.md` — this is the reference.
+
+### Primitives
 
 - **`.lw-hero-dark`** — full-bleed dark hero: deep-navy ground, masked hairline grid,
   subtle radial brand wash; on-dark text roles for descendants. Brand accent text on
@@ -186,7 +202,7 @@ Five additive primitives, all token-driven:
   tones) inside the existing console frame; `.lw-console-caret` adds a blinking caret,
   static under reduced motion.
 
-## v0.4.0 scroll-driven motion + browser frame (`lw.css`)
+### Scroll-driven motion + browser frame
 
 All progressive enhancement — double-gated behind `@supports (animation-timeline: …)`
 AND `prefers-reduced-motion: no-preference`; the static state is always complete:
@@ -200,7 +216,7 @@ AND `prefers-reduced-motion: no-preference`; the static state is always complete
 - **`.lw-browser-frame`** — browser chrome around a screenshot: `.lw-browser-bar` with
   three `<i>` dots + `.lw-browser-url` address pill, `--lw-brand-glow` shadow. Pure CSS.
 
-## v0.5.0 SOTA interaction layer (`lw.css`)
+### Interaction
 
 - **`.lw-spotlight`** — cursor-tracking radial brand highlight on cards; consumer sets
   `--lw-mx`/`--lw-my` from pointermove. No JS → card unchanged.

@@ -147,7 +147,7 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 .lw-btn:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
 
 /* PRIMARY = amber. One per view. This is the whole point of having an amber.
-   Note the navy ink: white on #F97316 is 2.80 and fails WCAG AA. */
+   Note the navy ink: white on #FCB603 is 1.77 and fails WCAG AA. */
 .lw-btn-primary {
   background: var(--lw-cta-500);
   color: var(--lw-fg);

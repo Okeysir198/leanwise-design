@@ -1,5 +1,7 @@
 /* =============================================================================
-   @leanwise/design/react — the compiled React component layer for v0.6.0.
+   @leanwise/design/react — the React component layer. Source; tsup compiles it
+   to dist/react. Unversioned on purpose: it ships with the package, so a version
+   pinned in this header only ever goes stale (it read "v0.6.0" through v0.9.0).
 
    These components render the `.lw-*` classes from lw.css; they do NOT bundle
    CSS. Import the stylesheet once at your app root:

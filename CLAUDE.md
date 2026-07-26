@@ -6,17 +6,37 @@ Guidance for Claude Code when working in this repository.
 
 The **`@leanwise/design` token core** — the canonical source of colors, radii, type scale,
 motion, and the WCAG contrast contract for every LeanWise product. **Tokens + a Tailwind preset
-+ two enforcement CLIs.** It ships **no component primitives** (no Button/Select/Eyebrow) —
-each consumer owns its own shadcn copy; this package owns the *contract* those copies render
-against. README is the user-facing doc; this file is the *maintainer* doc.
++ two enforcement CLIs**, plus an **optional React layer** (`./react`) that renders the `.lw-*`
+marketing classes.
+
+The token core is the product; the React layer is a convenience on top of it and only
+`leanwise-ai` consumes it. **It is not a shadcn replacement** — each consumer still owns its own
+shadcn copy for `Button`/`Select`/form primitives, and this package owns the *contract* those
+copies render against. Do not grow `./react` into a general component library; a component that
+needs a token belongs here, a component that needs product logic does not.
+
+README is the user-facing doc; this file is the *maintainer* doc.
+
+### Commands
+
+```bash
+pnpm check        # WCAG gate — node bin/lw-contrast-check.mjs. Run on EVERY token change.
+pnpm build        # tsup → dist/react (esm + cjs + d.ts). Also runs on prepublishOnly.
+pnpm ladle        # component preview harness for src/react (ladle.config.mjs)
+npx lw-token-lint <consumer>/src
+```
+
+This repo uses **pnpm** (`pnpm-lock.yaml` at root); consumers vary — see the table below.
 
 ### Consumers (the suite — keep them in lockstep)
 
 | Consumer | Pin | Installed | Consumes | Package manager |
 |---|---|---|---|---|
-| `leanwise-ai` | `#v0.7.0` | 0.7.0 | `tokens.css` + `lw.css` (the `.lw-*` marketing layer) + `./assets` | pnpm |
+| `leanwise-ai` | `#v0.8.1` | 0.8.1 | `tokens.css` + `lw.css` (the `.lw-*` marketing layer) + `./assets` + `./react` | pnpm |
 | `P20260707-vss/frontend` | `#v0.2.3` | 0.2.3 | `tokens.css` + `shadcn.css` + Tailwind preset + `./brand` | pnpm |
 | `P20260706-rag-service/frontend` | `#v0.2.2` | **0.2.1 — drifted** | `tokens.css` (vanilla CSS, no preset) | npm |
+
+All three are behind the current tag (**v0.9.0**, which moved the CTA ramp to amber).
 
 A token change is a reviewable one-line bump in each consumer, on that consumer's schedule.
 **Suite skew is the failure mode** — when one consumer lags, it re-hand-rolls the very patterns
@@ -26,7 +46,7 @@ all three; the lockfile-check gotcha below is how a "bump" silently no-ops.
 
 ### The v0.2.x consumers — read before bumping them
 
-VSS and rag-service are ~5 minor versions behind and were **deliberately left on their pins**
+VSS and rag-service are ~7 minor versions behind and were **deliberately left on their pins**
 when v0.7.0 moved the brand hue. Do not bump them in one jump:
 
 1. **rag-service's install is drifted** — pinned `v0.2.2`, `node_modules` resolved `0.2.1`. Its
@@ -46,7 +66,7 @@ Sequence drift-fix → version bump → hue change, so breakage is attributable 
 
 ```
 tokens.css          THE source of truth — HSL channel triples + derived colors, light + dark.
-                      Authored once as a triple (--lw-brand-500-c: 192 78% 47%) and derived
+                      Authored once as a triple (--lw-brand-500-c: 185 82% 26.5%) and derived
                       (--lw-brand-500: hsl(var(--lw-brand-500-c))). Edit the triple; NEVER the
                       derived line; never a hex in a consumer.
 assets/             the logo. logo-mark.svg (gradient, for <img>), logo-mark-mono.svg
@@ -60,7 +80,17 @@ lw.css              the .lw-* marketing classes (+ 44px touch targets, iOS-zoom 
                       leanwise-ai consumes this layer.
 fonts.css + fonts/  Geist + Geist Mono, self-hosted, incl. Vietnamese subsets.
 lib/brand.js        brandVars() / inkOn() / monogram() — runtime per-tenant theming.
+                      lib/counter.js is exported as ./counter.
 bin/                the two CLIs (below).
+src/react/          SOURCE of the ./react layer — Button, Eyebrow, Card, CodeBlock, Console,
+                      StoryCard, FeatureGrid, LogoRail, ThemeToggle + hooks/ + icons/. Renders
+                      the .lw-* classes and bundles NO css: the consumer imports lw.css itself.
+                      react/react-dom are peerDeps. Edit here, never in dist/.
+dist/react/         BUILD OUTPUT (tsup.config.ts) — committed because consumers install this
+                      package straight from a git tag, so there is no publish step to build it.
+                      A token change alone needs no rebuild; a src/react change DOES — run
+                      `pnpm build` and commit dist/ in the same commit, or the tag ships stale
+                      components. build/ is the built ladle preview — gitignored, not shipped.
 ```
 
 ## The two CLIs — both must stay green
@@ -78,9 +108,9 @@ it before cutting the tag.
 `bin/lw-contrast-check.mjs` — the WCAG AA gate. Parses `tokens.css` for the authored triples,
 scoped per block (`:root` and `.dark` separately — scanning the whole file lets the last
 declaration win and silently resolves a light token to its dark value), and fails if any of the
-pair in the MANIFEST drops under 4.5:1 (63 pairs as of v0.6.7). **Run it on every token change.**
-It exists because white-on-orange (2.80) shipped in a doc for months; a
-number in CI catches what an eyeball doesn't.
+pair in the MANIFEST drops under 4.5:1 (64 pairs as of v0.9.0). **Run it on every token change.**
+It exists because white-on-CTA (2.80 on the old orange; 1.77 on today's amber) shipped in a doc
+for months; a number in CI catches what an eyeball doesn't.
 
 Coverage is manifest-driven: `MANIFEST` at the top of the script is the single place a pair is
 added, and the resolver supplies the color by chasing `var()` chains. That is what makes a
@@ -133,15 +163,15 @@ disagree** — `lw-token-lint` cannot see inside `.svg`, so this is the only thi
 
 1. **Ink follows the fill's LIGHTNESS, not the brand.** v0.8.0 re-sampled brand-500 off the mark
    and it came out 20 points darker, which flipped this: white on teal `#0C727B` is 5.68 and navy
-   is 2.96, so `--lw-on-brand` is now WHITE. CTA orange and the status fills are still light, so
+   is 3.31, so `--lw-on-brand` is now WHITE. The CTA amber and the status fills are still light, so
    they keep navy — that is `--lw-on-cta` / `--lw-on-status`. Do not "restore" the old rule; the
    gate will fail.
 2. **A fill color is usually not a text color.** Still true for status and CTA. Brand is now the
    exception: brand-500 reads on white at 5.68, so `--lw-brand-text-c` points at the fill on
    light and at brand-400 on dark.
    This is the three-way `fill` / `text` / `ink` split — most systems conflate it.
-3. **`--primary` is cyan; orange is the `cta` *variant*, one per view.** Shadcn's `--primary`
-   drives the default Button; putting orange there makes every button a CTA. And `--accent` is a
+3. **`--primary` is cyan; amber is the `cta` *variant*, one per view.** Shadcn's `--primary`
+   drives the default Button; putting amber there makes every button a CTA. And `--accent` is a
    ghost-button **hover surface**, not a brand color — per-tenant theming overrides
    `--primary`/`--ring` only (via `brandVars()`), never `--accent`.
 

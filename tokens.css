@@ -7,7 +7,7 @@
 
    Every color is declared twice, but authored ONCE:
 
-     --lw-brand-500-c: 192.0 78% 47%;              <- authored (the triple)
+     --lw-brand-500-c: 185.0 82% 26.5%;            <- authored (the triple)
      --lw-brand-500:   hsl(var(--lw-brand-500-c)); <- derived (a usable color)
 
    The triple exists because Tailwind/shadcn compose `hsl(var(--primary))` and
@@ -18,17 +18,21 @@
 
    Edit the triple. Never edit the derived line, and never hardcode a hex in an app.
 
-   ## Why brand fills carry NAVY ink, not white
+   ## Ink follows the fill's LIGHTNESS, not the brand
 
    Measured, not assumed (bin/lw-contrast-check.mjs re-verifies on every build):
 
-     white on cyan #1AB0D5 ....  2.56  FAILS AA
-     white on amber  #FCB603 ..  1.65  FAILS AA
-     navy  on cyan ............  7.33  AAA
-     navy  on amber ...........  10.54 AAA
+                              white ink   navy ink #0B1220
+     cyan  #0C727B (brand) ..    5.66 ✓       3.31 ✗
+     amber #FCB603 (CTA) ....    1.77 ✗      10.54 ✓
+     green #16A34A (success)     3.30 ✗       5.69 ✓
 
-   So a bright-brand fill takes near-black type. That is a deliberate look, and
-   it is the only one that is accessible without changing the brand hexes.
+   So the DARK brand fill takes white, and the LIGHT cta/status fills take navy.
+   Do not generalise either way — the rule is per-fill and it has already flipped
+   once. Through v0.7.x this block read "brand fills carry NAVY ink", which was
+   correct while brand-500 was a light cyan (#1AB0D5) where white scored 2.56.
+   v0.8.0 re-sampled brand-500 off the mark, it came out 20 points darker, and
+   the conclusion inverted. The reasoning never changed; the premise did.
 
    ## Fill colors and TEXT colors are different tokens
 
@@ -88,25 +92,25 @@
      LIGHT. That last one is what read as "pale sky" against the mark's deep teal.
 
      The 500 is NOT the sampled cyan exactly, and the 5-point gap is deliberate.
-     At L=32% the colour lands on the ink crossover: white scores 4.24 and navy
-     4.39, so NEITHER ink clears AA, and any darker hover drops navy to 4.06.
+     At L=32% the colour lands on the ink crossover: white scores 4.25 and navy
+     4.40, so NEITHER ink clears AA, and any darker hover drops navy to 4.06.
      Taking it ~5 points darker — which is independently where the CONNECT deck
      put its --accent (#0C757C, presentation/leanwise-ai-presentation.html) —
-     puts white ink at 5.68 with headroom and lets hover darken normally. The
+     puts white ink at 5.66 with headroom and lets hover darken normally. The
      deck and the product now agree, which they never did before.
 
      Consequence, and it reverses a documented rule: BRAND FILLS TAKE WHITE INK.
      "Navy ink on brand" was correct while brand-500 was a LIGHT cyan where white
      scored 2.56. The premise changed, not the reasoning — navy on the new 500 is
-     2.96. CTA and the status fills are still light, so they keep navy ink. */
+     3.31. CTA and the status fills are still light, so they keep navy ink. */
   --lw-brand-50-c:  186.0 68.0% 96.0%;   /* #EEFAFC */
   --lw-brand-100-c: 185.5 66.0% 90.0%;   /* #D5F3F6 */
   --lw-brand-200-c: 185.0 64.0% 80.0%;   /* #ABE7ED */
-  --lw-brand-300-c: 184.5 60.0% 64.0%;   /* #6CD2DA — on navy paper 10.59 */
-  --lw-brand-400-c: 183.5 62.0% 47.5%;   /* #2EBBC4 — teal as TEXT on dark (8.08); the deck's dark accent */
-  --lw-brand-500-c: 185.0 82.0% 26.5%;   /* #0C727B — THE brand color. WHITE ink, 5.68 */
-  --lw-brand-600-c: 186.0 86.0% 21.0%;   /* #075A64 — hover fill (white ink 7.87) */
-  --lw-brand-700-c: 187.0 88.0% 16.5%;   /* #05464F — deepest tier, on white 10.46 */
+  --lw-brand-300-c: 184.5 60.0% 64.0%;   /* #6CD2DA — on navy paper 10.58 */
+  --lw-brand-400-c: 183.5 62.0% 47.5%;   /* #2EBBC4 — teal as TEXT on dark (8.04); the deck's dark accent */
+  --lw-brand-500-c: 185.0 82.0% 26.5%;   /* #0C727B — THE brand color. WHITE ink, 5.66 */
+  --lw-brand-600-c: 186.0 86.0% 21.0%;   /* #075A64 — hover fill (white ink 7.91) */
+  --lw-brand-700-c: 187.0 88.0% 16.5%;   /* #05464F — deepest tier, on white 10.52 */
 
   --lw-brand-50:  hsl(var(--lw-brand-50-c));
   --lw-brand-100: hsl(var(--lw-brand-100-c));
@@ -126,7 +130,7 @@
   --lw-navy-deep-c: 208.0 95.0% 10.5%;   /* #011C34 */
   /* The mark's own cyan end, 187.6° 88% 32% — the ONLY token here that exists
      purely for artwork, and the only one no UI rule may consume. It fits no role:
-     too dark to read on the navy paper (4.05, so it cannot be the on-dark text
+     too dark to read on the navy paper (4.06, so it cannot be the on-dark text
      tier) and too light to carry white ink (4.25, so it cannot be the fill).
      brand-500 is deliberately ~5 points darker so white ink clears AA — a
      compromise the logo does not have to make, because a logo carries no text.
@@ -323,7 +327,7 @@
   --lw-line-strong-c: var(--lw-border-2-c);
 
   /* Brand-as-text (links, active labels). Since v0.8.0 brand-500 IS readable on
-     white (5.68), so this is the same colour as the fill — the three-way
+     white (5.66), so this is the same colour as the fill — the three-way
      fill/text/ink split collapses to two for brand. Kept as its own name because
      dark re-points it (to brand-400) and consumers reference the role, not the tier. */
   --lw-brand-text-c:   var(--lw-brand-500-c);
@@ -333,7 +337,7 @@
   --lw-danger-on-c:    var(--lw-danger-text-c);
 
   /* Ink that sits ON a fill. The brand fill is DARK since v0.8.0, so it takes
-     WHITE (5.68; navy would be 2.96). CTA amber and the status fills are still
+     WHITE (5.66; navy would be 3.31). CTA amber and the status fills are still
      light, so they keep navy — the split is by fill lightness, not by brand. */
   --lw-on-brand-c: var(--lw-surface-0-c);    /* white — the brand fill is dark */
   --lw-on-cta-c:   var(--lw-text-1-c);       /* navy — amber is a LIGHT fill */
@@ -356,7 +360,7 @@
 
   /* Ink that sits ON a fill, as a ready-to-use color. Theme-independent: the cyan and
      the amber is the same color in both themes, so its ink must be too — using
-     --lw-fg here would flip to near-white on dark and put white on #F97316 (2.80). */
+     --lw-fg here would flip to near-white on dark and put white on #FCB603 (1.77). */
   --lw-on-brand:  hsl(var(--lw-on-brand-c));
   --lw-on-cta:    hsl(var(--lw-on-cta-c));
   --lw-on-danger: hsl(var(--lw-on-danger-c));
@@ -397,8 +401,11 @@
   --lw-line-c:        220.5 38.7% 21.8%;   /* #22304D */
   --lw-line-strong-c: 220.5 38.7% 28.0%;
 
-  /* Brand AS TEXT lightens on dark (brand-500 is a fine FILL on dark, but as
-     text it sits at 7.52 — fine — while brand-400 reaches 10.06 and reads better). */
+  /* Brand AS TEXT must lighten on dark. brand-500 stays a fine FILL on dark, but
+     AS TEXT on the paper it is 3.31 — it FAILS. brand-400 reaches 8.04 and is the
+     only tier that passes, which is why this re-point is mandatory, not cosmetic.
+     (Through v0.9.0 this comment read "7.52 — fine … brand-400 reaches 10.06";
+     both numbers were wrong and the first inverted the conclusion.) */
   --lw-brand-text-c: var(--lw-brand-400-c);
   --lw-cta-text-c: var(--lw-cta-400-c);
   --lw-success-on-c: 158.1 64.4% 51.6%;    /* #34D399 */
@@ -411,7 +418,7 @@
   --lw-success-soft-c: 153.3 47.4% 11.2%;  /* #0F2A1E — ink lands at 7.97 */
   --lw-warning-soft-c: 38.9  67.3% 10.8%;  /* #2E2109 — 9.40 */
   --lw-danger-soft-c:  0     53.2% 15.1%;  /* #3B1212 — 5.93 */
-  --lw-cta-soft-c:     34.0  62.0% 13.0%;  /* #3A1F0C — 6.72 */
+  --lw-cta-soft-c:     34.0  62.0% 13.0%;  /* #36240D — cta-400 on it 9.22 */
 
   /* Navy-tinted shadows are invisible on a navy ground: go black, and lean on
      the hairline border for elevation instead. */
@@ -450,7 +457,7 @@
     --lw-success-soft-c: 153.3 47.4% 11.2%;  /* #0F2A1E — ink lands at 7.97 */
     --lw-warning-soft-c: 38.9  67.3% 10.8%;  /* #2E2109 — 9.40 */
     --lw-danger-soft-c:  0     53.2% 15.1%;  /* #3B1212 — 5.93 */
-    --lw-cta-soft-c:     34.0  62.0% 13.0%;  /* #3A1F0C — 6.72 */
+    --lw-cta-soft-c:     34.0  62.0% 13.0%;  /* #36240D — cta-400 on it 9.22 */
     --lw-shadow-xs: 0 1px 0 hsl(var(--lw-line-c) / 0.5);
     --lw-shadow-sm: 0 1px 0 hsl(var(--lw-line-c) / 0.6);
     --lw-shadow-md: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 8px 24px rgba(0, 0, 0, 0.45);
@@ -503,7 +510,7 @@
   --lw-success-soft-c: 153.3 47.4% 11.2%;
   --lw-warning-soft-c: 38.9  67.3% 10.8%;
   --lw-danger-soft-c:  0     53.2% 15.1%;
-  --lw-cta-soft-c:     34.0  62.0% 13.0%;
+  --lw-cta-soft-c:     34.0  62.0% 13.0%;  /* #36240D — cta-400 on it 9.22 */
   --lw-shadow-xs: 0 1px 0 hsl(var(--lw-line-c) / 0.5);
   --lw-shadow-sm: 0 1px 0 hsl(var(--lw-line-c) / 0.6);
   --lw-shadow-md: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 8px 24px rgba(0, 0, 0, 0.45);
@@ -551,7 +558,7 @@
   --lw-success-soft-c: 153.3 47.4% 11.2%;
   --lw-warning-soft-c: 38.9  67.3% 10.8%;
   --lw-danger-soft-c:  0     53.2% 15.1%;
-  --lw-cta-soft-c:     34.0  62.0% 13.0%;
+  --lw-cta-soft-c:     34.0  62.0% 13.0%;  /* #36240D — cta-400 on it 9.22 */
   --lw-shadow-xs: 0 1px 0 hsl(var(--lw-line-c) / 0.5);
   --lw-shadow-sm: 0 1px 0 hsl(var(--lw-line-c) / 0.6);
   --lw-shadow-md: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 8px 24px rgba(0, 0, 0, 0.45);

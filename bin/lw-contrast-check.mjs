@@ -3,7 +3,7 @@
  * Derived WCAG 2.1 contrast gate for the token core.
  *
  * WHY THIS EXISTS — white on the brand cyan (#1AB0D5) scores 2.56 and on the
- * CTA amber (#FCB603) 1.65. Both fail AA. The design system shipped that pairing
+ * CTA amber (#FCB603) 1.77. Both fail AA. The design system shipped that pairing
  * for months; a human eyeballing a mockup did not catch it, a number in CI would
  * have. This file is that number.
  *
