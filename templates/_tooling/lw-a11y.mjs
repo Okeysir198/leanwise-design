@@ -53,10 +53,30 @@ for (const card of cards) {
     }, theme);
     await page.waitForTimeout(200);
     await page.addScriptTag({ content: axeSource });
-    const res = await page.evaluate(() => window.axe.run(document, {
-      runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"] },
-    }));
+    const res = await page.evaluate(async () => {
+      const r = await window.axe.run(document, {
+        runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"] },
+      });
+      // Resolve each node's target back to its element while still in the page,
+      // and record whether it opted out of THIS rule. Node objects do not carry
+      // the element across the bridge, so the lookup has to happen here.
+      for (const v of r.violations) {
+        for (const n of v.nodes) {
+          const el = document.querySelector(n.target.join(" "));
+          n.expects = el ? (el.getAttribute("data-a11y-expect") || "").split(/\s+/) : [];
+        }
+      }
+      return r;
+    });
+    // A specimen that DEMONSTRATES a failure must be allowed to fail it. The
+    // neutrals card prints text-4's sub-AA ratio next to the swatch as the whole
+    // point of the row; recolouring it to green the gate would make the card
+    // assert the opposite of its own caption. `data-a11y-expect="<rule-id>"`
+    // opts one node out of one rule — never a whole card, never a whole rule,
+    // and it is greppable, so the exemptions stay countable.
     for (const v of res.violations) {
+      v.nodes = v.nodes.filter((n) => !(n.expects || []).includes(v.id));
+      if (!v.nodes.length) continue;
       findings.push({
         card: relative(ROOT, card), ground: theme || "light",
         id: v.id, impact: v.impact, nodes: v.nodes.length,

@@ -57,7 +57,9 @@
     <div class="r" data-ratio="text-2 on surface-0"></div>
     <div class="t" style="color:var(--lw-text-3)">text-3 — the muted floor: labels, captions</div>
     <div class="r" data-ratio="text-3 on surface-0"></div>
-    <div class="t" style="color:var(--lw-text-4)">text-4 — decorative hairline text only</div>
+    <!-- data-a11y-expect: this swatch EXISTS to render below AA. Recolouring it to
+         satisfy the gate would make the card assert the opposite of what it says. -->
+    <div class="t" data-a11y-expect="color-contrast" style="color:var(--lw-text-4)">text-4 — decorative hairline text only</div>
     <div class="r" data-ratio="text-4 on surface-0"></div>
   </div>
   <p class="sub"><b>text-4 fails AA as body text and that is intentional.</b> If the number beside it is

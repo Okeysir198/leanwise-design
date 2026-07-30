@@ -84,7 +84,19 @@ for (const card of cards) {
 }
 await browser.close();
 
-console.log("lw-visual: " + cards.length + " cards × " + MATRIX.length + " grounds; " + recorded + " baseline(s) recorded.");
+const compared = cards.length * MATRIX.length - recorded;
+console.log("lw-visual: " + cards.length + " cards × " + MATRIX.length + " grounds; " + recorded + " baseline(s) recorded, " + compared + " compared.");
+if (!compared) {
+  // Recording every shot and then printing "no visual change" reads as a pass.
+  // It is not one — nothing was compared. Say so, because a gate that cannot
+  // fail is indistinguishable from a gate that passed, and this one has never
+  // had a committed baseline to compare against.
+  console.log("lw-visual: NOTHING WAS COMPARED — every shot was a first recording.");
+  console.log("  Baselines are byte-exact PNG matches, so they are machine-local: a set");
+  console.log("  recorded here will not match CI's Chromium. Re-run to compare locally;");
+  console.log("  for CI, record the baselines inside the CI image.");
+  process.exit(0);
+}
 if (changed.length) {
   console.error("lw-visual: " + changed.length + " card(s) changed:");
   for (const c of changed) console.error("  · " + c);

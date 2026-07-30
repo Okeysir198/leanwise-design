@@ -12,6 +12,80 @@ and would not be at five.
 
 Nothing yet.
 
+## [1.1.3] — 2026-07-30
+
+A whole-codebase review. Every finding traces to the same shape: **a gate that could not see
+the thing it existed to police, and a defect living in that blind spot.** The gates were
+widened first, then the defects they surfaced were fixed.
+
+### Fixed — the gates
+
+- **`check:themes` was vacuous.** The DTCG generator skipped the file's main `:root` because
+  the leading `@import url("./fonts.css");` — a statement at-rule, terminated by `;` rather
+  than a block — was glued onto the next selector capture and read as an at-rule. The entire
+  palette (`brand`, `navy`, `cta`, `surface`, `text`, `border`) was dropped, so "every channel
+  re-pointed" was measured over a set that contained none of them. `tokens.json` shipped
+  gutted at v1.1.2. Base token count went 141 → 271 on the fix; the gate is now verified to
+  fail when a dark re-point is removed. A token that is both a group and a leaf
+  (`brand-500` beside `brand-500-c`) no longer overwrites its own channels.
+- **The contrast gate could not read an alpha tint.** `--lw-brand-soft` is authored
+  `hsl(var(--lw-brand-500-c) / 0.14)` where every status tint gets an opaque `-c` channel, so
+  it parsed as a derived line and was dropped — leaving the one soft chip the manifest could
+  not measure as the brand one, in the group whose own comment calls it "the documented bug
+  floor". Alpha tints now resolve, and a translucent BACKGROUND is flattened over every
+  surface tier it can land on, scored at the worst — a `.lw-chip` sits on a card as often as
+  on the page.
+- **An unresolved pair blamed the wrong side.** The MISS message printed `entry.fg` whether
+  or not the fg was the problem, which sent a reader hunting a token that resolved perfectly.
+- **`declarationsIn` required a trailing `;`**, silently dropping a block's final declaration
+  — and a dropped channel reads downstream as "unresolved", not as the authoring slip it is.
+- **`check:visual` cannot fail and said so as "no visual change".** It has never had a
+  committed baseline, so every run recorded and reported success. It now states plainly when
+  nothing was compared. Baselines are byte-exact PNG matches and therefore machine-local;
+  `.visual/` is fully ignored, and CI must record its own inside its image.
+- **`npm ci` in CI had no lockfile to install from.** `package-lock.json` is now committed.
+- **`lw-token-lint` threw a raw ENOENT** on a mistyped path instead of naming its two modes.
+- **`lw-a11y` had no way to exempt a deliberate failure.** `data-a11y-expect="<rule-id>"` opts
+  one node out of one rule, so the neutrals card can keep publishing text-4's sub-AA ratio —
+  which is the row's entire point — without the gate demanding the card contradict itself.
+
+### Fixed — what the widened gates found
+
+- **`--lw-text-3` was AA against white only** (4.83), and measured **4.07** on `--lw-surface-3`
+  — where `code`, `.lbl` and most muted captions actually sit. A floor measured against the
+  lightest surface is not a floor. Now `220 8.9% 43.3%` (#656B78): 5.34 on the page, 4.51 on
+  an inset. **`--lw-fg-subtle` on dark** had the identical hole (4.47 on a raised card) and is
+  now `57.5%`.
+- **New `--lw-brand-on`** — the ink for the brand tint, mirroring `--lw-success-on`. `.lw-chip`
+  and `.lw-avatar` painted `--lw-brand-text` (the *link* shade) on `--lw-brand-soft`: **3.98**
+  over an inset. Brand was the only family in the soft-chip group without its own ink, which
+  is exactly why the omission went unnoticed while all four statuses were covered.
+- **`role="feed"` on `ActivityFeed` → `role="group"`.** That role obliges `aria-posinset` /
+  `aria-setsize`, managed focus and `role="article"` children — none implemented, and the
+  group headings between items cannot be feed children at all. Claiming a role you do not
+  honour is worse than claiming none.
+- **`RichText`'s toolbar carried `aria-controls="rt"`** — a literal IDREF pointing at nothing,
+  in every instance on the page. It now references the editor body's real `useId`, and is
+  omitted entirely when a caller brings their own surface.
+- **The specimen cards reached past the roles to the tiers.** `--lw-text-3` / `--lw-surface-2`
+  are theme-invariant by design, so a card that paints them renders light-mode ink on navy
+  (3.5:1). Swapped for `--lw-fg-subtle` / `--lw-bg-inset` in the motion, spacing and radii
+  cards — the same mistake `base.css` already documents for `surface-3`/`text-4`.
+- **The swatch cards never re-hydrated on a theme flip.** `_card.js` listened for
+  `prefers-color-scheme` but not for `.dark` / `data-theme` on `<html>` — which is how a theme
+  is actually toggled. The swatches kept light-mode ink over a dark-mode plate: navy on the
+  dark `cta-soft` tint measured **1.26**, on the card whose purpose is publishing ratios. Its
+  ink picker also ignored alpha, reading a `-soft` tint as its fully opaque channel.
+- **Opacity used as hierarchy.** `.sw span` at 85% measured 3.81 over the danger fill, and the
+  marketing logo rail's `opacity: 0.42` — right for a masked graphic — put the `.is-text`
+  wordmark at **2.77**. Both now carry the recede in ink and size instead.
+- **`.lw-diff-line .n`** painted line numbers from `--lw-fg-faint`, the tier documented
+  "decorative only, fails AA as body text", over the tinted add/mod row fills. The ~40 other
+  `fg-faint` uses are disabled states, which WCAG exempts, and are left alone.
+
+`check:a11y` goes from **43 violation groups to zero**; the contrast manifest from 64 to 75
+pairs, all passing.
+
 ## [1.1.2] — 2026-07-30
 
 ### Fixed

@@ -93,6 +93,17 @@ const MANIFEST = [
   { group: "text-on-light", fg: "text-1", bg: "surface-2", scope: "light", label: "body text on muted surface" },
   { group: "text-on-light", fg: "text-1", bg: "surface-3", scope: "light", label: "body text on inset surface" },
   { group: "text-on-light", fg: "text-1", bg: "brand-50",  scope: "light", label: "text on the brand-50 accent surface" },
+  //    The secondary and muted tiers on the RAISED surfaces, not just the page.
+  //    Through v1.1.2 the gate paired text-2/text-3 with surface-0 only, so it
+  //    read green while `code`, `.lbl` and every muted caption on an inset panel
+  //    rendered at 4.08–4.34. A tier that is only AA against white is not a
+  //    muted text token, it is a muted-on-white text token; say which.
+  { group: "text-on-light", fg: "text-2", bg: "surface-1", scope: "light", label: "secondary text on subtle surface" },
+  { group: "text-on-light", fg: "text-2", bg: "surface-2", scope: "light", label: "secondary text on muted surface" },
+  { group: "text-on-light", fg: "text-2", bg: "surface-3", scope: "light", label: "secondary text on inset surface" },
+  { group: "text-on-light", fg: "text-3", bg: "surface-1", scope: "light", label: "muted text on subtle surface" },
+  { group: "text-on-light", fg: "text-3", bg: "surface-2", scope: "light", label: "muted text on muted surface" },
+  { group: "text-on-light", fg: "text-3", bg: "surface-3", scope: "light", label: "muted text on inset surface (the worst case)" },
   // Role-token sanity: --lw-fg must stay aliased to --lw-text-1 on --lw-bg = surface-0.
   // If anyone re-points --lw-fg-c in :root, these flip and fail — exactly the guard.
   { group: "text-on-light", fg: "fg",        bg: "bg",        scope: "light", label: "role: --lw-fg on --lw-bg (≡ text-1/surface-0)" },
@@ -107,6 +118,11 @@ const MANIFEST = [
   { group: "text-on-dark", fg: "fg-subtle",  bg: "bg",        scope: "dark", label: "muted text on dark" },
   { group: "text-on-dark", fg: "fg",         bg: "bg-subtle", scope: "dark", label: "body text on a dark card" },
   { group: "text-on-dark", fg: "fg-muted",   bg: "bg-subtle", scope: "dark", label: "secondary text on a dark card" },
+  //    The dark half of the same hole section D closes on light: fg-subtle was
+  //    paired with the page ground only, and measured 4.47 on a raised card.
+  { group: "text-on-dark", fg: "fg-subtle",  bg: "bg-subtle", scope: "dark", label: "muted text on a dark card" },
+  { group: "text-on-dark", fg: "fg-subtle",  bg: "bg-inset",  scope: "dark", label: "muted text on a dark inset" },
+  { group: "text-on-dark", fg: "fg-muted",   bg: "bg-inset",  scope: "dark", label: "secondary text on a dark inset" },
   { group: "text-on-dark", fg: "brand-400",  bg: "bg",        scope: "dark", label: "cyan as text on dark" },
   { group: "text-on-dark", fg: "cta-400",    bg: "bg",        scope: "dark", label: "amber as text on dark" },
   // The role token, not the literal — guards the cta-text alias re-pointing to
@@ -129,6 +145,11 @@ const MANIFEST = [
   { group: "soft chips", fg: "danger-on",    bg: "danger-soft",  scope: "dark",  label: "danger badge on dark tint" },
   { group: "soft chips", fg: "cta-400",      bg: "cta-soft",     scope: "dark",  label: "CTA badge on dark tint" },
   { group: "soft chips", fg: "cta-text",     bg: "cta-soft",     scope: "dark",  label: "role: --lw-cta-text on the dark CTA tint" },
+  //    BRAND soft was the hole in this group: every status tint was paired with
+  //    its ink, brand was not, and `.lw-chip` / `.lw-avatar` paint brand-text on
+  //    brand-soft — 4.37 on light. The four status tints being covered is exactly
+  //    why the brand one being missed went unnoticed.
+  { group: "soft chips", fg: "brand-on",     bg: "brand-soft",   scope: "both",  label: "brand chip / avatar on the brand tint" },
 
   // ── G. Always-dark navy-deep ground — the full-bleed dark hero AND the .lw-code
   //    mono surface (lw.css verifies .lw-code sits on this same navy-deep). Every
@@ -225,7 +246,11 @@ function findRule(rules, re, label) {
  */
 function declarationsIn(body) {
   const out = {};
-  const re = /--lw-([a-z0-9-]+)\s*:\s*([^;]+);/g;
+  // The final declaration in a block is allowed to omit its semicolon. Requiring
+  // one dropped that token silently, and a dropped channel reads downstream as
+  // "unresolved" rather than as the authoring slip it is — so terminate on `;`
+  // or on the end of the body.
+  const re = /--lw-([a-z0-9-]+)\s*:\s*([^;]+)(?:;|$)/g;
   let m;
   while ((m = re.exec(body))) out[m[1]] = m[2].trim();
   return out;
@@ -274,6 +299,20 @@ function parseValue(raw) {
   // rgba() / rgb() — comma OR modern slash form. (rgba(255,255,255,0.70) etc.)
   const rg = v.match(/^rgba?\(\s*([\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)\s*(?:[,/]\s*([\d.]+))?\s*\)$/i);
   if (rg) return { kind: "rgb", r: +rg[1] / 255, g: +rg[2] / 255, b: +rg[3] / 255, a: rg[4] !== undefined ? +rg[4] : 1 };
+  // An ALPHA TINT: `hsl(var(--lw-brand-500-c) / 0.14)` or `hsl(1 2% 3% / .14)`.
+  // The `-soft` family is authored this way where a status tint gets its own
+  // opaque `-c` channel, and until v1.1.3 that asymmetry meant --lw-brand-soft
+  // parsed as a plain derived line and was dropped — so the one soft chip the
+  // MANIFEST could not measure was the brand one, the group whose own comment
+  // calls it "the documented bug floor".
+  const tint = v.match(/^hsla?\(\s*(.+?)\s*\/\s*([\d.]+%?)\s*\)$/i);
+  if (tint) {
+    const inner = parseValue(tint[1]);
+    if (inner.kind === "skip") return { kind: "skip", raw: v };
+    const a = tint[2].endsWith("%") ? parseFloat(tint[2]) / 100 : +tint[2];
+    // A ref carries the alpha forward; chase() multiplies it into the target.
+    return inner.kind === "ref" ? { ...inner, a } : { ...inner, a: (inner.a ?? 1) * a };
+  }
   // hsl()/hsla() derived lines, gradients, multi-value shadows: not solid colors.
   return { kind: "skip", raw: v };
 }
@@ -294,9 +333,15 @@ function buildScope(decls) {
   }
   for (const [k, v] of Object.entries(decls)) {
     if (k.endsWith("-c")) continue;
-    if (/^hsl\(/i.test(v) || /var\(/.test(v)) continue; // derived color / gradient ref
+    // A derived `hsl(var(--x-c))` line is redundant — its channel is already in
+    // scope under the bare name. An alpha TINT `hsl(var(--x-c) / .14)` is not:
+    // no channel carries the alpha, so it is the only declaration of that color.
     const parsed = parseValue(v);
-    if (parsed.kind === "rgb") scope[k] = parsed;
+    if (parsed.kind === "skip") continue;
+    if (parsed.a === undefined || parsed.a === 1) {
+      if (/^hsl\(/i.test(v) || /var\(/.test(v)) continue; // derived color / gradient ref
+    }
+    if (scope[k] === undefined) scope[k] = parsed;
   }
   for (const k of Object.keys(scope)) {
     scope[k] = chase(scope, k, new Set());
@@ -311,7 +356,12 @@ function chase(scope, name, seen) {
   if (!v) return { kind: "missing", name };
   if (v.kind === "ref") {
     seen.add(name);
-    return chase(scope, v.name, seen);
+    const target = chase(scope, v.name, seen);
+    // A tint ref (`hsl(var(--lw-brand-500-c) / .14)`) borrows the target's
+    // channel but keeps its OWN alpha; without this the tint would resolve to
+    // the fully opaque brand fill and measure a contrast nothing renders.
+    if (v.a !== undefined && target.kind === "rgb") return { ...target, a: (target.a ?? 1) * v.a };
+    return target;
   }
   return v;
 }
@@ -451,9 +501,37 @@ for (const entry of MANIFEST) {
   const scopes = entry.scope === "both" ? ["light", "dark"] : [entry.scope];
   for (const scopeName of scopes) {
     const fg = resolveColor(entry.fg, scopeName);
-    const bg = resolveColor(entry.bg, scopeName);
+    let bg = resolveColor(entry.bg, scopeName);
+    // A translucent BACKGROUND (the `-soft` tints) renders over the page ground.
+    // Flatten it there before measuring, or the ratio describes a surface the
+    // viewer never sees.
+    // Which ground? Not the page — a `.lw-chip` sits on a CARD as often as on the
+    // page, and 0.14 brand over surface-1 is darker than over white: axe measured
+    // 4.37 for a pair this gate scored 4.65 against white alone. So flatten over
+    // EVERY surface tier the tint can land on and keep the worst. Enumerating
+    // them beats an `over:` field nobody remembers to set.
+    let groundNote = "";
+    if (bg && (bg.a ?? 1) < 1) {
+      const tiers = scopeName === "dark" ? ["bg", "bg-subtle"] : ["surface-0", "surface-1", "surface-2", "surface-3"];
+      const flat = (over) => ({ kind: "rgb", a: 1,
+        r: bg.a * bg.r + (1 - bg.a) * over.r,
+        g: bg.a * bg.g + (1 - bg.a) * over.g,
+        b: bg.a * bg.b + (1 - bg.a) * over.b });
+      let worst = null;
+      for (const t of tiers) {
+        const over = resolveColor(t, scopeName);
+        if (!over) continue;
+        const cand = flat(over);
+        const r = contrast(fg || cand, cand);
+        if (!worst || r < worst.r) worst = { r, cand, t };
+      }
+      if (worst) { bg = worst.cand; groundNote = ` over ${worst.t}`; }
+    }
     if (!fg || !bg) {
-      rows.push({ scope: scopeName, group: entry.group, status: "MISS", ratio: "  ?  ", pair: `${entry.fg} on ${entry.bg}`, label: `unresolved token (${entry.fg || entry.bg})` });
+      // Name the side that actually failed. `entry.fg || entry.bg` always named
+      // the fg, which sent a reader hunting a token that resolved perfectly.
+      const missing = [!fg && entry.fg, !bg && entry.bg].filter(Boolean).join(", ");
+      rows.push({ scope: scopeName, group: entry.group, status: "MISS", ratio: "  ?  ", pair: `${entry.fg} on ${entry.bg}`, label: `unresolved token (${missing})` });
       failed++;
       continue;
     }
@@ -466,8 +544,8 @@ for (const entry of MANIFEST) {
       group: entry.group,
       status: ok ? "PASS" : "FAIL",
       ratio: ratio.toFixed(2),
-      pair: `${entry.fg} on ${entry.bg}`,
-      label: entry.label + (entry.scope === "both" ? "" : ""),
+      pair: `${entry.fg} on ${entry.bg}${groundNote}`,
+      label: entry.label,
       large: !!entry.large,
     });
   }

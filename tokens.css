@@ -227,7 +227,11 @@
   /* ---- Neutrals — text -------------------------------------------------- */
   --lw-text-1-c: 220   48.8% 8.4%; /* @kind color */       /* #0B1220 — also the ink on every brand fill */
   --lw-text-2-c: 215   13.8% 34.1%; /* @kind color */      /* #4B5563 */
-  --lw-text-3-c: 220    8.9% 46.1%; /* @kind color */      /* #6B7280 — 4.83 on white, the muted floor */
+  --lw-text-3-c: 220    8.9% 43.3%; /* @kind color */      /* #656B78 — the muted floor. 5.34 on white, and 4.51 on
+                                                              surface-3: through v1.1.2 this was 46.1% (#6B7280), AA on
+                                                              the page and 4.07 on an inset panel — where `code`, `.lbl`
+                                                              and most muted captions actually sit. A floor measured
+                                                              against only the lightest surface is not a floor. */
   --lw-text-4-c: 217.9 10.6% 64.9%; /* @kind color */      /* #9CA3AF — decorative only, fails AA as body text */
   --lw-text-1: hsl(var(--lw-text-1-c));
   --lw-text-2: hsl(var(--lw-text-2-c));
@@ -511,6 +515,7 @@
      dark re-points it (to brand-400) and consumers reference the role, not the tier. */
   --lw-brand-text-c: var(--lw-brand-500-c); /* @kind color */
   --lw-cta-text-c: var(--lw-cta-700-c); /* @kind color */
+  --lw-brand-on-c: var(--lw-brand-700-c); /* @kind color */
   --lw-success-on-c: var(--lw-success-text-c); /* @kind color */
   --lw-warning-on-c: var(--lw-warning-text-c); /* @kind color */
   --lw-danger-on-c: var(--lw-danger-text-c); /* @kind color */
@@ -560,6 +565,7 @@
 
   /* Status as ready-to-use colors. `-on` is the readable TEXT color (theme-aware);
      the bare name is the FILL; `-soft` is the chip tint. */
+  --lw-brand-on:     hsl(var(--lw-brand-on-c));
   --lw-success-on:   hsl(var(--lw-success-on-c));
   --lw-success-soft: hsl(var(--lw-success-soft-c));
   --lw-warning-on:   hsl(var(--lw-warning-on-c));
@@ -585,7 +591,8 @@
   --lw-bg-inset-c: 221.1 45.2% 16.5%; /* @kind color */
   --lw-fg-c: 215   33.3% 92.9%; /* @kind color */   /* #E7ECF3 */
   --lw-fg-muted-c: 218.7 21.7% 72.0%; /* @kind color */   /* #A8B3C7 — 8.86 on paper */
-  --lw-fg-subtle-c: 218.5 17.5% 56.3%; /* @kind color */   /* #7C8AA3 — 5.37 on paper */
+  --lw-fg-subtle-c: 218.5 17.5% 57.5%; /* @kind color */   /* #808EA6 — 5.62 on paper, 4.6 on a raised card. Was 56.3% (#7C8AA3),
+                                                              AA on the page ground only — the same hole as --lw-text-3. */
   --lw-fg-faint-c: 218.5 17.5% 46.0%; /* @kind color */
   --lw-line-c: 220.5 38.7% 21.8%; /* @kind color */   /* #22304D */
   --lw-line-strong-c: 220.5 38.7% 28.0%; /* @kind color */
@@ -597,6 +604,7 @@
      both numbers were wrong and the first inverted the conclusion.) */
   --lw-brand-text-c: var(--lw-brand-400-c); /* @kind color */
   --lw-cta-text-c: var(--lw-cta-400-c); /* @kind color */
+  --lw-brand-on-c: var(--lw-brand-300-c); /* @kind color */
   --lw-success-on-c: 158.1 64.4% 51.6%; /* @kind color */    /* #34D399 */
   --lw-warning-on-c: var(--lw-cta-400-c); /* @kind color */    /* #FBC42D — the amber anchor */
   --lw-danger-on-c: 0     90.6% 70.8%; /* @kind color */    /* #F87171 — 6.77 on paper */
@@ -631,12 +639,13 @@
     --lw-bg-inset-c: 221.1 45.2% 16.5%; /* @kind color */
     --lw-fg-c: 215   33.3% 92.9%; /* @kind color */
     --lw-fg-muted-c: 218.7 21.7% 72.0%; /* @kind color */
-    --lw-fg-subtle-c: 218.5 17.5% 56.3%; /* @kind color */
+    --lw-fg-subtle-c: 218.5 17.5% 57.5%; /* @kind color */
     --lw-fg-faint-c: 218.5 17.5% 46.0%; /* @kind color */
     --lw-line-c: 220.5 38.7% 21.8%; /* @kind color */
     --lw-line-strong-c: 220.5 38.7% 28.0%; /* @kind color */
     --lw-brand-text-c: var(--lw-brand-400-c); /* @kind color */
     --lw-cta-text-c: var(--lw-cta-400-c); /* @kind color */
+    --lw-brand-on-c: var(--lw-brand-300-c); /* @kind color */
     --lw-success-on-c: 158.1 64.4% 51.6%; /* @kind color */
     --lw-warning-on-c: var(--lw-cta-400-c); /* @kind color */
     --lw-danger-on-c: 0     90.6% 70.8%; /* @kind color */
@@ -675,6 +684,7 @@
     --lw-line-strong-c:var(--lw-border-2-c);
     --lw-brand-text-c:var(--lw-brand-500-c);
     --lw-cta-text-c:var(--lw-cta-700-c);
+    --lw-brand-on-c: var(--lw-brand-700-c); /* @kind color */
     --lw-success-on-c:var(--lw-success-text-c);
     --lw-warning-on-c:var(--lw-warning-text-c);
     --lw-danger-on-c:var(--lw-danger-text-c);
@@ -714,12 +724,13 @@
   --lw-bg-inset-c: 221.1 45.2% 16.5%; /* @kind color */
   --lw-fg-c: 215   33.3% 92.9%; /* @kind color */
   --lw-fg-muted-c: 218.7 21.7% 72.0%; /* @kind color */
-  --lw-fg-subtle-c: 218.5 17.5% 56.3%; /* @kind color */
+  --lw-fg-subtle-c: 218.5 17.5% 57.5%; /* @kind color */
   --lw-fg-faint-c: 218.5 17.5% 46.0%; /* @kind color */
   --lw-line-c: 220.5 38.7% 21.8%; /* @kind color */
   --lw-line-strong-c: 220.5 38.7% 28.0%; /* @kind color */
   --lw-brand-text-c: var(--lw-brand-400-c); /* @kind color */
   --lw-cta-text-c: var(--lw-cta-400-c); /* @kind color */
+  --lw-brand-on-c: var(--lw-brand-300-c); /* @kind color */
   --lw-success-on-c: 158.1 64.4% 51.6%; /* @kind color */
   --lw-warning-on-c: var(--lw-cta-400-c); /* @kind color */
   --lw-danger-on-c: 0     90.6% 70.8%; /* @kind color */
@@ -764,12 +775,13 @@
   --lw-bg-inset-c: 221.1 45.2% 16.5%; /* @kind color */
   --lw-fg-c: 215   33.3% 92.9%; /* @kind color */
   --lw-fg-muted-c: 218.7 21.7% 72.0%; /* @kind color */
-  --lw-fg-subtle-c: 218.5 17.5% 56.3%; /* @kind color */
+  --lw-fg-subtle-c: 218.5 17.5% 57.5%; /* @kind color */
   --lw-fg-faint-c: 218.5 17.5% 46.0%; /* @kind color */
   --lw-line-c: 220.5 38.7% 21.8%; /* @kind color */
   --lw-line-strong-c: 220.5 38.7% 28.0%; /* @kind color */
   --lw-brand-text-c: var(--lw-brand-400-c); /* @kind color */
   --lw-cta-text-c: var(--lw-cta-400-c); /* @kind color */
+  --lw-brand-on-c: var(--lw-brand-300-c); /* @kind color */
   --lw-success-on-c: 158.1 64.4% 51.6%; /* @kind color */
   --lw-warning-on-c: var(--lw-cta-400-c); /* @kind color */
   --lw-danger-on-c: 0     90.6% 70.8%; /* @kind color */
@@ -805,6 +817,7 @@
   --lw-line-strong-c: var(--lw-border-2-c); /* @kind color */
   --lw-brand-text-c: var(--lw-brand-500-c); /* @kind color */
   --lw-cta-text-c: var(--lw-cta-700-c); /* @kind color */
+  --lw-brand-on-c: var(--lw-brand-700-c); /* @kind color */
   --lw-success-on-c: var(--lw-success-text-c); /* @kind color */
   --lw-warning-on-c: var(--lw-warning-text-c); /* @kind color */
   --lw-danger-on-c: var(--lw-danger-text-c); /* @kind color */
@@ -854,6 +867,7 @@
   --lw-line-strong: hsl(var(--lw-line-strong-c));
   --lw-brand-text: hsl(var(--lw-brand-text-c));
   --lw-cta-text:   hsl(var(--lw-cta-text-c));
+  --lw-brand-on:     hsl(var(--lw-brand-on-c));
   --lw-success-on:   hsl(var(--lw-success-on-c));
   --lw-success-soft: hsl(var(--lw-success-soft-c));
   --lw-warning-on:   hsl(var(--lw-warning-on-c));

@@ -58,7 +58,14 @@ const byTheme = { base: {}, light: {}, dark: {}, compact: {}, comfortable: {} };
 const scopes = new Set();
 
 for (const [, selRaw, body] of blocks) {
-  const sel = selRaw.trim();
+  // A statement at-rule terminates with `;`, not a block, so the leading
+  // `@import url("./fonts.css");` lands in the NEXT match's selector capture.
+  // Trimming to the last `;` is what stops it being read as an at-rule and
+  // skipped — without it the whole main :root palette block (every brand /
+  // cta / navy / surface channel) was dropped, and the parity gate below then
+  // policed a set that did not contain the channels it exists to police.
+  // lw-contrast-check.mjs solves the same case the same way.
+  const sel = selRaw.slice(selRaw.lastIndexOf(";") + 1).trim();
   if (sel.startsWith("@")) continue;
   const theme = THEME(sel);
   scopes.add(sel);
@@ -78,7 +85,12 @@ const nest = (flat) => {
     let node = out;
     parts.forEach((p, i) => {
       if (i === parts.length - 1) {
-        node[p] = { $value: value, $type: KIND(name, value, hints.get(name)) };
+        const leaf = { $value: value, $type: KIND(name, value, hints.get(name)) };
+        // Group-then-leaf is the mirror of the case handled below: `brand-500-c`
+        // creates the group `brand.500`, and `brand-500` arriving after it would
+        // overwrite that group with a leaf and take every channel under it with
+        // it. Same answer — the leaf becomes DEFAULT beside its siblings.
+        node[p] = node[p] && !node[p].$value ? { ...node[p], DEFAULT: leaf } : leaf;
       } else {
         node[p] = node[p] || {};
         // A token that is both a group and a leaf (foo and foo-bar) needs the leaf
@@ -99,8 +111,24 @@ const nest = (flat) => {
 // those inks sit on fills that do not follow the theme (the cyan button is cyan on
 // both grounds), so an ink that DID follow would put 1.77 contrast on the amber.
 // They are literal triples on purpose — README §Accessibility, third hole.
+//
+// The PALETTE is exempt for the same reason, and this exemption only became
+// load-bearing when the parse defect above was fixed — until then `base` never
+// contained a palette channel, so the gate never had to have an opinion. A
+// numbered ramp (`brand-500`, `surface-2`, `text-3`), the navy constants and the
+// status FILLS are fixed values: the cyan is the same cyan on both grounds, and
+// what follows the theme is the ROLE composed from them (`fg`, `bg`, `line`,
+// `brand-text`, `*-on`, `*-soft`). Requiring a ramp to re-point would demand
+// exactly what README rule 2 forbids. `--lw-{status}-text-c` is likewise a light
+// palette constant — the theme-following role is `--lw-{status}-on-c`, which
+// points at it on light and IS re-pointed on dark.
 const THEMABLE = /^--lw-(fg|bg|line|brand|navy|cta|success|warning|danger|neutral|surface|text|border|diff|chart|shadow)/;
-const EXEMPT = /^--lw-on-/;
+const EXEMPT = new RegExp([
+  /^--lw-on-/,                                        // inks on theme-invariant fills
+  /^--lw-(brand|cta|surface|text|border)-\d+-c$/,     // numbered palette ramps
+  /^--lw-navy-(700|900|deep)-c$/,                     // the mark's navy constants
+  /^--lw-(success|warning|danger|neutral)(-text)?-c$/, // status fills + their light ink
+].map((r) => "(?:" + r.source + ")").join("|"));
 const problems = [];
 for (const theme of ["dark"]) {
   const t = byTheme[theme] || {};

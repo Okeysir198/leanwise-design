@@ -264,7 +264,7 @@
 span.lw-kpi-icon, .lw-kpi-badge {
   flex: none; display: inline-flex; align-items: center; justify-content: center;
   width: 34px; height: 34px; border-radius: var(--lw-radius-md);
-  background: var(--lw-brand-soft); color: var(--lw-brand-text);
+  background: var(--lw-brand-soft); color: var(--lw-brand-on);
 }
 span.lw-kpi-icon[data-accent="pos"], .lw-kpi-badge[data-accent="pos"] { background: var(--lw-success-soft); color: var(--lw-success-on); }
 span.lw-kpi-icon[data-accent="neg"], .lw-kpi-badge[data-accent="neg"] { background: var(--lw-danger-soft); color: var(--lw-danger-on); }
@@ -289,7 +289,7 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
    improvement red. Tone defaults to direction; pass `tone` to override.
    And direction is never colour alone — the arrow icon carries it too. */
 .lw-kpi .d .lw-icon, .lw-stat-delta .lw-icon { align-self: center; flex: none; }
-.lw-kpi .d .w { color: var(--lw-fg-faint); }
+.lw-kpi .d .w { color: var(--lw-fg-subtle); }
 .lw-kpi .d.pos { color: var(--lw-success-on); }
 .lw-kpi .d.neg { color: var(--lw-danger-on); }
 
@@ -305,7 +305,7 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 @keyframes lwShimmer { to { transform: translateX(100%); } }
 
 /* AVATAR — initials by default; an image only if there is one. */
-.lw-avatar { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; flex: none; border-radius: 50%; background: var(--lw-brand-soft); color: var(--lw-brand-text); font-size: 12px; font-weight: var(--lw-fw-medium); letter-spacing: 0.01em; overflow: hidden; user-select: none; }
+.lw-avatar { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; flex: none; border-radius: 50%; background: var(--lw-brand-soft); color: var(--lw-brand-on); font-size: 12px; font-weight: var(--lw-fw-medium); letter-spacing: 0.01em; overflow: hidden; user-select: none; }
 .lw-avatar img { width: 100%; height: 100%; object-fit: cover; }
 .lw-avatar-sm { width: 24px; height: 24px; font-size: 10px; }
 .lw-avatar-lg { width: 44px; height: 44px; font-size: 15px; }
@@ -335,7 +335,7 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
    rather than polish — and a transitioned property reports its START value to
    getComputedStyle until frames advance, which makes the highlight untestable
    and cost this panel several rounds of misdiagnosis. Hover keeps its snap. */
-.lw-toc a[aria-current] { color: var(--lw-brand-text); font-weight: var(--lw-fw-medium); background: var(--lw-brand-soft); }
+.lw-toc a[aria-current] { color: var(--lw-brand-on); font-weight: var(--lw-fw-medium); background: var(--lw-brand-soft); }
 
 /* BREADCRUMB — mono, so it reads as a path rather than as prose. */
 .lw-crumbs { display: flex; flex-wrap: nowrap; min-width: 0; overflow: hidden; align-items: center; gap: 6px; font-family: var(--lw-font-mono); font-size: var(--lw-text-xs); color: var(--lw-fg-subtle); }
@@ -436,12 +436,12 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
 .lw-nav-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--lw-radius-sm); font-size: var(--lw-text-sm); color: var(--lw-fg-muted); text-decoration: none; cursor: pointer; border: 0; background: none; font-family: inherit; width: 100%; text-align: left; transition: background var(--lw-dur-xs) var(--lw-ease-out), color var(--lw-dur-xs) var(--lw-ease-out); }
 .lw-nav-item .ic { width: 20px; height: 20px; flex: none; display: inline-flex; align-items: center; justify-content: center; font-size: 17px; opacity: 0.9; }
 .lw-nav-item .lw-nav-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.lw-nav-item .badge { margin-left: auto; font-family: var(--lw-font-mono); font-size: 10px; color: var(--lw-fg-subtle); }
+.lw-nav-item .badge { margin-left: auto; font-family: var(--lw-font-mono); font-size: 10px; color: var(--lw-fg-muted); }
 .lw-nav-item:hover { background: var(--lw-bg-muted); color: var(--lw-fg); }
 .lw-nav-item:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
 /* Active is a tint plus brand ink — not a left accent bar, which is the one
    marker this system deliberately does not use. */
-.lw-nav-item[aria-current="page"], .lw-nav-item.is-active { background: var(--lw-brand-soft); color: var(--lw-brand-text); font-weight: var(--lw-fw-medium); }
+.lw-nav-item[aria-current="page"], .lw-nav-item.is-active { background: var(--lw-brand-soft); color: var(--lw-brand-on); font-weight: var(--lw-fw-medium); }
 .lw-nav-item[aria-current="page"] .ic, .lw-nav-item.is-active .ic { opacity: 1; }
 
 /* ICON — one 24-grid, currentColor only, so an icon cannot introduce ink the
@@ -574,7 +574,7 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
 
 /* SOURCE — the citation atom. A numbered mono chip so a claim in the answer and
    the document behind it share one identifier. */
-.lw-source { display: inline-flex; align-items: center; gap: 5px; height: 18px; padding: 0 6px; border-radius: var(--lw-radius-xs); background: var(--lw-brand-soft); color: var(--lw-brand-text); font-family: var(--lw-font-mono); font-size: 10.5px; line-height: 1; text-decoration: none; vertical-align: 2px; border: 0; cursor: pointer; transition: background var(--lw-dur-xs) var(--lw-ease-out); }
+.lw-source { display: inline-flex; align-items: center; gap: 5px; height: 18px; padding: 0 6px; border-radius: var(--lw-radius-xs); background: var(--lw-brand-soft); color: var(--lw-brand-on); font-family: var(--lw-font-mono); font-size: 10.5px; line-height: 1; text-decoration: none; vertical-align: 2px; border: 0; cursor: pointer; transition: background var(--lw-dur-xs) var(--lw-ease-out); }
 .lw-source:hover { background: hsl(var(--lw-brand-500-c) / 0.24); }
 .lw-source:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
 .lw-source-list { display: flex; flex-direction: column; gap: var(--lw-space-8); }
@@ -803,7 +803,7 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
   display: inline-flex; align-items: center; gap: var(--lw-space-4);
   height: 22px; padding: 0 var(--lw-space-4) 0 var(--lw-space-8);
   border-radius: var(--lw-radius-xs);
-  background: var(--lw-brand-soft); color: var(--lw-brand-text);
+  background: var(--lw-brand-soft); color: var(--lw-brand-on);
   font-size: var(--lw-text-xs); font-weight: var(--lw-fw-medium); max-width: 200px;
 }
 .lw-combo-token span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -988,7 +988,7 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
   transition: border-color var(--lw-dur-sm) var(--lw-ease-out), background var(--lw-dur-sm) var(--lw-ease-out);
 }
 .lw-dropzone:hover { border-color: var(--lw-fg-subtle); }
-.lw-dropzone[data-over="true"] { border-color: var(--lw-brand-500); background: var(--lw-brand-soft); color: var(--lw-brand-text); }
+.lw-dropzone[data-over="true"] { border-color: var(--lw-brand-500); background: var(--lw-brand-soft); color: var(--lw-brand-on); }
 .lw-dropzone:focus-within { outline: none; box-shadow: var(--lw-focus-ring); border-color: var(--lw-brand-500); }
 .lw-dropzone[data-disabled="true"] { background: var(--lw-bg-muted); color: var(--lw-fg-faint); cursor: not-allowed; }
 .lw-dropzone input[type="file"] { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); }
@@ -1091,7 +1091,7 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
   position: relative; z-index: var(--lw-z-local-1);
 }
 .lw-stepper-step[data-state="done"] .lw-stepper-marker { background: var(--lw-brand-500); border-color: var(--lw-brand-500); color: var(--lw-on-brand); }
-.lw-stepper-step[data-state="current"] .lw-stepper-marker { border-color: var(--lw-brand-500); color: var(--lw-brand-text); box-shadow: 0 0 0 3px var(--lw-brand-soft); }
+.lw-stepper-step[data-state="current"] .lw-stepper-marker { border-color: var(--lw-brand-500); color: var(--lw-brand-on); box-shadow: 0 0 0 3px var(--lw-brand-soft); }
 .lw-stepper-step[data-state="error"] .lw-stepper-marker { background: var(--lw-danger); border-color: var(--lw-danger); color: var(--lw-on-danger); }
 .lw-stepper-label { font-size: var(--lw-text-sm); font-weight: var(--lw-fw-medium); color: var(--lw-fg-muted); max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
 .lw-stepper-step[data-state="current"] .lw-stepper-label { color: var(--lw-fg); }
@@ -1195,8 +1195,8 @@ a.lw-feed-item:hover, button.lw-feed-item:hover { background: var(--lw-bg-subtle
 .lw-diff-file { flex: 1; min-width: 0; font-family: var(--lw-font-mono); font-size: var(--lw-text-xs); color: var(--lw-fg-muted); overflow: hidden; text-overflow: ellipsis; }
 .lw-diff-lines { margin: 0; font-family: var(--lw-font-mono); font-size: var(--lw-text-xs); line-height: 1.65; }
 .lw-diff-line { display: grid; grid-template-columns: 34px 14px 1fr; align-items: baseline; }
-.lw-diff-line .n { text-align: right; padding-right: var(--lw-space-8); color: var(--lw-fg-faint); user-select: none; }
-.lw-diff-line .s { text-align: center; color: var(--lw-fg-subtle); user-select: none; }
+.lw-diff-line .n { text-align: right; padding-right: var(--lw-space-8); color: var(--lw-fg-muted); user-select: none; }
+.lw-diff-line .s { text-align: center; color: var(--lw-fg-muted); user-select: none; }
 .lw-diff-line .t { padding-right: var(--lw-space-12); white-space: pre-wrap; word-break: break-word; color: var(--lw-fg); }
 .lw-diff-line[data-kind="add"] { background: var(--lw-diff-add); box-shadow: inset 2px 0 0 var(--lw-diff-add-line); }
 .lw-diff-line[data-kind="del"] { background: var(--lw-diff-del); box-shadow: inset 2px 0 0 var(--lw-diff-del-line); }
@@ -1218,7 +1218,7 @@ a.lw-feed-item:hover, button.lw-feed-item:hover { background: var(--lw-bg-subtle
 
 /* ---- Feedback ------------------------------------------------------------------- */
 .lw-feedback { display: flex; align-items: center; gap: var(--lw-space-4); }
-.lw-feedback .lw-icon-btn[aria-pressed="true"] { color: var(--lw-brand-text); background: var(--lw-brand-soft); }
+.lw-feedback .lw-icon-btn[aria-pressed="true"] { color: var(--lw-brand-on); background: var(--lw-brand-soft); }
 .lw-feedback-note { font-size: var(--lw-text-xs); color: var(--lw-fg-subtle); }
 
 /* ---- State views ------------------------------------------------------------------
@@ -1238,7 +1238,7 @@ a.lw-feed-item:hover, button.lw-feed-item:hover { background: var(--lw-bg-subtle
    template never has to compute a colour — a colour computed in a logic class is
    a colour the stylesheet cannot re-point on the dark ground. */
 .lw-job-ic { flex: none; display: grid; place-items: center; width: 34px; height: 34px; border-radius: var(--lw-radius-md); background: var(--lw-bg-inset); color: var(--lw-fg-subtle); }
-.lw-job[data-status="running"] .lw-job-ic { background: var(--lw-brand-soft); color: var(--lw-brand-text); }
+.lw-job[data-status="running"] .lw-job-ic { background: var(--lw-brand-soft); color: var(--lw-brand-on); }
 .lw-job[data-status="done"] .lw-job-ic { background: var(--lw-success-soft); color: var(--lw-success-on); }
 .lw-job[data-status="failed"] .lw-job-ic { background: var(--lw-danger-soft); color: var(--lw-danger-on); }
 .lw-job-meta { font-family: var(--lw-font-mono); font-size: var(--lw-text-xs); color: var(--lw-fg-subtle); font-variant-numeric: tabular-nums; }
@@ -1304,7 +1304,7 @@ a.lw-feed-item:hover, button.lw-feed-item:hover { background: var(--lw-bg-subtle
 .lw-editor:focus-within { border-color: var(--lw-brand-500); box-shadow: var(--lw-focus-ring); }
 .lw-editor-bar { flex: none; display: flex; align-items: center; gap: 2px; flex-wrap: wrap; padding: var(--lw-space-4) var(--lw-space-4); border-bottom: 1px solid var(--lw-line); background: var(--lw-bg-subtle); }
 .lw-editor-bar .sep { width: 1px; height: 18px; margin: 0 var(--lw-space-4); background: var(--lw-line); }
-.lw-editor-bar .lw-icon-btn[aria-pressed="true"] { background: var(--lw-brand-soft); color: var(--lw-brand-text); }
+.lw-editor-bar .lw-icon-btn[aria-pressed="true"] { background: var(--lw-brand-soft); color: var(--lw-brand-on); }
 .lw-editor-body {
   padding: var(--lw-space-16); min-height: 160px; max-height: 420px; overflow: auto;
   font-size: var(--lw-text-body); line-height: 1.65; color: var(--lw-fg); outline: none;

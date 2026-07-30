@@ -42,6 +42,33 @@
     var n = (s || '').match(/[\d.]+/g);
     return n ? [+n[0], +n[1], +n[2]] : WHITE;
   }
+  /** Composite a possibly-translucent computed color over its opaque ancestor. */
+  function flatten(css, host) {
+    var n = (css || '').match(/[\d.]+/g);
+    if (!n) return WHITE;
+    var c = [+n[0], +n[1], +n[2]];
+    var a = n.length > 3 ? +n[3] : 1;
+    if (a >= 1) return c;
+    // Walk to the first OPAQUE ancestor background. Every ancestor is usually
+    // transparent up to the root, so the fallback matters more than the walk:
+    // it must be --lw-bg (which re-points on dark), never a hardcoded white —
+    // assuming white is how the dark cta-soft swatch got navy ink at 1.26.
+    var under = null;
+    for (var el = host; el && el.nodeType === 1; el = el.parentNode) {
+      var m = (getComputedStyle(el).backgroundColor || '').match(/[\d.]+/g);
+      if (m && (m.length < 4 || +m[3] >= 1)) { under = [+m[0], +m[1], +m[2]]; break; }
+    }
+    if (!under) {
+      var probe = document.createElement('span');
+      probe.style.cssText = 'display:none;background:var(--lw-bg)';
+      document.body.appendChild(probe);
+      var pm = (getComputedStyle(probe).backgroundColor || '').match(/[\d.]+/g);
+      probe.remove();
+      under = pm ? [+pm[0], +pm[1], +pm[2]] : WHITE;
+    }
+    return c.map(function (v, i) { return a * v + (1 - a) * under[i]; });
+  }
+
   function hex(c) {
     return '#' + c.map(function (v) {
       return ('0' + Math.round(v).toString(16)).slice(-2);
@@ -54,7 +81,12 @@
       var token = el.getAttribute('data-swatch');
       el.style.background = 'var(--lw-' + token + ')';
 
-      var bg = parse(getComputedStyle(el).backgroundColor);
+      // The `-soft` tints are authored as `hsl(<channel> / .14)`, so the computed
+      // background is rgba and parse() would hand back the OPAQUE channel — for
+      // cta-soft, full amber. The picker then chose navy ink and painted it on a
+      // near-black tint: 1.26:1, on the very card whose job is to publish ratios.
+      // Flatten over what the swatch actually sits on before deciding.
+      var bg = flatten(getComputedStyle(el).backgroundColor, el.parentNode);
       var pin = el.getAttribute('data-ink');
       var ink = pin === 'white' ? WHITE
               : pin === 'navy' ? NAVY
@@ -143,4 +175,10 @@
     // Theme flip re-points the tokens; the derived values must follow.
     setTimeout(hydrate, 0);
   });
+  // …and the OS preference is not how a theme is usually flipped. A consumer sets
+  // `.dark` / `data-theme` on <html>, and that path had no re-hydrate at all: the
+  // swatches kept their light-mode ink over a dark-mode plate — navy on the dark
+  // cta-soft tint measured 1.26, on the card whose purpose is publishing ratios.
+  new MutationObserver(function () { setTimeout(hydrate, 0); })
+    .observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'data-theme'] });
 })();

@@ -32,6 +32,10 @@ export function RichText({
   label, readOnly, footer, children, className, ...rest
 }) {
   const ref = React.useRef(null);
+  // The toolbar's aria-controls was the literal string "rt" — an IDREF pointing at
+  // nothing, in every instance on the page. A dangling IDREF is worse than no
+  // attribute: a screen reader announces a relationship that does not exist.
+  const bodyId = React.useId();
   const [active, setActive] = React.useState({});
   const list = tools ? TOOLS.filter(t => t.sep || tools.includes(t.id)) : TOOLS;
 
@@ -73,7 +77,7 @@ export function RichText({
 
   return (
     <div className={cx("lw-editor", className)} {...rest}>
-      <div className="lw-editor-bar" role="toolbar" aria-label={(label || "Editor") + " formatting"} aria-controls="rt">
+      <div className="lw-editor-bar" role="toolbar" aria-label={(label || "Editor") + " formatting"} aria-controls={children ? undefined : bodyId}>
         {list.map((t, i) => t.sep ? <span key={"s" + i} className="sep" aria-hidden="true" />
           : (
             <button key={t.id} type="button" className="lw-icon-btn" aria-label={t.label} title={t.label}
@@ -86,7 +90,7 @@ export function RichText({
           ))}
       </div>
       {children || (
-        <div ref={ref} className="lw-editor-body" contentEditable={!readOnly} suppressContentEditableWarning
+        <div ref={ref} id={bodyId} className="lw-editor-body" contentEditable={!readOnly} suppressContentEditableWarning
           role="textbox" aria-multiline="true" aria-label={label} data-placeholder={placeholder}
           onInput={() => onChange && onChange(ref.current.innerHTML)}
           onKeyUp={syncActive} onMouseUp={syncActive} />

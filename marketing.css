@@ -440,6 +440,11 @@
 .lw-logo-item.is-text {
   width: auto; height: auto;
   background: none;
+  /* The rail dims its marks with opacity: 0.42, which is right for a masked
+     GRAPHIC and wrong for a wordmark — as text it measured 2.77. Text carries
+     the same recede with a muted ink at full opacity, and that one is AA. */
+  opacity: 1;
+  color: var(--lw-fg-subtle);
   -webkit-mask: none; mask: none;
   font-family: var(--lw-font-mono);
   font-size: 12.5px;

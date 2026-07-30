@@ -2470,7 +2470,7 @@ function ActivityFeed({
   });
   return /*#__PURE__*/React.createElement("div", _extends({
     className: cx("lw-feed", className),
-    role: "feed",
+    role: "group",
     "aria-label": label
   }, rest), groups.map((g, gi) => /*#__PURE__*/React.createElement(React.Fragment, {
     key: g.name ?? gi
@@ -4002,6 +4002,7 @@ function RichText({
   className,
   ...rest
 }) {
+  const _lwRtBodyId = React.useId();
   const ref = React.useRef(null);
   const [active, setActive] = React.useState({});
   const list = tools ? TOOLS.filter(t => t.sep || tools.includes(t.id)) : TOOLS;
@@ -4048,7 +4049,7 @@ function RichText({
     className: "lw-editor-bar",
     role: "toolbar",
     "aria-label": (label || "Editor") + " formatting",
-    "aria-controls": "rt"
+    "aria-controls": _lwRtBodyId
   }, list.map((t, i) => t.sep ? /*#__PURE__*/React.createElement("span", {
     key: "s" + i,
     className: "sep",
@@ -4074,6 +4075,7 @@ function RichText({
     size: 15
   })))), children || /*#__PURE__*/React.createElement("div", {
     ref: ref,
+    id: _lwRtBodyId,
     className: "lw-editor-body",
     contentEditable: !readOnly,
     suppressContentEditableWarning: true,

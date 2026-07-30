@@ -111,6 +111,16 @@ function walk(dir, out = []) {
 
 let violations = 0;
 
+// A missing target is a wiring mistake, not a crash: this script is pointed at a
+// CONSUMER's source tree, and the path is whatever the caller typed. An ENOENT
+// stack says nothing about which argument was wrong or what the modes are.
+if (!existsSync(target)) {
+  console.error(`lw-token-lint: no such path: ${target}`);
+  console.error("  TSX mode expects a source directory, e.g. `lw-token-lint ../my-app/src`.");
+  console.error("  To self-check this package's CSS layers instead, run with --css and no path.");
+  process.exit(2);
+}
+
 for (const file of walk(target)) {
   const rel = relative(process.cwd(), file);
   const src = readFileSync(file, "utf8");

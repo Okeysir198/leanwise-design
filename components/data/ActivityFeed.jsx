@@ -35,8 +35,14 @@ export function ActivityFeed({ items = [], onItemClick, grouped = true, now = Da
     if (last && last.name === g) last.items.push(it);
     else groups.push({ name: g, items: [it] });
   });
+  /* NOT role="feed". That role obliges aria-posinset / aria-setsize on every
+     entry, managed focus, and role="article" children — none of which this
+     implements, and the group headings sitting between items cannot be feed
+     children at all. Claiming a role you do not honour is worse than claiming
+     none. A labelled grouping of entries is role="group", the same call
+     .lw-diff already makes. */
   return (
-    <div className={cx("lw-feed", className)} role="feed" aria-label={label} {...rest}>
+    <div className={cx("lw-feed", className)} role="group" aria-label={label} {...rest}>
       {groups.map((g, gi) => (
         <React.Fragment key={g.name ?? gi}>
           {g.name && <div className="lw-feed-group">{g.name}</div>}
