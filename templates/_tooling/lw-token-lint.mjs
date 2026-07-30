@@ -52,7 +52,7 @@ const arg = process.argv[2];
 // Function declaration is hoisted, so it is callable here despite being defined
 // at the bottom of the file.
 if (!arg || arg === "--css") {
-  const errs = cssSelfCheck().concat(jsxSelfCheck());
+  const errs = cssSelfCheck().concat(jsxSelfCheck(), docPinSelfCheck());
   if (errs.length) {
     for (const e of errs) {
       console.error(`${e.file || "css"}  [${e.rule}]  ${e.hit}\n    in \`${e.selector}\` — ${e.msg}`);
@@ -317,6 +317,48 @@ function jsxSelfCheck() {
       file: relative(PKG_ROOT, file),
       msg: 'references `React.` without `import * as React from "react";` — the automatic JSX runtime does not provide the React binding, so this throws for a bundling consumer',
     });
+  }
+  return errs;
+}
+
+/* README's install snippet carries a version pin, and a pin is a SECOND HOME for
+   package.json#version. It went stale immediately: v1.1.7 shipped with the README
+   still telling every new consumer to install `#v1.1.6` — which resolves, installs
+   and builds, so nothing anywhere could notice. That is the whole failure mode this
+   package exists to argue against, sitting in its own front page.
+
+   The rule is deliberately narrow: it does not lint prose about old versions (the
+   CHANGELOG and the consumer table are full of legitimate references to earlier
+   tags). It matches only the dependency-spec form `leanwise-design#vX.Y.Z`, which
+   is a copy-paste target and must always name the version being released. */
+function docPinSelfCheck() {
+  const errs = [];
+  let version;
+  try {
+    version = JSON.parse(readFileSync(join(PKG_ROOT, "package.json"), "utf8")).version;
+  } catch (e) {
+    errs.push({ rule: "no-package-json", hit: "package.json", selector: "-", file: "package.json", msg: String(e.message || e) });
+    return errs;
+  }
+  for (const doc of ["README.md", "CONTRIBUTING.md"]) {
+    let src;
+    try { src = readFileSync(join(PKG_ROOT, doc), "utf8"); } catch { continue; }
+    const pins = [...src.matchAll(/leanwise-design#v(\d+\.\d+\.\d+)/g)];
+    for (const m of pins) {
+      if (m[1] === version) continue;
+      const line = src.slice(0, m.index).split("\n").length;
+      errs.push({
+        rule: "stale-install-pin",
+        hit: `#v${m[1]}`,
+        selector: `${doc}:${line}`,
+        file: doc,
+        msg: `install pin names v${m[1]} but package.json is ${version} — a consumer copying this line installs the wrong release, and it resolves cleanly so nothing catches it. Bump both in the release commit.`,
+      });
+    }
+    if (doc === "README.md" && !pins.length) {
+      errs.push({ rule: "no-install-pin", hit: "README.md", selector: "README.md", file: doc,
+        msg: "no `leanwise-design#vX.Y.Z` install pin found — if the install snippet moved, move this rule with it rather than leaving it asserting nothing" });
+    }
   }
   return errs;
 }

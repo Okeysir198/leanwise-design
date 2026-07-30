@@ -1,6 +1,6 @@
 {
   "name": "@leanwise/design",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "LeanWise Design System — token core, CSS layers, React components, twelve templates.",
   "license": "UNLICENSED",
   "private": false,
@@ -36,7 +36,6 @@
       "require": "./tailwind-preset.cjs",
       "default": "./tailwind-preset.cjs"
     },
-    "./components/*": "./components/*",
     "./tokens.css": "./tokens.css",
     "./fonts.css": "./fonts.css",
     "./shadcn.css": "./shadcn.css",

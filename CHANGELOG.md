@@ -24,6 +24,40 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 Nothing yet.
 
+## [1.1.8] — 2026-07-31
+
+Two documentation defects, both of the kind this package exists to argue against: a fact
+with two homes, drifting silently.
+
+### Removed
+
+- **The `./components/*` subpath export.** README states in two places that "there is no deep
+  path into `components/`, so a component can move without breaking a consumer" — and
+  `package.json` had exported `./components/*` since v1.1.5, quietly making every file path
+  under `components/` public API. The documented contract is the intended one, so the export
+  goes rather than the guarantee. Removing it inside a minor is a deliberate exception to the
+  deprecation policy on two grounds: it was never documented (so nothing could have been
+  written against it in good faith), and all three consumers are pinned pre-1.1.0, so the
+  installed-user count is zero. **This is the cheapest moment it will ever be.** Import from
+  `@leanwise/design/react`.
+
+### Fixed
+
+- **README's install pin said `#v1.1.6` while the package was `1.1.7`.** A consumer copying
+  that line installs the previous release — and it resolves, installs and builds, so nothing
+  anywhere notices. A version number in a document is a second home for
+  `package.json#version`, sitting on the front page of the package whose whole thesis is that
+  consistency should be a dependency rather than a discipline.
+
+### Added
+
+- **`stale-install-pin`**, a self-check rule, so the above cannot recur: the
+  `leanwise-design#vX.Y.Z` spec in `README.md`/`CONTRIBUTING.md` must equal
+  `package.json#version`. Deliberately narrow — it matches only the dependency-spec form, not
+  prose about older versions, of which the CHANGELOG and the consumer table are legitimately
+  full. It also fails if the install pin disappears entirely, so the rule cannot end up
+  asserting nothing.
+
 ## [1.1.7] — 2026-07-31
 
 Closed every item the v1.1.6 audit left open. Three of them were **live user-facing defects
