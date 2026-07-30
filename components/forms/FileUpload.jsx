@@ -51,7 +51,7 @@ export function FileUpload({
         <span className="lw-dz-title">{title}</span>
         <span className="lw-dz-hint">{hint || (accept ? accept + (maxSize ? " · up to " + formatBytes(maxSize) : "") : maxSize ? "Up to " + formatBytes(maxSize) : "or click to browse")}</span>
       </label>
-      {rejected && <div className="lw-error" role="alert" style={{ marginTop: "var(--lw-space-8)" }}>{rejected}</div>}
+      {rejected && <div className="lw-error" role="alert">{rejected}</div>}
       {files.length > 0 && (
         <div className="lw-file-list">
           {files.map((f, i) => (

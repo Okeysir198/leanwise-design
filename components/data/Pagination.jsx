@@ -38,9 +38,9 @@ export function Pagination({
       <span className="lw-pag-info">
         {cursor ? "Page " + page : total ? nf.format(from) + "–" + nf.format(to) + " of " + nf.format(total) : ""}
       </span>
-      <span className="lw-pag-spacer" />
+      <span className="lw-spacer" />
       {onPageSizeChange && !cursor && (
-        <select className="lw-input lw-input-sm" style={{ width: "auto" }} aria-label="Rows per page"
+        <select className="lw-input lw-input-sm lw-pag-size" aria-label="Rows per page"
           value={pageSize} onChange={(e) => onPageSizeChange(Number(e.target.value))}>
           {pageSizes.map(s => <option key={s} value={s}>{s} / page</option>)}
         </select>

@@ -17,7 +17,7 @@ export function Sidebar({ items = [], collapsed = false, footer, className, chil
           : <NavItem key={it.id ?? i} {...it} collapsed={collapsed} />
       )}
       {children}
-      {footer && <div style={{ marginTop: "auto" }}>{footer}</div>}
+      {footer && <div className="lw-sidebar-foot">{footer}</div>}
     </nav>
   );
 }

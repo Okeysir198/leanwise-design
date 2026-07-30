@@ -1,4 +1,14 @@
-@import url("_fonts.css");
+/* tokens.css @imports ./fonts.css, which points at ./fonts/*.woff2 — and those
+   URLs resolve relative to fonts.css, so they are correct from any card depth and
+   over file://, which is how both browser gates load a card. That is why there is
+   no longer a `_fonts.css` here: it was 140 KB of base64 mirroring the 147 KB of
+   .woff2 on disk, with no generator linking the two, so re-subsetting the fonts
+   would have gone stale in silence. Measured identical (Geist and Geist Mono both
+   `document.fonts.check()`-ready, same glyph advances) with it removed, at both
+   `preview/*.html` and `components/<cat>/*.card.html`.
+   If a card ever has to render somewhere a relative font URL cannot reach — the
+   Claude Design project's preview frames were that case — the inline copy comes
+   back as a GENERATED artifact with a gate, not as a hand-maintained file. */
 @import url("../tokens.css");
 
 * { box-sizing: border-box; }
@@ -19,9 +29,32 @@ body {
 }
 .card .sub { margin: 0; font-size: 12.5px; color: var(--lw-fg-subtle); line-height: 1.5; max-width: 68ch; }
 .mono { font-family: var(--lw-font-mono); font-variant-numeric: tabular-nums; }
-/* Row label. Cards were each defining .lbl locally and the ones that forgot got
-   15px body text in a 60px column — "space-4" wrapped onto two lines. */
+/* -----------------------------------------------------------------------------
+   TWO label shapes, and they are different things. Getting this wrong is what
+   produced twenty private copies: a card that wanted the eyebrow found `.lbl`
+   already meaning something else and redefined it inline, where — because the
+   inline <style> follows the <link> — the local copy always won and the shared
+   rule became dead code.
+
+   `.lbl`         — the ROW label: a compact identifier in a fixed left column
+                    (`space-4`, `radius-md`). nowrap, because a wrapped token
+                    name doubles the row height and stops being scannable. Cards
+                    were each defining this locally and the ones that forgot got
+                    15px body text in a 60px column.
+   `.lbl-eyebrow` — the SECTION eyebrow that introduces a demo. This is what
+                    twenty cards were redefining `.lbl` to mean. `.pane .lbl`
+                    used to be the same rule under a location-dependent selector,
+                    which is what made the collision possible: the same class
+                    rendered two ways depending on where it sat. Gone — every
+                    eyebrow now says it is one.
+   `.lbl-above`   — composable with either: an eyebrow sitting above its demo in
+                    a plain block, where no grid gap is doing the spacing. Eight
+                    cards inlined this pair.
+   -------------------------------------------------------------------------- */
 .lbl { font-family: var(--lw-font-mono); font-size: 11px; letter-spacing: .06em; color: var(--lw-fg-subtle); white-space: nowrap; }
+.lbl-eyebrow { font-family: var(--lw-font-mono); font-size: 10px; letter-spacing: .14em;
+               text-transform: uppercase; color: var(--lw-fg-subtle); white-space: nowrap; }
+.lbl-above { display: block; margin-bottom: 8px; }
 .grid { display: grid; gap: 10px; }
 .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 
@@ -32,14 +65,17 @@ body {
 .ramp { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 0; border-radius: 8px; overflow: hidden; }
 .ramp .sw { border-radius: 0; }
 
-/* panes */
-.panes { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+/* panes.
+   The gap is 14px, not the 12px this shipped with through v1.1.5: eighteen cards
+   carried a private `.pane` copy that was byte-identical to this rule apart from
+   the gap, and every one of them had raised it (nine to 14, nine to 16). A shared
+   value that no card agreed with is the reason the copies existed. 14 is the
+   consensus and it is within 2px of every card's own choice. */
+.panes { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .pane svg { max-width: 110px; }
-.pane { border-radius: 10px; padding: 20px; display: grid; gap: 12px; align-content: start;
+.pane { border-radius: 10px; padding: 20px; display: grid; gap: 14px; align-content: start;
         background: var(--lw-bg-subtle); color: var(--lw-fg);
         box-shadow: inset 0 0 0 1px var(--lw-line); }
-.pane .lbl { font-family: var(--lw-font-mono); font-size: 10px; letter-spacing: .14em;
-             text-transform: uppercase; color: var(--lw-fg-subtle); }
 
 /* generic */
 table { border-collapse: collapse; width: 100%; font-size: 12.5px; }
@@ -54,6 +90,17 @@ td.mono, th:first-child { white-space: nowrap; }
 /* The logo SVGs carry width/height (they must — mask-size:contain needs an
    intrinsic size). Left alone they lay out at 871px and blow the card open. */
 svg { display: block; width: 100%; height: auto; }
+
+/* Inline code in a caption. Ten cards carried this verbatim, and no CSS layer
+   defines a bare `code` — so the shared rule is the one that renders. Keep it
+   here rather than in a layer: a design system does not get to own `code`.
+   `:not(pre) >` is load-bearing, not tidiness. The ten local copies were bare
+   `code`, which was safe only because none of those ten cards also rendered a
+   `.lw-code` block; promoting it made it global, and `data.card`'s CodeBlock is
+   a `<pre>` on the ALWAYS-DARK code surface — a light `--lw-bg-inset` chip
+   behind on-dark ink, which check:a11y caught as a serious contrast failure. */
+:not(pre) > code { font-family: var(--lw-font-mono); font-size: 12px; background: var(--lw-bg-inset);
+                   padding: 1px 5px; border-radius: var(--lw-radius-xs); }
 
 .pill { font-family: var(--lw-font-mono); font-size: 10px; letter-spacing: .06em;
         padding: 2px 6px; border-radius: 4px; background: var(--lw-brand-soft, rgba(0,0,0,.06));
@@ -73,4 +120,11 @@ svg { display: block; width: 100%; height: auto; }
    restate background, ink and label colour because `.pane` painted from raw tiers
    (--lw-surface-1 / --lw-text-1 / --lw-border-1) that no scope re-points; fixing the
    source deleted all three overrides. If you find yourself re-adding one, the paint
-   is coming from a raw tier again. */
+   is coming from a raw tier again.
+
+   Eighteen cards were re-adding two of them anyway — `.pane.dark{background:
+   var(--lw-navy-deep)}` and `.pane.dark .lbl{color:var(--lw-on-dark-3)}` — as private
+   copies in their own <style>, where they always won. Both are gone. navy-deep is a
+   PALETTE value and on-dark-3 is a raw white alpha; the band's `--lw-bg-subtle` and
+   `--lw-fg-subtle` are the roles, and the eyebrow measures slightly BETTER on them
+   (5.02 vs 4.86) because a flattened .48 alpha is not what the contrast gate models. */

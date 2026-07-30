@@ -7,6 +7,7 @@
 </head>
 <body>
 <x-dc>
+<a class="lw-skip" href="#lw-main">Skip to content</a>
 <!-- @template name="Docs / spec page" description="Three-column documentation page — nav rail, prose with code blocks and callouts, on-this-page index." -->
 <helmet><script src="./ds-base.js"></script>
 <style>@media (prefers-reduced-motion: no-preference){html{scroll-behavior:smooth}}</style></helmet>
@@ -27,7 +28,7 @@
 </div>
 </div>
 
-<main style="padding:36px 48px;min-width:0;display:flex;flex-direction:column;gap:24px">
+<main id="lw-main" style="padding:36px 48px;min-width:0;display:flex;flex-direction:column;gap:24px">
 
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.Breadcrumbs" hint-size="240px,18px" items="{{ crumbs }}"></x-import>
 

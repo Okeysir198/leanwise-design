@@ -14,7 +14,7 @@ export function SourceList({ sources = [], className, ...rest }) {
         <Tag key={s.id ?? i} className="lw-source-item" href={s.href || undefined}
           type={s.href ? undefined : "button"} onClick={s.onClick}>
           <span className="n">{s.n ?? i + 1}</span>
-          <span style={{ minWidth: 0 }}>
+          <span className="lw-source-main">
             <span className="t">{s.title}</span>
             {s.meta && <span className="m">{s.meta}</span>}
           </span>

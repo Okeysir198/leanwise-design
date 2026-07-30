@@ -5,13 +5,10 @@
 <link rel="stylesheet" href="../../base.css">
 <link rel="stylesheet" href="../../marketing.css">
 <link rel="stylesheet" href="../../product.css">
-<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../preview/_vendor/react.development.js"></script>
+<script src="../../preview/_vendor/react-dom.development.js"></script>
+<script src="../../preview/_vendor/babel.min.js"></script>
 <script src="../../_ds_bundle.js"></script>
-<style>.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.pane{padding:20px;display:grid;gap:14px;align-content:start;border-radius:10px}
-.pane.dark{background:var(--lw-navy-deep)}.lbl{font-family:var(--lw-font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--lw-fg-subtle)}
-.pane.dark .lbl{color:var(--lw-on-dark-3)}</style>
 </head><body><div class="card">
 <header><h1>Form controls</h1>
 <p class="sub"><b>Field is the unit.</b> Label, control, and ONE slot that holds either help text or an error — never
@@ -21,7 +18,7 @@ both, because a field showing both is a field whose error is easy to miss. Field
 <p class="sub"><b>Invalid is driven by the ARIA attribute, not a class.</b> The attribute is what a screen reader reads,
 so binding the colour to it makes the two impossible to desync. The focus ring turns red too — a red border with a cyan
 ring reads as "already fixed" the moment it is focused.</p></header>
-<div class="two"><div class="pane" id="light"></div><div class="pane dark lw-band-dark" id="dark"></div></div>
+<div class="panes"><div class="pane" id="light"></div><div class="pane dark lw-band-dark" id="dark"></div></div>
 </div>
 <script type="text/babel">
 const LW = window.LeanWiseDesign_f2d907;
@@ -46,7 +43,7 @@ function Demo({ns}) {
       <Field label="System prompt" htmlFor={ns+"-e"} optional>
         <Textarea id={ns+"-e"} placeholder="Answer only from the retrieved passages…" />
       </Field>
-      <span className="lbl">switch · checkbox · radio · segmented</span>
+      <span className="lbl-eyebrow">switch · checkbox · radio · segmented</span>
       <Stack gap={12}>
         <Switch label="Cite every claim" defaultChecked />
         <Switch label="Allow model fallback" />

@@ -18,7 +18,12 @@ export interface ActivityFeedProps extends React.HTMLAttributes<HTMLDivElement> 
   onItemClick?(item: ActivityItem): void;
   /** Group into Today / Yesterday / This week / Earlier. Default true. */
   grouped?: boolean;
-  /** Inject "now" so the output is deterministic in a test or a specimen. */
+  /**
+   * Inject "now" so the output is deterministic in a test or a specimen.
+   * Left unset it is resolved on MOUNT, not during render — `Date.now()` in the
+   * render body is a hydration mismatch. Until it lands, timestamps show their
+   * absolute date and the day headings are held back.
+   */
   now?: number;
   label?: string;
 }

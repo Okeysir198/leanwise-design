@@ -312,6 +312,10 @@
    flush against each other, because the roles all zero their margins and nothing
    here supplied the gap. */
 .lw-hero-dark > .lw-container { display: flex; flex-direction: column; align-items: flex-start; gap: var(--lw-space-20, 20px); }
+/* The action row sits further from the lead than the stack gap gives it. A hero's
+   CTA is the one thing on the section that is not prose, and running it at the
+   same rhythm as the paragraphs above reads as another line of copy. */
+.lw-hero-dark .lw-hero-actions { margin-top: var(--lw-space-24); }
 .lw-hero-dark .lw-h1,
 .lw-hero-dark .lw-h2,
 .lw-hero-dark .lw-h3 { color: var(--lw-on-dark-1); }
@@ -410,7 +414,7 @@
   align-items: center;
   flex: 0 0 auto;
   gap: var(--lw-space-48);
-  padding-right: var(--lw-space-48);
+  padding-inline-end: var(--lw-space-48);
   animation: lwMarquee var(--lw-dur-marquee) linear infinite;
 }
 @keyframes lwMarquee {
@@ -479,7 +483,7 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
   .lw-logo-rail.marquee .lw-logo-track {
     animation: none;
     flex-wrap: wrap;
-    padding-right: 0;
+    padding-inline-end: 0;
   }
   /* With the duplicate track hidden, the rail reads as a plain logo wall. */
   .lw-logo-rail.marquee .lw-logo-track + .lw-logo-track { display: none; }
@@ -506,7 +510,7 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 }
 /* A number without a unit, a direction and a baseline is decoration. These three
    parts are what turn a stat into a reading. */
-.lw-stat .u { font-family: var(--lw-font-mono); font-size: 0.5em; font-weight: 500; color: var(--lw-fg-subtle); letter-spacing: 0; margin-left: 2px; }
+.lw-stat .u { font-family: var(--lw-font-mono); font-size: 0.5em; font-weight: 500; color: var(--lw-fg-subtle); letter-spacing: 0; margin-inline-start: 2px; }
 .lw-stat-row { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
 .lw-stat-delta {
   display: inline-flex; align-items: center; gap: 4px;
@@ -531,6 +535,12 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 /* A reading is not clickable, so a plain tile’s default cursor is right — but this
    rule loads AFTER .lw-card-interactive and was overriding it, so an INTERACTIVE
    tile promised nothing on hover. Scope it to the non-interactive case. */
+/* The tile pins the number instead of inheriting .lw-stat .n's fluid clamp. The
+   clamp tracks the VIEWPORT (28-40px), which is right for a hero stat whose
+   column is the page — and wrong in a KPI grid, where the tile's width is set by
+   the grid and a viewport-driven number grows out of a box that did not. One
+   fixed step, at the middle of the clamp's range. */
+.lw-stat-tile .lw-stat .n { font-size: 32px; }
 .lw-stat-tile:not(.lw-card-interactive):not([role="button"]) { cursor: default; }
 .lw-stat-tile.lw-card-interactive .lw-bar .fill { transition: width var(--lw-duration-slow) var(--lw-ease-out), background var(--lw-duration) var(--lw-ease-out); }
 .dark .lw-stat .n, [data-band="dark"] .lw-stat .n, .lw-band-dark .lw-stat .n { color: var(--lw-on-dark); }
@@ -666,7 +676,7 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
   background: hsl(var(--lw-fg-faint-c) / 0.5);
 }
 .lw-browser-url {
-  margin-left: var(--lw-space-8);
+  margin-inline-start: var(--lw-space-8);
   padding: 3px 12px;
   border-radius: var(--lw-radius-pill);
   background: var(--lw-bg-muted);
@@ -957,7 +967,7 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 .lw-story .meta b { color: var(--lw-brand-text); font-weight: 500; }
 /* The quote needs a mark and a spine, or it reads as a paragraph that happens to have
    quotation marks. A brand hairline down the left is the cheapest honest attribution. */
-.lw-story .lw-story-quote { position: relative; padding-left: 16px; border-left: 2px solid var(--lw-brand-line); }
+.lw-story .lw-story-quote { position: relative; padding-inline-start: 16px; border-inline-start: 2px solid var(--lw-brand-line); }
 .lw-story-result {
   display: inline-flex; align-items: baseline; gap: 8px;
   font-family: var(--lw-font-mono); font-size: 12.5px; letter-spacing: .04em;

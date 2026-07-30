@@ -6,15 +6,20 @@
 <link rel="stylesheet" href="../marketing.css">
 <link rel="stylesheet" href="../product.css">
 <style>
-.two{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
-.pane{padding:18px;border:1px solid var(--lw-line);border-radius:var(--lw-radius-lg);display:grid;gap:var(--lw-stack-gap);align-content:start;background:var(--lw-bg)}
-.lbl{font-family:var(--lw-font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--lw-fg-subtle)}
+/* The two panes are different HEIGHTS — that is the finding, not a layout bug —
+   so they must top-align rather than stretch to the taller one. */
+.panes{align-items:start}
+/* The ONE thing this card's pane may not take from the shared rule: the stack gap
+   has to be the density token, because the whole card exists to show that gap
+   change. Everything else it used to restate (padding, radius, a 1px border that
+   double-drew the shared inset ring, and a `background: var(--lw-bg)` that is
+   exactly the tier-ish override _card.css deleted) is gone. */
+.pane{gap:var(--lw-stack-gap)}
 .row{display:flex;gap:var(--lw-space-8);align-items:center;flex-wrap:wrap}
 .tbl{width:100%;border-collapse:collapse;font-size:var(--lw-text-sm)}
 .tbl td,.tbl th{border-bottom:1px solid var(--lw-line);text-align:left;padding:0 var(--lw-space-8);height:var(--lw-row-h)}
 .tbl th{font-size:var(--lw-text-xs);color:var(--lw-fg-subtle);font-weight:var(--lw-fw-medium)}
 .tbl td.n{font-family:var(--lw-font-mono);text-align:right;font-variant-numeric:tabular-nums}
-code{font-family:var(--lw-font-mono);font-size:12px;background:var(--lw-bg-inset);padding:1px 5px;border-radius:var(--lw-radius-xs)}
 </style>
 </head><body><div class="card">
 <header><h1>Density</h1>
@@ -27,9 +32,9 @@ what components paint with, and only those move.</p>
 the same way <code>brandVars()</code> goes on the workspace and not on <code>&lt;html&gt;</code>. A dashboard is compact
 in its table and comfortable in its filter bar, and that is correct. <b>The 44px touch minimum overrides density</b>,
 set on the token rather than on each control, so it reaches every control including the ones not written yet.</p></header>
-<div class="two">
+<div class="panes">
   <div class="pane" data-density="comfortable">
-    <span class="lbl">comfortable — the default</span>
+    <span class="lbl-eyebrow">comfortable — the default</span>
     <div class="row"><button class="lw-btn lw-btn-brand" type="button">Run query</button><button class="lw-btn lw-btn-ghost" type="button">Cancel</button></div>
     <input class="lw-input" placeholder="Search sources" aria-label="Search sources">
     <table class="tbl"><thead><tr><th>Source</th><th>Status</th><th class="n">Chunks</th></tr></thead>
@@ -38,7 +43,7 @@ set on the token rather than on each control, so it reaches every control includ
     <tr><td>support/tickets</td><td>Queued</td><td class="n">12,004</td></tr></tbody></table>
   </div>
   <div class="pane" data-density="compact">
-    <span class="lbl">compact — desktop workbench</span>
+    <span class="lbl-eyebrow">compact — desktop workbench</span>
     <div class="row"><button class="lw-btn lw-btn-brand" type="button">Run query</button><button class="lw-btn lw-btn-ghost" type="button">Cancel</button></div>
     <input class="lw-input" placeholder="Search sources" aria-label="Search sources">
     <table class="tbl"><thead><tr><th>Source</th><th>Status</th><th class="n">Chunks</th></tr></thead>

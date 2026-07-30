@@ -1,6 +1,6 @@
 {
   "name": "@leanwise/design",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "LeanWise Design System — token core, CSS layers, React components, twelve templates.",
   "license": "UNLICENSED",
   "private": false,
@@ -84,16 +84,20 @@
     "check:tokens": "node templates/_tooling/lw-token-lint.mjs --css",
     "check:themes": "node templates/_tooling/lw-tokens-dtcg.mjs --check",
     "check:dts": "node templates/_tooling/lw-dts-barrel.mjs --check",
+    "check:bundle": "node templates/_tooling/lw-bundle.mjs --check",
+    "check:templates": "node templates/_tooling/lw-templates.mjs",
     "check:a11y": "node templates/_tooling/lw-a11y.mjs",
     "check:visual": "node templates/_tooling/lw-visual.mjs",
-    "check": "npm run check:contrast && npm run check:tokens && npm run check:themes && npm run check:dts",
+    "check": "npm run check:contrast && npm run check:tokens && npm run check:themes && npm run check:dts && npm run check:bundle && npm run check:templates",
     "check:ci": "npm run check && npm run check:a11y && npm run check:visual",
     "tokens": "node templates/_tooling/lw-tokens-dtcg.mjs",
     "dts": "node templates/_tooling/lw-dts-barrel.mjs",
-    "prepublishOnly": "npm run check && npm run tokens && npm run dts && npm run build"
+    "bundle": "node templates/_tooling/lw-bundle.mjs",
+    "prepublishOnly": "npm run check && npm run tokens && npm run dts && npm run bundle && npm run build"
   },
   "devDependencies": {
     "axe-core": "^4.10.0",
+    "esbuild": "^0.27.7",
     "playwright": "^1.48.0",
     "tsup": "^8.3.0",
     "typescript": "^5.6.0"

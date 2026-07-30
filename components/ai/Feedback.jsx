@@ -30,12 +30,12 @@ export function Feedback({ value, onChange, onComment, commentPlaceholder = "Wha
         {note && <span className="lw-feedback-note">{note}</span>}
       </div>
       {open && onComment && (
-        <form style={{ display: "grid", gap: "var(--lw-space-8)", marginTop: "var(--lw-space-8)" }}
+        <form className="lw-feedback-form"
           onSubmit={(e) => { e.preventDefault(); onComment(text); setOpen(false); setText(""); }}>
           <textarea className="lw-textarea" rows={2} value={text} autoFocus
             aria-label={commentPlaceholder} placeholder={commentPlaceholder}
             onChange={(e) => setText(e.target.value)} />
-          <div style={{ display: "flex", gap: "var(--lw-space-8)", justifyContent: "flex-end" }}>
+          <div className="lw-feedback-actions">
             <button type="button" className="lw-btn lw-btn-ghost lw-btn-sm" onClick={() => setOpen(false)}>Cancel</button>
             <button type="submit" className="lw-btn lw-btn-sm" disabled={!text.trim()}>Send</button>
           </div>

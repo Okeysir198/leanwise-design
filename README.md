@@ -196,6 +196,29 @@ rule; every transform stands down under `prefers-reduced-motion`.
 | `BarChart` `LineChart` | A thin tokenised layer, not a charting engine. Series come from `--lw-chart-1..8`; every chart renders its numbers as a hidden table |
 | `ActivityFeed` | Notifications and activity — the same list with a different verb. Day-bucketed; unread is a dot plus weight, never a tint alone |
 
+**`Table` and `DataGrid` share one column contract.** A column is
+`{ key, header, num, sortable, … }` and sorting is `sort={{ key, dir }}` + `onSort({ key, dir })`
+— identical in both, so a column definition moves between them unedited. Reach for `Table`
+first; `DataGrid` adds resize, pinning, selection and windowing.
+
+> **Deprecated in v1.1.7, removed in v2.0.0.** `Table` previously used `columns[].label`,
+> `columns[].sort` and `onSort(key, direction)`. All three still work, and each logs a one-time
+> `console.warn` naming its replacement (deduped per component per prop, silent under
+> `NODE_ENV=production`). The positional callback is detected from the legacy column shape or
+> from a handler declared with two parameters — so **rename the columns and switch the callback
+> in the same change**, or the component keeps calling you positionally.
+>
+> ```js
+> // before                                  // after
+> columns: [{ key: "n", label: "Name" }]     columns: [{ key: "n", header: "Name" }]
+> onSort: (key, dir) => …                    onSort: ({ key, dir }) => …
+> columns: [{ key: "n", sort: "asc" }]       sort={{ key: "n", dir: "asc" }}
+> ```
+
+**The deprecation cycle.** A rename ships accepting both spellings, warns once per component per
+prop, and is removed only at the next major. Nothing in this package disappears inside a minor —
+a design system whose API moves under a consumer's feet is a reason to vendor it.
+
 ### Navigation — `components/nav/`
 
 | Component | Purpose |
@@ -485,6 +508,15 @@ to the platform and generates its own label ids, `Field` wires `aria-describedby
 `status`, `ConfidenceMeter` and `StatMeter`'s bar carry `role="meter"` with real values, and
 a `Button` that is `loading` keeps its focus ring but refuses the click.
 
+**Single-choice controls are radio groups.** `Segmented` and `ThemeToggle` render
+`role="radiogroup"` with `role="radio"` + `aria-checked` children, one tab stop for the set, and
+Arrow/Home/End to move *and* select. `aria-pressed` describes N *independent* toggles, and is
+kept only for controls that are actually independent — `RichText`'s formatting buttons, which
+genuinely combine, and `Feedback`'s thumbs, which can each be cleared (something a radio cannot
+do). `DatePicker`'s presets are `aria-current`: they are shortcut *actions* that apply a range
+and close the panel, not a selection state, and as toggles they announced four buttons with
+three of them "not pressed" for a set where usually none is current.
+
 Nothing is focusable without a role. `StatMeter interactive` renders a `<button>` rather than
 a `<div tabindex="0">`, and a `SourceList` entry with no URL renders as a button rather than an
 `<a>` with no `href` — an anchor without a target is not reachable by keyboard and is not
@@ -493,18 +525,43 @@ announced as a control.
 ## Enforcement
 
 ```bash
-npm run check        # the four fast gates — what a contributor runs
+npm run check        # the six fast gates — what a contributor runs
 npm run check:ci     # the above plus the two that need a browser
 
-npm run check:contrast   # every token pair ≥ WCAG AA
+npm run check:contrast   # every token pair ≥ WCAG AA, in three canonical scopes
 npm run check:tokens     # raw hex, palette escapes, arbitrary-value access, >1 CTA
 npm run check:themes     # every themable CHANNEL re-pointed in every theme scope
 npm run check:dts        # react.d.ts covers every runtime export of react.js
+npm run check:bundle     # _ds_bundle.js matches the .jsx sources it is built from
+npm run check:templates  # the twelve generated files are identical; landmarks present
 npm run check:a11y       # axe over every card, both grounds (serious/critical fail)
 npm run check:visual     # every card × light/dark × comfortable/compact
 npm run tokens           # tokens.css → tokens.json (DTCG, for Tokens Studio)
 npm run dts              # react.js → react.d.ts (generated, committed)
+npm run bundle           # components/**/*.jsx → _ds_bundle.js (generated, committed)
 ```
+
+**`check:contrast` measures three scopes, not two.** Light, `.dark`, and `light ⊕ media-dark` —
+the last being what a browser computes for a visitor whose OS prefers dark and whose page sets
+no class. That is the default for a plain marketing page and so the most common deployment
+there is, and until v1.1.7 it was asserted by nothing. It was also broken: the chart ramp and
+the diff grounds re-pointed only behind a class selector, so that visitor got light diff grounds
+on a navy page and a review surface at **1.08:1**. The scope is merged in *source order* — a
+`:root` inside a media query and a top-level `:root` have identical specificity, so a naive
+merge reports a palette the browser never paints.
+
+**`check:bundle` exists because the cards were testing the wrong thing.** They render from
+`_ds_bundle.js`, which had no generator in this repo — it was cut in the design project. So a
+component fix was invisible to `check:a11y` and `check:visual` until the next wholesale sync,
+and **34 source files had drifted** by the time the generator landed. Edit a `.jsx`, run
+`npm run bundle`, commit both.
+
+**`check:templates` is the only gate that opens a `.dc.html`.** It asserts the twelve
+`ds-base.js` and twelve `support.js` are byte-identical (they are generated; "never hand-edit
+one copy" was previously undetectable), that no template loads the `lw.css`/`app.css` shims
+alongside the real layers, and that `lang`, a main landmark and a resolvable skip link are all
+present. It found four real gaps the first time it ran, two of them missed by the sweep that
+was supposed to have fixed exactly that.
 
 **`check:dts` exists because the barrel had two homes for one fact.** `react.js` is the
 runtime export list; `react.d.ts` was hand-written beside it and drifted — four re-exports
@@ -524,12 +581,11 @@ both grounds AND both densities is what protects the CSS layers from each other.
 change that only breaks compact-on-dark is exactly the one no human notices. A missing
 baseline records rather than fails, so adding a card never breaks the PR that adds it.
 
-**But the gate cannot currently fail in CI, and never has.** `.visual/` is gitignored, so
-every CI run has 136 missing baselines, records all of them, and compares nothing. It is
-genuinely useful locally for a before/after within one session, and it says so out loud
-rather than printing "no visual change". Making it real in CI means recording the baselines
-inside the CI image — not committing this box's, which would make CI permanently red rather
-than green, because a byte-exact PNG match is only valid on the machine that recorded it.
+**It could not fail in CI until v1.1.7.** `.visual/` is gitignored, so every run recorded 136
+fresh baselines and compared nothing, and the comparison was a byte-exact PNG match — valid
+only on the machine that recorded it. Both halves had to change: a pixel-tolerance comparator,
+and baselines recorded *from the base ref inside the same runner*, so the shots being compared
+came off one machine with one Chromium and one set of fonts.
 
 **`check:a11y` closes the one hole the contrast gate cannot see.** That gate proves token
 PAIRS in isolation; axe proves the palette as actually composed, plus rendered ARIA — a role

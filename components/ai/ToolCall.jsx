@@ -30,7 +30,7 @@ export function ToolCall({ name, summary, args, result, error, state = "ok", dur
       {open && (
         <div className="lw-tool-body" id={uid}>
           {args != null && <><span className="k">arguments</span><pre>{fmt(args)}</pre></>}
-          {error ? <><span className="k">error</span><pre style={{ color: "var(--lw-danger-on)" }}>{fmt(error)}</pre></>
+          {error ? <><span className="k">error</span><pre className="err">{fmt(error)}</pre></>
             : result != null && <><span className="k">result</span><pre>{fmt(result)}</pre></>}
         </div>
       )}

@@ -15,7 +15,7 @@ export function Artifact({ title, version, versionCount, onPrevVersion, onNextVe
   return (
     <div className={cx("lw-artifact", className)} {...rest}>
       <div className="lw-artifact-head">
-        <Icon name="file" size={15} style={{ color: "var(--lw-fg-subtle)", flex: "none" }} />
+        <Icon name="file" size={15} className="lw-artifact-ic" />
         <span className="lw-artifact-title">{title}</span>
         {version != null && (
           <>
@@ -42,7 +42,7 @@ export function Artifact({ title, version, versionCount, onPrevVersion, onNextVe
               <Icon name="undo" size={14} />Revert
             </button>
           )}
-          <span style={{ flex: 1 }} />
+          <span className="lw-spacer" />
           {actions}
         </div>
       )}

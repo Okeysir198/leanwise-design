@@ -5,20 +5,14 @@
 <link rel="stylesheet" href="../../base.css">
 <link rel="stylesheet" href="../../marketing.css">
 <link rel="stylesheet" href="../../product.css">
-<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../preview/_vendor/react.development.js"></script>
+<script src="../../preview/_vendor/react-dom.development.js"></script>
+<script src="../../preview/_vendor/babel.min.js"></script>
 <script src="../../preview/_card.js"></script>
 <script src="../../_ds_bundle.js"></script>
 <style>.sheet{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:1px;background:var(--lw-line);border:1px solid var(--lw-line);border-radius:10px;overflow:hidden}
 .cellx{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;padding:16px 6px;background:var(--lw-bg);color:var(--lw-fg);min-height:82px}
 .cellx .nm{font-family:var(--lw-font-mono);font-size:9.5px;letter-spacing:.04em;color:var(--lw-fg-subtle);text-align:center;word-break:break-word}
-.pane.dark{background:var(--lw-navy-deep);padding:20px;border-radius:10px;display:flex;flex-direction:column;gap:14px}
-.pane.dark .sheet{background:hsl(0 0% 100%/.12);border-color:hsl(0 0% 100%/.12)}
-.pane.dark .cellx{background:var(--lw-navy-deep);color:var(--lw-on-dark-1)}
-.pane.dark .cellx .nm{color:var(--lw-on-dark-3)}
-.lbl{font-family:var(--lw-font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--lw-fg-subtle)}
-.pane.dark .lbl{color:var(--lw-on-dark-3)}
 .scale{display:flex;align-items:center;gap:20px;padding:16px 18px;border:1px solid var(--lw-line);border-radius:10px}
 .scale .s{display:flex;flex-direction:column;align-items:center;gap:7px}
 .scale .s span{font-family:var(--lw-font-mono);font-size:9.5px;color:var(--lw-fg-subtle)}</style>
@@ -28,12 +22,12 @@
 <span class="mono">window.LeanWiseDesign_f2d907.IconNames</span> — so this sheet cannot fall behind the set,
 and says so in place if the bundle is stale. Name a glyph; never redraw one.</p></header>
 <div style="display:flex;flex-direction:column;gap:20px">
-  <div><span class="lbl">the set</span><div style="height:10px"></div><div class="sheet" id="light"></div></div>
-  <div class="pane dark lw-band-dark"><span class="lbl">on the dark ground</span><div class="sheet" id="dark"></div></div>
-  <div><span class="lbl">the size scale</span><div style="height:10px"></div><div class="scale" id="scale"></div></div>
+  <div><span class="lbl-eyebrow">the set</span><div style="height:10px"></div><div class="sheet" id="light"></div></div>
+  <div class="pane dark lw-band-dark"><span class="lbl-eyebrow">on the dark ground</span><div class="sheet" id="dark"></div></div>
+  <div><span class="lbl-eyebrow">the size scale</span><div style="height:10px"></div><div class="scale" id="scale"></div></div>
 </div>
 <div style="display:flex;flex-direction:column;gap:12px;padding-top:20px;margin-top:6px;border-top:1px solid var(--lw-line)">
-<span class="lbl">why it is built this way</span>
+<span class="lbl-eyebrow">why it is built this way</span>
 <p class="sub"><b>Paths, never a font.</b> An icon font ships one glyph height for every icon, fails
 visibly while it loads, and cannot be recoloured per-path. These are inline SVG on a single 24 grid at a
 single 1.6 stroke, filled with <span class="mono">currentColor</span> — so an icon inherits the ink of

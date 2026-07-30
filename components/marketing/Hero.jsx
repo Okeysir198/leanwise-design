@@ -10,7 +10,7 @@ export function Hero({ eyebrow, title, lead, actions, aside, className, children
         {eyebrow && <p className="lw-eyebrow">{eyebrow}</p>}
         {title && <h1 className="lw-h1">{title}</h1>}
         {lead && <p className="lw-lead">{lead}</p>}
-        {actions && <div className="lw-cluster lw-cluster-12" style={{ marginTop: "var(--lw-space-24)" }}>{actions}</div>}
+        {actions && <div className="lw-cluster lw-cluster-12 lw-hero-actions">{actions}</div>}
         {aside}{children}
       </div>
     </section>

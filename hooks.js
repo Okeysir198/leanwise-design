@@ -18,6 +18,28 @@ const prefersReduced = () => canDOM() && window.matchMedia("(prefers-reduced-mot
    component must never disagree" is enforced rather than asserted. */
 export const THEME_KEY = "lw-theme";
 const read = () => { try { return localStorage.getItem(THEME_KEY) || "system"; } catch (e) { return "system"; } };
+
+/* The choice is written TWICE, to two stores, for two different readers.
+ *
+ * localStorage is for this document — it is what `read()` picks back up on the
+ * next mount. But a server cannot see localStorage, so an SSR consumer has no
+ * way to emit `<html data-theme>` in the first byte, and the user gets a frame
+ * of the wrong theme on every reload. The cookie is what makes the server-side
+ * resolve possible; leanwise-ai's SSR reads exactly this key.
+ *
+ * v0.6.5 added the cookie for that reason. The v1.1.0 wholesale replacement
+ * rewrote this hook with localStorage only and dropped it — nothing failed, no
+ * gate could see it, and the flash came back. Restored in v1.1.7. If you are
+ * tempted to simplify this to one store again: the two readers are a server and
+ * a browser, and neither can read the other's.
+ *
+ * SameSite=Lax so it survives a top-level navigation back to the app (which is
+ * the case that matters — the reload), and not None, which would need Secure
+ * and ship the preference to every third party. */
+export const persist = (mode) => {
+  try { localStorage.setItem(THEME_KEY, mode); } catch (e) { /* private mode — the DOM attribute still applied */ }
+  try { document.cookie = THEME_KEY + "=" + mode + "; max-age=31536000; path=/; samesite=lax"; } catch (e) {}
+};
 const systemDark = () => canDOM() && window.matchMedia("(prefers-color-scheme: dark)").matches;
 
 /* Exported so ThemeToggle writes the theme through the SAME function the hook
@@ -58,7 +80,7 @@ export function useTheme() {
 
   const choose = useCallback((m) => {
     setMode(m);
-    try { localStorage.setItem(THEME_KEY, m); } catch (e) {}
+    persist(m);
     setResolved(paint(m) ? "dark" : "light");
   }, []);
 

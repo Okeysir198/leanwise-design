@@ -994,18 +994,6 @@
   --lw-chart-grid: var(--lw-line);
   --lw-chart-axis: var(--lw-fg-subtle);
 }
-/* On the navy paper the 500-tier fills go muddy, so each series lifts a tier —
-   the same reason the focus ring switches to brand-400 on dark. */
-.dark, [data-theme="dark"], .lw-band-dark, [data-band="dark"] {
-  --lw-chart-1: hsl(185.0 62.0% 46.0%); /* @kind color */
-  --lw-chart-2: hsl(205.0 70.0% 55.0%); /* @kind color */
-  --lw-chart-3: hsl(44.0 92.0% 58.0%);  /* @kind color */
-  --lw-chart-4: hsl(258.0 62.0% 68.0%); /* @kind color */
-  --lw-chart-5: hsl(160.0 52.0% 50.0%); /* @kind color */
-  --lw-chart-6: hsl(14.0 82.0% 65.0%);  /* @kind color */
-  --lw-chart-7: hsl(196.0 60.0% 72.0%); /* @kind color */
-  --lw-chart-8: hsl(300.0 34.0% 62.0%); /* @kind color */
-}
 
 /* ---- Diff grounds -------------------------------------------------------------
    For the accept/reject review surface. These are GROUNDS, not ink: the text on
@@ -1019,6 +1007,85 @@
   --lw-diff-del-line: hsl(0 62.0% 82.0%); /* @kind color */
   --lw-diff-mod: hsl(44.0 92.0% 92.0%); /* @kind color */
   --lw-diff-mod-line: hsl(44.0 70.0% 72.0%); /* @kind color */
+}
+
+/* ---- The system-dark path for the two families above (v1.1.7) ------------------
+   The chart palette and the diff grounds are the only colour families in this
+   file whose dark values live ONLY behind a class/attribute selector. Everything
+   else re-points in all four dark forms (`.dark`, `[data-theme="dark"]`,
+   `.lw-band-dark`, and the `@media (prefers-color-scheme: dark)` block near the
+   top). These two did not — so a visitor whose OS prefers dark and whose page
+   sets no class (the default for a plain marketing page, and the single most
+   common deployment) rendered a navy page with the LIGHT chart ramp and, far
+   worse, the near-white diff grounds: `.lw-diff-line .t` paints --lw-fg, which on
+   that path is #E7ECF3, over --lw-diff-add #E7F9ED. 1.08:1. The diff was blank.
+
+   WHY THIS BLOCK IS DOWN HERE AND NOT IN THE @media BLOCK NEAR THE TOP.
+   A `:root` inside a media query and a plain top-level `:root` have the SAME
+   specificity (0,1,0), so source order decides. The two `:root` blocks above are
+   authored AFTER that earlier @media block, so a re-point placed there would be
+   overwritten by the light values and change nothing. It has to follow them.
+
+   The explicit-light restatement is the same device the earlier @media block
+   uses, and for the same reason: an explicit `[data-theme="light"]` choice must
+   beat the system preference. It is (0,2,0), so it wins on specificity wherever
+   it sits — but keep it BEFORE the `:root` above it in source, because
+   lw-tokens-dtcg.mjs types every rule inside a prefers-dark at-rule as the DARK
+   theme and takes the last write.
+
+   The `.dark, [data-theme="dark"], .lw-band-dark, [data-band="dark"]` blocks
+   below are last in source on purpose: an explicit dark choice, and a dark band
+   inside a light page, must beat both of the above.
+
+   lw-contrast-check.mjs now measures this path as a third canonical scope and
+   compares it to `.dark` token-for-token, so the next family that forgets it
+   fails by name rather than by nobody noticing. */
+@media (prefers-color-scheme: dark) {
+  :root.light, :root[data-theme="light"] {
+    --lw-chart-1: hsl(185.0 82.0% 26.5%); /* @kind color */
+    --lw-chart-2: hsl(205.0 95.0% 23.5%); /* @kind color */
+    --lw-chart-3: hsl(44.0 97.0% 50.0%);  /* @kind color */
+    --lw-chart-4: hsl(258.0 52.0% 52.0%); /* @kind color */
+    --lw-chart-5: hsl(160.0 60.0% 36.0%); /* @kind color */
+    --lw-chart-6: hsl(14.0 78.0% 55.0%);  /* @kind color */
+    --lw-chart-7: hsl(196.0 55.0% 62.0%); /* @kind color */
+    --lw-chart-8: hsl(300.0 28.0% 42.0%); /* @kind color */
+    --lw-diff-add: hsl(140.0 60.0% 94.0%); /* @kind color */
+    --lw-diff-add-line: hsl(140.0 44.0% 74.0%); /* @kind color */
+    --lw-diff-del: hsl(0 84.0% 95.5%); /* @kind color */
+    --lw-diff-del-line: hsl(0 62.0% 82.0%); /* @kind color */
+    --lw-diff-mod: hsl(44.0 92.0% 92.0%); /* @kind color */
+    --lw-diff-mod-line: hsl(44.0 70.0% 72.0%); /* @kind color */
+  }
+  :root {
+    --lw-chart-1: hsl(185.0 62.0% 46.0%); /* @kind color */
+    --lw-chart-2: hsl(205.0 70.0% 55.0%); /* @kind color */
+    --lw-chart-3: hsl(44.0 92.0% 58.0%);  /* @kind color */
+    --lw-chart-4: hsl(258.0 62.0% 68.0%); /* @kind color */
+    --lw-chart-5: hsl(160.0 52.0% 50.0%); /* @kind color */
+    --lw-chart-6: hsl(14.0 82.0% 65.0%);  /* @kind color */
+    --lw-chart-7: hsl(196.0 60.0% 72.0%); /* @kind color */
+    --lw-chart-8: hsl(300.0 34.0% 62.0%); /* @kind color */
+    --lw-diff-add: hsl(150.0 46.0% 12.0%); /* @kind color */
+    --lw-diff-add-line: hsl(150.0 38.0% 28.0%); /* @kind color */
+    --lw-diff-del: hsl(0 48.0% 15.0%); /* @kind color */
+    --lw-diff-del-line: hsl(0 40.0% 32.0%); /* @kind color */
+    --lw-diff-mod: hsl(40.0 52.0% 14.0%); /* @kind color */
+    --lw-diff-mod-line: hsl(40.0 44.0% 30.0%); /* @kind color */
+  }
+}
+
+/* On the navy paper the 500-tier fills go muddy, so each series lifts a tier —
+   the same reason the focus ring switches to brand-400 on dark. */
+.dark, [data-theme="dark"], .lw-band-dark, [data-band="dark"] {
+  --lw-chart-1: hsl(185.0 62.0% 46.0%); /* @kind color */
+  --lw-chart-2: hsl(205.0 70.0% 55.0%); /* @kind color */
+  --lw-chart-3: hsl(44.0 92.0% 58.0%);  /* @kind color */
+  --lw-chart-4: hsl(258.0 62.0% 68.0%); /* @kind color */
+  --lw-chart-5: hsl(160.0 52.0% 50.0%); /* @kind color */
+  --lw-chart-6: hsl(14.0 82.0% 65.0%);  /* @kind color */
+  --lw-chart-7: hsl(196.0 60.0% 72.0%); /* @kind color */
+  --lw-chart-8: hsl(300.0 34.0% 62.0%); /* @kind color */
 }
 .dark, [data-theme="dark"], .lw-band-dark, [data-band="dark"] {
   --lw-diff-add: hsl(150.0 46.0% 12.0%); /* @kind color */

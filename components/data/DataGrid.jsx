@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Icon } from "../primitives/Icon.jsx";
+import { colHeader, legacySortArgs, emitSort } from "./_columns.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
 
 /**
@@ -9,6 +10,11 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  * It is deliberately NOT an extension of `Table`. A grid owns its own scroll
  * box and a pile of machinery a static table never needs; merging them would
  * make every simple table pay for it. Reach for `Table` first.
+ *
+ * `columns[].header` and `onSort({ key, dir })` are the canonical shape, shared
+ * with `Table`. `Table`'s pre-v1.1.7 `columns[].label` and `onSort(key, dir)` are
+ * accepted here too so a consumer can move a column definition across without
+ * rewriting it — each warns once and is removed in v2.0.0. See `_columns.js`.
  */
 export function DataGrid({
   columns = [], rows = [], rowKey = (r, i) => r.id ?? i,
@@ -18,8 +24,12 @@ export function DataGrid({
 }) {
   /* One home for the column-width fallbacks. Both defaults were written out at
      six and two call sites; a grid where one of them drifts is a grid whose
-     header and body columns stop lining up. */
-  const DEFAULT_W = 160, MIN_W = 72;
+     header and body columns stop lining up. SEL_W is the same story: the
+     selection column's width is arithmetic (it seeds every pinned column's
+     offset and the table's min-width) as well as a <col> width, so the number
+     cannot live only in CSS — but it can live in one place here. */
+  const DEFAULT_W = 160, MIN_W = 72, SEL_W = 44;
+  const legacyArgs = legacySortArgs("DataGrid", columns, onSort);
   const [widths, setWidths] = React.useState(() => columns.map(c => c.width || DEFAULT_W));
   const [scrollTop, setScrollTop] = React.useState(0);
   const scrollRef = React.useRef(null);
@@ -49,7 +59,7 @@ export function DataGrid({
   // Pinned columns stack, so each one's offset is the SUM of the widths before
   // it — a fixed left per column only works while there is exactly one.
   const pinLefts = React.useMemo(() => {
-    let acc = selectable ? 44 : 0;
+    let acc = selectable ? SEL_W : 0;
     return columns.map((c, i) => {
       if (!c.pin) return null;
       const l = acc; acc += widths[i] || DEFAULT_W; return l;
@@ -103,7 +113,7 @@ export function DataGrid({
   const padTop = win ? start * rowHeight : 0;
   const padBottom = win ? Math.max(0, (rows.length - start - slice.length) * rowHeight) : 0;
 
-  const total = (selectable ? 44 : 0) + widths.reduce((s, w) => s + (w || DEFAULT_W), 0);
+  const total = (selectable ? SEL_W : 0) + widths.reduce((s, w) => s + (w || DEFAULT_W), 0);
 
   return (
     <div className={cx("lw-dgrid", className)} {...rest}>
@@ -111,7 +121,7 @@ export function DataGrid({
         <div className="lw-dgrid-selbar">
           <span className="count">{selSet.size}</span>
           <span>selected</span>
-          <span className="lw-dgrid-selbar-spacer" />
+          <span className="lw-spacer" />
           {selectionActions}
           <button type="button" className="lw-filter-clear" onClick={() => onSelectionChange && onSelectionChange([])}>Clear</button>
         </div>
@@ -120,15 +130,15 @@ export function DataGrid({
         onScroll={win ? (e) => setScrollTop(e.currentTarget.scrollTop) : undefined}>
         <table style={{ minWidth: total }} aria-label={label} aria-rowcount={rows.length}>
           <colgroup>
-            {selectable && <col style={{ width: 44 }} />}
+            {selectable && <col style={{ width: SEL_W }} />}
             {columns.map((c, i) => <col key={c.key} style={{ width: widths[i] || DEFAULT_W }} />)}
           </colgroup>
           <thead>
             <tr>
               {selectable && (
-                <th data-pin="true" style={{ left: 0 }} scope="col">
+                <th data-pin="true" style={{ insetInlineStart: 0 }} scope="col">
                   <span className="lw-dgrid-check">
-                    <label className="lw-check" style={{ gap: 0 }}>
+                    <label className="lw-check">
                       <input type="checkbox" checked={allOn}
                         ref={(el) => { if (el) el.indeterminate = someOn; }}
                         onChange={toggleAll} aria-label={allOn ? "Clear selection" : "Select all rows"} />
@@ -143,17 +153,17 @@ export function DataGrid({
                   <th key={c.key} scope="col" className={cx(c.num && "num")}
                     data-pin={c.pin ? "true" : undefined}
                     data-pin-last={c.pin && i === lastPin ? "true" : undefined}
-                    style={c.pin ? { left: pinLefts[i] } : undefined}
+                    style={c.pin ? { insetInlineStart: pinLefts[i] } : undefined}
                     aria-sort={dir ? (dir === "asc" ? "ascending" : "descending") : undefined}>
                     {c.sortable && onSort ? (
                       <button type="button" className="lw-dgrid-sort"
-                        onClick={() => onSort({ key: c.key, dir: dir === "asc" ? "desc" : "asc" })}>
-                        {c.header}
+                        onClick={() => emitSort(onSort, legacyArgs, c.key, dir === "asc" ? "desc" : "asc")}>
+                        {colHeader("DataGrid", c)}
                         <Icon name={dir === "asc" ? "sort-asc" : dir === "desc" ? "sort-desc" : "chevrons-up-down"} size={13} />
                       </button>
-                    ) : c.header}
+                    ) : colHeader("DataGrid", c)}
                     {c.resizable !== false && (
-                      <button type="button" className="lw-dgrid-resize" aria-label={"Resize " + (typeof c.header === "string" ? c.header : c.key)}
+                      <button type="button" className="lw-dgrid-resize" aria-label={"Resize " + (typeof colHeader("DataGrid", c) === "string" ? colHeader("DataGrid", c) : c.key)}
                         onPointerDown={(e) => onResizeDown(i, e)} onKeyDown={(e) => onResizeKey(i, e)} />
                     )}
                   </th>
@@ -162,19 +172,20 @@ export function DataGrid({
             </tr>
           </thead>
           <tbody>
-            {padTop > 0 && <tr aria-hidden="true" style={{ height: padTop }}><td colSpan={columns.length + (selectable ? 1 : 0)} style={{ padding: 0, border: 0 }} /></tr>}
+            {padTop > 0 && <tr aria-hidden="true" className="lw-dgrid-pad" style={{ height: padTop }}><td colSpan={columns.length + (selectable ? 1 : 0)} /></tr>}
             {slice.map((r, n) => {
               const i = start + n;
               const k = rowKey(r, i);
               const on = selSet.has(k);
               return (
                 <tr key={k} aria-selected={on || undefined} aria-rowindex={i + 2}
-                  style={{ height: rowHeight, cursor: onRowClick ? "pointer" : undefined }}
+                  data-clickable={onRowClick ? "true" : undefined}
+                  style={{ height: rowHeight }}
                   onClick={onRowClick ? () => onRowClick(r, i) : undefined}>
                   {selectable && (
-                    <td data-pin="true" style={{ left: 0 }} onClick={(e) => e.stopPropagation()}>
+                    <td data-pin="true" style={{ insetInlineStart: 0 }} onClick={(e) => e.stopPropagation()}>
                       <span className="lw-dgrid-check">
-                        <label className="lw-check" style={{ gap: 0 }}>
+                        <label className="lw-check">
                           <input type="checkbox" checked={on} onChange={() => toggleRow(k)}
                             aria-label={"Select row " + (i + 1)} />
                           <span className="box" />
@@ -186,14 +197,14 @@ export function DataGrid({
                     <td key={c.key} className={cx(c.num && "num")}
                       data-pin={c.pin ? "true" : undefined}
                       data-pin-last={c.pin && ci === lastPin ? "true" : undefined}
-                      style={c.pin ? { left: pinLefts[ci] } : undefined}>
+                      style={c.pin ? { insetInlineStart: pinLefts[ci] } : undefined}>
                       {c.render ? c.render(r, i) : r[c.key]}
                     </td>
                   ))}
                 </tr>
               );
             })}
-            {padBottom > 0 && <tr aria-hidden="true" style={{ height: padBottom }}><td colSpan={columns.length + (selectable ? 1 : 0)} style={{ padding: 0, border: 0 }} /></tr>}
+            {padBottom > 0 && <tr aria-hidden="true" className="lw-dgrid-pad" style={{ height: padBottom }}><td colSpan={columns.length + (selectable ? 1 : 0)} /></tr>}
           </tbody>
         </table>
         {!rows.length && <div className="lw-dgrid-empty">{empty}</div>}

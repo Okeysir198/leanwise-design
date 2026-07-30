@@ -29,8 +29,7 @@ export function StateView({ variant = "empty", icon, title, description, action,
   const p = PRESETS[variant] || PRESETS.empty;
   if (variant === "loading") {
     return (
-      <div className={cx("lw-state", className)} data-variant="loading" role="status" aria-busy="true"
-        style={{ justifyItems: "stretch", textAlign: "left", gap: "var(--lw-space-12)" }} {...rest}>
+      <div className={cx("lw-state", className)} data-variant="loading" role="status" aria-busy="true" {...rest}>
         <span className="lw-sr-only">{title || p.title}</span>
         <Skeleton lines={lines} />
       </div>

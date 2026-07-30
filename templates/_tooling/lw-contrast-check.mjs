@@ -15,8 +15,27 @@
  *   2. Per block, collect --lw-*-c channel declarations (HSL triples OR var()
  *      references) plus the bare-name color literals (the --lw-on-dark* rgba
  *      family). Resolve the var() chains to their final RGB within each scope.
- *   3. Build two CANONICAL scopes — light (:root) and dark (:root ⊕ .dark).
- *   4. Evaluate every pair in MANIFEST against the scope(s) it declares.
+ *   3. Build THREE CANONICAL scopes — light (:root), dark (:root ⊕ .dark), and
+ *      media-dark (:root ⊕ the :root inside @media (prefers-color-scheme: dark)).
+ *   4. Evaluate every pair in MANIFEST against the scope(s) it declares. Every
+ *      pair asserted in `dark` is asserted in `media-dark` too.
+ *
+ * WHY A THIRD SCOPE — a consumer that sets no class and no attribute and lets the
+ * OS decide is the DEFAULT deployment for a plain marketing page, and through
+ * v1.1.6 the palette it actually rendered was measured by nothing: every
+ * `scope: "dark"` pair was asserted against `.dark`, a scope that consumer never
+ * enters, and a difference in the media block was downgraded to a warning. The
+ * media path is now a hard scope, and the two dark scopes are additionally
+ * compared token-for-token (`darkScopeDivergence`) so a role that re-points in one
+ * and not the other fails by name rather than by whichever pair happens to notice.
+ *
+ * SOURCE ORDER IS PART OF THE MODEL, not a detail. The `:root` inside the media
+ * block and a plain top-level `:root` have the SAME specificity (0,1,0), so the
+ * later declaration wins — and tokens.css authors several `:root` blocks AFTER
+ * the media block (the chart palette, the diff grounds). Merging the media block
+ * on top unconditionally would report a dark chart palette the browser never
+ * paints. The media-dark scope therefore merges both sets in source order, which
+ * is what makes the gate able to see that trap at all.
  *
  * The manifest is the SINGLE place coverage is added — append an entry and it is
  * checked. The colors come from the parse, so re-pointing a role token (e.g.
@@ -171,6 +190,18 @@ const MANIFEST = [
   //    fill, so it is the pair that decides which overlay tier a header may use.
   { group: "navy-deep ground", fg: "on-dark-3", bg: "bg", scope: "dark", label: "dark-band table header ink on the page ground" },
 
+  // ── G2. Diff grounds. `.lw-diff-line .t` paints --lw-fg and the parent row
+  //    paints --lw-diff-*, so the ink and the ground are declared in DIFFERENT
+  //    rules — which is precisely the shape the composed-pair walk below cannot
+  //    see (it needs both in one rule). The manifest is the only place this pair
+  //    can be stated, and it is worth stating: the diff grounds are near-white on
+  //    light and near-black on dark, so a scope that re-points --lw-fg without
+  //    re-pointing the ground renders white ink on a white ground. The
+  //    system-dark path did exactly that.
+  { group: "diff grounds", fg: "fg", bg: "diff-add", scope: "both", label: ".lw-diff-line[data-kind=add] .t — ink on the add ground" },
+  { group: "diff grounds", fg: "fg", bg: "diff-del", scope: "both", label: ".lw-diff-line[data-kind=del] .t — ink on the del ground" },
+  { group: "diff grounds", fg: "fg", bg: "diff-mod", scope: "both", label: ".lw-diff-line[data-kind=mod] .t — ink on the mod ground" },
+
   // ── H. NON-TEXT contrast, WCAG 1.4.11 — 3:1, via `large`.
   //    Until now every pair in this manifest was a TEXT pair, and `AA_LARGE` was
   //    dead code: no entry set `large`. That left the two things 1.4.11 actually
@@ -202,16 +233,10 @@ const cssRaw = readFileSync(TOKENS_PATH, "utf8");
 const css = stripComments(cssRaw);
 
 
-/**
- * First rule matching `re` whose body lies INSIDE `outer`. The system-preference
- * block scopes a plain `:root`, which is ambiguous at top level — this anchors
- * the lookup to the enclosing at-rule instead of the selector text.
- */
-function findNested(rules, outer, re, label) {
-  const r = rules.find((r) => r.start > outer.start && r.end <= outer.end && re.test(r.selector));
-  if (!r) throw new Error(`theme block not found: ${label} (no selector matched ${re} inside ${outer.selector})`);
-  return r;
-}
+/* A nested block is found by its enclosing AT-RULE, never by its selector: the
+   `:root` inside @media (prefers-color-scheme: dark) has selector `:root`, the
+   same as the base one. _css.mjs reports `atRule` per rule precisely so no gate
+   has to re-derive nesting from offsets — see MEDIA_DARK_RE below. */
 
 /** True when no other rule encloses this one — i.e. not nested in an at-rule. */
 function isTopLevel(rules, r) {
@@ -295,7 +320,14 @@ function parseValue(raw) {
     // A ref carries the alpha forward; chase() multiplies it into the target.
     return inner.kind === "ref" ? { ...inner, a } : { ...inner, a: (inner.a ?? 1) * a };
   }
-  // hsl()/hsla() derived lines, gradients, multi-value shadows: not solid colors.
+  // A LITERAL hsl() with no channel behind it — `hsl(140 60% 94%)`. The chart
+  // palette and the diff grounds are authored this way (they have no `-c`
+  // triple), so without this branch they resolved to nothing and every pair that
+  // named one was silently unmeasurable. `hsl(var(--x-c))` is handled above via
+  // the ref branch; only a literal reaches here.
+  const fn = v.match(/^hsla?\(\s*(-?[\d.]+)\s+([\d.]+)%\s+([\d.]+)%\s*\)$/i);
+  if (fn) return { kind: "rgb", ...hslToRgb(+fn[1], +fn[2], +fn[3]), a: 1 };
+  // Derived lines that chase a var(), gradients, multi-value shadows: not solid colors.
   return { kind: "skip", raw: v };
 }
 
@@ -320,8 +352,13 @@ function buildScope(decls) {
     // no channel carries the alpha, so it is the only declaration of that color.
     const parsed = parseValue(v);
     if (parsed.kind === "skip") continue;
+    // A DERIVED line chases a var() — `hsl(var(--lw-fg-c))` — and is redundant
+    // with the channel already in scope under the same bare name. A LITERAL
+    // `hsl(140 60% 94%)` is not: nothing else declares that colour, so dropping
+    // it (which an `/^hsl\(/` test did) made the whole chart and diff family
+    // unresolvable. The discriminator is `var(`, not the function name.
     if (parsed.a === undefined || parsed.a === 1) {
-      if (/^hsl\(/i.test(v) || /var\(/.test(v)) continue; // derived color / gradient ref
+      if (/var\(/.test(v)) continue; // derived color / gradient ref
     }
     if (scope[k] === undefined) scope[k] = parsed;
   }
@@ -368,17 +405,100 @@ const darkClassDecls = mergeRules(rules, /^\.dark\s*,/, ".dark, [data-theme=\"da
 // --lw-on-brand-c points at it rather than at --lw-fg-c).
 const darkDecls = { ...lightDecls, ...darkClassDecls };
 
+/* The system-preference block scopes a bare `:root`, which is ambiguous by
+   selector alone — that exact collision is what folded the whole dark palette
+   into `base` in lw-tokens-dtcg.mjs. Anchor on the enclosing at-rule, which
+   _css.mjs already reports per rule as `atRule`. */
+const MEDIA_DARK_RE = /^@media\s*\(prefers-color-scheme:\s*dark\)\s*$/;
+const MEDIA_ROOT_RE = /^:root(?::not\([^)]*\))*\s*$/;
+
+/**
+ * MEDIA-DARK = the base `:root` cascade with the `@media (prefers-color-scheme:
+ * dark)` `:root` block(s) layered in BY SOURCE ORDER — exactly what a browser
+ * computes for a visitor whose OS prefers dark and whose page carries no class
+ * and no data-theme. That is the default marketing-page deployment.
+ *
+ * Source order, not a spread, because the two selectors have identical
+ * specificity (0,1,0): a plain `:root` authored AFTER the media block wins over
+ * it. tokens.css does that for the chart palette and the diff grounds, and a
+ * naive `{...light, ...media}` would have reported a dark chart palette no
+ * browser paints — a gate that lies in the direction of green.
+ *
+ * The explicit-light restatement inside the same media block
+ * (`:root.light, :root[data-theme="light"]`) is (0,2,0) and never participates
+ * here: that visitor has made a choice and is not on this path.
+ */
+const mediaDarkRootRules = rules.filter((r) => MEDIA_DARK_RE.test(r.atRule) && MEDIA_ROOT_RE.test(r.selector));
+if (!mediaDarkRootRules.length) {
+  throw new Error("no `:root` found inside @media (prefers-color-scheme: dark) — the system-dark path is the default deployment; it cannot go unmeasured");
+}
+const lightRootRules = rules.filter((r) => /^:root\s*$/.test(r.selector) && isTopLevel(rules, r));
+const mediaDarkDecls = Object.assign(
+  {},
+  ...[...lightRootRules, ...mediaDarkRootRules]
+    .sort((a, b) => a.start - b.start)
+    .map((r) => declarationsIn(r.directBody)),
+);
+
 const light = buildScope(lightDecls);
 const dark = buildScope(darkDecls);
+const mediaDark = buildScope(mediaDarkDecls);
+
+/**
+ * The two dark scopes must resolve to the SAME colour, token for token.
+ *
+ * The manifest catches a divergence only where someone thought to name the pair;
+ * this catches it by name, everywhere, and is the cheap insurance the third scope
+ * buys. It is what makes the standing "@media block omits a re-point" warning a
+ * result instead of a note: either the scopes agree, or this says which token,
+ * with both values.
+ *
+ * It found two families on the first run — the chart palette and the diff
+ * grounds. Both re-point under `.dark, [data-theme="dark"], .lw-band-dark`, and
+ * neither re-pointed on the system-dark path, so a visitor with the OS set to
+ * dark and no class read `--lw-fg` (#E7ECF3) on `--lw-diff-add` (a near-white
+ * green): 1.05:1.
+ */
+function darkScopeDivergence() {
+  const fails = [];
+  let compared = 0;
+  const solid = (v) => v && v.kind === "rgb";
+  const hex = ({ r, g, b, a }) =>
+    "#" + [r, g, b].map((v) => Math.round(v * 255).toString(16).padStart(2, "0")).join("").toUpperCase() +
+    ((a ?? 1) < 1 ? ` @${(a ?? 1).toFixed(2)}` : "");
+  for (const k of [...new Set([...Object.keys(dark), ...Object.keys(mediaDark)])].sort()) {
+    const a = dark[k];
+    const b = mediaDark[k];
+    if (!solid(a) && !solid(b)) continue;
+    if (!solid(a) || !solid(b)) {
+      fails.push(`--lw-${k} resolves in ${solid(a) ? ".dark" : "media-dark"} only — the other dark scope cannot paint it`);
+      continue;
+    }
+    compared++;
+    if (hex(a) !== hex(b)) {
+      fails.push(
+        `--lw-${k}: .dark → ${hex(a)}, system-dark (@media) → ${hex(b)} — the media path is missing this re-point. ` +
+        `Note a plain :root authored AFTER the media block wins over it; place the re-point accordingly.`,
+      );
+    }
+  }
+  return { fails, compared };
+}
 
 /**
  * Parity guard — the design intent (documented at tokens.css ≈ line 400) is that
  * every DARK context re-points the SAME set. The explicit attribute form
  * (:root[data-theme="dark"]) and the dark band (:where(.lw-band-dark)) MUST agree
  * with .dark declaration-for-declaration; a divergence here is a real drift bug
- * and fails the gate. The @media (system-preference) block is a documented subset
- * fallback — differences there are reported as WARNINGS, not failures, because
- * they point at a tokens.css gap to fix, not a pair this gate measures.
+ * and fails the gate.
+ *
+ * The @media (system-preference) block stays a WARNING here, and that is no
+ * longer a hole: it is a DECLARATION-SHAPE check, and the rendered result of that
+ * block is now measured directly — every `scope: "dark"` pair is evaluated in the
+ * media-dark scope, and `darkScopeDivergence()` compares the two dark scopes token
+ * for token as a hard failure. What this warning adds on top is the case where the
+ * media block reaches the same colour by a different declaration (an inlined
+ * triple where .dark uses a var(), say) — worth saying, not worth failing.
  *
  * Likewise :where(.lw-band-light) must reproduce the light role set.
  */
@@ -390,9 +510,8 @@ const dark = buildScope(darkDecls);
  */
 const BAND_DARK_RE = /^:where\((?![^)]*\.lw-band-light)[^)]*\.lw-band-dark\b[^)]*\)\s*$/;
 const BAND_LIGHT_RE = /^:where\((?![^)]*\.lw-band-dark)[^)]*\.lw-band-light\b[^)]*\)\s*$/;
-/* The system-preference block scopes a bare `:root`; find it via its at-rule. */
-const MEDIA_DARK_RE = /^@media\s*\(prefers-color-scheme:\s*dark\)\s*$/;
-const MEDIA_ROOT_RE = /^:root(?::not\([^)]*\))*\s*$/;
+/* MEDIA_DARK_RE / MEDIA_ROOT_RE are declared with the scope assembly above — the
+   media-dark scope needs them before this point. */
 
 function parity() {
   const failPairs = []; // hard fails (explicit dark forms disagree)
@@ -401,7 +520,11 @@ function parity() {
   const want = [
     { label: ":root[data-theme=\"dark\"]", re: /^:root\[data-theme="dark"\]\s*$/, here: declarationsIn(findRule(rules, /^:root\[data-theme="dark"\]\s*$/, ":root[data-theme=\"dark\"]").body), strict: true },
     { label: ":where(.lw-band-dark)",     re: BAND_DARK_RE,                       here: declarationsIn(findRule(rules, BAND_DARK_RE, ":where(.lw-band-dark)").body), strict: true },
-    { label: "@media (prefers-color-scheme: dark)", re: MEDIA_ROOT_RE, here: declarationsIn(findNested(rules, findRule(rules, MEDIA_DARK_RE, "@media (prefers-color-scheme: dark)"), MEDIA_ROOT_RE, "@media dark inner").body), strict: false },
+    // ALL the system-dark `:root` blocks, merged — tokens.css may state the
+    // re-points in more than one media block (source order relative to the plain
+    // `:root` blocks forces that for the chart palette and the diff grounds), and
+    // reading only the first would warn about tokens that are in fact re-pointed.
+    { label: "@media (prefers-color-scheme: dark)", re: MEDIA_ROOT_RE, here: Object.assign({}, ...mediaDarkRootRules.map((r) => declarationsIn(r.directBody))), strict: false },
   ];
 
   // Compare COLOR declarations only (-c channels + the rgba on-dark family).
@@ -468,8 +591,16 @@ function contrast(fg, bg) {
 
 const C = { reset: "\x1b[0m", green: "\x1b[32m", red: "\x1b[31m", yellow: "\x1b[33m", dim: "\x1b[2m", bold: "\x1b[1m" };
 
+const SCOPES = { light, dark, "media-dark": mediaDark };
+/* Every scope that paints on a dark ground. A pair is asserted in ALL of them or
+   in none — an assertion that holds only for the class-based dark scope leaves
+   the OS-preference visitor, who is the default, measured by nothing. */
+const DARK_SCOPES = ["dark", "media-dark"];
+const isDark = (s) => DARK_SCOPES.includes(s);
+
 const resolveColor = (name, scopeName) => {
-  const scope = scopeName === "dark" ? dark : light;
+  const scope = SCOPES[scopeName];
+  if (!scope) throw new Error(`unknown scope ${JSON.stringify(scopeName)}`);
   // A cycle or a missing target is already surfaced by chase(); here anything
   // that did not resolve to a solid colour is simply unresolved.
   return scope[name]?.kind === "rgb" ? scope[name] : null;
@@ -479,7 +610,9 @@ let failed = 0;
 const rows = [];
 
 for (const entry of MANIFEST) {
-  const scopes = entry.scope === "both" ? ["light", "dark"] : [entry.scope];
+  const scopes = entry.scope === "both" ? ["light", ...DARK_SCOPES]
+    : entry.scope === "dark" ? DARK_SCOPES
+    : [entry.scope];
   for (const scopeName of scopes) {
     const fg = resolveColor(entry.fg, scopeName);
     let bg = resolveColor(entry.bg, scopeName);
@@ -493,7 +626,7 @@ for (const entry of MANIFEST) {
     // them beats an `over:` field nobody remembers to set.
     let groundNote = "";
     if (bg && (bg.a ?? 1) < 1) {
-      const tiers = scopeName === "dark" ? ["bg", "bg-subtle"] : ["surface-0", "surface-1", "surface-2", "surface-3"];
+      const tiers = isDark(scopeName) ? ["bg", "bg-subtle"] : ["surface-0", "surface-1", "surface-2", "surface-3"];
       const flat = (over) => ({ kind: "rgb", a: 1,
         r: bg.a * bg.r + (1 - bg.a) * over.r,
         g: bg.a * bg.g + (1 - bg.a) * over.g,
@@ -693,10 +826,12 @@ function composedPairs() {
         continue;
       }
       // A rule scoped to a dark band paints on the dark ground only; an
-      // unscoped one is seen on whichever theme the page is in.
+      // unscoped one is seen on whichever theme the page is in — INCLUDING the
+      // system-preference one, which is the theme a page with no class is in.
+      // A `.dark`-scoped rule is not on that path: that visitor has no class.
       const dark = /\.dark\b|\[data-band="dark"\]|\.lw-band-dark|-dark\b/.test(selector);
       const light = /\.lw-band-light|\[data-band="light"\]/.test(selector);
-      const scopesFor = dark ? ["dark"] : light ? ["light"] : ["light", "dark"];
+      const scopesFor = dark ? ["dark"] : light ? ["light"] : ["light", ...DARK_SCOPES];
       for (const sc of scopesFor) {
         const key = fg[1] + "|" + bg[1] + "|" + sc;
         if (!seen.has(key)) seen.set(key, { fg: fg[1], bg: bg[1], scope: sc, where: layer + " " + selector.split(",")[0].trim() });
@@ -730,9 +865,12 @@ for (const c of composedPairs()) {
 const { failPairs: parityFails, warnings: parityWarnings } = parity();
 const logoFails = logoStops();
 const emailFails = emailLiterals();
+const { fails: divergenceFails, compared: divergenceCount } = darkScopeDivergence();
 
 console.log(`\n${C.bold}LeanWise Design System — derived WCAG contrast gate${C.reset}`);
-console.log(`${C.dim}canonical scopes: light (:root) + dark (:root ⊕ .dark)${C.reset}\n`);
+console.log(`${C.dim}canonical scopes: light (:root) · dark (:root ⊕ .dark) · media-dark (:root ⊕ @media${C.reset}`);
+console.log(`${C.dim}(prefers-color-scheme: dark) :root, in source order — the no-class OS-preference page).${C.reset}`);
+console.log(`${C.dim}Every pair asserted in dark is asserted in media-dark too.${C.reset}\n`);
 
 // Group rows for readability; emit a header per group.
 const groups = [];
@@ -748,7 +886,7 @@ for (const grp of groups) {
   for (const r of grp) {
     const mark = r.status === "PASS" ? `${C.green}✓${C.reset}` : r.status === "MISS" ? `${C.yellow}?${C.reset}` : `${C.red}✗${C.reset}`;
     const ratioCol = r.ratio.padStart(5);
-    const scopeTag = `${C.dim}[${r.scope.padEnd(5)}]${C.reset}`;
+    const scopeTag = `${C.dim}[${r.scope.padEnd(10)}]${C.reset}`;
     console.log(`  ${mark} ${ratioCol}  ${scopeTag} ${r.pair.padEnd(w)}  ${C.dim}${r.label}${C.reset}`);
   }
   console.log();
@@ -757,10 +895,18 @@ for (const grp of groups) {
 if (composedFails.length) {
   console.log(`${C.bold}Composed pairs below AA (derived from the CSS layers, not the manifest)${C.reset}`);
   for (const f of composedFails) {
-    console.log(`  ${C.red}✗${C.reset} ${f.ratio.padStart(5)}  ${C.dim}[${f.scope.padEnd(5)}]${C.reset} ${f.fg} on ${f.bg}  ${C.dim}${f.where}${C.reset}`);
+    console.log(`  ${C.red}✗${C.reset} ${f.ratio.padStart(5)}  ${C.dim}[${f.scope.padEnd(10)}]${C.reset} ${f.fg} on ${f.bg}  ${C.dim}${f.where}${C.reset}`);
   }
   console.log();
   failed += composedFails.length;
+}
+
+if (divergenceFails.length) {
+  console.log(`${C.bold}Dark-scope divergence (hard fail — .dark and the system-dark @media path resolve differently)${C.reset}`);
+  for (const m of divergenceFails) console.log(`  ${C.red}✗${C.reset} ${m}`);
+  console.log(`${C.dim}  A page with no class and the OS set to dark takes the @media path. A token that${C.reset}`);
+  console.log(`${C.dim}  re-points in one dark scope and not the other ships two different dark themes.${C.reset}\n`);
+  failed += divergenceFails.length;
 }
 
 if (parityFails.length) {
@@ -787,9 +933,10 @@ if (emailFails.length) {
 if (parityWarnings.length) {
   console.log(`${C.bold}Dark-block parity (warnings — @media system-preference path)${C.reset}`);
   for (const m of parityWarnings) console.log(`  ${C.yellow}!${C.reset} ${m}`);
-  console.log(`${C.dim}  The .dark / [data-theme=\"dark\"] / .lw-band-dark forms (the ones this gate${C.reset}`);
-  console.log(`${C.dim}  measures) all agree and pass. The @media block above omits a re-point; under${C.reset}`);
-  console.log(`${C.dim}  pure system-dark preference a pair may break. Fix tokens.css, not this gate.${C.reset}\n`);
+  console.log(`${C.dim}  Declaration shape only — the RENDERED result of the @media path is measured as${C.reset}`);
+  console.log(`${C.dim}  the media-dark scope above, and compared to .dark token-for-token by the${C.reset}`);
+  console.log(`${C.dim}  divergence check. A warning here with no failure above means the two blocks${C.reset}`);
+  console.log(`${C.dim}  reach the same colour by different declarations. Fix tokens.css, not this gate.${C.reset}\n`);
 }
 
 const pairCount = rows.filter((r) => r.status !== "MISS").length;
@@ -800,6 +947,12 @@ if (failed) {
   process.exit(1);
 }
 
+const perScope = ["light", ...DARK_SCOPES]
+  .map((s) => `${s} ${rows.filter((r) => r.scope === s && r.status !== "MISS").length}`)
+  .join(" · ");
+
 console.log(`${C.green}All ${pairCount} pairs pass WCAG AA (≥ ${AA_TEXT}:1).${C.reset}`);
-console.log(`${C.dim}Coverage is derived from tokens.css via the composition manifest — add a pair${C.reset}`);
-console.log(`${C.dim}to MANIFEST and it is checked in the scope(s) you declare.${C.reset}\n`);
+console.log(`${C.dim}Across three canonical scopes — ${perScope} — plus ${divergenceCount} tokens compared${C.reset}`);
+console.log(`${C.dim}between the two dark scopes. Coverage is derived from tokens.css via the${C.reset}`);
+console.log(`${C.dim}composition manifest — add a pair to MANIFEST and it is checked in the${C.reset}`);
+console.log(`${C.dim}scope(s) you declare; a "dark" pair is checked in the @media path too.${C.reset}\n`);

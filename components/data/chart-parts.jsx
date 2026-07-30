@@ -3,6 +3,13 @@ export const cx = (...a) => a.filter(Boolean).join(" ");
 export const SERIES = (i) => "var(--lw-chart-" + ((i % 8) + 1) + ")";
 export const nf = new Intl.NumberFormat();
 
+/* Keys come from the INDEX, never from a series name or an axis label. A chart
+   is routinely handed repeated labels — "Jan" twice across a two-year range is
+   the common case, and two series legitimately share a name when they are the
+   same metric on two scopes — and React treats duplicate keys as unsupported:
+   children may be dropped or duplicated. A label is a caption, not an identity.
+   Sidebar.jsx makes the same argument about `href`. */
+
 /* Every chart ships the numbers behind it. A picture of data is not readable by
    a screen reader, and a one-line summary is not the data — so the table is the
    real content and the SVG is the presentation of it. */
@@ -10,10 +17,10 @@ export function DataTable({ labels, series, caption }) {
   return (
     <table className="lw-sr-only">
       <caption>{caption}</caption>
-      <thead><tr><th scope="col">Category</th>{series.map(s => <th key={s.name} scope="col">{s.name}</th>)}</tr></thead>
+      <thead><tr><th scope="col">Category</th>{series.map((s, i) => <th key={i} scope="col">{s.name}</th>)}</tr></thead>
       <tbody>
         {labels.map((l, i) => (
-          <tr key={l}><th scope="row">{l}</th>{series.map(s => <td key={s.name}>{nf.format(s.data[i])}</td>)}</tr>
+          <tr key={i}><th scope="row">{l}</th>{series.map((s, si) => <td key={si}>{nf.format(s.data[i])}</td>)}</tr>
         ))}
       </tbody>
     </table>
@@ -25,7 +32,7 @@ export function Legend({ series }) {
   return (
     <div className="lw-chart-legend">
       {series.map((s, i) => (
-        <span key={s.name}><i style={{ background: s.color || SERIES(i) }} />{s.name}</span>
+        <span key={i}><i style={{ background: s.color || SERIES(i) }} />{s.name}</span>
       ))}
     </div>
   );
@@ -56,9 +63,9 @@ export function frame(max, height) {
 export function Grid({ f }) {
   return (
     <>
-      <g className="grid">{f.ts.map(v => <line key={v} x1={f.pad.l} x2={f.w - f.pad.r} y1={f.y(v)} y2={f.y(v)} />)}</g>
+      <g className="grid">{f.ts.map((v, i) => <line key={i} x1={f.pad.l} x2={f.w - f.pad.r} y1={f.y(v)} y2={f.y(v)} />)}</g>
       <g className="axis">
-        {f.ts.map(v => <text key={v} x={f.pad.l - 6} y={f.y(v) + 3} textAnchor="end">{nf.format(v)}</text>)}
+        {f.ts.map((v, i) => <text key={i} x={f.pad.l - 6} y={f.y(v) + 3} textAnchor="end">{nf.format(v)}</text>)}
       </g>
     </>
   );

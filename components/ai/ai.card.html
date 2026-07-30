@@ -5,14 +5,11 @@
 <link rel="stylesheet" href="../../base.css">
 <link rel="stylesheet" href="../../marketing.css">
 <link rel="stylesheet" href="../../product.css">
-<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../preview/_vendor/react.development.js"></script>
+<script src="../../preview/_vendor/react-dom.development.js"></script>
+<script src="../../preview/_vendor/babel.min.js"></script>
 <script src="../../_ds_bundle.js"></script>
-<style>.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.pane{padding:20px;display:grid;gap:14px;align-content:start;border-radius:10px}
-.pane.dark{background:var(--lw-navy-deep)}.lbl{font-family:var(--lw-font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--lw-fg-subtle)}
-.pane.dark .lbl{color:var(--lw-on-dark-3)}
-/* Per-turn actions are hover-revealed in the product. A specimen has no pointer,
+<style>/* Per-turn actions are hover-revealed in the product. A specimen has no pointer,
    so this card pins them open — the ONLY deviation from the shell here, and it is
    an opacity, not a restyle. */
 .pane .lw-msg-actions{opacity:1}
@@ -32,7 +29,7 @@ is unscannable — and drops to neutral ink below 60%, because a low score paint
 belong to the answer rather than to a strip beneath it. Actions are hover-revealed in the product — the card holds them
 open, because a specimen of an invisible control shows nothing. The provenance list and the trace are the right-hand
 panel's contents, summoned rather than always on screen.</p></header>
-<div class="two"><div class="pane" id="light"></div><div class="pane dark lw-band-dark" id="dark"></div></div>
+<div class="panes"><div class="pane" id="light"></div><div class="pane dark lw-band-dark" id="dark"></div></div>
 </div>
 <script type="text/babel">
 const LW = window.LeanWiseDesign_f2d907;
@@ -50,7 +47,7 @@ function Demo({ns}) {
   const [q, setQ] = React.useState("");
   return (
     <Stack gap={16}>
-      <span className="lbl">conversation</span>
+      <span className="lbl-eyebrow">conversation</span>
       <div className="thread">
         <Message role="user" who="You">Which contracts auto-renew before the end of Q3?
           <div className="lw-msg-actions"><Act icon="edit" label="Edit question" title="Edit" /></div>
@@ -75,7 +72,7 @@ function Demo({ns}) {
           </div>
         </Message>
       </div>
-      <span className="lbl">provenance panel</span>
+      <span className="lbl-eyebrow">provenance panel</span>
       {/* The score lives with the evidence, not in the answer's footer: it grades
           the retrieval, so it belongs beside the passages that were retrieved. */}
       <ConfidenceMeter value={91} />
@@ -88,7 +85,7 @@ function Demo({ns}) {
         {n:1,title:"Northwind — Master Services Agreement",meta:"contracts/2024 · p.14 · 94% match"},
         {n:2,title:"Orbital Systems — Statement of Work 3",meta:"contracts/2024 · p.2 · 88% match"},
         {n:3,title:"Kestrel Data — MSA (amended)",meta:"contracts/2023 · p.31 · 81% match"}]} />
-      <span className="lbl">prompt</span>
+      <span className="lbl-eyebrow">prompt</span>
       {/* One footer row passed as children — the shell's arrangement: tools left,
           the Enter hint and Send pushed right by a spacer. */}
       <div className="thread">

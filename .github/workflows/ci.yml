@@ -12,6 +12,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # The visual gate records the BASE REF's baseline on this runner
+          # before it shoots HEAD (see below), so the base commit has to be in
+          # this clone. The default fetch-depth of 1 does not put it there.
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -30,6 +35,18 @@ jobs:
       # broke `npm run build` (and prepublishOnly) for two releases.
       - name: Barrel types
         run: npm run check:dts
+      # The cards render from _ds_bundle.js, not from components/**/*.jsx. Until
+      # v1.1.7 that bundle was cut in the design project, so a component fix was
+      # invisible to the two browser gates below until the next wholesale sync —
+      # 34 sources had drifted by the time the generator landed. This must run
+      # BEFORE Accessibility and Visual, or they score the old components.
+      - name: Bundle freshness
+        run: npm run check:bundle
+      # The only gate that opens a .dc.html: the twelve generated files are
+      # byte-identical, no template loads the shims, landmarks and skip links
+      # resolve. It found four real gaps the first time it ran.
+      - name: Templates
+        run: npm run check:templates
 
       # check:dts proves react.d.ts is not STALE; it does not run
       # rollup-plugin-dts, whose own resolution rules are what actually failed
@@ -47,14 +64,104 @@ jobs:
       - name: Accessibility
         run: npm run check:a11y
 
-      # Every card, both grounds, both densities. A missing baseline records
-      # rather than fails, so a new card does not break the first PR that adds it.
+      # ---------------------------------------------------------------------
+      # Visual regression.
+      #
+      # `.visual/` is gitignored and a pixel baseline is only meaningful on the
+      # machine that recorded it, so CI records its OWN: shoot the BASE REF
+      # first, on this runner, with this Chromium and these fonts; then shoot
+      # HEAD and pixel-diff the two. Same machine on both sides is the whole
+      # reason the comparison means anything. Committing this box's baselines
+      # would instead make CI permanently red.
+      #
+      # The baseline lives in $RUNNER_TEMP, outside the worktree, because the
+      # step in between checks the tree back out and git would clean it away.
+      # ---------------------------------------------------------------------
+      - name: Visual gate self-test
+        # Proves the PNG decoder agrees with Chromium's own and that a
+        # perturbed image FAILS. A comparator that always answers "same" is the
+        # exact defect this whole section exists to remove, and it is invisible
+        # to a green run.
+        run: node templates/_tooling/lw-visual.mjs --self-test
+
+      - name: Resolve the base ref
+        id: base
+        env:
+          EVENT: ${{ github.event_name }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PUSH_BEFORE: ${{ github.event.before }}
+        run: |
+          set -uo pipefail
+          echo "head=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          if [ "$EVENT" = "pull_request" ]; then BASE="${PR_BASE:-}"; else BASE="${PUSH_BEFORE:-}"; fi
+          # A branch's first push, an initial commit and a force-push over a
+          # discarded commit all hand us the all-zero sha or an object that is
+          # not in this clone. None of those is a regression; none of them is a
+          # pass either. Say so, and let the gate skip out loud.
+          if [ -z "$BASE" ] || [ "$BASE" = "0000000000000000000000000000000000000000" ] \
+             || ! git cat-file -e "${BASE}^{commit}" 2>/dev/null; then
+            echo "::warning title=lw-visual::No usable base ref (event=$EVENT, base='$BASE'). The visual gate will skip loudly — it compares nothing this run."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "base=$BASE" >> "$GITHUB_OUTPUT"
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Record the base ref's baseline
+        if: steps.base.outputs.skip != 'true'
+        # A base ref that cannot be shot (a card that fails to render at that
+        # commit) is a defect of the base, not of this change, so it must not
+        # block the PR: the recorder is allowed to fail, and the comparison
+        # below then degrades to a loud skip or to a partial compare that names
+        # every shot it had no baseline for.
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          git checkout --force --detach "${{ steps.base.outputs.base }}"
+          # Both sides are measured by the SAME comparator: keep HEAD's gate
+          # tooling even while the CARDS and the CSS are the base ref's.
+          # Otherwise a PR that touches this gate is scored by two different
+          # gates and the diff is uninterpretable. node_modules is untracked,
+          # so the browser and its deps stay exactly as `npm ci` left them.
+          git checkout --force "${{ steps.base.outputs.head }}" -- templates/_tooling
+          node templates/_tooling/lw-visual.mjs --record --dir "$RUNNER_TEMP/visual"
+
+      - name: Restore HEAD
+        if: always() && steps.base.outputs.skip != 'true'
+        run: git checkout --force --detach "${{ steps.base.outputs.head }}"
+
+      # Compare only — never records. With no baseline (the skip cases above)
+      # this exits 0 with a SKIPPED banner rather than recording 136 shots and
+      # calling it a pass, which is what it used to do on every single run.
+      #
+      # An INTENDED visual change still has to be able to land. `--update` is
+      # meaningless here (the baseline is thrown away with the runner), so the
+      # escape hatch is a marker in the head commit message. It is deliberately
+      # awkward and it is greppable — `git log --grep='\[visual-ok\]'` counts
+      # every time somebody waved the gate through, the same property that makes
+      # `data-a11y-expect` safe to have.
       - name: Visual regression
-        run: npm run check:visual
+        env:
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -uo pipefail
+          ACCEPT=""
+          if git log -1 --pretty=%B "$HEAD_SHA" | grep -qF '[visual-ok]'; then
+            echo "::warning title=lw-visual::[visual-ok] in the head commit — visual differences will be reported but will not fail the build. Review the uploaded diff artifact."
+            ACCEPT="--report-only"
+          fi
+          node templates/_tooling/lw-visual.mjs --compare $ACCEPT --dir "$RUNNER_TEMP/visual"
+
+      # always(), not failure(): under [visual-ok] the gate exits 0, and that is
+      # precisely the run whose diff a reviewer has to look at. `if-no-files-found:
+      # ignore` keeps it silent on the runs that produced no diff at all.
       - name: Upload visual diff
-        if: failure()
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: visual
-          path: .visual
+          path: |
+            ${{ runner.temp }}/visual/diff
+            ${{ runner.temp }}/visual/current
+          if-no-files-found: ignore
           retention-days: 14

@@ -43,13 +43,16 @@ export function DatePicker({
     ? presets.findIndex(p => { const r = p.get(); return r.start.getTime() === day(value.start).getTime() && r.end.getTime() === day(value.end).getTime(); })
     : -1;
 
+  /* The empty state is an ATTRIBUTE, not a second class the caller picks: it is
+     the same element either way, so data-placeholder keeps the choice in the CSS
+     layer where the ink already lives. */
   const field = (
     <button type="button" id={id || uid} disabled={disabled}
       aria-invalid={invalid ? "true" : undefined} aria-label={label}
-      className={cx("lw-input", size === "sm" && "lw-input-sm", size === "lg" && "lw-input-lg", className)}
-      style={{ display: "flex", alignItems: "center", gap: "var(--lw-space-8)", textAlign: "left", cursor: disabled ? "not-allowed" : "pointer" }}>
-      <Icon name="calendar" size={15} style={{ flex: "none", color: "var(--lw-fg-subtle)" }} />
-      <span style={{ flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", color: text ? "var(--lw-fg)" : "var(--lw-fg-subtle)" }}>
+      className={cx("lw-input", "lw-datefield", size === "sm" && "lw-input-sm", size === "lg" && "lw-input-lg", className)}
+      data-placeholder={text ? undefined : "true"}>
+      <Icon name="calendar" size={15} className="lw-datefield-ic" />
+      <span className="lw-datefield-text">
         {text || placeholder || (range ? "Pick a range" : "Pick a date")}
       </span>
     </button>
@@ -62,7 +65,14 @@ export function DatePicker({
         {range && presets.length > 0 && (
           <div className="lw-cal-presets">
             {presets.map((p, i) => (
-              <button key={p.label} type="button" className="lw-cal-preset" aria-pressed={i === activePreset}
+              /* aria-current, not aria-pressed. These are shortcut ACTIONS —
+                 each applies a range and closes the panel — so `aria-pressed`
+                 announced four toggle buttons, three of them "not pressed",
+                 for a set where at most one is ever the current range and often
+                 none is. aria-current is the idiom for "this one in the set is
+                 the current one" and claims nothing about togglability. */
+              <button key={p.label} type="button" className="lw-cal-preset"
+                aria-current={i === activePreset ? "true" : undefined}
                 onClick={() => { onChange && onChange(p.get()); setOpen(false); }}>{p.label}</button>
             ))}
           </div>

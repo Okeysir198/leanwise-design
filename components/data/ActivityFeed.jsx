@@ -2,16 +2,23 @@ import * as React from "react";
 import { Icon } from "../primitives/Icon.jsx";
 const cx = (...a) => a.filter(Boolean).join(" ");
 
+const ms = (when) => (when instanceof Date ? when.getTime() : new Date(when).getTime());
+/* The absolute form, and the fallback while "now" is unknown: it depends only on
+   the item, so a server render and the client's hydration agree on it. */
+const stamp = (when) => new Intl.DateTimeFormat(undefined, { day: "numeric", month: "short" }).format(ms(when));
+
 /* Relative until it stops being useful. "3 days ago" is worse than a date the
-   moment the user needs to correlate it with anything else. */
+   moment the user needs to correlate it with anything else.
+   `now` still defaults to Date.now() HERE because this is a plain function the
+   caller invokes imperatively; the hazard was defaulting it during render. */
 export function timeAgo(when, now = Date.now()) {
-  const t = when instanceof Date ? when.getTime() : new Date(when).getTime();
+  const t = ms(when);
   const s = Math.max(0, (now - t) / 1000);
   if (s < 60) return "just now";
   if (s < 3600) return Math.floor(s / 60) + "m ago";
   if (s < 86400) return Math.floor(s / 3600) + "h ago";
   if (s < 86400 * 3) return Math.floor(s / 86400) + "d ago";
-  return new Intl.DateTimeFormat(undefined, { day: "numeric", month: "short" }).format(t);
+  return stamp(when);
 }
 
 const bucket = (when, now) => {
@@ -28,10 +35,22 @@ const bucket = (when, now) => {
  * Items are grouped by day bucket, because 40 undifferentiated rows with a
  * relative timestamp each is a list nobody scans.
  */
-export function ActivityFeed({ items = [], onItemClick, grouped = true, now = Date.now(), label = "Activity", className, ...rest }) {
+export function ActivityFeed({ items = [], onItemClick, grouped = true, now, label = "Activity", className, ...rest }) {
+  /* `now` is resolved in an EFFECT, not defaulted during render — the same fix
+     Calendar's `today` marker got in v1.1.5, and for the same reason: Date.now()
+     in the render body differs between a server render and the client's
+     hydration, so every relative timestamp and every day heading was a
+     mismatch waiting for the first SSR consumer. Until it lands, timestamps
+     show their absolute date and the day headings are held back; both depend
+     only on the item, so the server and the first client render agree. Pass
+     `now` to keep the output deterministic in a test or a specimen. */
+  const [mounted, setMounted] = React.useState(null);
+  React.useEffect(() => { setMounted(Date.now()); }, []);
+  const at = now != null ? now : mounted;
+
   const groups = [];
   items.forEach((it) => {
-    const g = grouped && it.when ? bucket(it.when, now) : null;
+    const g = grouped && it.when && at != null ? bucket(it.when, at) : null;
     const last = groups[groups.length - 1];
     if (last && last.name === g) last.items.push(it);
     else groups.push({ name: g, items: [it] });
@@ -45,7 +64,9 @@ export function ActivityFeed({ items = [], onItemClick, grouped = true, now = Da
   return (
     <div className={cx("lw-feed", className)} role="group" aria-label={label} {...rest}>
       {groups.map((g, gi) => (
-        <React.Fragment key={g.name ?? gi}>
+        /* Keyed on the index: two runs can carry the same bucket name when the
+           items are not in date order, and a duplicate key is a dropped child. */
+        <React.Fragment key={gi}>
           {g.name && <div className="lw-feed-group">{g.name}</div>}
           {g.items.map((it, i) => {
             const Tag = it.href ? "a" : onItemClick || it.onClick ? "button" : "div";
@@ -58,7 +79,7 @@ export function ActivityFeed({ items = [], onItemClick, grouped = true, now = Da
                 <span className="lw-feed-main">
                   <span className="lw-feed-title">{it.title}</span>
                   <span className="lw-feed-meta">
-                    {it.when ? timeAgo(it.when, now) : null}{it.meta ? (it.when ? " · " : "") + it.meta : ""}
+                    {it.when ? (at != null ? timeAgo(it.when, at) : stamp(it.when)) : null}{it.meta ? (it.when ? " · " : "") + it.meta : ""}
                   </span>
                 </span>
                 {it.unread && <span className="lw-sr-only">Unread</span>}

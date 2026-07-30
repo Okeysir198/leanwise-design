@@ -17,7 +17,7 @@ export function BarChart({ labels = [], series = [], height = 200, stacked, labe
       <svg className="lw-chart" viewBox={"0 0 " + w + " " + height} role="img" aria-label={label}>
         <Grid f={f} />
         <g className="axis">
-          {labels.map((l, i) => <text key={l} x={pad.l + bandW * i + bandW / 2} y={height - 6} textAnchor="middle">{l}</text>)}
+          {labels.map((l, i) => <text key={i} x={pad.l + bandW * i + bandW / 2} y={height - 6} textAnchor="middle">{l}</text>)}
         </g>
         {labels.map((l, i) => {
           let acc = 0;
@@ -27,7 +27,7 @@ export function BarChart({ labels = [], series = [], height = 200, stacked, labe
             const x = stacked ? pad.l + bandW * i + (bandW - barW) / 2 : pad.l + bandW * i + (bandW - barW * series.length) / 2 + barW * si;
             const yy = stacked ? pad.t + ih - acc - h : y(v);
             acc += h;
-            return <rect key={s.name + i} className="bar" x={x} y={yy} width={barW} height={Math.max(0, h)}
+            return <rect key={si} className="bar" x={x} y={yy} width={barW} height={Math.max(0, h)}
               rx="2" fill={s.color || SERIES(si)}><title>{s.name + " · " + l + " · " + nf.format(v)}</title></rect>;
           });
         })}

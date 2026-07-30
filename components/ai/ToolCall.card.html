@@ -5,15 +5,11 @@
 <link rel="stylesheet" href="../../base.css">
 <link rel="stylesheet" href="../../marketing.css">
 <link rel="stylesheet" href="../../product.css">
-<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../preview/_vendor/react.development.js"></script>
+<script src="../../preview/_vendor/react-dom.development.js"></script>
+<script src="../../preview/_vendor/babel.min.js"></script>
 <script src="../../_ds_bundle.js"></script>
-<style>.lbl{font-family:var(--lw-font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--lw-fg-subtle);display:block;margin-bottom:8px}
-code{font-family:var(--lw-font-mono);font-size:12px;background:var(--lw-bg-inset);padding:1px 5px;border-radius:2px}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.pane{padding:20px;display:grid;gap:16px;align-content:start;border-radius:10px}
-.pane.dark{background:var(--lw-navy-deep)}.pane.dark .lbl{color:var(--lw-on-dark-3)}
-.grid4{display:grid;grid-template-columns:1fr 1fr;gap:14px}.cell{border:1px solid var(--lw-line);border-radius:10px}</style>
+<style>.grid4{display:grid;grid-template-columns:1fr 1fr;gap:14px}.cell{border:1px solid var(--lw-line);border-radius:10px}</style>
 </head><body><div class="card">
 <header><h1>Agent surfaces</h1>
 <p class="sub"><b><code>AgentTrace</code> says a step ran; <code>ToolCall</code> says what it did.</b> Pair them — the
@@ -25,7 +21,7 @@ green-on-green is unreadable at exactly the moment it matters.</p>
 <p class="sub"><b>One system rule these encode: an AI surface is never the only path to an outcome.</b> Every artifact
 has a manual editor and a revert; every rating has a correction path, because a number nobody can act on is not
 feedback.</p></header>
-<div class="two"><div class="pane" id="light"></div><div class="pane dark lw-band-dark" id="dark"></div></div>
+<div class="panes"><div class="pane" id="light"></div><div class="pane dark lw-band-dark" id="dark"></div></div>
 </div>
 <script type="text/babel">
 const LW = window.LeanWiseDesign_f2d907;
@@ -48,7 +44,7 @@ function Demo(){
   ];
   return (
     <Stack gap={16}>
-      <div><span className="lbl">trace + tool calls</span>
+      <div><span className="lbl-eyebrow lbl-above">trace + tool calls</span>
         <AgentTrace steps={[{label:"Parsed the question",state:"done"},{label:"Retrieved 8 passages",state:"done"},{label:"Drafting the answer",state:"active"}]} />
         <div style={{marginTop:12}}>
           <ToolCall name="search_index" summary="contracts/2024 · 8 hits" duration={214} state="ok"
@@ -56,13 +52,13 @@ function Demo(){
           <ToolCall name="fetch_document" summary="doc_4182 — 404" duration={88} error="Not found: doc_4182" />
         </div>
       </div>
-      <div><span className="lbl">diff review — accept or reject per hunk</span>
+      <div><span className="lbl-eyebrow lbl-above">diff review — accept or reject per hunk</span>
         <DiffReview hunks={hunks} decisions={dec}
           onDecide={(id,d)=>setDec(x=>({...x,[id]:d}))}
           onAcceptAll={()=>setDec({a:"accepted",b:"accepted"})}
           onRejectAll={()=>setDec({a:"rejected",b:"rejected"})} />
       </div>
-      <div><span className="lbl">artifact — versioned, revertible, manually editable</span>
+      <div><span className="lbl-eyebrow lbl-above">artifact — versioned, revertible, manually editable</span>
         <Artifact title="Termination clause summary" version={v} versionCount={4}
           onPrevVersion={()=>setV(n=>n-1)} onNextVersion={()=>setV(n=>n+1)}
           onRevert={()=>setV(1)} onEdit={()=>{}}
@@ -72,7 +68,7 @@ function Demo(){
             after the second renewal term.</p>
         </Artifact>
       </div>
-      <div><span className="lbl">feedback</span>
+      <div><span className="lbl-eyebrow lbl-above">feedback</span>
         <Feedback value={fb} onChange={setFb} onComment={()=>{}} note="Was this grounded in the right source?" />
       </div>
     </Stack>

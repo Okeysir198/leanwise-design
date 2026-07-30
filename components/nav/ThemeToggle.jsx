@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Icon } from "../primitives/Icon.jsx";
-import { paint, THEME_KEY } from "../../hooks.js";
+import { paint, persist, THEME_KEY } from "../../hooks.js";
+import { useRadioGroup } from "../_radio-group.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
 
 
@@ -30,6 +31,10 @@ const GLYPHS = { light: "sun", dark: "moon", system: "monitor" };
  * Glyphs, not words: the control sits in app chrome where three text labels cost
  * more room than the choice is worth. Each button is named for assistive tech
  * and carries a title, so the meaning survives without the text.
+ *
+ * `radiogroup` / `radio` / `aria-checked`, not `aria-pressed` — the modes are one
+ * choice, not three independent toggles. Same call as `Segmented`, and the same
+ * roving tabindex and arrow keys: see `_radio-group.js`.
  */
 export function ThemeToggle({ value, onChange, modes = ["light", "dark"], className, ...rest }) {
   const [internal, setInternal] = React.useState(modes.includes("system") ? "system" : modes[0]);
@@ -48,13 +53,19 @@ export function ThemeToggle({ value, onChange, modes = ["light", "dark"], classN
     onChange && onChange(m);
     // Only the UNCONTROLLED toggle owns the global key. A controlled one is a
     // view onto the host's state; persisting behind its back is not ours to do.
-    if (value === undefined) { try { localStorage.setItem(THEME_KEY, m); } catch (e) {} }
+    /* persist(), not a local localStorage write: the choice has to reach the
+       COOKIE too or an SSR consumer cannot resolve the theme server-side. This
+       component having its own copy of the write is how it missed that. */
+    if (value === undefined) persist(m);
     paint(m);
   };
+  const { ref, onKeyDown, tabIndexFor } = useRadioGroup(modes, mode, apply);
   return (
-    <div className={cx("lw-segmented", className)} role="group" aria-label="Colour theme" {...rest}>
-      {modes.map((m) => (
-        <button key={m} type="button" aria-pressed={mode === m} onClick={() => apply(m)}
+    <div ref={ref} className={cx("lw-segmented", className)} role="radiogroup" aria-label="Colour theme"
+      onKeyDown={onKeyDown} {...rest}>
+      {modes.map((m, i) => (
+        <button key={m} type="button" role="radio" aria-checked={mode === m}
+          tabIndex={tabIndexFor(i)} onClick={() => apply(m)}
           aria-label={LABELS[m] || m} title={LABELS[m] || m}>
           <Icon name={GLYPHS[m] || "monitor"} size={16} />
         </button>

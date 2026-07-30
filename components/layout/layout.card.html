@@ -5,13 +5,11 @@
 <link rel="stylesheet" href="../../base.css">
 <link rel="stylesheet" href="../../marketing.css">
 <link rel="stylesheet" href="../../product.css">
-<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../preview/_vendor/react.development.js"></script>
+<script src="../../preview/_vendor/react-dom.development.js"></script>
+<script src="../../preview/_vendor/babel.min.js"></script>
 <script src="../../_ds_bundle.js"></script>
-<style>.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.pane{padding:20px;display:grid;gap:14px;align-content:start;border-radius:10px}
-.pane.dark{background:var(--lw-navy-deep)}.lbl{font-family:var(--lw-font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--lw-fg-subtle)}
-.pane.dark .lbl{color:var(--lw-on-dark-3)}.demo{background:var(--lw-brand-soft);border:1px dashed var(--lw-brand-line);border-radius:6px;padding:12px;font-family:var(--lw-font-mono);font-size:11px;color:var(--lw-brand-on)}</style>
+<style>.demo{background:var(--lw-brand-soft);border:1px dashed var(--lw-brand-line);border-radius:6px;padding:12px;font-family:var(--lw-font-mono);font-size:11px;color:var(--lw-brand-on)}</style>
 </head><body><div class="card">
 <header><h1>Layout primitives</h1>
 <p class="sub"><b>Stack</b> is vertical rhythm, <b>Cluster</b> is a wrapping row, <b>Grid</b> is auto-fit columns, and
@@ -27,12 +25,12 @@ const { Stack, Cluster, Grid, Split } = LW;
 const B = ({children}) => <div className="demo">{children}</div>;
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Stack gap={24}>
-    <div><span className="lbl">Stack gap={24}</span><Stack gap={8} style={{marginTop:8}}><B>row</B><B>row</B><B>row</B></Stack></div>
-    <div><span className="lbl">Cluster — wraps, never overflows</span><Cluster gap={8} style={{marginTop:8}}>
+    <div><span className="lbl-eyebrow">Stack gap={24}</span><Stack gap={8} style={{marginTop:8}}><B>row</B><B>row</B><B>row</B></Stack></div>
+    <div><span className="lbl-eyebrow">Cluster — wraps, never overflows</span><Cluster gap={8} style={{marginTop:8}}>
       {["all","contracts","policies","transcripts","email","tickets","wiki"].map(t=><B key={t}>{t}</B>)}</Cluster></div>
-    <div><span className="lbl">Grid min=180px — auto-fit, no breakpoint</span><Grid min={180} style={{marginTop:8}}>
+    <div><span className="lbl-eyebrow">Grid min=180px — auto-fit, no breakpoint</span><Grid min={180} style={{marginTop:8}}>
       {[1,2,3,4,5].map(i=><B key={i}>col {i}</B>)}</Grid></div>
-    <div><span className="lbl">Split rail=260 — one column below 1024px</span><Split rail={260} style={{marginTop:8}}>
+    <div><span className="lbl-eyebrow">Split rail=260 — one column below 1024px</span><Split rail={260} style={{marginTop:8}}>
       <B>main</B><B>rail</B></Split></div>
   </Stack>
 );

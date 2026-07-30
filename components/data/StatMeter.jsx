@@ -25,7 +25,7 @@ export function StatMeter({ label, value, unit, delta, direction, percent, targe
       {label && <span className="lw-card-eyebrow">{label}</span>}
       <div className="lw-stat-row">
         <div className="lw-stat">
-          <span className="n" style={{ fontSize: 32 }}>{value}{unit && <span className="u">{unit}</span>}</span>
+          <span className="n">{value}{unit && <span className="u">{unit}</span>}</span>
         </div>
         {delta && (
           <span className="lw-stat-delta" data-dir={direction}>
@@ -40,7 +40,10 @@ export function StatMeter({ label, value, unit, delta, direction, percent, targe
           aria-label={typeof label === "string" ? label : undefined}
           aria-valuetext={target != null ? percent + "% of a " + target + "% target" : undefined}>
           <i className="fill" />
-          {target != null && <span className="target" style={{ left: target + "%" }} />}
+          {/* insetInlineStart, not left: the bar is a logical row and an RTL page fills
+              it from the other edge, so a physical offset puts the target marker on
+              the wrong side of its own measurement. */}
+          {target != null && <span className="target" style={{ insetInlineStart: target + "%" }} />}
         </div>
       )}
       {foot && <span className="lw-stat-foot">{foot}</span>}

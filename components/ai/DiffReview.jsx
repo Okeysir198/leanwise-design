@@ -23,7 +23,7 @@ export function DiffReview({ hunks = [], decisions = {}, onDecide, onAcceptAll, 
         return (
           <div key={h.id} className="lw-diff-hunk" data-decision={d}>
             <div className="lw-diff-head">
-              <Icon name="file" size={14} style={{ color: "var(--lw-fg-subtle)", flex: "none" }} />
+              <Icon name="file" size={14} className="lw-diff-ic" />
               <span className="lw-diff-file">{h.file}{h.range ? " · " + h.range : ""}</span>
             </div>
             <div className="lw-diff-lines">
