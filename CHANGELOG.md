@@ -10,6 +10,12 @@ and would not be at five.
 
 ## [Unreleased]
 
+Nothing yet.
+
+## [1.1.4] — 2026-07-30
+
+Two shipped-package defects, plus the cleanup pass that found them.
+
 ### Fixed
 
 - **`npm run build` was broken, and with it `prepublishOnly`.** `react.d.ts` was a hand-written
@@ -28,8 +34,46 @@ and would not be at five.
   they get React as a UMD global. Only a consumer bundling the package saw it. The import is
   added, and `check:tokens`'s self-check now asserts it for every `components/**/*.jsx`.
 
-Both were caught by the review pass in the previous commit and are fixed here rather than
-folded into it: they are correctness, and a cleanup commit should stay a cleanup commit.
+Both had been broken for at least two releases: the build fails on any clean checkout, and a
+bundling consumer could not import the package at all. The preview cards hid the second one —
+they get React as a UMD global, so every gate that renders a card was green.
+
+### Changed — the cleanup pass
+
+- **The two browser gates run in 9.0s, down from 84.2s.** Each card is navigated ONCE and the
+  theme swapped in place (the document is identical across the matrix), across four worker
+  pages, waiting on fonts and a mounted root rather than a flat 250ms sleep — which was 47.6s
+  of the 84.2s on its own. axe is injected per page instead of recompiled on all 68
+  navigations. All 136 visual shots come back byte-identical to baselines recorded by the old
+  code, which is what proves the rewrite behaviour-preserving.
+- **`lw-a11y` refuses to score a card that rendered nothing.** 21 cards pull React and Babel
+  from unpkg; on a CDN failure axe found no violations in an empty div and the gate exited 0.
+  It also freezes transitions like `lw-visual` does — flipping the theme in place starts every
+  colour transition at once, and axe reading a half-finished frame scored an `.lw-input` at
+  1.18 between its two themes.
+- **One CSS parser (`templates/_tooling/_css.mjs`) instead of three.** The `@import` defect was
+  found once, hand-fixed twice, and was still live in the third copy — the same defect that
+  gutted `tokens.json` and made the parity gate vacuous at v1.1.2. `tokens.json` regenerates
+  byte-identical through the shared parser.
+- **Contrast coverage is now DERIVED from the CSS layers, not only declared.** The MANIFEST
+  lists pairs someone thought of; its failure mode is silent green. The gate now also scores
+  every rule declaring both a token colour and a token background, skipping WCAG-exempt
+  disabled states and scoping band-locked rules to their ground. It found two live AA failures
+  on its first run, both invisible to the manifest AND to both card gates because no card
+  renders either rule: `.lw-file-tree li[data-active]` at 3.98 (a site the v1.1.3
+  `--lw-brand-on` sweep missed, because the rule spans three lines and the sweep was line-wise)
+  and `.lw-pill.brand` at 2.18 on dark (theme-invariant TIERS paired with an ink that
+  re-points).
+- `ThemeToggle` writes the theme through `hooks.js`'s `paint()` / `THEME_KEY` instead of its own
+  copy; the comment there said "the hook and the component must never disagree", which
+  documented the coupling rather than removing it.
+- `BarChart` / `LineChart` share `frame()` and `<Grid>` from `chart-parts.jsx` — the plot
+  geometry had two homes. Verified identical element trees for bars, stacked bars and areas.
+- 34 hand-expanded three-way dark selectors collapsed to `:is()` (identical specificity;
+  `check:visual` confirms byte-identical rendering). `Popover`'s capture-phase scroll handler
+  and `DataGrid`'s column resize coalesce to one update per frame. `preview/_card.js` resolves
+  the page ground once per hydrate instead of a forced layout per swatch, and has one coalesced
+  re-hydrate trigger instead of two.
 
 ## [1.1.3] — 2026-07-30
 
