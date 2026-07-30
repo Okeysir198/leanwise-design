@@ -428,6 +428,17 @@
   --lw-dur-aurora-b: 32s; /* @kind other */    /* .lw-aurora::after                  */
   --lw-dur-vt-old: 160ms; /* @kind other */  /* view-transition old snapshot fade  */
   --lw-dur-vt-new: 220ms; /* @kind other */  /* view-transition new snapshot fade  */
+  --lw-dur-press: 60ms; /* @kind other */    /* :active settle — btn / interactive card */
+  --lw-dur-spin: 700ms; /* @kind other */    /* .lw-btn[data-loading] spinner      */
+  --lw-dur-spin-slow: 2.4s; /* @kind other */ /* same spinner, reduced-motion       */
+  --lw-dur-ground: 26s; /* @kind other */    /* .lw-page-*::before lwGroundDrift    */
+  --lw-dur-comb: 14s; /* @kind other */      /* .lw-page-*::after lwCombPulse*      */
+  --lw-dur-breathe: 24s; /* @kind other */   /* .lw-hero-dark::after lwMarkBreathe  */
+  --lw-dur-sheen: 19s; /* @kind other */     /* .lw-hero-dark::before lwSheen       */
+  --lw-dur-shimmer: 1.4s; /* @kind other */  /* .lw-skeleton::after lwShimmer       */
+  --lw-dur-caret-stream: 1s; /* @kind other */ /* .lw-msg[data-streaming] caret      */
+  --lw-dur-trace: 1.6s; /* @kind other */    /* .lw-trace li[data-state="active"]   */
+  --lw-dur-tool: 1.4s; /* @kind other */     /* .lw-tool[data-state="running"] dot  */
 
   /* Legacy aliases — DO NOT REMOVE. Consumers reference these by name; they
      now point onto the scale above. --lw-duration-fast was 120ms and maps to
@@ -465,6 +476,14 @@
      toast   100  transient notifications.
      modal   110  blocking dialogs, focus-trap surfaces. Always the top. */
   --lw-z-base: 0; /* @kind other */
+  /* Local tier — ordering WITHIN one component's own stacking context (a data
+     grid's header over its pinned column over its cells). Deliberately below
+     --lw-z-raised: these never compete with page furniture, and collapsing them
+     onto one page-level token would flatten the component's internal order. */
+  --lw-z-local-1: 1; /* @kind other */
+  --lw-z-local-2: 2; /* @kind other */
+  --lw-z-local-3: 3; /* @kind other */
+  --lw-z-local-4: 4; /* @kind other */
   --lw-z-raised: 10; /* @kind other */
   --lw-z-nav: 50; /* @kind other */
   --lw-z-sticky: 60; /* @kind other */

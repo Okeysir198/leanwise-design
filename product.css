@@ -300,7 +300,7 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 .lw-skeleton.text { height: 0.75em; margin: 0.2em 0; border-radius: var(--lw-radius-xs); }
 .lw-skeleton.circle { border-radius: 50%; }
 @media (prefers-reduced-motion: no-preference) {
-  .lw-skeleton::after { content: ""; position: absolute; inset: 0; transform: translateX(-100%); background: linear-gradient(90deg, transparent, hsl(var(--lw-fg-c) / 0.06), transparent); animation: lwShimmer 1.4s var(--lw-ease-in-out) infinite; }
+  .lw-skeleton::after { content: ""; position: absolute; inset: 0; transform: translateX(-100%); background: linear-gradient(90deg, transparent, hsl(var(--lw-fg-c) / 0.06), transparent); animation: lwShimmer var(--lw-dur-shimmer) var(--lw-ease-in-out) infinite; }
 }
 @keyframes lwShimmer { to { transform: translateX(100%); } }
 
@@ -568,7 +568,7 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
 .lw-msg[data-streaming="true"] .body:not(:has(p))::after { content: "\258B"; margin-left: 2px; color: var(--lw-brand-text); }
 @media (prefers-reduced-motion: no-preference) {
   .lw-msg[data-streaming="true"] .body > p:last-of-type::after,
-  .lw-msg[data-streaming="true"] .body:not(:has(p))::after { animation: lwCaret 1s steps(1) infinite; }
+  .lw-msg[data-streaming="true"] .body:not(:has(p))::after { animation: lwCaret var(--lw-dur-caret-stream) steps(1) infinite; }
 }
 @keyframes lwCaret { 50% { opacity: 0; } }
 
@@ -603,7 +603,7 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
 .lw-trace li[data-state="done"]::after { background: var(--lw-success-on); border-color: var(--lw-success-on); }
 .lw-trace li[data-state="active"]::after { background: var(--lw-brand-500); border-color: var(--lw-brand-500); }
 .lw-trace li[data-state="error"]::after { background: var(--lw-danger-on); border-color: var(--lw-danger-on); }
-@media (prefers-reduced-motion: no-preference) { .lw-trace li[data-state="active"]::after { animation: lwPulse 1.6s var(--lw-ease-in-out) infinite; } }
+@media (prefers-reduced-motion: no-preference) { .lw-trace li[data-state="active"]::after { animation: lwPulse var(--lw-dur-trace) var(--lw-ease-in-out) infinite; } }
 @keyframes lwPulse { 50% { box-shadow: 0 0 0 4px hsl(var(--lw-brand-500-c) / 0.18); } }
 .lw-trace .step { font-size: var(--lw-text-sm); color: var(--lw-fg); line-height: 1.4; }
 .lw-trace .meta { font-family: var(--lw-font-mono); font-size: 10.5px; color: var(--lw-fg-subtle); line-height: 1.5; overflow-wrap: anywhere; }
@@ -1026,7 +1026,7 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .lw-dgrid thead th {
-  position: sticky; top: 0; z-index: 2;
+  position: sticky; top: 0; z-index: var(--lw-z-local-2);
   height: var(--lw-control-h-md);
   background: var(--lw-bg-subtle); color: var(--lw-fg-subtle);
   font-size: var(--lw-text-xs); font-weight: var(--lw-fw-medium);
@@ -1034,8 +1034,8 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
 }
 /* A pinned cell has to carry its own background or the scrolling rows show
    through it — sticky positions the box, it does not make it opaque. */
-.lw-dgrid th[data-pin], .lw-dgrid td[data-pin] { position: sticky; z-index: 1; background: var(--lw-bg); }
-.lw-dgrid thead th[data-pin] { z-index: 3; background: var(--lw-bg-subtle); }
+.lw-dgrid th[data-pin], .lw-dgrid td[data-pin] { position: sticky; z-index: var(--lw-z-local-1); background: var(--lw-bg); }
+.lw-dgrid thead th[data-pin] { z-index: var(--lw-z-local-3); background: var(--lw-bg-subtle); }
 .lw-dgrid th[data-pin-last="true"], .lw-dgrid td[data-pin-last="true"] { box-shadow: 1px 0 0 var(--lw-line); }
 .lw-dgrid td.num, .lw-dgrid th.num { text-align: right; font-family: var(--lw-font-mono); font-variant-numeric: tabular-nums; }
 .lw-dgrid tbody tr:last-child td { border-bottom: 0; }
@@ -1051,7 +1051,7 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
    the affordance is invisible. */
 .lw-dgrid-resize {
   position: absolute; top: 0; right: -5px; width: 9px; height: 100%;
-  cursor: col-resize; background: none; border: 0; padding: 0; z-index: 4;
+  cursor: col-resize; background: none; border: 0; padding: 0; z-index: var(--lw-z-local-4);
 }
 .lw-dgrid-resize:hover::after, .lw-dgrid-resize:focus-visible::after {
   content: ""; position: absolute; top: 0; left: 4px; width: 1px; height: 100%; background: var(--lw-brand-500);
@@ -1088,7 +1088,7 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
   border-radius: 50%; border: 1px solid var(--lw-line-strong);
   background: var(--lw-bg); color: var(--lw-fg-subtle);
   font-family: var(--lw-font-mono); font-size: var(--lw-text-xs); font-variant-numeric: tabular-nums;
-  position: relative; z-index: 1;
+  position: relative; z-index: var(--lw-z-local-1);
 }
 .lw-stepper-step[data-state="done"] .lw-stepper-marker { background: var(--lw-brand-500); border-color: var(--lw-brand-500); color: var(--lw-on-brand); }
 .lw-stepper-step[data-state="current"] .lw-stepper-marker { border-color: var(--lw-brand-500); color: var(--lw-brand-text); box-shadow: 0 0 0 3px var(--lw-brand-soft); }
@@ -1179,7 +1179,7 @@ a.lw-feed-item:hover, button.lw-feed-item:hover { background: var(--lw-bg-subtle
 .lw-tool[data-state="ok"] .lw-tool-dot { background: var(--lw-success-on); }
 .lw-tool[data-state="error"] .lw-tool-dot { background: var(--lw-danger-on); }
 @media (prefers-reduced-motion: no-preference) {
-  .lw-tool[data-state="running"] .lw-tool-dot { animation: lwToolPulse 1.4s var(--lw-ease-out) infinite; }
+  .lw-tool[data-state="running"] .lw-tool-dot { animation: lwToolPulse var(--lw-dur-tool) var(--lw-ease-out) infinite; }
   @keyframes lwToolPulse { 50% { opacity: .35; } }
 }
 .lw-tool-body { padding: 0 var(--lw-space-12) var(--lw-space-12); display: grid; gap: var(--lw-space-8); }

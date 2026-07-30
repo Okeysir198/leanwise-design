@@ -141,12 +141,12 @@
    pulse (opacity, safe) for the comb, and a separate travelling element for the
    sense of movement across it. */
 .lw-page-dark::before, .lw-page-light::before {
-  animation: lwGroundDrift 26s var(--lw-ease-in-out) infinite alternate;
+  animation: lwGroundDrift var(--lw-dur-ground) var(--lw-ease-in-out) infinite alternate;
 }
-.lw-page-dark::after { animation: lwCombPulseDark 14s var(--lw-ease-in-out) infinite alternate; }
-.lw-page-light::after { animation: lwCombPulseLight 14s var(--lw-ease-in-out) infinite alternate; }
+.lw-page-dark::after { animation: lwCombPulseDark var(--lw-dur-comb) var(--lw-ease-in-out) infinite alternate; }
+.lw-page-light::after { animation: lwCombPulseLight var(--lw-dur-comb) var(--lw-ease-in-out) infinite alternate; }
 .lw-page-dark .lw-hero-dark::after, .lw-page-light .lw-hero-dark::after {
-  animation: lwMarkBreathe 24s var(--lw-ease-in-out) infinite alternate;
+  animation: lwMarkBreathe var(--lw-dur-breathe) var(--lw-ease-in-out) infinite alternate;
 }
 /* The sheen: the hero's ::before, which the full-page ground otherwise has no
    use for. Oversized and translated, so it never exposes its own edge. */
@@ -162,7 +162,7 @@
   pointer-events: none;
   border-radius: 50%;
   filter: blur(40px);
-  animation: lwSheen 19s var(--lw-ease-in-out) infinite alternate;
+  animation: lwSheen var(--lw-dur-sheen) var(--lw-ease-in-out) infinite alternate;
 }
 .lw-page-dark .lw-hero-dark::before { background: radial-gradient(closest-side, hsl(var(--lw-logo-cyan-c) / 0.22), transparent 100%); }
 .lw-page-light .lw-hero-dark::before { background: radial-gradient(closest-side, hsl(var(--lw-brand-500-c) / 0.12), transparent 100%); }

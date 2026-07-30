@@ -260,7 +260,7 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 
 /* Pressed. Every variant lifts on hover, so every variant must land again on press —
    otherwise the button stays raised while the pointer is down and feels stuck. */
-.lw-btn:active { transform: translateY(0); transition-duration: 60ms; }
+.lw-btn:active { transform: translateY(0); transition-duration: var(--lw-dur-press); }
 
 .lw-btn-link {
   padding: 0;
@@ -323,12 +323,12 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 .lw-btn[data-loading="true"]::after {
   content: ""; position: absolute; width: 15px; height: 15px; border-radius: 999px;
   border: 2px solid var(--lw-btn-spin-ink); border-top-color: transparent; opacity: .9;
-  animation: lw-btn-spin .7s linear infinite;
+  animation: lw-btn-spin var(--lw-dur-spin) linear infinite;
 }
 @keyframes lw-btn-spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) {
   .lw-btn:hover { transform: none; }
-  .lw-btn[data-loading="true"]::after { animation-duration: 2.4s; }
+  .lw-btn[data-loading="true"]::after { animation-duration: var(--lw-dur-spin-slow); }
 }
 
 /* ---- Pills / tags -------------------------------------------------------- */
@@ -394,7 +394,7 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
   box-shadow: var(--lw-shadow-md);
   transform: translateY(-2px);
 }
-.lw-card-interactive:active { transform: translateY(0); box-shadow: var(--lw-shadow-sm); transition-duration: 60ms; }
+.lw-card-interactive:active { transform: translateY(0); box-shadow: var(--lw-shadow-sm); transition-duration: var(--lw-dur-press); }
 .lw-card-interactive:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); border-color: var(--lw-brand-500); }
 .dark .lw-card-interactive:focus-visible, [data-band="dark"] .lw-card-interactive:focus-visible, .lw-band-dark .lw-card-interactive:focus-visible { box-shadow: var(--lw-focus-ring); border-color: var(--lw-brand-400); }
 @media (prefers-reduced-motion: reduce) {
