@@ -128,6 +128,34 @@ and would not be at five.
 - The per-control heights in `app.css`'s `@media (pointer: coarse)` block are gone. They
   would have outranked the density token the same block now raises.
 
+## [1.1.1] — 2026-07-30
+
+No rendered output changes. Two gates that reported success they had not earned, and the
+debt the second one was hiding.
+
+### Fixed
+- **The contrast gate never measured a pair.** Three defects, each masking the next. Its CSS
+  splitter treated everything since the last `}` as a selector, so the leading
+  `@import url("./fonts.css");` was glued onto the first `:root` — the palette block never
+  matched and every channel resolved as "unresolved token". Parity matched theme blocks by
+  exact selector text, but `tokens.css` authors them as lists
+  (`:where(.lw-band-dark, [data-band="dark"])`) and scopes the system-preference block with a
+  bare `:root`. And `:root` / `.dark, …` are each authored across several blocks, of which
+  only the first was read. Now: 64/64 pairs at AA, parity and logo-gradient clean.
+- **`check:tokens` pointed at `src`**, which does not exist in this package — the script threw
+  ENOENT rather than running. It now uses `--css`, the intended in-repo mode.
+- The 18 raw values that surfaced once the lint ran: 13 durations and 5 z-indexes across
+  `base.css`, `marketing.css` and `product.css`.
+
+### Added
+- Names for those 18 values — every literal preserved exactly, so nothing moves on screen.
+  `--lw-dur-press` 60ms, `--lw-dur-spin` 700ms, `--lw-dur-spin-slow` 2.4s, `--lw-dur-ground`
+  26s, `--lw-dur-comb` 14s, `--lw-dur-breathe` 24s, `--lw-dur-sheen` 19s, `--lw-dur-shimmer`
+  1.4s, `--lw-dur-caret-stream` 1s, `--lw-dur-trace` 1.6s, `--lw-dur-tool` 1.4s.
+- `--lw-z-local-1..4` — a local tier BELOW `--lw-z-raised`, for ordering a component against
+  itself (a data grid's header over its pinned column over its cells). Collapsing those onto
+  one page-level token would have flattened the component's internal order.
+
 ## [1.1.0]
 
 Baseline. See the README for what shipped.
