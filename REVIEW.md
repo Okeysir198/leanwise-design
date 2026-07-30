@@ -4,7 +4,11 @@ Standing audit. `CHANGELOG.md` records what moved; this file records what is tru
 still open, and why. Re-read it before touching the CSS layers or the gates.
 
 **Scope reviewed:** `tokens.css`, `base.css`, `marketing.css`, `product.css`, `email.css`,
-83 component exports, 34 specimen cards, 12 templates, 5 gates.
+the barrel's component exports, the specimen cards, the twelve templates, and every gate.
+Counts are deliberately not restated here — `npm run check:dts` prints the export count and
+`npm run check:a11y` the card count, and a number in prose is a second home that goes stale.
+It already had: this line read "83 exports … 5 gates" when the barrel exported 82 and there
+were six.
 
 ---
 
@@ -14,7 +18,9 @@ Coverage is closed and the structural problem the last pass found is fixed. Nine
 open; **seven are resolved, two are blocked on a machine that can run `npm install`.**
 
 What is left is not design work. It is one build, one publish, and the honest admission that
-two gates have never executed.
+`check:visual` still cannot fail in CI — its baselines are byte-exact PNGs and `.visual/` is
+gitignored, so every CI run records a fresh set and compares nothing. Making it real needs
+baselines recorded inside the CI image, not this box's.
 
 ---
 

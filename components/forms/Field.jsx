@@ -1,3 +1,4 @@
+import * as React from "react";
 const cx = (...a) => a.filter(Boolean).join(" ");
 
 
@@ -7,8 +8,14 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  * miss. Wires htmlFor/id and aria-describedby so the control does not have to.
  */
 export function Field({ label, help, error, required, optional, htmlFor, className, children, ...rest }) {
-  const id = htmlFor;
-  const msgId = id ? id + "-msg" : undefined;
+  /* Both ids fall back to a generated one. Without `htmlFor`, msgId was
+     undefined — so the error span carried no id and nothing pointed at it, and
+     the render-prop branch handed out `aria-describedby: undefined`. The most
+     common use, `<Field error="…"><Input/></Field>`, produced an error message
+     the screen reader never connected to the control. */
+  const auto = React.useId();
+  const id = htmlFor || auto;
+  const msgId = id + "-msg";
   return (
     <div className={cx("lw-field", className)} {...rest}>
       {label && (
@@ -22,7 +29,7 @@ export function Field({ label, help, error, required, optional, htmlFor, classNa
         </label>
       )}
       {typeof children === "function"
-        ? children({ id, "aria-describedby": msgId, "aria-invalid": error ? "true" : undefined, required })
+        ? children({ id, "aria-describedby": (error || help) ? msgId : undefined, "aria-invalid": error ? "true" : undefined, required })
         : children}
       {error ? <span className="lw-error" id={msgId} role="alert">{error}</span>
              : help ? <span className="lw-help" id={msgId}>{help}</span> : null}

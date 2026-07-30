@@ -16,8 +16,10 @@ export function Tabs({ tabs = [], value, onChange, label, className, ...rest }) 
     if (el) el.focus({ preventScroll: true });
   };
   const onKeyDown = (e) => {
-    const i = tabs.findIndex(t => t.value === value);
-    if (i < 0) return;
+    // -1 means `value` matches no tab (an unset or stale value). Falling back to
+    // the first tab keeps the tablist keyboard-operable; returning made it inert.
+    const found = tabs.findIndex(t => t.value === value);
+    const i = found < 0 ? 0 : found;
     const k = e.key;
     if (k === "Home") { e.preventDefault(); return move(0); }
     if (k === "End") { e.preventDefault(); return move(tabs.length - 1); }

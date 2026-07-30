@@ -28,7 +28,7 @@ export function Drawer({ open, onClose, title, description, footer, side = "end"
   return (
     <dialog ref={ref} className={cx("lw-drawer", className)} data-side={side}
       style={w ? { "--lw-drawer-w": w } : undefined}
-      onClose={onClose} onCancel={onClose} aria-labelledby={titleId} aria-describedby={descId} {...rest}>
+      onClose={onClose} onCancel={(e) => { e.preventDefault(); onClose && onClose(e); }} aria-labelledby={titleId} aria-describedby={descId} {...rest}>
       {title && (
         <div className="lw-drawer-head">
           <h2 className="lw-drawer-title" id={titleId}>{title}</h2>

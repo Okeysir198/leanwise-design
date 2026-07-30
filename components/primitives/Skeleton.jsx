@@ -6,9 +6,9 @@ const cx = (...a) => a.filter(Boolean).join(" ");
 export function Skeleton({ shape = "block", width, height, lines, className, style, ...rest }) {
   if (lines) {
     return (
-      <span className="lw-stack-4" style={{ display: "flex", flexDirection: "column", ...style }} aria-hidden="true" {...rest}>
+      <span className={cx("lw-skeleton-lines", className)} style={style} aria-hidden="true" {...rest}>
         {Array.from({ length: lines }, (_, i) => (
-          <span key={i} className="lw-skeleton text" style={{ width: i === lines - 1 ? "62%" : "100%" }} />
+          <span key={i} className="lw-skeleton text" />
         ))}
       </span>
     );

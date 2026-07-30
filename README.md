@@ -54,7 +54,7 @@ what is still open. `CONTRIBUTING.md` points back here — the checklist lives i
 ## Install
 
 ```jsonc
-"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v1.0.0" }
+"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v1.1.5" }
 ```
 
 ```css
@@ -66,8 +66,13 @@ what is still open. `CONTRIBUTING.md` points back here — the checklist lives i
 @import "@leanwise/design/product.css";   /* app surfaces */
 ```
 ```js
-// tailwind.config.js
-export default { presets: [require("@leanwise/design/tailwind-preset")] };
+// tailwind.config.cjs — the preset is CJS, so `require` needs a CJS config file.
+module.exports = { presets: [require("@leanwise/design/tailwind-preset")] };
+
+// tailwind.config.js in a "type": "module" package — import it instead.
+// `export default { presets: [require(…)] }` is a ReferenceError there.
+import preset from "@leanwise/design/tailwind-preset";
+export default { presets: [preset] };
 ```
 
 ```css
@@ -488,16 +493,24 @@ announced as a control.
 ## Enforcement
 
 ```bash
-npm run check        # the three fast gates — what a contributor runs
+npm run check        # the four fast gates — what a contributor runs
 npm run check:ci     # the above plus the two that need a browser
 
 npm run check:contrast   # every token pair ≥ WCAG AA
 npm run check:tokens     # raw hex, palette escapes, arbitrary-value access, >1 CTA
 npm run check:themes     # every themable CHANNEL re-pointed in every theme scope
+npm run check:dts        # react.d.ts covers every runtime export of react.js
 npm run check:a11y       # axe over every card, both grounds (serious/critical fail)
 npm run check:visual     # every card × light/dark × comfortable/compact
 npm run tokens           # tokens.css → tokens.json (DTCG, for Tokens Studio)
+npm run dts              # react.js → react.d.ts (generated, committed)
 ```
+
+**`check:dts` exists because the barrel had two homes for one fact.** `react.js` is the
+runtime export list; `react.d.ts` was hand-written beside it and drifted — four re-exports
+named a sibling's file, which broke `npm run build` outright, and thirty-one components had
+no types at all, which broke only the consumer. The generator joins `react.js` to each
+component's own `.d.ts` so neither can drift from the other again.
 
 **`check:themes` exists because of a specific bug in this system's history.**
 `--lw-neutral-text` had a derived colour while its three siblings had only channels, so it
@@ -510,6 +523,13 @@ set — one per folder, plus a state matrix where there is a state axis — and 
 both grounds AND both densities is what protects the CSS layers from each other. A
 change that only breaks compact-on-dark is exactly the one no human notices. A missing
 baseline records rather than fails, so adding a card never breaks the PR that adds it.
+
+**But the gate cannot currently fail in CI, and never has.** `.visual/` is gitignored, so
+every CI run has 136 missing baselines, records all of them, and compares nothing. It is
+genuinely useful locally for a before/after within one session, and it says so out loud
+rather than printing "no visual change". Making it real in CI means recording the baselines
+inside the CI image — not committing this box's, which would make CI permanently red rather
+than green, because a byte-exact PNG match is only valid on the machine that recorded it.
 
 **`check:a11y` closes the one hole the contrast gate cannot see.** That gate proves token
 PAIRS in isolation; axe proves the palette as actually composed, plus rendered ARIA — a role

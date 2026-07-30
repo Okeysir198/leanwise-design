@@ -527,7 +527,7 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 /* Target marker — a meter with no target is a bar with no argument. */
 /* The marker sits ON the fill as often as beside it, so it cannot be a single ink:
    a light core with a dark hairline reads against both the track and the fill. */
-.lw-bar .target { position: absolute; top: -3px; bottom: -3px; width: 2px; border-radius: 1px; background: var(--lw-bg); box-shadow: 0 0 0 1px hsl(220 60% 12% / .45); }
+.lw-bar .target { position: absolute; top: -3px; bottom: -3px; width: 2px; border-radius: 1px; background: var(--lw-bg); box-shadow: 0 0 0 1px var(--lw-scrim); }
 /* A reading is not clickable, so a plain tile’s default cursor is right — but this
    rule loads AFTER .lw-card-interactive and was overriding it, so an INTERACTIVE
    tile promised nothing on hover. Scope it to the non-interactive case. */
@@ -713,7 +713,7 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
   width: 40%;
   transform: skewX(-18deg);
   background: linear-gradient(90deg, transparent,
-    rgba(255, 255, 255, 0.35), transparent);
+    var(--lw-on-dark-sheen), transparent);
   pointer-events: none;
 }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
@@ -804,7 +804,12 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
   gap: var(--lw-space-8);
   flex-wrap: wrap;
 }
-.lw-run-controls .lw-btn { min-height: 36px; }
+/* Was `min-height: 36px`, which is (0,2,0) and unconditional — it beat the
+   (0,1,0) `@media (pointer: coarse) { .lw-btn { min-height: 44px } }` floor and
+   shipped a 36px touch target. 36px is off the 32/40/48 scale too; the small
+   control tier is a token, and it keeps the coarse-pointer floor. */
+.lw-run-controls .lw-btn { min-height: var(--lw-control-h-sm); }
+@media (pointer: coarse) { .lw-run-controls .lw-btn { min-height: 44px; } }
 .lw-run-controls input[type="range"] { accent-color: var(--lw-brand-500); }
 .lw-run-controls :focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
 
@@ -881,12 +886,12 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 .lw-feature .lw-feature-more .arrow { flex: none; transition: transform var(--lw-duration) var(--lw-ease-out); }
 .lw-feature-interactive:hover .lw-feature-more .arrow { transform: translateX(3px); }
 
-:is(.dark, [data-band="dark"], .lw-band-dark) .lw-features { background: hsl(0 0% 100% / 0.12); border-color: hsl(0 0% 100% / 0.12); }
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-features { background: var(--lw-on-dark-fill); border-color: var(--lw-on-dark-line); }
 :is(.dark, [data-band="dark"], .lw-band-dark) .lw-feature { background: var(--lw-navy-deep); }
-:is(.dark, [data-band="dark"], .lw-band-dark) .lw-feature-interactive:hover { background: hsl(0 0% 100% / 0.05); }
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-feature-interactive:hover { background: var(--lw-on-dark-fill); }
 .dark .lw-feature h3, [data-band="dark"] .lw-feature h3, .lw-band-dark .lw-feature h3 { color: var(--lw-on-dark); }
 .dark .lw-feature p, [data-band="dark"] .lw-feature p, .lw-band-dark .lw-feature p { color: var(--lw-on-dark-2); }
-.dark .lw-feature .num::after, [data-band="dark"] .lw-feature .num::after, .lw-band-dark .lw-feature .num::after { background: hsl(0 0% 100% / 0.16); }
+.dark .lw-feature .num::after, [data-band="dark"] .lw-feature .num::after, .lw-band-dark .lw-feature .num::after { background: var(--lw-on-dark-fill-strong); }
 
 @media (prefers-reduced-motion: reduce) {
   .lw-feature::before { transition: none; }
@@ -963,9 +968,9 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 .lw-story.lw-card-interactive:hover, .lw-story-interactive:hover { border-color: hsl(var(--lw-brand-500-c) / .55); box-shadow: var(--lw-shadow-md), var(--lw-brand-glow); transform: translateY(-2px); }
 .lw-story-interactive { cursor: pointer; transition: transform var(--lw-duration) var(--lw-ease-out), border-color var(--lw-duration) var(--lw-ease-out), box-shadow var(--lw-duration) var(--lw-ease-out); }
 .lw-story-interactive:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); border-color: var(--lw-brand-500); }
-:is(.dark, [data-band="dark"], .lw-band-dark) .lw-story { background: var(--lw-navy-deep); border-color: hsl(0 0% 100% / .12); }
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-story { background: var(--lw-navy-deep); border-color: var(--lw-on-dark-line); }
 .dark .lw-story .lw-story-quote, [data-band="dark"] .lw-story .lw-story-quote, .lw-band-dark .lw-story .lw-story-quote { color: var(--lw-on-dark); }
 .dark .lw-story h3, [data-band="dark"] .lw-story h3, .lw-band-dark .lw-story h3 { color: var(--lw-on-dark); }
 .dark .lw-story p, .dark .lw-story .meta, [data-band="dark"] .lw-story p, [data-band="dark"] .lw-story .meta, .lw-band-dark .lw-story p, .lw-band-dark .lw-story .meta { color: var(--lw-on-dark-2); }
-.dark .lw-story .meta, [data-band="dark"] .lw-story .meta, .lw-band-dark .lw-story .meta { border-top-color: hsl(0 0% 100% / .12); }
+.dark .lw-story .meta, [data-band="dark"] .lw-story .meta, .lw-band-dark .lw-story .meta { border-top-color: var(--lw-on-dark-line); }
 @media (prefers-reduced-motion: reduce) { .lw-story-interactive:hover { transform: none; } }

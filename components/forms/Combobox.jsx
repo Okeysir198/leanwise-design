@@ -103,12 +103,18 @@ export function Combobox({
         </span>
       ))}
       <input ref={inputRef} id={inputId} role="combobox" type="text" autoComplete="off"
-        aria-expanded={open} aria-controls={listId} aria-autocomplete="list" aria-label={label}
+        aria-expanded={open}
+        /* Only while the list is actually rendered. A dangling IDREF is worse
+           than no attribute: it announces a relationship that does not exist. */
+        aria-controls={open ? listId : undefined} aria-autocomplete="list" aria-label={label}
         aria-activedescendant={open && shown[active] ? listId + "-" + active : undefined}
         aria-invalid={invalid ? "true" : undefined}
         disabled={disabled}
         placeholder={current ? undefined : (multiple && selectedOpts.length ? "" : placeholder)}
-        value={!multiple && !open && current ? current.label : query}
+        /* Keep showing the committed label until the user actually types.
+           Focusing the field opens the popover, so the old condition (`!open`)
+           blanked the visible value on focus with nothing changed. */
+        value={!multiple && current && !query ? current.label : query}
         onChange={(e) => { setQuery(e.target.value); setActive(0); setOpen(true); onSearch && onSearch(e.target.value); }}
         onKeyDown={onKeyDown}
         onFocus={() => setOpen(true)} />
@@ -119,8 +125,8 @@ export function Combobox({
   return (
     <Popover trigger={field} open={open && !disabled} onOpenChange={setOpen} role="listbox"
       triggerAria={false} matchWidth placement="bottom-start" label={label} {...rest}>
-      {loading ? <div className="lw-listbox-empty">Searching…</div>
-        : !shown.length ? <div className="lw-listbox-empty">{emptyText}</div>
+      {loading ? <div id={listId} role="listbox" aria-busy="true" className="lw-listbox-empty">Searching…</div>
+        : !shown.length ? <div id={listId} role="listbox" className="lw-listbox-empty">{emptyText}</div>
         : (
         <ul ref={listRef} className="lw-listbox" id={listId} role="listbox" aria-multiselectable={multiple || undefined}>
           {shown.map((o, i) => {

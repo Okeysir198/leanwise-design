@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,6 +7,7 @@
 </head>
 <body>
 <x-dc>
+<a class="lw-skip" href="#lw-main">Skip to content</a>
 <!-- @template name="Marketing landing page" description="One continuous ground, light or dark, carrying the honeycomb left and the mark right with ambient drift; left-aligned hero, three guarantees, grounded-answer proof, use cases, one CTA. Placeholder copy describes the product only — no invented customers, logos or metrics." -->
 <helmet><script src="./ds-base.js"></script></helmet>
 <div class="{{ pageClass }}" data-band="{{ band }}" style="font-family:var(--lw-font-sans)">
@@ -15,7 +16,7 @@
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="150px,36px" variant="brand" size="sm">Book a walkthrough</x-import>
 </x-import>
 
-<section class="lw-hero-dark">
+<section class="lw-hero-dark" role="main" id="lw-main">
 <div class="lw-container" style="display:flex;flex-direction:column;gap:14px;align-items:flex-start;max-width:min(var(--lw-col-max),1180px)">
 <p class="lw-eyebrow">Retrieval you can audit</p>
 <h1 class="lw-h1" style="max-width:17ch;margin:0">Answers your team can <em>defend</em>.</h1>

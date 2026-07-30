@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,6 +7,7 @@
 </head>
 <body>
 <x-dc>
+<a class="lw-skip" href="#lw-main">Skip to content</a>
 <!-- @template name="Search + filter + results" description="Faceted search with applied-filter chips, three distinct result states (no query / no results / results), and the empty-vs-no-results distinction most products get wrong." -->
 <helmet><script src="./ds-base.js"></script></helmet>
 <div class="{{ themeClass }}" data-band="{{ band }}" style="min-height:100vh;background:var(--lw-bg);color:var(--lw-fg);font-family:var(--lw-font-sans)">
@@ -15,7 +16,7 @@
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.ThemeToggle" hint-size="72px,30px" value="{{ theme }}" onChange="{{ setTheme }}"></x-import>
 </x-import>
 
-<div class="lw-page" style="padding:32px 0 64px;display:flex;flex-direction:column;gap:20px">
+<div class="lw-page" style="padding:32px 0 64px;display:flex;flex-direction:column;gap:20px" role="main" id="lw-main">
 
 <div style="display:flex;flex-direction:column;gap:6px">
 <p class="lw-eyebrow" style="margin:0">Search</p>

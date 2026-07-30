@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -203,7 +203,7 @@
 <sc-for list="{{ detailParas }}" as="p" hint-placeholder-count="6">
 <div>
 <sc-if value="{{ p.isHeading }}" hint-placeholder-val="{{ false }}">
-<h3 style="margin:6px 0 0;font-family:var(--lw-font-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--lw-fg-subtle)">{{ p.text }}</h3>
+<p style="margin:6px 0 0;font-family:var(--lw-font-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--lw-fg-subtle)">{{ p.text }}</p>
 </sc-if>
 <sc-if value="{{ p.isCited }}" hint-placeholder-val="{{ false }}">
 <p style="margin:0;padding:12px 14px;border-radius:var(--lw-radius-md);background:var(--lw-brand-soft);border-left:3px solid var(--lw-brand-500);font-size:13.5px;line-height:1.7;color:var(--lw-fg);text-wrap:pretty">{{ p.text }}</p>

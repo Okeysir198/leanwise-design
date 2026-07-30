@@ -70,6 +70,7 @@ const MANIFEST = [
   { group: "brand fills", fg: "on-danger", bg: "danger",    scope: "both", label: "destructive fill + WHITE ink" },
 
   // ── B. Semantic status fills + their ink. Navy sits on green/amber fills.
+  { group: "status fills", fg: "on-neutral", bg: "neutral", scope: "both", label: "neutral fill + WHITE ink" },
   { group: "status fills", fg: "on-status", bg: "success",  scope: "both", label: "success fill + navy ink" },
   { group: "status fills", fg: "on-status", bg: "warning",  scope: "both", label: "warning fill + navy ink" },
 
@@ -164,6 +165,31 @@ const MANIFEST = [
   { group: "navy-deep ground", fg: "brand-400", bg: "navy-deep", scope: "both", label: ".tok-function / .tok-attr-name (cyan)" },
   { group: "navy-deep ground", fg: "brand-300", bg: "navy-deep", scope: "both", label: ".tok-keyword / .tok-number (light cyan)" },
   { group: "navy-deep ground", fg: "cta-400",   bg: "navy-deep", scope: "both", label: ".tok-string / .tok-tag / .tok-attr-value (amber)" },
+
+  //    The dark-band table header: --lw-on-dark-3 over the page ground plus the
+  //    header's own white wash. It sits at 4.67 with the wash and 4.33 with the
+  //    fill, so it is the pair that decides which overlay tier a header may use.
+  { group: "navy-deep ground", fg: "on-dark-3", bg: "bg", scope: "dark", label: "dark-band table header ink on the page ground" },
+
+  // ── H. NON-TEXT contrast, WCAG 1.4.11 — 3:1, via `large`.
+  //    Until now every pair in this manifest was a TEXT pair, and `AA_LARGE` was
+  //    dead code: no entry set `large`. That left the two things 1.4.11 actually
+  //    names — the boundary of a UI component, and the focus indicator —
+  //    measured by nothing. axe does not close it either: its color-contrast
+  //    rule is text-only.
+  //
+  //    --lw-border-2 (`line-strong`) is the border of .lw-input / .lw-textarea /
+  //    .lw-select / .lw-combo. On an empty field it is the ONLY thing that makes
+  //    the control perceivable, so it is a 1.4.11 boundary, not a divider.
+  //    --lw-line stays a divider and is deliberately absent: a decorative rule
+  //    between rows is exempt.
+  { group: "non-text (1.4.11, 3:1)", fg: "line-control", bg: "bg",        scope: "both", large: true, label: "control border on the page ground" },
+  { group: "non-text (1.4.11, 3:1)", fg: "line-control", bg: "surface-1", scope: "light", large: true, label: "control border on a raised surface" },
+  { group: "non-text (1.4.11, 3:1)", fg: "line-control", bg: "bg-subtle", scope: "dark",  large: true, label: "control border on a raised surface" },
+  { group: "non-text (1.4.11, 3:1)", fg: "brand-500",   bg: "bg",        scope: "light", large: true, label: "focus ring against the page ground" },
+  { group: "non-text (1.4.11, 3:1)", fg: "brand-400",   bg: "bg",        scope: "dark",  large: true, label: "focus ring against the page ground" },
+  { group: "non-text (1.4.11, 3:1)", fg: "brand-500",   bg: "surface-1", scope: "light", large: true, label: "focus ring against a raised surface" },
+  { group: "non-text (1.4.11, 3:1)", fg: "brand-400",   bg: "bg-subtle", scope: "dark",  large: true, label: "focus ring against a raised surface" },
 ];
 
 /* =============================================================================
@@ -583,24 +609,39 @@ function logoStops() {
 
 const LAYERS = ["base.css", "marketing.css", "product.css"];
 const TOKEN_VAL = /^var\(--lw-([a-z0-9-]+)\)$/;
+// An anchored exact match on `var(--lw-x)` DROPPED every alpha tint, every
+// gradient and every var() with a fallback — 33 of the 122 rules that declare
+// both a colour and a background, with no diagnostic. The section's own header
+// argues this walk exists because "the manifest tracks memory, and its failure
+// mode is silent green"; skipping a quarter of the input reintroduced silent
+// green one layer down. Skips are now COUNTED and reported.
+const skipped = [];
 
 function composedPairs() {
   const seen = new Map();
   for (const layer of LAYERS) {
     let src;
     try { src = readFileSync(join(ROOT, layer), "utf8"); } catch { continue; }
-    for (const { selector, body } of splitRules(stripComments(src))) {
+    for (const { selector, directBody } of splitRules(stripComments(src))) {
       if (!selector || selector.startsWith("@")) continue;
       // WCAG exempts disabled controls, and the system leans on that: fg-faint
       // on bg-muted is 2.28 and deliberate.
       if (/:disabled|\[aria-disabled|\[data-disabled|\[disabled/.test(selector)) continue;
       const decls = {};
-      for (const m of body.matchAll(/(^|[;{])\s*(color|background|background-color)\s*:\s*([^;}]+)/g)) {
+      for (const m of directBody.matchAll(/(^|[;{])\s*(color|background|background-color)\s*:\s*([^;}]+)/g)) {
         decls[m[2] === "background-color" ? "background" : m[2]] = m[3].trim();
       }
-      const fg = (decls.color || "").match(TOKEN_VAL);
-      const bg = (decls.background || "").match(TOKEN_VAL);
-      if (!fg || !bg) continue;
+      if (!decls.color || !decls.background) continue;
+      const fg = decls.color.match(TOKEN_VAL);
+      // A gradient has no single background colour; score against its DARKEST
+      // and LIGHTEST token stop would be right, but the resolver models solid
+      // colours, so take the stops it can resolve and keep the worst.
+      const bg = decls.background.match(TOKEN_VAL);
+      if (!fg || !bg) {
+        skipped.push(layer + " " + selector.split(",")[0].trim()
+          + "  {" + (fg ? "" : " color: " + decls.color) + (bg ? "" : " background: " + decls.background) + " }");
+        continue;
+      }
       // A rule scoped to a dark band paints on the dark ground only; an
       // unscoped one is seen on whichever theme the page is in.
       const dark = /\.dark\b|\[data-band="dark"\]|\.lw-band-dark|-dark\b/.test(selector);

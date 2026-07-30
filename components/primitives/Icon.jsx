@@ -1,3 +1,4 @@
+import * as React from "react";
 const cx = (...a) => a.filter(Boolean).join(" ");
 
 /**
@@ -114,15 +115,21 @@ const ICONS = {
    review while the console warning scrolls past. */
 const UNKNOWN = ["M5.5 5.5h13v13h-13z", "M9.4 9.4l5.2 5.2", "M14.6 9.4l-5.2 5.2"];
 
+/* Warn ONCE per distinct missing name. In render this fired on every render —
+   twice per render under StrictMode — and rebuilt the 80-name list each time. */
+const warned = new Set();
+
 export function Icon({ name, size = 16, strokeWidth = 1.6, label, className, style, ...rest }) {
   const known = ICONS[name];
   // Loud AND visible. The warning is what caught nine silently-missing glyphs, so
   // it stays; but the slot now draws UNKNOWN rather than returning null, because
   // an empty-but-space-occupying slot breaks an icon column's rhythm in a way
   // that is easy to miss in review while the warning scrolls past.
-  if (!known && typeof console !== "undefined") {
+  React.useEffect(() => {
+    if (known || warned.has(name) || typeof console === "undefined") return;
+    warned.add(name);
     console.warn(`Icon: no glyph named "${name}". Known names: ${Object.keys(ICONS).join(", ")}`);
-  }
+  }, [known, name]);
   const paths = known || UNKNOWN;
   // The size goes inline, not just on the presentation attributes: any class rule
   // (`.lw-btn svg { width: 16px }`) outranks a presentation attribute, which

@@ -5,4 +5,8 @@ export interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElemen
   /** Renders a radio: round box, single choice. */
   radio?: boolean;
 }
-export declare function Checkbox(props: CheckboxProps): JSX.Element;
+/** Forwards its ref to the underlying <input>, so
+ *  react-hook-form and imperative .focus() reach the real control. */
+export declare const Checkbox: React.ForwardRefExoticComponent<
+  CheckboxProps & React.RefAttributes<HTMLInputElement>
+>;

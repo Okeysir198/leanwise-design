@@ -39,6 +39,8 @@ export function Calendar({ value, onChange, range, month, onMonthChange, min, ma
   const lead = (first.getDay() - weekStart + 7) % 7;
   const cells = Array.from({ length: 42 }, (_, i) => addDays(first, i - lead));
   const dows = Array.from({ length: 7 }, (_, i) => fmtDow.format(addDays(new Date(2024, 0, 7 + weekStart), i)));
+  // role="grid" needs a row layer, so the flat 42 are chunked into six weeks.
+  const weeks = Array.from({ length: 6 }, (_, w) => cells.slice(w * 7, w * 7 + 7));
 
   const disabled = (d) => (min && day(d) < day(min)) || (max && day(d) > day(max));
 
@@ -64,6 +66,14 @@ export function Calendar({ value, onChange, range, month, onMonthChange, min, ma
     setFocused(next);
     if (next.getMonth() !== view.getMonth()) setMonth(addMonths(next, 0));
   };
+
+  /* `today` is resolved in an EFFECT, not during render. `new Date()` in the
+     render body differs between a server render and the client's hydration, so
+     the today marker was a hydration mismatch waiting for the first SSR
+     consumer. Null until mounted means no marker for one frame, which is the
+     correct trade. */
+  const [today, setToday] = React.useState(null);
+  React.useEffect(() => { setToday(day(new Date())); }, []);
   // An effect, not requestAnimationFrame: rAF does not run in a hidden or
   // throttled document, so the focus would silently never land — and the cell
   // that should take it does not exist until this render has committed.
@@ -95,31 +105,52 @@ export function Calendar({ value, onChange, range, month, onMonthChange, min, ma
           <Icon name="chevron-right" size={16} />
         </button>
       </div>
-      <div className="lw-cal-grid" aria-hidden="true">
-        {dows.map((d, i) => <div key={i} className="lw-cal-dow">{d}</div>)}
-      </div>
+      {/* role="grid" obliges a row/rowgroup layer and column headers. Forty-two
+          gridcells as DIRECT children of the grid is axe aria-required-children,
+          and it leaves a screen reader with no row or column position — the two
+          things a date grid exists to convey. The weekday strip was
+          aria-hidden, so the grid had no column headers at all. */}
       <div ref={gridRef} className="lw-cal-grid" role="grid" onKeyDown={onKeyDown} onMouseLeave={() => setHover(null)}>
-        {cells.map((d, i) => {
-          const outside = d.getMonth() !== view.getMonth();
-          const selected = isSelected(d);
-          const end = range ? (sel.end || hover) : null;
-          return (
-            <button key={i} type="button" role="gridcell" className="lw-cal-day"
-              tabIndex={same(d, focused) ? 0 : -1}
-              aria-selected={selected}
-              aria-label={fmtFull.format(d)}
-              disabled={disabled(d)}
-              data-outside={outside ? "true" : undefined}
-              data-today={same(d, new Date()) ? "true" : undefined}
-              data-in-range={inRange(d) ? "true" : undefined}
-              data-edge={range && selected ? (same(d, sel.start) && end ? "start" : same(d, sel.end) ? "end" : undefined) : undefined}
-              onMouseEnter={() => range && sel.start && !sel.end && setHover(day(d))}
-              onFocus={() => setFocused(day(d))}
-              onClick={() => pick(d)}>
-              {d.getDate()}
-            </button>
-          );
-        })}
+        <div role="row" className="lw-cal-dow-row">
+          {dows.map((d, i) => (
+            <div key={i} role="columnheader" className="lw-cal-dow">{d}</div>
+          ))}
+        </div>
+        <div role="rowgroup" className="lw-cal-weeks">
+          {weeks.map((week, w) => (
+            <div key={w} role="row" className="lw-cal-week">
+              {week.map((d, i) => {
+                const outside = d.getMonth() !== view.getMonth();
+                const selected = isSelected(d);
+                const end = range ? (sel.end || hover) : null;
+                const off = disabled(d);
+                return (
+                  <button key={i} type="button" role="gridcell" className="lw-cal-day"
+                    tabIndex={same(d, focused) ? 0 : -1}
+                    aria-selected={selected}
+                    aria-label={fmtFull.format(d)}
+                    /* aria-disabled, NOT the disabled attribute. The roving
+                       tabindex can land on any date, and a `disabled` button
+                       cannot take focus — so when min/max ruled out the focused
+                       date, NO cell in the grid had a focusable tabindex="0" and
+                       the keyboard user was stuck. aria-disabled keeps the cell
+                       focusable and announced as unavailable; pick() guards the
+                       activation. This is the standard datepicker approach. */
+                    aria-disabled={off || undefined}
+                    data-outside={outside ? "true" : undefined}
+                    data-today={today && same(d, today) ? "true" : undefined}
+                    data-in-range={inRange(d) ? "true" : undefined}
+                    data-edge={range && selected ? (same(d, sel.start) && end ? "start" : same(d, sel.end) ? "end" : undefined) : undefined}
+                    onMouseEnter={() => range && sel.start && !sel.end && setHover(day(d))}
+                    onFocus={() => setFocused(day(d))}
+                    onClick={() => { if (!off) pick(d); }}>
+                    {d.getDate()}
+                  </button>
+                );
+              })}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

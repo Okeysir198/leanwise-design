@@ -1,7 +1,7 @@
 {
   "name": "@leanwise/design",
-  "version": "1.1.4",
-  "description": "LeanWise Design System \u2014 token core, CSS layers, React components, twelve templates.",
+  "version": "1.1.5",
+  "description": "LeanWise Design System — token core, CSS layers, React components, twelve templates.",
   "license": "UNLICENSED",
   "private": false,
   "type": "module",
@@ -27,10 +27,16 @@
       "types": "./hooks.d.ts",
       "default": "./hooks.js"
     },
+    "./counter": {
+      "types": "./hooks.d.ts",
+      "default": "./hooks.js"
+    },
     "./tailwind-preset": {
+      "types": "./tailwind-preset.d.cts",
       "require": "./tailwind-preset.cjs",
       "default": "./tailwind-preset.cjs"
     },
+    "./components/*": "./components/*",
     "./tokens.css": "./tokens.css",
     "./fonts.css": "./fonts.css",
     "./shadcn.css": "./shadcn.css",
@@ -43,7 +49,8 @@
     "./tokens.json": "./tokens.json",
     "./assets/*": "./assets/*",
     "./fonts/*": "./fonts/*",
-    "./templates/*": "./templates/*"
+    "./templates/*": "./templates/*",
+    "./package.json": "./package.json"
   },
   "files": [
     "react.js",
@@ -53,6 +60,7 @@
     "hooks.js",
     "hooks.d.ts",
     "tailwind-preset.cjs",
+    "tailwind-preset.d.cts",
     "tokens.css",
     "fonts.css",
     "shadcn.css",
@@ -67,6 +75,7 @@
     "assets",
     "fonts",
     "templates",
+    "!templates/_tooling",
     "README.md"
   ],
   "scripts": {

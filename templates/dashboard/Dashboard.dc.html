@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,6 +7,7 @@
 </head>
 <body>
 <x-dc>
+<a class="lw-skip" href="#lw-main">Skip to content</a>
 <!-- @template name="Dashboard / analytics" description="KPI tiles, a sortable data table, a run log and an empty state — mono tabular numerics throughout." -->
 <helmet><script src="./ds-base.js"></script></helmet>
 <div class="{{ themeClass }}" data-band="{{ band }}" style="height:100vh;display:flex;background:var(--lw-bg);color:var(--lw-fg);font-family:var(--lw-font-sans);overflow:hidden">
@@ -32,7 +33,7 @@
 </div>
 </div>
 
-<div style="flex:1;min-width:0;display:flex;flex-direction:column;min-height:0">
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;min-height:0" role="main" id="lw-main">
 
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.TopBar" hint-size="100%,56px">
 <div style="order:-1;display:flex;align-items:center;gap:12px;flex:0 1 auto;min-width:0;margin-right:16px;overflow:hidden;white-space:nowrap">
@@ -75,7 +76,7 @@
 <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px;justify-content:space-between">
 <h2 style="margin:0;font-size:16px;font-weight:600;letter-spacing:-.012em">Indexed sources</h2>
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.InputGroup" hint-size="220px,40px" prefix="{{ searchIcon }}" style="width:220px">
-<input placeholder="Filter sources…" />
+<input placeholder="Filter sources…" aria-label="Filter sources" />
 </x-import>
 </div>
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.Table" hint-size="100%,280px" columns="{{ columns }}" rows="{{ rows }}" on-sort="{{ onSort }}" caption="Indexed sources and their retrieval hit rate"></x-import>

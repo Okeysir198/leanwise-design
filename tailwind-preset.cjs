@@ -112,13 +112,21 @@ module.exports = {
         navy: "hsl(var(--navy) / <alpha-value>)",
       },
 
+      // Every tier in the token scale is registered. A MISSING tier is the quiet
+      // failure mode here: `rounded-full` / `shadow-xl` still compile, because
+      // Tailwind falls back to its own stock value — so the utility renders
+      // off-system and nothing lints. The token lint is a deny-list; it cannot
+      // see a tier the preset never registered.
       borderRadius: {
+        none: "0",
+        xs: "var(--lw-radius-xs)",
         sm: "var(--lw-radius-sm)",
         DEFAULT: "var(--lw-radius-md)",
         md: "var(--lw-radius-md)",
         lg: "var(--lw-radius-lg)",
         xl: "var(--lw-radius-xl)",
         "2xl": "var(--lw-radius-2xl)",
+        full: "var(--lw-radius-pill)",
       },
 
       fontFamily: {
@@ -140,11 +148,21 @@ module.exports = {
       },
 
       boxShadow: {
+        none: "none",
+        xs: "var(--lw-shadow-xs)",
         sm: "var(--lw-shadow-sm)",
         DEFAULT: "var(--lw-shadow-md)",
         md: "var(--lw-shadow-md)",
         lg: "var(--lw-shadow-lg)",
+        xl: "var(--lw-shadow-xl)",
+        // shadow-2xl and shadow-inner have no token behind them, so they are
+        // pinned to the nearest tier rather than left to resolve to Tailwind's
+        // stock BLACK shadows — which would defeat the navy tint and its dark
+        // re-point on the two utilities most likely to be reached for on a modal.
+        "2xl": "var(--lw-shadow-xl)",
+        inner: "var(--lw-shadow-sm)",
         focus: "var(--lw-focus-ring)",
+        "focus-danger": "var(--lw-focus-ring-danger)",
       },
 
       transitionTimingFunction: { out: "var(--lw-ease-out)" },

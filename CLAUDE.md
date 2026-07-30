@@ -4,7 +4,7 @@ Guidance for Claude Code when working in this repository.
 
 ## What this is
 
-**`@leanwise/design` v1.1.4** — the LeanWise design system. Tokens, five CSS layers, a Tailwind
+**`@leanwise/design` v1.1.5** — the LeanWise design system. Tokens, five CSS layers, a Tailwind
 preset, ~65 React components across eight categories, twelve page templates, and **six gates**
 that turn the style guide into build failures.
 
@@ -117,6 +117,12 @@ so `check:themes` fails when `tokens.json` does not match what `tokens.css` woul
   rejects a re-export the target does not declare), taking `prepublishOnly` with it; the other
   31 failed quietly, as a type error in the consumer. Add the export to `react.js` and the
   declaration to the component's `.d.ts`, then `npm run dts`.
+- **`_cards.mjs`** — not a gate, but the list BOTH browser gates enumerate. They used to walk
+  for `.html` files whose first 200 bytes contain `@dsCard`, which had two silent-pass holes:
+  an empty result is a pass (`Promise.all([])` resolves, and the a11y gate prints "0 cards —
+  no violations"), and a card whose preamble grew past 200 bytes dropped out of both gates
+  with no diagnostic. It now cross-checks `_ds_manifest.json` against the filesystem and
+  errors on disagreement in either direction.
 - **`lw-visual.mjs`** — every card x light/dark x comfortable/compact. ⚠️ **This gate cannot
   fail in CI and never has.** Comparison is a byte-exact PNG match, so a baseline is valid
   only on the machine that recorded it; `.visual/` is fully gitignored, so every CI run
@@ -141,6 +147,16 @@ so `check:themes` fails when `tokens.json` does not match what `tokens.css` woul
   what `.lw-chip` and `.lw-avatar` shipped through v1.1.2. `--lw-brand-on` (added v1.1.3)
   mirrors `--lw-success-on`: brand-700 on light, brand-300 on dark. Every `background:
   var(--lw-brand-soft)` rule pairs with `color: var(--lw-brand-on)`.
+- **A derived role must be re-derived in every scope that re-points its channel.**
+  `--lw-fg: hsl(var(--lw-fg-c))` is substituted where it is DECLARED, so a scope that only
+  re-points `--lw-fg-c` inherits the page-theme COLOR. This bit `.dark` (used as a scoped
+  subtree throughout the layers), every `shadcn.css` alias, and the two chart-chrome tokens.
+  At `<html>` it happens to work, because the declaration and the override land on the same
+  element — which is why it survived: the case everyone demos is the one that cannot fail.
+  The `:where(...)` block at the foot of `tokens.css` is where a new role goes.
+- **A keyframe name is GLOBAL and last-wins.** `lwPulse` was defined in `base.css` and again
+  in `product.css`; product's won for every consumer in the supported load order, and no gate
+  can see a name collision. Prefix new animations distinctly.
 - **A TIER is theme-invariant; a ROLE re-points.** `--lw-text-3` / `--lw-surface-2` are the
   same value in both themes on purpose. Paint a tier and your card renders light-mode ink on
   navy — 3.5:1. In anything that can be seen on both grounds, reach for the role

@@ -13,7 +13,8 @@
  *
  * Usage: node templates/_tooling/lw-a11y.mjs
  */
-import { readdirSync, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
+import { collectCards } from "./_cards.mjs";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
@@ -29,16 +30,7 @@ try {
   process.exit(2);
 }
 
-const cards = [];
-const walk = (dir) => {
-  for (const e of readdirSync(dir, { withFileTypes: true })) {
-    if (e.name.startsWith(".") || e.name === "node_modules") continue;
-    const p = join(dir, e.name);
-    if (e.isDirectory()) walk(p);
-    else if (e.name.endsWith(".html") && readFileSync(p, "utf8").slice(0, 200).includes("@dsCard")) cards.push(p);
-  }
-};
-walk(ROOT);
+const cards = collectCards(ROOT);
 
 const browser = await chromium.launch();
 const findings = [];

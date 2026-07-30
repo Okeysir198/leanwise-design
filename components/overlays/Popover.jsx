@@ -145,6 +145,19 @@ export function Popover({
     };
   }, [open, setOpen]);
 
+  const wasOpen = React.useRef(false);
+  React.useEffect(() => {
+    const closing = wasOpen.current && !open;
+    wasOpen.current = open;
+    if (!closing) return;
+    // Only reclaim focus if the panel had it. If the user tabbed away or clicked
+    // another control, yanking focus back to the trigger would be the bug.
+    const active = document.activeElement;
+    if (active && active !== document.body && !panelRef.current?.contains(active)) return;
+    const t = anchorEl();
+    if (t && t.focus) t.focus({ preventScroll: true });
+  }, [open]);
+
   const HASPOPUP = { menu: "menu", listbox: "listbox", grid: "grid", dialog: "dialog" };
   const triggerEl = React.isValidElement(trigger)
     ? React.cloneElement(trigger, {
@@ -164,7 +177,9 @@ export function Popover({
   return (
     <>
       <span className="lw-popover-anchor" ref={anchorRef}>{triggerEl}</span>
-      <div ref={panelRef} id={uid} popover="manual" role={role} aria-label={label}
+      <div ref={panelRef} id={uid} popover="manual"
+        role={open ? role : undefined} aria-label={open ? label : undefined}
+        aria-hidden={open ? undefined : true}
         tabIndex={-1} className={cx("lw-popover", padded && "lw-popover-pad", className)} {...rest}>
         {open && children}
       </div>

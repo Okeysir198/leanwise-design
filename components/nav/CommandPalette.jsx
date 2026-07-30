@@ -72,7 +72,7 @@ export function CommandPalette({
   let lastGroup = null;
   return (
     <dialog ref={ref} className={cx("lw-cmdk", className)} aria-label={label}
-      onClose={onClose} onCancel={onClose} onKeyDown={onKeyDown} {...rest}>
+      onClose={onClose} onCancel={(e) => { e.preventDefault(); onClose && onClose(e); }} onKeyDown={onKeyDown} {...rest}>
       <div className="lw-cmdk-input">
         <Icon name="search" size={17} />
         <input ref={inputRef} type="text" role="combobox" aria-expanded="true" aria-controls={uid}

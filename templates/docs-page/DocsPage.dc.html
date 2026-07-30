@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,7 +14,7 @@
 
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.TopBar" hint-size="100%,56px" brand="LeanWise AI" brand-href="#" logo="{{ true }}" links="{{ navLinks }}">
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.InputGroup" hint-size="200px,40px" prefix="{{ searchIcon }}" suffix="⌘K" style="width:200px">
-<input placeholder="Search docs…" />
+<input placeholder="Search docs…" aria-label="Search docs" />
 </x-import>
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.ThemeToggle" hint-size="72px,30px" modes="{{ themeModes }}" value="{{ theme }}" onChange="{{ setTheme }}"></x-import>
 </x-import>

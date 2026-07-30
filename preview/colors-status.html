@@ -22,12 +22,12 @@
     <div class="sw" data-swatch="neutral"><b>neutral</b></div>
   </div>
   <table>
-    <thead><tr><th>Semantic</th><th style="text-align:right">Fill ink</th><th style="text-align:right">As text on white</th><th style="text-align:right">Text on its own tint</th></tr></thead>
+    <thead><tr><th>Semantic</th><th style="text-align:right">Fill ink</th><th style="text-align:right">As text on white</th><th style="text-align:right">Ink on its own tint</th></tr></thead>
     <tbody>
-      <tr><td class="mono">success</td><td class="n" data-ratio="on-status on success"></td><td class="n" data-ratio="success-text on surface-0"></td><td class="n" data-ratio="success-text on success-soft"></td></tr>
-      <tr><td class="mono">warning</td><td class="n" data-ratio="on-status on warning"></td><td class="n" data-ratio="warning-text on surface-0"></td><td class="n" data-ratio="warning-text on warning-soft"></td></tr>
-      <tr><td class="mono">danger</td><td class="n" data-ratio="on-danger on danger"></td><td class="n" data-ratio="danger-text on surface-0"></td><td class="n" data-ratio="danger-text on danger-soft"></td></tr>
-      <tr><td class="mono">neutral</td><td class="n" data-ratio="on-danger on neutral"></td><td class="n" data-ratio="neutral-text on surface-0"></td><td class="n" data-ratio="neutral-text on neutral-soft"></td></tr>
+      <tr><td class="mono">success</td><td class="n" data-ratio="on-status on success"></td><td class="n" data-ratio="success-text on surface-0"></td><td class="n" data-ratio="success-on on success-soft"></td></tr>
+      <tr><td class="mono">warning</td><td class="n" data-ratio="on-status on warning"></td><td class="n" data-ratio="warning-text on surface-0"></td><td class="n" data-ratio="warning-on on warning-soft"></td></tr>
+      <tr><td class="mono">danger</td><td class="n" data-ratio="on-danger on danger"></td><td class="n" data-ratio="danger-text on surface-0"></td><td class="n" data-ratio="danger-on on danger-soft"></td></tr>
+      <tr><td class="mono">neutral</td><td class="n" data-ratio="on-neutral on neutral"></td><td class="n" data-ratio="neutral-text on surface-0"></td><td class="n" data-ratio="neutral-on on neutral-soft"></td></tr>
     </tbody>
   </table>
   <div class="row">
@@ -40,7 +40,7 @@
   The fill is <b data-hex="warning"></b> — ~6° toward orange from the CTA at full chroma, so it reads as a clean
   caution and is legible as a different color from the CTA's yellow-amber even side by side. (A mid
   lightness on a 38° hue reads brown, which is why warning is authored rather than aliased to a cta
-  tier.) The text tier is <b data-hex="warning-text"></b>, <span class="n" data-ratio="warning-text on surface-0"></span> on white and <span class="n" data-ratio="warning-text on warning-soft"></span> on its own tint; on dark, warning text
+  tier.) The text tier is <b data-hex="warning-text"></b>, <span class="n" data-ratio="warning-text on surface-0"></span> on white and <span class="n" data-ratio="warning-on on warning-soft"></span> on its own tint; on dark, warning text
   falls back to the amber 400 anchor. Separating by hue is what protects the one-per-view CTA rule.</p>
   <p class="sub"><b>The fourth state is <span class="mono">neutral</span>, not <span class="mono">info</span>.</b>
   Info wants a blue, and every blue here is already spoken for — cyan is the brand and the link color, navy

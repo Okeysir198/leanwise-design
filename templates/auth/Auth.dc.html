@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,11 +7,12 @@
 </head>
 <body>
 <x-dc>
+<a class="lw-skip" href="#lw-main">Skip to content</a>
 <!-- @template name="Auth screens" description="Sign in, SSO, two-factor, accept-invite and password reset — five screens on one split layout, with the error and locked-out states most auth flows leave until last." -->
 <helmet><script src="./ds-base.js"></script></helmet>
 <div class="{{ themeClass }}" data-band="{{ band }}" style="min-height:100vh;display:flex;background:var(--lw-bg);color:var(--lw-fg);font-family:var(--lw-font-sans)">
 
-<div style="flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:48px 24px">
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:48px 24px" role="main" id="lw-main">
 <div style="width:100%;max-width:380px;display:flex;flex-direction:column;gap:24px">
 
 <span style="flex:none;display:flex;align-items:center;gap:9px;white-space:nowrap;font-size:var(--lw-text-sm);font-weight:var(--lw-fw-semibold);letter-spacing:-.012em;color:var(--lw-brand-text)"><span class="brand-mark" aria-hidden="true"></span>LeanWise AI</span>

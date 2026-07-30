@@ -73,19 +73,28 @@ export function RichText({
     onChange && onChange(el.innerHTML);
   };
 
-  const text = (ref.current && ref.current.textContent) || "";
-  const over = maxLength != null && text.length > maxLength;
+  /* Held in STATE, not read from the DOM during render. A render-phase
+     `ref.current.textContent` is "" on the first render and only refreshes when
+     something else re-renders the component — so with an uncontrolled editor
+     (no `value` prop) the counter never moved off 0 and `over` never fired. */
+  const [len, setLen] = React.useState(0);
+  const syncLen = () => setLen(((ref.current && ref.current.textContent) || "").length);
+  React.useEffect(syncLen, [value]);
+  const over = maxLength != null && len > maxLength;
 
   return (
     <div className={cx("lw-editor", className)} {...rest}>
-      <div className="lw-editor-bar" role="toolbar" aria-label={(label || "Editor") + " formatting"} aria-controls={children ? undefined : bodyId}>
+      {/* role="group", not "toolbar": a toolbar obliges left/right arrow roving
+          with a single tab stop, and these are ten independent tab stops. Claiming
+          the role without the behaviour is worse than not claiming it. */}
+      <div className="lw-editor-bar" role="group" aria-label={(label || "Editor") + " formatting"} aria-controls={children ? undefined : bodyId}>
         {list.map((t, i) => t.sep ? <span key={"s" + i} className="sep" aria-hidden="true" />
           : (
             <button key={t.id} type="button" className="lw-icon-btn" aria-label={t.label} title={t.label}
               aria-pressed={!!active[t.id]} disabled={readOnly}
               onMouseDown={(e) => e.preventDefault()} onClick={() => run(t)}>
               {t.glyph
-                ? <span style={{ fontWeight: t.id === "bold" ? 700 : 500, fontStyle: t.id === "italic" ? "italic" : undefined, fontSize: 13 }}>{t.glyph}</span>
+                ? <span className="lw-editor-glyph" data-glyph={t.id}>{t.glyph}</span>
                 : <Icon name={t.icon} size={15} />}
             </button>
           ))}
@@ -93,16 +102,16 @@ export function RichText({
       {children || (
         <div ref={ref} id={bodyId} className="lw-editor-body" contentEditable={!readOnly} suppressContentEditableWarning
           role="textbox" aria-multiline="true" aria-label={label} data-placeholder={placeholder}
-          onInput={() => onChange && onChange(ref.current.innerHTML)}
+          onInput={() => { syncLen(); onChange && onChange(ref.current.innerHTML); }}
           onKeyUp={syncActive} onMouseUp={syncActive} />
       )}
       {(footer || maxLength != null) && (
         <div className="lw-editor-foot">
           {footer}
-          <span style={{ flex: 1 }} />
+          <span className="lw-editor-spacer" />
           {maxLength != null && (
-            <span style={{ color: over ? "var(--lw-danger-on)" : undefined }} aria-live="polite">
-              {text.length} / {maxLength}
+            <span className="lw-editor-count" data-over={over ? "true" : undefined} aria-live="polite">
+              {len} / {maxLength}
             </span>
           )}
         </div>

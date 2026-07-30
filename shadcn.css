@@ -23,7 +23,15 @@
    and NEVER --accent.
    ============================================================================= */
 
-:root {
+/* Every alias below is `var(--lw-*-c)`, and a var() inside a custom property is
+   substituted where the property is DECLARED. Declared on :root alone, the whole
+   shadcn surface froze to the PAGE theme inside a band: `bg-success-soft
+   text-success-on` on a .lw-band-dark rendered the light tint with the light ink.
+   The band selectors re-declare the same expressions against the band's own
+   channels — same fix, and same reason, as the role re-derive in tokens.css. */
+:root,
+:where(.lw-band-dark, [data-band="dark"], .lw-band-light, [data-band="light"],
+       .dark, [data-theme="dark"]) {
   --background: var(--lw-bg-c);
   --foreground: var(--lw-fg-c);
 
@@ -54,7 +62,7 @@
   --input: var(--lw-line-strong-c);
   --ring: var(--lw-brand-500-c);
 
-  --radius: var(--lw-radius-md);   /* 10px, not shadcn's 8px */
+  --radius: var(--lw-radius-md);   /* 8px — the same as shadcn's default, on purpose */
 
   /* --- Tokens shadcn has no concept of; registered in tailwind-preset.js --- */
 
@@ -83,7 +91,7 @@
   /* The fourth status: idle / pending / draft. Deliberately not "info" — every blue
      here already means brand or link. Neutral is a dark fill, so it takes white ink. */
   --neutral: var(--lw-neutral-c);
-  --neutral-foreground: var(--lw-on-danger-c);
+  --neutral-foreground: var(--lw-on-neutral-c);
   --neutral-soft: var(--lw-neutral-soft-c);
   --neutral-on: var(--lw-neutral-on-c);
 
@@ -95,8 +103,12 @@
   --navy: var(--lw-navy-900-c);
 }
 
+/* The dark-specific CHOICES (cards lift, accent is navy not cyan) — not just a
+   re-derive, so they need the dark band too. */
 .dark,
-[data-theme="dark"] {
+[data-theme="dark"],
+.lw-band-dark,
+[data-band="dark"] {
   /* On dark, cards lift ABOVE the page rather than sitting flush. */
   --card: var(--lw-bg-subtle-c);
   --popover: var(--lw-bg-subtle-c);

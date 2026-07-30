@@ -11,7 +11,11 @@ const cx = (...a) => a.filter(Boolean).join(" ");
 export function Toast({ tone = "info", label, onClose, children, className, ...rest }) {
   const k = label || (tone === "ok" ? "done" : tone === "warn" ? "warn" : tone === "err" ? "error" : "info");
   return (
-    <div className={cx("lw-toast", tone !== "info" && tone, className)} role={tone === "err" ? "alert" : "status"} {...rest}>
+    /* No role here. The enclosing ToastRegion is the live region; a role="status"
+       or role="alert" INSIDE it nests two, which is why an announcement could
+       come twice or not at all. An error toast raises the REGION's urgency
+       instead — one live region, one politeness setting. */
+    <div className={cx("lw-toast", tone !== "info" && tone, className)} {...rest}>
       <span className="k">{k}</span>
       <span className="msg">{children}</span>
       {onClose && (
@@ -22,6 +26,9 @@ export function Toast({ tone = "info", label, onClose, children, className, ...r
     </div>
   );
 }
-export function ToastRegion({ className, children, ...rest }) {
-  return <div className={cx("lw-toast-region", className)} role="region" aria-live="polite" aria-label="Notifications" {...rest}>{children}</div>;
+export function ToastRegion({ className, children, urgent, ...rest }) {
+  return (
+    <div className={cx("lw-toast-region", className)} role="region"
+      aria-live={urgent ? "assertive" : "polite"} aria-label="Notifications" {...rest}>{children}</div>
+  );
 }

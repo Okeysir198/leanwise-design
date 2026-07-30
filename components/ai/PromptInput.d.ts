@@ -14,5 +14,7 @@ export interface PromptInputProps extends Omit<React.HTMLAttributes<HTMLDivEleme
   /** Replaces the whole footer row — tools, hint and action together. */
   children?: React.ReactNode;
   disabled?: boolean;
+  /** Accessible name for the textarea. Defaults to "Prompt". */
+  label?: string;
 }
 export declare function PromptInput(props: PromptInputProps): JSX.Element;

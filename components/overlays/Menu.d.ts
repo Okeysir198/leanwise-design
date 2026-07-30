@@ -18,7 +18,7 @@ export interface MenuItem {
   onSelect?(item: MenuItem): void;
   type?: "item" | "separator" | "label";
 }
-export interface MenuProps {
+export interface MenuProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onSelect"> {
   items: MenuItem[];
   trigger: React.ReactNode;
   onSelect?(value: MenuItem["value"], item: MenuItem): void;

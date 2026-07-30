@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,6 +7,7 @@
 </head>
 <body>
 <x-dc>
+<a class="lw-skip" href="#lw-main">Skip to content</a>
 <!-- @template name="List → detail → edit" description="The most common screen in any back-office: a filtered list, a detail view, an edit mode with an unsaved-changes guard, bulk actions and role-gated destructive controls." -->
 <helmet><script src="./ds-base.js"></script></helmet>
 <div class="{{ themeClass }}" data-band="{{ band }}" data-density="{{ density }}" style="height:100vh;display:flex;flex-direction:column;background:var(--lw-bg);color:var(--lw-fg);font-family:var(--lw-font-sans);overflow:hidden">
@@ -17,7 +18,7 @@
 
 <div style="flex:1;min-height:0;display:flex;overflow:hidden">
 
-<div style="flex:1;min-width:0;display:flex;flex-direction:column;min-height:0;overflow:hidden">
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;min-height:0;overflow:hidden" role="main" id="lw-main">
 <div style="flex:none;display:flex;flex-direction:column;gap:12px;padding:20px 24px 12px;border-bottom:1px solid var(--lw-line)">
 <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
 <div style="display:flex;flex-direction:column;gap:4px">

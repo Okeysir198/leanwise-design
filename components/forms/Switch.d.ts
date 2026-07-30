@@ -9,4 +9,8 @@ export interface SwitchProps extends React.InputHTMLAttributes<HTMLInputElement>
  * has already taken effect. `label` is part of the control (it is the `<label>`), so
  * the text is a hit target too and reaches 44px on a coarse pointer.
  */
-export declare function Switch(props: SwitchProps): JSX.Element;
+/** Forwards its ref to the underlying <input>, so
+ *  react-hook-form and imperative .focus() reach the real control. */
+export declare const Switch: React.ForwardRefExoticComponent<
+  SwitchProps & React.RefAttributes<HTMLInputElement>
+>;

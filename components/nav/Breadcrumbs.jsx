@@ -17,9 +17,12 @@ export function Breadcrumbs({ items = [], className, ...rest }) {
       {items.map((it, i) => (
         <React.Fragment key={i}>
           {i > 0 && <span className="sep" aria-hidden="true">/</span>}
+          {/* Only the LAST crumb is the current page. The condition used to be
+              "has no href", so a non-linked intermediate crumb — an ancestor the
+              user cannot navigate to — announced itself as current too. */}
           {it.href && i < items.length - 1
             ? <a href={it.href}>{it.label}</a>
-            : <span aria-current="page">{it.label}</span>}
+            : <span aria-current={i === items.length - 1 ? "page" : undefined}>{it.label}</span>}
         </React.Fragment>
       ))}
     </nav>

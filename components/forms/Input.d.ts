@@ -10,4 +10,8 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
  * desync. Normally you do not pass it: wrap the input in a `Field` with `error` and
  * Field wires the attribute, the description and the ring together.
  */
-export declare function Input(props: InputProps): JSX.Element;
+/** Forwards its ref to the underlying <input>, so
+ *  react-hook-form and imperative .focus() reach the real control. */
+export declare const Input: React.ForwardRefExoticComponent<
+  InputProps & React.RefAttributes<HTMLInputElement>
+>;

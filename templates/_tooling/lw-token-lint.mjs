@@ -189,9 +189,35 @@ function checkOneCss(raw) {
   const TIME_PROP = /^(animation|transition|animation-duration|transition-duration)$/;
   const TIME_LIT = /\d+(?:\.\d+)?(?:ms|s)\b/g;
 
-  for (const { selector, body } of rules) {
-    if (!/\.lw-/.test(selector)) continue;
-    const decls = body.split(";");
+  // Colour properties whose value must come from a token. The package's whole
+  // claim is "never a hex in a consumer"; nothing enforced "never a hex in the
+  // design system's own layers", and the contrast gate's composed-pair walk
+  // silently SKIPS any rule whose colour is not a bare var(), so a literal was
+  // invisible to all six gates at once.
+  const COLOR_PROP = /^(color|background|background-color|border-color|border-(top|right|bottom|left|inline|block)(-(start|end))?-color|outline-color|fill|stroke|caret-color|accent-color|text-decoration-color|column-rule-color)$/;
+  // A LITERAL, not merely a colour function. `hsl(var(--lw-brand-500-c) / .14)`
+  // is the authored form of every alpha tint in this system and must pass; what
+  // must not is a hex, or an hsl()/rgb() whose channels are numbers rather than
+  // a token. Matching the function name alone flagged 40 correct tints.
+  const rawColorLiteral = (value) => {
+    const hex = value.match(/#[0-9a-f]{3,8}\b/i);
+    if (hex) return hex[0];
+    for (const m of value.matchAll(/\b(?:rgba?|hsla?)\(([^()]*(?:\([^()]*\)[^()]*)*)\)/gi)) {
+      if (!/var\(\s*--lw-/.test(m[1])) return m[0];
+    }
+    return null;
+  };
+  // `mask-image`/`-webkit-mask` gradients use #000/#fff as LUMINANCE, not colour,
+  // and system colours are the point in a forced-colors block.
+  const SYSTEM_COLOR = /\b(Highlight|HighlightText|Canvas|CanvasText|ButtonText|ButtonFace|LinkText|GrayText|Mark|MarkText|AccentColor|AccentColorText|Field|FieldText)\b/;
+
+  for (const { selector, directBody } of rules) {
+    // Was `if (!/\.lw-/.test(selector)) continue;` — which exempted every bare
+    // element, `:root`, `*`, `[data-density]` and every @keyframes step from the
+    // rules below. The layers do style bare elements, so that was a hole, not a
+    // filter. @keyframes preludes and at-rules carry no declarations of ours.
+    if (selector.startsWith("@")) continue;
+    const decls = directBody.split(";");
     for (const decl of decls) {
       const colon = decl.indexOf(":");
       if (colon < 0) continue;
@@ -213,6 +239,18 @@ function checkOneCss(raw) {
             });
           }
         }
+      }
+
+      // Rule 8: a colour in the layers must come from a token.
+      const lit = COLOR_PROP.test(prop) && !SYSTEM_COLOR.test(value) && !/\b(mask|-webkit-mask)/.test(prop)
+        ? rawColorLiteral(value) : null;
+      if (lit) {
+        errs.push({
+          rule: "raw-color",
+          hit: `${prop}: …${lit}…`,
+          selector,
+          msg: "use a --lw-* token — a literal here is a second home for a palette value and no gate can see it",
+        });
       }
 
       // Rule 5: animation/transition durations must come from a token. Strip
@@ -248,7 +286,11 @@ function checkOneCss(raw) {
 function jsxSelfCheck() {
   const errs = [];
   const dir = join(PKG_ROOT, "components");
-  if (!existsSync(dir)) return errs;
+  if (!existsSync(dir)) {
+    // Missing input is not a clean run — mirror cssSelfCheck's `no-css`.
+    errs.push({ rule: "no-components", hit: "components/", selector: "-", file: "components/", msg: `not found at ${dir}` });
+    return errs;
+  }
   // Its own traversal: walk() closes over EXT, a const declared below in the
   // TSX-mode section, which this self-check runs before.
   const jsx = [];
@@ -264,7 +306,10 @@ function jsxSelfCheck() {
   for (const file of jsx) {
     const src = readFileSync(file, "utf8");
     if (!/\bReact\./.test(src)) continue;
-    if (/^import \* as React from "react";/m.test(src)) continue;
+    // Any namespace import of react binds the identifier; so does a default
+    // import. Matching one exact spelling trained people to reformat rather
+    // than fix, and would have failed a correct `import React, { useState }`.
+    if (/^\s*import\s+(?:\*\s+as\s+React|React\b)[^;]*from\s+['"]react['"]/m.test(src)) continue;
     errs.push({
       rule: "missing-react-import",
       hit: relative(PKG_ROOT, file),

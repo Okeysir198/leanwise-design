@@ -29,22 +29,48 @@ const css = readFileSync(join(ROOT, "tokens.css"), "utf8");
 // Scope name → the theme it represents. Anything not listed is treated as a
 // variant of :root, which is deliberate: an unrecognised scope should show up in
 // the output rather than vanish from it.
-const THEME = (sel) =>
-  /\.dark|\[data-theme="dark"\]|data-band="dark"|band-dark/.test(sel) ? "dark"
-  : /\.light|\[data-theme="light"\]|data-band="light"|band-light/.test(sel) ? "light"
-  : /data-density="compact"/.test(sel) ? "compact"
-  : /data-density="comfortable"/.test(sel) ? "comfortable"
-  : "base";
+//
+// The theme is decided by the enclosing AT-RULE as well as the selector. Reading
+// the selector alone was a silent, total defeat of this gate: the `:root` nested
+// inside `@media (prefers-color-scheme: dark)` has selector `:root`, so its whole
+// dark palette was written into `base` — in source order, overwriting light. The
+// committed tokens.json shipped `base.bg.c` as the navy ground, designers pulling
+// it into Tokens Studio got the DARK palette labelled base, and the re-point loop
+// below was comparing dark against a base that was already dark. It reported
+// "every themable channel re-pointed" while having lost its discriminating power.
+// Exactly the "gutted tokens.json" failure this file's header claims was fixed.
+const THEME = (sel, atRule = "") => {
+  const ctx = atRule + " " + sel;
+  return /prefers-color-scheme:\s*dark/.test(atRule) ? "dark"
+    : /prefers-color-scheme:\s*light/.test(atRule) ? "light"
+    : /\.dark|\[data-theme="dark"\]|data-band="dark"|band-dark/.test(ctx) ? "dark"
+    : /\.light|\[data-theme="light"\]|data-band="light"|band-light/.test(ctx) ? "light"
+    : /data-density="compact"/.test(ctx) ? "compact"
+    : /data-density="comfortable"/.test(ctx) ? "comfortable"
+    : "base";
+};
 
 const KIND = (name, value, hinted) => {
   if (hinted) return hinted;
+  // The VALUE is stronger evidence than the name, so it is tested first. The
+  // prefix `--lw-text` is overloaded — `--lw-text-1` is a colour tier and
+  // `--lw-text-sm` a font size — and the name-first order typed the entire text
+  // COLOUR ramp as `dimension`, while the `-c` channels beneath it came out
+  // `color`. Two halves of one token disagreeing is worse than either being
+  // uniformly wrong: Tokens Studio imports half the ramp into the wrong panel.
+  // A colour LITERAL. Shadows also contain hsl()/rgba(), so they are excluded by
+  // requiring the value to be a colour function or hex on its own.
+  if (/^(hsla?\(|rgba?\(|#[0-9a-f]{3,8}$)/i.test(value.trim())) return "color";
   if (/^--lw-(space|radius|control-h|row-h|cell-pad|card-pad|stack-gap|field-pad|bp|sidebar|bottom-nav|mobile-bar)/.test(name)) return "dimension";
   if (/^--lw-(dur)/.test(name)) return "duration";
   if (/^--lw-(ease)/.test(name)) return "cubicBezier";
   if (/^--lw-(fw)/.test(name)) return "fontWeight";
   if (/^--lw-font/.test(name)) return "fontFamily";
-  if (/^--lw-(text)/.test(name)) return "dimension";
   if (/^--lw-shadow/.test(name)) return "shadow";
+  // A derived colour is `var(--lw-x-c)`; resolve one hop to type it correctly
+  // rather than falling through to "other".
+  if (/^--lw-text-(xs|sm|base|lg|xl|\d?xl)$/.test(name)) return "dimension";
+  if (/^--lw-(text|fg|bg|line|border|surface|brand|navy|cta|success|warning|danger|neutral|chart|on|diff|scrim|logo)/.test(name)) return "color";
   if (/hsl|rgb|#[0-9a-f]{3,8}/i.test(value)) return "color";
   return "other";
 };
@@ -60,11 +86,13 @@ for (const m of css.matchAll(/(--[\w-]+)\s*:\s*([^;]+);\s*\/\*\s*@kind\s+(\w+)/g
 const byTheme = { base: {}, light: {}, dark: {}, compact: {}, comfortable: {} };
 const scopes = new Set();
 
-for (const { selector, body } of splitRules(stripComments(css))) {
+for (const { selector, directBody, atRule } of splitRules(stripComments(css))) {
   if (!selector || selector.startsWith("@")) continue;
-  const theme = THEME(selector);
+  const theme = THEME(selector, atRule);
   scopes.add(selector);
-  for (const [name, value] of Object.entries(declarationsIn(body))) {
+  // directBody, not body: a parent's body includes every nested child verbatim,
+  // so a `:root` wrapping a nested rule would absorb that rule's declarations.
+  for (const [name, value] of Object.entries(declarationsIn(directBody))) {
     byTheme[theme]["--lw-" + name] = value;
   }
 }
@@ -118,7 +146,8 @@ const nest = (flat) => {
 const THEMABLE = /^--lw-(fg|bg|line|brand|navy|cta|success|warning|danger|neutral|surface|text|border|diff|chart|shadow)/;
 const EXEMPT = new RegExp(
   "^--lw-on-"                                       // inks on theme-invariant fills
-  + "|^--lw-(brand|cta|surface|text|border)-\\d+-c$" // numbered palette ramps
+  + "|^--lw-(brand|cta|surface|text)-\\d+-c$"          // numbered palette ramps
+  + "|^--lw-border-(\\d+|control)-c$"                // border ramp + the 1.4.11 control boundary
   + "|^--lw-navy-(700|900|deep)-c$"                  // the mark's navy constants
   + "|^--lw-(success|warning|danger|neutral)(-text)?-c$" // status fills + their light ink
 );

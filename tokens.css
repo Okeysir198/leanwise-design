@@ -241,6 +241,15 @@
   /* ---- Borders ---------------------------------------------------------- */
   --lw-border-1-c: 220 13.0% 91.0%; /* @kind color */      /* #E5E7EB */
   --lw-border-2-c: 216 12.2% 83.9%; /* @kind color */      /* #D1D5DB */
+  /* The CONTROL BOUNDARY — WCAG 1.4.11, 3:1 against its adjacent surface.
+     Distinct from --lw-line-strong on purpose. `line-strong` is a DIVIDER, and a
+     divider is decorative: 1.4.11 exempts it. But `line-strong` was also doing
+     control-boundary duty on .lw-input / .lw-textarea / .lw-select / .lw-combo,
+     where the border is the ONLY thing that makes an empty field perceivable —
+     at 1.47:1 on light and 1.76:1 on dark. Darkening line-strong to fix that
+     would have dragged every divider in the system with it, so the boundary got
+     its own role, checked in the manifest's non-text group. */
+  --lw-border-control-c: 216 12.2% 57.0%; /* @kind color */ /* #848F9F — 3.29 on surface-0, 3.14 on surface-1 */
   --lw-border-1: hsl(var(--lw-border-1-c));
   --lw-border-2: hsl(var(--lw-border-2-c));
 
@@ -288,8 +297,26 @@
   --lw-on-dark-1:    rgba(255, 255, 255, 0.92);
   --lw-on-dark-2:    rgba(255, 255, 255, 0.70);
   --lw-on-dark-3:    rgba(255, 255, 255, 0.48);
-  --lw-on-dark-line: rgba(255, 255, 255, 0.14);
+  /* Two tiers were not enough, so the layers grew SIX more alphas inline —
+     0.03 0.04 0.05 0.10 0.12 0.16 0.22 0.45 — two lines below a comment saying
+     this family "exists to stop exactly that sprawl". The result was that dark
+     hairlines did not match across table / kpi / empty / features / story /
+     segmented: six borders that were all meant to be the same border. The scale
+     below is the honest set — a wash, a fill, a pressed fill, a hairline, a
+     strong hairline, and the two ghost-button borders — and the raw-color rule
+     in lw-token-lint.mjs now keeps a seventh from being added inline. */
+  --lw-on-dark-wash: rgba(255, 255, 255, 0.03);
   --lw-on-dark-fill: rgba(255, 255, 255, 0.06);
+  --lw-on-dark-fill-strong: rgba(255, 255, 255, 0.16);
+  --lw-on-dark-line: rgba(255, 255, 255, 0.14);
+  --lw-on-dark-line-strong: rgba(255, 255, 255, 0.22);
+  /* The ghost button's resting and hover borders. It is the one control that
+     paints ONLY a border on the dark ground, so it needs more weight than a
+     hairline or it disappears. */
+  --lw-on-dark-border: rgba(255, 255, 255, 0.22);
+  --lw-on-dark-border-hover: rgba(255, 255, 255, 0.45);
+  /* The sheen sweep — a decorative highlight, not a surface. */
+  --lw-on-dark-sheen: rgba(255, 255, 255, 0.35);
 
   /* ---- Space (4px base) -------------------------------------------------
      Named by PIXEL VALUE, deliberately: --lw-space-24 is 24px, always. An index
@@ -508,6 +535,7 @@
   --lw-fg-faint-c: var(--lw-text-4-c); /* @kind color */
   --lw-line-c: var(--lw-border-1-c); /* @kind color */
   --lw-line-strong-c: var(--lw-border-2-c); /* @kind color */
+  --lw-line-control-c: var(--lw-border-control-c); /* @kind color */
 
   /* Brand-as-text (links, active labels). Since v0.8.0 brand-500 IS readable on
      white (5.66), so this is the same colour as the fill — the three-way
@@ -536,6 +564,12 @@
   --lw-on-cta-c: 220 48.8% 8.4%; /* @kind color */          /* navy — amber is a LIGHT fill */
   --lw-on-status-c: 220 48.8% 8.4%; /* @kind color */       /* navy — success/warning fills */
   --lw-on-danger-c: 0 0% 100%; /* @kind color */            /* white */
+  /* Neutral is a fill too (.lw-chip-neutral, .lw-stat-delta, the neutral KPI
+     accent), and it was the one of the five with no ink token — so shadcn.css
+     pointed --neutral-foreground at --lw-on-danger-c to borrow its white. Two
+     families sharing one channel means a change to danger's ink silently moves
+     neutral's. */
+  --lw-on-neutral-c: 0 0% 100%; /* @kind color */           /* white — the neutral fill is dark */
 
   --lw-bg:        hsl(var(--lw-bg-c));
   --lw-bg-subtle: hsl(var(--lw-bg-subtle-c));
@@ -548,6 +582,7 @@
   --lw-fg-ghost:  hsl(var(--lw-text-4-c) / 0.65);   /* decorative hairline text only */
   --lw-line:      hsl(var(--lw-line-c));
   --lw-line-strong: hsl(var(--lw-line-strong-c));
+  --lw-line-control: hsl(var(--lw-line-control-c));
   --lw-brand-text: hsl(var(--lw-brand-text-c));
   --lw-cta-text:   hsl(var(--lw-cta-text-c));
 
@@ -558,6 +593,15 @@
   --lw-on-cta:    hsl(var(--lw-on-cta-c));
   --lw-on-status: hsl(var(--lw-on-status-c));
   --lw-on-danger: hsl(var(--lw-on-danger-c));
+  --lw-on-neutral: hsl(var(--lw-on-neutral-c));
+
+  /* The modal scrim: the page ground at 55%. A ROLE, so it re-derives on bands.
+     It was `hsl(220 48% 8% / .55)` inline at three ::backdrop rules — a literal
+     matching no token, invisible to the raw-hex lint because it is hsl(), and
+     three orphans waiting for the next palette move. ::backdrop inherits from
+     its originating element in every browser this package targets, so the
+     custom property reaches it. */
+  --lw-scrim: hsl(var(--lw-bg-c) / 0.55);
 
   /* Brand tints — for chip backgrounds and hairlines keyed to the brand. */
   --lw-brand-soft: hsl(var(--lw-brand-500-c) / 0.14);
@@ -596,6 +640,7 @@
   --lw-fg-faint-c: 218.5 17.5% 46.0%; /* @kind color */
   --lw-line-c: 220.5 38.7% 21.8%; /* @kind color */   /* #22304D */
   --lw-line-strong-c: 220.5 38.7% 28.0%; /* @kind color */
+  --lw-line-control-c: 220.5 38.7% 48.0%; /* @kind color */ /* #4B6AAA — 3.51 on bg, 3.24 on bg-subtle */
 
   /* Brand AS TEXT must lighten on dark. brand-500 stays a fine FILL on dark, but
      AS TEXT on the paper it is 3.31 — it FAILS. brand-400 reaches 8.04 and is the
@@ -626,7 +671,8 @@
   --lw-shadow-md: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 8px 24px rgba(0, 0, 0, 0.45);
   --lw-shadow-lg: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 30px 60px -28px rgba(0, 0, 0, 0.85);
   --lw-shadow-xl: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 40px 80px -32px rgba(0, 0, 0, 0.9);
-  --lw-focus-ring: 0 0 0 3px hsl(var(--lw-brand-400-c) / 0.35);
+  --lw-focus-ring: 0 0 0 2px var(--lw-brand-400);
+  --lw-focus-ring-danger: 0 0 0 2px var(--lw-danger-on);
 }
 
 /* System preference, unless the user has explicitly chosen light. */
@@ -643,6 +689,7 @@
     --lw-fg-faint-c: 218.5 17.5% 46.0%; /* @kind color */
     --lw-line-c: 220.5 38.7% 21.8%; /* @kind color */
     --lw-line-strong-c: 220.5 38.7% 28.0%; /* @kind color */
+    --lw-line-control-c: 220.5 38.7% 48.0%; /* @kind color */ /* #4B6AAA — 3.51 on bg, 3.24 on bg-subtle */
     --lw-brand-text-c: var(--lw-brand-400-c); /* @kind color */
     --lw-cta-text-c: var(--lw-cta-400-c); /* @kind color */
     --lw-brand-on-c: var(--lw-brand-300-c); /* @kind color */
@@ -665,7 +712,8 @@
     --lw-shadow-md: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 8px 24px rgba(0, 0, 0, 0.45);
     --lw-shadow-lg: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 30px 60px -28px rgba(0, 0, 0, 0.85);
     --lw-shadow-xl: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 40px 80px -32px rgba(0, 0, 0, 0.9);
-    --lw-focus-ring: 0 0 0 3px hsl(var(--lw-brand-400-c) / 0.35);
+    --lw-focus-ring: 0 0 0 2px var(--lw-brand-400);
+    --lw-focus-ring-danger: 0 0 0 2px var(--lw-danger-on);
     }
   /* An explicit light choice must beat the system preference. The dark block above
      targets :root plainly (a :not() guard there is opaque to tooling), so the light
@@ -682,6 +730,7 @@
     --lw-fg-faint-c:var(--lw-text-4-c);
     --lw-line-c:var(--lw-border-1-c);
     --lw-line-strong-c:var(--lw-border-2-c);
+    --lw-line-control-c:var(--lw-border-control-c); /* @kind color */
     --lw-brand-text-c:var(--lw-brand-500-c);
     --lw-cta-text-c:var(--lw-cta-700-c);
     --lw-brand-on-c: var(--lw-brand-700-c); /* @kind color */
@@ -699,7 +748,7 @@
     --lw-shadow-md:0 6px 20px -8px rgba(11, 37, 69, 0.14), 0 1px 2px rgba(11, 37, 69, 0.05);
     --lw-shadow-lg:0 24px 56px -22px rgba(11, 37, 69, 0.22), 0 2px 6px rgba(11, 37, 69, 0.06);
     --lw-shadow-xl:0 32px 64px -24px rgba(11, 37, 69, 0.30), 0 4px 12px rgba(11, 37, 69, 0.08);
-    --lw-focus-ring:0 0 0 3px hsl(var(--lw-brand-500-c) / 0.30);
+    --lw-focus-ring: 0 0 0 2px var(--lw-brand-500);
   }
 }
 
@@ -728,6 +777,7 @@
   --lw-fg-faint-c: 218.5 17.5% 46.0%; /* @kind color */
   --lw-line-c: 220.5 38.7% 21.8%; /* @kind color */
   --lw-line-strong-c: 220.5 38.7% 28.0%; /* @kind color */
+  --lw-line-control-c: 220.5 38.7% 48.0%; /* @kind color */ /* #4B6AAA — 3.51 on bg, 3.24 on bg-subtle */
   --lw-brand-text-c: var(--lw-brand-400-c); /* @kind color */
   --lw-cta-text-c: var(--lw-cta-400-c); /* @kind color */
   --lw-brand-on-c: var(--lw-brand-300-c); /* @kind color */
@@ -745,7 +795,8 @@
   --lw-shadow-md: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 8px 24px rgba(0, 0, 0, 0.45);
   --lw-shadow-lg: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 30px 60px -28px rgba(0, 0, 0, 0.85);
   --lw-shadow-xl: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 40px 80px -32px rgba(0, 0, 0, 0.9);
-  --lw-focus-ring: 0 0 0 3px hsl(var(--lw-brand-400-c) / 0.35);
+  --lw-focus-ring: 0 0 0 2px var(--lw-brand-400);
+  --lw-focus-ring-danger: 0 0 0 2px var(--lw-danger-on);
 }
 
 /* =============================================================================
@@ -779,6 +830,7 @@
   --lw-fg-faint-c: 218.5 17.5% 46.0%; /* @kind color */
   --lw-line-c: 220.5 38.7% 21.8%; /* @kind color */
   --lw-line-strong-c: 220.5 38.7% 28.0%; /* @kind color */
+  --lw-line-control-c: 220.5 38.7% 48.0%; /* @kind color */ /* #4B6AAA — 3.51 on bg, 3.24 on bg-subtle */
   --lw-brand-text-c: var(--lw-brand-400-c); /* @kind color */
   --lw-cta-text-c: var(--lw-cta-400-c); /* @kind color */
   --lw-brand-on-c: var(--lw-brand-300-c); /* @kind color */
@@ -796,7 +848,8 @@
   --lw-shadow-md: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 8px 24px rgba(0, 0, 0, 0.45);
   --lw-shadow-lg: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 30px 60px -28px rgba(0, 0, 0, 0.85);
   --lw-shadow-xl: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 40px 80px -32px rgba(0, 0, 0, 0.9);
-  --lw-focus-ring: 0 0 0 3px hsl(var(--lw-brand-400-c) / 0.35);
+  --lw-focus-ring: 0 0 0 2px var(--lw-brand-400);
+  --lw-focus-ring-danger: 0 0 0 2px var(--lw-danger-on);
   background: var(--lw-bg);
   color: var(--lw-fg);
 }
@@ -815,6 +868,7 @@
   --lw-fg-faint-c: var(--lw-text-4-c); /* @kind color */
   --lw-line-c: var(--lw-border-1-c); /* @kind color */
   --lw-line-strong-c: var(--lw-border-2-c); /* @kind color */
+  --lw-line-control-c: var(--lw-border-control-c); /* @kind color */
   --lw-brand-text-c: var(--lw-brand-500-c); /* @kind color */
   --lw-cta-text-c: var(--lw-cta-700-c); /* @kind color */
   --lw-brand-on-c: var(--lw-brand-700-c); /* @kind color */
@@ -853,8 +907,20 @@
    a band that only re-points `--lw-fg-c` inherits the page-theme color and its
    text goes unreadable. Kept out of the band blocks themselves so the dark-block
    parity gate keeps comparing like with like.
+
+   `.dark` / [data-theme="dark"] belong here for the SAME reason, and were the
+   longer-standing bug: they are used as SCOPED SUBTREES throughout the layers
+   (`.dark .lw-x`, `:is(.dark, [data-band="dark"]) …`), not just on <html>. On a
+   non-root `<div class="dark">` the channels re-point but the derived roles do
+   not, so every `background: var(--lw-bg)` inside kept the PAGE theme's value —
+   a white card on navy. At root it happened to work, because there the
+   declaration and the override land on the same element, which is exactly why
+   it survived: the demo everyone checks is the one case that cannot fail.
+   :where() keeps specificity at 0, so the :root declarations still win on <html>
+   and resolve identically.
    -------------------------------------------------------------------------- */
-:where(.lw-band-dark, [data-band="dark"], .lw-band-light, [data-band="light"]) {
+:where(.lw-band-dark, [data-band="dark"], .lw-band-light, [data-band="light"],
+       .dark, [data-theme="dark"]) {
   --lw-bg:        hsl(var(--lw-bg-c));
   --lw-bg-subtle: hsl(var(--lw-bg-subtle-c));
   --lw-bg-muted:  hsl(var(--lw-bg-muted-c));
@@ -865,6 +931,7 @@
   --lw-fg-faint:  hsl(var(--lw-fg-faint-c));
   --lw-line:      hsl(var(--lw-line-c));
   --lw-line-strong: hsl(var(--lw-line-strong-c));
+  --lw-line-control: hsl(var(--lw-line-control-c));
   --lw-brand-text: hsl(var(--lw-brand-text-c));
   --lw-cta-text:   hsl(var(--lw-cta-text-c));
   --lw-brand-on:     hsl(var(--lw-brand-on-c));
@@ -882,6 +949,18 @@
   --lw-neutral-on:   hsl(var(--lw-neutral-on-c));
   --lw-neutral-soft: hsl(var(--lw-neutral-soft-c));
   --lw-cta-soft:     hsl(var(--lw-cta-soft-c));
+  --lw-brand-soft:   hsl(var(--lw-brand-500-c) / 0.14);
+  /* The chart chrome points at two ROLES, so it needs the same re-derive for the
+     same reason. Missing here, a dark-band chart drew LIGHT gridlines and a light
+     axis over navy — the graph furniture stayed on the page theme while the
+     series colors (which re-point by channel above) correctly went dark. */
+  --lw-chart-grid: var(--lw-line);
+  --lw-chart-axis: var(--lw-fg-subtle);
+  /* A scrim is a ROLE too: it is the page ground at 55%, so it must follow the
+     ground. Three ::backdrop rules had `hsl(220 48% 8% / .55)` inline — a literal
+     that is not any token's value, that the raw-hex lint cannot see because it is
+     hsl(), and that a palette move would leave behind in three places. */
+  --lw-scrim: hsl(var(--lw-bg-c) / 0.55);
 }
 
 @media (prefers-reduced-motion: reduce) {

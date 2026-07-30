@@ -59,7 +59,8 @@
    roughly 5x letter white. Tightening the space instead makes it worse. */
 
 /* Screen-reader-only, for the labels a visual design drops but a11y needs. */
-.lw-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+/* .lw-sr-only now lives in base.css — every surface needs it, and it was
+   defined twice under two names. */
 
 /* ---- Forms -----------------------------------------------------------------
    The layer the system was missing entirely. A FIELD is the unit: label, the
@@ -85,7 +86,7 @@
   line-height: 1.4;
   color: var(--lw-fg);
   background: var(--lw-bg);
-  border: 1px solid var(--lw-line-strong);
+  border: 1px solid var(--lw-line-control);
   border-radius: var(--lw-radius-sm);
   transition: border-color var(--lw-dur-xs) var(--lw-ease-out), box-shadow var(--lw-dur-xs) var(--lw-ease-out), background var(--lw-dur-xs) var(--lw-ease-out);
 }
@@ -138,7 +139,7 @@
 /* An input with an affix — a search glyph, a unit, a paste button. The BOX owns
    the border and the focus ring; the input inside is bare, so the ring wraps
    the whole control rather than a rectangle inside it. */
-.lw-input-group { display: flex; align-items: center; gap: 8px; height: var(--lw-control-h-md); padding: 0 var(--lw-field-pad-x); background: var(--lw-bg); border: 1px solid var(--lw-line-strong); border-radius: var(--lw-radius-sm); transition: border-color var(--lw-dur-xs) var(--lw-ease-out), box-shadow var(--lw-dur-xs) var(--lw-ease-out); }
+.lw-input-group { display: flex; align-items: center; gap: 8px; height: var(--lw-control-h-md); padding: 0 var(--lw-field-pad-x); background: var(--lw-bg); border: 1px solid var(--lw-line-control); border-radius: var(--lw-radius-sm); transition: border-color var(--lw-dur-xs) var(--lw-ease-out), box-shadow var(--lw-dur-xs) var(--lw-ease-out); }
 .lw-input-group:focus-within { border-color: var(--lw-brand-500); box-shadow: var(--lw-focus-ring); }
 /* The group owns the border, so it has to own the INVALID border too. Without this
    rule aria-invalid on the inner input announced an error that nothing showed —
@@ -156,7 +157,7 @@
    you submit; the two are not interchangeable and the shapes say which is which. */
 .lw-switch { display: inline-flex; align-items: center; gap: 10px; cursor: pointer; }
 .lw-switch input { position: absolute; opacity: 0; width: 0; height: 0; }
-.lw-switch .track { position: relative; width: 38px; height: 22px; flex: none; border-radius: var(--lw-radius-pill); background: var(--lw-bg-inset); border: 1px solid var(--lw-line-strong); transition: background var(--lw-dur-sm) var(--lw-ease-out), border-color var(--lw-dur-sm) var(--lw-ease-out); }
+.lw-switch .track { position: relative; width: 38px; height: 22px; flex: none; border-radius: var(--lw-radius-pill); background: var(--lw-bg-inset); border: 1px solid var(--lw-line-control); transition: background var(--lw-dur-sm) var(--lw-ease-out), border-color var(--lw-dur-sm) var(--lw-ease-out); }
 .lw-switch .track::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--lw-bg); box-shadow: var(--lw-shadow-sm); transition: transform var(--lw-dur-sm) var(--lw-ease-out); }
 .lw-switch input:checked + .track { background: var(--lw-brand-500); border-color: var(--lw-brand-500); }
 .lw-switch input:checked + .track::after { transform: translateX(16px); }
@@ -173,7 +174,7 @@
    `.lbl` — a consumer page will have one, and whichever loads last wins. */
 .lw-check { display: inline-flex; align-items: flex-start; gap: 9px; cursor: pointer; font-size: var(--lw-text-sm); color: var(--lw-fg); line-height: 1.45; }
 .lw-check input { position: absolute; opacity: 0; width: 0; height: 0; }
-.lw-check .box { position: relative; width: 18px; height: 18px; margin-top: 1px; flex: none; border: 1px solid var(--lw-line-strong); border-radius: var(--lw-radius-xs); background: var(--lw-bg); transition: background var(--lw-dur-xs) var(--lw-ease-out), border-color var(--lw-dur-xs) var(--lw-ease-out); }
+.lw-check .box { position: relative; width: 18px; height: 18px; margin-top: 1px; flex: none; border: 1px solid var(--lw-line-control); border-radius: var(--lw-radius-xs); background: var(--lw-bg); transition: background var(--lw-dur-xs) var(--lw-ease-out), border-color var(--lw-dur-xs) var(--lw-ease-out); }
 .lw-check.radio .box { border-radius: 50%; }
 .lw-check input:checked + .box { background: var(--lw-brand-500); border-color: var(--lw-brand-500); }
 .lw-check input:checked + .box::after { content: ""; position: absolute; left: 5px; top: 1px; width: 5px; height: 10px; border: solid var(--lw-on-brand); border-width: 0 2px 2px 0; transform: rotate(43deg); }
@@ -460,7 +461,7 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
 /* Scoped to [open]: a bare `display` on the base selector outranks the UA's
    `dialog:not([open]) { display: none }` and paints closed dialogs in flow. */
 .lw-dialog[open] { display: flex; flex-direction: column; }
-.lw-dialog::backdrop { background: hsl(220 48% 8% / 0.55); backdrop-filter: blur(2px); }
+.lw-dialog::backdrop { background: var(--lw-scrim); backdrop-filter: blur(2px); }
 .lw-dialog-head { flex: none; display: flex; align-items: flex-start; justify-content: space-between; gap: var(--lw-space-16); padding: var(--lw-space-20) var(--lw-space-24) var(--lw-space-12); }
 .lw-dialog-title { font-size: var(--lw-text-h3); font-weight: var(--lw-fw-semibold); letter-spacing: var(--lw-tracking-tight); line-height: 1.25; margin: 0; }
 /* Bare glyph, like every other dismiss in the system — a boxed close competes
@@ -520,7 +521,7 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
 
 /* PROMPT — the app's primary input. A framed box, not a bare textarea: the
    attachments row and the send action live inside the same focus ring. */
-.lw-prompt { display: flex; flex-direction: column; gap: 8px; padding: 12px; background: var(--lw-bg); border: 1px solid var(--lw-line-strong); border-radius: var(--lw-radius-lg); box-shadow: var(--lw-shadow-sm); transition: border-color var(--lw-dur-xs) var(--lw-ease-out), box-shadow var(--lw-dur-xs) var(--lw-ease-out); }
+.lw-prompt { display: flex; flex-direction: column; gap: 8px; padding: 12px; background: var(--lw-bg); border: 1px solid var(--lw-line-control); border-radius: var(--lw-radius-lg); box-shadow: var(--lw-shadow-sm); transition: border-color var(--lw-dur-xs) var(--lw-ease-out), box-shadow var(--lw-dur-xs) var(--lw-ease-out); }
 /* The prompt is the product's hero input, so its focus state is a deliberate
    brand ring — the same one every other control uses. The soft outer halo this
    rule used to carry was the bloom it warned against: two stops of one hue with
@@ -603,8 +604,8 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
 .lw-trace li[data-state="done"]::after { background: var(--lw-success-on); border-color: var(--lw-success-on); }
 .lw-trace li[data-state="active"]::after { background: var(--lw-brand-500); border-color: var(--lw-brand-500); }
 .lw-trace li[data-state="error"]::after { background: var(--lw-danger-on); border-color: var(--lw-danger-on); }
-@media (prefers-reduced-motion: no-preference) { .lw-trace li[data-state="active"]::after { animation: lwPulse var(--lw-dur-trace) var(--lw-ease-in-out) infinite; } }
-@keyframes lwPulse { 50% { box-shadow: 0 0 0 4px hsl(var(--lw-brand-500-c) / 0.18); } }
+@media (prefers-reduced-motion: no-preference) { .lw-trace li[data-state="active"]::after { animation: lwTracePulse var(--lw-dur-trace) var(--lw-ease-in-out) infinite; } }
+@keyframes lwTracePulse { 50% { box-shadow: 0 0 0 4px hsl(var(--lw-brand-500-c) / 0.18); } }
 .lw-trace .step { font-size: var(--lw-text-sm); color: var(--lw-fg); line-height: 1.4; }
 .lw-trace .meta { font-family: var(--lw-font-mono); font-size: 10.5px; color: var(--lw-fg-subtle); line-height: 1.5; overflow-wrap: anywhere; }
 
@@ -658,12 +659,16 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
 .lw-band-dark, [data-band="dark"] { color: var(--lw-on-dark-2); }
 .lw-band-dark .lw-table-wrap, [data-band="dark"] .lw-table-wrap,
 .lw-band-dark .lw-kpi, [data-band="dark"] .lw-kpi,
-.lw-band-dark .lw-source-item, [data-band="dark"] .lw-source-item { background: hsl(0 0% 100% / 0.03); border-color: hsl(0 0% 100% / 0.12); }
-.lw-band-dark .lw-table th, [data-band="dark"] .lw-table th { background: hsl(0 0% 100% / 0.04); color: var(--lw-on-dark-3); border-bottom-color: hsl(0 0% 100% / 0.12); }
-.lw-band-dark .lw-table td, [data-band="dark"] .lw-table td { color: var(--lw-on-dark-1); border-bottom-color: hsl(0 0% 100% / 0.1); }
+.lw-band-dark .lw-source-item, [data-band="dark"] .lw-source-item { background: var(--lw-on-dark-wash); border-color: var(--lw-on-dark-line); }
+/* The WASH tier, not the fill. --lw-on-dark-3 is the muted floor (4.91 on
+   navy-deep) and has no headroom: every point the header ground is lightened
+   comes straight off the ink. At the 0.06 fill this measured 4.33 and axe
+   caught it; at 0.03 it is 4.67. A header band is a wash by intent anyway. */
+.lw-band-dark .lw-table th, [data-band="dark"] .lw-table th { background: var(--lw-on-dark-wash); color: var(--lw-on-dark-3); border-bottom-color: var(--lw-on-dark-line); }
+.lw-band-dark .lw-table td, [data-band="dark"] .lw-table td { color: var(--lw-on-dark-1); border-bottom-color: var(--lw-on-dark-line); }
 .lw-band-dark .lw-kpi .v, [data-band="dark"] .lw-kpi .v { color: var(--lw-on-dark-1); }
 .lw-band-dark .lw-kpi .k, [data-band="dark"] .lw-kpi .k { color: var(--lw-on-dark-3); }
-.lw-band-dark .lw-empty, [data-band="dark"] .lw-empty { background: hsl(0 0% 100% / 0.03); border-color: hsl(0 0% 100% / 0.16); }
+.lw-band-dark .lw-empty, [data-band="dark"] .lw-empty { background: var(--lw-on-dark-wash); border-color: var(--lw-on-dark-line-strong); }
 .lw-band-dark .lw-empty .t, [data-band="dark"] .lw-empty .t { color: var(--lw-on-dark-1); }
 .lw-band-dark .lw-empty .s, [data-band="dark"] .lw-empty .s { color: var(--lw-on-dark-2); }
 
@@ -678,7 +683,7 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
 .dark .lw-segmented button, [data-band="dark"] .lw-segmented button, .lw-band-dark .lw-segmented button { color: var(--lw-on-dark-2); }
 .dark .lw-segmented button:hover, [data-band="dark"] .lw-segmented button:hover, .lw-band-dark .lw-segmented button:hover { color: var(--lw-on-dark-1); }
 .dark .lw-segmented button[aria-pressed="true"], [data-band="dark"] .lw-segmented button[aria-pressed="true"], .lw-band-dark .lw-segmented button[aria-pressed="true"],
-.dark .lw-segmented button[aria-selected="true"], [data-band="dark"] .lw-segmented button[aria-selected="true"], .lw-band-dark .lw-segmented button[aria-selected="true"] { background: hsl(0 0% 100% / 0.16); color: var(--lw-on-dark); box-shadow: inset 0 0 0 1px var(--lw-on-dark-line); }
+.dark .lw-segmented button[aria-selected="true"], [data-band="dark"] .lw-segmented button[aria-selected="true"], .lw-band-dark .lw-segmented button[aria-selected="true"] { background: var(--lw-on-dark-fill-strong); color: var(--lw-on-dark); box-shadow: inset 0 0 0 1px var(--lw-on-dark-line); }
 
 /* The eyebrow's hexagon is the one part of the motif pinned to a TIER, so on a
    dark band the label re-pointed to the dark subtle ink while its node stayed
@@ -689,7 +694,6 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
 
 /* The focus ring must switch to the 400 tier on dark — the 500 ring disappears
    into the navy. Same rule base.css applies to buttons. */
-.lw-band-dark, [data-band="dark"] { --lw-focus-ring: 0 0 0 2px var(--lw-brand-400); --lw-focus-ring-danger: 0 0 0 2px var(--lw-danger-on); }
 /* The offset-ring controls take the same tier swap. */
 .dark .lw-switch input:focus-visible + .track, [data-band="dark"] .lw-switch input:focus-visible + .track, .lw-band-dark .lw-switch input:focus-visible + .track,
 .dark .lw-switch input[data-focus-demo] + .track, [data-band="dark"] .lw-switch input[data-focus-demo] + .track, .lw-band-dark .lw-switch input[data-focus-demo] + .track,
@@ -780,7 +784,7 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
   width: 100%; min-height: var(--lw-control-h-md);
   padding: 3px var(--lw-space-8) 3px var(--lw-field-pad-x);
   background: var(--lw-bg); color: var(--lw-fg);
-  border: 1px solid var(--lw-line-strong); border-radius: var(--lw-radius-sm);
+  border: 1px solid var(--lw-line-control); border-radius: var(--lw-radius-sm);
   font-size: var(--lw-text-sm); cursor: text;
   transition: border-color var(--lw-dur-xs) var(--lw-ease-out), box-shadow var(--lw-dur-xs) var(--lw-ease-out);
 }
@@ -856,7 +860,7 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
   max-height: min(88vh, 720px); border: 0; border-top: 1px solid var(--lw-line);
   border-radius: var(--lw-radius-xl) var(--lw-radius-xl) 0 0;
 }
-.lw-drawer::backdrop { background: hsl(220 48% 8% / 0.55); backdrop-filter: blur(2px); }
+.lw-drawer::backdrop { background: var(--lw-scrim); backdrop-filter: blur(2px); }
 .lw-drawer-head {
   flex: none; display: flex; align-items: flex-start; gap: var(--lw-space-12);
   padding: var(--lw-card-pad); border-bottom: 1px solid var(--lw-line);
@@ -890,7 +894,14 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
 .lw-cal { display: flex; flex-direction: column; gap: var(--lw-space-8); width: 244px; }
 .lw-cal-head { display: flex; align-items: center; gap: var(--lw-space-4); }
 .lw-cal-month { flex: 1; text-align: center; font-size: var(--lw-text-sm); font-weight: var(--lw-fw-semibold); color: var(--lw-fg); }
-.lw-cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+/* The grid gained a row/rowgroup layer so role="grid" owns role="row" owns
+   role="gridcell" — required by ARIA, and what gives a screen reader row and
+   column position. The seven-column track therefore moved from the grid onto
+   each row; the grid itself is now a vertical stack of rows. */
+.lw-cal-grid { display: flex; flex-direction: column; gap: 2px; }
+.lw-cal-dow-row,
+.lw-cal-week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+.lw-cal-weeks { display: flex; flex-direction: column; gap: 2px; }
 .lw-cal-dow {
   height: 22px; display: grid; place-items: center;
   font-family: var(--lw-font-mono); font-size: 10px; letter-spacing: 0.08em;
@@ -908,7 +919,7 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
 .lw-cal-day[data-outside="true"] { color: var(--lw-fg-faint); }
 /* Today is a RING, selected is a FILL — two different facts, so they must be able
    to show at once. Today-and-selected is one cell, not a conflict to resolve. */
-.lw-cal-day[data-today="true"] { box-shadow: inset 0 0 0 1px var(--lw-line-strong); }
+.lw-cal-day[data-today="true"] { box-shadow: inset 0 0 0 1px var(--lw-line-control); }
 .lw-cal-day[data-in-range="true"] { background: var(--lw-brand-soft); border-radius: 0; }
 .lw-cal-day[aria-selected="true"] {
   background: var(--lw-brand-500); color: var(--lw-on-brand); font-weight: var(--lw-fw-semibold);
@@ -916,7 +927,9 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
 .lw-cal-day[aria-selected="true"]:focus-visible { box-shadow: none; outline: 2px solid var(--lw-brand-500); outline-offset: 2px; }
 .lw-cal-day[data-edge="start"] { border-radius: var(--lw-radius-sm) 0 0 var(--lw-radius-sm); }
 .lw-cal-day[data-edge="end"] { border-radius: 0 var(--lw-radius-sm) var(--lw-radius-sm) 0; }
-.lw-cal-day:disabled { color: var(--lw-fg-faint); background: none; cursor: not-allowed; }
+.lw-cal-day:disabled,
+.lw-cal-day[aria-disabled="true"] { color: var(--lw-fg-faint); background: none; cursor: not-allowed; }
+.lw-cal-day[aria-disabled="true"]:hover { background: none; }
 .lw-cal-wrap { display: flex; gap: var(--lw-space-12); }
 .lw-cal-presets {
   display: flex; flex-direction: column; gap: 2px;
@@ -1152,7 +1165,7 @@ a.lw-feed-item:hover, button.lw-feed-item:hover { background: var(--lw-bg-subtle
    should make the page behind it inert. Same native element, same trap. */
 .lw-cmdk { width: min(560px, 92vw); max-height: 60vh; padding: 0; border: 0; border-radius: var(--lw-radius-xl); background: var(--lw-bg); box-shadow: var(--lw-shadow-xl); overflow: hidden; }
 .lw-cmdk[open] { display: flex; flex-direction: column; }
-.lw-cmdk::backdrop { background: hsl(220 48% 8% / 0.55); backdrop-filter: blur(2px); }
+.lw-cmdk::backdrop { background: var(--lw-scrim); backdrop-filter: blur(2px); }
 .lw-cmdk-input { flex: none; display: flex; align-items: center; gap: var(--lw-space-12); padding: 0 var(--lw-space-16); height: 52px; border-bottom: 1px solid var(--lw-line); color: var(--lw-fg-subtle); }
 .lw-cmdk-input input { flex: 1; border: 0; background: none; outline: none; font: inherit; font-size: var(--lw-text-body); color: var(--lw-fg); }
 .lw-cmdk-input input::placeholder { color: var(--lw-fg-subtle); }
@@ -1300,7 +1313,7 @@ a.lw-feed-item:hover, button.lw-feed-item:hover { background: var(--lw-bg-subtle
    prose surface sized on the type scale — swap the engine underneath (TipTap,
    ProseMirror) without the toolbar changing, which is the only way an editor
    stops being a fork of the design system. */
-.lw-editor { display: flex; flex-direction: column; border: 1px solid var(--lw-line-strong); border-radius: var(--lw-radius-md); background: var(--lw-bg); overflow: hidden; }
+.lw-editor { display: flex; flex-direction: column; border: 1px solid var(--lw-line-control); border-radius: var(--lw-radius-md); background: var(--lw-bg); overflow: hidden; }
 .lw-editor:focus-within { border-color: var(--lw-brand-500); box-shadow: var(--lw-focus-ring); }
 .lw-editor-bar { flex: none; display: flex; align-items: center; gap: 2px; flex-wrap: wrap; padding: var(--lw-space-4) var(--lw-space-4); border-bottom: 1px solid var(--lw-line); background: var(--lw-bg-subtle); }
 .lw-editor-bar .sep { width: 1px; height: 18px; margin: 0 var(--lw-space-4); background: var(--lw-line); }
@@ -1347,3 +1360,20 @@ a.lw-feed-item:hover, button.lw-feed-item:hover { background: var(--lw-bg-subtle
   letter-spacing: -0.012em; color: var(--lw-brand-text); text-decoration: none;
 }
 .lw-appbar-brand:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); border-radius: var(--lw-radius-xs); }
+
+/* Editor chrome that was inline in RichText.jsx. Styling lives in the CSS layer:
+   that is what keeps the React and vanilla consumers from drifting, and an
+   inline style cannot be re-pointed by a theme or a density. */
+.lw-editor-glyph { font-size: 13px; font-weight: var(--lw-fw-medium); }
+.lw-editor-glyph[data-glyph="bold"] { font-weight: var(--lw-fw-bold); }
+.lw-editor-glyph[data-glyph="italic"] { font-style: italic; }
+.lw-editor-spacer { flex: 1; }
+.lw-editor-count[data-over="true"] { color: var(--lw-danger-on); }
+
+/* Skeleton's multi-line form. Was an inline flex column plus an inline 62% on the
+   last line — both static styling, and the inline `className` was dropped
+   entirely on that branch. The short last line is what makes a skeleton read as
+   text rather than as three bars. */
+.lw-skeleton-lines { display: flex; flex-direction: column; gap: var(--lw-space-4); }
+.lw-skeleton-lines > .lw-skeleton { width: 100%; }
+.lw-skeleton-lines > .lw-skeleton:last-child { width: 62%; }

@@ -1,3 +1,4 @@
+import * as React from "react";
 import { Icon } from "../primitives/Icon.jsx";
 const cx = (...a) => a.filter(Boolean).join(" ");
 
@@ -11,9 +12,12 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  * everywhere. The 44px target comes from the bar height, not from padding.
  */
 export function BottomNav({ items = [], value, onChange, label = "Main", className, ...rest }) {
-  if (items.length > 5 && typeof console !== "undefined") {
+  // An effect, not the render body: a console.warn during render is a side
+  // effect, and StrictMode double-invokes render.
+  React.useEffect(() => {
+    if (items.length <= 5 || typeof console === "undefined") return;
     console.warn("BottomNav: " + items.length + " items. Past five, labels truncate and the bar stops being scannable — use a sidebar or a More destination.");
-  }
+  }, [items.length]);
   return (
     <nav className={cx("lw-bottom-nav", className)} aria-label={label} {...rest}>
       {items.map((it) => {

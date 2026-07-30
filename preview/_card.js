@@ -2,8 +2,15 @@
 // Mirror the host's theme onto our own root so tokens.css resolves correctly.
 (function () {
   var m = window.matchMedia('(prefers-color-scheme: dark)');
+  var root = document.documentElement;
+  // Defer to an explicit host choice. This ran unconditionally at parse time and
+  // on every OS change, overwriting whatever data-theme the host pane — or a gate
+  // mid-run — had already set. The file's own header says "mirror the host's
+  // theme"; mirroring means following it, not overwriting it.
+  var owned = !root.hasAttribute('data-theme');
   function apply() {
-    document.documentElement.setAttribute('data-theme', m.matches ? 'dark' : 'light');
+    if (!owned) return;
+    root.setAttribute('data-theme', m.matches ? 'dark' : 'light');
   }
   apply();
   m.addEventListener('change', apply);
@@ -56,6 +63,16 @@
     pageGround = pm ? [+pm[0], +pm[1], +pm[2]] : WHITE;
   }
 
+  /** Composite a computed color over a KNOWN ground. */
+  function over(css, ground) {
+    var n = (css || '').match(/[\d.]+/g);
+    if (!n) return ground;
+    var c = [+n[0], +n[1], +n[2]];
+    var a = n.length > 3 ? +n[3] : 1;
+    if (a >= 1) return c;
+    return c.map(function (v, i) { return a * v + (1 - a) * ground[i]; });
+  }
+
   /** Composite a possibly-translucent computed color over its opaque ancestor. */
   function flatten(css, host) {
     var n = (css || '').match(/[\d.]+/g);
@@ -104,7 +121,10 @@
     var probe = document.createElement('div');
     probe.style.cssText = 'position:absolute;visibility:hidden;background:' + cssColor;
     host.appendChild(probe);
-    var v = parse(getComputedStyle(probe).backgroundColor);
+    // flatten(), not parse(): a `-soft` token is `hsl(<channel> / .14)` and parse()
+    // hands back the OPAQUE channel. That is the same bug the swatch path carries
+    // an eight-line comment about, and it was live here too.
+    var v = flatten(getComputedStyle(probe).backgroundColor, host);
     probe.remove();
     return v;
   }
@@ -186,7 +206,13 @@
       probe.style.cssText = 'position:absolute;visibility:hidden;color:' + ink + ';background:' + ground;
       host.appendChild(probe);
       var cs = getComputedStyle(probe);
-      el.textContent = ratio(parse(cs.color), parse(cs.backgroundColor)).toFixed(2);
+      // Both sides need compositing, and each over a DIFFERENT ground: the tint
+      // over whatever the probe sits on, the ink over the tint. Reading them with
+      // parse() took the opaque channel of each, so every ratio published against
+      // a `-soft` token was computed against the full-strength colour — the whole
+      // soft-tint column of the status card, printed as measured data.
+      var groundRgb = flatten(cs.backgroundColor, host);
+      el.textContent = ratio(over(cs.color, groundRgb), groundRgb).toFixed(2);
       probe.remove();
     });
   }

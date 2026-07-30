@@ -17,10 +17,21 @@ Use it as the PR template verbatim.
 ## Before you open the PR
 
 ```bash
-npm run check     # contrast gate + token lint. The only path to remember.
+npm run check     # the four fast gates. The only path to remember.
+                  #   check:contrast  every token pair >= WCAG AA, plus the
+                  #                   non-text 3:1 boundaries and focus rings
+                  #   check:tokens    raw hex/colour, palette escapes, raw
+                  #                   durations and z-indexes, missing React import
+                  #   check:themes    every themable channel re-pointed in every
+                  #                   theme scope; tokens.json not stale
+                  #   check:dts       react.d.ts covers every runtime export
+npm run dts       # after adding or removing a barrel export
+npm run tokens    # after changing any token — commit tokens.json with it
 ```
 
-Both gates must pass. The lint is the load-bearing part of this package — a shared token file
+All four must pass. `check:dts` is the one whose failure mode is a broken
+`npm run build`: add the export to `react.js` AND the declaration to the component's own
+`.d.ts`, then regenerate. The lint is the load-bearing part of this package — a shared token file
 does not make products consistent on its own, and nothing else stops a dev writing
 `bg-emerald-500` next to it.
 

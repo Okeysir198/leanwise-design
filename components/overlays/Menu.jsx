@@ -116,7 +116,9 @@ export function Menu({ items = [], trigger, onSelect, label, placement = "bottom
   return (
     <Popover trigger={triggerEl} open={open} onOpenChange={setOpen} role="menu"
       label={label} placement={placement} matchWidth={matchWidth} {...rest}>
-      <div ref={listRef} className={cx("lw-menu", className)} onKeyDown={onKeyDown}>
+      {/* role="none" so the menuitems below are owned by the panel's role="menu",
+            not by this generic div. Without it the ownership chain is broken. */}
+      <div ref={listRef} role="none" className={cx("lw-menu", className)} onKeyDown={onKeyDown}>
         {items.map((it, i) => {
           if (it.type === "separator") return <hr key={i} className="lw-menu-sep" />;
           if (it.type === "label") return <div key={i} className="lw-menu-label">{it.label}</div>;

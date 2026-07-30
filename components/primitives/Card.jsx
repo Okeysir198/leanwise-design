@@ -11,7 +11,11 @@ export function Card({ interactive = false, glow = false, selected, as, classNam
   return (
     <Tag
       className={cx("lw-card", interactive && "lw-card-interactive", glow && "lw-card-glow", className)}
-      aria-selected={selected}
+      /* aria-pressed, not aria-selected: the latter is only valid on
+         gridcell/option/row/tab, so on a div or a button it was invalid and
+         ignored. data-selected drives the CSS either way. */
+      aria-pressed={interactive && selected != null ? !!selected : undefined}
+      data-selected={selected ? "true" : undefined}
       type={Tag === "button" ? "button" : undefined}
       {...rest}
     >{children}</Tag>

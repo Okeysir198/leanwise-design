@@ -29,7 +29,7 @@ export function Dialog({ open, onClose, title, description, footer, width, class
   return (
     <dialog ref={ref} className={cx("lw-dialog", className)}
       style={w ? { "--lw-dialog-w": w } : undefined}
-      onClose={onClose} onCancel={onClose} aria-labelledby={titleId} aria-describedby={descId} {...rest}>
+      onClose={onClose} onCancel={(e) => { e.preventDefault(); onClose && onClose(e); }} aria-labelledby={titleId} aria-describedby={descId} {...rest}>
       {title && (
         <div className="lw-dialog-head">
           <h2 className="lw-dialog-title" id={titleId}>{title}</h2>

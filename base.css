@@ -48,15 +48,48 @@ img { display: block; max-width: 100%; }
 button, input, textarea, select { font-family: inherit; }
 a { color: inherit; text-decoration: none; }
 button { cursor: pointer; background: none; border: 0; padding: 0; }
-::selection { background: var(--lw-brand-100); }
+/* A ROLE, not a tier: --lw-brand-100 is theme-invariant, so on dark it put the
+   near-white --lw-fg on a near-white #D5F3F6 ground — selected text vanished
+   at ~1.1:1. The tint follows the theme and the ink is stated explicitly. */
+::selection { background: var(--lw-brand-soft); color: var(--lw-fg); }
 
+/* One screen-reader-only utility, under two names. `.visually-hidden` lived here
+   and `.lw-sr-only` lived in product.css with a different clip technique — the
+   same utility twice, in two layers, so a page loading only base.css had one and
+   a page loading only product.css had the other. `.lw-sr-only` is the canonical
+   name (it carries the package prefix); `.visually-hidden` is kept as an alias
+   for one major because consumers use it. */
+.lw-sr-only,
 .visually-hidden {
   position: absolute !important;
   width: 1px; height: 1px;
   padding: 0; margin: -1px;
   overflow: hidden;
-  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
   white-space: nowrap; border: 0;
+}
+
+/* The skip link. Hidden until focused, then a real, visible control at the top
+   of the page — the canonical fix for a shell that puts a long sidebar ahead of
+   the content, which is nine of the twelve templates. */
+.lw-skip {
+  position: absolute;
+  inset-inline-start: var(--lw-space-8);
+  inset-block-start: var(--lw-space-8);
+  z-index: var(--lw-z-toast);
+  padding: 10px 16px;
+  border-radius: var(--lw-radius-sm);
+  background: var(--lw-brand-500);
+  color: var(--lw-on-brand);
+  font-size: var(--lw-text-sm);
+  font-weight: var(--lw-fw-semibold);
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+.lw-skip:focus-visible {
+  transform: none;
+  outline: none;
+  box-shadow: var(--lw-focus-ring);
 }
 
 .lw-container {
@@ -231,7 +264,7 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 .lw-btn-ghost {
   background: var(--lw-bg);
   color: var(--lw-fg);
-  border: 1px solid var(--lw-line-strong);
+  border: 1px solid var(--lw-line-control);
 }
 .lw-btn-ghost:hover { border-color: var(--lw-fg-subtle); background: var(--lw-bg-subtle); }
 
@@ -241,11 +274,11 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 :is(.dark, [data-band="dark"], .lw-band-dark) .lw-btn-ghost {
   background: transparent;
   color: var(--lw-on-dark);
-  border-color: hsl(0 0% 100% / 0.22);
+  border-color: var(--lw-on-dark-border);
 }
 :is(.dark, [data-band="dark"], .lw-band-dark) .lw-btn-ghost:hover {
   background: var(--lw-on-dark-fill);
-  border-color: hsl(0 0% 100% / 0.45);
+  border-color: var(--lw-on-dark-border-hover);
   color: var(--lw-on-dark);
 }
 :is(.dark, [data-band="dark"], .lw-band-dark) .lw-btn-link { color: var(--lw-brand-400); }
@@ -316,9 +349,12 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 .lw-btn[data-loading="true"] { position: relative; color: transparent; pointer-events: none; }
 /* The spinner cannot use currentColor — the loading state sets color:transparent to
    hide the label, which would make the ring invisible too. Each dark fill re-points
-   this ink to white; the light amber keeps the navy default. */
+   this ink to white; the amber CTA pins the navy that the fill demands, and only
+   the ghost/link variants — which paint on the page ground — track --lw-fg. */
 .lw-btn { --lw-btn-spin-ink: var(--lw-fg); }
 .lw-btn-brand, .lw-btn-ink, .lw-btn-danger { --lw-btn-spin-ink: var(--lw-on-dark); }
+/* The amber fill is theme-invariant, so its spinner ink must be too. */
+.lw-btn-cta { --lw-btn-spin-ink: var(--lw-on-cta); }
 .lw-btn:disabled, .lw-btn[aria-disabled="true"] { --lw-btn-spin-ink: var(--lw-fg-faint); }
 .lw-btn[data-loading="true"]::after {
   content: ""; position: absolute; width: 15px; height: 15px; border-radius: 999px;
@@ -434,7 +470,7 @@ button.lw-empty { text-align: left; font: inherit; color: inherit; }
    inner radius to outer minus zero inset — the same tier, top corners only. */
 .lw-card-media { margin: -20px -20px 4px; border-radius: var(--lw-radius-lg) var(--lw-radius-lg) 0 0; overflow: hidden; display: block; }
 /* Selection is an inset ring, so it costs no layout and cannot shift a grid row. */
-.lw-card.is-selected, .lw-card[aria-selected="true"] {
+.lw-card.is-selected, .lw-card[data-selected="true"], .lw-card[aria-selected="true"] {
   border-color: transparent;
   box-shadow: inset 0 0 0 1.5px var(--lw-brand-500);
 }
@@ -868,6 +904,11 @@ button.lw-empty { text-align: left; font: inherit; color: inherit; }
 .lw-table th[aria-sort] { cursor: pointer; }
 /* Numerics are a column, not prose: a wrapped "0.60 – 0.79" reads as two rows. */
 .lw-table th.num, .lw-table td.num { white-space: nowrap; }
+.lw-chip[role="button"]:focus-visible, .lw-pill[role="button"]:focus-visible,
+.lw-chip[tabindex]:focus-visible, .lw-pill[tabindex]:focus-visible {
+  outline: none; box-shadow: var(--lw-focus-ring);
+}
+
 .lw-tabs [role="tab"], .lw-segmented button, .lw-nav-item, .lw-chip[role="button"],
 .lw-pill[role="button"], .lw-copy, .lw-code-tabs button,
 /* `.lw-source-chip` was a name this system never shipped, so that selector matched
@@ -879,3 +920,48 @@ button.lw-empty { text-align: left; font: inherit; color: inherit; }
 .lw-card-interactive, .lw-feature-interactive, .lw-story-interactive,
 .lw-stat-tile.lw-card-interactive, .lw-stat-tile[role="button"],
 .lw-kpi[role="button"], .lw-msg-actions button, .lw-table th[aria-sort]:not([aria-sort="none"]) button { cursor: pointer; }
+
+/* -----------------------------------------------------------------------------
+   Windows High Contrast Mode (forced-colors).
+
+   Forced-colors strips author background-image, box-shadow and most colors and
+   substitutes a small system palette. That takes out the entire focus story of
+   this package: every focus indicator is `outline: none` PLUS
+   `box-shadow: var(--lw-focus-ring)` — 41 sites across the three layers. The
+   outline survives, the box-shadow does not, so a forced-colors user gets no
+   focus indicator at all. That is a WCAG 2.4.7 failure that the contrast gate
+   cannot see (it measures tokens, and here the tokens are ignored) and the a11y
+   gate cannot see (axe does not emulate forced-colors).
+
+   The rule is deliberately broad: restore a real outline wherever we removed
+   one, and opt the two glyphs drawn with borders/backgrounds out of forcing so
+   they stay visible.
+   -------------------------------------------------------------------------- */
+@media (forced-colors: active) {
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible,
+  :where(.lw-input-group, .lw-combo, .lw-prompt):focus-within {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+
+  /* The checkmark is a rotated border and the switch knob a background circle —
+     both are erased by forcing. Opt them out so the control still reads as on. */
+  .lw-check input, .lw-check input::after,
+  .lw-switch input, .lw-switch input::after {
+    forced-color-adjust: none;
+  }
+
+  /* The chevron is a CSS gradient, which forcing removes entirely, leaving a
+     select that looks like a text field. */
+  .lw-select { background-image: none; padding-inline-end: var(--lw-space-12); }
+
+  /* Selected/active state is carried by a tinted background or an inset ring in
+     the normal palette; neither survives. Give it a border the system keeps. */
+  .lw-card.is-selected, .lw-card[data-selected="true"], .lw-nav-item[aria-current], .lw-menu-item[data-active],
+  [role="tab"][aria-selected="true"], .lw-segmented button[aria-pressed="true"] {
+    border: 2px solid Highlight;
+  }
+
+  /* Decorative washes only add noise once the palette is forced. */
+  .lw-ground, .lw-aurora, .lw-sheen { display: none; }
+}

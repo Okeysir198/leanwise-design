@@ -16,7 +16,8 @@
  *
  * Usage: node templates/_tooling/lw-visual.mjs [--update]
  */
-import { readdirSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { collectCards } from "./_cards.mjs";
 import { createHash } from "node:crypto";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -34,16 +35,7 @@ catch {
 
 // Walk for *.card.html and preview/*.html — the same set the design-system tab
 // renders, found the same way (a @dsCard comment on line one).
-const cards = [];
-const walk = (dir) => {
-  for (const e of readdirSync(dir, { withFileTypes: true })) {
-    if (e.name.startsWith(".") || e.name === "node_modules") continue;
-    const p = join(dir, e.name);
-    if (e.isDirectory()) walk(p);
-    else if (e.name.endsWith(".html") && readFileSync(p, "utf8").slice(0, 200).includes("@dsCard")) cards.push(p);
-  }
-};
-walk(ROOT);
+const cards = collectCards(ROOT);
 
 const MATRIX = [
   { name: "light", theme: null, density: "comfortable" },

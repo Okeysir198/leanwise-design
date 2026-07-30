@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,6 +7,7 @@
 </head>
 <body>
 <x-dc>
+<a class="lw-skip" href="#lw-main">Skip to content</a>
 <!-- @template name="Settings & forms" description="Sectioned settings page — Field/Input/Select/Switch with help, error and destructive-action patterns." -->
 <helmet><script src="./ds-base.js"></script></helmet>
 <div class="{{ themeClass }}" data-band="{{ band }}" style="min-height:100vh;background:var(--lw-bg-subtle);color:var(--lw-fg);font-family:var(--lw-font-sans)">
@@ -16,7 +17,7 @@
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.Avatar" hint-size="32px,32px" name="Your Name"></x-import>
 </x-import>
 
-<div class="lw-container" style="padding-top:28px;padding-bottom:64px;display:flex;flex-direction:column;gap:24px">
+<div class="lw-container" style="padding-top:28px;padding-bottom:64px;display:flex;flex-direction:column;gap:24px" role="main" id="lw-main">
 
 <div style="display:flex;flex-direction:column;gap:8px">
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.Breadcrumbs" hint-size="200px,18px" items="{{ crumbs }}"></x-import>

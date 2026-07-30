@@ -12,6 +12,167 @@ and would not be at five.
 
 Nothing yet.
 
+## [1.1.5] — 2026-07-30
+
+A full-codebase review. Five parallel passes over the tokens and layers, the React
+components, the gates, packaging, and the templates and cards. The theme through almost all
+of it is the same: **things that were true at the root and wrong everywhere else**, and
+**gates that could not fail.**
+
+### Fixed — the palette and the layers
+
+- **`.dark` re-pointed the channels but never re-derived the roles.** `--lw-bg: hsl(var(--lw-bg-c))`
+  is substituted where it is DECLARED, so on a non-root `<div class="dark">` every
+  `background: var(--lw-bg)` kept the PAGE theme's value — a white card on navy. `.dark` is
+  used as a scoped subtree throughout the layers. It worked at `<html>` because there the
+  declaration and the override land on the same element, which is exactly why it survived:
+  the case everyone demos is the one that cannot fail.
+- **The same bug in `shadcn.css`, for every alias.** Declared on `:root` only, so inside a
+  band `bg-success-soft text-success-on` rendered the light tint with the light ink.
+- **`--lw-chart-grid` / `--lw-chart-axis` were missing from the band re-derive**, so a
+  dark-band chart drew light gridlines while its series correctly went dark.
+- **`@keyframes lwPulse` was declared twice** — an opacity blink in `base.css`, a brand halo
+  in `product.css`. Keyframe names are global and last-wins, so in the supported load order
+  the "live" dot stopped blinking and grew a cyan ring, and a marketing-only page got the
+  opposite. Renamed to `lwTracePulse`.
+- **The CTA's loading spinner was invisible on dark.** It defaulted to `--lw-fg`, which is
+  near-white on dark, and the amber fill does not flip. The label is `color: transparent`
+  at that moment, so the button had no visible content at all.
+- **`::selection` pinned a light tier** (`--lw-brand-100`), putting near-white ink on a
+  near-white ground at ~1.1:1 on dark.
+- **Control borders failed WCAG 1.4.11** at 1.47:1 light and 1.76:1 dark. Fixed with a new
+  `--lw-line-control` role rather than by darkening `--lw-line-strong`, which would have
+  dragged every divider in the system along with it.
+- **The dark focus ring contradicted its own documented contract** — `tokens.css` explains at
+  length why the translucent halo was removed, and all four dark scopes still shipped it, with
+  `product.css` overriding band-dark to a third value. Now solid 2px everywhere.
+- **`--lw-focus-ring-danger` existed in two scopes of six.**
+- **Nine hairline alphas inline** (0.03 0.04 0.05 0.10 0.12 0.16 0.22 0.35 0.45), two lines
+  below a comment saying the `--lw-on-dark-*` family "exists to stop exactly that sprawl" —
+  so dark borders did not match across table, kpi, empty, features, story and segmented.
+- **The modal scrim was a literal repeated at three `::backdrop` rules**, matching no token.
+- **`.lw-run-controls .lw-btn { min-height: 36px }`** was unconditional and higher-specificity
+  than the coarse-pointer 44px floor, so every console playback button was a 36px touch target.
+- **Interactive chips and pills had no `:focus-visible`** — the only controls in the package
+  without one, despite being listed in the pointer-affordance block.
+- **No `forced-colors` support anywhere.** Windows High Contrast strips `box-shadow`, which is
+  how all 41 focus indicators are drawn, while the paired `outline: none` survives — so a
+  forced-colors user had no focus indicator at all.
+- **The Tailwind preset never registered `radius-xs`/`pill` or `shadow-xs`/`xl`/`2xl`/`inner`,**
+  so those utilities silently resolved to Tailwind's stock black shadows and default radii.
+- **One screen-reader utility under two names** — `.visually-hidden` in `base.css`,
+  `.lw-sr-only` in `product.css`, with different clip techniques.
+
+### Fixed — the gates
+
+- **`tokens.json`'s `base` theme was the DARK palette.** The DTCG generator read the selector
+  alone, and the `:root` nested inside `@media (prefers-color-scheme: dark)` has selector
+  `:root` — so the whole dark palette overwrote light. Designers pulling the file into Tokens
+  Studio got dark labelled base, and the re-point gate was comparing dark against a base that
+  was already dark: it reported "every themable channel re-pointed" with no discriminating
+  power left. The theme is now decided by the at-rule plus the selector.
+- **`KIND()` typed the text COLOUR ramp as `dimension`,** because `--lw-text` is overloaded
+  (`text-1` is a colour, `text-sm` a size) and the name was tested before the value. The `-c`
+  channels came out `color`, so the two halves of one token disagreed.
+- **Zero cards was a pass** in both browser gates: an empty walk resolves immediately and
+  prints "0 cards — no violations". Both now enumerate from `_ds_manifest.json` cross-checked
+  against the filesystem, and disagreement in either direction is an error.
+- **The token lint skipped every selector without `.lw-`** — bare elements, `:root`, `*`,
+  `@keyframes` steps — and had no colour rule over the package's own layers at all. A hex in
+  `product.css` was invisible to all six gates simultaneously. Added `raw-color`, which
+  accepts token-derived alpha tints and rejects literals.
+- **The contrast manifest had no non-text pairs,** so `AA_LARGE` was dead code and WCAG 1.4.11
+  — control boundaries and focus indicators — was measured by nothing. axe does not close it
+  either; its contrast rule is text-only.
+- **The composed-pair walk dropped 33 of 122 rules with no diagnostic.** Skips are counted now.
+- **`_css.mjs` brace-walked without string or `url()` awareness** and swallowed unbalanced
+  braces, so one brace inside a string would have silently corrupted every rule after it for
+  all three static gates. It also returned each rule's body INCLUDING its nested children, so
+  a parent absorbed its descendants' declarations.
+- **CI never ran `npm run build`** — the only step in `prepublishOnly` it did not exercise,
+  and the exact failure `check:dts` was written for.
+- The React-import rule matched one exact spelling, and a missing `components/` directory was
+  a pass.
+
+### Fixed — the React layer
+
+- **No component forwarded a ref**, including every form control. `react-hook-form`'s
+  `register()`, a Controller's `field.ref`, imperative `.focus()` and scroll-to-error all
+  failed silently. `Input`, `Textarea`, `Select`, `Checkbox` and `Switch` now forward.
+- **Selecting a menu item dropped focus to `<body>`.** `Popover` renders `{open && children}`,
+  so the focused row unmounts on close; Escape restored focus and nothing else did.
+- **A nameless `role="dialog"` was permanently in the DOM** for every Popover, Menu, Combobox
+  and DatePicker on the page, open or not.
+- **`role="menu"` owned a roleless `div`,** not its menu items.
+- **`role="grid"` in Calendar had 42 gridcells as direct children** — no rows, no rowgroup, and
+  the weekday strip was `aria-hidden`, so there were no column headers either. Its roving
+  tabindex could also land on a `disabled` cell, at which point NO cell was focusable and the
+  keyboard user was stuck; disabled dates are `aria-disabled` now.
+- **`onClose` fired twice on Escape** in Dialog, Drawer and CommandPalette — the platform fires
+  `cancel` then `close`, and both were wired to the same handler.
+- **`aria-current="page"` on every crumb without an `href`,** so a non-linked ancestor announced
+  itself as the current page.
+- **Nested live regions** — `Toast` carried `role="status"`/`"alert"` inside an `aria-live`
+  `ToastRegion`.
+- **`aria-controls` in Combobox pointed at a `<ul>` that only exists when open and non-empty.**
+- **The RichText counter read the DOM during render,** so with an uncontrolled editor it never
+  moved off 0. Its `role="toolbar"` also promised arrow-key roving over ten real tab stops.
+- **DataGrid's width effect read a stale `widths` and keyed on `columns.length`,** so
+  reordering columns kept the previous widths.
+- **ThemeToggle never painted the restored theme on mount,** and a CONTROLLED toggle wrote the
+  global `localStorage` key behind its host's back.
+- `Card`'s `aria-selected` was invalid on a div/button and simply ignored; `Skeleton`'s
+  `lines` branch dropped `className`; `Tabs` was keyboard-inert when `value` matched no tab;
+  `Field`'s error message was unassociated unless the caller passed `htmlFor`; `Icon` and
+  `BottomNav` warned during render.
+
+### Fixed — templates and cards
+
+- **No template had `lang` on `<html>`.** Every card does, so this was template-specific drift,
+  and the a11y gate never saw it because it enumerates `@dsCard` files only. Consumers copy
+  these as starting points.
+- **Nine templates had no main landmark and none had a skip link,** despite three putting a
+  long sidebar ahead of the content.
+- **The card ratio readouts never flattened alpha,** so every ratio published against a `-soft`
+  tint was computed against the full-strength colour — the entire soft-tint column of the
+  status card, printed as measured data. The swatch path had fixed this locally and carries a
+  comment about it; the ratio and hex paths never did.
+- **The status card paired `*-text` with `*-soft`** — the link shade with the tint — which is
+  the mis-pairing `--lw-*-on` was added to prevent. Its neutral row also borrowed
+  `--lw-on-danger` because `--lw-on-neutral` did not exist.
+- The Brand card had no specimen for `--lw-brand-on`, the token added in v1.1.3 to fix a
+  shipped 3.98 contrast bug.
+- The card runtime overwrote a `data-theme` the host had already set.
+
+### Added
+
+- `--lw-on-neutral` — neutral was the one status family of five with no ink token, so
+  `shadcn.css` aliased `--neutral-foreground` to `--lw-on-danger-c` to borrow its white.
+- `--lw-line-control` — the WCAG 1.4.11 control boundary, distinct from the `line-strong`
+  divider.
+- `--lw-scrim`, `--lw-on-dark-wash`, `--lw-on-dark-fill-strong`, `--lw-on-dark-line-strong`,
+  `--lw-on-dark-border`, `--lw-on-dark-border-hover`, `--lw-on-dark-sheen`.
+- `.lw-skip`, and `.lw-sr-only` promoted to `base.css`.
+- `templates/_tooling/_cards.mjs` — the cross-checked card list both browser gates enumerate.
+- `tailwind-preset.d.cts`, `components/data/chart-parts.d.ts`.
+
+### Changed
+
+- **`package.json#exports`**: added `./package.json` (bundler version probes and
+  `require.resolve` were getting `ERR_PACKAGE_PATH_NOT_EXPORTED` from a closed map),
+  `./components/*` for deep imports, a `types` condition on `./tailwind-preset`, and `./counter`
+  back as a one-major shim — it was exported at v0.8.1, `leanwise-ai` imports it, and removing
+  it silently is what this file's own deprecation policy forbids.
+- `files` no longer ships `templates/_tooling`, whose scripts import devDependencies.
+- README's install pin, its Tailwind snippet (`export default` + `require` is a
+  `ReferenceError` in an ESM config), and the gate count in README, CONTRIBUTING and REVIEW.
+
+### Known gaps, unchanged
+
+- `check:visual` still cannot fail in CI. `_ds_bundle.js` is still generated in the design
+  project with no generator here, so the cards render from it rather than from the `.jsx`
+  sources these fixes touched.
+
 ## [1.1.4] — 2026-07-30
 
 Two shipped-package defects, plus the cleanup pass that found them.
@@ -194,6 +355,13 @@ debt the second one was hiding.
 ## [1.1.0]
 
 Baseline. See the README for the full component index.
+
+> **[0.9.0] and earlier — see git history.** `v0.1.1` through `v0.9.0` predate this file;
+> v1.1.0 replaced the repository wholesale from the Claude Design project, and the entries
+> were not carried across. `git log v0.1.1..v1.1.0` is the record. This matters more than it
+> looks: all three consumers are pinned in that range (`v0.8.1`, `v0.2.3`, `v0.2.2`), so the
+> gap covers exactly the span a consumer bump has to reason about. Reconstructing it is the
+> prerequisite for the first bump, not an archival nicety.
 
 ### Fixed
 - **`check:tokens` CSS self-check read only `lw.css`** — which the layer split turned into a

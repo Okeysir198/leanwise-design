@@ -37,14 +37,18 @@ export function ThemeToggle({ value, onChange, modes = ["light", "dark"], classN
     if (value !== undefined) return;
     try {
       const saved = localStorage.getItem(THEME_KEY);
-      if (saved && modes.includes(saved)) setInternal(saved);
+      // paint(), not just setInternal(): restoring the saved mode into state
+      // without applying it left the buttons and the document disagreeing.
+      if (saved && modes.includes(saved)) { setInternal(saved); paint(saved); }
     } catch (e) {}
   }, [value]);
   const mode = value !== undefined ? value : internal;
   const apply = (m) => {
     if (value === undefined) setInternal(m);
     onChange && onChange(m);
-    try { localStorage.setItem(THEME_KEY, m); } catch (e) {}
+    // Only the UNCONTROLLED toggle owns the global key. A controlled one is a
+    // view onto the host's state; persisting behind its back is not ours to do.
+    if (value === undefined) { try { localStorage.setItem(THEME_KEY, m); } catch (e) {} }
     paint(m);
   };
   return (

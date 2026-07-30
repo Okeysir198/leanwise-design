@@ -25,7 +25,14 @@ export function DataGrid({
   const scrollRef = React.useRef(null);
   const drag = React.useRef(null);
 
-  React.useEffect(() => { setWidths(columns.map((c, i) => widths[i] || c.width || DEFAULT_W)); }, [columns.length]);
+  /* Keyed on the column KEYS, not the count: swapping or reordering columns at
+     the same length left every width bound to the previous set. The functional
+     update is what makes the previous widths safe to read — the old code closed
+     over `widths` without depending on it, so it re-applied a stale array. */
+  const colKeys = columns.map((c) => c.key).join("\u0000");
+  React.useEffect(() => {
+    setWidths((prev) => columns.map((c, i) => prev[i] || c.width || DEFAULT_W));
+  }, [colKeys]);
 
   const selSet = React.useMemo(() => new Set(selected), [selected]);
   const allOn = rows.length > 0 && rows.every((r, i) => selSet.has(rowKey(r, i)));

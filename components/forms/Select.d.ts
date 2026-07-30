@@ -10,4 +10,8 @@ export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElemen
  * a phone, which no custom implementation matches. `options` takes bare strings when
  * the value and the label are the same, `{value,label}` when they are not.
  */
-export declare function Select(props: SelectProps): JSX.Element;
+/** Forwards its ref to the underlying <select>, so
+ *  react-hook-form and imperative .focus() reach the real control. */
+export declare const Select: React.ForwardRefExoticComponent<
+  SelectProps & React.RefAttributes<HTMLSelectElement>
+>;

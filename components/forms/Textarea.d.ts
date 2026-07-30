@@ -6,4 +6,8 @@ export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextArea
  * follows the attribute. No autogrow — a box that changes height while you type moves
  * the Save button out from under the cursor. Set `rows` for the size you expect.
  */
-export declare function Textarea(props: TextareaProps): JSX.Element;
+/** Forwards its ref to the underlying <textarea>, so
+ *  react-hook-form and imperative .focus() reach the real control. */
+export declare const Textarea: React.ForwardRefExoticComponent<
+  TextareaProps & React.RefAttributes<HTMLTextAreaElement>
+>;

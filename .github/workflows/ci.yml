@@ -31,6 +31,15 @@ jobs:
       - name: Barrel types
         run: npm run check:dts
 
+      # check:dts proves react.d.ts is not STALE; it does not run
+      # rollup-plugin-dts, whose own resolution rules are what actually failed
+      # (a re-export the target does not declare). prepublishOnly runs the build,
+      # so without this step the FIRST time anyone learns the build is broken is
+      # at publish — after the tag has been cut. It is the only gate in
+      # prepublishOnly that CI did not exercise.
+      - name: Build
+        run: npm run build
+
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
 
