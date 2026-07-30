@@ -23,8 +23,13 @@ README is the user-facing doc; this file is the *maintainer* doc.
 pnpm check        # WCAG gate — node bin/lw-contrast-check.mjs. Run on EVERY token change.
 pnpm build        # tsup → dist/react (esm + cjs + d.ts). Also runs on prepublishOnly.
 pnpm ladle        # component preview harness for src/react (ladle.config.mjs)
+pnpm ladle:build  # static preview → build/ (gitignored; dev-only, never shipped)
 npx lw-token-lint <consumer>/src
 ```
+
+**CI runs the contrast gate only** (`.github/workflows/check.yml`, every push/PR). `lw-token-lint`
+has no CI job here — it lints *consumer* source, so it must be run by hand in each consumer before
+a pin bump. A green tag proves contrast, not token discipline.
 
 This repo uses **pnpm** (`pnpm-lock.yaml` at root); consumers vary — see the table below.
 
@@ -82,6 +87,9 @@ fonts.css + fonts/  Geist + Geist Mono, self-hosted, incl. Vietnamese subsets.
 lib/brand.js        brandVars() / inkOn() / monogram() — runtime per-tenant theming.
                       lib/counter.js is exported as ./counter.
 bin/                the two CLIs (below).
+.ladle/             the preview stories (components/composites/code/console/theme) + css.ts, the
+                      shared side-effect import of fonts+tokens+lw.css. Ladle has no preview.tsx,
+                      so every story imports css.ts itself.
 src/react/          SOURCE of the ./react layer — Button, Eyebrow, Card, CodeBlock, Console,
                       StoryCard, FeatureGrid, LogoRail, ThemeToggle + hooks/ + icons/. Renders
                       the .lw-* classes and bundles NO css: the consumer imports lw.css itself.
