@@ -130,17 +130,19 @@ export function brandVars(hex, scheme = "light") {
     out[`--lw-brand-${k}-c`] = triple(v);
     out[`--lw-brand-${k}`] = `hsl(${triple(v)})`;
   }
-  const text = scheme === "dark" ? tiers[400] : tiers[500];
-  out["--lw-brand-text-c"] = triple(text);
-  out["--lw-brand-text"] = `hsl(${triple(text)})`;
+  /* One accent tier drives brand-text, --ring and the focus ring: they must not
+     be able to disagree about which tier the scheme selects. */
+  const accent = triple(scheme === "dark" ? tiers[400] : tiers[500]);
+  out["--lw-brand-text-c"] = accent;
+  out["--lw-brand-text"] = `hsl(${accent})`;
   /* Rule 3 of the README: a tenant theme owns --primary and --ring. It never
      touches --accent, which is shadcn's hover SURFACE, not a brand colour. */
   out["--primary"] = triple(tiers[500]);
   out["--primary-foreground"] = ink === WHITE ? "0 0% 100%" : "220.5 48.9% 8.4%";
-  out["--ring"] = triple(scheme === "dark" ? tiers[400] : tiers[500]);
+  out["--ring"] = accent;
   /* Solid, matching the shipped token — a tenant's ring must not be the one washed
      focus state in the system. Tier follows the scheme, as --ring already does. */
-  out["--lw-focus-ring"] = `0 0 0 2px hsl(${triple(tiers[scheme === "dark" ? 400 : 500])})`;
+  out["--lw-focus-ring"] = `0 0 0 2px hsl(${accent})`;
   return out;
 }
 

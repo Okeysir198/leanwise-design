@@ -17,6 +17,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { splitRules, stripComments, declarationsIn } from "./_css.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const args = process.argv.slice(2);
@@ -53,26 +54,18 @@ const KIND = (name, value, hinted) => {
 const hints = new Map();
 for (const m of css.matchAll(/(--[\w-]+)\s*:\s*([^;]+);\s*\/\*\s*@kind\s+(\w+)/g)) hints.set(m[1], m[3]);
 
-const blocks = [...css.replace(/\/\*[^]*?\*\//g, "").matchAll(/([^{}]+)\{([^{}]*)\}/g)];
+/* Shared walker — this file previously used a regex block matcher and had to be
+   taught the `@import` case by hand after the contrast gate hit it. Same parser
+   now, so there is no third place for the next parse defect to hide. */
 const byTheme = { base: {}, light: {}, dark: {}, compact: {}, comfortable: {} };
 const scopes = new Set();
 
-for (const [, selRaw, body] of blocks) {
-  // A statement at-rule terminates with `;`, not a block, so the leading
-  // `@import url("./fonts.css");` lands in the NEXT match's selector capture.
-  // Trimming to the last `;` is what stops it being read as an at-rule and
-  // skipped — without it the whole main :root palette block (every brand /
-  // cta / navy / surface channel) was dropped, and the parity gate below then
-  // policed a set that did not contain the channels it exists to police.
-  // lw-contrast-check.mjs solves the same case the same way.
-  const sel = selRaw.slice(selRaw.lastIndexOf(";") + 1).trim();
-  if (sel.startsWith("@")) continue;
-  const theme = THEME(sel);
-  scopes.add(sel);
-  for (const m of body.matchAll(/(--[\w-]+)\s*:\s*([^;]+)/g)) {
-    const name = m[1].trim();
-    const value = m[2].trim();
-    (byTheme[theme] = byTheme[theme] || {})[name] = value;
+for (const { selector, body } of splitRules(stripComments(css))) {
+  if (!selector || selector.startsWith("@")) continue;
+  const theme = THEME(selector);
+  scopes.add(selector);
+  for (const [name, value] of Object.entries(declarationsIn(body))) {
+    byTheme[theme]["--lw-" + name] = value;
   }
 }
 
@@ -123,15 +116,15 @@ const nest = (flat) => {
 // palette constant — the theme-following role is `--lw-{status}-on-c`, which
 // points at it on light and IS re-pointed on dark.
 const THEMABLE = /^--lw-(fg|bg|line|brand|navy|cta|success|warning|danger|neutral|surface|text|border|diff|chart|shadow)/;
-const EXEMPT = new RegExp([
-  /^--lw-on-/,                                        // inks on theme-invariant fills
-  /^--lw-(brand|cta|surface|text|border)-\d+-c$/,     // numbered palette ramps
-  /^--lw-navy-(700|900|deep)-c$/,                     // the mark's navy constants
-  /^--lw-(success|warning|danger|neutral)(-text)?-c$/, // status fills + their light ink
-].map((r) => "(?:" + r.source + ")").join("|"));
+const EXEMPT = new RegExp(
+  "^--lw-on-"                                       // inks on theme-invariant fills
+  + "|^--lw-(brand|cta|surface|text|border)-\\d+-c$" // numbered palette ramps
+  + "|^--lw-navy-(700|900|deep)-c$"                  // the mark's navy constants
+  + "|^--lw-(success|warning|danger|neutral)(-text)?-c$" // status fills + their light ink
+);
 const problems = [];
 for (const theme of ["dark"]) {
-  const t = byTheme[theme] || {};
+  const t = byTheme[theme];
   for (const name of Object.keys(byTheme.base)) {
     if (!THEMABLE.test(name) || EXEMPT.test(name)) continue;
     // Channel tokens are what dark re-points; a derived colour follows its channel,
@@ -144,8 +137,8 @@ for (const theme of ["dark"]) {
 const doc = {
   $description: "@leanwise/design tokens, generated from tokens.css. Do not hand-edit — regenerate.",
   base: nest(byTheme.base),
-  dark: nest(byTheme.dark || {}),
-  density: { compact: nest(byTheme.compact || {}), comfortable: nest(byTheme.comfortable || {}) },
+  dark: nest(byTheme.dark),
+  density: { compact: nest(byTheme.compact), comfortable: nest(byTheme.comfortable) },
 };
 
 const count = Object.keys(byTheme.base).length;

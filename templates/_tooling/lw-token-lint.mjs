@@ -37,6 +37,7 @@
 import { readdirSync, readFileSync, statSync, existsSync } from "node:fs";
 import { join, relative, extname, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { splitRules, stripComments } from "./_css.mjs";
 
 /* PATH NOTE — this folder sits under templates/ because everything outside it is
    compiled into the design system's browser bundle, and a Node script (node:fs,
@@ -178,29 +179,11 @@ function cssSelfCheck() {
 }
 
 function checkOneCss(raw) {
-  // Strip comments so prose mentioning `1.8s` or `z-index` does not trip a rule.
-  const src = raw.replace(/\/\*[\s\S]*?\*\//g, "");
-
-  // Walk the file with a brace-depth scanner and emit every (selector, body)
-  // pair. Nested rules (inside @media/@supports) surface as their own pairs; the
-  // outer at-rule's body is also emitted, but its selector lacks `.lw-` and is
-  // skipped, so declarations are not double-counted.
-  const rules = [];
-  const stack = [];
-  let buf = "";
-  for (let i = 0; i < src.length; i++) {
-    const c = src[i];
-    if (c === "{") {
-      stack.push({ selector: buf.trim(), start: i + 1 });
-      buf = "";
-    } else if (c === "}") {
-      const top = stack.pop();
-      if (top) rules.push({ selector: top.selector, body: src.slice(top.start, i) });
-      buf = "";
-    } else {
-      buf += c;
-    }
-  }
+  // Shared with the contrast gate and the DTCG generator. This file used to
+  // carry its own copy of the walker, and it was the copy that never received
+  // the `@import` selector-trim fix the other two both got — the one parser
+  // still holding a bug that had already been paid for twice.
+  const rules = splitRules(stripComments(raw));
 
   const errs = [];
   const TIME_PROP = /^(animation|transition|animation-duration|transition-duration)$/;

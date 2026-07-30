@@ -35,6 +35,7 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import { splitRules, stripComments, declarationsIn } from "./_css.mjs";
 
 /* PATH NOTE — this folder sits under templates/ because everything outside it is
    compiled into the design system's browser bundle, and a Node script (node:fs,
@@ -172,37 +173,8 @@ const MANIFEST = [
 const cssRaw = readFileSync(TOKENS_PATH, "utf8");
 // Strip comments before brace-walking — prose mentioning `{` or a triple would
 // otherwise fool the splitter, and declarations inside `/* *\/` are inert.
-const css = cssRaw.replace(/\/\*[\s\S]*?\*\//g, "");
+const css = stripComments(cssRaw);
 
-/**
- * Split into (selector, body) rule pairs via a brace-depth walk. Nested rules
- * (the `:root:not(…)` inside the @media block) surface as their OWN pair with
- * their direct body, so each scope's declarations are extracted exactly once.
- * Returns [{ selector, body }] in source order.
- */
-function splitRules(src) {
-  const rules = [];
-  const stack = [];
-  let buf = "";
-  for (let i = 0; i < src.length; i++) {
-    const c = src[i];
-    if (c === "{") {
-      // Everything after the last `;` is the selector. Statement at-rules — the
-      // leading `@import url("./fonts.css");` — terminate with a semicolon rather
-      // than a block, and would otherwise be glued onto the first selector, so
-      // the palette `:root` never matched and every channel read as unresolved.
-      stack.push({ selector: buf.slice(buf.lastIndexOf(";") + 1).trim(), start: i + 1 });
-      buf = "";
-    } else if (c === "}") {
-      const top = stack.pop();
-      if (top) rules.push({ selector: top.selector, body: src.slice(top.start, i), start: top.start, end: i });
-      buf = "";
-    } else {
-      buf += c;
-    }
-  }
-  return rules;
-}
 
 /**
  * First rule matching `re` whose body lies INSIDE `outer`. The system-preference
@@ -239,22 +211,6 @@ function findRule(rules, re, label) {
   return r;
 }
 
-/**
- * Declarations in a block body, keyed by the FULL property suffix after --lw-.
- * So `--lw-brand-500-c` → "brand-500-c", `--lw-bg-c` → "bg-c", `--lw-on-dark-3`
- * → "on-dark-3". Values are the raw authored string (triple / var() / hex / rgba).
- */
-function declarationsIn(body) {
-  const out = {};
-  // The final declaration in a block is allowed to omit its semicolon. Requiring
-  // one dropped that token silently, and a dropped channel reads downstream as
-  // "unresolved" rather than as the authoring slip it is — so terminate on `;`
-  // or on the end of the body.
-  const re = /--lw-([a-z0-9-]+)\s*:\s*([^;]+)(?:;|$)/g;
-  let m;
-  while ((m = re.exec(body))) out[m[1]] = m[2].trim();
-  return out;
-}
 
 /* =============================================================================
    3. COLOR VALUE PARSING + VAR() CHASE
@@ -488,10 +444,9 @@ const C = { reset: "\x1b[0m", green: "\x1b[32m", red: "\x1b[31m", yellow: "\x1b[
 
 const resolveColor = (name, scopeName) => {
   const scope = scopeName === "dark" ? dark : light;
-  const v = scope[name];
-  if (!v) return null;
-  if (v.kind === "rgb") return v;
-  return null; // cycle / missing — surfaced by chase() upstream; treat as unresolved here
+  // A cycle or a missing target is already surfaced by chase(); here anything
+  // that did not resolve to a solid colour is simply unresolved.
+  return scope[name]?.kind === "rgb" ? scope[name] : null;
 };
 
 let failed = 0;
@@ -611,6 +566,73 @@ function logoStops() {
 }
 
 /* =============================================================================
+   6c. COMPOSED PAIRS — coverage the MANIFEST structurally cannot have
+
+   The manifest lists pairs someone THOUGHT of. That is the right shape for
+   intent ("brand-on must read on brand-soft even if nothing paints it yet"),
+   and the wrong shape for coverage: it tracks memory, and its failure mode is
+   silent green. v1.1.3 added --lw-brand-on for exactly this pairing, converted
+   fourteen sites, missed `.lw-file-tree li[data-active]` because the rule spans
+   three lines and the sweep was line-wise — and the gate stayed green, because
+   the manifest asserts the pair in the abstract and never asks who paints it.
+
+   So: walk the CSS layers, take every rule that declares BOTH a color and a
+   background from tokens, and score what is actually composed. The manifest
+   stays as the intent overlay; this is the coverage.
+   ============================================================================= */
+
+const LAYERS = ["base.css", "marketing.css", "product.css"];
+const TOKEN_VAL = /^var\(--lw-([a-z0-9-]+)\)$/;
+
+function composedPairs() {
+  const seen = new Map();
+  for (const layer of LAYERS) {
+    let src;
+    try { src = readFileSync(join(ROOT, layer), "utf8"); } catch { continue; }
+    for (const { selector, body } of splitRules(stripComments(src))) {
+      if (!selector || selector.startsWith("@")) continue;
+      // WCAG exempts disabled controls, and the system leans on that: fg-faint
+      // on bg-muted is 2.28 and deliberate.
+      if (/:disabled|\[aria-disabled|\[data-disabled|\[disabled/.test(selector)) continue;
+      const decls = {};
+      for (const m of body.matchAll(/(^|[;{])\s*(color|background|background-color)\s*:\s*([^;}]+)/g)) {
+        decls[m[2] === "background-color" ? "background" : m[2]] = m[3].trim();
+      }
+      const fg = (decls.color || "").match(TOKEN_VAL);
+      const bg = (decls.background || "").match(TOKEN_VAL);
+      if (!fg || !bg) continue;
+      // A rule scoped to a dark band paints on the dark ground only; an
+      // unscoped one is seen on whichever theme the page is in.
+      const dark = /\.dark\b|\[data-band="dark"\]|\.lw-band-dark|-dark\b/.test(selector);
+      const light = /\.lw-band-light|\[data-band="light"\]/.test(selector);
+      const scopesFor = dark ? ["dark"] : light ? ["light"] : ["light", "dark"];
+      for (const sc of scopesFor) {
+        const key = fg[1] + "|" + bg[1] + "|" + sc;
+        if (!seen.has(key)) seen.set(key, { fg: fg[1], bg: bg[1], scope: sc, where: layer + " " + selector.split(",")[0].trim() });
+      }
+    }
+  }
+  return [...seen.values()];
+}
+
+const composedFails = [];
+for (const c of composedPairs()) {
+  const fg = resolveColor(c.fg, c.scope);
+  let bg = resolveColor(c.bg, c.scope);
+  if (!fg || !bg) continue; // not a solid pair the resolver models; the manifest covers those
+  if ((bg.a ?? 1) < 1) {
+    const over = resolveColor("bg", c.scope);
+    if (!over) continue;
+    bg = { kind: "rgb", a: 1,
+      r: bg.a * bg.r + (1 - bg.a) * over.r,
+      g: bg.a * bg.g + (1 - bg.a) * over.g,
+      b: bg.a * bg.b + (1 - bg.a) * over.b };
+  }
+  const ratio = contrast(fg, bg);
+  if (ratio < AA_TEXT) composedFails.push({ ...c, ratio: ratio.toFixed(2) });
+}
+
+/* =============================================================================
    7. REPORT
    ============================================================================= */
 
@@ -633,11 +655,20 @@ for (const grp of groups) {
   console.log(`${C.dim}— ${grp[0].group} —${C.reset}`);
   for (const r of grp) {
     const mark = r.status === "PASS" ? `${C.green}✓${C.reset}` : r.status === "MISS" ? `${C.yellow}?${C.reset}` : `${C.red}✗${C.reset}`;
-    const ratioCol = (r.status === "MISS" ? r.ratio : r.ratio).padStart(5);
+    const ratioCol = r.ratio.padStart(5);
     const scopeTag = `${C.dim}[${r.scope.padEnd(5)}]${C.reset}`;
     console.log(`  ${mark} ${ratioCol}  ${scopeTag} ${r.pair.padEnd(w)}  ${C.dim}${r.label}${C.reset}`);
   }
   console.log();
+}
+
+if (composedFails.length) {
+  console.log(`${C.bold}Composed pairs below AA (derived from the CSS layers, not the manifest)${C.reset}`);
+  for (const f of composedFails) {
+    console.log(`  ${C.red}✗${C.reset} ${f.ratio.padStart(5)}  ${C.dim}[${f.scope.padEnd(5)}]${C.reset} ${f.fg} on ${f.bg}  ${C.dim}${f.where}${C.reset}`);
+  }
+  console.log();
+  failed += composedFails.length;
 }
 
 if (parityFails.length) {

@@ -47,12 +47,12 @@ export function CommandPalette({
   // fires on mount, and this dialog is mounted long before it is opened.
   React.useEffect(() => { if (open && inputRef.current) inputRef.current.focus({ preventScroll: true }); }, [open]);
 
-  const shown = React.useMemo(() => {
-    if (!q) return commands.filter(c => !c.hidden);
-    return commands.filter(c => !c.hidden)
-      .map(c => ({ c, s: Math.max(score(q, c.label), score(q, c.group || "") - 4, ...(c.keywords || []).map(k => score(q, k) - 2)) }))
-      .filter(x => x.s >= 0).sort((a, b) => b.s - a.s).map(x => x.c);
-  }, [q, commands]);
+  /* No empty-query special case: score() returns 0 for one, so every visible row
+     clears `s >= 0` and the sort is stable — the general path already IS the
+     unfiltered list, and writing it twice let the two drift. */
+  const shown = React.useMemo(() => commands.filter(c => !c.hidden)
+    .map(c => ({ c, s: Math.max(score(q, c.label), score(q, c.group || "") - 4, ...(c.keywords || []).map(k => score(q, k) - 2)) }))
+    .filter(x => x.s >= 0).sort((a, b) => b.s - a.s).map(x => x.c), [q, commands]);
 
   React.useEffect(() => { setActive(0); }, [q]);
 

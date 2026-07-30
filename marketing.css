@@ -462,8 +462,8 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
    rather than eight logos shouting at once. */
 .lw-logo-rail:hover .lw-logo-item { opacity: 0.24; }
 .lw-logo-rail:hover .lw-logo-item:hover { opacity: 1; }
-.dark .lw-logo-item, [data-band="dark"] .lw-logo-item, .lw-band-dark .lw-logo-item { color: var(--lw-on-dark); opacity: 0.55; }
-.dark .lw-logo-item:hover, [data-band="dark"] .lw-logo-item:hover, .lw-band-dark .lw-logo-item:hover { color: var(--lw-brand-300); }
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-logo-item { color: var(--lw-on-dark); opacity: 0.55; }
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-logo-item:hover { color: var(--lw-brand-300); }
 
 /* The marquee has to fade at both edges or marks appear to be sliced off by the
    container. Mask, not a gradient overlay, so it works on any ground. */
@@ -535,7 +535,7 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 .lw-stat-tile.lw-card-interactive .lw-bar .fill { transition: width var(--lw-duration-slow) var(--lw-ease-out), background var(--lw-duration) var(--lw-ease-out); }
 .dark .lw-stat .n, [data-band="dark"] .lw-stat .n, .lw-band-dark .lw-stat .n { color: var(--lw-on-dark); }
 .dark .lw-stat .l, [data-band="dark"] .lw-stat .l, .lw-band-dark .lw-stat .l { color: var(--lw-on-dark-3); }
-.dark .lw-bar, [data-band="dark"] .lw-bar, .lw-band-dark .lw-bar { background: var(--lw-on-dark-fill); }
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-bar { background: var(--lw-on-dark-fill); }
 /* The dark ground lightens the meter fill to the 400 tier — but ONLY where no
    tone is set. Written as :not([data-tone]) rather than relying on declaration
    order: this rule and the [data-tone] block above are both (0,3,0), so a tie is
@@ -548,17 +548,17 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
    The toned fills step to the dark-legible tiers, because the light fills are
    mixed against white and go muddy on navy. */
 .dark .lw-bar:not([data-tone]) .fill, [data-band="dark"] .lw-bar:not([data-tone]) .fill, .lw-band-dark .lw-bar:not([data-tone]) .fill,
-.dark .lw-bar:not([data-tone])::after, [data-band="dark"] .lw-bar:not([data-tone])::after, .lw-band-dark .lw-bar:not([data-tone])::after { background: var(--lw-brand-400); }
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-bar:not([data-tone])::after { background: var(--lw-brand-400); }
 .dark .lw-bar[data-tone="cta"] .fill, [data-band="dark"] .lw-bar[data-tone="cta"] .fill, .lw-band-dark .lw-bar[data-tone="cta"] .fill,
-.dark .lw-bar[data-tone="cta"]::after, [data-band="dark"] .lw-bar[data-tone="cta"]::after, .lw-band-dark .lw-bar[data-tone="cta"]::after { background: var(--lw-cta-400); }
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-bar[data-tone="cta"]::after { background: var(--lw-cta-400); }
 .dark .lw-bar[data-tone="success"] .fill, [data-band="dark"] .lw-bar[data-tone="success"] .fill, .lw-band-dark .lw-bar[data-tone="success"] .fill,
-.dark .lw-bar[data-tone="success"]::after, [data-band="dark"] .lw-bar[data-tone="success"]::after, .lw-band-dark .lw-bar[data-tone="success"]::after { background: var(--lw-success-on); }
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-bar[data-tone="success"]::after { background: var(--lw-success-on); }
 .dark .lw-bar[data-tone="warning"] .fill, [data-band="dark"] .lw-bar[data-tone="warning"] .fill, .lw-band-dark .lw-bar[data-tone="warning"] .fill,
-.dark .lw-bar[data-tone="warning"]::after, [data-band="dark"] .lw-bar[data-tone="warning"]::after, .lw-band-dark .lw-bar[data-tone="warning"]::after { background: var(--lw-warning-on); }
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-bar[data-tone="warning"]::after { background: var(--lw-warning-on); }
 .dark .lw-bar[data-tone="danger"] .fill, [data-band="dark"] .lw-bar[data-tone="danger"] .fill, .lw-band-dark .lw-bar[data-tone="danger"] .fill,
-.dark .lw-bar[data-tone="danger"]::after, [data-band="dark"] .lw-bar[data-tone="danger"]::after, .lw-band-dark .lw-bar[data-tone="danger"]::after { background: var(--lw-danger-on); }
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-bar[data-tone="danger"]::after { background: var(--lw-danger-on); }
 .dark .lw-bar[data-tone="neutral"] .fill, [data-band="dark"] .lw-bar[data-tone="neutral"] .fill, .lw-band-dark .lw-bar[data-tone="neutral"] .fill,
-.dark .lw-bar[data-tone="neutral"]::after, [data-band="dark"] .lw-bar[data-tone="neutral"]::after, .lw-band-dark .lw-bar[data-tone="neutral"]::after { background: var(--lw-neutral-on); }
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-bar[data-tone="neutral"]::after { background: var(--lw-neutral-on); }
 
 /* Animated count-up stat (v0.3.0). Extends the .lw-stat number look. The
    CONTRACT: markup ships the FINAL value (SSR-safe, JS-free correct); the
@@ -881,9 +881,9 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 .lw-feature .lw-feature-more .arrow { flex: none; transition: transform var(--lw-duration) var(--lw-ease-out); }
 .lw-feature-interactive:hover .lw-feature-more .arrow { transform: translateX(3px); }
 
-.dark .lw-features, [data-band="dark"] .lw-features, .lw-band-dark .lw-features { background: hsl(0 0% 100% / 0.12); border-color: hsl(0 0% 100% / 0.12); }
-.dark .lw-feature, [data-band="dark"] .lw-feature, .lw-band-dark .lw-feature { background: var(--lw-navy-deep); }
-.dark .lw-feature-interactive:hover, [data-band="dark"] .lw-feature-interactive:hover, .lw-band-dark .lw-feature-interactive:hover { background: hsl(0 0% 100% / 0.05); }
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-features { background: hsl(0 0% 100% / 0.12); border-color: hsl(0 0% 100% / 0.12); }
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-feature { background: var(--lw-navy-deep); }
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-feature-interactive:hover { background: hsl(0 0% 100% / 0.05); }
 .dark .lw-feature h3, [data-band="dark"] .lw-feature h3, .lw-band-dark .lw-feature h3 { color: var(--lw-on-dark); }
 .dark .lw-feature p, [data-band="dark"] .lw-feature p, .lw-band-dark .lw-feature p { color: var(--lw-on-dark-2); }
 .dark .lw-feature .num::after, [data-band="dark"] .lw-feature .num::after, .lw-band-dark .lw-feature .num::after { background: hsl(0 0% 100% / 0.16); }
@@ -963,7 +963,7 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 .lw-story.lw-card-interactive:hover, .lw-story-interactive:hover { border-color: hsl(var(--lw-brand-500-c) / .55); box-shadow: var(--lw-shadow-md), var(--lw-brand-glow); transform: translateY(-2px); }
 .lw-story-interactive { cursor: pointer; transition: transform var(--lw-duration) var(--lw-ease-out), border-color var(--lw-duration) var(--lw-ease-out), box-shadow var(--lw-duration) var(--lw-ease-out); }
 .lw-story-interactive:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); border-color: var(--lw-brand-500); }
-.dark .lw-story, [data-band="dark"] .lw-story, .lw-band-dark .lw-story { background: var(--lw-navy-deep); border-color: hsl(0 0% 100% / .12); }
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-story { background: var(--lw-navy-deep); border-color: hsl(0 0% 100% / .12); }
 .dark .lw-story .lw-story-quote, [data-band="dark"] .lw-story .lw-story-quote, .lw-band-dark .lw-story .lw-story-quote { color: var(--lw-on-dark); }
 .dark .lw-story h3, [data-band="dark"] .lw-story h3, .lw-band-dark .lw-story h3 { color: var(--lw-on-dark); }
 .dark .lw-story p, .dark .lw-story .meta, [data-band="dark"] .lw-story p, [data-band="dark"] .lw-story .meta, .lw-band-dark .lw-story p, .lw-band-dark .lw-story .meta { color: var(--lw-on-dark-2); }

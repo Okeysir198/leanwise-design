@@ -198,7 +198,7 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 }
 .lw-btn-cta:focus-visible { outline-color: var(--lw-cta-text); }
 .lw-btn-danger:focus-visible { outline-color: var(--lw-danger-on); }
-.dark .lw-btn-brand:focus-visible, [data-band="dark"] .lw-btn-brand:focus-visible, .lw-band-dark .lw-btn-brand:focus-visible { outline-color: var(--lw-brand-400); }
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-btn-brand:focus-visible { outline-color: var(--lw-brand-400); }
 
 /* CTA = amber. One per view. This is the whole point of having an amber.
    Never named "primary": shadcn's --primary is the cyan, and one word cannot mean
@@ -238,23 +238,23 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 /* Ghost is the one variant with no fill of its own, so it is the only one that has
    to be told about the ground it sits on. Consumers must never patch this inline:
    an inline style outranks :hover and silently removes the hover state. */
-.dark .lw-btn-ghost, [data-band="dark"] .lw-btn-ghost, .lw-band-dark .lw-btn-ghost {
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-btn-ghost {
   background: transparent;
   color: var(--lw-on-dark);
   border-color: hsl(0 0% 100% / 0.22);
 }
-.dark .lw-btn-ghost:hover, [data-band="dark"] .lw-btn-ghost:hover, .lw-band-dark .lw-btn-ghost:hover {
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-btn-ghost:hover {
   background: var(--lw-on-dark-fill);
   border-color: hsl(0 0% 100% / 0.45);
   color: var(--lw-on-dark);
 }
-.dark .lw-btn-link, [data-band="dark"] .lw-btn-link, .lw-band-dark .lw-btn-link { color: var(--lw-brand-400); }
-.dark .lw-btn-link:hover, [data-band="dark"] .lw-btn-link:hover, .lw-band-dark .lw-btn-link:hover { border-bottom-color: var(--lw-brand-400); }
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-btn-link { color: var(--lw-brand-400); }
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-btn-link:hover { border-bottom-color: var(--lw-brand-400); }
 
 /* The focus ring is brand-500 at 30% — nearly invisible against navy. Dark grounds
    take the 400 tier so the ring reads in both themes. The tier swap lives in the
    token, so this rule only has to name the token. */
-.dark .lw-btn:focus-visible, [data-band="dark"] .lw-btn:focus-visible, .lw-band-dark .lw-btn:focus-visible {
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-btn:focus-visible {
   box-shadow: var(--lw-focus-ring);
 }
 
@@ -365,10 +365,14 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
      the dot changed colour and its halo did not. */
   box-shadow: 0 0 0 3px hsl(var(--lw-fg-faint-c) / 0.20);
 }
+/* brand-50 and brand-200 are palette TIERS — the same near-white in both
+   themes — so pairing them with brand-text (which re-points to the light
+   brand-400 on dark) put light cyan on near-white at 2.18. The tint that
+   follows the theme is brand-soft, and its ink is brand-on. */
 .lw-pill.brand {
-  border-color: var(--lw-brand-200);
-  color: var(--lw-brand-text);
-  background: var(--lw-brand-50);
+  border-color: var(--lw-brand-line);
+  color: var(--lw-brand-on);
+  background: var(--lw-brand-soft);
 }
 .lw-pill.brand .dot {
   background: var(--lw-brand-500);
@@ -396,7 +400,7 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 }
 .lw-card-interactive:active { transform: translateY(0); box-shadow: var(--lw-shadow-sm); transition-duration: var(--lw-dur-press); }
 .lw-card-interactive:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); border-color: var(--lw-brand-500); }
-.dark .lw-card-interactive:focus-visible, [data-band="dark"] .lw-card-interactive:focus-visible, .lw-band-dark .lw-card-interactive:focus-visible { box-shadow: var(--lw-focus-ring); border-color: var(--lw-brand-400); }
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-card-interactive:focus-visible { box-shadow: var(--lw-focus-ring); border-color: var(--lw-brand-400); }
 @media (prefers-reduced-motion: reduce) {
   .lw-card-interactive:hover { transform: none; }
 }
@@ -778,7 +782,7 @@ button.lw-empty { text-align: left; font: inherit; color: inherit; }
 .lw-file-tree li:hover { background: var(--lw-bg-muted); color: var(--lw-fg); }
 .lw-file-tree li[data-active] {
   background: var(--lw-brand-soft);
-  color: var(--lw-brand-text);
+  color: var(--lw-brand-on);
   box-shadow: inset 2px 0 0 var(--lw-brand-500);
 }
 .lw-file-tree li:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }

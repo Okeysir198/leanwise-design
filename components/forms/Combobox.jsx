@@ -107,7 +107,7 @@ export function Combobox({
         aria-invalid={invalid ? "true" : undefined}
         disabled={disabled}
         placeholder={current ? undefined : (multiple && selectedOpts.length ? "" : placeholder)}
-        value={query || (!multiple && !open && current ? current.label : query)}
+        value={!multiple && !open && current ? current.label : query}
         onChange={(e) => { setQuery(e.target.value); setActive(0); setOpen(true); onSearch && onSearch(e.target.value); }}
         onKeyDown={onKeyDown}
         onFocus={() => setOpen(true)} />

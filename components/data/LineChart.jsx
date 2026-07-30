@@ -1,21 +1,17 @@
-import { cx, SERIES, nf, DataTable, Legend, ticks } from "./chart-parts.jsx";
+import { cx, SERIES, nf, DataTable, Legend, frame, Grid } from "./chart-parts.jsx";
 
 /** The line and area chart. Same tokenised layer as BarChart. */
 export function LineChart({ labels = [], series = [], height = 200, area, label, className, ...rest }) {
-  const w = 640, pad = { t: 8, r: 8, b: 22, l: 40 };
   const max = Math.max(1, ...series.flatMap(s => s.data));
-  const ts = ticks(max);
-  const top = ts[ts.length - 1];
-  const iw = w - pad.l - pad.r, ih = height - pad.t - pad.b;
+  const f = frame(max, height);
+  const { w, pad, top, iw, ih, y } = f;
   const x = (i) => pad.l + (labels.length < 2 ? iw / 2 : (iw / (labels.length - 1)) * i);
-  const y = (v) => pad.t + ih - (v / top) * ih;
 
   return (
     <div className={cx("lw-chart-wrap", className)} {...rest}>
       <svg className="lw-chart" viewBox={"0 0 " + w + " " + height} role="img" aria-label={label}>
-        <g className="grid">{ts.map(v => <line key={v} x1={pad.l} x2={w - pad.r} y1={y(v)} y2={y(v)} />)}</g>
+        <Grid f={f} />
         <g className="axis">
-          {ts.map(v => <text key={v} x={pad.l - 6} y={y(v) + 3} textAnchor="end">{nf.format(v)}</text>)}
           {labels.map((l, i) => <text key={l} x={x(i)} y={height - 6} textAnchor="middle">{l}</text>)}
         </g>
         {series.map((s, si) => {

@@ -98,12 +98,23 @@ export function Popover({
       panel.style.left = pos.left + "px";
       panel.dataset.side = pos.side;
     };
+    /* Coalesce to one reposition per frame. `capture: true` means every
+       scrolling ancestor delivers, and reposition() reads two bounding rects
+       then writes three styles — a read/write/read/write cycle at raw event
+       rate, which on a trackpad runs well above 60Hz. useSpotlight in hooks.js
+       already establishes this pattern. */
+    let frame = 0;
+    const onScrollOrResize = () => {
+      if (frame) return;
+      frame = requestAnimationFrame(() => { frame = 0; reposition(); });
+    };
     reposition();
-    window.addEventListener("scroll", reposition, true);
-    window.addEventListener("resize", reposition);
+    window.addEventListener("scroll", onScrollOrResize, true);
+    window.addEventListener("resize", onScrollOrResize);
     return () => {
-      window.removeEventListener("scroll", reposition, true);
-      window.removeEventListener("resize", reposition);
+      if (frame) cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScrollOrResize, true);
+      window.removeEventListener("resize", onScrollOrResize);
     };
   }, [open, placement, offset, matchWidth]);
 

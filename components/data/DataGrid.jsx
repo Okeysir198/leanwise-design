@@ -15,12 +15,16 @@ export function DataGrid({
   height = 420, rowHeight = 44, virtualize, overscan = 8,
   onRowClick, empty = "No rows", selectionActions, label = "Data grid", className, ...rest
 }) {
-  const [widths, setWidths] = React.useState(() => columns.map(c => c.width || 160));
+  /* One home for the column-width fallbacks. Both defaults were written out at
+     six and two call sites; a grid where one of them drifts is a grid whose
+     header and body columns stop lining up. */
+  const DEFAULT_W = 160, MIN_W = 72;
+  const [widths, setWidths] = React.useState(() => columns.map(c => c.width || DEFAULT_W));
   const [scrollTop, setScrollTop] = React.useState(0);
   const scrollRef = React.useRef(null);
   const drag = React.useRef(null);
 
-  React.useEffect(() => { setWidths(columns.map((c, i) => widths[i] || c.width || 160)); }, [columns.length]);
+  React.useEffect(() => { setWidths(columns.map((c, i) => widths[i] || c.width || DEFAULT_W)); }, [columns.length]);
 
   const selSet = React.useMemo(() => new Set(selected), [selected]);
   const allOn = rows.length > 0 && rows.every((r, i) => selSet.has(rowKey(r, i)));
@@ -40,21 +44,38 @@ export function DataGrid({
     let acc = selectable ? 44 : 0;
     return columns.map((c, i) => {
       if (!c.pin) return null;
-      const l = acc; acc += widths[i] || 160; return l;
+      const l = acc; acc += widths[i] || DEFAULT_W; return l;
     });
   }, [columns, widths, selectable]);
   const lastPin = columns.reduce((last, c, i) => (c.pin ? i : last), -1);
 
   const onResizeDown = (i, e) => {
     e.preventDefault();
-    drag.current = { i, x: e.clientX, w: widths[i] || 160 };
-    const move = (ev) => {
+    drag.current = { i, x: e.clientX, w: widths[i] || DEFAULT_W };
+    /* One setWidths per FRAME, not per pointer event. A state update here
+       re-renders the whole grid — including the pinLefts scan and the lastPin
+       reduce — and pointermove fires far faster than the screen refreshes.
+       hooks.js:96 documents exactly this ("a setState per mousemove re-renders
+       the subtree 60 times a second"); the grid predates the note. */
+    let frame = 0, latest = null;
+    const flush = () => {
+      frame = 0;
       const d = drag.current;
-      if (!d) return;
-      const min = columns[d.i].minWidth || 72;
-      setWidths(w => w.map((v, n) => (n === d.i ? Math.max(min, d.w + ev.clientX - d.x) : v)));
+      if (!d || latest === null) return;
+      const min = columns[d.i].minWidth || MIN_W;
+      setWidths(w => w.map((v, n) => (n === d.i ? Math.max(min, d.w + latest - d.x) : v)));
     };
-    const up = () => { drag.current = null; window.removeEventListener("pointermove", move); window.removeEventListener("pointerup", up); };
+    const move = (ev) => {
+      if (!drag.current) return;
+      latest = ev.clientX;
+      if (!frame) frame = requestAnimationFrame(flush);
+    };
+    const up = () => {
+      if (frame) { cancelAnimationFrame(frame); flush(); }
+      drag.current = null;
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", up);
+    };
     window.addEventListener("pointermove", move);
     window.addEventListener("pointerup", up);
   };
@@ -63,8 +84,8 @@ export function DataGrid({
     const d = e.key === "ArrowRight" ? 16 : e.key === "ArrowLeft" ? -16 : 0;
     if (!d) return;
     e.preventDefault();
-    const min = columns[i].minWidth || 72;
-    setWidths(w => w.map((v, n) => (n === i ? Math.max(min, (v || 160) + d) : v)));
+    const min = columns[i].minWidth || MIN_W;
+    setWidths(w => w.map((v, n) => (n === i ? Math.max(min, (v || DEFAULT_W) + d) : v)));
   };
 
   const win = virtualize && rows.length * rowHeight > height;
@@ -74,7 +95,7 @@ export function DataGrid({
   const padTop = win ? start * rowHeight : 0;
   const padBottom = win ? Math.max(0, (rows.length - start - slice.length) * rowHeight) : 0;
 
-  const total = (selectable ? 44 : 0) + widths.reduce((s, w) => s + (w || 160), 0);
+  const total = (selectable ? 44 : 0) + widths.reduce((s, w) => s + (w || DEFAULT_W), 0);
 
   return (
     <div className={cx("lw-dgrid", className)} {...rest}>
@@ -92,7 +113,7 @@ export function DataGrid({
         <table style={{ minWidth: total }} aria-label={label} aria-rowcount={rows.length}>
           <colgroup>
             {selectable && <col style={{ width: 44 }} />}
-            {columns.map((c, i) => <col key={c.key} style={{ width: widths[i] || 160 }} />)}
+            {columns.map((c, i) => <col key={c.key} style={{ width: widths[i] || DEFAULT_W }} />)}
           </colgroup>
           <thead>
             <tr>

@@ -17,6 +17,7 @@
  * Usage: node templates/_tooling/lw-visual.mjs [--update]
  */
 import { readdirSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
@@ -55,33 +56,58 @@ mkdirSync(join(OUT, "baseline"), { recursive: true });
 mkdirSync(join(OUT, "current"), { recursive: true });
 
 const browser = await chromium.launch();
-const page = await browser.newPage({ viewport: { width: 1280, height: 900 }, deviceScaleFactor: 1 });
-let recorded = 0, changed = [];
+let recorded = 0; const changed = [];
 
-for (const card of cards) {
+/* One page per worker, and each card is navigated ONCE — only data-theme /
+   data-density differ across the matrix, so re-loading the document four times
+   re-paid the fonts and React-mount cost for an identical DOM. The freeze sheet
+   is injected the same way, once per navigation.
+
+   The old fixed `waitForTimeout(250)` per shot was 34s of the gate's 56s. What
+   it was really waiting for is fonts + a non-empty React root; wait for THAT
+   and the gate stops paying for the worst case on every card. */
+const WORKERS = 4;
+
+async function shoot(page, card) {
   const id = relative(ROOT, card).replace(/[\/\\]/g, "__").replace(/\.html$/, "");
+  const out = [];
+  await page.goto(pathToFileURL(card).href, { waitUntil: "load" });
+  await page.addStyleTag({ content: "*,*::before,*::after{animation:none !important;transition:none !important;caret-color:transparent !important}" });
+  // A card whose React root never mounted screenshots as a blank plate and
+  // compares clean forever. Require actual rendered content before shooting.
+  await page.waitForFunction(() => document.fonts.status === "loaded" && document.body.innerText.trim().length > 0,
+    null, { timeout: 15000 });
   for (const m of MATRIX) {
-    await page.goto(pathToFileURL(card).href, { waitUntil: "load" });
     await page.evaluate(([theme, density]) => {
       const r = document.documentElement;
       r.classList.toggle("dark", theme === "dark");
       if (theme) r.setAttribute("data-theme", theme); else r.removeAttribute("data-theme");
       r.setAttribute("data-density", density);
     }, [m.theme, m.density]);
-    // Fonts and the React roots both settle before the shot; animation is frozen
-    // so a shimmer or a caret cannot make every run a diff.
-    await page.addStyleTag({ content: "*,*::before,*::after{animation:none !important;transition:none !important;caret-color:transparent !important}" });
-    await page.evaluate(() => document.fonts && document.fonts.ready);
-    await page.waitForTimeout(250);
-    const shot = await page.screenshot({ fullPage: true });
-    const file = id + "__" + m.name + ".png";
-    const basePath = join(OUT, "baseline", file);
-    writeFileSync(join(OUT, "current", file), shot);
-    if (!existsSync(basePath) || update) { writeFileSync(basePath, shot); recorded++; continue; }
-    const before = readFileSync(basePath);
-    if (!before.equals(shot)) changed.push(file);
+    out.push([id + "__" + m.name + ".png", await page.screenshot({ fullPage: true })]);
   }
+  return out;
 }
+
+const queue = cards.slice();
+await Promise.all(Array.from({ length: Math.min(WORKERS, queue.length) }, async () => {
+  const page = await browser.newPage({ viewport: { width: 1280, height: 900 }, deviceScaleFactor: 1 });
+  for (let card; (card = queue.shift()); ) {
+    for (const [file, shot] of await shoot(page, card)) {
+      const basePath = join(OUT, "baseline", file);
+      if (!existsSync(basePath) || update) { writeFileSync(basePath, shot); recorded++; continue; }
+      // Compare digests, not bytes on disk, and only materialize .visual/current
+      // for a shot that actually differs — the old unconditional write plus
+      // baseline read moved ~33 MB per run to prove nothing had changed.
+      if (createHash("sha256").update(readFileSync(basePath)).digest("hex")
+       !== createHash("sha256").update(shot).digest("hex")) {
+        writeFileSync(join(OUT, "current", file), shot);
+        changed.push(file);
+      }
+    }
+  }
+  await page.close();
+}));
 await browser.close();
 
 const compared = cards.length * MATRIX.length - recorded;

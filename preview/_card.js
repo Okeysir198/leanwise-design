@@ -42,6 +42,20 @@
     var n = (s || '').match(/[\d.]+/g);
     return n ? [+n[0], +n[1], +n[2]] : WHITE;
   }
+  /* The page ground, resolved ONCE per hydrate. flatten() needs it for every
+     translucent swatch and the ancestor walk almost always misses (each card's
+     panes are transparent to the root), so this was a probe insert + forced
+     layout per swatch to re-derive one value. */
+  var pageGround = WHITE;
+  function resolveGround() {
+    var probe = document.createElement('span');
+    probe.style.cssText = 'display:none;background:var(--lw-bg)';
+    document.body.appendChild(probe);
+    var pm = (getComputedStyle(probe).backgroundColor || '').match(/[\d.]+/g);
+    probe.remove();
+    pageGround = pm ? [+pm[0], +pm[1], +pm[2]] : WHITE;
+  }
+
   /** Composite a possibly-translucent computed color over its opaque ancestor. */
   function flatten(css, host) {
     var n = (css || '').match(/[\d.]+/g);
@@ -58,14 +72,7 @@
       var m = (getComputedStyle(el).backgroundColor || '').match(/[\d.]+/g);
       if (m && (m.length < 4 || +m[3] >= 1)) { under = [+m[0], +m[1], +m[2]]; break; }
     }
-    if (!under) {
-      var probe = document.createElement('span');
-      probe.style.cssText = 'display:none;background:var(--lw-bg)';
-      document.body.appendChild(probe);
-      var pm = (getComputedStyle(probe).backgroundColor || '').match(/[\d.]+/g);
-      probe.remove();
-      under = pm ? [+pm[0], +pm[1], +pm[2]] : WHITE;
-    }
+    if (!under) under = pageGround;
     return c.map(function (v, i) { return a * v + (1 - a) * under[i]; });
   }
 
@@ -75,7 +82,35 @@
     }).join('').toUpperCase();
   }
 
+  /* A token name -> a CSS colour EXPRESSION, resolved against `scope`.
+     Several families ship channels only (--lw-success-text-c, no
+     --lw-success-text), and a var() that does not resolve silently falls back
+     to inherited ink — which is how all four status rows once read the same
+     18.72 against white and looked like measured data. Returns null so the
+     caller can render "—" rather than a plausible number.
+
+     Written twice (once inline as a nested ternary for [data-hex], once named
+     for [data-ratio]) until the hex copy was found to be missing the title/warn
+     path the ratio copy had. */
+  function expr(scope, name) {
+    if (scope.getPropertyValue('--lw-' + name).trim()) return 'var(--lw-' + name + ')';
+    if (scope.getPropertyValue('--lw-' + name + '-c').trim()) return 'hsl(var(--lw-' + name + '-c))';
+    return null;
+  }
+
+  /* Paint an expression on a hidden probe and read back what the browser
+     computed. The probe is the only honest way to resolve a var() chain. */
+  function measure(host, cssColor) {
+    var probe = document.createElement('div');
+    probe.style.cssText = 'position:absolute;visibility:hidden;background:' + cssColor;
+    host.appendChild(probe);
+    var v = parse(getComputedStyle(probe).backgroundColor);
+    probe.remove();
+    return v;
+  }
+
   function hydrate() {
+    resolveGround();
     var sw = document.querySelectorAll('[data-swatch]');
     Array.prototype.forEach.call(sw, function (el) {
       var token = el.getAttribute('data-swatch');
@@ -117,19 +152,14 @@
       var name = el.getAttribute('data-hex');
       var host = el.closest('.pane, .card') || document.body;
       var scope = getComputedStyle(host);
-      var v = scope.getPropertyValue('--lw-' + name).trim()
-        ? 'var(--lw-' + name + ')'
-        : scope.getPropertyValue('--lw-' + name + '-c').trim() ? 'hsl(var(--lw-' + name + '-c))' : null;
+      var v = expr(scope, name);
       if (!v) {
         el.textContent = '—';
+        el.title = 'unresolved token: --lw-' + name;
         if (typeof console !== 'undefined') console.warn('card: no token for "' + name + '" — hex not resolved');
         return;
       }
-      var probe = document.createElement('div');
-      probe.style.cssText = 'position:absolute;visibility:hidden;background:' + v;
-      host.appendChild(probe);
-      el.textContent = hex(parse(getComputedStyle(probe).backgroundColor));
-      probe.remove();
+      el.textContent = hex(measure(host, v));
     });
 
     // Inline ratio readouts in prose/tables: <span data-ratio="brand-500 on bg"></span>
@@ -145,12 +175,7 @@
       // looked like measured data. A name that resolves to nothing renders "—"
       // and warns; it never renders a plausible number.
       var scope = getComputedStyle(host);
-      var expr = function (name) {
-        if (scope.getPropertyValue('--lw-' + name).trim()) return 'var(--lw-' + name + ')';
-        if (scope.getPropertyValue('--lw-' + name + '-c').trim()) return 'hsl(var(--lw-' + name + '-c))';
-        return null;
-      };
-      var ink = expr(pair[0]), ground = expr(pair[1]);
+      var ink = expr(scope, pair[0]), ground = expr(scope, pair[1]);
       if (!ink || !ground) {
         el.textContent = '—';
         el.title = 'unresolved token: ' + (!ink ? '--lw-' + pair[0] : '--lw-' + pair[1]);
@@ -171,14 +196,18 @@
   } else {
     hydrate();
   }
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
-    // Theme flip re-points the tokens; the derived values must follow.
-    setTimeout(hydrate, 0);
-  });
-  // …and the OS preference is not how a theme is usually flipped. A consumer sets
-  // `.dark` / `data-theme` on <html>, and that path had no re-hydrate at all: the
-  // swatches kept their light-mode ink over a dark-mode plate — navy on the dark
-  // cta-soft tint measured 1.26, on the card whose purpose is publishing ratios.
-  new MutationObserver(function () { setTimeout(hydrate, 0); })
-    .observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'data-theme'] });
+  /* A theme flip re-points the tokens, so every derived value must follow. ONE
+     trigger: the observer below. Watching prefers-color-scheme separately was
+     redundant — the IIFE at the top of this file already writes `data-theme` on
+     that event, so the observer sees it, and listening to both queued two full
+     hydrations per OS flip.
+
+     A consumer flips the theme by setting `.dark` AND `data-theme`, which is two
+     mutations; coalesce so that is one pass, not two. */
+  var pending = false;
+  new MutationObserver(function () {
+    if (pending) return;
+    pending = true;
+    setTimeout(function () { pending = false; hydrate(); }, 0);
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'data-theme'] });
 })();

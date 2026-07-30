@@ -634,21 +634,21 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
    components need no rule here at all — they are built from role tokens, which
    already re-point. What is listed below is only what role tokens cannot fix. */
 
-.dark .lw-input, [data-band="dark"] .lw-input, .lw-band-dark .lw-input,
-.dark .lw-textarea, [data-band="dark"] .lw-textarea, .lw-band-dark .lw-textarea,
-.dark .lw-select, [data-band="dark"] .lw-select, .lw-band-dark .lw-select,
-.dark .lw-input-group, [data-band="dark"] .lw-input-group, .lw-band-dark .lw-input-group,
-.dark .lw-prompt, [data-band="dark"] .lw-prompt, .lw-band-dark .lw-prompt { background-color: var(--lw-bg-subtle); }
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-input,
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-textarea,
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-select,
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-input-group,
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-prompt { background-color: var(--lw-bg-subtle); }
 /* background-COLOR, never the shorthand: the shorthand resets background-image
    and would erase the two gradients that draw .lw-select's chevron, leaving the
    select on dark indistinguishable from a text input. */
 
-.dark .lw-input:focus-visible, [data-band="dark"] .lw-input:focus-visible, .lw-band-dark .lw-input:focus-visible,
-.dark .lw-textarea:focus-visible, [data-band="dark"] .lw-textarea:focus-visible, .lw-band-dark .lw-textarea:focus-visible,
-.dark .lw-select:focus-visible, [data-band="dark"] .lw-select:focus-visible, .lw-band-dark .lw-select:focus-visible,
-.dark .lw-input-group:focus-within, [data-band="dark"] .lw-input-group:focus-within, .lw-band-dark .lw-input-group:focus-within,
-.dark .lw-prompt:focus-within, [data-band="dark"] .lw-prompt:focus-within, .lw-band-dark .lw-prompt:focus-within,
-.dark [data-focus-demo], [data-band="dark"] [data-focus-demo], .lw-band-dark [data-focus-demo] { border-color: var(--lw-brand-400); box-shadow: var(--lw-focus-ring); }
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-input:focus-visible,
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-textarea:focus-visible,
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-select:focus-visible,
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-input-group:focus-within,
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-prompt:focus-within,
+:is(.dark, [data-band="dark"], .lw-band-dark) [data-focus-demo] { border-color: var(--lw-brand-400); box-shadow: var(--lw-focus-ring); }
 
 /* The switch knob and the check glyph are the two places a literal white is
    correct on both grounds — they sit on the brand fill, whose ink never flips. */
@@ -674,7 +674,7 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
    a well); dark keeps that same figure/ground rather than inverting it, so the
    control reads identically in both themes. Painted from the --lw-on-dark-*
    family, not raw rgba — that family exists to stop exactly that sprawl. */
-.dark .lw-segmented, [data-band="dark"] .lw-segmented, .lw-band-dark .lw-segmented { background: var(--lw-on-dark-fill); border-color: var(--lw-on-dark-line); }
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-segmented { background: var(--lw-on-dark-fill); border-color: var(--lw-on-dark-line); }
 .dark .lw-segmented button, [data-band="dark"] .lw-segmented button, .lw-band-dark .lw-segmented button { color: var(--lw-on-dark-2); }
 .dark .lw-segmented button:hover, [data-band="dark"] .lw-segmented button:hover, .lw-band-dark .lw-segmented button:hover { color: var(--lw-on-dark-1); }
 .dark .lw-segmented button[aria-pressed="true"], [data-band="dark"] .lw-segmented button[aria-pressed="true"], .lw-band-dark .lw-segmented button[aria-pressed="true"],
@@ -684,8 +684,8 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
    dark band the label re-pointed to the dark subtle ink while its node stayed
    the light-theme cyan. .lw-section.dark and .lw-hero-dark already patched this;
    a plain dark band was the gap. */
-.dark .lw-eyebrow::before, [data-band="dark"] .lw-eyebrow::before, .lw-band-dark .lw-eyebrow::before { background: var(--lw-brand-400); }
-.dark .lw-eyebrow.muted::before, [data-band="dark"] .lw-eyebrow.muted::before, .lw-band-dark .lw-eyebrow.muted::before { background: var(--lw-fg-faint); }
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-eyebrow::before { background: var(--lw-brand-400); }
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-eyebrow.muted::before { background: var(--lw-fg-faint); }
 
 /* The focus ring must switch to the 400 tier on dark — the 500 ring disappears
    into the navy. Same rule base.css applies to buttons. */

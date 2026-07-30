@@ -14,12 +14,17 @@ const prefersReduced = () => canDOM() && window.matchMedia("(prefers-reduced-mot
 
 /* ---- theme ---------------------------------------------------------------- */
 
-const THEME_KEY = "lw-theme"; /* the key ThemeToggle already writes — the hook
-                                 and the component must never disagree */
+/* Exported: ThemeToggle reads and writes through these, so "the hook and the
+   component must never disagree" is enforced rather than asserted. */
+export const THEME_KEY = "lw-theme";
 const read = () => { try { return localStorage.getItem(THEME_KEY) || "system"; } catch (e) { return "system"; } };
 const systemDark = () => canDOM() && window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-function paint(mode) {
+/* Exported so ThemeToggle writes the theme through the SAME function the hook
+   reads it back with. The comment on THEME_KEY used to say "the hook and the
+   component must never disagree" — documenting a coupling instead of removing
+   it. The component had its own copy, without the system-preference listener. */
+export function paint(mode) {
   const dark = mode === "dark" || (mode === "system" && systemDark());
   const el = document.documentElement;
   el.classList.toggle("dark", dark);

@@ -1,4 +1,5 @@
 import { Icon } from "../primitives/Icon.jsx";
+import { paint, THEME_KEY } from "../../hooks.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
 
 
@@ -34,7 +35,7 @@ export function ThemeToggle({ value, onChange, modes = ["light", "dark"], classN
   React.useEffect(() => {
     if (value !== undefined) return;
     try {
-      const saved = localStorage.getItem("lw-theme");
+      const saved = localStorage.getItem(THEME_KEY);
       if (saved && modes.includes(saved)) setInternal(saved);
     } catch (e) {}
   }, [value]);
@@ -42,11 +43,8 @@ export function ThemeToggle({ value, onChange, modes = ["light", "dark"], classN
   const apply = (m) => {
     if (value === undefined) setInternal(m);
     onChange && onChange(m);
-    try { localStorage.setItem("lw-theme", m); } catch (e) {}
-    const dark = m === "dark" || (m === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
-    const el = document.documentElement;
-    el.classList.toggle("dark", dark);
-    el.setAttribute("data-theme", dark ? "dark" : "light");
+    try { localStorage.setItem(THEME_KEY, m); } catch (e) {}
+    paint(m);
   };
   return (
     <div className={cx("lw-segmented", className)} role="group" aria-label="Colour theme" {...rest}>
