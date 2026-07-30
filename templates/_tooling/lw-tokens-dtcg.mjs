@@ -128,7 +128,23 @@ if (problems.length) {
   process.exit(1);
 }
 if (checkOnly) {
-  console.log("lw-tokens-dtcg: OK — " + count + " base tokens across " + scopes.size + " scopes, every themable channel re-pointed.");
+  // tokens.json is committed (it is in package.json#exports, and every consumer
+  // installs from a git tag, where a generated-at-publish file does not exist).
+  // A committed generated file can go stale silently, so the check that runs on
+  // every token change is also the one that catches it.
+  const want = JSON.stringify(doc, null, 2) + "\n";
+  let have = null;
+  try { have = readFileSync(outPath, "utf8"); } catch { /* absent — reported below */ }
+  if (have === null) {
+    console.error("lw-tokens-dtcg: " + outPath + " is missing. Run `npm run tokens` and commit it.");
+    process.exit(1);
+  }
+  if (have !== want) {
+    console.error("lw-tokens-dtcg: " + outPath + " is stale — tokens.css has moved since it was generated.");
+    console.error("  Run `npm run tokens` and commit the result.");
+    process.exit(1);
+  }
+  console.log("lw-tokens-dtcg: OK — " + count + " base tokens across " + scopes.size + " scopes, every themable channel re-pointed; tokens.json current.");
   process.exit(0);
 }
 writeFileSync(outPath, JSON.stringify(doc, null, 2) + "\n");
