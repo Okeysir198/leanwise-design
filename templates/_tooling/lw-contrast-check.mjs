@@ -166,17 +166,49 @@ function splitRules(src) {
   for (let i = 0; i < src.length; i++) {
     const c = src[i];
     if (c === "{") {
-      stack.push({ selector: buf.trim(), start: i + 1 });
+      // Everything after the last `;` is the selector. Statement at-rules — the
+      // leading `@import url("./fonts.css");` — terminate with a semicolon rather
+      // than a block, and would otherwise be glued onto the first selector, so
+      // the palette `:root` never matched and every channel read as unresolved.
+      stack.push({ selector: buf.slice(buf.lastIndexOf(";") + 1).trim(), start: i + 1 });
       buf = "";
     } else if (c === "}") {
       const top = stack.pop();
-      if (top) rules.push({ selector: top.selector, body: src.slice(top.start, i) });
+      if (top) rules.push({ selector: top.selector, body: src.slice(top.start, i), start: top.start, end: i });
       buf = "";
     } else {
       buf += c;
     }
   }
   return rules;
+}
+
+/**
+ * First rule matching `re` whose body lies INSIDE `outer`. The system-preference
+ * block scopes a plain `:root`, which is ambiguous at top level — this anchors
+ * the lookup to the enclosing at-rule instead of the selector text.
+ */
+function findNested(rules, outer, re, label) {
+  const r = rules.find((r) => r.start > outer.start && r.end <= outer.end && re.test(r.selector));
+  if (!r) throw new Error(`theme block not found: ${label} (no selector matched ${re} inside ${outer.selector})`);
+  return r;
+}
+
+/** True when no other rule encloses this one — i.e. not nested in an at-rule. */
+function isTopLevel(rules, r) {
+  return !rules.some((o) => o !== r && o.start < r.start && o.end >= r.end);
+}
+
+/**
+ * Declarations from EVERY top-level rule matching `re`, merged in source order
+ * (later wins, as the cascade would). A scope authored across several blocks —
+ * which `:root` and `.dark, …` both are — must be read whole or half its
+ * channels look unresolved. Throws if nothing matched.
+ */
+function mergeRules(rules, re, label) {
+  const matched = rules.filter((r) => re.test(r.selector) && isTopLevel(rules, r));
+  if (!matched.length) throw new Error(`theme block not found: ${label} (no selector matched ${re})`);
+  return Object.assign({}, ...matched.map((r) => declarationsIn(r.body)));
 }
 
 /** First rule whose selector matches the regexp. Throws if absent. */
@@ -290,10 +322,14 @@ function chase(scope, name, seen) {
 
 const rules = splitRules(css);
 
-// Light defaults — the first bare :root. NOT :root[data-theme="dark"] / :root:not(…).
-const lightDecls = declarationsIn(findRule(rules, /^:root\s*$/, ":root (light defaults)").body);
-// The canonical dark overlay — the `.dark, [data-theme="dark"]` combined rule.
-const darkClassDecls = declarationsIn(findRule(rules, /^\.dark\s*,/, ".dark, [data-theme=\"dark\"]").body);
+// Light defaults — EVERY top-level bare :root, merged in source order. tokens.css
+// opens several (the scale, then the color roles, then the late addenda); taking
+// only the first resolves none of the color channels. NOT :root[data-theme="dark"],
+// and not the :root nested inside the system-preference @media.
+const lightDecls = mergeRules(rules, /^:root\s*$/, ":root (light defaults)");
+// The canonical dark overlay — the `.dark, [data-theme="dark"], …` rules, likewise
+// authored as more than one block.
+const darkClassDecls = mergeRules(rules, /^\.dark\s*,/, ".dark, [data-theme=\"dark\"]");
 
 // Dark = light ⊕ dark overlay (everything the dark block does NOT redeclare is
 // inherited from :root — e.g. --lw-text-1-c stays navy, which is the whole reason
@@ -314,14 +350,26 @@ const dark = buildScope(darkDecls);
  *
  * Likewise :where(.lw-band-light) must reproduce the light role set.
  */
+/**
+ * The band blocks are authored as selector LISTS — `:where(.lw-band-dark,
+ * [data-band="dark"])` — so an exact-match regex never finds them. Match the
+ * class anywhere in the list, and exclude the block that carries BOTH bands
+ * (the shared-declaration block), which is not the role set we are comparing.
+ */
+const BAND_DARK_RE = /^:where\((?![^)]*\.lw-band-light)[^)]*\.lw-band-dark\b[^)]*\)\s*$/;
+const BAND_LIGHT_RE = /^:where\((?![^)]*\.lw-band-dark)[^)]*\.lw-band-light\b[^)]*\)\s*$/;
+/* The system-preference block scopes a bare `:root`; find it via its at-rule. */
+const MEDIA_DARK_RE = /^@media\s*\(prefers-color-scheme:\s*dark\)\s*$/;
+const MEDIA_ROOT_RE = /^:root(?::not\([^)]*\))*\s*$/;
+
 function parity() {
   const failPairs = []; // hard fails (explicit dark forms disagree)
   const warnings = [];  // soft (media block / informational)
 
   const want = [
     { label: ":root[data-theme=\"dark\"]", re: /^:root\[data-theme="dark"\]\s*$/, here: declarationsIn(findRule(rules, /^:root\[data-theme="dark"\]\s*$/, ":root[data-theme=\"dark\"]").body), strict: true },
-    { label: ":where(.lw-band-dark)",     re: /^:where\(\.lw-band-dark\)\s*$/,    here: declarationsIn(findRule(rules, /^:where\(\.lw-band-dark\)\s*$/, ":where(.lw-band-dark)").body), strict: true },
-    { label: "@media (prefers-color-scheme: dark)", re: /^:root:not\(\.light\):not\(\[data-theme="light"\]\)\s*$/, here: declarationsIn(findRule(rules, /^:root:not\(\.light\):not\(\[data-theme="light"\]\)\s*$/, "@media dark inner").body), strict: false },
+    { label: ":where(.lw-band-dark)",     re: BAND_DARK_RE,                       here: declarationsIn(findRule(rules, BAND_DARK_RE, ":where(.lw-band-dark)").body), strict: true },
+    { label: "@media (prefers-color-scheme: dark)", re: MEDIA_ROOT_RE, here: declarationsIn(findNested(rules, findRule(rules, MEDIA_DARK_RE, "@media (prefers-color-scheme: dark)"), MEDIA_ROOT_RE, "@media dark inner").body), strict: false },
   ];
 
   // Compare COLOR declarations only (-c channels + the rgba on-dark family).
@@ -345,7 +393,7 @@ function parity() {
   }
 
   // Band-light must reproduce the light role set for color decls it shares.
-  const bandLightDecls = declarationsIn(findRule(rules, /^:where\(\.lw-band-light\)\s*$/, ":where(.lw-band-light)").body);
+  const bandLightDecls = declarationsIn(findRule(rules, BAND_LIGHT_RE, ":where(.lw-band-light)").body);
   for (const k of Object.keys(bandLightDecls)) {
     if (!isColorDecl(k)) continue;
     const lightVal = lightDecls[k];

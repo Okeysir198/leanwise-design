@@ -72,7 +72,7 @@
   "scripts": {
     "build": "tsup --config templates/_tooling/tsup.config.js",
     "check:contrast": "node templates/_tooling/lw-contrast-check.mjs",
-    "check:tokens": "node templates/_tooling/lw-token-lint.mjs src",
+    "check:tokens": "node templates/_tooling/lw-token-lint.mjs --css",
     "check:themes": "node templates/_tooling/lw-tokens-dtcg.mjs --check",
     "check:a11y": "node templates/_tooling/lw-a11y.mjs",
     "check:visual": "node templates/_tooling/lw-visual.mjs",
