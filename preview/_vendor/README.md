@@ -44,6 +44,11 @@ sha256sum *.js            # then update the table above
 ```
 
 Bumping React means bumping it in **both** filenames and in all 21 cards
-(`grep -rl _vendor components/`), and re-running `npm run check:a11y`. The bundle the
-cards actually render (`_ds_bundle.js`) is built against React 18 in the Claude Design
-project — do not move to 19 here without moving it there first.
+(`grep -rl _vendor components/`), and re-running `npm run check:a11y`.
+
+The bundle the cards actually render (`_ds_bundle.js`) is built **here** by
+`npm run bundle` as of v1.1.7 — it used to be cut in the Claude Design project, which is
+why an earlier draft of this file said so. It takes React from the page globals (these
+files) rather than bundling its own, so the version the cards run is decided *here* and
+nowhere else. Bump these and the bundle follows on the next `npm run bundle`; the
+`peerDependencies` range in `package.json` is what governs consumers.
