@@ -4,7 +4,7 @@ Guidance for Claude Code when working in this repository.
 
 ## What this is
 
-**`@leanwise/design` v1.1.5** — the LeanWise design system. Tokens, five CSS layers, a Tailwind
+**`@leanwise/design` v1.1.6** — the LeanWise design system. Tokens, five CSS layers, a Tailwind
 preset, ~65 React components across eight categories, twelve page templates, and **six gates**
 that turn the style guide into build failures.
 

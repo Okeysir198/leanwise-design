@@ -12,6 +12,30 @@ and would not be at five.
 
 Nothing yet.
 
+## [1.1.6] — 2026-07-30
+
+Documentation truth-up, plus one real defect found while checking it.
+
+### Fixed — `email.css` drift, now gated
+
+`email.css` carries literal hex on purpose (mail clients have no custom properties), which
+makes it a second home for palette values — and six had drifted from `tokens.css`:
+`--lw-text-2`, `--lw-text-3`, `--lw-border-1`, `--lw-border-2`, `--lw-surface-1` and the dark
+`--lw-fg-muted`. `--lw-text-3` was the one that mattered: v1.1.3 moved the muted floor to
+clear AA on surface-3, and email kept the old `#6B7684` — so the one surface that cannot be
+re-themed after it is sent had the pre-fix value baked in. `emailLiterals()` in the contrast
+gate now asserts them, the same way `logoStops()` asserts the SVG gradient.
+
+### Changed
+
+- **`REVIEW.md` rewritten.** The standing audit had gone stale in a way that would mislead the
+  next reader: it said the browser gates "have never executed" (they run, and a11y is green
+  across 34 cards), said the build had never run, and told the reader to flip `exports` to
+  `dist/` — the opposite of the deliberate v1.1.0 decision that `dist/` is a type-check
+  artifact, neither shipped nor exported. Its token count and gate count were both wrong.
+  Now ranked by what would hurt most to leave, with `_ds_bundle.js` named as the one
+  structural gap.
+
 ## [1.1.5] — 2026-07-30
 
 A full-codebase review. Five parallel passes over the tokens and layers, the React
@@ -166,16 +190,6 @@ of it is the same: **things that were true at the root and wrong everywhere else
 - `files` no longer ships `templates/_tooling`, whose scripts import devDependencies.
 - README's install pin, its Tailwind snippet (`export default` + `require` is a
   `ReferenceError` in an ESM config), and the gate count in README, CONTRIBUTING and REVIEW.
-
-### Fixed — `email.css` drift, now gated
-
-`email.css` carries literal hex on purpose (mail clients have no custom properties), which
-makes it a second home for palette values — and six had drifted from `tokens.css`:
-`--lw-text-2`, `--lw-text-3`, `--lw-border-1`, `--lw-border-2`, `--lw-surface-1` and the dark
-`--lw-fg-muted`. `--lw-text-3` was the one that mattered: v1.1.3 moved the muted floor to
-clear AA on surface-3, and email kept the old `#6B7684` — so the one surface that cannot be
-re-themed after it is sent had the pre-fix value baked in. `emailLiterals()` in the contrast
-gate now asserts them, the same way `logoStops()` asserts the SVG gradient.
 
 ### Known gaps, unchanged
 
