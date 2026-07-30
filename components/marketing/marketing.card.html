@@ -1,0 +1,87 @@
+<!-- @dsCard group="Marketing" name="Marketing composites" subtitle="Hero, FeatureGrid, StoryCard, LogoRail — the no-fabrication rule enforced at runtime" viewport="1100x900" -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Marketing</title>
+<link rel="stylesheet" href="../../preview/_card.css">
+<link rel="stylesheet" href="../../base.css">
+<link rel="stylesheet" href="../../marketing.css">
+<link rel="stylesheet" href="../../product.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../preview/_card.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.pane{padding:20px;display:grid;gap:14px;align-content:start;border-radius:10px}
+.pane.dark{background:var(--lw-navy-deep)}.lbl{font-family:var(--lw-font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--lw-fg-subtle)}
+.pane.dark .lbl{color:var(--lw-on-dark-3)}.full{margin:0 -30px}</style>
+</head><body><div class="card">
+<header><h1>Marketing composites</h1>
+<p class="sub"><b>StoryCard will not render a half-filled testimonial.</b> The quote block appears only when quote,
+person and role are all present — checked at runtime, not documented in a file nobody reads. A quote with no attributable
+person is an invented one, and the component refuses to help.</p>
+<p class="sub"><b>One amber CTA per view.</b> The hero below spends it; every other action on the page is cyan or ghost.
+That is the only rule that keeps a call to action meaning anything.</p></header>
+<div class="full" id="hero"></div>
+<div id="root"></div>
+<div style="display:flex;flex-direction:column;gap:12px;padding-top:20px;margin-top:6px;border-top:1px solid var(--lw-line)">
+<span class="lbl">why it is built this way</span>
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">Logo rail</h2>
+<p class="sub"><b>Rail items are real anchors</b>: pointer cursor, a lift and full-opacity brand ink on
+  hover and focus, and a rail that dims its <i>other</i> marks while one is hovered — so the wall reads
+  as a set being scanned rather than several logos shouting at once. Resting ink is a theme-aware token,
+  never a hard-coded <span class="mono">opacity</span>, which would stay dark on a dark page.</p>
+<p class="sub"><b>The marquee variant fades at both edges</b> with a mask rather than a gradient
+  overlay, so it works on any ground, and it pauses on hover — a moving logo you cannot click is a
+  reasonable thing to be annoyed by. Reduced motion falls back to the static wrap with no mask. The mark
+  shown is LeanWise's own mono mark standing in for customer artwork.</p>
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">Feature grid</h2>
+<p class="sub"><b>A cell that looks clickable must behave like it is.</b>
+  <span class="mono">.lw-feature-interactive</span> carries a pointer cursor, a surface tint, the
+  wipe-in rule, an arrow that advances 3px, and a <span class="mono">:focus-visible</span> ring — hover
+  and focus are the <i>same</i> treatment, so a keyboard user sees what a mouse user sees. All of it
+  stands down under <span class="mono">prefers-reduced-motion</span>.</p>
+<p class="sub"><b>Role tokens, not palette tiers.</b> The index reads
+  <span class="mono">--lw-brand-text</span> and the rules <span class="mono">--lw-brand-line</span>,
+  both theme-aware — which is why the dark grid above needs no per-element overrides, only the
+  <span class="mono">.lw-band-dark</span> scope. A numbered tier like
+  <span class="mono">brand-50</span> does not re-point, and would stay a light tint on a dark page.</p>
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">Story card</h2>
+<p class="sub"><b>Anatomy.</b> The shipped <span class="mono">.lw-story</span> parts: a brand-line spine
+  on the quote, a mono <span class="mono">cite</span>, and the outcome promoted to
+  <span class="mono">.lw-story-result</span> — amber soft tint behind the amber text tier
+  (<span class="mono" data-ratio="cta-text on cta-soft"></span>:1), <b>both</b> of which re-point on dark.</p>
+<p class="sub">Both halves of that pair must re-point together — a dark <span class="mono">-on</span>
+  text tier left on a light tint measures 1.75 and disappears. In the React
+  component the block renders <b>only</b> when quote, person and role are all present — the
+  no-fabrication rule, enforced at runtime rather than in review.</p>
+</div>
+</div>
+<script type="text/babel">
+const LW = window.LeanWiseDesign_f2d907;
+
+const { Hero, FeatureGrid, StoryCard, LogoRail, Button, Stack, Grid } = LW;
+ReactDOM.createRoot(document.getElementById("hero")).render(
+  <Hero eyebrow="Retrieval you can audit"
+    title={<>Answers your legal team can <em>defend</em>.</>}
+    lead="LeanWise grounds every response in your own documents, and shows the passage it came from — so an answer is a starting point for review, not a claim you have to trust."
+    actions={<><Button variant="cta" size="lg">Book a walkthrough</Button><Button variant="ghost" size="lg">Read the spec</Button></>} />
+);
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <Stack gap={32} style={{paddingTop:24}}>
+    <FeatureGrid features={[
+      {title:"Grounded by default",body:"Every claim carries the passage it came from. No citation, no answer.",href:"#"},
+      {title:"Hybrid retrieval",body:"Semantic and keyword search over one index, reranked before the model sees it.",href:"#"},
+      {title:"Evaluated continuously",body:"Grounding and citation accuracy tracked per source, per release.",href:"#"}]} />
+    <Grid min={280}>
+      <StoryCard title="Northwind Legal" result="61% faster contract review"
+        body="Cut first-pass review from 40 minutes to 15 across a 1,200-agreement portfolio." />
+      <StoryCard title="Kestrel Data" result="Zero ungrounded answers"
+        body="Every response in the pilot cited a retrievable passage."
+        quote="We stopped arguing about whether the model was right and started checking the page it pointed at."
+        person="A. Rossi" role="Head of Legal Ops" />
+    </Grid>
+    <div><span className="lbl">logo rail — a card, not a real customer list</span>
+      <LogoRail logos={[{name:"Northwind"},{name:"Orbital"},{name:"Kestrel"},{name:"Vantage"},{name:"Meridian"}]} /></div>
+  </Stack>
+);
+
+</script></body></html>

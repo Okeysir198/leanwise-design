@@ -1,0 +1,877 @@
+/* @leanwise/design — BASE layer
+ *
+ * The SHARED layer: everything both a product and a marketing page need. It used
+ * to be lw.css, described as "the marketing layer", and that was wrong in a way
+ * that cost real time — `.lw-btn` lives here, so an app that loaded only the
+ * product layer got correct forms, tables and overlays and unstyled buttons. The
+ * names now say what the files hold.
+ *
+ * Contents: the reset, type utilities, buttons, pills, cards and card anatomy,
+ * chips, the console surface, spacing and motion utilities, the code surface, the
+ * file tree, the status chip, the top-bar brand mark, and the consolidated
+ * pointer-affordance list.
+ *
+ * Load order is tokens → base → marketing and/or product. The pointer list stays
+ * at the FOOT of this file with the product layer loading after it — exactly the
+ * arrangement it had inside lw.css, which is what README rule 7 is about.
+ */
+
+/* =============================================================================
+   The `.lw-*` layer — marketing-site component classes.
+   Import AFTER tokens.css. Only leanwise-ai needs this; apps use the Tailwind
+   preset instead. Both read the same tokens, which is what keeps the site and the
+   products looking like one company.
+
+   Naming rule: a class names the ROLE, and the role names the color it resolves
+   to. `.lw-btn-cta` is the amber, `.lw-btn-brand` the cyan, `--lw-space-24` is
+   24px. No alias may resolve to a color other than the one it is named after.
+   ============================================================================= */
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--lw-font-sans);
+  color: var(--lw-fg);
+  background: var(--lw-bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-size: var(--lw-text-body);
+  line-height: var(--lw-lh-normal);
+}
+
+img { display: block; max-width: 100%; }
+button, input, textarea, select { font-family: inherit; }
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; background: none; border: 0; padding: 0; }
+::selection { background: var(--lw-brand-100); }
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap; border: 0;
+}
+
+.lw-container {
+  max-width: var(--lw-col-max);
+  margin: 0 auto;
+  padding: 0 var(--lw-pad-x);
+}
+
+/* ---- Type ---------------------------------------------------------------- */
+
+.lw-mono {
+  font-family: var(--lw-font-mono);
+  letter-spacing: var(--lw-tracking-wide);
+}
+
+/* The signature motif: mono, uppercase, wide-tracked, with a cyan hexagon. */
+.lw-eyebrow {
+  font-family: var(--lw-font-mono);
+  font-size: var(--lw-text-eyebrow);
+  font-weight: var(--lw-fw-medium);
+  letter-spacing: var(--lw-tracking-eyebrow);
+  /* Tracking opens EVERY gap by one step. A letter gap starts near zero, so one
+     step is a several-hundred-percent change; a word gap starts wide, so the
+     same step barely moves it. The word boundary therefore loses its lead over
+     the letter boundary and the label reads as loose letters rather than words.
+     The answer is to open the word space as well — never to close it. */
+  word-spacing: var(--lw-word-spacing-caps);
+  text-transform: uppercase;
+  color: var(--lw-fg-subtle);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lw-space-8);
+}
+/* The node is a HEXAGON, not a dot (v0.4.0) — the mark's shape carried into the
+   type system, at the one size where it still reads. The halo it replaced was
+   --lw-focus-ring used as decoration, which is a token borrowed out of role. */
+.lw-eyebrow::before {
+  content: "";
+  width: 8px; height: 9px;
+  flex: none;
+  background: var(--lw-brand-500);
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+}
+/* `.muted` drops the brand node, nothing else: the base ink is already the subtle
+   tier, so re-declaring it here was a variant that changed nothing anyone could
+   see. What separates the two is whether the label is worth a brand mark. */
+.lw-eyebrow.muted::before { background: var(--lw-fg-faint); }
+
+.lw-h1 {
+  font-size: var(--lw-text-h1);
+  line-height: var(--lw-lh-tight);
+  letter-spacing: var(--lw-tracking-tighter);
+  font-weight: var(--lw-fw-semibold);
+  margin: 0;
+  text-wrap: balance;
+}
+.lw-h2 {
+  font-size: var(--lw-text-h2);
+  line-height: var(--lw-lh-snug);
+  letter-spacing: var(--lw-tracking-tight);
+  font-weight: var(--lw-fw-semibold);
+  margin: 0;
+  text-wrap: balance;
+}
+.lw-h3 {
+  font-size: var(--lw-text-h3);
+  line-height: 1.18;
+  letter-spacing: var(--lw-tracking-tight);
+  font-weight: var(--lw-fw-semibold);
+  margin: 0;
+}
+.lw-lead {
+  font-size: var(--lw-text-lead);
+  line-height: 1.6;
+  color: var(--lw-fg-muted);
+  max-width: 60ch;
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.lw-italic-brand {
+  color: var(--lw-brand-text);
+  font-style: italic;
+  font-weight: var(--lw-fw-medium);
+}
+
+/* ---- Buttons ------------------------------------------------------------- */
+
+.lw-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  /* Height is DECLARED, never accumulated from padding — padding-derived heights
+     drift the moment a consumer changes the font. 32 / 40 / 48 on the 8px grid, in
+     step with spacing and the input row height. Horizontal padding is ~0.45x the
+     height: the wide, engineered stance rather than a cramped chip.
+
+     The value comes from --lw-control-h-md so a button in a [data-density] scope
+     matches the inputs beside it. A marketing band sets no density attribute, so it
+     resolves to the 40px default and a hero is untouched. */
+  height: var(--lw-control-h-md);
+  padding: 0 18px;
+  font-family: var(--lw-font-sans);
+  font-size: var(--lw-text-sm);
+  font-weight: var(--lw-fw-medium);
+  letter-spacing: -0.005em;
+  border-radius: var(--lw-radius-md);
+  transition: background var(--lw-duration), color var(--lw-duration),
+              border-color var(--lw-duration), transform var(--lw-duration),
+              box-shadow var(--lw-duration);
+  white-space: nowrap;
+  line-height: 1.2;
+}
+/* Glyphs scale with the label, never with the box: 16px at default, 14 / 18 at the
+   ends. An icon larger than its cap height reads as a sticker on the button. */
+.lw-btn svg, .lw-btn .lw-icon { width: 16px; height: 16px; flex: none; }
+.lw-btn-sm svg, .lw-btn-sm .lw-icon { width: 14px; height: 14px; }
+.lw-btn-lg svg, .lw-btn-lg .lw-icon { width: 18px; height: 18px; }
+/* A glyph icon (icon font, ✕, arrow) has no width/height to set — it is TYPE, so it
+   needs a font-size or it silently renders at the label size and looks a size too small.
+   1em on the box, centered, so glyph and SVG icons occupy the same square. */
+.lw-btn .lw-icon { display: inline-flex; align-items: center; justify-content: center; font-size: 16px; line-height: 1; }
+.lw-btn-sm .lw-icon { font-size: 14px; }
+.lw-btn-lg .lw-icon { font-size: 18px; }
+/* Icon-only: the glyph IS the content, so it steps up one notch from the inline icon —
+   it has to hold the square on its own without a label beside it for scale. */
+.lw-btn-icon { font-size: 17px; line-height: 1; }
+.lw-btn-icon.lw-btn-sm { font-size: 14px; }
+.lw-btn-icon.lw-btn-lg { font-size: 20px; }
+.lw-btn .arrow { transition: transform var(--lw-duration); }
+.lw-btn:hover .arrow { transform: translateX(2px); }
+.lw-btn:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
+/* A brand ring on a brand FILL is 1:1 against it, so the filled variants take an
+   offset outline instead — the transparent gap separates ring from fill and shows
+   the real local ground, which a box-shadow gap cannot do. */
+.lw-btn-brand:focus-visible, .lw-btn-cta:focus-visible, .lw-btn-danger:focus-visible {
+  box-shadow: none; outline: 2px solid var(--lw-brand-500); outline-offset: 2px;
+}
+.lw-btn-cta:focus-visible { outline-color: var(--lw-cta-text); }
+.lw-btn-danger:focus-visible { outline-color: var(--lw-danger-on); }
+.dark .lw-btn-brand:focus-visible, [data-band="dark"] .lw-btn-brand:focus-visible, .lw-band-dark .lw-btn-brand:focus-visible { outline-color: var(--lw-brand-400); }
+
+/* CTA = amber. One per view. This is the whole point of having an amber.
+   Never named "primary": shadcn's --primary is the cyan, and one word cannot mean
+   two colors. Note the navy ink — white on #FCB603 is 1.77 and fails WCAG AA. */
+.lw-btn-cta {
+  background: var(--lw-cta-500);
+  color: var(--lw-on-cta);   /* NOT --lw-fg: that flips near-white on dark → 1.77 on amber */
+  box-shadow: 0 1px 2px hsl(var(--lw-cta-600-c) / 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+.lw-btn-cta:hover {
+  background: var(--lw-cta-600);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px -10px hsl(var(--lw-cta-600-c) / 0.55);
+}
+
+/* BRAND = cyan. Secondary emphasis, product accents.
+   Ink is --lw-on-brand (white, 5.66), never --lw-fg: --lw-fg re-points per theme,
+   and the fill does not, so its ink must not either. */
+.lw-btn-brand {
+  background: var(--lw-brand-500);
+  color: var(--lw-on-brand);
+  box-shadow: 0 1px 2px hsl(var(--lw-brand-700-c) / 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.20);
+}
+.lw-btn-brand:hover { background: var(--lw-brand-600); transform: translateY(-1px); } /* white 7.91 */
+
+/* INK = navy. High-contrast neutral action. */
+.lw-btn-ink { background: var(--lw-navy-900); color: var(--lw-on-dark); }
+.lw-btn-ink:hover { background: var(--lw-navy-700); transform: translateY(-1px); }
+
+.lw-btn-ghost {
+  background: var(--lw-bg);
+  color: var(--lw-fg);
+  border: 1px solid var(--lw-line-strong);
+}
+.lw-btn-ghost:hover { border-color: var(--lw-fg-subtle); background: var(--lw-bg-subtle); }
+
+/* Ghost is the one variant with no fill of its own, so it is the only one that has
+   to be told about the ground it sits on. Consumers must never patch this inline:
+   an inline style outranks :hover and silently removes the hover state. */
+.dark .lw-btn-ghost, [data-band="dark"] .lw-btn-ghost, .lw-band-dark .lw-btn-ghost {
+  background: transparent;
+  color: var(--lw-on-dark);
+  border-color: hsl(0 0% 100% / 0.22);
+}
+.dark .lw-btn-ghost:hover, [data-band="dark"] .lw-btn-ghost:hover, .lw-band-dark .lw-btn-ghost:hover {
+  background: var(--lw-on-dark-fill);
+  border-color: hsl(0 0% 100% / 0.45);
+  color: var(--lw-on-dark);
+}
+.dark .lw-btn-link, [data-band="dark"] .lw-btn-link, .lw-band-dark .lw-btn-link { color: var(--lw-brand-400); }
+.dark .lw-btn-link:hover, [data-band="dark"] .lw-btn-link:hover, .lw-band-dark .lw-btn-link:hover { border-bottom-color: var(--lw-brand-400); }
+
+/* The focus ring is brand-500 at 30% — nearly invisible against navy. Dark grounds
+   take the 400 tier so the ring reads in both themes. The tier swap lives in the
+   token, so this rule only has to name the token. */
+.dark .lw-btn:focus-visible, [data-band="dark"] .lw-btn:focus-visible, .lw-band-dark .lw-btn:focus-visible {
+  box-shadow: var(--lw-focus-ring);
+}
+
+/* Pressed. Every variant lifts on hover, so every variant must land again on press —
+   otherwise the button stays raised while the pointer is down and feels stuck. */
+.lw-btn:active { transform: translateY(0); transition-duration: 60ms; }
+
+.lw-btn-link {
+  padding: 0;
+  gap: 6px;
+  color: var(--lw-brand-text);
+  border-radius: 0;
+  border-bottom: 1px solid transparent;
+  font-weight: var(--lw-fw-medium);
+}
+.lw-btn-link:hover { border-bottom-color: var(--lw-brand-500); }
+
+/* DANGER = destructive confirms. The one fill that takes white ink. */
+.lw-btn-danger { background: var(--lw-danger); color: var(--lw-on-danger); }
+.lw-btn-danger:hover { background: hsl(var(--lw-danger-text-c)); transform: translateY(-1px); }
+
+/* Sizes. Every one clears a 44px target except -sm, which is for dense toolbars
+   and table rows where the row itself carries the hit area. */
+.lw-btn-sm { height: var(--lw-control-h-sm); padding: 0 12px; font-size: var(--lw-text-xs, 12px); border-radius: var(--lw-radius-sm); gap: 6px; }
+.lw-btn-lg { height: var(--lw-control-h-lg); padding: 0 24px; font-size: var(--lw-text-base, 15px); border-radius: var(--lw-radius-lg); gap: 10px; }
+/* Icon-only is a SQUARE of the same height — never a separate size scale, or icon and
+   text buttons stop lining up in a toolbar. aria-label is required; there is no text. */
+.lw-btn-icon { width: var(--lw-control-h-md); padding: 0; }
+.lw-btn-icon.lw-btn-sm { width: var(--lw-control-h-sm); }
+.lw-btn-icon.lw-btn-lg { width: var(--lw-control-h-lg); }
+
+/* Touch. 40px is correct for a pointer and short of the 44px touch target, so on a
+   coarse pointer every size grows to 44 instead of the design shipping one size that
+   is wrong for one of the two input methods. */
+@media (pointer: coarse) {
+  .lw-btn { min-height: 44px; }
+  .lw-btn-sm { min-height: 44px; padding: 0 14px; }
+  .lw-btn-icon, .lw-btn-icon.lw-btn-sm { min-width: 44px; }
+}
+
+/* Disabled is a STATE, not a variant: it must flatten every fill identically, or a
+   disabled CTA still reads as the loudest thing on the page.
+
+   ROLE tokens, not the surface-3/text-4 TIERS this used through v1.0. A tier is a
+   fixed palette value that no dark scope re-points, so a disabled button inside
+   .lw-band-dark kept a light-grey fill and light-grey ink — a pale block sitting on
+   navy. bg-muted and fg-faint are re-pointed by every dark scope, so the flattening
+   follows the ground. README rule 2, caught by the state matrix in Button.card. */
+.lw-btn:disabled, .lw-btn[aria-disabled="true"] {
+  background: var(--lw-bg-muted); color: var(--lw-fg-faint);
+  box-shadow: none; transform: none; cursor: not-allowed; pointer-events: none;
+}
+/* …except the link variant, which has no fill in any other state. Flattening it
+   to bg-muted grew a grey box around a word that was never a box — the disabled
+   and loading link were the only two cells in the matrix with a shape of their
+   own. A link goes quiet by losing its ink and its rule, not by gaining a
+   surface. */
+.lw-btn-link:disabled, .lw-btn-link[aria-disabled="true"] { background: none; border-bottom-color: transparent; }
+.lw-btn[data-loading="true"] { position: relative; color: transparent; pointer-events: none; }
+/* The spinner cannot use currentColor — the loading state sets color:transparent to
+   hide the label, which would make the ring invisible too. Each dark fill re-points
+   this ink to white; the light amber keeps the navy default. */
+.lw-btn { --lw-btn-spin-ink: var(--lw-fg); }
+.lw-btn-brand, .lw-btn-ink, .lw-btn-danger { --lw-btn-spin-ink: var(--lw-on-dark); }
+.lw-btn:disabled, .lw-btn[aria-disabled="true"] { --lw-btn-spin-ink: var(--lw-fg-faint); }
+.lw-btn[data-loading="true"]::after {
+  content: ""; position: absolute; width: 15px; height: 15px; border-radius: 999px;
+  border: 2px solid var(--lw-btn-spin-ink); border-top-color: transparent; opacity: .9;
+  animation: lw-btn-spin .7s linear infinite;
+}
+@keyframes lw-btn-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .lw-btn:hover { transform: none; }
+  .lw-btn[data-loading="true"]::after { animation-duration: 2.4s; }
+}
+
+/* ---- Pills / tags -------------------------------------------------------- */
+
+.lw-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lw-space-8);
+  padding: 5px 10px 5px 8px;
+  font-family: var(--lw-font-mono);
+  font-size: 11px;
+  font-weight: var(--lw-fw-medium);
+  letter-spacing: 0.10em;
+  word-spacing: var(--lw-word-spacing-caps);
+  text-transform: uppercase;
+  background: var(--lw-bg);
+  border: 1px solid var(--lw-line);
+  border-radius: var(--lw-radius-pill);
+  color: var(--lw-fg-muted);
+}
+.lw-pill .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--lw-success);
+  box-shadow: 0 0 0 3px hsl(var(--lw-success-c) / 0.20);
+}
+.lw-pill.live { border-color: hsl(var(--lw-success-c) / 0.40); color: hsl(var(--lw-success-on-c)); }
+.lw-pill.live .dot { animation: lwPulse var(--lw-dur-pulse) ease-in-out infinite; }
+.lw-pill.rd { color: var(--lw-fg-subtle); }
+.lw-pill.rd .dot {
+  background: var(--lw-fg-faint);
+  /* --lw-fg-faint-c, not the raw --lw-text-4-c tier: the fill already reads the
+     semantic role, and the raw tier is never re-pointed by a dark scope — so on navy
+     the dot changed colour and its halo did not. */
+  box-shadow: 0 0 0 3px hsl(var(--lw-fg-faint-c) / 0.20);
+}
+.lw-pill.brand {
+  border-color: var(--lw-brand-200);
+  color: var(--lw-brand-text);
+  background: var(--lw-brand-50);
+}
+.lw-pill.brand .dot {
+  background: var(--lw-brand-500);
+  box-shadow: 0 0 0 3px hsl(var(--lw-brand-500-c) / 0.22);
+}
+
+@keyframes lwPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+
+/* ---- Cards --------------------------------------------------------------- */
+
+.lw-card {
+  background: var(--lw-bg);
+  border: 1px solid var(--lw-line);
+  border-radius: var(--lw-radius-lg);
+  transition: border-color var(--lw-duration), box-shadow var(--lw-duration), transform var(--lw-duration);
+}
+/* Interactive cards. A card that lifts on hover is a control: it needs a pointer
+   cursor, a keyboard focus ring and a press state, or it looks clickable to a mouse
+   and is invisible to everything else. */
+.lw-card-interactive { cursor: pointer; }
+.lw-card-interactive:hover {
+  border-color: var(--lw-line-strong);
+  box-shadow: var(--lw-shadow-md);
+  transform: translateY(-2px);
+}
+.lw-card-interactive:active { transform: translateY(0); box-shadow: var(--lw-shadow-sm); transition-duration: 60ms; }
+.lw-card-interactive:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); border-color: var(--lw-brand-500); }
+.dark .lw-card-interactive:focus-visible, [data-band="dark"] .lw-card-interactive:focus-visible, .lw-band-dark .lw-card-interactive:focus-visible { box-shadow: var(--lw-focus-ring); border-color: var(--lw-brand-400); }
+@media (prefers-reduced-motion: reduce) {
+  .lw-card-interactive:hover { transform: none; }
+}
+
+/* ---- Card anatomy ---------------------------------------------------------
+   The card owns its interior — a 20px pad and a 12px vertical rhythm — so cards
+   line up across consumers instead of each inventing its own padding. */
+/* Flex column, not grid: `margin-top:auto` on the footer only pushes the footer to
+   the bottom inside a flex container, which is what aligns footers across a row. */
+.lw-card { padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+/* An interactive card IS a <button>, and a button centres its text: without this
+   the body copy sat centred while the title read left. Any surface that can
+   become a button inherits page text alignment, not the control default. */
+button.lw-card, button.lw-feature, button.lw-story, button.lw-stat-tile,
+button.lw-kpi, button.lw-nav-item, button.lw-source-item, button.lw-logo-item,
+button.lw-empty { text-align: left; font: inherit; color: inherit; }
+.lw-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.lw-card-eyebrow {
+  font-family: var(--lw-font-mono); font-size: 10px; line-height: 1.4;
+  letter-spacing: 0.12em; word-spacing: var(--lw-word-spacing-caps); text-transform: uppercase; color: var(--lw-fg-subtle);
+}
+.lw-card-title { font-size: 16px; font-weight: var(--lw-fw-semibold, 600); letter-spacing: -0.012em; line-height: 1.3; margin: 0; }
+.lw-card-body { font-size: 13.5px; line-height: 1.55; color: var(--lw-fg-muted); margin: 0; text-wrap: pretty; }
+/* The footer pins to the bottom, so cards of different text lengths still align
+   their actions on one line across a row. This is the whole reason to name it. */
+.lw-card-foot {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  margin-top: auto; padding-top: 12px; border-top: 1px solid var(--lw-line);
+}
+/* Media bleeds to the edge by cancelling the pad; the concentric rule sets the
+   inner radius to outer minus zero inset — the same tier, top corners only. */
+.lw-card-media { margin: -20px -20px 4px; border-radius: var(--lw-radius-lg) var(--lw-radius-lg) 0 0; overflow: hidden; display: block; }
+/* Selection is an inset ring, so it costs no layout and cannot shift a grid row. */
+.lw-card.is-selected, .lw-card[aria-selected="true"] {
+  border-color: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--lw-brand-500);
+}
+/* Equal-height cards on one row. auto-fit + stretch is what keeps footers aligned. */
+.lw-card-grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); align-items: stretch; }
+.lw-card-grid > .lw-card { height: 100%; }
+
+/* Chip — the card's status atom. Reads a status family's soft tint + text tier, so
+   it re-points on dark with no conditional. */
+.lw-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; font-weight: var(--lw-fw-medium); line-height: 1;
+  padding: 5px 9px; border-radius: var(--lw-radius-pill);
+  background: var(--lw-brand-soft); color: var(--lw-brand-text); white-space: nowrap;
+}
+.lw-chip-success { background: var(--lw-success-soft); color: var(--lw-success-on); }
+.lw-chip-warning { background: var(--lw-warning-soft); color: var(--lw-warning-on); }
+.lw-chip-danger  { background: var(--lw-danger-soft);  color: var(--lw-danger-on); }
+.lw-chip-neutral { background: var(--lw-neutral-soft); color: var(--lw-neutral-on); }
+.lw-chip::before { content: ""; width: 5px; height: 5px; border-radius: 999px; background: currentColor; flex: none; }
+
+/* ---- Console ("browser frame" motif) ------------------------------------- */
+
+.lw-console {
+  background: var(--lw-bg);
+  border: 1px solid var(--lw-line);
+  border-radius: var(--lw-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--lw-shadow-lg);
+}
+/* macOS window chrome: the traffic lights sit OUT of flow on the left so the
+   address bar can centre on the frame, not on the space left over beside them. */
+.lw-console-h {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  background: linear-gradient(180deg, var(--lw-bg), var(--lw-bg-muted));
+  border-bottom: 1px solid var(--lw-line);
+  font-family: var(--lw-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--lw-fg-subtle);
+}
+.lw-console-h .left {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.lw-console-h .lights { display: inline-flex; gap: 8px; }
+/* macOS window controls, not brand — a token ramp here would make them wrong.
+   They are still tokens (--lw-sys-mac-*, declared beside --lw-logo-cyan) so the
+   no-raw-hex lint holds and the exception is declared where it is reviewable. */
+.lw-console-h .lights i {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--lw-sys-mac-amber);
+}
+.lw-console-h .lights i:first-child { background: var(--lw-sys-mac-red); }
+.lw-console-h .lights i:last-child { background: var(--lw-sys-mac-green); }
+/* The address bar: centred on the frame at about half its width, URL centred
+   inside it — Safari's toolbar, not a full-width pill. */
+.lw-console-h .url {
+  width: min(52%, 320px);
+  margin: 0 auto;
+  min-width: 0;
+  justify-content: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: var(--lw-bg-inset);
+  border: 1px solid var(--lw-line);
+  padding: 4px 10px;
+  border-radius: 7px;
+  /* fg-subtle on bg-inset measured below AA; fg-muted is the secondary-text token
+     and clears 4.5:1 on the inset surface in both themes. */
+  color: var(--lw-fg-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.lw-console-h .url::before {
+  content: "";
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--lw-success);
+}
+.lw-console-body { background: var(--lw-bg-subtle); }
+.lw-console-foot {
+  padding: 8px 14px;
+  background: var(--lw-bg-subtle);
+  border-top: 1px solid var(--lw-line);
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--lw-font-mono);
+  font-size: 10px;
+  color: var(--lw-fg-subtle);
+  letter-spacing: 0.06em;
+}
+
+/* ---- Console: log variant (v0.3.0) ---------------------------------------
+   A mono stream body for the browser-frame motif. Additive — the base
+   .lw-console classes above are untouched. */
+
+/* v0.4.0: the stream is styled on .lw-console-log — the element Console.jsx
+   actually renders. It used to hang off `.lw-console.log`, a modifier nothing
+   ever set, so every log console shipped with zero padding and its lines flush
+   against the frame. `.log` is kept as an alias for hand-written markup. */
+.lw-console-log,
+.lw-console.log .lw-console-body {
+  font-family: var(--lw-font-mono);
+  font-size: var(--lw-text-xs);
+  line-height: 1.6;
+  padding: var(--lw-space-16);
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+/* v0.4.1: the gutter is a real grid column shared by every line (subgrid), so a
+   prefix of ANY length — "$" or "09:14:02" — sizes it and nothing collides.
+   It used to be a 1ch absolute box, which timestamps overflowed into the text. */
+.lw-console-log {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  column-gap: var(--lw-space-8);
+  row-gap: 7px;
+  align-content: start;
+}
+.lw-console-line {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  color: var(--lw-fg-muted);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+/* A line with no prefix keeps the stream column, so it still lines up. */
+.lw-console-line > *:only-child { grid-column: 2; }
+/* Cells are real columns, so they must not carry the line's pre-wrap: a field
+   that wraps mid-value defeats the alignment the grid just established. The
+   last cell is the free-running one and is allowed to wrap. */
+/* A free-running line in a columned log takes the whole stream, not column one.
+   Squeezed into a single max-content field it would wrap to one word per line.
+   Matched two ways on purpose: by class for current markup, and structurally for
+   any build that predates the class — so the rule cannot arrive before the
+   markup it styles. `.t` is excluded because the gutter IS column one. */
+.lw-console-span,
+.lw-console-line > span:not(.lw-console-cell):not(.t) { grid-column: 2 / -1; white-space: pre-wrap; min-width: 0; }
+.lw-console-cell { white-space: nowrap; min-width: 0; }
+.lw-console-cell:last-child { white-space: pre-wrap; }
+.lw-console-cell.num { text-align: right; font-variant-numeric: tabular-nums; }
+/* A tone owns the whole line, so a muted cell must not out-rank it — muting is
+   for the neutral stream only. */
+.lw-console-cell.muted { color: var(--lw-fg-faint); }
+.lw-console-line.ok .lw-console-cell.muted,
+.lw-console-line.warn .lw-console-cell.muted,
+.lw-console-line.err .lw-console-cell.muted { color: inherit; opacity: 0.72; }
+.lw-console-line .t {
+  white-space: pre;
+  color: var(--lw-fg-subtle);
+}
+@supports not (grid-template-columns: subgrid) {
+  .lw-console-line { display: flex; gap: var(--lw-space-8); }
+  .lw-console-line .t { flex: 0 0 auto; }
+  /* Without subgrid the columns cannot align across lines; the cells still read
+     as separated fields rather than collapsing into one run. */
+  .lw-console-cell:last-child { flex: 1; }
+}
+.lw-console-line.ok { color: var(--lw-success-on); }
+.lw-console-line.warn { color: var(--lw-warning-on); }
+.lw-console-line.err { color: var(--lw-danger-on); }
+
+/* Blinking caret — decorative; a solid block under reduced motion. */
+.lw-console-caret::after {
+  content: "▋";
+  color: var(--lw-brand-text);
+  animation: lwCaretBlink var(--lw-dur-caret) steps(1) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lw-console-caret::after { animation: none; }
+}
+@keyframes lwCaretBlink { 0%, 60% { opacity: 1; } 61%, 100% { opacity: 0; } }
+
+/* ---- Spacing utilities --------------------------------------------------- */
+
+.lw-mt-2 { margin-top: var(--lw-space-8); }
+.lw-mt-3 { margin-top: var(--lw-space-12); }
+.lw-mt-4 { margin-top: var(--lw-space-16); }
+.lw-mt-6 { margin-top: var(--lw-space-24); }
+.lw-mt-8 { margin-top: var(--lw-space-32); }
+.lw-mb-2 { margin-bottom: var(--lw-space-8); }
+.lw-mb-3 { margin-bottom: var(--lw-space-12); }
+.lw-mb-4 { margin-bottom: var(--lw-space-16); }
+.lw-mb-5 { margin-bottom: var(--lw-space-20); }
+.lw-mb-6 { margin-bottom: var(--lw-space-24); }
+.lw-mb-8 { margin-bottom: var(--lw-space-32); }
+.lw-measure { max-width: 60ch; }
+.lw-measure-sm { max-width: 46ch; }
+
+/* =============================================================================
+   Cross-product ergonomics, harvested from rag-service.
+   These were solved once there and re-solved nowhere else; putting them in the
+   package means every product inherits them.
+   ============================================================================= */
+
+/* ---- Motion utilities (v0.3.2) ---------------------------------------------
+   Interaction affordances shared across products. All motion is gated behind
+   prefers-reduced-motion: no-preference; the static state is complete. */
+
+/* Hover lift + brand glow for cards. Opt-in class beside .lw-card etc. */
+.lw-card-glow { transition: transform var(--lw-duration-fast) var(--lw-ease-out),
+                            border-color var(--lw-duration-fast) var(--lw-ease-out),
+                            box-shadow var(--lw-duration-fast) var(--lw-ease-out); }
+.lw-card-glow:hover {
+  border-color: hsl(var(--lw-brand-500-c) / 0.55);
+  box-shadow: var(--lw-shadow-md), var(--lw-brand-glow);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .lw-card-glow:hover { transform: translateY(-3px); }
+}
+
+/* Row highlight for data tables. */
+.lw-row-hover tbody tr { transition: background var(--lw-duration-fast) var(--lw-ease-out); }
+.lw-row-hover tbody tr:hover td { background: var(--lw-bg-subtle); }
+
+/* Flowing connector line — pair with an SVG path (fill none, stroke set by the
+   consumer). The dash drift reads as data moving along the line. */
+.lw-flow-line { stroke-dasharray: 6 6; }
+@media (prefers-reduced-motion: no-preference) {
+  .lw-flow-line { animation: lwDashFlow var(--lw-dur-dash) linear infinite; }
+}
+@keyframes lwDashFlow { to { stroke-dashoffset: -12; } }
+
+/* Slow drifting brand wash for dark grounds. Layered as its own pseudo so the
+   ground's grid/wash stay put; transform-only, compositor-friendly. */
+.lw-wash { position: relative; }
+.lw-wash::before {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  z-index: var(--lw-z-base);
+  background: radial-gradient(42rem at 30% 30%, hsl(var(--lw-brand-500-c) / 0.10), transparent 60%);
+  pointer-events: none;
+}
+.lw-wash > * { position: relative; z-index: var(--lw-z-raised); }
+@media (prefers-reduced-motion: no-preference) {
+  .lw-wash::before { animation: lwDrift var(--lw-dur-wash) ease-in-out infinite alternate; }
+}
+@keyframes lwDrift {
+  from { transform: translate3d(-4%, -3%, 0) scale(1); }
+  to   { transform: translate3d(5%, 4%, 0) scale(1.12); }
+}
+
+/* Grow a ≥44×44px tap target on small controls WITHOUT resizing them visually.
+   Touch only — a mouse does not need it and it would eat hover areas. */
+@media (pointer: coarse) {
+  .lw-hit::after {
+    content: "";
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%; height: 100%;
+    min-width: 44px; min-height: 44px;
+  }
+}
+
+/* iOS Safari zooms the page when focusing an input under 16px. Keep the tighter
+   desktop size, but never trip the zoom on a phone. --lw-bp-md (768px) covers
+   every phone and tablet portrait; a media query cannot read a var(), so the
+   number is written out and the token is named here. */
+@media (max-width: 768px) {
+  input, textarea, select { font-size: 16px; }
+}
+
+/* ---- Code block surface ---------------------------------------------------
+   An always-dark mono surface (navy-deep) with syntax token spans. The spans
+   use theme-invariant brand/cta/on-dark tokens, so they clear AA on the
+   navy-deep ground regardless of the site theme — verified against the same
+   navy-deep the dark hero sits on. No raw fills-as-text anywhere. */
+.lw-code {
+  font-family: var(--lw-font-mono);
+  font-size: var(--lw-text-sm);
+  line-height: var(--lw-lh-relaxed);
+  tab-size: 2;
+  background: var(--lw-navy-deep);
+  color: var(--lw-on-dark-1);
+  padding: var(--lw-space-16);
+  border: 1px solid var(--lw-on-dark-line);
+  border-radius: var(--lw-radius-md);
+  overflow-x: auto;
+  -webkit-font-smoothing: antialiased;
+}
+.lw-code ::selection { background: hsl(var(--lw-brand-500-c) / 0.35); color: var(--lw-on-dark); }
+/* Token spans. comment = the muted tier (on-dark-3 ≈ 4.8:1 on navy-deep); the
+   accent tiers (brand-300/400, cta-400) are well above AA on the dark ground. */
+.lw-code .tok-comment      { color: var(--lw-on-dark-3); font-style: italic; }
+.lw-code .tok-keyword      { color: var(--lw-brand-300); }
+.lw-code .tok-string       { color: var(--lw-cta-400); }
+.lw-code .tok-number       { color: var(--lw-brand-300); }
+.lw-code .tok-function     { color: var(--lw-brand-400); }
+.lw-code .tok-punctuation  { color: var(--lw-on-dark-2); }
+.lw-code .tok-tag          { color: var(--lw-cta-400); }
+.lw-code .tok-attr-name    { color: var(--lw-brand-400); }
+.lw-code .tok-attr-value   { color: var(--lw-cta-400); }
+
+/* ---- Theme toggle ---------------------------------------------------------
+   REMOVED in v1.0. It was a second segmented control with its own pill radius
+   and its own selected-segment fill, which meant the same interaction looked
+   like two different components depending on which file a dev happened to
+   copy from. The one segmented control now lives in product.css as .lw-segmented;
+   ThemeToggle renders that. Two treatments of one control is not a style
+   choice, it is a bug that takes a year to notice. */
+
+/* ---- File tree (document explorer) ----------------------------------------
+   A vertical mono file list for the console's explorer pane. Rows are <li>;
+   the selected row carries data-active. Brand-soft tint + brand-text ink +
+   a left brand rail — all AA-checked pairs, no fill-as-text. */
+.lw-file-tree {
+  /* The element IS the <ul role="listbox"> (options are direct <li> children) — a
+     listbox must own its options with no wrapper between, so role="listbox" lives here,
+     not on a parent div. Reset the <ul> defaults so it reads as a panel, not a list. */
+  list-style: none;
+  margin: 0;
+  font-family: var(--lw-font-mono);
+  font-size: var(--lw-text-sm);
+  background: var(--lw-bg-subtle);
+  border: 1px solid var(--lw-line);
+  border-radius: var(--lw-radius-md);
+  padding: var(--lw-space-8) 0;
+}
+.lw-file-tree li {
+  display: flex;
+  align-items: center;
+  gap: var(--lw-space-8);
+  padding: 5px var(--lw-space-16);
+  color: var(--lw-fg-muted);
+  cursor: pointer;
+  transition: background var(--lw-dur-xs) var(--lw-ease-out),
+              color var(--lw-dur-xs) var(--lw-ease-out);
+}
+.lw-file-tree li:hover { background: var(--lw-bg-muted); color: var(--lw-fg); }
+.lw-file-tree li[data-active] {
+  background: var(--lw-brand-soft);
+  color: var(--lw-brand-text);
+  box-shadow: inset 2px 0 0 var(--lw-brand-500);
+}
+.lw-file-tree li:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
+
+/* ---- Code tabs ------------------------------------------------------------
+   REMOVED in v1.0. A tab strip above a code panel is a tab strip; it did not
+   need its own class, and having two meant the same interaction looked like two
+   different components depending on which file a dev copied from. product.css ships
+   the one .lw-tabs (roving tabindex in the React component) plus the six rules
+   it needs on the dark code surface. */
+
+/* ---- Status chip (Live / Pilot) -------------------------------------------
+   A small status pill. Default is neutral; variants via data-variant. Uses the
+   semantic -soft fill + -on text pair ONLY (never a raw fill behind text). */
+.lw-status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  font-family: var(--lw-font-mono);
+  font-size: var(--lw-text-eyebrow);
+  font-weight: var(--lw-fw-medium);
+  letter-spacing: var(--lw-tracking-eyebrow);
+  word-spacing: var(--lw-word-spacing-caps);
+  text-transform: uppercase;
+  border-radius: var(--lw-radius-pill);
+  background: var(--lw-bg-inset);
+  color: var(--lw-fg-muted);
+}
+.lw-status-chip::before {
+  content: "";
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.lw-status-chip[data-variant="live"] {
+  background: var(--lw-success-soft);
+  color: var(--lw-success-on);
+}
+.lw-status-chip[data-variant="pilot"] {
+  background: var(--lw-warning-soft);
+  color: var(--lw-warning-on);
+}
+.lw-status-chip[data-variant="error"] {
+  background: var(--lw-danger-soft);
+  color: var(--lw-danger-on);
+}
+
+/* ---- Brand mark in the top bar (v0.6.3) -----------------------------------
+   The MARK only, beside the name as live text. The combined lockup
+   (assets/logo-lockup.svg) is 2775:1000 — fit to a 56px bar it puts the wordmark
+   caps near 6px, so v0.6.2's lockup-as-one-image was unreadable however it was
+   sized. Splitting them lets the name set in the DS font at the DS size.
+
+   Two artwork files swapped by background-image, the pattern this package uses
+   for hex-lattice/hex-lattice-ink and hero-mark/hero-mark-ink: the mark's navy
+   end vanishes on a dark bar, so the dark ground takes the lifted file. Not a
+   CSS mask — mask alpha is dropped in capture and export paths, which is how
+   v0.6.1 shipped the brand as a solid gradient block. */
+.lw-topbar .brand-mark, .brand-mark {
+  width: auto;
+  height: 24px;
+  aspect-ratio: 871.1 / 1000;
+  flex: none;
+  background: url("assets/logo-mark.svg") no-repeat center / contain;
+}
+.dark .lw-topbar .brand-mark,
+[data-band="dark"] .lw-topbar .brand-mark,
+.lw-band-dark .lw-topbar .brand-mark,
+.dark .brand-mark,
+[data-band="dark"] .brand-mark,
+.lw-band-dark .brand-mark {
+  background-image: url("assets/hero-mark.svg");
+}
+
+/* ---- Pointer affordance ---------------------------------------------------
+   Anything that responds to a click must say so. <button> and a[href] get the
+   pointer from the UA; label-wrapped controls, <select> and sortable headers do
+   not, and without this they read as text while behaving as controls. */
+.lw-switch, .lw-check, .lw-select, .lw-switch input, .lw-check input { cursor: pointer; }
+.lw-switch:has(input:disabled), .lw-check:has(input:disabled),
+.lw-select:disabled, .lw-switch input:disabled, .lw-check input:disabled { cursor: not-allowed; }
+.lw-table th[aria-sort] { cursor: pointer; }
+/* Numerics are a column, not prose: a wrapped "0.60 – 0.79" reads as two rows. */
+.lw-table th.num, .lw-table td.num { white-space: nowrap; }
+.lw-tabs [role="tab"], .lw-segmented button, .lw-nav-item, .lw-chip[role="button"],
+.lw-pill[role="button"], .lw-copy, .lw-code-tabs button,
+/* `.lw-source-chip` was a name this system never shipped, so that selector matched
+   nothing for two releases. The citation atom is `.lw-source`. Everything listed
+   here is a link or a button that a pointer can activate; anything NOT clickable
+   is deliberately absent, because a pointer over inert text promises a click that
+   never happens. */
+.lw-source, .lw-source-item, .lw-toc a, .lw-crumbs a, .lw-icon-btn, .lw-dialog-close,
+.lw-card-interactive, .lw-feature-interactive, .lw-story-interactive,
+.lw-stat-tile.lw-card-interactive, .lw-stat-tile[role="button"],
+.lw-kpi[role="button"], .lw-msg-actions button, .lw-table th[aria-sort]:not([aria-sort="none"]) button { cursor: pointer; }

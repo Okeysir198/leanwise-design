@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>LeanWise</title><link rel="stylesheet" href="tokens.css">
+<style>html,body{margin:0;padding:0}body{width:1280px;height:854px;overflow:hidden;display:flex}
+/* The ground is navy-deep — the token the dark hero and .lw-code already use, so
+   the tile is the same navy as the product. Through v1.0 this was a literal
+   #0B2545 that matched no token in the file it links. */
+.mark{flex:0 0 960px;height:854px;background:var(--lw-navy-deep);display:flex;align-items:center;justify-content:center}
+/* logo-mark-mono.svg is currentColor, and currentColor inside an <img> resolves
+   against that SVG's own root — it paints black there, whatever this document's
+   ink is. brightness(0) invert(1) is what turns that black into the white the
+   navy ground needs. A CSS mask is the cleaner expression of the same idea, but
+   the thumbnail is captured by a DOM-to-image rasteriser that does not honour
+   mask, and a tile that renders as a white block is worse than a filter. */
+.mark img{width:420px;height:420px;object-fit:contain;filter:brightness(0) invert(1)}
+.strip{flex:1;height:854px;display:flex;flex-direction:column}.strip>div{flex:1}</style>
+</head><body>
+<div class="mark"><img src="assets/logo-mark-mono.svg" alt="LeanWise"></div>
+<div class="strip"><div style="background:var(--lw-cta-500)"></div><div style="background:var(--lw-brand-400)"></div><div style="background:var(--lw-brand-500)"></div></div>
+</body></html>

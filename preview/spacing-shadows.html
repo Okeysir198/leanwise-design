@@ -1,0 +1,39 @@
+<!-- @dsCard group="Spacing" name="Elevation" subtitle="Shadow tiers on a light ground" width="760" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Elevation</title>
+<link rel="stylesheet" href="_card.css">
+<script src="_card.js"></script>
+<style>
+  .elev { display: grid; gap: 8px; justify-items: center; }
+  .elev > div { width: 96px; height: 64px; border-radius: var(--lw-radius-md);
+                background: var(--lw-surface-0); }
+  .elev > span { font-family: var(--lw-font-mono); font-size: 10.5px; color: var(--lw-text-3); }
+</style>
+</head>
+<body>
+<div class="card">
+  <header>
+    <h1>Elevation</h1>
+    <p class="sub">Five tiers, navy-tinted so shadows read as depth on a light page rather than as
+    soot. Each tile applies the token itself, so the specimen cannot drift from the scale.</p>
+  </header>
+  <div class="row" style="gap:18px;padding:8px 0">
+    <div class="elev"><div style="box-shadow:var(--lw-shadow-xs)"></div><span>xs</span></div>
+    <div class="elev"><div style="box-shadow:var(--lw-shadow-sm)"></div><span>sm</span></div>
+    <div class="elev"><div style="box-shadow:var(--lw-shadow-md)"></div><span>md</span></div>
+    <div class="elev"><div style="box-shadow:var(--lw-shadow-lg)"></div><span>lg</span></div>
+    <div class="elev"><div style="box-shadow:var(--lw-shadow-xl)"></div><span>xl</span></div>
+  </div>
+  <p class="sub"><span class="mono">xs</span> is a 1px ground line — the faintest lift, separating a
+  surface from the page without casting. <span class="mono">xl</span> is a floating
+  popover/command-menu shadow.</p>
+  <p class="sub"><b>On dark these re-point to black.</b> A navy-tinted shadow is invisible on a navy
+  ground, so the dark theme swaps them and leans on the hairline border for elevation instead. Flip
+  your system theme and this card follows.</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Docs / spec page" description="Three-column documentation page — nav rail, prose with code blocks and callouts, on-this-page index." -->
+<helmet><script src="./ds-base.js"></script>
+<style>@media (prefers-reduced-motion: no-preference){html{scroll-behavior:smooth}}</style></helmet>
+<div class="{{ themeClass }}" data-band="{{ band }}" style="min-height:100vh;background:var(--lw-bg);color:var(--lw-fg);font-family:var(--lw-font-sans)">
+
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.TopBar" hint-size="100%,56px" brand="LeanWise AI" brand-href="#" logo="{{ true }}" links="{{ navLinks }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.InputGroup" hint-size="200px,40px" prefix="{{ searchIcon }}" suffix="⌘K" style="width:200px">
+<input placeholder="Search docs…" />
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.ThemeToggle" hint-size="72px,30px" modes="{{ themeModes }}" value="{{ theme }}" onChange="{{ setTheme }}"></x-import>
+</x-import>
+
+<div style="display:grid;grid-template-columns:236px minmax(0,1fr) 220px;gap:0;align-items:start;max-width:1400px;margin:0 auto">
+
+<div style="position:sticky;top:56px;height:calc(100vh - 56px);display:flex;flex-direction:column;min-height:0;background:var(--lw-bg-subtle);border-right:1px solid var(--lw-line)">
+<div class="lw-scroll" style="flex:1;min-height:0;overflow-y:auto;overflow-x:hidden">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Sidebar" hint-size="236px,600px" items="{{ navItems }}" data-embedded="true"></x-import>
+</div>
+</div>
+
+<main style="padding:36px 48px;min-width:0;display:flex;flex-direction:column;gap:24px">
+
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Breadcrumbs" hint-size="240px,18px" items="{{ crumbs }}"></x-import>
+
+<header style="display:flex;flex-direction:column;gap:12px">
+<h1 style="margin:0;font-size:38px;font-weight:600;letter-spacing:-.03em;line-height:1.1">Grounding contract</h1>
+<p style="margin:0;font-size:17px;line-height:1.6;color:var(--lw-fg-muted);max-width:70ch;text-wrap:pretty">Every answer the API returns is accompanied by the passages it was composed from. This page specifies what "grounded" means, what the service guarantees, and what it does when it cannot meet that guarantee.</p>
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Chip" hint-size="70px,20px" tone="neutral">v4.2</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Chip" hint-size="90px,20px" tone="success">stable</x-import>
+</div>
+</header>
+
+<hr style="border:0;border-top:1px solid var(--lw-line);margin:0">
+
+<section style="display:flex;flex-direction:column;gap:14px">
+<h2 style="margin:0;font-size:24px;font-weight:600;letter-spacing:-.022em">What counts as grounded</h2>
+<p style="margin:0;font-size:15.5px;line-height:1.7;color:var(--lw-fg-muted);max-width:72ch;text-wrap:pretty">A claim is grounded when the service can point to a contiguous span in an indexed document that supports it. Paraphrase is allowed; inference across two passages is not. If a sentence in the response cannot be tied to a span, the sentence is removed before the response is returned — the service does not ship an unsupported sentence with a hedge attached to it.</p>
+<div style="display:flex;gap:12px;padding:16px;border:1px solid var(--lw-brand-line);border-radius:var(--lw-radius-md);background:var(--lw-brand-soft)">
+<span style="font-family:var(--lw-font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--lw-brand-text);padding-top:2px;flex:none">Note</span>
+<p style="margin:0;font-size:14px;line-height:1.6;color:var(--lw-fg)">Grounding is checked after generation, not during. A model that writes a well-supported answer and a model that writes a plausible one are indistinguishable at generation time.</p>
+</div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:14px">
+<h2 style="margin:0;font-size:24px;font-weight:600;letter-spacing:-.022em">Response shape</h2>
+<p style="margin:0;font-size:15.5px;line-height:1.7;color:var(--lw-fg-muted);max-width:72ch">Citations are returned as character offsets into <code style="font-family:var(--lw-font-mono);font-size:.9em;background:var(--lw-bg-inset);padding:1px 5px;border-radius:var(--lw-radius-xs)">answer</code>, not as inline markers, so a client can render them as chips, footnotes or margin notes without parsing prose.</p>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.CodeBlock" hint-size="100%,220px" filename="POST /v1/ask · 200" lang="json" code="{{ sampleJson }}"></x-import>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:14px">
+<h2 style="margin:0;font-size:24px;font-weight:600;letter-spacing:-.022em">Confidence and refusal</h2>
+<p style="margin:0;font-size:15.5px;line-height:1.7;color:var(--lw-fg-muted);max-width:72ch">Below the workspace threshold the service returns <code style="font-family:var(--lw-font-mono);font-size:.9em;background:var(--lw-bg-inset);padding:1px 5px;border-radius:var(--lw-radius-xs)">status: "insufficient_evidence"</code> with the passages it did find, and no answer. A weak answer with a low score attached still reads as an answer, so the service declines to produce one.</p>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Table" hint-size="100%,200px" columns="{{ thresholdCols }}" rows="{{ thresholdRows }}" caption="Confidence thresholds and service behaviour"></x-import>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:14px">
+<h2 style="margin:0;font-size:24px;font-weight:600;letter-spacing:-.022em">Errors</h2>
+<div style="display:flex;gap:12px;padding:16px;border:1px solid var(--lw-warning-soft);border-radius:var(--lw-radius-md);background:var(--lw-warning-soft)">
+<span style="font-family:var(--lw-font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--lw-warning-on);padding-top:2px;flex:none">Caution</span>
+<p style="margin:0;font-size:14px;line-height:1.6;color:var(--lw-fg)">A <code style="font-family:var(--lw-font-mono);font-size:.9em">409</code> means the index is mid-rebuild. Queries keep serving the previous index — retry is safe and returns the old answer, not an error.</p>
+</div>
+</section>
+
+<footer style="display:flex;justify-content:space-between;gap:16px;padding-top:24px;margin-top:8px;border-top:1px solid var(--lw-line)">
+<a href="#" style="display:flex;align-items:center;gap:7px;font-size:13.5px;color:var(--lw-brand-text);text-decoration:none">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="16px,16px" name="chevron-left" size="16"></x-import>Retrieval modes
+</a>
+<a href="#" style="display:flex;align-items:center;gap:7px;font-size:13.5px;color:var(--lw-brand-text);text-decoration:none">Evaluation suites
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="16px,16px" name="chevron-right" size="16"></x-import>
+</a>
+</footer>
+
+</main>
+
+<aside style="position:sticky;top:56px;padding:28px 24px 28px 4px">
+<nav aria-labelledby="lw-toc-h" class="lw-toc lw-scroll" style="max-height:calc(100vh - 112px);overflow-y:auto">
+<span id="lw-toc-h" class="lw-toc-h">On this page</span>
+<sc-for list="{{ toc }}" as="t" hint-placeholder-count="4">
+<a href="{{ t.href }}" aria-current="{{ t.cur }}">{{ t.label }}</a>
+</sc-for>
+</nav>
+</aside>
+
+</div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1400,&quot;height&quot;:1000},&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;\&quot;light\&quot; | \&quot;dark\&quot;&quot;,&quot;section&quot;:&quot;Theme&quot;}}">
+class Component extends DCLogic {
+  state = { theme: null, toc: [], activeToc: null };
+  // The contents panel is DERIVED from the headings in the page, never a second
+  // hand-kept list: a literal list drifts the moment someone edits a section
+  // title, and the drift is invisible until a reader clicks a dead anchor.
+  componentDidMount() {
+    this.readHeadings();
+    this._sync = () => this.syncActive();
+    // Driven three ways on purpose. An IntersectionObserver is the primary: it
+    // reports regardless of WHICH ancestor scrolls, so the panel still tracks
+    // when the page is embedded in a scrolling host rather than scrolling its own
+    // document — a plain window listener silently does nothing in that case.
+    // Scroll is captured (it does not bubble) so a nested scroller is covered too.
+    if (typeof IntersectionObserver === "function") {
+      this._io = new IntersectionObserver(this._sync, { rootMargin: "-76px 0px -60% 0px", threshold: [0, 1] });
+      this.state.toc.forEach((it) => {
+        const el = document.getElementById(it.id);
+        if (el) this._io.observe(el);
+      });
+    }
+    addEventListener("scroll", this._sync, { passive: true, capture: true });
+    addEventListener("resize", this._sync);
+    this.syncActive();
+  }
+  componentWillUnmount() {
+    if (this._io) this._io.disconnect();
+    removeEventListener("scroll", this._sync, true);
+    removeEventListener("resize", this._sync);
+  }
+  readHeadings() {
+    const main = document.querySelector("#dc-root main");
+    if (!main) return;
+    const slug = (t) => t.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    const toc = [...main.querySelectorAll("h2")].map((h) => {
+      const id = h.id || slug(h.textContent);
+      h.id = id;
+      // Without this an anchor jump parks the heading UNDER the sticky bar.
+      h.style.scrollMarginTop = "76px";
+      return { id, label: h.textContent.trim() };
+    });
+    // Observation is attached here rather than only in componentDidMount, because
+    // the heading list is read here — the two must not drift apart.
+    this.setState({ toc }, () => {
+      if (!this._io) return;
+      toc.forEach((it) => {
+        const el = document.getElementById(it.id);
+        if (el) this._io.observe(el);
+      });
+      this.syncActive();
+    });
+  }
+  syncActive() {
+    const items = this.state.toc;
+    if (!items.length) return;
+    // The active section is the LAST heading to have crossed the reading line,
+    // not the first one merely intersecting the viewport — that is what a reader
+    // means by "where I am". The line sits just under the sticky bar.
+    const LINE = 96;
+    let active = items[0].id;
+    for (const it of items) {
+      const el = document.getElementById(it.id);
+      if (el && el.getBoundingClientRect().top <= LINE) active = it.id;
+    }
+    // The final section is often too short to ever cross the line, so at the
+    // end of the document it wins outright — otherwise the highlight sticks one
+    // section behind for the whole last screen.
+    const doc = document.documentElement;
+    if (innerHeight + scrollY >= doc.scrollHeight - 4) active = items[items.length - 1].id;
+    if (active !== this.state.activeToc) this.setState({ activeToc: active });
+  }
+  // Nav icons live in a prop array, so they must be elements. The one place this
+  // template builds React by hand, and only ever an icon.
+  icon(name, size = 17) {
+    const NS = window.LeanWiseDesign_f2d907;
+    return NS && NS.Icon ? React.createElement(NS.Icon, { name, size }) : null;
+  }
+  renderVals() {
+    // One owner of theme. The page paints its band from this value and the
+    // toggle is driven by it — an uncontrolled toggle would write the document
+    // root while the wrapper stayed on the prop, rendering half a theme.
+    const theme = this.state.theme || this.props.theme || "light";
+    // Reading position is a live runtime value — it cannot exist at parse time —
+    // which is the one style hole the compiler sanctions. It is also the only way
+    // these rows reliably take colour: an author `color` on `.lw-toc a` in app.css
+    // does not reach them in this runtime (an anchor in the rail, from the same
+    // stylesheet, does), and even an `!important` rule failed to win. Inline is
+    // the known-good path; `aria-current` still ships for assistive tech.
+    // Box, padding, radius and transition DO apply from `.lw-toc`, so only the
+    // three colour-bearing properties are held here.
+    // Only the STATE travels — never appearance. `.lw-toc a[aria-current]` in
+    // app.css paints the row, so the panel is fully styled the moment markup
+    // lands, one attribute serves both CSS and assistive tech, and the template
+    // carries no style hole. An interpolated inline `style` was tried and is
+    // worse than it looks: it applies once and does NOT re-apply on re-render, so
+    // the highlight would freeze on the first section and ignore a theme switch.
+    const toc = this.state.toc.map((it) => ({
+      id: it.id,
+      label: it.label,
+      href: "#" + it.id,
+      cur: it.id === this.state.activeToc ? "true" : undefined
+    }));
+    const light = theme !== "dark";
+    return {
+      toc,
+      theme,
+      setTheme: (v) => this.setState({ theme: v }),
+      themeClass: light ? "" : "dark",
+      band: light ? "light" : "dark",
+      navLinks: [
+        { href: "#guides", label: "Guides" },
+        { href: "#api", label: "API", current: true },
+        { href: "#changelog", label: "Changelog" }
+      ],
+      // One icon per page, not a repeated bullet: in a rail this long the glyph
+      // is the thing a returning reader aims at, so it has to differentiate.
+      navItems: [
+        { group: "Getting started" },
+        { href: "#quickstart", label: "Quickstart", icon: this.icon("rocket") },
+        { href: "#authentication", label: "Authentication", icon: this.icon("key") },
+        { group: "Retrieval" },
+        { href: "#indexing", label: "Indexing", icon: this.icon("database") },
+        { href: "#retrieval-modes", label: "Retrieval modes", icon: this.icon("search") },
+        { href: "#grounding-contract", label: "Grounding contract", icon: this.icon("shield"), current: true },
+        { href: "#evaluation-suites", label: "Evaluation suites", icon: this.icon("check") },
+        { group: "Reference" },
+        { href: "#rest-api", label: "REST API", icon: this.icon("code") },
+        { href: "#webhooks", label: "Webhooks", icon: this.icon("webhook") },
+        { href: "#error-codes", label: "Error codes", icon: this.icon("alert") }
+      ],
+      searchIcon: this.icon("search", 15),
+      // Two themes, so the control offers two — not a third mode hidden by CSS.
+      themeModes: ["light", "dark"],
+      crumbs: [
+        { label: "docs", href: "#" },
+        { label: "retrieval", href: "#" },
+        { label: "grounding-contract" }
+      ],
+      sampleJson: [
+        '{',
+        '  "status": "grounded",',
+        '  "answer": "Four agreements auto-renew before 30 September…",',
+        '  "confidence": 0.91,',
+        '  "citations": [',
+        '    { "start": 0, "end": 52, "source_id": "ctr-2024-0148", "page": 14 },',
+        '    { "start": 53, "end": 118, "source_id": "ctr-2024-0092", "page": 2 }',
+        '  ],',
+        '  "retrieved": 41,',
+        '  "latency_ms": 840',
+        '}'
+      ].join("\n"),
+      thresholdCols: [
+        { key: "range", label: "Confidence", num: true },
+        { key: "status", label: "status" },
+        { key: "behaviour", label: "Behaviour" }
+      ],
+      thresholdRows: [
+        { id: 1, range: "≥ 0.80", status: "grounded", behaviour: "Answer returned with citations." },
+        { id: 2, range: "0.60 – 0.79", status: "grounded", behaviour: "Answer returned; client should surface the score." },
+        { id: 3, range: "< 0.60", status: "insufficient_evidence", behaviour: "No answer. Passages returned for review." }
+      ]
+    };
+  }
+}
+
+</script>
+</body>
+</html>

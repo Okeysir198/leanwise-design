@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Pitch deck" description="1920×1080 deck on the LeanWise palette — dark section openers, mono eyebrows, one amber CTA at the close." -->
+<helmet><script src="./ds-base.js"></script></helmet>
+<x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1920" height="1080" hint-size="100%,100%">
+
+<section data-screen-label="01" data-label="Title" style="width:1920px;height:1080px;background:#0B1220;color:var(--lw-on-dark-1);font-family:'Geist',system-ui,sans-serif;display:flex;flex-direction:column;justify-content:center;padding:0 160px;position:relative;overflow:hidden">
+<div style="position:absolute;inset:0;background:radial-gradient(900px 600px at 78% 18%, rgba(12,114,123,.38), transparent 70%);pointer-events:none"></div>
+<div style="position:relative;display:flex;flex-direction:column;gap:36px">
+<p style="margin:0;font-family:'Geist Mono',monospace;font-size:24px;letter-spacing:.14em;text-transform:uppercase;color:#6CD2DA">LeanWise AI · Series A</p>
+<h1 style="margin:0;font-size:118px;line-height:1.02;letter-spacing:-.035em;font-weight:500;max-width:20ch">Answers enterprises can <em style="color:var(--lw-brand-400);font-style:italic">defend</em>.</h1>
+<p style="margin:0;font-size:34px;line-height:1.5;color:#A8B3C7;max-width:52ch">Retrieval infrastructure for teams whose answers get audited.</p>
+</div>
+<p style="position:relative;margin:96px 0 0;font-family:'Geist Mono',monospace;font-size:20px;letter-spacing:.1em;color:#7C8AA3">July 2026 · Confidential</p>
+</section>
+
+<section data-screen-label="02" data-label="Problem" style="width:1920px;height:1080px;background:#FFFFFF;color:#0B1220;font-family:'Geist',system-ui,sans-serif;display:flex;flex-direction:column;justify-content:center;padding:0 160px;gap:56px">
+<p style="margin:0;font-family:'Geist Mono',monospace;font-size:22px;letter-spacing:.14em;text-transform:uppercase;color:#0C727B">The problem</p>
+<h2 style="margin:0;font-size:82px;line-height:1.08;letter-spacing:-.03em;font-weight:600;max-width:24ch">Generative search is fast, confident, and unusable in regulated work.</h2>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:48px;margin-top:24px">
+<div style="display:flex;flex-direction:column;gap:14px;padding-top:28px;border-top:2px solid #0C727B"><p style="margin:0;font-family:'Geist Mono',monospace;font-size:20px;color:#6B7A90">01</p><p style="margin:0;font-size:30px;line-height:1.4;font-weight:500">The answer arrives with no passage behind it.</p></div>
+<div style="display:flex;flex-direction:column;gap:14px;padding-top:28px;border-top:2px solid #DDE3EC"><p style="margin:0;font-family:'Geist Mono',monospace;font-size:20px;color:#6B7A90">02</p><p style="margin:0;font-size:30px;line-height:1.4;font-weight:500">A reviewer re-does the work to check it.</p></div>
+<div style="display:flex;flex-direction:column;gap:14px;padding-top:28px;border-top:2px solid #DDE3EC"><p style="margin:0;font-family:'Geist Mono',monospace;font-size:20px;color:#6B7A90">03</p><p style="margin:0;font-size:30px;line-height:1.4;font-weight:500">So the tool never leaves the pilot.</p></div>
+</div>
+</section>
+
+<section data-screen-label="03" data-label="Section — Solution" style="width:1920px;height:1080px;background:#024576;color:var(--lw-on-dark-1);font-family:'Geist',system-ui,sans-serif;display:flex;flex-direction:column;justify-content:center;padding:0 160px;gap:28px">
+<p style="margin:0;font-family:'Geist Mono',monospace;font-size:24px;letter-spacing:.14em;text-transform:uppercase;color:#6CD2DA">01 / 04</p>
+<h2 style="margin:0;font-size:104px;line-height:1.05;letter-spacing:-.035em;font-weight:500;max-width:18ch">Ground the answer, then show the ground.</h2>
+</section>
+
+<section data-screen-label="04" data-label="Product" style="width:1920px;height:1080px;background:#FFFFFF;color:#0B1220;font-family:'Geist',system-ui,sans-serif;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:96px;padding:0 160px">
+<div style="display:flex;flex-direction:column;gap:32px">
+<p style="margin:0;font-family:'Geist Mono',monospace;font-size:22px;letter-spacing:.14em;text-transform:uppercase;color:#0C727B">How it works</p>
+<h2 style="margin:0;font-size:72px;line-height:1.08;letter-spacing:-.03em;font-weight:600">Every claim carries its source.</h2>
+<p style="margin:0;font-size:30px;line-height:1.55;color:#42506A;max-width:34ch">Citations resolve to the exact page. When retrieval is weak, the service refuses rather than hedging.</p>
+</div>
+<div class="dark" data-band="dark" style="background:#0B1220;border-radius:20px;padding:44px;font-family:'Geist Mono',monospace;font-size:24px;line-height:2;color:#A8B3C7">
+<p style="margin:0;color:var(--lw-on-dark-1)">→ Which contracts auto-renew before Q3?</p>
+<p style="margin:0;color:var(--lw-success-on)">&nbsp;&nbsp;retrieve  hybrid  41 candidates  240ms</p>
+<p style="margin:0;color:var(--lw-success-on)">&nbsp;&nbsp;rerank    cross-encoder  top 4</p>
+<p style="margin:0;padding-left:2ch;text-indent:-2ch;color:var(--lw-on-dark-1)">← 4 agreements, each clause cited [1][2]</p>
+<p style="margin:0;color:var(--lw-brand-400)">&nbsp;&nbsp;grounding 0.91 · 4 of 4 claims cited</p>
+</div>
+</section>
+
+<section data-screen-label="05" data-label="Traction" style="width:1920px;height:1080px;background:#F6F8FB;color:#0B1220;font-family:'Geist',system-ui,sans-serif;display:flex;flex-direction:column;justify-content:center;padding:0 160px;gap:64px">
+<p style="margin:0;font-family:'Geist Mono',monospace;font-size:22px;letter-spacing:.14em;text-transform:uppercase;color:#0C727B">Traction</p>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:32px">
+<div style="background:#fff;border:1px solid #DDE3EC;border-radius:16px;padding:44px;display:flex;flex-direction:column;gap:12px"><p style="margin:0;font-family:'Geist Mono',monospace;font-size:19px;letter-spacing:.12em;text-transform:uppercase;color:#6B7A90">ARR</p><p style="margin:0;font-family:'Geist Mono',monospace;font-size:68px;font-weight:500;letter-spacing:-.03em">$4.2M</p><p style="margin:0;font-size:22px;color:#16A34A">↑ 3.1× YoY</p></div>
+<div style="background:#fff;border:1px solid #DDE3EC;border-radius:16px;padding:44px;display:flex;flex-direction:column;gap:12px"><p style="margin:0;font-family:'Geist Mono',monospace;font-size:19px;letter-spacing:.12em;text-transform:uppercase;color:#6B7A90">Enterprise logos</p><p style="margin:0;font-family:'Geist Mono',monospace;font-size:68px;font-weight:500;letter-spacing:-.03em">31</p><p style="margin:0;font-size:22px;color:#16A34A">↑ 14 this year</p></div>
+<div style="background:#fff;border:1px solid #DDE3EC;border-radius:16px;padding:44px;display:flex;flex-direction:column;gap:12px"><p style="margin:0;font-family:'Geist Mono',monospace;font-size:19px;letter-spacing:.12em;text-transform:uppercase;color:#6B7A90">Net retention</p><p style="margin:0;font-family:'Geist Mono',monospace;font-size:68px;font-weight:500;letter-spacing:-.03em">141%</p><p style="margin:0;font-size:22px;color:#6B7A90">seat + corpus expansion</p></div>
+<div style="background:#fff;border:1px solid #DDE3EC;border-radius:16px;padding:44px;display:flex;flex-direction:column;gap:12px"><p style="margin:0;font-family:'Geist Mono',monospace;font-size:19px;letter-spacing:.12em;text-transform:uppercase;color:#6B7A90">Pilot → paid</p><p style="margin:0;font-family:'Geist Mono',monospace;font-size:68px;font-weight:500;letter-spacing:-.03em">72%</p><p style="margin:0;font-size:22px;color:#6B7A90">industry median 19%</p></div>
+</div>
+<p style="margin:0;font-family:'Geist Mono',monospace;font-size:20px;color:#8894A8">Figures are placeholders — replace before sending.</p>
+</section>
+
+<section data-screen-label="06" data-label="Why now" style="width:1920px;height:1080px;background:#FFFFFF;color:#0B1220;font-family:'Geist',system-ui,sans-serif;display:flex;flex-direction:column;justify-content:center;padding:0 160px;gap:56px">
+<p style="margin:0;font-family:'Geist Mono',monospace;font-size:22px;letter-spacing:.14em;text-transform:uppercase;color:#0C727B">Why now</p>
+<h2 style="margin:0;font-size:82px;line-height:1.08;letter-spacing:-.03em;font-weight:600;max-width:26ch">Regulation moved the buying question from "is it clever" to "can you show me".</h2>
+<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:64px;margin-top:16px">
+<p style="margin:0;font-size:30px;line-height:1.55;color:#42506A;padding-left:28px;border-left:3px solid #0C727B">Audit requirements now name model outputs specifically. A vendor without provenance is a vendor without a compliance story.</p>
+<p style="margin:0;font-size:30px;line-height:1.55;color:#42506A;padding-left:28px;border-left:3px solid #DDE3EC">Retrieval quality, not model quality, is the remaining bottleneck — and it is the part a buyer's own documents determine.</p>
+</div>
+</section>
+
+<section data-screen-label="07" data-label="Ask" style="width:1920px;height:1080px;background:#0B1220;color:var(--lw-on-dark-1);font-family:'Geist',system-ui,sans-serif;display:flex;flex-direction:column;justify-content:center;padding:0 160px;gap:48px;position:relative;overflow:hidden">
+<div style="position:absolute;inset:0;background:radial-gradient(760px 520px at 88% 78%, rgba(2,69,118,.55), transparent 72%);pointer-events:none"></div>
+<div style="position:relative;display:flex;flex-direction:column;gap:36px">
+<p style="margin:0;font-family:'Geist Mono',monospace;font-size:24px;letter-spacing:.14em;text-transform:uppercase;color:#6CD2DA">The ask</p>
+<h2 style="margin:0;font-size:96px;line-height:1.05;letter-spacing:-.035em;font-weight:500">$18M Series A</h2>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:56px;margin-top:24px">
+<div style="display:flex;flex-direction:column;gap:12px"><p style="margin:0;font-family:'Geist Mono',monospace;font-size:44px;color:var(--lw-brand-400)">55%</p><p style="margin:0;font-size:26px;line-height:1.5;color:#A8B3C7">Retrieval and evaluation engineering</p></div>
+<div style="display:flex;flex-direction:column;gap:12px"><p style="margin:0;font-family:'Geist Mono',monospace;font-size:44px;color:var(--lw-brand-400)">30%</p><p style="margin:0;font-size:26px;line-height:1.5;color:#A8B3C7">Enterprise go-to-market</p></div>
+<div style="display:flex;flex-direction:column;gap:12px"><p style="margin:0;font-family:'Geist Mono',monospace;font-size:44px;color:var(--lw-brand-400)">15%</p><p style="margin:0;font-size:26px;line-height:1.5;color:#A8B3C7">Compliance and certification</p></div>
+</div>
+</div>
+</section>
+
+<section data-screen-label="08" data-label="Close" style="width:1920px;height:1080px;background:#0B1220;color:var(--lw-on-dark-1);font-family:'Geist',system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:44px;text-align:center;padding:0 200px">
+<h2 style="margin:0;font-size:104px;line-height:1.05;letter-spacing:-.035em;font-weight:500;max-width:20ch">Bring one corpus. See it answer.</h2>
+<p style="margin:0;font-size:32px;line-height:1.5;color:#A8B3C7;max-width:48ch">A walkthrough runs on your documents, not a demo set.</p>
+<span style="display:inline-flex;align-items:center;justify-content:center;height:88px;padding:0 48px;border-radius:12px;background:#FCB603;color:#0B1220;font-size:30px;font-weight:600;letter-spacing:-.01em;margin-top:16px">Book a walkthrough</span>
+<p style="margin:24px 0 0;font-family:'Geist Mono',monospace;font-size:22px;letter-spacing:.08em;color:#7C8AA3">hello@leanwise.ai</p>
+</section>
+
+</x-import>
+
+</x-dc>
+</body>
+</html>

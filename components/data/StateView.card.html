@@ -1,0 +1,43 @@
+<!-- @dsCard group="Data" name="The five states" subtitle="Empty, loading, error, offline, denied — one set, shipped together" viewport="1080x700" -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>The five states</title>
+<link rel="stylesheet" href="../../preview/_card.css">
+<link rel="stylesheet" href="../../base.css">
+<link rel="stylesheet" href="../../marketing.css">
+<link rel="stylesheet" href="../../product.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.lbl{font-family:var(--lw-font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--lw-fg-subtle);display:block;margin-bottom:8px}
+code{font-family:var(--lw-font-mono);font-size:12px;background:var(--lw-bg-inset);padding:1px 5px;border-radius:2px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.pane{padding:20px;display:grid;gap:16px;align-content:start;border-radius:10px}
+.pane.dark{background:var(--lw-navy-deep)}.pane.dark .lbl{color:var(--lw-on-dark-3)}
+.grid4{display:grid;grid-template-columns:1fr 1fr;gap:14px}.cell{border:1px solid var(--lw-line);border-radius:10px}</style>
+</head><body><div class="card">
+<header><h1>The five states</h1>
+<p class="sub"><b>Empty, loading, error, offline and no-permission are one set.</b> Shipping only the empty one is how
+the other four get invented per product — each with its own tone, its own icon, and its own idea of whether there is
+an action. These are the house answers.</p>
+<p class="sub"><b>Exactly one action</b>, like <code>EmptyState</code>: a dead end with three buttons is a dead end
+with three ways to guess. <b>The announcement differs by variant</b> — <code>error</code> and <code>offline</code> use
+<code>role="alert"</code> because they interrupt; <code>loading</code> uses <code>role="status"</code> with
+<code>aria-busy</code>, because a progress report is not an interruption.</p></header>
+<div class="grid4" id="root"></div>
+</div>
+<script type="text/babel">
+const LW = window.LeanWiseDesign_f2d907;
+const { StateView, Button } = LW;
+function Demo(){
+  return (<>
+    <div className="cell"><StateView variant="empty" title="No sources connected"
+      description="Connect a database, a bucket or a folder and its documents become queryable within a few minutes."
+      action={<Button size="sm">Connect a source</Button>} /></div>
+    <div className="cell"><StateView variant="loading" lines={4} /></div>
+    <div className="cell"><StateView variant="error" onAction={()=>{}} /></div>
+    <div className="cell"><StateView variant="offline" onAction={()=>{}} /></div>
+    <div className="cell" style={{gridColumn:"span 2"}}><StateView variant="denied" /></div>
+  </>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo />);
+</script></body></html>

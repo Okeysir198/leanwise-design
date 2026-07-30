@@ -80,6 +80,13 @@
   --danger-soft: var(--lw-danger-soft-c);
   --danger-on: var(--lw-danger-on-c);
 
+  /* The fourth status: idle / pending / draft. Deliberately not "info" — every blue
+     here already means brand or link. Neutral is a dark fill, so it takes white ink. */
+  --neutral: var(--lw-neutral-c);
+  --neutral-foreground: var(--lw-on-danger-c);
+  --neutral-soft: var(--lw-neutral-soft-c);
+  --neutral-on: var(--lw-neutral-on-c);
+
   /* Brand as TEXT (links, active nav). Since v0.8.0 brand-500 reads on white at
      5.68, so on light this IS the fill colour; on dark it re-points to brand-400.
      Use `text-brand` for a teal label rather than hand-writing a theme branch. */

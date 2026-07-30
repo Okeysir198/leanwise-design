@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Dashboard / analytics" description="KPI tiles, a sortable data table, a run log and an empty state — mono tabular numerics throughout." -->
+<helmet><script src="./ds-base.js"></script></helmet>
+<div class="{{ themeClass }}" data-band="{{ band }}" style="height:100vh;display:flex;background:var(--lw-bg);color:var(--lw-fg);font-family:var(--lw-font-sans);overflow:hidden">
+
+<div style="width:var(--lw-sidebar-w,252px);flex:none;display:flex;flex-direction:column;min-height:0;background:var(--lw-bg-subtle);border-right:1px solid var(--lw-line);overflow:hidden;transition:width .2s cubic-bezier(.2,.7,.3,1)" data-collapsed="{{ navCollapsedAttr }}">
+
+<div data-collapse-center="" style="display:flex;align-items:center;height:56px;flex:none;padding:0 14px;border-bottom:1px solid var(--lw-line)">
+<a href="#" aria-label="LeanWise AI — home" style="min-width:0;font-size:var(--lw-text-sm);font-weight:var(--lw-fw-semibold);letter-spacing:-.012em;color:var(--lw-brand-text);text-decoration:none">
+<span style="display:flex;align-items:center;gap:9px;min-width:0"><span class="brand-mark" aria-hidden="true"></span><span data-collapse-hide="">LeanWise AI</span></span>
+</a>
+</div>
+
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Sidebar" hint-size="100%,200px" items="{{ navItems }}" collapsed="{{ navCollapsed }}" data-embedded="true"></x-import>
+
+<div style="flex:1;min-height:0"></div>
+
+<div data-collapse-center="" style="display:flex;align-items:center;gap:10px;flex:none;margin-top:auto;padding:10px 14px;border-top:1px solid var(--lw-line)">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Avatar" hint-size="32px,32px" name="Your Name"></x-import>
+<span data-collapse-hide="" style="min-width:0;line-height:1.3">
+<span style="display:block;font-size:var(--lw-text-sm);font-weight:var(--lw-fw-medium);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Your Name</span>
+<span style="display:block;font-family:var(--lw-font-mono);font-size:10px;color:var(--lw-fg-subtle);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">you@leanwise.ai</span>
+</span>
+</div>
+</div>
+
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;min-height:0">
+
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.TopBar" hint-size="100%,56px">
+<div style="order:-1;display:flex;align-items:center;gap:12px;flex:0 1 auto;min-width:0;margin-right:16px;overflow:hidden;white-space:nowrap">
+<button type="button" onClick="{{ toggleNav }}" aria-expanded="{{ navExpanded }}" aria-label="{{ navToggleLabel }}" title="{{ navToggleLabel }}" class="lw-icon-btn" style-hover="color:var(--lw-brand-text)">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="21px,21px" name="sidebar" size="21"></x-import>
+</button>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Breadcrumbs" hint-size="220px,18px" items="{{ crumbs }}"></x-import>
+</div>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="110px,32px" size="sm">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="17px,17px" name="download" size="17"></x-import>
+<span>Export CSV</span>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.ThemeToggle" hint-size="72px,30px" modes="{{ themeModes }}" value="{{ theme }}" onChange="{{ setTheme }}"></x-import>
+</x-import>
+
+<div class="lw-scroll" style="flex:1;min-height:0;overflow:auto;background:var(--lw-bg-subtle)">
+<div class="lw-page" style="padding-top:28px;padding-bottom:56px;display:flex;flex-direction:column;gap:24px">
+
+<div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px">
+<div style="display:flex;flex-direction:column;gap:6px">
+<p class="lw-eyebrow" style="margin:0">Retrieval health</p>
+<h1 style="margin:0;font-size:27px;font-weight:600;letter-spacing:-.022em">Index performance</h1>
+</div>
+<div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Segmented" hint-size="220px,32px" label="Range" options="{{ ranges }}" value="{{ range }}" onChange="{{ setRange }}"></x-import>
+<span style="font-family:var(--lw-font-mono);font-size:11px;color:var(--lw-fg-muted)">updated 4 min ago · next sync 09:30</span>
+</div>
+</div>
+
+<div class="lw-grid" style="--lw-grid-min:240px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.KpiTile" hint-size="100%,110px" label="Queries / day" icon="search" value="18.4k" delta="12.1%" direction="up"></x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.KpiTile" hint-size="100%,110px" label="Grounded answers" icon="shield" accent="pos" value="97.3%" delta="0.4pt" direction="up"></x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.KpiTile" hint-size="100%,110px" label="p95 latency" icon="clock" value="840ms" delta="60ms" direction="down" tone="pos"></x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.KpiTile" hint-size="100%,110px" label="Failed embeds" icon="alert" accent="neg" value="4" delta="3" direction="up" tone="neg"></x-import>
+</div>
+
+<div class="lw-split" style="--lw-split-rail:340px">
+
+<div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px;justify-content:space-between">
+<h2 style="margin:0;font-size:16px;font-weight:600;letter-spacing:-.012em">Indexed sources</h2>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.InputGroup" hint-size="220px,40px" prefix="{{ searchIcon }}" style="width:220px">
+<input placeholder="Filter sources…" />
+</x-import>
+</div>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Table" hint-size="100%,280px" columns="{{ columns }}" rows="{{ rows }}" on-sort="{{ onSort }}" caption="Indexed sources and their retrieval hit rate"></x-import>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+<h2 style="margin:0;font-size:16px;font-weight:600;letter-spacing:-.012em">Last run</h2>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Console" hint-size="100%,230px" url="ops.leanwise.ai/index" lines="{{ logLines }}"></x-import>
+<h2 style="margin:8px 0 0;font-size:16px;font-weight:600;letter-spacing:-.012em">Evaluations</h2>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.EmptyState" hint-size="100%,180px" icon="check" title="No suite has run yet" description="Run an evaluation to track grounding and citation accuracy per release.">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="170px,32px" size="sm">Run first evaluation</x-import>
+</x-import>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1400,&quot;height&quot;:940},&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;\&quot;light\&quot; | \&quot;dark\&quot;&quot;,&quot;section&quot;:&quot;Theme&quot;}}">
+class Component extends DCLogic {
+  state = { range: "7d", sortKey: "hit", sortDir: "desc", nav: null, theme: null };
+  // The table sorts on the RAW number, not on the rendered string: "1,284"
+  // sorts before "312" as text, which is the bug every dashboard ships once.
+  num(v) {
+    const n = parseFloat(String(v).replace(/[^0-9.-]/g, ""));
+    return Number.isFinite(n) ? n : -Infinity;
+  }
+  // Icons that ride in props must be elements. The one place this template
+  // builds React by hand, and only ever an icon.
+  icon(name, fallback = "more", size = 17) {
+    const NS = window.LeanWiseDesign_f2d907;
+    if (!NS || !NS.Icon) return null;
+    // Resolved against the COMPILED set, not against intent. A glyph added in the
+    // same change as its first use is not in the bundle until the next build, and
+    // a nav row with an empty icon slot is worse than a stand-in. Once the real
+    // name compiles this picks it up with no edit here.
+    const set = NS.IconNames || [];
+    const resolved = set.length && !set.includes(name) ? fallback : name;
+    return React.createElement(NS.Icon, { name: resolved, size });
+  }
+  // One row spec -> a line carrying BOTH shapes: `cells` for the grid renderer,
+  // `text` as the fallback any older renderer will print.
+  buildLog(rows) {
+    return rows.map(([t, act, target, detail, tone, num]) => ({
+      t,
+      tone,
+      cells: [act, target, num ? { text: detail, num: true } : { text: detail }],
+      text: [act, target, detail].filter(Boolean).join(" ")
+    }));
+  }
+  renderVals() {
+    const chip = (tone, label) =>
+      React.createElement("span", { className: "lw-chip lw-chip-" + tone }, label);
+    const theme = this.state.theme ?? (this.props.theme || "light");
+    const light = theme !== "dark";
+    const navCollapsed = this.state.nav ?? false;
+    const { sortKey, sortDir } = this.state;
+    const cols = [
+      { key: "src", label: "Source", sortable: true },
+      { key: "docs", label: "Docs", num: true, sortable: true },
+      { key: "chunks", label: "Chunks", num: true, sortable: true },
+      { key: "hit", label: "Hit rate", num: true, sortable: true },
+      { key: "st", label: "Status" }
+    ].map(c => (c.key === sortKey ? { ...c, sort: sortDir } : c));
+    const data = [
+      { id: 1, src: "Contracts / 2024", docs: "1,284", chunks: "41,208", hit: "94.2%", status: "success", label: "live" },
+      { id: 2, src: "Policy handbook", docs: "312", chunks: "6,940", hit: "88.7%", status: "success", label: "live" },
+      { id: 3, src: "Contracts / 2023", docs: "1,109", chunks: "35,772", hit: "86.1%", status: "success", label: "live" },
+      { id: 4, src: "Support transcripts", docs: "9,015", chunks: "128,400", hit: "71.4%", status: "warning", label: "stale" },
+      { id: 5, src: "Legacy wiki", docs: "476", chunks: "—", hit: "—", status: "danger", label: "failed" }
+    ];
+    const sorted = [...data].sort((a, b) => {
+      const dir = sortDir === "asc" ? 1 : -1;
+      if (sortKey === "src") return a.src.localeCompare(b.src) * dir;
+      return (this.num(a[sortKey]) - this.num(b[sortKey])) * dir;
+    });
+    return {
+      themeClass: light ? "" : "dark",
+      band: light ? "light" : "dark",
+      searchIcon: this.icon("search", 15),
+      range: this.state.range,
+      setRange: (v) => this.setState({ range: v }),
+      ranges: [
+        { value: "24h", label: "24h" },
+        { value: "7d", label: "7 days" },
+        { value: "30d", label: "30 days" }
+      ],
+      // The SAME nav model the app-shell template declares — one product, one
+      // rail. Only `current` differs: this screen is Overview.
+      navItems: [
+        { group: "Workspace" },
+        { href: "#overview", label: "Overview", icon: this.icon("chart", "monitor"), current: true },
+        { href: "#ask", label: "Ask", icon: this.icon("spark") },
+        { href: "#sources", label: "Sources", icon: this.icon("layers"), badge: "12" },
+        { href: "#evaluations", label: "Evaluations", icon: this.icon("check") },
+        { group: "Admin" },
+        { href: "#members", label: "Members", icon: this.icon("users") },
+        { href: "#settings", label: "Settings", icon: this.icon("settings") }
+      ],
+      crumbs: [
+        { label: "your-workspace", href: "#" },
+        { label: "overview" }
+      ],
+      navCollapsed,
+      navCollapsedAttr: navCollapsed ? "true" : undefined,
+      navExpanded: navCollapsed ? "false" : "true",
+      navToggleLabel: navCollapsed ? "Expand navigation" : "Collapse navigation",
+      toggleNav: () => this.setState({ nav: !navCollapsed }),
+      theme,
+      themeModes: ["light", "dark"],
+      setTheme: (t) => this.setState({ theme: t }),
+      columns: cols,
+      onSort: (key, dir) => this.setState({ sortKey: key, sortDir: dir }),
+      rows: sorted.map(r => ({ ...r, st: chip(r.status, r.label) })),
+      // Fields, not a space-padded string: the columns align because they ARE
+      // columns, at any frame width and whatever the longest source name turns
+      // out to be.
+      //
+      // `text` is kept beside `cells` deliberately. A renderer that predates
+      // `cells` still has something to print, so a version skew between this
+      // data and the component degrades to an unaligned line rather than to a
+      // blank one. Data that blanks the UI when the component lags is not data
+      // worth shipping.
+      logLines: this.buildLog([
+        ["09:14:02", "embed", "contracts/2024", "1,284 docs", "ok", true],
+        ["09:14:48", "reindex", "policy-handbook", "312 docs", "ok", true],
+        ["09:15:03", "embed", "contracts/2023", "1,109 docs", "ok", true],
+        ["09:15:10", "skip", "legacy-wiki", "parser timeout", "warn"],
+        ["09:15:11", "fail", "legacy-wiki", "4 of 476 unreadable", "err"],
+        ["09:15:12", "done", "", "4 of 5 sources current"]
+      ])
+    };
+  }
+}
+
+</script>
+</body>
+</html>

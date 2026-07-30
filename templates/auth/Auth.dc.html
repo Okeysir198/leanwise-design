@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Auth screens" description="Sign in, SSO, two-factor, accept-invite and password reset — five screens on one split layout, with the error and locked-out states most auth flows leave until last." -->
+<helmet><script src="./ds-base.js"></script></helmet>
+<div class="{{ themeClass }}" data-band="{{ band }}" style="min-height:100vh;display:flex;background:var(--lw-bg);color:var(--lw-fg);font-family:var(--lw-font-sans)">
+
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:48px 24px">
+<div style="width:100%;max-width:380px;display:flex;flex-direction:column;gap:24px">
+
+<span style="flex:none;display:flex;align-items:center;gap:9px;white-space:nowrap;font-size:var(--lw-text-sm);font-weight:var(--lw-fw-semibold);letter-spacing:-.012em;color:var(--lw-brand-text)"><span class="brand-mark" aria-hidden="true"></span>LeanWise AI</span>
+
+<div style="display:flex;flex-direction:column;gap:6px">
+<h1 style="margin:0;font-size:24px;font-weight:600;letter-spacing:-.02em">{{ heading }}</h1>
+<p style="margin:0;font-size:var(--lw-text-sm);color:var(--lw-fg-muted);line-height:1.6;text-wrap:pretty">{{ sub }}</p>
+</div>
+
+<sc-if value="{{ showAlert }}" hint-placeholder-val="{{ false }}">
+<div role="alert" style="display:flex;gap:10px;padding:12px 14px;border:1px solid var(--lw-danger-on);border-radius:var(--lw-radius-md);background:var(--lw-danger-soft);font-size:var(--lw-text-sm);line-height:1.5;color:var(--lw-fg)">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="16px,16px" name="alert" size="16"></x-import>
+<span style="min-width:0">{{ alertText }}</span>
+</div>
+</sc-if>
+
+<form style="display:flex;flex-direction:column;gap:16px" onSubmit="{{ onSubmit }}">
+
+<sc-if value="{{ isSignIn }}" hint-placeholder-val="{{ true }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Field" hint-size="100%,72px" label="Work email" required="{{ true }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Input" hint-size="100%,40px" type="email" autoComplete="email" value="{{ email }}" onChange="{{ setEmail }}" placeholder="you@company.com" aria-label="Work email"></x-import>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Field" hint-size="100%,72px" label="Password" required="{{ true }}" error="{{ pwError }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.InputGroup" hint-size="100%,40px" suffix="{{ revealBtn }}">
+<input type="{{ pwType }}" autoComplete="current-password" value="{{ password }}" onChange="{{ setPassword }}" aria-label="Password" aria-invalid="{{ pwInvalid }}" style="flex:1;min-width:0;border:0;background:none;outline:none;font:inherit;color:var(--lw-fg)">
+</x-import>
+</x-import>
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Checkbox" hint-size="140px,24px" label="Keep me signed in" checked="{{ remember }}" onChange="{{ setRemember }}"></x-import>
+<button type="button" onClick="{{ goReset }}" style="border:0;background:none;padding:0;color:var(--lw-brand-text);font-size:var(--lw-text-sm);font-weight:var(--lw-fw-medium);cursor:pointer">Forgot password?</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ isTwoFactor }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Field" hint-size="100%,80px" label="Six-digit code" required="{{ true }}" error="{{ codeError }}" help="{{ codeHelp }}">
+<input inputMode="numeric" autoComplete="one-time-code" maxLength="6" value="{{ code }}" onChange="{{ setCode }}" aria-label="Six-digit code" aria-invalid="{{ codeInvalid }}" class="lw-input" style="font-family:var(--lw-font-mono);font-size:20px;letter-spacing:.34em;text-align:center">
+</x-import>
+<button type="button" onClick="{{ resend }}" style="align-self:flex-start;border:0;background:none;padding:0;color:var(--lw-brand-text);font-size:var(--lw-text-sm);font-weight:var(--lw-fw-medium);cursor:pointer">Send a new code</button>
+</sc-if>
+
+<sc-if value="{{ isInvite }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--lw-line);border-radius:var(--lw-radius-md);background:var(--lw-bg-subtle)">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Avatar" hint-size="32px,32px" name="R. Okafor"></x-import>
+<span style="min-width:0;font-size:var(--lw-text-sm);line-height:1.5;color:var(--lw-fg-muted)"><b style="color:var(--lw-fg);font-weight:var(--lw-fw-medium)">R. Okafor</b> invited you to <b style="color:var(--lw-fg);font-weight:var(--lw-fw-medium)">Acme Legal</b> as a viewer.</span>
+</div>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Field" hint-size="100%,72px" label="Your name" required="{{ true }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Input" hint-size="100%,40px" value="{{ fullName }}" onChange="{{ setFullName }}" placeholder="Jamie Tran" aria-label="Your name"></x-import>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Field" hint-size="100%,84px" label="Choose a password" required="{{ true }}" help="At least 12 characters. A passphrase beats a symbol soup.">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.InputGroup" hint-size="100%,40px" suffix="{{ revealBtn }}">
+<input type="{{ pwType }}" autoComplete="new-password" value="{{ password }}" onChange="{{ setPassword }}" aria-label="Choose a password" style="flex:1;min-width:0;border:0;background:none;outline:none;font:inherit;color:var(--lw-fg)">
+</x-import>
+</x-import>
+<div class="lw-pwmeter" aria-hidden="true" data-level="{{ strengthLevel }}"><span></span><span></span><span></span><span></span></div>
+<p style="margin:-6px 0 0;font-size:var(--lw-text-xs);color:var(--lw-fg-subtle)" aria-live="polite">{{ strengthLabel }}</p>
+</sc-if>
+
+<sc-if value="{{ isReset }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Field" hint-size="100%,72px" label="Work email" required="{{ true }}" help="If an account exists we send a link. We do not say whether it does — that would confirm the address to anyone who asks.">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Input" hint-size="100%,40px" type="email" autoComplete="email" value="{{ email }}" onChange="{{ setEmail }}" placeholder="you@company.com" aria-label="Work email"></x-import>
+</x-import>
+</sc-if>
+
+<sc-if value="{{ isSent }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;gap:12px;padding:14px;border:1px solid var(--lw-success-on);border-radius:var(--lw-radius-md);background:var(--lw-success-soft);font-size:var(--lw-text-sm);line-height:1.55">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="16px,16px" name="mail" size="16"></x-import>
+<span style="min-width:0">Check <b>{{ emailShown }}</b>. The link works once and expires in 30 minutes.</span>
+</div>
+</sc-if>
+
+<sc-if value="{{ hasSubmit }}" hint-placeholder-val="{{ true }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="100%,48px" size="lg" style="width:100%" loading="{{ busy }}" onClick="{{ onSubmit }}">{{ submitLabel }}</x-import>
+</sc-if>
+</form>
+
+<sc-if value="{{ showSso }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:center;gap:12px;color:var(--lw-fg-subtle)">
+<span style="flex:1;height:1px;background:var(--lw-line)"></span>
+<span style="font-family:var(--lw-font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase">or</span>
+<span style="flex:1;height:1px;background:var(--lw-line)"></span>
+</div>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="100%,44px" variant="ghost" style="width:100%" onClick="{{ ssoSignIn }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="16px,16px" name="shield" size="16"></x-import>
+<span>Continue with SSO</span>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="100%,44px" variant="ghost" style="width:100%" onClick="{{ ssoSignIn }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="16px,16px" name="key" size="16"></x-import>
+<span>Use a passkey</span>
+</x-import>
+</div>
+</sc-if>
+
+<p style="margin:0;font-size:var(--lw-text-sm);color:var(--lw-fg-muted)">{{ footNote }} <button type="button" onClick="{{ footAction }}" style="border:0;background:none;padding:0;color:var(--lw-brand-text);font-size:var(--lw-text-sm);font-weight:var(--lw-fw-medium);cursor:pointer">{{ footLink }}</button></p>
+</div>
+</div>
+
+<div class="lw-band-dark" data-band="dark" style="flex:1;min-width:0;display:none;flex-direction:column;justify-content:flex-end;gap:24px;padding:56px;background:var(--lw-navy-deep);color:var(--lw-on-dark-1)" data-auth-aside="">
+<blockquote style="margin:0;max-width:34ch;font-size:24px;font-weight:500;line-height:1.35;letter-spacing:-.018em;text-wrap:pretty">Every answer arrives with the paragraph it came from. That is the only reason legal signed off.</blockquote>
+<div style="display:flex;align-items:center;gap:12px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Avatar" hint-size="36px,36px" name="A. Mensah"></x-import>
+<span style="line-height:1.4">
+<span style="display:block;font-size:var(--lw-text-sm);font-weight:var(--lw-fw-medium)">A. Mensah</span>
+<span style="display:block;font-family:var(--lw-font-mono);font-size:11px;color:var(--lw-on-dark-3)">Head of Knowledge, Acme Legal</span>
+</span>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:820}}">
+const SCREENS = ["signin", "twofactor", "invite", "reset", "sent"];
+
+class Component extends DCLogic {
+  state = {
+    theme: "light",
+    screen: "signin",
+    email: "jamie@acme.com",
+    password: "",
+    code: "",
+    fullName: "",
+    remember: true,
+    reveal: false,
+    busy: false,
+    attempts: 0,
+    error: null,
+  };
+
+  componentDidMount() {
+    // The aside is hidden below lg — a testimonial is not worth a horizontal
+    // scrollbar on a phone, and auth is the one screen everybody reaches on one.
+    this.mq = window.matchMedia("(min-width: 1024px)"); // --lw-bp-lg
+    this.apply = () => {
+      const el = document.querySelector("[data-auth-aside]");
+      if (el) el.style.display = this.mq.matches ? "flex" : "none";
+    };
+    this.apply();
+    this.mq.addEventListener("change", this.apply);
+  }
+  componentWillUnmount() { this.mq && this.mq.removeEventListener("change", this.apply); }
+  componentDidUpdate() { this.apply && this.apply(); }
+
+  go(screen) { this.setState({ screen, error: null, busy: false }); }
+
+  submit() {
+    const s = this.state;
+    if (s.screen === "reset") { this.go("sent"); return; }
+    if (s.screen === "invite") { this.setState({ busy: true }); return; }
+    if (s.screen === "twofactor") {
+      if (s.code.length !== 6) { this.setState({ error: "code" }); return; }
+      this.setState({ busy: true, error: null });
+      return;
+    }
+    // Sign-in failure names the LOCKOUT rule up front rather than after it fires.
+    // "Incorrect password" three times then a silent lock is how a user ends up
+    // certain the product is broken.
+    if (s.password !== "correct-horse") {
+      this.setState(st => ({ attempts: st.attempts + 1, error: "creds" }));
+      return;
+    }
+    this.setState({ error: null, busy: true }, () => this.go("twofactor"));
+  }
+
+  strength() {
+    const p = this.state.password;
+    let n = 0;
+    if (p.length >= 8) n++;
+    if (p.length >= 12) n++;
+    if (/[^a-zA-Z0-9]/.test(p) || /\d/.test(p)) n++;
+    if (p.length >= 16) n++;
+    return n;
+  }
+
+  renderVals() {
+    const s = this.state;
+    const R = React.createElement;
+    const NS = window.LeanWiseDesign_f2d907;
+    const remaining = Math.max(0, 5 - s.attempts);
+    const st = this.strength();
+    const STRENGTH = ["Too short", "Weak", "Fair", "Good", "Strong"];
+
+    const copy = {
+      signin: { heading: "Sign in", sub: "Use your work account. Sessions last 30 days unless your admin says otherwise.", submit: "Sign in" },
+      twofactor: { heading: "Two-factor code", sub: "Enter the six-digit code from your authenticator app.", submit: "Verify" },
+      invite: { heading: "Accept your invitation", sub: "Set a password and you are in. The workspace is already waiting for you.", submit: "Join workspace" },
+      reset: { heading: "Reset your password", sub: "We email a single-use link. It expires in 30 minutes.", submit: "Send reset link" },
+      sent: { heading: "Check your email", sub: "The link signs you in once and then stops working.", submit: null },
+    }[s.screen];
+
+    return {
+      themeClass: s.theme === "dark" ? "dark" : "",
+      band: s.theme === "dark" ? "dark" : "light",
+
+      heading: copy.heading,
+      sub: copy.sub,
+      isSignIn: s.screen === "signin",
+      isTwoFactor: s.screen === "twofactor",
+      isInvite: s.screen === "invite",
+      isReset: s.screen === "reset",
+      isSent: s.screen === "sent",
+      showSso: s.screen === "signin",
+      hasSubmit: !!copy.submit,
+      submitLabel: copy.submit,
+      busy: s.busy,
+
+      showAlert: !!s.error,
+      alertText: s.error === "creds"
+        ? "That email and password do not match. " + (remaining > 2 ? remaining + " attempts left before the account locks for 15 minutes." : remaining + " attempts left — after that the account locks for 15 minutes and an admin can unlock it sooner.")
+        : s.error === "code" ? "Enter all six digits." : "",
+
+      email: s.email,
+      emailShown: s.email,
+      setEmail: (e) => this.setState({ email: e.target.value }),
+      password: s.password,
+      setPassword: (e) => this.setState({ password: e.target.value }),
+      pwType: s.reveal ? "text" : "password",
+      pwInvalid: s.error === "creds" ? "true" : undefined,
+      pwError: s.error === "creds" ? " " : undefined,
+      // The reveal control is a real button with a label that changes — an eye
+      // icon with a static name tells a screen reader nothing about its state.
+      revealBtn: R("button", {
+        type: "button", className: "lw-icon-btn",
+        "aria-label": s.reveal ? "Hide password" : "Show password",
+        "aria-pressed": s.reveal,
+        onClick: () => this.setState(x => ({ reveal: !x.reveal })),
+      }, R(NS.Icon, { name: s.reveal ? "eye-off" : "eye", size: 16 })),
+
+      code: s.code,
+      setCode: (e) => this.setState({ code: e.target.value.replace(/\D/g, "").slice(0, 6), error: null }),
+      codeInvalid: s.error === "code" ? "true" : undefined,
+      codeError: s.error === "code" ? " " : undefined,
+      codeHelp: s.error === "code" ? undefined : "Lost your device? An admin can reset two-factor for you.",
+      resend: () => this.setState({ code: "", error: null }),
+
+      fullName: s.fullName,
+      setFullName: (e) => this.setState({ fullName: e.target.value }),
+      // The LEVEL goes to the template; the colours stay in app.css, so they
+      // re-point on the dark ground without this class knowing about themes.
+      strengthLevel: s.password ? String(st) : "0",
+      strengthLabel: s.password ? STRENGTH[st] : "At least 12 characters.",
+
+      remember: s.remember,
+      setRemember: (e) => this.setState({ remember: e.target.checked }),
+      onSubmit: (e) => { if (e && e.preventDefault) e.preventDefault(); this.submit(); },
+      ssoSignIn: () => this.go("twofactor"),
+      goReset: () => this.go("reset"),
+
+      footNote: s.screen === "signin" ? "No account yet?" : s.screen === "invite" ? "Wrong person?" : "Remembered it?",
+      footLink: s.screen === "signin" ? "Accept an invitation" : s.screen === "invite" ? "Decline this invitation" : "Back to sign in",
+      footAction: () => this.go(s.screen === "signin" ? "invite" : "signin"),
+    };
+  }
+}
+</script>
+</body>
+</html>

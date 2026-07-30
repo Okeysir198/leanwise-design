@@ -1,0 +1,119 @@
+<!-- @dsCard group="Primitives" name="Primitives" subtitle="Button, Card, Chip, Eyebrow, Avatar, Skeleton mounted from _ds_bundle.js" viewport="1000x1180" -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Primitives</title>
+<link rel="stylesheet" href="../../preview/_card.css">
+<link rel="stylesheet" href="../../base.css">
+<link rel="stylesheet" href="../../marketing.css">
+<link rel="stylesheet" href="../../product.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../preview/_card.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.pane{padding:20px;display:grid;gap:14px;align-content:start;border-radius:10px}
+.pane.dark{background:var(--lw-navy-deep)}.lbl{font-family:var(--lw-font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--lw-fg-subtle)}
+.pane.dark .lbl{color:var(--lw-on-dark-3)}</style>
+</head><body><div class="card">
+<header><h1>Primitives — the React layer</h1>
+<p class="sub">These are the shipped components from <span class="mono">window.LeanWiseDesign_f2d907</span>, not
+a copy of the markup. They render the same <span class="mono">.lw-*</span> classes the vanilla consumers use, so the
+two can never drift. Both grounds, side by side — a component that only works on one is not finished.</p></header>
+<div class="two"><div class="pane" id="light"></div><div class="pane dark lw-band-dark" id="dark"></div></div>
+<div style="display:flex;flex-direction:column;gap:12px;padding-top:20px;margin-top:6px;border-top:1px solid var(--lw-line)">
+<span class="lbl">why it is built this way</span>
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">Buttons</h2>
+<p class="sub"><b>Ink is measured, not chosen.</b> Navy on the amber
+  (<span class="mono" data-ratio="on-cta on cta-500"></span>:1) and white on the cyan
+  (<span class="mono" data-ratio="on-brand on brand-500"></span>:1) — the fill does not change between
+  themes, so its ink must not either; both variants pin <span class="mono">--lw-on-cta</span> /
+  <span class="mono">--lw-on-brand</span> rather than <span class="mono">--lw-fg</span>, which
+  re-points. Hover darkens one tier — cta-600
+  (<span class="mono" data-ratio="on-cta on cta-600"></span>:1) and brand-600
+  (<span class="mono" data-ratio="on-brand on brand-600"></span>:1) — so both hold AA with the same ink.</p>
+<p class="sub"><b>Sizes are declared, never accumulated.</b> <b>32 / 40 / 48</b> on the 8px grid,
+  with icon-only as a square of the same heights so icon and text buttons align in a toolbar.
+  Horizontal padding holds at roughly 0.45× the height — the wide, engineered stance the brand reads
+  as precise rather than cramped. On a coarse pointer every size grows to a 44px target, so desktop
+  density and the touch minimum are not forced to be one number. <span class="mono">-sm</span> is for
+  dense toolbars and table rows, where the row carries the hit area.</p>
+<p class="sub"><b>Icon sizing is its own scale.</b> An icon <i>beside a label</i> is 14 / 16 / 18,
+  matched to cap height so it optically aligns with the text. An <i>icon-only</i> button steps up to
+  14 / 17 / 20: with no label beside it the glyph has to hold the square on its own. Glyph icons (an
+  icon font, an arrow) need an explicit <span class="mono">font-size</span> — they are type, not
+  boxes, so <span class="mono">width/height</span> alone leaves them rendering at label size.</p>
+<p class="sub"><b>Ghost is the only variant with no fill of its own</b>, so it is the only one that
+  has to be told about its ground. <span class="mono">base.css</span> ships the dark-ground ghost and
+  link treatment under <span class="mono">.dark</span>,
+  <span class="mono">[data-band="dark"]</span> and <span class="mono">.lw-band-dark</span> — never
+  patch it inline, since an inline style outranks <span class="mono">:hover</span> and removes the
+  hover state. The focus ring switches to the brand-400 tier on dark, where the 500 ring disappears
+  into the navy. It is a solid 2px band: the 30&percnt;-alpha halo it replaced had no defined edge and
+  read as a glow, and being translucent it mixed with whatever ground sat behind it.</p>
+<p class="sub"><b>States.</b> <span class="mono">:disabled</span> flattens every fill to the same
+  grey — a disabled CTA must not stay the loudest thing on the page. <span class="mono">:active</span>
+  returns the 1px hover lift, so a held button does not feel stuck.
+  <span class="mono">data-loading="true"</span> hides the label and spins a ring that carries its own
+  ink token, not <span class="mono">currentColor</span>, which the transparent label would erase. Lift
+  and spin stand down under <span class="mono">prefers-reduced-motion</span>.</p>
+<p class="sub"><b>Never "primary".</b> shadcn's <span class="mono">--primary</span> is the cyan, so
+  the amber is <span class="mono">.lw-btn-cta</span> and the cyan
+  <span class="mono">.lw-btn-brand</span>. One word cannot name two colors without the one-per-view
+  CTA rule quietly dying. <span class="mono">danger</span> is the one fill that takes white ink.</p>
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">Card</h2>
+<p class="sub"><b>Every card in that row is a different length and every footer sits on the same
+  line.</b> That is <span class="mono">.lw-card-grid</span> stretching the row plus
+  <span class="mono">margin-top:auto</span> on the foot — not a fixed height, which would clip the
+  longest card the moment copy changed.</p>
+<p class="sub"><b>A card that lifts is a control</b>, so
+  <span class="mono">.lw-card-interactive</span> carries all four affordances together: pointer cursor,
+  a 2px lift with <span class="mono">shadow-md</span>, a press that returns the lift, and a
+  <span class="mono">:focus-visible</span> ring that switches to the brand-400 tier on dark grounds,
+  where the 500 ring disappears. Anything less is clickable to a mouse and invisible to a keyboard. The
+  lift stands down under <span class="mono">prefers-reduced-motion</span>.</p>
+<p class="sub"><b>Selection is an inset ring</b>
+  (<span class="mono">.is-selected</span> / <span class="mono">[aria-selected]</span>), not a border
+  swap — a 1.5px inset costs no layout, so selecting a card cannot nudge its neighbours. Chips read a
+  status family's soft tint and text tier, so they re-point on dark with no conditional; the
+  <span class="mono">neutral</span> chip carries idle, pending and draft — the states that must read
+  quiet rather than as an alert.</p>
+</div>
+</div>
+<script type="text/babel">
+const LW = window.LeanWiseDesign_f2d907;
+
+const { Button, Card, CardHead, CardTitle, CardBody, CardFoot, Chip, Eyebrow, Avatar, Skeleton, Icon } = LW;
+function Demo() {
+  return (
+    <>
+      <span className="lbl">buttons</span>
+      <div className="lw-cluster">
+        <Button variant="cta">Book a walkthrough</Button>
+        <Button>View the platform</Button>
+        <Button variant="ghost">Docs</Button>
+        <Button variant="link">Read the spec <Icon name="arrow-right" size={14} /></Button>
+        <Button loading>Saving</Button>
+        <Button variant="ghost" iconOnly aria-label="Settings"><Icon name="settings" size={17} /></Button>
+      </div>
+      <span className="lbl">eyebrow · chips · avatars</span>
+      <Eyebrow>Retrieval integrity</Eyebrow>
+      <div className="lw-cluster">
+        <Chip>indexed</Chip><Chip tone="success">passing</Chip><Chip tone="warning">stale</Chip>
+        <Chip tone="danger">failed</Chip><Chip tone="neutral">draft</Chip>
+        <Avatar name="Minh Tran" size="sm" /><Avatar name="Ana Rossi" /><Avatar name="Leanwise Ops" size="lg" />
+      </div>
+      <span className="lbl">card · skeleton</span>
+      <div className="lw-grid" style={{"--lw-grid-min":"200px"}}>
+        <Card interactive glow>
+          <CardHead><CardTitle>Contract corpus</CardTitle><Chip tone="success">live</Chip></CardHead>
+          <CardBody>1,284 documents, re-embedded nightly.</CardBody>
+          <CardFoot><span className="lw-mono" style={{fontSize:11,color:"var(--lw-fg-faint)"}}>v4 · 12m ago</span></CardFoot>
+        </Card>
+        <Card><CardHead><CardTitle>Loading</CardTitle></CardHead><Skeleton lines={3} /></Card>
+      </div>
+    </>
+  );
+}
+ReactDOM.createRoot(document.getElementById("light")).render(<Demo />);
+ReactDOM.createRoot(document.getElementById("dark")).render(<Demo />);
+
+</script></body></html>

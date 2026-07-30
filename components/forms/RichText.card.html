@@ -1,0 +1,43 @@
+<!-- @dsCard group="Forms" name="RichText" subtitle="The chrome is the system's; the editing engine is deliberately not" viewport="1000x600" -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>RichText</title>
+<link rel="stylesheet" href="../../preview/_card.css">
+<link rel="stylesheet" href="../../base.css">
+<link rel="stylesheet" href="../../marketing.css">
+<link rel="stylesheet" href="../../product.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.lbl{font-family:var(--lw-font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--lw-fg-subtle);display:block;margin-bottom:8px}
+code{font-family:var(--lw-font-mono);font-size:12px;background:var(--lw-bg-inset);padding:1px 5px;border-radius:2px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.pane{padding:20px;display:grid;gap:16px;align-content:start;border-radius:10px}
+.pane.dark{background:var(--lw-navy-deep)}.pane.dark .lbl{color:var(--lw-on-dark-3)}</style>
+</head><body><div class="card">
+<header><h1>RichText</h1>
+<p class="sub"><b>The chrome is the system's; the engine is not.</b> A toolbar and a prose surface on the type scale —
+swap TipTap or ProseMirror in underneath and the toolbar does not change, which is the only way a rich-text editor
+stops being a fork of the design system. The default surface is <code>contenteditable</code> +
+<code>execCommand</code>: honest about what it is, fine for a comment box, not for a document.</p>
+<p class="sub"><b>The toolbar is data, not markup</b>, so a product drops a control by filtering an array. Each button
+is a real control with a label and <code>aria-pressed</code>, and the surface is a
+<code>role="textbox" aria-multiline</code> — a bare contenteditable div announces nothing.</p></header>
+<div class="two"><div class="pane" id="light"></div><div class="pane dark lw-band-dark" id="dark"></div></div>
+</div>
+<script type="text/babel">
+const LW = window.LeanWiseDesign_f2d907;
+const { RichText, Field } = LW;
+function Demo(){
+  const [html,setHtml]=React.useState("<h2>Termination clause</h2><p>Either party may terminate for convenience on <strong>60 days'</strong> written notice.</p><ul><li>Rises to 90 days after the second renewal</li><li>Notice must be in writing</li></ul>");
+  return (<>
+    <Field label="Summary" help="Bold, italic, headings, lists, quote, code and links.">
+      <RichText value={html} onChange={setHtml} maxLength={600} label="Summary" />
+    </Field>
+    <div><span className="lbl">read-only — same chrome, no editing</span>
+      <RichText value="<p>Locked while the source re-indexes.</p>" readOnly label="Locked summary" />
+    </div>
+  </>);
+}
+ReactDOM.createRoot(document.getElementById("light")).render(<Demo />);
+ReactDOM.createRoot(document.getElementById("dark")).render(<Demo />);
+</script></body></html>

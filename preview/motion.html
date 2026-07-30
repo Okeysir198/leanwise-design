@@ -1,0 +1,55 @@
+<!-- @dsCard group="Motion" name="Motion" subtitle="Durations and easing — and the reduced-motion contract" width="760" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Motion</title>
+<link rel="stylesheet" href="_card.css">
+<script src="_card.js"></script>
+<style>
+  .track { position: relative; height: 10px; flex: 1; border-radius: 5px;
+           background: var(--lw-surface-3); overflow: hidden; }
+  .track > i { position: absolute; inset: 0; display: block; border-radius: 5px;
+               background: var(--lw-brand-500); transform-origin: left center;
+               animation: sweep var(--d) var(--lw-ease-out) infinite alternate; }
+  @keyframes sweep { from { transform: scaleX(.04) } to { transform: scaleX(1) } }
+  .k { font-family: var(--lw-font-mono); font-size: 10.5px; color: var(--lw-text-3); width: 108px; flex: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .track > i { animation: none; transform: scaleX(1); }
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <header>
+    <h1>Motion</h1>
+    <p class="sub">Five interaction durations, each bar animating at the token it names. Every value
+    below is a real token — never quote a duration the scale does not define.</p>
+  </header>
+  <div class="grid">
+    <div class="row" style="gap:14px"><span class="k">dur-xs · 100ms</span><span class="track" style="--d:var(--lw-dur-xs)"><i></i></span><span class="sub" style="margin:0;width:180px">micro: a hover colour swap</span></div>
+    <div class="row" style="gap:14px"><span class="k">dur-sm · 180ms</span><span class="track" style="--d:var(--lw-dur-sm)"><i></i></span><span class="sub" style="margin:0;width:180px">the default interaction</span></div>
+    <div class="row" style="gap:14px"><span class="k">dur-md · 300ms</span><span class="track" style="--d:var(--lw-dur-md)"><i></i></span><span class="sub" style="margin:0;width:180px">a panel sliding in</span></div>
+    <div class="row" style="gap:14px"><span class="k">dur-lg · 500ms</span><span class="track" style="--d:var(--lw-dur-lg)"><i></i></span><span class="sub" style="margin:0;width:180px">an editorial entrance</span></div>
+    <div class="row" style="gap:14px"><span class="k">dur-xl · 800ms</span><span class="track" style="--d:var(--lw-dur-xl)"><i></i></span><span class="sub" style="margin:0;width:180px">a slow, deliberate reveal</span></div>
+  </div>
+  <table>
+    <thead><tr><th>Easing</th><th>Use</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">ease-out</td><td>the house curve — almost everything</td></tr>
+      <tr><td class="mono">ease-emphasis</td><td>long, patient deceleration</td></tr>
+      <tr><td class="mono">ease-spring</td><td>subtle overshoot; use sparingly</td></tr>
+      <tr><td class="mono">stagger · 60ms</td><td>per-sibling reveal delay</td></tr>
+    </tbody>
+  </table>
+  <p class="sub">Ambient loops (marquee 40s, wash 32s, aurora 26/32s, caret 1.1s) are deliberately
+  <b>not</b> on this scale — their feel is calibrated to the effect, not to an interaction.</p>
+  <p class="sub">The legacy <span class="mono">--lw-duration-*</span> names still resolve, as aliases
+  onto this scale. <b>Do not remove them</b> — consumers reference them by name.</p>
+  <p class="sub">Every animation is wrapped in <code class="mono">@media (prefers-reduced-motion: reduce)</code>,
+  including the bars above — set that preference and they render complete and still. Motion is an
+  enhancement; nothing may depend on it to convey state.</p>
+</div>
+</body>
+</html>

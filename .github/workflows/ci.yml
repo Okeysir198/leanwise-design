@@ -1,0 +1,47 @@
+# The gate. `npm run check` is what a contributor runs; this adds the two that
+# need a browser, which is why they are not in the local default.
+name: check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  gates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      # Fast, no browser: token pairs, palette escapes, theme-scope completeness.
+      - name: Contrast gate
+        run: npm run check:contrast
+      - name: Token lint
+        run: npm run check:tokens
+      - name: Theme completeness
+        run: npm run check:themes
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      # Rendered ARIA. serious/critical fail; moderate/minor report and pass.
+      - name: Accessibility
+        run: npm run check:a11y
+
+      # Every card, both grounds, both densities. A missing baseline records
+      # rather than fails, so a new card does not break the first PR that adds it.
+      - name: Visual regression
+        run: npm run check:visual
+      - name: Upload visual diff
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual
+          path: .visual
+          retention-days: 14

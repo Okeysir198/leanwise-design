@@ -1,0 +1,52 @@
+<!-- @dsCard group="Colors" name="Light vs dark" subtitle="The same tokens on both grounds — brand changes tier between them, because it has to" width="760" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Light vs dark</title>
+<link rel="stylesheet" href="_card.css">
+<script src="_card.js"></script>
+</head>
+<body>
+<div class="card">
+  <header>
+    <h1>Light vs dark</h1>
+    <p class="sub">The same tokens on both grounds. Nothing here names a tier: both panes read
+    <span class="mono">--lw-brand-text</span>, and the dark pane resolves it to a different tier
+    because the token re-points, not because the markup branches.</p>
+  </header>
+  <!-- Both panes pin --lw-bg and drop the inset border because they specimen the PAGE
+       ground, not the inset `.pane` surface the other cards use. They must paint the SAME
+       role for the comparison to mean anything — pinning a named tier (--lw-navy-deep) on
+       one side and a role on the other made the pair specimen two different things, and
+       the closing figure then described a ground the card never rendered. -->
+  <div class="panes">
+    <div class="pane" style="background:var(--lw-bg);box-shadow:none">
+      <span class="lbl">light</span>
+      <div style="font-size:19px;font-weight:600;letter-spacing:-.02em">Close the compliance gap</div>
+      <div class="row">
+        <span class="sw" data-swatch="brand-500" data-ink="white" style="min-height:auto;padding:8px 12px;border-radius:6px"><b>Primary</b></span>
+        <span class="sw" data-swatch="cta-500" data-ink="navy" style="min-height:auto;padding:8px 12px;border-radius:6px"><b>CTA</b></span>
+      </div>
+      <span class="mono" style="font-size:11px;color:var(--lw-brand-text)">brand text → brand-500 ·
+        <span data-ratio="brand-text on bg"></span>:1</span>
+    </div>
+    <div class="pane dark lw-band-dark" style="background:var(--lw-bg);box-shadow:none">
+      <span class="lbl">dark</span>
+      <div style="font-size:19px;font-weight:600;letter-spacing:-.02em;color:var(--lw-fg)">Close the compliance gap</div>
+      <div class="row">
+        <span class="sw" data-swatch="brand-500" data-ink="white" style="min-height:auto;padding:8px 12px;border-radius:6px"><b>Primary</b></span>
+        <span class="sw" data-swatch="cta-500" data-ink="navy" style="min-height:auto;padding:8px 12px;border-radius:6px"><b>CTA</b></span>
+      </div>
+      <span class="mono" style="font-size:11px;color:var(--lw-brand-text)">brand text → brand-400 ·
+        <span data-ratio="brand-text on bg"></span>:1</span>
+    </div>
+  </div>
+  <p class="sub">The fills do <b>not</b> change between themes — the cyan is the cyan and the amber is
+  the amber, so their ink is theme-independent too. Only brand-as-<i>text</i> re-points: brand-500 on
+  the dark paper measures 3.31 and fails, so dark lifts it to brand-400. That re-point is mandatory,
+  not cosmetic.</p>
+</div>
+</body>
+</html>

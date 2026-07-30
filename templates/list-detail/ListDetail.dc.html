@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="List → detail → edit" description="The most common screen in any back-office: a filtered list, a detail view, an edit mode with an unsaved-changes guard, bulk actions and role-gated destructive controls." -->
+<helmet><script src="./ds-base.js"></script></helmet>
+<div class="{{ themeClass }}" data-band="{{ band }}" data-density="{{ density }}" style="height:100vh;display:flex;flex-direction:column;background:var(--lw-bg);color:var(--lw-fg);font-family:var(--lw-font-sans);overflow:hidden">
+
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.AppBar" hint-size="100%,56px" brand="LeanWise AI" crumbs="{{ crumbs }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.ThemeToggle" hint-size="72px,30px" value="{{ theme }}" onChange="{{ setTheme }}"></x-import>
+</x-import>
+
+<div style="flex:1;min-height:0;display:flex;overflow:hidden">
+
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;min-height:0;overflow:hidden">
+<div style="flex:none;display:flex;flex-direction:column;gap:12px;padding:20px 24px 12px;border-bottom:1px solid var(--lw-line)">
+<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
+<div style="display:flex;flex-direction:column;gap:4px">
+<p class="lw-eyebrow" style="margin:0">Knowledge</p>
+<h1 style="margin:0;font-size:22px;font-weight:600;letter-spacing:-.02em">Sources</h1>
+</div>
+<div style="display:flex;align-items:center;gap:8px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Segmented" hint-size="180px,32px" label="Density" options="{{ densityOptions }}" value="{{ density }}" onChange="{{ setDensity }}"></x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="130px,32px" size="sm">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="16px,16px" name="plus" size="16"></x-import>
+<span>Connect source</span>
+</x-import>
+</div>
+</div>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Toolbar" hint-size="100%,36px">
+<span class="lw-toolbar-grow">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Input" hint-size="100%,36px" size="sm" placeholder="Search sources" aria-label="Search sources" value="{{ query }}" onChange="{{ onQuery }}"></x-import>
+</span>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="90px,32px" size="sm" variant="ghost" onClick="{{ addFilter }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="15px,15px" name="filter" size="15"></x-import>
+<span>Filter</span>
+</x-import>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.FilterBar" hint-size="100%,26px" filters="{{ filters }}" onRemove="{{ removeFilter }}" onClear="{{ clearFilters }}"></x-import>
+</div>
+
+<div class="lw-scroll" style="flex:1;min-height:0;overflow:auto;padding:16px 24px 24px">
+<sc-if value="{{ hasRows }}" hint-placeholder-val="{{ true }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.DataGrid" hint-size="100%,360px" columns="{{ columns }}" rows="{{ rows }}" sort="{{ sort }}" onSort="{{ setSort }}" selectable="{{ true }}" selected="{{ selected }}" onSelectionChange="{{ setSelected }}" onRowClick="{{ openRow }}" rowHeight="{{ rowHeight }}" height="{{ 420 }}" virtualize="{{ true }}" label="Sources" selectionActions="{{ bulkActions }}"></x-import>
+<div style="margin-top:12px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Pagination" hint-size="100%,32px" page="{{ page }}" pageSize="{{ pageSize }}" total="{{ total }}" onPageChange="{{ setPage }}" onPageSizeChange="{{ setPageSize }}"></x-import>
+</div>
+</sc-if>
+<sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.StateView" hint-size="100%,240px" variant="empty" icon="search" title="No sources match those filters" description="Filters narrow the list; they never change what is indexed. Clear one to widen the search." action="{{ clearAction }}"></x-import>
+</sc-if>
+</div>
+</div>
+
+<sc-if value="{{ railOpen }}" hint-placeholder-val="{{ false }}">
+<aside style="width:380px;flex:none;display:flex;flex-direction:column;min-height:0;border-left:1px solid var(--lw-line);background:var(--lw-bg-subtle);overflow:hidden">
+<div style="flex:none;display:flex;align-items:flex-start;gap:12px;padding:16px 20px;border-bottom:1px solid var(--lw-line)">
+<span style="flex:1;min-width:0">
+<span style="display:block;font-family:var(--lw-font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--lw-fg-subtle)">Source</span>
+<span style="display:block;margin-top:4px;font-size:var(--lw-text-body);font-weight:var(--lw-fw-semibold);letter-spacing:-.014em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ detailName }}</span>
+</span>
+<button type="button" class="lw-icon-btn" aria-label="Close detail" onClick="{{ closeDetail }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="17px,17px" name="close" size="17"></x-import>
+</button>
+</div>
+<div class="lw-scroll" style="flex:1;min-height:0;overflow:auto;padding:20px;display:flex;flex-direction:column;gap:16px">
+<sc-if value="{{ editing }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Field" hint-size="100%,64px" label="Display name" help="Shown in citations and in the picker.">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Input" hint-size="100%,40px" value="{{ draftName }}" onChange="{{ onDraftName }}" aria-label="Display name"></x-import>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Field" hint-size="100%,64px" label="Owner">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Combobox" hint-size="100%,40px" options="{{ owners }}" value="{{ draftOwner }}" onChange="{{ onDraftOwner }}" label="Owner"></x-import>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Field" hint-size="100%,64px" label="Refresh schedule">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Select" hint-size="100%,40px" options="{{ schedules }}" value="{{ draftSchedule }}" onChange="{{ onDraftSchedule }}" aria-label="Refresh schedule"></x-import>
+</x-import>
+</sc-if>
+<sc-if value="{{ viewing }}" hint-placeholder-val="{{ true }}">
+<div style="display:grid;gap:12px">
+<sc-for list="{{ detailFacts }}" as="fact" hint-placeholder-count="4">
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:10px;border-bottom:1px solid var(--lw-line)">
+<span style="font-size:var(--lw-text-xs);color:var(--lw-fg-subtle)">{{ fact.k }}</span>
+<span style="font-family:var(--lw-font-mono);font-size:var(--lw-text-xs);font-variant-numeric:tabular-nums;text-align:right">{{ fact.v }}</span>
+</div>
+</sc-for>
+</div>
+<div>
+<span style="display:block;margin-bottom:8px;font-family:var(--lw-font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--lw-fg-subtle)">Recent activity</span>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.ActivityFeed" hint-size="100%,180px" items="{{ activity }}" now="{{ now }}" label="Source activity"></x-import>
+</div>
+</sc-if>
+</div>
+<div style="flex:none;display:flex;align-items:center;gap:8px;padding:12px 20px;border-top:1px solid var(--lw-line);background:var(--lw-bg)">
+<sc-if value="{{ editing }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="80px,36px" size="sm" variant="ghost" onClick="{{ cancelEdit }}">Cancel</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="110px,36px" size="sm" disabled="{{ notDirty }}" onClick="{{ saveEdit }}">{{ saveLabel }}</x-import>
+</sc-if>
+<sc-if value="{{ viewing }}" hint-placeholder-val="{{ true }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="70px,36px" size="sm" disabled="{{ cannotEdit }}" title="{{ editReason }}" onClick="{{ startEdit }}">Edit</x-import>
+<span style="flex:1"></span>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="80px,36px" size="sm" variant="danger" disabled="{{ cannotDelete }}" title="{{ deleteReason }}" onClick="{{ askDelete }}">Delete</x-import>
+</sc-if>
+</div>
+</aside>
+</sc-if>
+</div>
+
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Dialog" hint-size="440px,220px" open="{{ guardOpen }}" onClose="{{ keepEditing }}" title="Discard your changes?" description="{{ guardBody }}" footer="{{ guardFooter }}"></x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Dialog" hint-size="440px,220px" open="{{ deleteOpen }}" onClose="{{ cancelDelete }}" title="{{ deleteTitle }}" description="This removes the source and its embeddings. Queries stop returning it immediately. It cannot be undone." footer="{{ deleteFooter }}"></x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.ToastRegion" hint-size="320px,60px">{{ toasts }}</x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:820}}">
+const NAMES = ["contracts/2024", "policies/handbook", "support/tickets", "product/specs", "legal/archive", "research/notes", "sales/decks", "eng/runbooks"];
+const OWNERS = ["A. Mensah", "R. Okafor", "J. Tran", "M. Silva"];
+const ALL = Array.from({ length: 184 }, (_, i) => ({
+  id: i + 1,
+  name: NAMES[i % NAMES.length] + "/" + String(i + 1).padStart(3, "0"),
+  status: ["Indexed", "Queued", "Failed"][i % 3],
+  chunks: (i * 137) % 48000,
+  docs: (i * 7) % 1400,
+  owner: OWNERS[i % 4],
+  schedule: ["Hourly", "Daily", "Weekly", "Manual"][i % 4],
+}));
+
+// What each role may do. Hide vs. disable-with-reason: the house answer is
+// DISABLE and explain — hiding a control makes a user think the product cannot
+// do the thing at all, and they file a bug instead of asking for access.
+const CAN = {
+  admin: { edit: true, delete: true },
+  editor: { edit: true, delete: false },
+  viewer: { edit: false, delete: false },
+};
+
+class Component extends DCLogic {
+  state = {
+    theme: "light", density: "comfortable", role: "editor",
+    query: "", filters: [{ id: 1, key: "status", value: "Indexed" }],
+    sort: { key: "chunks", dir: "desc" },
+    selected: [], page: 1, pageSize: 50,
+    openId: null, editing: false, draft: null,
+    guardOpen: false, deleteOpen: false, toast: null,
+  };
+
+  now = Date.now();
+
+  filtered() {
+    const q = this.state.query.trim().toLowerCase();
+    let rows = ALL;
+    for (const f of this.state.filters) {
+      if (f.key === "status") rows = rows.filter(r => r.status === f.value);
+      if (f.key === "owner") rows = rows.filter(r => r.owner === f.value);
+    }
+    if (q) rows = rows.filter(r => r.name.toLowerCase().includes(q));
+    const { key, dir } = this.state.sort;
+    const d = dir === "asc" ? 1 : -1;
+    return [...rows].sort((a, b) => (a[key] > b[key] ? 1 : a[key] < b[key] ? -1 : 0) * d);
+  }
+
+  // Any navigation away from a dirty edit goes through the guard. One place, so
+  // there is no path that loses work — the guard is not per-button.
+  leaveEdit(then) {
+    if (this.state.editing && this.dirty()) { this.pendingLeave = then; this.setState({ guardOpen: true }); return; }
+    then();
+  }
+  dirty() {
+    const d = this.state.draft, row = this.row();
+    if (!d || !row) return false;
+    return d.name !== row.name || d.owner !== row.owner || d.schedule !== row.schedule;
+  }
+  row() { return ALL.find(r => r.id === this.state.openId) || null; }
+
+  renderVals() {
+    const s = this.state;
+    const rows = this.filtered();
+    const perms = CAN[s.role];
+    const row = this.row();
+    const start = (s.page - 1) * s.pageSize;
+    const pageRows = rows.slice(start, start + s.pageSize);
+    const R = React.createElement;
+    const B = window.LeanWiseDesign_f2d907.Button;
+    const T = window.LeanWiseDesign_f2d907.Toast;
+
+    return {
+      themeClass: s.theme === "dark" ? "dark" : "",
+      band: s.theme === "dark" ? "dark" : "light",
+      theme: s.theme,
+      setTheme: (t) => this.setState({ theme: t }),
+      density: s.density,
+      densityOptions: [{ value: "comfortable", label: "Comfortable" }, { value: "compact", label: "Compact" }],
+      setDensity: (d) => this.setState({ density: d }),
+      rowHeight: s.density === "compact" ? 32 : 44,
+      crumbs: [{ label: "Workspace", href: "#" }, { label: "Knowledge", href: "#" }, { label: "Sources" }],
+
+      query: s.query,
+      onQuery: (e) => this.setState({ query: e.target.value, page: 1 }),
+      filters: s.filters,
+      addFilter: () => this.setState(st => st.filters.some(f => f.key === "owner")
+        ? st : { filters: [...st.filters, { id: 2, key: "owner", value: "J. Tran" }], page: 1 }),
+      removeFilter: (f) => this.setState(st => ({ filters: st.filters.filter(x => x.id !== f.id), page: 1 })),
+      clearFilters: () => this.setState({ filters: [], page: 1 }),
+      clearAction: R(B, { size: "sm", onClick: () => this.setState({ filters: [], query: "", page: 1 }) }, "Clear filters"),
+
+      hasRows: rows.length > 0,
+      noResults: rows.length === 0,
+      rows: pageRows,
+      total: rows.length,
+      page: s.page, pageSize: s.pageSize,
+      setPage: (p) => this.setState({ page: p }),
+      setPageSize: (n) => this.setState({ pageSize: n, page: 1 }),
+      sort: s.sort,
+      setSort: (x) => this.setState({ sort: x }),
+      columns: [
+        { key: "name", header: "Source", width: 260, pin: true, sortable: true },
+        { key: "status", header: "Status", width: 120, render: (r) => R(window.LeanWiseDesign_f2d907.Chip,
+          { tone: r.status === "Indexed" ? "success" : r.status === "Queued" ? "neutral" : "danger" }, r.status) },
+        { key: "docs", header: "Docs", width: 90, num: true, sortable: true, render: (r) => r.docs.toLocaleString() },
+        { key: "chunks", header: "Chunks", width: 110, num: true, sortable: true, render: (r) => r.chunks.toLocaleString() },
+        { key: "owner", header: "Owner", width: 150 },
+        { key: "schedule", header: "Refresh", width: 110 },
+      ],
+      selected: s.selected,
+      setSelected: (k) => this.setState({ selected: k }),
+      // Bulk actions live in the selection bar, which replaces the toolbar. Undo
+      // over confirm for the reversible one; confirm stays for the destructive one.
+      bulkActions: R(React.Fragment, null,
+        R(B, { size: "sm", variant: "ghost", onClick: () => this.setState({ selected: [], toast: "queued" }) }, "Re-index"),
+        R(B, { size: "sm", variant: "ghost", onClick: () => this.setState({ selected: [], toast: "exported" }) }, "Export"),
+        R(B, { size: "sm", variant: "danger", onClick: () => this.setState({ deleteOpen: true }) }, "Delete")),
+
+      openRow: (r) => this.leaveEdit(() => this.setState({ openId: r.id, editing: false, draft: null })),
+      railOpen: !!row,
+      viewing: !!row && !s.editing,
+      editing: !!row && s.editing,
+      detailName: row ? row.name : "",
+      closeDetail: () => this.leaveEdit(() => this.setState({ openId: null, editing: false, draft: null })),
+      detailFacts: row ? [
+        { k: "Status", v: row.status },
+        { k: "Documents", v: row.docs.toLocaleString() },
+        { k: "Chunks", v: row.chunks.toLocaleString() },
+        { k: "Owner", v: row.owner },
+        { k: "Refresh", v: row.schedule },
+      ] : [],
+      activity: row ? [
+        { title: "Index rebuilt", when: this.now - 1000 * 60 * 26, meta: row.chunks.toLocaleString() + " chunks", icon: "check", tone: "ok" },
+        { title: "Schedule changed to " + row.schedule, when: this.now - 1000 * 60 * 60 * 30, icon: "settings" },
+        { title: row.owner + " became the owner", when: this.now - 1000 * 60 * 60 * 100, icon: "users" },
+      ] : [],
+      now: this.now,
+
+      cannotEdit: !perms.edit,
+      editReason: perms.edit ? undefined : "Editors and admins can change a source. You are a " + s.role + ".",
+      cannotDelete: !perms.delete,
+      deleteReason: perms.delete ? undefined : "Only an admin can delete a source.",
+      startEdit: () => this.setState({ editing: true, draft: row ? { name: row.name, owner: row.owner, schedule: row.schedule } : null }),
+      cancelEdit: () => this.leaveEdit(() => this.setState({ editing: false, draft: null })),
+      notDirty: !this.dirty(),
+      saveLabel: this.dirty() ? "Save changes" : "Saved",
+      saveEdit: () => {
+        const d = s.draft, r = this.row();
+        if (r && d) Object.assign(r, d);
+        this.setState({ editing: false, draft: null, toast: "saved" });
+      },
+      draftName: s.draft ? s.draft.name : "",
+      onDraftName: (e) => this.setState(st => ({ draft: { ...st.draft, name: e.target.value } })),
+      draftOwner: s.draft ? s.draft.owner : "",
+      onDraftOwner: (v) => this.setState(st => ({ draft: { ...st.draft, owner: v } })),
+      owners: OWNERS,
+      draftSchedule: s.draft ? s.draft.schedule : "",
+      onDraftSchedule: (e) => this.setState(st => ({ draft: { ...st.draft, schedule: e.target.value } })),
+      schedules: ["Hourly", "Daily", "Weekly", "Manual"],
+
+      guardOpen: s.guardOpen,
+      guardBody: "You have unsaved changes to " + (row ? row.name : "this source") + ". Leaving now discards them.",
+      keepEditing: () => this.setState({ guardOpen: false }),
+      guardFooter: R(React.Fragment, null,
+        R(B, { variant: "ghost", onClick: () => this.setState({ guardOpen: false }) }, "Keep editing"),
+        R(B, { variant: "danger", onClick: () => {
+          const go = this.pendingLeave; this.pendingLeave = null;
+          this.setState({ guardOpen: false, editing: false, draft: null }, () => go && go());
+        } }, "Discard")),
+
+      deleteOpen: s.deleteOpen,
+      deleteTitle: s.selected.length > 1 ? "Delete " + s.selected.length + " sources?" : "Delete " + (row ? row.name : "this source") + "?",
+      cancelDelete: () => this.setState({ deleteOpen: false }),
+      deleteFooter: R(React.Fragment, null,
+        R(B, { variant: "ghost", onClick: () => this.setState({ deleteOpen: false }) }, "Cancel"),
+        R(B, { variant: "danger", onClick: () => this.setState({ deleteOpen: false, selected: [], openId: null, toast: "deleted" }) }, "Delete")),
+
+      toasts: s.toast ? R(T, {
+        tone: s.toast === "deleted" ? "err" : "ok",
+        onClose: () => this.setState({ toast: null }),
+      }, s.toast === "saved" ? "Changes saved."
+        : s.toast === "queued" ? "Re-index queued. It runs in the background."
+        : s.toast === "exported" ? "Export queued — you will get an email when it is ready."
+        : "Source deleted.") : null,
+    };
+  }
+}
+</script>
+</body>
+</html>

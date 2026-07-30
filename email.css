@@ -1,0 +1,86 @@
+/* @leanwise/design — EMAIL layer
+ *
+ * A separate stylesheet, and separate for a reason worth stating: an email is not
+ * a web page with fewer features. It is a document rendered by thirty engines,
+ * several of which predate flexbox, most of which strip <link>, and one of which
+ * (Outlook on Windows) renders through Word.
+ *
+ * Three rules follow from that, and they are the opposite of the rules in app.css:
+ *
+ * 1. VALUES ARE LITERAL. Custom properties do not resolve in Outlook, and a
+ *    var() that falls back to nothing paints black on black. Every value here is
+ *    the resolved hex from tokens.css, copied deliberately — so this file is a
+ *    SECOND HOME for brand values and must be regenerated whenever the palette
+ *    moves. `lw-token-lint` skips it for exactly that reason; the contrast gate
+ *    is what guards the pairs.
+ * 2. LAYOUT IS TABLES. Not a preference — Outlook has no flex and no grid.
+ * 3. THESE CLASSES ARE A CONVENIENCE, NOT THE CONTRACT. Gmail keeps <style> in
+ *    the head; several clients do not. Ship every rule that matters INLINE on
+ *    the element as well, and treat this file as the place the values are
+ *    written down once so the inliner has something to copy.
+ *
+ * Colours, resolved from tokens.css:
+ *   brand   #0C727B   navy    #024576   navy-deep #0B1220
+ *   cta     #FCB603   ink     #0B1220   muted     #4A5567
+ *   line    #E3E8EF   surface #FFFFFF   subtle    #F6F8FA
+ */
+
+/* Client resets. Not optional: each one answers a specific client bug. */
+body { margin: 0; padding: 0; width: 100% !important; background: #F6F8FA; }
+/* Outlook and Windows Mail resize text on their own without these two. */
+body, table, td { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+table { border-collapse: collapse !important; mso-table-lspace: 0; mso-table-rspace: 0; }
+img { border: 0; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; display: block; }
+/* iOS turns dates, addresses and numbers into blue links on its own. */
+a[x-apple-data-detectors] { color: inherit !important; text-decoration: none !important; font-size: inherit !important; font-family: inherit !important; font-weight: inherit !important; line-height: inherit !important; }
+
+.lw-em-body { background: #F6F8FA; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Geist, Helvetica, Arial, sans-serif; color: #0B1220; }
+.lw-em-shell { width: 100%; max-width: 600px; margin: 0 auto; background: #FFFFFF; }
+.lw-em-pad { padding: 32px 32px 8px; }
+.lw-em-pad-b { padding: 8px 32px 32px; }
+.lw-em-head { padding: 24px 32px; background: #024576; }
+.lw-em-brand { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; color: #FFFFFF; text-decoration: none; }
+.lw-em-eyebrow { font-family: ui-monospace, "SF Mono", "Geist Mono", Menlo, Consolas, monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #4A5567; }
+.lw-em-h1 { margin: 0; font-size: 24px; line-height: 1.25; font-weight: 600; letter-spacing: -0.02em; color: #0B1220; }
+.lw-em-h2 { margin: 0; font-size: 17px; line-height: 1.35; font-weight: 600; color: #0B1220; }
+.lw-em-p { margin: 0; font-size: 15px; line-height: 1.62; color: #4A5567; }
+.lw-em-small { margin: 0; font-size: 12.5px; line-height: 1.55; color: #6B7684; }
+.lw-em-rule { height: 1px; line-height: 1px; font-size: 0; background: #E3E8EF; }
+.lw-em-panel { background: #F6F8FA; border: 1px solid #E3E8EF; border-radius: 8px; }
+.lw-em-mono { font-family: ui-monospace, "SF Mono", "Geist Mono", Menlo, Consolas, monospace; font-size: 13px; color: #0B1220; }
+
+/* Buttons are padded ANCHORS inside a table cell, never a styled <button>: a
+   button element does nothing in most clients, and a bare anchor gives a 15px
+   tap target. The cell paints the fill so Outlook has a box to fill. */
+.lw-em-btn { background: #0C727B; border-radius: 8px; }
+.lw-em-btn a { display: inline-block; padding: 13px 26px; font-size: 15px; font-weight: 600; line-height: 1; color: #FFFFFF !important; text-decoration: none; }
+/* The amber CTA takes NAVY ink — white on #FCB603 measures 1.77 and fails AA.
+   Same rule as the app: ink follows the fill's lightness, not the brand. */
+.lw-em-btn-cta { background: #FCB603; }
+.lw-em-btn-cta a { color: #0B1220 !important; }
+.lw-em-btn-ghost { background: #FFFFFF; border: 1px solid #CBD3DE; }
+.lw-em-btn-ghost a { color: #0B1220 !important; font-weight: 500; }
+
+.lw-em-foot { padding: 24px 32px 32px; }
+.lw-em-foot a { color: #0C727B; }
+
+/* One breakpoint, and it is a max-width: several clients ignore min-width queries.
+   480 is --lw-bp-sm. */
+@media only screen and (max-width: 480px) {
+  .lw-em-pad, .lw-em-pad-b, .lw-em-head, .lw-em-foot { padding-left: 20px !important; padding-right: 20px !important; }
+  .lw-em-h1 { font-size: 21px !important; }
+  .lw-em-stack { display: block !important; width: 100% !important; }
+}
+
+/* Dark mode is a REQUEST, not a guarantee — Gmail and Outlook recolour on their
+   own regardless. So the light design must survive being inverted: no white text
+   on a white-in-dark-mode surface, and every fill stated on the element. */
+@media (prefers-color-scheme: dark) {
+  .lw-em-body, .lw-em-shell { background: #0B1220 !important; }
+  .lw-em-h1, .lw-em-h2, .lw-em-mono { color: #E7ECF3 !important; }
+  .lw-em-p, .lw-em-small, .lw-em-eyebrow { color: #A8B3C2 !important; }
+  .lw-em-panel { background: #131C2B !important; border-color: #222E42 !important; }
+  .lw-em-rule { background: #222E42 !important; }
+  .lw-em-btn-ghost { background: #131C2B !important; border-color: #33415A !important; }
+  .lw-em-btn-ghost a { color: #E7ECF3 !important; }
+}

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Onboarding wizard" description="A multi-step form that validates per step, never loses work going back, resumes where you left off, and ends on a review screen that can still reach every field." -->
+<helmet><script src="./ds-base.js"></script></helmet>
+<div class="{{ themeClass }}" data-band="{{ band }}" style="min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:48px 24px;background:var(--lw-bg-subtle);color:var(--lw-fg);font-family:var(--lw-font-sans)">
+<div style="width:100%;max-width:720px;display:flex;flex-direction:column;gap:24px">
+
+<div style="display:flex;flex-direction:column;gap:6px;align-items:center;text-align:center">
+<span style="display:flex;align-items:center;gap:9px;font-size:var(--lw-text-sm);font-weight:var(--lw-fw-semibold);letter-spacing:-.012em;color:var(--lw-brand-text)"><span class="brand-mark" aria-hidden="true"></span>LeanWise AI</span>
+<h1 style="margin:6px 0 0;font-size:24px;font-weight:600;letter-spacing:-.02em">Set up your workspace</h1>
+<p style="margin:0;max-width:52ch;font-size:var(--lw-text-sm);color:var(--lw-fg-muted);line-height:1.6;text-wrap:pretty">Four steps, about three minutes. Everything is saved as you go — close the tab and you come back to the step you were on.</p>
+</div>
+
+<div style="padding:4px 8px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Stepper" hint-size="100%,64px" steps="{{ steps }}" current="{{ step }}" onStepChange="{{ goStep }}" label="Setup progress"></x-import>
+</div>
+
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Card" hint-size="100%,420px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.CardBody" hint-size="100%,360px">
+
+<sc-if value="{{ onWorkspace }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:18px">
+<div style="display:flex;flex-direction:column;gap:4px">
+<h2 style="margin:0;font-size:var(--lw-text-body);font-weight:var(--lw-fw-semibold)">Name your workspace</h2>
+<p style="margin:0;font-size:var(--lw-text-sm);color:var(--lw-fg-muted)">This is what teammates see in the switcher. You can change it later.</p>
+</div>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Field" hint-size="100%,72px" label="Workspace name" required="{{ true }}" error="{{ errName }}" help="{{ helpName }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Input" hint-size="100%,40px" value="{{ name }}" onChange="{{ setName }}" invalid="{{ hasErrName }}" placeholder="Acme Legal" aria-label="Workspace name"></x-import>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Field" hint-size="100%,72px" label="Region" help="Where documents and embeddings are stored. This one cannot be changed after setup.">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Select" hint-size="100%,40px" options="{{ regions }}" value="{{ region }}" onChange="{{ setRegion }}" aria-label="Region"></x-import>
+</x-import>
+</div>
+</sc-if>
+
+<sc-if value="{{ onSources }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:18px">
+<div style="display:flex;flex-direction:column;gap:4px">
+<h2 style="margin:0;font-size:var(--lw-text-body);font-weight:var(--lw-fw-semibold)">Add your first documents</h2>
+<p style="margin:0;font-size:var(--lw-text-sm);color:var(--lw-fg-muted)">Drop a few files to start. Connecting a live source comes later — this step just gives the index something to chew on.</p>
+</div>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.FileUpload" hint-size="100%,220px" multiple="{{ true }}" accept=".pdf,.docx,.txt" maxSize="{{ 20971520 }}" files="{{ files }}" onFiles="{{ addFiles }}" onRemove="{{ removeFile }}" title="Drop documents here"></x-import>
+</div>
+</sc-if>
+
+<sc-if value="{{ onTeam }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:18px">
+<div style="display:flex;flex-direction:column;gap:4px">
+<h2 style="margin:0;font-size:var(--lw-text-body);font-weight:var(--lw-fw-semibold)">Invite your team</h2>
+<p style="margin:0;font-size:var(--lw-text-sm);color:var(--lw-fg-muted)">Optional — you can do this any time from Settings. Invitees get read access until you change it.</p>
+</div>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Field" hint-size="100%,72px" label="Email addresses" help="Comma-separated. Nothing is sent until you finish setup.">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Textarea" hint-size="100%,88px" rows="{{ 3 }}" value="{{ invites }}" onChange="{{ setInvites }}" placeholder="rita@acme.com, jt@acme.com" aria-label="Email addresses"></x-import>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Checkbox" hint-size="100%,24px" label="Let invitees create their own sources" checked="{{ allowCreate }}" onChange="{{ setAllowCreate }}"></x-import>
+</div>
+</sc-if>
+
+<sc-if value="{{ onReview }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:18px">
+<div style="display:flex;flex-direction:column;gap:4px">
+<h2 style="margin:0;font-size:var(--lw-text-body);font-weight:var(--lw-fw-semibold)">Review and finish</h2>
+<p style="margin:0;font-size:var(--lw-text-sm);color:var(--lw-fg-muted)">Every line here jumps back to the step that owns it. A review screen you cannot act from is a receipt, not a review.</p>
+</div>
+<div style="display:grid;gap:2px">
+<sc-for list="{{ summary }}" as="s" hint-placeholder-count="4">
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid var(--lw-line)">
+<span style="font-size:var(--lw-text-sm);color:var(--lw-fg-subtle)">{{ s.k }}</span>
+<span style="display:flex;align-items:baseline;gap:12px;min-width:0">
+<span style="font-size:var(--lw-text-sm);text-align:right;overflow:hidden;text-overflow:ellipsis">{{ s.v }}</span>
+<button type="button" onClick="{{ s.edit }}" style="flex:none;border:0;background:none;padding:0;color:var(--lw-brand-text);font-size:var(--lw-text-xs);font-weight:var(--lw-fw-medium);cursor:pointer">Change</button>
+</span>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.CardFoot" hint-size="100%,64px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="80px,40px" variant="ghost" disabled="{{ atStart }}" onClick="{{ back }}">Back</x-import>
+<span style="flex:1"></span>
+<sc-if value="{{ canSkip }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="90px,40px" variant="link" onClick="{{ next }}">Skip for now</x-import>
+</sc-if>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="130px,40px" onClick="{{ next }}">{{ nextLabel }}</x-import>
+</x-import>
+</x-import>
+
+<p style="margin:0;text-align:center;font-family:var(--lw-font-mono);font-size:var(--lw-text-xs);color:var(--lw-fg-subtle)">{{ resumeNote }}</p>
+</div>
+
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.ToastRegion" hint-size="320px,60px">{{ toasts }}</x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:900,&quot;height&quot;:860}}">
+const KEY = "lw-onboarding-draft";
+const STEPS = ["Workspace", "Documents", "Team", "Review"];
+
+class Component extends DCLogic {
+  state = {
+    theme: "light",
+    step: 0,
+    // Steps the user has completed at least once. A step is only clickable in the
+    // Stepper once it is done — offering a jump to a step that has never been
+    // filled in is offering a jump into a validation error.
+    done: [],
+    touched: [],
+    name: "",
+    region: "eu-west-1",
+    files: [],
+    invites: "",
+    allowCreate: false,
+    toast: null,
+  };
+
+  // Resume is the whole reason a wizard is not one long form. Draft state is
+  // written on every change, not on step change — a tab that closes mid-step
+  // should not lose the step.
+  componentDidMount() {
+    try {
+      const raw = window.localStorage.getItem(KEY);
+      if (raw) {
+        const d = JSON.parse(raw);
+        this.setState({ ...d, toast: d.step > 0 ? "resumed" : null });
+      }
+    } catch (e) { /* a corrupt draft is not worth a crash — start clean */ }
+  }
+  persist(patch) {
+    this.setState(patch, () => {
+      const { theme, toast, ...keep } = this.state;
+      try { window.localStorage.setItem(KEY, JSON.stringify(keep)); } catch (e) {}
+    });
+  }
+
+  errorFor(step) {
+    if (step === 0 && !this.state.name.trim()) return "Give the workspace a name — teammates pick it out of a list.";
+    return null;
+  }
+
+  next() {
+    const err = this.errorFor(this.state.step);
+    // Validate on ADVANCE, not on every keystroke: an error that appears while a
+    // user is still typing the first character is an error about nothing.
+    this.persist(st => ({ touched: st.touched.includes(st.step) ? st.touched : [...st.touched, st.step] }));
+    if (err) return;
+    if (this.state.step === STEPS.length - 1) { this.finish(); return; }
+    this.persist(st => ({
+      step: st.step + 1,
+      done: st.done.includes(st.step) ? st.done : [...st.done, st.step],
+    }));
+  }
+
+  finish() {
+    try { window.localStorage.removeItem(KEY); } catch (e) {}
+    this.setState({ toast: "done", done: [0, 1, 2, 3] });
+  }
+
+  renderVals() {
+    const s = this.state;
+    const R = React.createElement;
+    const NS = window.LeanWiseDesign_f2d907;
+    const err = s.touched.includes(s.step) ? this.errorFor(s.step) : null;
+    const regionLabel = { "eu-west-1": "EU (Ireland)", "us-east-1": "US East (Virginia)", "ap-southeast-1": "Asia Pacific (Singapore)" }[s.region];
+    const inviteCount = s.invites.split(",").map(x => x.trim()).filter(Boolean).length;
+
+    return {
+      themeClass: s.theme === "dark" ? "dark" : "",
+      band: s.theme === "dark" ? "dark" : "light",
+
+      steps: STEPS.map((label, i) => ({
+        label,
+        state: s.touched.includes(i) && this.errorFor(i) && i !== s.step ? "error"
+          : i === s.step ? "current"
+          : s.done.includes(i) ? "done" : "upcoming",
+      })),
+      step: s.step,
+      goStep: (i) => this.persist({ step: i }),
+
+      onWorkspace: s.step === 0,
+      onSources: s.step === 1,
+      onTeam: s.step === 2,
+      onReview: s.step === 3,
+
+      name: s.name,
+      setName: (e) => this.persist({ name: e.target.value }),
+      errName: err || undefined,
+      hasErrName: !!err,
+      // A field shows help OR an error, never both — Field enforces it, so the
+      // help has to stand down when the error appears.
+      helpName: err ? undefined : "Letters, numbers and spaces.",
+      regions: [
+        { value: "eu-west-1", label: "EU (Ireland)" },
+        { value: "us-east-1", label: "US East (Virginia)" },
+        { value: "ap-southeast-1", label: "Asia Pacific (Singapore)" },
+      ],
+      region: s.region,
+      setRegion: (e) => this.persist({ region: e.target.value }),
+
+      files: s.files,
+      addFiles: (fs) => this.persist(st => ({
+        files: [...st.files, ...fs.map((f, i) => ({ id: Date.now() + i, name: f.name, size: f.size, state: "done" }))],
+      })),
+      removeFile: (f) => this.persist(st => ({ files: st.files.filter(x => x.id !== f.id) })),
+
+      invites: s.invites,
+      setInvites: (e) => this.persist({ invites: e.target.value }),
+      allowCreate: s.allowCreate,
+      setAllowCreate: (e) => this.persist({ allowCreate: e.target.checked }),
+
+      summary: [
+        { k: "Workspace", v: s.name || "—", edit: () => this.persist({ step: 0 }) },
+        { k: "Region", v: regionLabel, edit: () => this.persist({ step: 0 }) },
+        { k: "Documents", v: s.files.length ? s.files.length + " file" + (s.files.length > 1 ? "s" : "") : "None yet", edit: () => this.persist({ step: 1 }) },
+        { k: "Invites", v: inviteCount ? inviteCount + " address" + (inviteCount > 1 ? "es" : "") : "None", edit: () => this.persist({ step: 2 }) },
+      ],
+
+      atStart: s.step === 0,
+      back: () => this.persist(st => ({ step: Math.max(0, st.step - 1) })),
+      // Skippable steps say so. A "Next" that silently accepts nothing teaches a
+      // user that every step is optional, including the ones that are not.
+      canSkip: s.step === 1 || s.step === 2,
+      next: () => this.next(),
+      nextLabel: s.step === STEPS.length - 1 ? "Finish setup" : "Continue",
+
+      resumeNote: s.step === STEPS.length - 1
+        ? "Nothing is sent until you press Finish."
+        : "Saved automatically · step " + (s.step + 1) + " of " + STEPS.length,
+
+      toasts: s.toast ? R(NS.Toast, {
+        tone: s.toast === "done" ? "ok" : "info",
+        onClose: () => this.setState({ toast: null }),
+      }, s.toast === "resumed" ? "Picked up where you left off." : "Workspace ready. Indexing has started.") : null,
+    };
+  }
+}
+</script>
+</body>
+</html>

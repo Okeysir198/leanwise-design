@@ -1,0 +1,42 @@
+<!-- @dsCard group="Colors" name="Accent ramp" subtitle="Amber, anchored on 400 (#FBC42D). One per view. Near-complementary to the cyan, which is what keeps it an accent." width="760" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Accent ramp</title>
+<link rel="stylesheet" href="_card.css">
+<script src="_card.js"></script>
+</head>
+<body>
+<div class="card">
+  <header>
+    <h1>Accent ramp</h1>
+    <p class="sub">Amber. One per view. At 43° it sits ~144° from the logo cyan — near-complementary,
+    which is what keeps it legible as an <i>accent</i> rather than reading as a second brand color.
+    The ramp is anchored on <b>400 — <span data-hex="cta-400"></span></b>, the tier that carries amber as text on navy at
+    <span data-ratio="cta-400 on navy-deep"></span>:1; everything else is derived as a tint or shade of it. Values are read from <span class="mono">tokens.css</span> at render time.</p>
+  </header>
+  <div class="ramp">
+    <div class="sw" data-swatch="cta-soft"><b>soft</b></div>
+    <div class="sw" data-swatch="cta-300"><b>300</b></div>
+    <div class="sw" data-swatch="cta-400"><b>400 · anchor</b></div>
+    <div class="sw" data-swatch="cta-500"><b>500</b></div>
+    <div class="sw" data-swatch="cta-600"><b>600</b></div>
+  </div>
+  <p class="sub"><b>Where the anchor applies.</b> Dark themes point
+  <span class="mono">--lw-cta-text</span> (and therefore the shadcn
+  <span class="mono">--cta-on</span> / <span class="mono">text-cta-on</span> utility) at 400,
+  light themes at 700 — same role, tier chosen by ground. Code syntax highlighting uses 400 for
+  strings, tags and attribute values on the navy ground. Dark
+  <span class="mono">--lw-cta-soft</span> (#36240D) is tuned so 400 sits on it at 9.22:1.
+  400 is the single amber-as-text tier system-wide; 500 is the fill and 600 its hover.</p>
+  <p class="sub">Amber is a light fill at every usable tier, so it always takes <b>navy</b> ink —
+  the opposite of brand, which takes white. The swatches above pick their own ink by measurement,
+  so that contrast is shown rather than claimed. 500 is the CTA fill and 600 its hover — both
+  shades of the anchor. The 700 (not shown above) exists only for amber as text on white
+  (<span class="mono" data-ratio="cta-700 on bg"></span>:1); lemon at 55°+ cannot produce a 700
+  that holds AA there without turning olive.</p>
+</div>
+</body>
+</html>

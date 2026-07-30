@@ -1,0 +1,48 @@
+<!-- @dsCard group="Navigation" name="BottomNav" subtitle="Destinations only — and the home indicator reserved from a token, not a magic 34px" viewport="900x620" -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>BottomNav</title>
+<link rel="stylesheet" href="../../preview/_card.css">
+<link rel="stylesheet" href="../../base.css">
+<link rel="stylesheet" href="../../marketing.css">
+<link rel="stylesheet" href="../../product.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.lbl{font-family:var(--lw-font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--lw-fg-subtle);display:block;margin-bottom:8px}
+code{font-family:var(--lw-font-mono);font-size:12px;background:var(--lw-bg-inset);padding:1px 5px;border-radius:2px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.pane{padding:20px;display:grid;gap:16px;align-content:start;border-radius:10px}
+.pane.dark{background:var(--lw-navy-deep)}.pane.dark .lbl{color:var(--lw-on-dark-3)}</style>
+</head><body><div class="card">
+<header><h1>BottomNav</h1>
+<p class="sub"><b>Three to five destinations, never actions.</b> A tab bar that mixes "Home" with "New" teaches nobody
+where they are, and location is the one thing a tab bar exists to communicate. Past five items it warns: labels
+truncate and the bar stops being scannable.</p>
+<p class="sub"><b>The home indicator is reserved from <code>--lw-safe-bottom</code></b>, not a magic 34px — the inset is
+0 on a device without one, so the same rule is correct everywhere. <b>The 44px target comes from the bar height</b>,
+not from padding: a target that depends on padding shrinks the moment someone tightens a label.</p></header>
+<div class="two"><div class="pane" id="light"></div><div class="pane dark lw-band-dark" id="dark"></div></div>
+</div>
+<script type="text/babel">
+const LW = window.LeanWiseDesign_f2d907;
+const { BottomNav } = LW;
+const items=[
+  {value:"ask",label:"Ask",icon:"spark"},
+  {value:"sources",label:"Sources",icon:"database"},
+  {value:"activity",label:"Activity",icon:"bell",badge:3},
+  {value:"you",label:"You",icon:"user"},
+];
+function Demo(){
+  const [v,setV]=React.useState("ask");
+  return (
+    <div style={{border:"1px solid var(--lw-line)",borderRadius:12,overflow:"hidden",background:"var(--lw-bg)"}}>
+      <div style={{height:200,display:"grid",placeItems:"center",fontSize:"var(--lw-text-sm)",color:"var(--lw-fg-subtle)"}}>
+        {items.find(i=>i.value===v).label}
+      </div>
+      <BottomNav items={items} value={v} onChange={setV} />
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById("light")).render(<Demo />);
+ReactDOM.createRoot(document.getElementById("dark")).render(<Demo />);
+</script></body></html>

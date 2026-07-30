@@ -1,0 +1,126 @@
+<!-- @dsCard group="Forms" name="Controls — every state" subtitle="Each control × rest / invalid / disabled / checked, both grounds — the state axis the composition card cannot show" viewport="1000x1240" -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Control states</title>
+<link rel="stylesheet" href="../../preview/_card.css">
+<link rel="stylesheet" href="../../base.css">
+<link rel="stylesheet" href="../../marketing.css">
+<link rel="stylesheet" href="../../product.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>/* minmax(0,1fr), not 1fr: a 1fr track's min-width is auto, so it cannot shrink below
+   the content's min-content width. The bare input and textarea assert the UA intrinsic
+   width (~269px each), which floored each pane at 903px and pushed the dark pane out of
+   the card entirely — the one thing this card exists to show side by side. */
+/* Stacked, not side by side: three state columns plus a row label need the full card
+   width to stay readable. Two panes across left each control ~200px, which truncated
+   every value — and a matrix whose cells are elided is not a matrix. Light above,
+   dark below; the comparison is still one scroll-free glance. */
+.panes{grid-template-columns:minmax(0,1fr)}
+.mx{display:grid;grid-template-columns:72px repeat(4,minmax(0,1fr));gap:10px 12px;align-items:start}
+/* Scoped to the TEXT controls. The unscoped selector also hit the visually-hidden
+   native inputs inside .lw-switch / .lw-check, stretching an invisible 905px input
+   across the pane — harmless until one of those wrappers loses its clipping, at which
+   point it eats every click in the row. */
+.mx .lw-input,.mx .lw-select,.mx .lw-textarea,.mx .lw-input-group{width:100%;min-width:0}
+.mx .hd{font-family:var(--lw-font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--lw-fg-subtle);padding-top:9px}
+.pane.dark .mx .hd{color:var(--lw-on-dark-2)}.mx .hd.top{padding-top:0}</style>
+</head><body><div class="card">
+<header><h1>Controls — every state</h1>
+<p class="sub"><b>The focus column is the shipped focus state, not a repaint.</b> A card cannot hold real focus in
+seven cells at once, so each one carries <span class="mono">data-focus-demo</span> — a review hook listed alongside
+<span class="mono">:focus-visible</span> in the same declaration block, so the specimen cannot drift from the control.
+On a control with a neutral ground the ring is a <b>solid</b> 2px brand band via
+<span class="mono">box-shadow</span>: v1.1 replaced a 3px halo at 30&percnt; alpha, which had no defined edge and so read
+as a glow rather than as the brand colour &mdash; and being translucent it mixed with whatever sat behind it, so one ring
+looked like a different colour per surface. v1.1 also fixed the case behind this column: clicking a
+<span class="mono">&lt;select&gt;</span> does not match <span class="mono">:focus-visible</span> in Chromium, so a
+mouse-focused control fell through to the <i>browser's</i> outline &mdash; the UA's colour, not the brand's.</p>
+<p class="sub"><b>Brand-filled controls take a detached ring instead</b>, and this is the rule to copy: a checked switch,
+a checked checkbox or radio, and the filled buttons use
+<span class="mono">outline: 2px solid</span> with <span class="mono">outline-offset: 2px</span>, not a band. A brand ring
+flush against a brand fill is 1:1 against it &mdash; it reads as the control getting 2px bigger, not as focus. The gap has
+to be <i>transparent</i> so it shows whichever ground the control actually sits on, which is why this is an outline and not
+a second box-shadow stop: a transparent shadow layer paints nothing, it does not mask the layer beneath, and a gap painted
+from <span class="mono">--lw-bg</span> would show a white sliver on every <span class="mono">bg-subtle</span> surface.
+Two mechanisms, one look &mdash; a 2px brand ring either way; only the brand-filled cases need the gap.</p>
+<p class="sub"><b>Invalid is an attribute, not a class.</b> Every cell in the invalid column carries
+<span class="mono">aria-invalid="true"</span> and nothing else — the colour is bound to the attribute a screen reader
+reads, so the visual and the announced state cannot desync. Inspect one and there is no <span class="mono">.error</span>
+to find.</p>
+<p class="sub"><b>Disabled is the only column allowed to fail contrast</b>, and it must still look disabled on navy —
+which is why it is painted from <span class="mono">--lw-bg-muted</span> / <span class="mono">--lw-fg-faint</span>, roles
+that every dark scope re-points, rather than from a fixed grey tier.</p>
+<p class="sub"><b>Segmented takes two to four mutually exclusive options</b> — and it is the same control the theme
+toggle renders, because a two-or-three-state exclusive choice is one control, not two. v1.0 deleted the second
+implementation of it.</p>
+<p class="sub"><b>Every control here reaches 44px on a coarse pointer</b> without changing its desktop height, so density
+and the touch minimum are not forced to be the same number. The label is part of the Switch and Checkbox, so the text is
+a hit target too.</p></header>
+<div class="panes"><div class="pane" id="light"></div><div class="pane dark lw-band-dark" id="dark"></div></div>
+</div>
+<script type="text/babel">
+const { Input, Select, Textarea, Switch, Checkbox, Segmented, InputGroup, Stack, Icon } = window.LeanWiseDesign_f2d907;
+function Matrix({ ns }) {
+  const [seg, setSeg] = React.useState("hybrid");
+  const id = (s) => ns + "-" + s;
+  return (
+    <div className="mx">
+      <span className="hd top"></span><span className="hd top">rest</span>
+      <span className="hd top">focus</span>
+      <span className="hd top">invalid</span><span className="hd top">disabled</span>
+
+      <span className="hd">input</span>
+      <Input defaultValue="acme-legal" aria-label="Workspace" />
+      <Input defaultValue="acme-legal" data-focus-demo="" aria-label="Workspace, focused" />
+      <Input defaultValue="lw_live_8f2a…" invalid aria-label="Key" />
+      <Input defaultValue="acme-legal" disabled aria-label="Workspace, locked" />
+
+      <span className="hd">group</span>
+      <InputGroup prefix={<Icon name="search" />} suffix="⌘K"><input placeholder="Find…" aria-label="Search" /></InputGroup>
+      <InputGroup prefix={<Icon name="search" />} data-focus-demo=""><input placeholder="Find…" aria-label="Search, focused" /></InputGroup>
+      <InputGroup prefix={<Icon name="search" />}><input placeholder="Find…" aria-invalid="true" aria-label="Search" /></InputGroup>
+      <InputGroup prefix={<Icon name="search" />}><input placeholder="Find…" disabled aria-label="Search" /></InputGroup>
+
+      <span className="hd">select</span>
+      <Select options={["Semantic", "Hybrid", "Keyword"]} aria-label="Mode" />
+      <Select options={["Semantic", "Hybrid", "Keyword"]} data-focus-demo="" aria-label="Mode, focused" />
+      <Select options={["Semantic", "Hybrid"]} invalid aria-label="Mode" />
+      <Select options={["Semantic", "Hybrid"]} disabled aria-label="Mode" />
+
+      <span className="hd">textarea</span>
+      <Textarea rows={2} defaultValue="Answer only from the retrieved passages, and cite each one." aria-label="Prompt" />
+      <Textarea rows={2} defaultValue="Answer only from the retrieved passages, and cite each one." data-focus-demo="" aria-label="Prompt, focused" />
+      <Textarea rows={2} defaultValue="" placeholder="Required" invalid aria-label="Prompt" />
+      <Textarea rows={2} defaultValue="Locked by policy." disabled aria-label="Prompt" />
+
+      <span className="hd">switch</span>
+      <Switch label="Cite every claim" defaultChecked id={id("s1")} />
+      <Switch label="Focused" defaultChecked data-focus-demo="" id={id("s1f")} />
+      <Switch label="Off" id={id("s2")} />
+      <Switch label="Locked on" defaultChecked disabled id={id("s3")} />
+
+      <span className="hd">checkbox</span>
+      <Checkbox label="Re-embed on upload" defaultChecked id={id("c1")} />
+      <Checkbox label="Focused" defaultChecked data-focus-demo="" id={id("c1f")} />
+      <Checkbox label="Unchecked" id={id("c2")} />
+      <Checkbox label="Locked" defaultChecked disabled id={id("c3")} />
+
+      <span className="hd">radio</span>
+      <Checkbox radio name={id("r")} label="Strict grounding" defaultChecked />
+      <Checkbox radio name={id("rf")} label="Focused" defaultChecked data-focus-demo="" />
+      <Checkbox radio name={id("r")} label="Permissive" />
+      <Checkbox radio name={id("r2")} label="Unavailable" disabled />
+
+      <span className="hd">segmented</span>
+      <div style={{ gridColumn: "2 / -1" }}>
+        <Segmented label="Retrieval mode" value={seg} onChange={setSeg}
+          options={[{ value: "semantic", label: "Semantic" }, { value: "hybrid", label: "Hybrid" }, { value: "keyword", label: "Keyword" }]} />
+      </div>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById("light")).render(<Matrix ns="l" />);
+ReactDOM.createRoot(document.getElementById("dark")).render(<Matrix ns="d" />);
+</script></body></html>

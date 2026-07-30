@@ -1,3 +1,4 @@
+@import url("./fonts.css");
 /* =============================================================================
    LeanWise Design System v4 — the canonical token core.
    THE single source of truth for every LeanWiseAI product. Do not copy this
@@ -20,7 +21,7 @@
 
    ## Ink follows the fill's LIGHTNESS, not the brand
 
-   Measured, not assumed (bin/lw-contrast-check.mjs re-verifies on every build):
+   Measured, not assumed (the contrast gate re-verifies on every build):
 
                               white ink   navy ink #0B1220
      cyan  #0C727B (brand) ..    5.66 ✓       3.31 ✗
@@ -59,25 +60,38 @@
   --lw-text-h3: clamp(20px, 2vw, 27px);
   --lw-text-lead: clamp(16px, 1.2vw, 19px);
   --lw-text-body: 16px;
+  /* The control-scale body size. .lw-btn-lg referenced this with a 15px fallback
+     for four releases while the token itself did not exist — the fallback worked,
+     so nothing failed loudly and nothing got fixed. Declared now at the value the
+     fallback was already producing, so this is a no-op on render. */
+  --lw-text-base: 15px;
   --lw-text-sm: 14px;
   --lw-text-xs: 12.5px;
   --lw-text-eyebrow: 12px;
 
-  --lw-fw-regular: 400;
-  --lw-fw-medium: 500;
-  --lw-fw-semibold: 600;
-  --lw-fw-bold: 700;
+  --lw-fw-regular: 400; /* @kind other */
+  --lw-fw-medium: 500; /* @kind other */
+  --lw-fw-semibold: 600; /* @kind other */
+  --lw-fw-bold: 700; /* @kind other */
 
-  --lw-lh-tight: 1.05;
-  --lw-lh-snug: 1.2;
-  --lw-lh-normal: 1.55;
-  --lw-lh-relaxed: 1.7;
+  --lw-lh-tight: 1.05; /* @kind other */
+  --lw-lh-snug: 1.2; /* @kind other */
+  --lw-lh-normal: 1.55; /* @kind other */
+  --lw-lh-relaxed: 1.7; /* @kind other */
 
-  --lw-tracking-tighter: -0.035em;
-  --lw-tracking-tight: -0.022em;
-  --lw-tracking-normal: 0;
-  --lw-tracking-wide: 0.02em;
-  --lw-tracking-eyebrow: 0.14em;
+  --lw-tracking-tighter: -0.035em; /* @kind other */
+  --lw-tracking-tight: -0.022em; /* @kind other */
+  --lw-tracking-normal: 0; /* @kind other */
+  --lw-tracking-wide: 0.02em; /* @kind other */
+  --lw-tracking-eyebrow: 0.14em; /* @kind other */
+  /* Letterspaced capitals need their word spaces OPENED, not closed. Tracking
+     adds one step to every gap, which multiplies a ~0.2px letter gap several
+     times over while barely moving an already-wide space — so the word boundary
+     stops out-ranking the letter boundary and the phrase reads as loose rubble.
+     This is the letterpress rule: when you letterspace caps, open the words too.
+     +0.10em holds word white at roughly 5x letter white across the whole
+     0.10-0.14em tracking band this system uses. */
+  --lw-word-spacing-caps: 0.10em; /* @kind other */
 
   /* ---- Brand teal-cyan --------------------------------------------------- */
   /* Sampled from the MARK, not from a stock palette and not by eye.
@@ -103,14 +117,14 @@
      "Navy ink on brand" was correct while brand-500 was a LIGHT cyan where white
      scored 2.56. The premise changed, not the reasoning — navy on the new 500 is
      3.31. CTA and the status fills are still light, so they keep navy ink. */
-  --lw-brand-50-c:  186.0 68.0% 96.0%;   /* #EEFAFC */
-  --lw-brand-100-c: 185.5 66.0% 90.0%;   /* #D5F3F6 */
-  --lw-brand-200-c: 185.0 64.0% 80.0%;   /* #ABE7ED */
-  --lw-brand-300-c: 184.5 60.0% 64.0%;   /* #6CD2DA — on navy paper 10.58 */
-  --lw-brand-400-c: 183.5 62.0% 47.5%;   /* #2EBBC4 — teal as TEXT on dark (8.04); the deck's dark accent */
-  --lw-brand-500-c: 185.0 82.0% 26.5%;   /* #0C727B — THE brand color. WHITE ink, 5.66 */
-  --lw-brand-600-c: 186.0 86.0% 21.0%;   /* #075A64 — hover fill (white ink 7.91) */
-  --lw-brand-700-c: 187.0 88.0% 16.5%;   /* #05464F — deepest tier, on white 10.52 */
+  --lw-brand-50-c: 186.0 68.0% 96.0%; /* @kind color */   /* #EEFAFC */
+  --lw-brand-100-c: 185.5 66.0% 90.0%; /* @kind color */   /* #D5F3F6 */
+  --lw-brand-200-c: 185.0 64.0% 80.0%; /* @kind color */   /* #ABE7ED */
+  --lw-brand-300-c: 184.5 60.0% 64.0%; /* @kind color */   /* #6CD2DA — on navy paper 10.58 */
+  --lw-brand-400-c: 183.5 62.0% 47.5%; /* @kind color */   /* #2EBBC4 — teal as TEXT on dark (8.04); the deck's dark accent */
+  --lw-brand-500-c: 185.0 82.0% 26.5%; /* @kind color */   /* #0C727B — THE brand color. WHITE ink, 5.66 */
+  --lw-brand-600-c: 186.0 86.0% 21.0%; /* @kind color */   /* #075A64 — hover fill (white ink 7.91) */
+  --lw-brand-700-c: 187.0 88.0% 16.5%; /* @kind color */   /* #05464F — deepest tier, on white 10.52 */
 
   --lw-brand-50:  hsl(var(--lw-brand-50-c));
   --lw-brand-100: hsl(var(--lw-brand-100-c));
@@ -121,23 +135,59 @@
   --lw-brand-600: hsl(var(--lw-brand-600-c));
   --lw-brand-700: hsl(var(--lw-brand-700-c));
 
-  /* ---- Navy — dark surfaces, heading ink, depth ------------------------- */
-  /* Also re-sampled from the mark. The old ramp was 4° too blue and, more
-     visibly, 31 SATURATION POINTS flat — the mark's navy is close to pure
-     #024576, where v0.7.x rendered a washed slate. */
-  --lw-navy-700-c:  205.2 97.0% 23.5%;   /* #024576 — the mark's navy end */
-  --lw-navy-900-c:  207.0 96.0% 15.0%;   /* #022A4B */
-  --lw-navy-deep-c: 208.0 95.0% 10.5%;   /* #011C34 */
+  /* ---- Navy — dark surfaces, heading ink, depth -------------------------
+     ONE navy family, not two. Through v0.9.x this ramp ran 205→208° at 95–97%
+     saturation — sampled straight off the mark — while the dark theme's paper
+     sat at 220° / 47%. That is 14° and ~49 saturation points apart: a dark band
+     built from navy-900 next to a card built from --lw-bg-subtle did not look
+     like one system, and it was the loudest incoherence in the palette.
+
+     The ramp now BRIDGES the mark and the paper. navy-700 stays exactly as
+     sampled (it is the artwork stop --lw-gradient-brand feeds, and the contrast
+     gate pins it at offset 0 — it may not move). 900 and deep are the tiers that
+     are actually used as GROUNDS (dark hero, .lw-section.dark, .lw-code, dark
+     panes), so they interpolate toward the paper's hue and drop chroma:
+
+         navy-700  205.2° 97%  → the mark. Artwork and hover only.
+         navy-900  213.0° 72%  → tooltips, .lw-btn-ink, dark bands.
+         navy-deep 217.0° 66%  → the full-bleed dark ground, code surface.
+         paper     220.0° 47%  → --lw-bg on dark (unchanged).
+
+     Still unmistakably navy — deep and blue, never slate — but now visibly the
+     same colour as the dark theme it sits beside. Re-measured, all still pass:
+     white on navy-900 15.75, white on navy-deep 17.94, on-dark-3 (the .lw-code
+     comment floor) 4.91, brand-400 7.71, so no consumer loses AA. */
+  --lw-navy-700-c: 205.2 97.0% 23.5%; /* @kind color */   /* #024576 — the mark's navy end, DO NOT MOVE */
+  --lw-navy-900-c: 213.0 72.0% 15.0%; /* @kind color */   /* #0B2342 — white ink 15.75 */
+  --lw-navy-deep-c: 217.0 66.0% 10.5%; /* @kind color */   /* #09172C — white ink 17.94 */
   /* The mark's own cyan end, 187.6° 88% 32% — the ONLY token here that exists
      purely for artwork, and the only one no UI rule may consume. It fits no role:
      too dark to read on the navy paper (4.06, so it cannot be the on-dark text
      tier) and too light to carry white ink (4.25, so it cannot be the fill).
      brand-500 is deliberately ~5 points darker so white ink clears AA — a
      compromise the logo does not have to make, because a logo carries no text.
-     Named rather than inlined so build-logo.py and lw-contrast-check share one
+     Named rather than inlined so the logo build and the contrast gate share one
      source of truth for the gradient stop. */
-  --lw-logo-cyan-c: 187.6 88.0% 32.0%;   /* #0A8799 */
+  --lw-logo-cyan-c: 187.6 88.0% 32.0%; /* @kind color */   /* #0A8799 */
   --lw-logo-cyan: hsl(var(--lw-logo-cyan-c));
+
+  /* ---- System chrome — Console's macOS traffic lights -------------------
+     The second and last group that exists outside the palette, for the same
+     reason as --lw-logo-cyan: these are quotations of someone else's artwork,
+     not colours of ours. Console draws a browser frame, and macOS's window
+     controls are those three colours — running them through the brand ramp
+     would make the frame stop reading as a browser, which is the entire point
+     of the motif. Named rather than inlined so lw-token-lint's no-raw-hex rule
+     needs no exemption: the exception is now declared here, where a reviewer
+     sees it, instead of being three literals buried in a component rule.
+     No UI rule may consume them, and no contrast pair applies — a 12px dot
+     carries no text and states nothing on its own. */
+  --lw-sys-mac-red-c: 4.0 100% 67.5%; /* @kind color */    /* #FF5F57 */
+  --lw-sys-mac-amber-c: 41.0 99.0% 61.0%; /* @kind color */ /* #FEBC2E */
+  --lw-sys-mac-green-c: 135.0 66.0% 47.0%; /* @kind color */ /* #28C840 */
+  --lw-sys-mac-red: hsl(var(--lw-sys-mac-red-c));
+  --lw-sys-mac-amber: hsl(var(--lw-sys-mac-amber-c));
+  --lw-sys-mac-green: hsl(var(--lw-sys-mac-green-c));
 
   --lw-navy-700: hsl(var(--lw-navy-700-c));
   --lw-navy-900: hsl(var(--lw-navy-900-c));
@@ -151,11 +201,13 @@
      near-complementary, so it reads as a deliberate accent rather than a second
      brand color. Lemon (55°+) goes flat against navy paper and can't produce a
      700 tier that holds AA as text on white without turning olive. */
-  --lw-cta-400-c:  44.0 96.0% 58.0%;     /* #FBC42D — amber as TEXT on dark (11.62) */
-  --lw-cta-500-c:  43.0 98.0% 50.0%;     /* #FCB603 — the CTA fill (navy ink, 10.54) */
-  --lw-cta-600-c:  38.0 95.0% 44.0%;     /* #DB8D06 — hover (navy ink, 6.97) */
-  --lw-cta-soft-c: 46.0 100%  90.0%;     /* #FFF3CC */
-  --lw-cta-700-c:  30.0 88.0% 27.0%;     /* #814508 — amber as TEXT on white (7.53) */
+  --lw-cta-300-c: 45.0 97.0% 70.0%; /* @kind color */     /* #FDDA69 — tint above the anchor */
+  --lw-cta-400-c: 44.0 96.0% 58.0%; /* @kind color */     /* #FBC42D — ANCHOR of the ramp; amber as TEXT on dark (11.62) */
+  --lw-cta-500-c: 43.0 98.0% 50.0%; /* @kind color */     /* #FCB603 — the CTA fill (navy ink, 10.54) */
+  --lw-cta-600-c: 38.0 95.0% 44.0%; /* @kind color */     /* #DB8D06 — hover (navy ink, 6.97) */
+  --lw-cta-soft-c: 46.0 100%  90.0%; /* @kind color */     /* #FFF3CC */
+  --lw-cta-700-c: 30.0 88.0% 27.0%; /* @kind color */     /* #814508 — amber as TEXT on white (7.53) */
+  --lw-cta-300: hsl(var(--lw-cta-300-c));
   --lw-cta-400: hsl(var(--lw-cta-400-c));
   --lw-cta-500: hsl(var(--lw-cta-500-c));
   --lw-cta-600: hsl(var(--lw-cta-600-c));
@@ -163,46 +215,66 @@
   --lw-cta-soft: hsl(var(--lw-cta-soft-c));
 
   /* ---- Neutrals — surfaces --------------------------------------------- */
-  --lw-surface-0-c: 0     0%    100%;    /* #FFFFFF */
-  --lw-surface-1-c: 220   23.1% 97.5%;   /* #F7F8FA */
-  --lw-surface-2-c: 210   16.7% 95.3%;   /* #F1F3F5 */
-  --lw-surface-3-c: 217.5 22.2% 92.9%;   /* #E9ECF1 */
+  --lw-surface-0-c: 0     0%    100%; /* @kind color */    /* #FFFFFF */
+  --lw-surface-1-c: 220   23.1% 97.5%; /* @kind color */   /* #F7F8FA */
+  --lw-surface-2-c: 210   16.7% 95.3%; /* @kind color */   /* #F1F3F5 */
+  --lw-surface-3-c: 217.5 22.2% 92.9%; /* @kind color */   /* #E9ECF1 */
   --lw-surface-0: hsl(var(--lw-surface-0-c));
   --lw-surface-1: hsl(var(--lw-surface-1-c));
   --lw-surface-2: hsl(var(--lw-surface-2-c));
   --lw-surface-3: hsl(var(--lw-surface-3-c));
 
   /* ---- Neutrals — text -------------------------------------------------- */
-  --lw-text-1-c: 220   48.8% 8.4%;       /* #0B1220 — also the ink on every brand fill */
-  --lw-text-2-c: 215   13.8% 34.1%;      /* #4B5563 */
-  --lw-text-3-c: 220    8.9% 46.1%;      /* #6B7280 — 4.83 on white, the muted floor */
-  --lw-text-4-c: 217.9 10.6% 64.9%;      /* #9CA3AF — decorative only, fails AA as body text */
+  --lw-text-1-c: 220   48.8% 8.4%; /* @kind color */       /* #0B1220 — also the ink on every brand fill */
+  --lw-text-2-c: 215   13.8% 34.1%; /* @kind color */      /* #4B5563 */
+  --lw-text-3-c: 220    8.9% 46.1%; /* @kind color */      /* #6B7280 — 4.83 on white, the muted floor */
+  --lw-text-4-c: 217.9 10.6% 64.9%; /* @kind color */      /* #9CA3AF — decorative only, fails AA as body text */
   --lw-text-1: hsl(var(--lw-text-1-c));
   --lw-text-2: hsl(var(--lw-text-2-c));
   --lw-text-3: hsl(var(--lw-text-3-c));
   --lw-text-4: hsl(var(--lw-text-4-c));
 
   /* ---- Borders ---------------------------------------------------------- */
-  --lw-border-1-c: 220 13.0% 91.0%;      /* #E5E7EB */
-  --lw-border-2-c: 216 12.2% 83.9%;      /* #D1D5DB */
+  --lw-border-1-c: 220 13.0% 91.0%; /* @kind color */      /* #E5E7EB */
+  --lw-border-2-c: 216 12.2% 83.9%; /* @kind color */      /* #D1D5DB */
   --lw-border-1: hsl(var(--lw-border-1-c));
   --lw-border-2: hsl(var(--lw-border-2-c));
 
   /* ---- Semantic status -------------------------------------------------- */
-  --lw-success-c:      142.1 76.2% 36.3%;  /* #16A34A  fill */
-  --lw-success-soft-c: 140.6 84.2% 92.5%;  /* #DCFCE7  chip tint */
-  --lw-warning-c:      32.1  94.6% 43.7%;  /* #D97706  fill */
-  --lw-warning-soft-c: 48.0  96.5% 88.8%;  /* #FEF3C7  chip tint */
-  --lw-danger-c:       0     72.2% 50.6%;  /* #DC2626  fill — the one fill that takes WHITE ink */
-  --lw-danger-soft-c:  0     93.3% 94.1%;  /* #FEE2E2  chip tint */
+  --lw-success-c: 142.1 76.2% 36.3%; /* @kind color */  /* #16A34A  fill */
+  --lw-success-soft-c: 140.6 84.2% 92.5%; /* @kind color */  /* #DCFCE7  chip tint */
+  /* Amber family, but its own value — never an alias of a cta tier. A mid lightness
+     on a 38° hue reads brown; ~6° toward orange at full chroma keeps it clean
+     rather than muddy, and separates it from the CTA by HUE instead of by tier. */
+  --lw-warning-c: 37.0  98.0% 50.0%; /* @kind color */  /* #FA9C02  fill — 7.17 with navy ink */
+  --lw-warning-soft-c: 48.0  96.5% 88.8%; /* @kind color */  /* #FEF3C7  chip tint */
+  --lw-danger-c: 0     72.2% 50.6%; /* @kind color */  /* #DC2626  fill — the one fill that takes WHITE ink */
+  --lw-danger-soft-c: 0     93.3% 94.1%; /* @kind color */  /* #FEE2E2  chip tint */
+  /* The fourth status. Not "info": info would want a blue, and every blue in this
+     system already means brand or link. Neutral is the state a row is in before it
+     is anything — idle, pending, draft, not-run — and it must NOT read as an alert. */
+  --lw-neutral-c: 215.0 25.0% 34.0%; /* @kind color */  /* #414F65  fill — white ink */
+  --lw-neutral-soft-c: 213.0 30.0% 95.0%; /* @kind color */  /* #EEF2F7  chip tint */
 
   /* Status AS TEXT. These must clear AA on BOTH the page (white) and their own soft
      tint, because a badge is text on the tint. The lighter -700 shades (#15803D,
      #B45309) clear white at 5.02 but only reach ~3.1 on the tint — so the darker
      -800s are the real floor. This is why fill and text are separate tokens. */
-  --lw-success-text-c: 142.8 64.2% 24.1%;  /* #166534 — 7.13 on white, 6.49 on tint */
-  --lw-warning-text-c: 22.7  82.5% 31.4%;  /* #92400E — 7.09 on white, 6.37 on tint */
-  --lw-danger-text-c:  0     73.7% 41.8%;  /* #B91C1C — 6.47 on white, 5.30 on tint */
+  --lw-success-text-c: 142.8 64.2% 24.1%; /* @kind color */  /* #166534 — 7.13 on white, 6.49 on tint */
+  --lw-warning-text-c: 25.0  92.0% 28.0%; /* @kind color */  /* #8A3F05 — 7.46 on white, 6.64 on tint */
+  --lw-danger-text-c: 0     73.7% 41.8%; /* @kind color */  /* #B91C1C — 6.47 on white, 5.30 on tint */
+  --lw-neutral-text-c: 215.0 30.0% 26.0%; /* @kind color */  /* #2E3B54 — 10.4 on white, 9.8 on tint */
+  --lw-neutral: hsl(var(--lw-neutral-c));
+  --lw-neutral-soft: hsl(var(--lw-neutral-soft-c));
+  /* The *-text tiers deliberately have NO derived colour — channels only. They
+     are LIGHT-theme tiers: measured on the dark paper, --lw-success-text is 2.63,
+     warning 2.42, danger 2.89, neutral 1.75. A derived name invites
+     color: var(--lw-success-text) in a component that will one day render on dark,
+     and it would fail there silently. The theme-aware role is --lw-success-on,
+     which every dark scope re-points — README rule 2, "use the role token, not a
+     tier". v1.0 derived --lw-neutral-text alone, which is how the trap got noticed:
+     one of four is never a decision. */
+  --lw-neutral-on: hsl(var(--lw-neutral-on-c));
   --lw-success: hsl(var(--lw-success-c));
   --lw-warning: hsl(var(--lw-warning-c));
   --lw-danger:  hsl(var(--lw-danger-c));
@@ -216,23 +288,93 @@
   --lw-on-dark-fill: rgba(255, 255, 255, 0.06);
 
   /* ---- Space (4px base) -------------------------------------------------
-     Named by PIXEL VALUE, deliberately. The old system had --s-6 = 24px in the
-     marketing site and --s6 = 32px in rag-service: same-looking name, different
-     value. Ambiguity is what broke the last design system. --lw-space-24 is 24px. */
+     Named by PIXEL VALUE, deliberately: --lw-space-24 is 24px, always. An index
+     name (--s-6) states nothing and two of them can silently disagree. */
   --lw-space-4: 4px;    --lw-space-8: 8px;    --lw-space-12: 12px;
   --lw-space-16: 16px;  --lw-space-20: 20px;  --lw-space-24: 24px;
   --lw-space-32: 32px;  --lw-space-40: 40px;  --lw-space-48: 48px;
   --lw-space-64: 64px;  --lw-space-80: 80px;  --lw-space-96: 96px;
 
+  /* ---- Density ------------------------------------------------------------
+     A SECOND, semantic layer that consumes the literal scale above. It exists
+     because the rule that makes the space scale good — `--lw-space-24` is 24px,
+     always — is exactly what stops density being a remap of it: re-pointing
+     `--lw-space-24` to 16px in compact mode would break the one promise the
+     token's name makes. So the px scale stays literal and is what you COMPOSE
+     from; these tokens are what components PAINT with, and only these move.
+
+     Density SCOPES, it does not globalise. `data-density` goes on a workspace,
+     a grid, a rail — the same way brandVars() goes on the workspace and not on
+     <html>. A dashboard is compact in its table and comfortable in its filter
+     bar, and that is correct, not an inconsistency.
+
+     Marketing bands never opt in — a hero has one size. The SHARED controls that
+     happen to live in lw.css (.lw-btn) do read these, because a button in a compact
+     toolbar is a control, not a band. */
+  --lw-control-h-sm: 32px;
+  --lw-control-h-md: 40px;   /* the default control face: input, select, group */
+  --lw-control-h-lg: 48px;
+  --lw-field-pad-x: var(--lw-space-12);
+  --lw-row-h: 44px;          /* table/grid row */
+  --lw-cell-pad-y: var(--lw-space-12);
+  --lw-card-pad: var(--lw-space-24);
+  --lw-stack-gap: var(--lw-space-16);
+}
+
+/* Compact. Desktop-only by intent: it buys rows on a workbench, and the coarse-pointer
+   block below takes the minimums BACK on touch, so compact can never ship a target
+   under 44px no matter which scope it is applied to. */
+[data-density="compact"] {
+  --lw-control-h-sm: 28px;
+  --lw-control-h-md: 32px;
+  --lw-control-h-lg: 40px;
+  --lw-field-pad-x: var(--lw-space-8);
+  --lw-row-h: 32px;
+  --lw-cell-pad-y: var(--lw-space-8);
+  --lw-card-pad: var(--lw-space-16);
+  --lw-stack-gap: var(--lw-space-12);
+}
+/* Named so a consumer can be explicit rather than relying on the absence of an
+   attribute — [data-density="comfortable"] must be able to UNDO an inherited compact. */
+[data-density="comfortable"] {
+  --lw-control-h-sm: 32px;
+  --lw-control-h-md: 40px;
+  --lw-control-h-lg: 48px;
+  --lw-field-pad-x: var(--lw-space-12);
+  --lw-row-h: 44px;
+  --lw-cell-pad-y: var(--lw-space-12);
+  --lw-card-pad: var(--lw-space-24);
+  --lw-stack-gap: var(--lw-space-16);
+}
+/* The 44px touch minimum OVERRIDES density, never the other way round. It is set on
+   the TOKEN rather than on each control, so it reaches every control that reads the
+   token — including the ones not written yet. Density is a desktop affordance; the
+   hand does not get smaller because a table wants more rows. */
+@media (pointer: coarse) {
+  :root, [data-density="compact"], [data-density="comfortable"] {
+    --lw-control-h-sm: 44px;
+    --lw-control-h-md: 44px;
+    --lw-control-h-lg: 48px;
+    --lw-row-h: 48px;
+  }
+}
+
+:root {
+
   /* ---- Radii ------------------------------------------------------------ */
-  --lw-radius-sm: 6px;
-  --lw-radius-md: 10px;   /* the default: shadcn --radius maps here */
-  --lw-radius-lg: 14px;
-  --lw-radius-xl: 20px;
-  --lw-radius-2xl: 28px;
+  /* A 4px-based geometric scale, so every tier lands on the spacing grid and the
+     concentric rule (inner = outer − padding) always resolves to another tier.
+     Tight radii on controls read as software; the soft tiers are for surfaces. */
+  --lw-radius-xs: 2px;    /* hairline chips, tags, code marks */
+  --lw-radius-sm: 4px;    /* inputs, checkboxes, small controls */
+  --lw-radius-md: 8px;    /* the default: buttons, fields — shadcn --radius maps here */
+  --lw-radius-lg: 12px;   /* cards, popovers */
+  --lw-radius-xl: 16px;   /* panels, modals */
+  --lw-radius-2xl: 24px;  /* full-bleed sections, hero surfaces */
   --lw-radius-pill: 999px;
 
   /* ---- Elevation (navy-tinted, not neutral black) ------------------------
+
      A five-step scale. Hairline (xs) is the faintest lift — a 1px ground line
      that separates a surface from the page without casting. xl is a floating
      popover/command-menu shadow. Navy-tinted so shadows read as depth on a
@@ -242,7 +384,15 @@
   --lw-shadow-md: 0 6px 20px -8px rgba(11, 37, 69, 0.14), 0 1px 2px rgba(11, 37, 69, 0.05);
   --lw-shadow-lg: 0 24px 56px -22px rgba(11, 37, 69, 0.22), 0 2px 6px rgba(11, 37, 69, 0.06);
   --lw-shadow-xl: 0 32px 64px -24px rgba(11, 37, 69, 0.30), 0 4px 12px rgba(11, 37, 69, 0.08);
-  --lw-focus-ring: 0 0 0 3px hsl(var(--lw-brand-500-c) / 0.30);
+  /* A SOLID 2px brand ring, not a translucent halo. At 30% alpha the old ring was
+     a wash of the brand hue with no defined edge, so focus read as a glow rather
+     than as the brand colour — and on a tinted ground the wash mixed with
+     whatever sat behind it, so one ring looked like a different colour per
+     surface. Solid means it is the brand at every size, on every ground. */
+  --lw-focus-ring: 0 0 0 2px var(--lw-brand-500); /* @kind color */
+  /* The error equivalent, so an invalid control’s ring is a token rather than
+     one alpha value repeated at four call sites. */
+  --lw-focus-ring-danger: 0 0 0 2px var(--lw-danger-on); /* @kind color */
   /* Soft brand halo for hover-glow surfaces (v0.3.2). */
   --lw-brand-glow: 0 8px 24px -6px hsl(var(--lw-brand-500-c) / 0.25);
 
@@ -252,42 +402,52 @@
      existing consumer keeps working — do not remove them. Ambient loops
      (aurora/marquee/wash/etc.) are longer than any interaction; their tokens
      live just below and are referenced by name from lw.css. */
-  --lw-dur-xs: 100ms;   /* micro: a hover color swap                */
-  --lw-dur-sm: 180ms;   /* the default interaction                   */
-  --lw-dur-md: 300ms;   /* a panel sliding in                        */
-  --lw-dur-lg: 500ms;   /* an editorial entrance / first-paint rise  */
-  --lw-dur-xl: 800ms;   /* a slow, deliberate reveal                 */
+  --lw-dur-xs: 100ms; /* @kind other */   /* micro: a hover color swap                */
+  --lw-dur-sm: 180ms; /* @kind other */   /* the default interaction                   */
+  --lw-dur-md: 300ms; /* @kind other */   /* a panel sliding in                        */
+  --lw-dur-lg: 500ms; /* @kind other */   /* an editorial entrance / first-paint rise  */
+  --lw-dur-xl: 800ms; /* @kind other */   /* a slow, deliberate reveal                 */
 
-  --lw-ease-out:      cubic-bezier(0.22, 1, 0.36, 1);   /* the house curve */
-  --lw-ease-in:       cubic-bezier(0.4, 0, 1, 1);
-  --lw-ease-in-out:   cubic-bezier(0.4, 0, 0.2, 1);
-  --lw-ease-emphasis: cubic-bezier(0.16, 1, 0.3, 1);    /* long, patient decel */
-  --lw-ease-spring:   cubic-bezier(0.34, 1.56, 0.64, 1);  /* subtle overshoot */
-  --lw-stagger: 60ms;  /* per-sibling reveal delay */
+  --lw-ease-out: cubic-bezier(0.22, 1, 0.36, 1); /* @kind other */   /* the house curve */
+  --lw-ease-in: cubic-bezier(0.4, 0, 1, 1); /* @kind other */
+  --lw-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1); /* @kind other */
+  --lw-ease-emphasis: cubic-bezier(0.16, 1, 0.3, 1); /* @kind other */    /* long, patient decel */
+  --lw-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* @kind other */  /* subtle overshoot */
+  --lw-stagger: 60ms; /* @kind other */ /* per-sibling reveal delay */
 
   /* Ambient / loop durations — longer than any interaction, named per-effect so
      the timing is grep-able from lw.css. Kept bespoke (not on the xs→xl scale)
      because their feel is calibrated to the effect, not to an interaction. */
-  --lw-dur-pulse:    1.8s;   /* .lw-pill.live dot blink            */
-  --lw-dur-caret:    1.1s;   /* .lw-console-caret blink            */
-  --lw-dur-dash:     1.2s;   /* .lw-flow-line drift                */
-  --lw-dur-shine:    700ms;  /* .lw-shine one-shot sweep           */
-  --lw-dur-marquee:  40s;    /* .lw-logo-rail.marquee loop         */
-  --lw-dur-wash:     32s;    /* .lw-wash drift                     */
-  --lw-dur-aurora-a: 26s;    /* .lw-aurora::before                 */
-  --lw-dur-aurora-b: 32s;    /* .lw-aurora::after                  */
-  --lw-dur-vt-old:   160ms;  /* view-transition old snapshot fade  */
-  --lw-dur-vt-new:   220ms;  /* view-transition new snapshot fade  */
+  --lw-dur-pulse: 1.8s; /* @kind other */   /* .lw-pill.live dot blink            */
+  --lw-dur-caret: 1.1s; /* @kind other */   /* .lw-console-caret blink            */
+  --lw-dur-dash: 1.2s; /* @kind other */   /* .lw-flow-line drift                */
+  --lw-dur-shine: 700ms; /* @kind other */  /* .lw-shine one-shot sweep           */
+  --lw-dur-marquee: 40s; /* @kind other */    /* .lw-logo-rail.marquee loop         */
+  --lw-dur-wash: 32s; /* @kind other */    /* .lw-wash drift                     */
+  --lw-dur-aurora-a: 26s; /* @kind other */    /* .lw-aurora::before                 */
+  --lw-dur-aurora-b: 32s; /* @kind other */    /* .lw-aurora::after                  */
+  --lw-dur-vt-old: 160ms; /* @kind other */  /* view-transition old snapshot fade  */
+  --lw-dur-vt-new: 220ms; /* @kind other */  /* view-transition new snapshot fade  */
 
   /* Legacy aliases — DO NOT REMOVE. Consumers reference these by name; they
      now point onto the scale above. --lw-duration-fast was 120ms and maps to
      --lw-dur-xs (100ms); the 20ms on a fast interaction is imperceptible and
      the new scale is the contract going forward. */
-  --lw-duration-fast: var(--lw-dur-xs);
-  --lw-duration:      var(--lw-dur-sm);
-  --lw-duration-slow: var(--lw-dur-lg);
+  --lw-duration-fast: var(--lw-dur-xs); /* @kind other */
+  --lw-duration: var(--lw-dur-sm); /* @kind other */
+  --lw-duration-slow: var(--lw-dur-lg); /* @kind other */
 
   /* ---- Layout ----------------------------------------------------------- */
+  /* Breakpoints. Declared as tokens so the value is quotable in a review even
+     though @media cannot read a custom property — every hand-written query in
+     lw.css/app.css uses one of these five numbers and nothing else. Container
+     queries take the same numbers, and CAN read them. */
+  --lw-bp-sm: 480px; /* @kind other */   /* phone */
+  --lw-bp-md: 768px; /* @kind other */   /* tablet portrait */
+  --lw-bp-lg: 1024px; /* @kind other */  /* tablet landscape / small laptop */
+  --lw-bp-xl: 1280px; /* @kind other */  /* desktop */
+  --lw-bp-2xl: 1536px; /* @kind other */ /* wide desktop */
+
   --lw-col-max: 1200px;
   /* App-shell max (the `container` class). Wider than --lw-col-max on purpose:
      the shell holds grids and rails, --lw-col-max is the reading column. Two
@@ -304,45 +464,54 @@
      overlay 90   dropdowns, popovers, the mobile drawer.
      toast   100  transient notifications.
      modal   110  blocking dialogs, focus-trap surfaces. Always the top. */
-  --lw-z-base: 0;
-  --lw-z-raised: 10;
-  --lw-z-nav: 50;
-  --lw-z-sticky: 60;
-  --lw-z-overlay: 90;
-  --lw-z-toast: 100;
-  --lw-z-modal: 110;
+  --lw-z-base: 0; /* @kind other */
+  --lw-z-raised: 10; /* @kind other */
+  --lw-z-nav: 50; /* @kind other */
+  --lw-z-sticky: 60; /* @kind other */
+  --lw-z-overlay: 90; /* @kind other */
+  --lw-z-toast: 100; /* @kind other */
+  --lw-z-modal: 110; /* @kind other */
 
   /* ---- Resolved role tokens (LIGHT) -------------------------------------
      These are what apps actually consume. The dark block below re-points the
      same names, so a component never branches on theme. */
-  --lw-bg-c:          var(--lw-surface-0-c);
-  --lw-bg-subtle-c:   var(--lw-surface-1-c);
-  --lw-bg-muted-c:    var(--lw-surface-2-c);
-  --lw-bg-inset-c:    var(--lw-surface-3-c);
-  --lw-fg-c:          var(--lw-text-1-c);
-  --lw-fg-muted-c:    var(--lw-text-2-c);
-  --lw-fg-subtle-c:   var(--lw-text-3-c);
-  --lw-fg-faint-c:    var(--lw-text-4-c);
-  --lw-line-c:        var(--lw-border-1-c);
-  --lw-line-strong-c: var(--lw-border-2-c);
+  --lw-bg-c: var(--lw-surface-0-c); /* @kind color */
+  --lw-bg-subtle-c: var(--lw-surface-1-c); /* @kind color */
+  --lw-bg-muted-c: var(--lw-surface-2-c); /* @kind color */
+  --lw-bg-inset-c: var(--lw-surface-3-c); /* @kind color */
+  --lw-fg-c: var(--lw-text-1-c); /* @kind color */
+  --lw-fg-muted-c: var(--lw-text-2-c); /* @kind color */
+  --lw-fg-subtle-c: var(--lw-text-3-c); /* @kind color */
+  --lw-fg-faint-c: var(--lw-text-4-c); /* @kind color */
+  --lw-line-c: var(--lw-border-1-c); /* @kind color */
+  --lw-line-strong-c: var(--lw-border-2-c); /* @kind color */
 
   /* Brand-as-text (links, active labels). Since v0.8.0 brand-500 IS readable on
      white (5.66), so this is the same colour as the fill — the three-way
      fill/text/ink split collapses to two for brand. Kept as its own name because
      dark re-points it (to brand-400) and consumers reference the role, not the tier. */
-  --lw-brand-text-c:   var(--lw-brand-500-c);
-  --lw-cta-text-c:     var(--lw-cta-700-c);
-  --lw-success-on-c:   var(--lw-success-text-c);
-  --lw-warning-on-c:   var(--lw-warning-text-c);
-  --lw-danger-on-c:    var(--lw-danger-text-c);
+  --lw-brand-text-c: var(--lw-brand-500-c); /* @kind color */
+  --lw-cta-text-c: var(--lw-cta-700-c); /* @kind color */
+  --lw-success-on-c: var(--lw-success-text-c); /* @kind color */
+  --lw-warning-on-c: var(--lw-warning-text-c); /* @kind color */
+  --lw-danger-on-c: var(--lw-danger-text-c); /* @kind color */
+  --lw-neutral-on-c: var(--lw-neutral-text-c); /* @kind color */
 
   /* Ink that sits ON a fill. The brand fill is DARK since v0.8.0, so it takes
      WHITE (5.66; navy would be 3.31). CTA amber and the status fills are still
-     light, so they keep navy — the split is by fill lightness, not by brand. */
-  --lw-on-brand-c: var(--lw-surface-0-c);    /* white — the brand fill is dark */
-  --lw-on-cta-c:   var(--lw-text-1-c);       /* navy — amber is a LIGHT fill */
-  --lw-on-status-c: var(--lw-text-1-c);      /* navy — success/warning fills */
-  --lw-on-danger-c: var(--lw-surface-0-c);   /* white */
+     light, so they keep navy — the split is by fill lightness, not by brand.
+
+     These four are LITERAL triples, not var(--lw-text-1-c) / var(--lw-surface-0-c)
+     as they were through v1.0. The derived --lw-on-cta was already theme-safe by
+     accident: it is substituted at :root, so it froze to the light palette. The
+     CHANNEL was not. A Tailwind consumer composing hsl(var(--lw-on-cta-c)) inside
+     a dark scope re-resolved text-1 to near-white and put 1.77 ink on the amber —
+     the exact failure the comment above says the split exists to prevent. A fill
+     that does not change with the theme cannot take an ink that does. */
+  --lw-on-brand-c: 0 0% 100%; /* @kind color */             /* white — the brand fill is dark */
+  --lw-on-cta-c: 220 48.8% 8.4%; /* @kind color */          /* navy — amber is a LIGHT fill */
+  --lw-on-status-c: 220 48.8% 8.4%; /* @kind color */       /* navy — success/warning fills */
+  --lw-on-danger-c: 0 0% 100%; /* @kind color */            /* white */
 
   --lw-bg:        hsl(var(--lw-bg-c));
   --lw-bg-subtle: hsl(var(--lw-bg-subtle-c));
@@ -363,6 +532,7 @@
      --lw-fg here would flip to near-white on dark and put white on #FCB603 (1.77). */
   --lw-on-brand:  hsl(var(--lw-on-brand-c));
   --lw-on-cta:    hsl(var(--lw-on-cta-c));
+  --lw-on-status: hsl(var(--lw-on-status-c));
   --lw-on-danger: hsl(var(--lw-on-danger-c));
 
   /* Brand tints — for chip backgrounds and hairlines keyed to the brand. */
@@ -390,35 +560,37 @@
   color-scheme: dark;
 
   /* Navy-based dark ramp. Cards lift UP (lighter) rather than sinking. */
-  --lw-bg-c:          220   48.8% 8.4%;    /* #0B1220 paper */
-  --lw-bg-subtle-c:   221.4 46.0% 12.4%;   /* #111A2E surface — cards/popovers */
-  --lw-bg-muted-c:    221.1 45.2% 16.5%;   /* #17233D */
-  --lw-bg-inset-c:    221.1 45.2% 16.5%;
-  --lw-fg-c:          215   33.3% 92.9%;   /* #E7ECF3 */
-  --lw-fg-muted-c:    218.7 21.7% 72.0%;   /* #A8B3C7 — 8.86 on paper */
-  --lw-fg-subtle-c:   218.5 17.5% 56.3%;   /* #7C8AA3 — 5.37 on paper */
-  --lw-fg-faint-c:    218.5 17.5% 46.0%;
-  --lw-line-c:        220.5 38.7% 21.8%;   /* #22304D */
-  --lw-line-strong-c: 220.5 38.7% 28.0%;
+  --lw-bg-c: 220   48.8% 8.4%; /* @kind color */    /* #0B1220 paper */
+  --lw-bg-subtle-c: 221.4 46.0% 12.4%; /* @kind color */   /* #111A2E surface — cards/popovers */
+  --lw-bg-muted-c: 221.1 45.2% 16.5%; /* @kind color */   /* #17233D */
+  --lw-bg-inset-c: 221.1 45.2% 16.5%; /* @kind color */
+  --lw-fg-c: 215   33.3% 92.9%; /* @kind color */   /* #E7ECF3 */
+  --lw-fg-muted-c: 218.7 21.7% 72.0%; /* @kind color */   /* #A8B3C7 — 8.86 on paper */
+  --lw-fg-subtle-c: 218.5 17.5% 56.3%; /* @kind color */   /* #7C8AA3 — 5.37 on paper */
+  --lw-fg-faint-c: 218.5 17.5% 46.0%; /* @kind color */
+  --lw-line-c: 220.5 38.7% 21.8%; /* @kind color */   /* #22304D */
+  --lw-line-strong-c: 220.5 38.7% 28.0%; /* @kind color */
 
   /* Brand AS TEXT must lighten on dark. brand-500 stays a fine FILL on dark, but
      AS TEXT on the paper it is 3.31 — it FAILS. brand-400 reaches 8.04 and is the
      only tier that passes, which is why this re-point is mandatory, not cosmetic.
      (Through v0.9.0 this comment read "7.52 — fine … brand-400 reaches 10.06";
      both numbers were wrong and the first inverted the conclusion.) */
-  --lw-brand-text-c: var(--lw-brand-400-c);
-  --lw-cta-text-c: var(--lw-cta-400-c);
-  --lw-success-on-c: 158.1 64.4% 51.6%;    /* #34D399 */
-  --lw-warning-on-c: 43.3  96.4% 56.3%;    /* #FBBF24 */
-  --lw-danger-on-c:  0     90.6% 70.8%;    /* #F87171 — 6.77 on paper */
+  --lw-brand-text-c: var(--lw-brand-400-c); /* @kind color */
+  --lw-cta-text-c: var(--lw-cta-400-c); /* @kind color */
+  --lw-success-on-c: 158.1 64.4% 51.6%; /* @kind color */    /* #34D399 */
+  --lw-warning-on-c: var(--lw-cta-400-c); /* @kind color */    /* #FBC42D — the amber anchor */
+  --lw-danger-on-c: 0     90.6% 70.8%; /* @kind color */    /* #F87171 — 6.77 on paper */
+  --lw-neutral-on-c: 214.0 22.0% 72.0%; /* @kind color */    /* #AAB6C8 — 8.1 on paper */
 
   /* The soft tints MUST be re-pointed for dark. Left at their light values, a
      success badge renders #34D399 text on #DCFCE7 — contrast 1.75, invisible.
      (Shipped exactly that for one build; the contrast gate now covers these pairs.) */
-  --lw-success-soft-c: 153.3 47.4% 11.2%;  /* #0F2A1E — ink lands at 7.97 */
-  --lw-warning-soft-c: 38.9  67.3% 10.8%;  /* #2E2109 — 9.40 */
-  --lw-danger-soft-c:  0     53.2% 15.1%;  /* #3B1212 — 5.93 */
-  --lw-cta-soft-c:     34.0  62.0% 13.0%;  /* #36240D — cta-400 on it 9.22 */
+  --lw-success-soft-c: 153.3 47.4% 11.2%; /* @kind color */  /* #0F2A1E — ink lands at 7.97 */
+  --lw-warning-soft-c: 38.9  67.3% 10.8%; /* @kind color */  /* #2E2109 — 9.40 */
+  --lw-danger-soft-c: 0     53.2% 15.1%; /* @kind color */  /* #3B1212 — 5.93 */
+  --lw-neutral-soft-c: 215.0 30.0% 15.0%; /* @kind color */  /* #1A2331 — ink lands at 7.6 */
+  --lw-cta-soft-c: 34.0  62.0% 13.0%; /* @kind color */  /* #36240D — cta-400 on it 9.22 */
 
   /* Navy-tinted shadows are invisible on a navy ground: go black, and lean on
      the hairline border for elevation instead. */
@@ -432,85 +604,112 @@
 
 /* System preference, unless the user has explicitly chosen light. */
 @media (prefers-color-scheme: dark) {
-  :root:not(.light):not([data-theme="light"]) {
+  :root {
     color-scheme: dark;
-    --lw-bg-c:          220   48.8% 8.4%;
-    --lw-bg-subtle-c:   221.4 46.0% 12.4%;
-    --lw-bg-muted-c:    221.1 45.2% 16.5%;
-    --lw-bg-inset-c:    221.1 45.2% 16.5%;
-    --lw-fg-c:          215   33.3% 92.9%;
-    --lw-fg-muted-c:    218.7 21.7% 72.0%;
-    --lw-fg-subtle-c:   218.5 17.5% 56.3%;
-    --lw-fg-faint-c:    218.5 17.5% 46.0%;
-    --lw-line-c:        220.5 38.7% 21.8%;
-    --lw-line-strong-c: 220.5 38.7% 28.0%;
-    --lw-brand-text-c:  var(--lw-brand-400-c);
-    --lw-cta-text-c:  var(--lw-cta-400-c);
-    --lw-success-on-c:  158.1 64.4% 51.6%;
-    --lw-warning-on-c:  43.3  96.4% 56.3%;
-    --lw-danger-on-c:   0     90.6% 70.8%;
+    --lw-bg-c: 220   48.8% 8.4%; /* @kind color */
+    --lw-bg-subtle-c: 221.4 46.0% 12.4%; /* @kind color */
+    --lw-bg-muted-c: 221.1 45.2% 16.5%; /* @kind color */
+    --lw-bg-inset-c: 221.1 45.2% 16.5%; /* @kind color */
+    --lw-fg-c: 215   33.3% 92.9%; /* @kind color */
+    --lw-fg-muted-c: 218.7 21.7% 72.0%; /* @kind color */
+    --lw-fg-subtle-c: 218.5 17.5% 56.3%; /* @kind color */
+    --lw-fg-faint-c: 218.5 17.5% 46.0%; /* @kind color */
+    --lw-line-c: 220.5 38.7% 21.8%; /* @kind color */
+    --lw-line-strong-c: 220.5 38.7% 28.0%; /* @kind color */
+    --lw-brand-text-c: var(--lw-brand-400-c); /* @kind color */
+    --lw-cta-text-c: var(--lw-cta-400-c); /* @kind color */
+    --lw-success-on-c: 158.1 64.4% 51.6%; /* @kind color */
+    --lw-warning-on-c: var(--lw-cta-400-c); /* @kind color */
+    --lw-danger-on-c: 0     90.6% 70.8%; /* @kind color */
+    --lw-neutral-on-c: 214.0 22.0% 72.0%; /* @kind color */
     /* Soft chip tints must re-point in EVERY dark form. A dark `-on` status text on the
        light soft tint is 1.75:1 — the exact v0.1.2 regression. The `.dark`,
        `[data-theme="dark"]` and `.lw-band-dark` blocks all re-point these; this media
        query (the system-dark path) was the one that didn't, so a badge rendered at 1.75
        for any visitor whose OS preferred dark and who hadn't set an explicit theme. */
-    --lw-success-soft-c: 153.3 47.4% 11.2%;  /* #0F2A1E — ink lands at 7.97 */
-    --lw-warning-soft-c: 38.9  67.3% 10.8%;  /* #2E2109 — 9.40 */
-    --lw-danger-soft-c:  0     53.2% 15.1%;  /* #3B1212 — 5.93 */
-    --lw-cta-soft-c:     34.0  62.0% 13.0%;  /* #36240D — cta-400 on it 9.22 */
+    --lw-success-soft-c: 153.3 47.4% 11.2%; /* @kind color */  /* #0F2A1E — ink lands at 7.97 */
+    --lw-warning-soft-c: 38.9  67.3% 10.8%; /* @kind color */  /* #2E2109 — 9.40 */
+    --lw-danger-soft-c: 0     53.2% 15.1%; /* @kind color */  /* #3B1212 — 5.93 */
+  --lw-neutral-soft-c: 215.0 30.0% 15.0%; /* @kind color */  /* #1A2331 — ink lands at 7.6 */
+    --lw-cta-soft-c: 34.0  62.0% 13.0%; /* @kind color */  /* #36240D — cta-400 on it 9.22 */
     --lw-shadow-xs: 0 1px 0 hsl(var(--lw-line-c) / 0.5);
     --lw-shadow-sm: 0 1px 0 hsl(var(--lw-line-c) / 0.6);
     --lw-shadow-md: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 8px 24px rgba(0, 0, 0, 0.45);
     --lw-shadow-lg: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 30px 60px -28px rgba(0, 0, 0, 0.85);
     --lw-shadow-xl: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 40px 80px -32px rgba(0, 0, 0, 0.9);
     --lw-focus-ring: 0 0 0 3px hsl(var(--lw-brand-400-c) / 0.35);
+    }
+  /* An explicit light choice must beat the system preference. The dark block above
+     targets :root plainly (a :not() guard there is opaque to tooling), so the light
+     values are restated here under the explicit light selectors. */
+  :root.light, :root[data-theme="light"] {
+    color-scheme: light;
+    --lw-bg-c:var(--lw-surface-0-c);
+    --lw-bg-subtle-c:var(--lw-surface-1-c);
+    --lw-bg-muted-c:var(--lw-surface-2-c);
+    --lw-bg-inset-c:var(--lw-surface-3-c);
+    --lw-fg-c:var(--lw-text-1-c);
+    --lw-fg-muted-c:var(--lw-text-2-c);
+    --lw-fg-subtle-c:var(--lw-text-3-c);
+    --lw-fg-faint-c:var(--lw-text-4-c);
+    --lw-line-c:var(--lw-border-1-c);
+    --lw-line-strong-c:var(--lw-border-2-c);
+    --lw-brand-text-c:var(--lw-brand-500-c);
+    --lw-cta-text-c:var(--lw-cta-700-c);
+    --lw-success-on-c:var(--lw-success-text-c);
+    --lw-warning-on-c:var(--lw-warning-text-c);
+    --lw-danger-on-c:var(--lw-danger-text-c);
+    --lw-neutral-on-c:var(--lw-neutral-text-c);
+    --lw-success-soft-c:140.6 84.2% 92.5%; /* @kind color */
+    --lw-warning-soft-c:48.0  96.5% 88.8%; /* @kind color */
+    --lw-danger-soft-c:0     93.3% 94.1%; /* @kind color */
+    --lw-neutral-soft-c:213.0 30.0% 95.0%; /* @kind color */
+    --lw-cta-soft-c:46.0 100%  90.0%; /* @kind color */
+    --lw-shadow-xs:0 1px 0 rgba(11, 37, 69, 0.05);
+    --lw-shadow-sm:0 1px 2px rgba(11, 37, 69, 0.06);
+    --lw-shadow-md:0 6px 20px -8px rgba(11, 37, 69, 0.14), 0 1px 2px rgba(11, 37, 69, 0.05);
+    --lw-shadow-lg:0 24px 56px -22px rgba(11, 37, 69, 0.22), 0 2px 6px rgba(11, 37, 69, 0.06);
+    --lw-shadow-xl:0 32px 64px -24px rgba(11, 37, 69, 0.30), 0 4px 12px rgba(11, 37, 69, 0.08);
+    --lw-focus-ring:0 0 0 3px hsl(var(--lw-brand-500-c) / 0.30);
   }
 }
 
 /* =============================================================================
-   Explicit theme choice (v0.6.0) — the three-layer model.
+   Theme — three layers, in cascade order.
 
-     1. `:root`           — LIGHT defaults (the values at the top of the file).
-     2. the media query    — SYSTEM dark preference, UNLESS the user explicitly
-       just above            chose light via `.light` or `[data-theme="light"]`.
-                            The `:not(.light):not([data-theme="light"])` guard is
-                            what makes those resolve to light; `.light` is a
-                            deprecated alias kept so older markup that set
-                            `class="light"` still works. They do not need their
-                            own value block — the :root light defaults persist
-                            because the dark blocks are gated out by the :not().
-     3. the block below   — an EXPLICIT `[data-theme="dark"]` choice. It carries
-                            the SAME overrides as the `.dark`/media-query blocks
-                            and is emitted LAST so cascade order favors an
-                            explicit attribute over the system preference.
+     1. `:root`          — LIGHT defaults (the values at the top of the file).
+     2. the media query  — the SYSTEM dark preference, with the light values
+        just above          restated under `.light` / `[data-theme="light"]` so an
+                           explicit light choice still wins.
+     3. the block below  — an EXPLICIT `[data-theme="dark"]` choice, emitted LAST
+                           so an attribute beats the system preference.
 
-   `.dark, [data-theme="dark"]` (further up) already covers the class + attribute
-   forms; the block below is the root-scoped, cascade-final reinforcement of the
-   attribute form. The values are identical to layer 2, so specificity is moot in
-   practice — this exists to make intent unambiguous and to keep an explicit dark
-   choice working even if the media query's `:not()` guard is ever loosened.
+   `.dark, [data-theme="dark"]` further up covers the class and attribute forms for
+   scoped subtrees; the block below is the root-scoped, cascade-final form.
    ============================================================================= */
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --lw-bg-c:          220   48.8% 8.4%;
-  --lw-bg-subtle-c:   221.4 46.0% 12.4%;
-  --lw-bg-muted-c:    221.1 45.2% 16.5%;
-  --lw-bg-inset-c:    221.1 45.2% 16.5%;
-  --lw-fg-c:          215   33.3% 92.9%;
-  --lw-fg-muted-c:    218.7 21.7% 72.0%;
-  --lw-fg-subtle-c:   218.5 17.5% 56.3%;
-  --lw-fg-faint-c:    218.5 17.5% 46.0%;
-  --lw-line-c:        220.5 38.7% 21.8%;
-  --lw-line-strong-c: 220.5 38.7% 28.0%;
-  --lw-brand-text-c:  var(--lw-brand-400-c);
-  --lw-cta-text-c:  var(--lw-cta-400-c);
-  --lw-success-on-c:  158.1 64.4% 51.6%;
-  --lw-warning-on-c:  43.3  96.4% 56.3%;
-  --lw-danger-on-c:   0     90.6% 70.8%;
-  --lw-success-soft-c: 153.3 47.4% 11.2%;
-  --lw-warning-soft-c: 38.9  67.3% 10.8%;
-  --lw-danger-soft-c:  0     53.2% 15.1%;
-  --lw-cta-soft-c:     34.0  62.0% 13.0%;  /* #36240D — cta-400 on it 9.22 */
+  --lw-bg-c: 220   48.8% 8.4%; /* @kind color */
+  --lw-bg-subtle-c: 221.4 46.0% 12.4%; /* @kind color */
+  --lw-bg-muted-c: 221.1 45.2% 16.5%; /* @kind color */
+  --lw-bg-inset-c: 221.1 45.2% 16.5%; /* @kind color */
+  --lw-fg-c: 215   33.3% 92.9%; /* @kind color */
+  --lw-fg-muted-c: 218.7 21.7% 72.0%; /* @kind color */
+  --lw-fg-subtle-c: 218.5 17.5% 56.3%; /* @kind color */
+  --lw-fg-faint-c: 218.5 17.5% 46.0%; /* @kind color */
+  --lw-line-c: 220.5 38.7% 21.8%; /* @kind color */
+  --lw-line-strong-c: 220.5 38.7% 28.0%; /* @kind color */
+  --lw-brand-text-c: var(--lw-brand-400-c); /* @kind color */
+  --lw-cta-text-c: var(--lw-cta-400-c); /* @kind color */
+  --lw-success-on-c: 158.1 64.4% 51.6%; /* @kind color */
+  --lw-warning-on-c: var(--lw-cta-400-c); /* @kind color */
+  --lw-danger-on-c: 0     90.6% 70.8%; /* @kind color */
+    --lw-neutral-on-c: 214.0 22.0% 72.0%; /* @kind color */
+  --lw-success-soft-c: 153.3 47.4% 11.2%; /* @kind color */
+  --lw-warning-soft-c: 38.9  67.3% 10.8%; /* @kind color */
+  --lw-danger-soft-c: 0     53.2% 15.1%; /* @kind color */
+  --lw-neutral-soft-c: 215.0 30.0% 15.0%; /* @kind color */
+  --lw-cta-soft-c: 34.0  62.0% 13.0%; /* @kind color */  /* #36240D — cta-400 on it 9.22 */
   --lw-shadow-xs: 0 1px 0 hsl(var(--lw-line-c) / 0.5);
   --lw-shadow-sm: 0 1px 0 hsl(var(--lw-line-c) / 0.6);
   --lw-shadow-md: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 8px 24px rgba(0, 0, 0, 0.45);
@@ -538,27 +737,29 @@
    `.lw-band-light` — forces the light surface + roles; useful for an embedded
                       light panel (e.g. a form card) inside a dark site theme.
    ============================================================================= */
-:where(.lw-band-dark) {
+:where(.lw-band-dark, [data-band="dark"]) {
   color-scheme: dark;
-  --lw-bg-c:          220   48.8% 8.4%;
-  --lw-bg-subtle-c:   221.4 46.0% 12.4%;
-  --lw-bg-muted-c:    221.1 45.2% 16.5%;
-  --lw-bg-inset-c:    221.1 45.2% 16.5%;
-  --lw-fg-c:          215   33.3% 92.9%;
-  --lw-fg-muted-c:    218.7 21.7% 72.0%;
-  --lw-fg-subtle-c:   218.5 17.5% 56.3%;
-  --lw-fg-faint-c:    218.5 17.5% 46.0%;
-  --lw-line-c:        220.5 38.7% 21.8%;
-  --lw-line-strong-c: 220.5 38.7% 28.0%;
-  --lw-brand-text-c:  var(--lw-brand-400-c);
-  --lw-cta-text-c:  var(--lw-cta-400-c);
-  --lw-success-on-c:  158.1 64.4% 51.6%;
-  --lw-warning-on-c:  43.3  96.4% 56.3%;
-  --lw-danger-on-c:   0     90.6% 70.8%;
-  --lw-success-soft-c: 153.3 47.4% 11.2%;
-  --lw-warning-soft-c: 38.9  67.3% 10.8%;
-  --lw-danger-soft-c:  0     53.2% 15.1%;
-  --lw-cta-soft-c:     34.0  62.0% 13.0%;  /* #36240D — cta-400 on it 9.22 */
+  --lw-bg-c: 220   48.8% 8.4%; /* @kind color */
+  --lw-bg-subtle-c: 221.4 46.0% 12.4%; /* @kind color */
+  --lw-bg-muted-c: 221.1 45.2% 16.5%; /* @kind color */
+  --lw-bg-inset-c: 221.1 45.2% 16.5%; /* @kind color */
+  --lw-fg-c: 215   33.3% 92.9%; /* @kind color */
+  --lw-fg-muted-c: 218.7 21.7% 72.0%; /* @kind color */
+  --lw-fg-subtle-c: 218.5 17.5% 56.3%; /* @kind color */
+  --lw-fg-faint-c: 218.5 17.5% 46.0%; /* @kind color */
+  --lw-line-c: 220.5 38.7% 21.8%; /* @kind color */
+  --lw-line-strong-c: 220.5 38.7% 28.0%; /* @kind color */
+  --lw-brand-text-c: var(--lw-brand-400-c); /* @kind color */
+  --lw-cta-text-c: var(--lw-cta-400-c); /* @kind color */
+  --lw-success-on-c: 158.1 64.4% 51.6%; /* @kind color */
+  --lw-warning-on-c: var(--lw-cta-400-c); /* @kind color */
+  --lw-danger-on-c: 0     90.6% 70.8%; /* @kind color */
+    --lw-neutral-on-c: 214.0 22.0% 72.0%; /* @kind color */
+  --lw-success-soft-c: 153.3 47.4% 11.2%; /* @kind color */
+  --lw-warning-soft-c: 38.9  67.3% 10.8%; /* @kind color */
+  --lw-danger-soft-c: 0     53.2% 15.1%; /* @kind color */
+  --lw-neutral-soft-c: 215.0 30.0% 15.0%; /* @kind color */
+  --lw-cta-soft-c: 34.0  62.0% 13.0%; /* @kind color */  /* #36240D — cta-400 on it 9.22 */
   --lw-shadow-xs: 0 1px 0 hsl(var(--lw-line-c) / 0.5);
   --lw-shadow-sm: 0 1px 0 hsl(var(--lw-line-c) / 0.6);
   --lw-shadow-md: 0 1px 0 hsl(var(--lw-line-c) / 0.6), 0 8px 24px rgba(0, 0, 0, 0.45);
@@ -569,39 +770,85 @@
   color: var(--lw-fg);
 }
 
-:where(.lw-band-light) {
+:where(.lw-band-light, [data-band="light"]) {
   color-scheme: light;
   /* Re-point onto the theme-invariant PALETTE tokens (never re-pointed by the
      dark block), so the band is light regardless of the surrounding site theme. */
-  --lw-bg-c:          var(--lw-surface-0-c);
-  --lw-bg-subtle-c:   var(--lw-surface-1-c);
-  --lw-bg-muted-c:    var(--lw-surface-2-c);
-  --lw-bg-inset-c:    var(--lw-surface-3-c);
-  --lw-fg-c:          var(--lw-text-1-c);
-  --lw-fg-muted-c:    var(--lw-text-2-c);
-  --lw-fg-subtle-c:   var(--lw-text-3-c);
-  --lw-fg-faint-c:    var(--lw-text-4-c);
-  --lw-line-c:        var(--lw-border-1-c);
-  --lw-line-strong-c: var(--lw-border-2-c);
-  --lw-brand-text-c:  var(--lw-brand-500-c);
-  --lw-cta-text-c:  var(--lw-cta-700-c);
-  --lw-success-on-c:  var(--lw-success-text-c);
-  --lw-warning-on-c:  var(--lw-warning-text-c);
-  --lw-danger-on-c:   var(--lw-danger-text-c);
+  --lw-bg-c: var(--lw-surface-0-c); /* @kind color */
+  --lw-bg-subtle-c: var(--lw-surface-1-c); /* @kind color */
+  --lw-bg-muted-c: var(--lw-surface-2-c); /* @kind color */
+  --lw-bg-inset-c: var(--lw-surface-3-c); /* @kind color */
+  --lw-fg-c: var(--lw-text-1-c); /* @kind color */
+  --lw-fg-muted-c: var(--lw-text-2-c); /* @kind color */
+  --lw-fg-subtle-c: var(--lw-text-3-c); /* @kind color */
+  --lw-fg-faint-c: var(--lw-text-4-c); /* @kind color */
+  --lw-line-c: var(--lw-border-1-c); /* @kind color */
+  --lw-line-strong-c: var(--lw-border-2-c); /* @kind color */
+  --lw-brand-text-c: var(--lw-brand-500-c); /* @kind color */
+  --lw-cta-text-c: var(--lw-cta-700-c); /* @kind color */
+  --lw-success-on-c: var(--lw-success-text-c); /* @kind color */
+  --lw-warning-on-c: var(--lw-warning-text-c); /* @kind color */
+  --lw-danger-on-c: var(--lw-danger-text-c); /* @kind color */
+  --lw-neutral-on-c: var(--lw-neutral-text-c); /* @kind color */
   /* Soft tints + shadows have no underlying palette token (they ARE the value),
      so the light triples are restated here to undo any dark-site-theme override. */
-  --lw-success-soft-c: 140.6 84.2% 92.5%;
-  --lw-warning-soft-c: 48.0  96.5% 88.8%;
-  --lw-danger-soft-c:  0     93.3% 94.1%;
-  --lw-cta-soft-c:     46.0  100%  90.0%;
+  --lw-success-soft-c: 140.6 84.2% 92.5%; /* @kind color */
+  --lw-warning-soft-c: 48.0  96.5% 88.8%; /* @kind color */
+  --lw-danger-soft-c: 0     93.3% 94.1%; /* @kind color */
+  --lw-neutral-soft-c: 213.0 30.0% 95.0%; /* @kind color */
+  --lw-cta-soft-c: 46.0  100%  90.0%; /* @kind color */
   --lw-shadow-xs: 0 1px 0 rgba(11, 37, 69, 0.05);
   --lw-shadow-sm: 0 1px 2px rgba(11, 37, 69, 0.06);
   --lw-shadow-md: 0 6px 20px -8px rgba(11, 37, 69, 0.14), 0 1px 2px rgba(11, 37, 69, 0.05);
   --lw-shadow-lg: 0 24px 56px -22px rgba(11, 37, 69, 0.22), 0 2px 6px rgba(11, 37, 69, 0.06);
   --lw-shadow-xl: 0 32px 64px -24px rgba(11, 37, 69, 0.30), 0 4px 12px rgba(11, 37, 69, 0.08);
-  --lw-focus-ring: 0 0 0 3px hsl(var(--lw-brand-500-c) / 0.30);
+  /* A SOLID 2px brand ring, not a translucent halo. At 30% alpha the old ring was
+     a wash of the brand hue with no defined edge, so focus read as a glow rather
+     than as the brand colour — and on a tinted ground the wash mixed with
+     whatever sat behind it, so one ring looked like a different colour per
+     surface. Solid means it is the brand at every size, on every ground. */
+  --lw-focus-ring: 0 0 0 2px var(--lw-brand-500); /* @kind color */
+  /* The error equivalent, so an invalid control’s ring is a token rather than
+     one alpha value repeated at four call sites. */
+  --lw-focus-ring-danger: 0 0 0 2px var(--lw-danger-on); /* @kind color */
   background: var(--lw-bg);
   color: var(--lw-fg);
+}
+
+/* -----------------------------------------------------------------------------
+   Bands must re-DERIVE the ready-to-use role colors, not just the -c channels.
+   `--lw-fg: hsl(var(--lw-fg-c))` is substituted where it is DECLARED (:root), so
+   a band that only re-points `--lw-fg-c` inherits the page-theme color and its
+   text goes unreadable. Kept out of the band blocks themselves so the dark-block
+   parity gate keeps comparing like with like.
+   -------------------------------------------------------------------------- */
+:where(.lw-band-dark, [data-band="dark"], .lw-band-light, [data-band="light"]) {
+  --lw-bg:        hsl(var(--lw-bg-c));
+  --lw-bg-subtle: hsl(var(--lw-bg-subtle-c));
+  --lw-bg-muted:  hsl(var(--lw-bg-muted-c));
+  --lw-bg-inset:  hsl(var(--lw-bg-inset-c));
+  --lw-fg:        hsl(var(--lw-fg-c));
+  --lw-fg-muted:  hsl(var(--lw-fg-muted-c));
+  --lw-fg-subtle: hsl(var(--lw-fg-subtle-c));
+  --lw-fg-faint:  hsl(var(--lw-fg-faint-c));
+  --lw-line:      hsl(var(--lw-line-c));
+  --lw-line-strong: hsl(var(--lw-line-strong-c));
+  --lw-brand-text: hsl(var(--lw-brand-text-c));
+  --lw-cta-text:   hsl(var(--lw-cta-text-c));
+  --lw-success-on:   hsl(var(--lw-success-on-c));
+  --lw-success-soft: hsl(var(--lw-success-soft-c));
+  --lw-warning-on:   hsl(var(--lw-warning-on-c));
+  --lw-warning-soft: hsl(var(--lw-warning-soft-c));
+  --lw-danger-on:    hsl(var(--lw-danger-on-c));
+  --lw-danger-soft:  hsl(var(--lw-danger-soft-c));
+  /* Neutral is a status family too. It was the one of the four the re-derive
+     block skipped, so a `draft` chip kept its light #EEF2F7 tint and dark ink on
+     navy — the only chip in the set that stayed light on a dark band, and the
+     same one-of-four omission this file warns about above. */
+  --lw-neutral:      hsl(var(--lw-neutral-c));
+  --lw-neutral-on:   hsl(var(--lw-neutral-on-c));
+  --lw-neutral-soft: hsl(var(--lw-neutral-soft-c));
+  --lw-cta-soft:     hsl(var(--lw-cta-soft-c));
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -610,4 +857,77 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* ---- Categorical chart palette ----------------------------------------------
+   Eight series colours, and they are NOT a rainbow. The first three are the
+   brand's own family (cyan, navy, amber) because a one- or two-series chart is
+   the common case and it should look like this product; the rest are spaced by
+   hue AND by lightness, so the series stay distinguishable in greyscale and to a
+   colour-blind reader — which is why a chart still needs direct labels or a
+   pattern, never colour alone (README rule 6).
+
+   Series ink is a separate decision from series fill: --lw-chart-N is the FILL.
+   Label a slice in --lw-fg, not in its own series colour. */
+:root {
+  --lw-chart-1: hsl(185.0 82.0% 26.5%); /* @kind color */  /* brand cyan */
+  --lw-chart-2: hsl(205.0 95.0% 23.5%); /* @kind color */  /* navy */
+  --lw-chart-3: hsl(44.0 97.0% 50.0%);  /* @kind color */  /* amber */
+  --lw-chart-4: hsl(258.0 52.0% 52.0%); /* @kind color */
+  --lw-chart-5: hsl(160.0 60.0% 36.0%); /* @kind color */
+  --lw-chart-6: hsl(14.0 78.0% 55.0%);  /* @kind color */
+  --lw-chart-7: hsl(196.0 55.0% 62.0%); /* @kind color */
+  --lw-chart-8: hsl(300.0 28.0% 42.0%); /* @kind color */
+  /* The plot furniture. A gridline that competes with the data is noise. */
+  --lw-chart-grid: var(--lw-line);
+  --lw-chart-axis: var(--lw-fg-subtle);
+}
+/* On the navy paper the 500-tier fills go muddy, so each series lifts a tier —
+   the same reason the focus ring switches to brand-400 on dark. */
+.dark, [data-theme="dark"], .lw-band-dark, [data-band="dark"] {
+  --lw-chart-1: hsl(185.0 62.0% 46.0%); /* @kind color */
+  --lw-chart-2: hsl(205.0 70.0% 55.0%); /* @kind color */
+  --lw-chart-3: hsl(44.0 92.0% 58.0%);  /* @kind color */
+  --lw-chart-4: hsl(258.0 62.0% 68.0%); /* @kind color */
+  --lw-chart-5: hsl(160.0 52.0% 50.0%); /* @kind color */
+  --lw-chart-6: hsl(14.0 82.0% 65.0%);  /* @kind color */
+  --lw-chart-7: hsl(196.0 60.0% 72.0%); /* @kind color */
+  --lw-chart-8: hsl(300.0 34.0% 62.0%); /* @kind color */
+}
+
+/* ---- Diff grounds -------------------------------------------------------------
+   For the accept/reject review surface. These are GROUNDS, not ink: the text on
+   top stays --lw-fg, because a green-on-green diff is unreadable at exactly the
+   moment it matters. Rule 6 applies — the gutter carries + / − / ~ as well, so
+   the diff survives greyscale and a colour-blind reader. */
+:root {
+  --lw-diff-add: hsl(140.0 60.0% 94.0%); /* @kind color */
+  --lw-diff-add-line: hsl(140.0 44.0% 74.0%); /* @kind color */
+  --lw-diff-del: hsl(0 84.0% 95.5%); /* @kind color */
+  --lw-diff-del-line: hsl(0 62.0% 82.0%); /* @kind color */
+  --lw-diff-mod: hsl(44.0 92.0% 92.0%); /* @kind color */
+  --lw-diff-mod-line: hsl(44.0 70.0% 72.0%); /* @kind color */
+}
+.dark, [data-theme="dark"], .lw-band-dark, [data-band="dark"] {
+  --lw-diff-add: hsl(150.0 46.0% 12.0%); /* @kind color */
+  --lw-diff-add-line: hsl(150.0 38.0% 28.0%); /* @kind color */
+  --lw-diff-del: hsl(0 48.0% 15.0%); /* @kind color */
+  --lw-diff-del-line: hsl(0 40.0% 32.0%); /* @kind color */
+  --lw-diff-mod: hsl(40.0 52.0% 14.0%); /* @kind color */
+  --lw-diff-mod-line: hsl(40.0 44.0% 30.0%); /* @kind color */
+}
+
+/* ---- Safe areas ------------------------------------------------------------------
+   Declared as tokens so a layout can reserve the notch and the home indicator
+   without every component writing env() itself — and so the fallback is stated
+   once. env() is 0 on a desktop browser, which is correct: the token is additive,
+   never a minimum. */
+:root {
+  --lw-safe-top: env(safe-area-inset-top, 0px); /* @kind other */
+  --lw-safe-right: env(safe-area-inset-right, 0px); /* @kind other */
+  --lw-safe-bottom: env(safe-area-inset-bottom, 0px); /* @kind other */
+  --lw-safe-left: env(safe-area-inset-left, 0px); /* @kind other */
+  /* The bar heights a mobile shell reserves. Both clear 44px before the inset. */
+  --lw-bottom-nav-h: 56px; /* @kind other */
+  --lw-mobile-bar-h: 52px; /* @kind other */
 }

@@ -1,0 +1,55 @@
+<!-- @dsCard group="Data" name="Charts, ActivityFeed" subtitle="Eight categorical series that lift a tier on dark — and the numbers behind every picture" viewport="1080x680" -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Charts</title>
+<link rel="stylesheet" href="../../preview/_card.css">
+<link rel="stylesheet" href="../../base.css">
+<link rel="stylesheet" href="../../marketing.css">
+<link rel="stylesheet" href="../../product.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.lbl{font-family:var(--lw-font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--lw-fg-subtle);display:block;margin-bottom:8px}
+code{font-family:var(--lw-font-mono);font-size:12px;background:var(--lw-bg-inset);padding:1px 5px;border-radius:2px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.pane{padding:20px;display:grid;gap:16px;align-content:start;border-radius:10px}
+.pane.dark{background:var(--lw-navy-deep)}.pane.dark .lbl{color:var(--lw-on-dark-3)}</style>
+</head><body><div class="card">
+<header><h1>Charts &amp; activity</h1>
+<p class="sub"><b>The categorical palette is not a rainbow.</b> The first three series are the brand's own family —
+cyan, navy, amber — because a one- or two-series chart is the common case and it should look like this product. The
+rest are spaced by hue <em>and</em> by lightness, so they stay apart in greyscale and to a colour-blind reader. On the
+navy paper every series lifts a tier, the same reason the focus ring switches to brand-400 on dark.</p>
+<p class="sub"><b>Every chart ships the numbers behind it</b> as a visually hidden table. A picture of data is not
+readable by a screen reader, and a one-line summary is not the data. <b>Unread is a dot plus weight</b>, never a tint
+alone — a row slightly bluer than its neighbour is not a state anyone reads.</p></header>
+<div class="two"><div class="pane" id="light"></div><div class="pane dark lw-band-dark" id="dark"></div></div>
+</div>
+<script type="text/babel">
+const LW = window.LeanWiseDesign_f2d907;
+const { BarChart, LineChart, ActivityFeed } = LW;
+const labels=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+const NOW = new Date(2026,6,30,14,0,0).getTime();
+
+function Demo(){
+  return (<>
+    <div><span className="lbl">queries by ground — stacked</span>
+      <BarChart stacked label="Queries by grounding, last 7 days" labels={labels}
+        series={[{name:"Grounded",data:[820,910,1180,1040,1320,410,300]},{name:"Ungrounded",data:[120,90,160,140,180,60,40]}]} height={170} />
+    </div>
+    <div><span className="lbl">p95 latency</span>
+      <LineChart area label="p95 latency in ms, last 7 days" labels={labels}
+        series={[{name:"Retrieval",data:[180,172,210,190,240,150,140]},{name:"Generation",data:[420,400,460,430,510,380,360]}]} height={170} />
+    </div>
+    <div><span className="lbl">activity</span>
+      <ActivityFeed now={NOW} items={[
+        {title:"Index rebuilt for contracts/2024", when:NOW-1000*60*8, meta:"41,208 chunks", icon:"check", tone:"ok", unread:true},
+        {title:"3 documents skipped — unsupported encoding", when:NOW-1000*60*95, icon:"alert", tone:"warn", unread:true},
+        {title:"R. Okafor invited J. Tran to the workspace", when:NOW-1000*60*60*26, icon:"users"},
+        {title:"Embedding failed after 2 retries", when:NOW-1000*60*60*72, icon:"x-circle", tone:"err"},
+      ]} />
+    </div>
+  </>);
+}
+ReactDOM.createRoot(document.getElementById("light")).render(<Demo />);
+ReactDOM.createRoot(document.getElementById("dark")).render(<Demo />);
+</script></body></html>

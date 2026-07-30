@@ -1,0 +1,41 @@
+<!-- @dsCard group="Colors" name="Brand ramp" subtitle="Cyan sampled from the mark. Each swatch carries the ink that actually passes on it." width="760" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brand ramp</title>
+<link rel="stylesheet" href="_card.css">
+<script src="_card.js"></script>
+</head>
+<body>
+<div class="card">
+  <header>
+    <h1>Brand ramp</h1>
+    <p class="sub">Cyan sampled from the mark. Every hex and ratio below is read from
+    <span class="mono">tokens.css</span> at render time — no value is written into this card.
+    The ink on each swatch is <b>measured, not authored</b>: whichever of white or navy scores
+    higher wins, which is the "ink follows the fill's lightness" rule demonstrating itself.</p>
+  </header>
+  <div class="ramp">
+    <div class="sw" data-swatch="brand-50"><b>50</b></div>
+    <div class="sw" data-swatch="brand-100"><b>100</b></div>
+    <div class="sw" data-swatch="brand-200"><b>200</b></div>
+    <div class="sw" data-swatch="brand-300"><b>300</b></div>
+    <div class="sw" data-swatch="brand-400"><b>400</b></div>
+    <div class="sw" data-swatch="brand-500"><b>500</b></div>
+    <div class="sw" data-swatch="brand-600"><b>600</b></div>
+    <div class="sw" data-swatch="brand-700"><b>700</b></div>
+  </div>
+  <table>
+    <thead><tr><th>Token</th><th>Role</th><th style="text-align:right">Ratio</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">brand-500</td><td>The fill — <span class="mono">--primary</span>, every default button. Measured white-on-fill.</td><td class="n" data-ratio="on-brand on brand-500"></td></tr>
+      <tr><td class="mono">brand-500</td><td>The same value as <i>ink</i>. Measured fill-on-page — it clears AA both ways, which is what lets one token be both.</td><td class="n" data-ratio="brand-500 on bg"></td></tr>
+      <tr><td class="mono">brand-400</td><td>Brand as text on dark paper (the dark theme re-points <span class="mono">brand-text</span> here).</td><td class="n" data-ratio="brand-400 on navy-deep"></td></tr>
+      <tr><td class="mono">logo-cyan</td><td><b>Artwork only.</b> Too dark for the navy paper, too light for white ink — it clears AA against neither, which is why brand-500 sits ~5 points darker.</td><td class="n" data-ratio="logo-cyan on navy-deep"></td></tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!-- @dsCard group="Data" name="DataGrid, Pagination, filters" subtitle="Sticky header, pinned and resizable columns, bulk selection, windowed rows" viewport="1120x720" -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>DataGrid</title>
+<link rel="stylesheet" href="../../preview/_card.css">
+<link rel="stylesheet" href="../../base.css">
+<link rel="stylesheet" href="../../marketing.css">
+<link rel="stylesheet" href="../../product.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.lbl{font-family:var(--lw-font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--lw-fg-subtle);display:block;margin-bottom:8px}
+code{font-family:var(--lw-font-mono);font-size:12px;background:var(--lw-bg-inset);padding:1px 5px;border-radius:2px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.pane{padding:20px;display:grid;gap:16px;align-content:start;border-radius:10px}
+.pane.dark{background:var(--lw-navy-deep)}.pane.dark .lbl{color:var(--lw-on-dark-3)}</style>
+</head><body><div class="card">
+<header><h1>DataGrid</h1>
+<p class="sub"><b>Not an extension of <code>Table</code>.</b> A grid owns its own scroll box, a sticky header, resizable
+and pinnable columns and optional windowing — merging the two would make every static table pay for machinery it never
+uses. Reach for <code>Table</code> first; reach for this when the data outgrows it.</p>
+<p class="sub"><b>The selection bar replaces the toolbar rather than stacking under it</b> — two rows of controls where
+one was is how a table jumps a row height on every click. <b>A pinned cell carries its own background</b>, because
+sticky positions a box, it does not make it opaque. Pinned columns stack, so each offset is the sum of the widths
+before it.</p></header>
+<div id="root"></div>
+</div>
+<script type="text/babel">
+const LW = window.LeanWiseDesign_f2d907;
+const { DataGrid, Pagination, FilterBar, Toolbar, Input, Button, Chip, Stack } = LW;
+
+const NAMES = ["contracts/2024","policies/handbook","support/tickets","product/specs","legal/archive","research/notes","sales/decks","eng/runbooks"];
+const rows = Array.from({length:240},(_,i)=>({
+  id:i+1, source:NAMES[i%NAMES.length]+"/"+String(i+1).padStart(3,"0"),
+  status:["Indexed","Queued","Failed"][i%3], chunks:(i*137)%48000, latency:(40+(i*7)%260)+"ms",
+  owner:["A. Mensah","R. Okafor","J. Tran","M. Silva"][i%4],
+}));
+
+function Demo(){
+  const [sort,setSort]=React.useState({key:"chunks",dir:"desc"});
+  const [sel,setSel]=React.useState([]);
+  const [page,setPage]=React.useState(1);
+  const [size,setSize]=React.useState(50);
+  const [filters,setFilters]=React.useState([{id:1,key:"status",value:"Indexed"},{id:2,key:"owner",value:"J. Tran"}]);
+  const sorted=React.useMemo(()=>{
+    const d=sort.dir==="asc"?1:-1;
+    return [...rows].sort((a,b)=> (a[sort.key]>b[sort.key]?1:a[sort.key]<b[sort.key]?-1:0)*d);
+  },[sort]);
+  const cols=[
+    {key:"source",header:"Source",width:250,pin:true,sortable:true},
+    {key:"status",header:"Status",width:120,render:r=><Chip tone={r.status==="Indexed"?"success":r.status==="Queued"?"neutral":"danger"}>{r.status}</Chip>},
+    {key:"chunks",header:"Chunks",width:110,num:true,sortable:true,render:r=>r.chunks.toLocaleString()},
+    {key:"latency",header:"p95",width:90,num:true},
+    {key:"owner",header:"Owner",width:150},
+  ];
+  return (
+    <Stack gap={12}>
+      <Toolbar>
+        <span className="lw-toolbar-grow"><Input placeholder="Search sources" aria-label="Search sources" /></span>
+        <Button variant="ghost" size="sm">Columns</Button>
+        <Button variant="ghost" size="sm">Export</Button>
+      </Toolbar>
+      <FilterBar filters={filters} onRemove={f=>setFilters(fs=>fs.filter(x=>x.id!==f.id))} onClear={()=>setFilters([])} />
+      <DataGrid columns={cols} rows={sorted} sort={sort} onSort={setSort} selectable selected={sel}
+        onSelectionChange={setSel} virtualize height={340} rowHeight={44} label="Indexed sources"
+        selectionActions={<><Button size="sm" variant="ghost">Re-index</Button><Button size="sm" variant="danger">Delete</Button></>} />
+      <Pagination page={page} pageSize={size} total={rows.length} onPageChange={setPage} onPageSizeChange={setSize} />
+    </Stack>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo />);
+</script></body></html>

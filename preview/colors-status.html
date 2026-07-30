@@ -1,0 +1,56 @@
+<!-- @dsCard group="Colors" name="Status" subtitle="Four states — success, warning (amber), danger, neutral. Each ships a fill, the ink that sits on it, a text tier and a soft tint" width="760" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Status</title>
+<link rel="stylesheet" href="_card.css">
+<script src="_card.js"></script>
+</head>
+<body>
+<div class="card">
+  <header>
+    <h1>Status</h1>
+    <p class="sub">Four states. Each ships a fill, the ink that sits on it, a text tier and a soft
+    tint; every swatch below picks its own ink by measurement.</p>
+  </header>
+  <div class="ramp">
+    <div class="sw" data-swatch="success"><b>success</b></div>
+    <div class="sw" data-swatch="warning"><b>warning</b></div>
+    <div class="sw" data-swatch="danger"><b>danger</b></div>
+    <div class="sw" data-swatch="neutral"><b>neutral</b></div>
+  </div>
+  <table>
+    <thead><tr><th>Semantic</th><th style="text-align:right">Fill ink</th><th style="text-align:right">As text on white</th><th style="text-align:right">Text on its own tint</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">success</td><td class="n" data-ratio="on-status on success"></td><td class="n" data-ratio="success-text on surface-0"></td><td class="n" data-ratio="success-text on success-soft"></td></tr>
+      <tr><td class="mono">warning</td><td class="n" data-ratio="on-status on warning"></td><td class="n" data-ratio="warning-text on surface-0"></td><td class="n" data-ratio="warning-text on warning-soft"></td></tr>
+      <tr><td class="mono">danger</td><td class="n" data-ratio="on-danger on danger"></td><td class="n" data-ratio="danger-text on surface-0"></td><td class="n" data-ratio="danger-text on danger-soft"></td></tr>
+      <tr><td class="mono">neutral</td><td class="n" data-ratio="on-danger on neutral"></td><td class="n" data-ratio="neutral-text on surface-0"></td><td class="n" data-ratio="neutral-text on neutral-soft"></td></tr>
+    </tbody>
+  </table>
+  <div class="row">
+    <span class="sw" data-swatch="success-soft" style="min-height:auto;padding:8px 12px;border-radius:6px"><b>success-soft</b></span>
+    <span class="sw" data-swatch="warning-soft" style="min-height:auto;padding:8px 12px;border-radius:6px"><b>warning-soft</b></span>
+    <span class="sw" data-swatch="danger-soft" style="min-height:auto;padding:8px 12px;border-radius:6px"><b>danger-soft</b></span>
+    <span class="sw" data-swatch="neutral-soft" style="min-height:auto;padding:8px 12px;border-radius:6px"><b>neutral-soft</b></span>
+  </div>
+  <p class="sub"><b>Warning is the house amber, separated from the CTA by hue rather than by tier.</b>
+  The fill is <b data-hex="warning"></b> — ~6° toward orange from the CTA at full chroma, so it reads as a clean
+  caution and is legible as a different color from the CTA's yellow-amber even side by side. (A mid
+  lightness on a 38° hue reads brown, which is why warning is authored rather than aliased to a cta
+  tier.) The text tier is <b data-hex="warning-text"></b>, <span class="n" data-ratio="warning-text on surface-0"></span> on white and <span class="n" data-ratio="warning-text on warning-soft"></span> on its own tint; on dark, warning text
+  falls back to the amber 400 anchor. Separating by hue is what protects the one-per-view CTA rule.</p>
+  <p class="sub"><b>The fourth state is <span class="mono">neutral</span>, not <span class="mono">info</span>.</b>
+  Info wants a blue, and every blue here is already spoken for — cyan is the brand and the link color, navy
+  is the ground. Neutral covers what the three alert states can't: idle, pending, draft, not-yet-run — the
+  most common state in a compliance table, and the one that must read as <i>quiet</i> rather than as an alert.</p>
+  <p class="sub">Success and warning are light fills and take navy ink; danger and neutral are dark and take white.
+  That split is measured per fill, not assumed from the family. The last column is the one that bites:
+  a badge is text on the <i>tint</i>, and the lighter -700 shades clear white but only reach ~3.1 on
+  their own tint — which is why the darker -800s are the real floor, and why fill and text are
+  separate tokens.</p>
+</div>
+</body>
+</html>

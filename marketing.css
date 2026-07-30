@@ -1,0 +1,966 @@
+/* @leanwise/design — MARKETING layer
+ *
+ * The parts a product app genuinely drops: page grounds, the hero, sections,
+ * feature grids, story cards, the logo rail, data-viz bars, the browser frame,
+ * scroll-driven and ambient motion, marketing stat tiles, console run controls.
+ *
+ * Requires the BASE layer (tokens → base → marketing) — the buttons, cards and
+ * chips these compositions are built from live there.
+ *
+ * All motion here is opt-in and double-gated behind
+ * `@supports (animation-timeline: …)` and `prefers-reduced-motion: no-preference`;
+ * the static state is always complete.
+ */
+
+/* ---- Sections ------------------------------------------------------------ */
+
+/* Compact rhythm (v0.4.0): the old 120px cap read as a brochure, not a lean
+   product site. One scale, two densities — nothing else sets section padding. */
+.lw-section { padding: clamp(48px, 5.5vw, 88px) 0; }
+.lw-section.tight { padding: clamp(32px, 3.5vw, 56px) 0; }
+
+/* A dark BAND on a light page — not dark mode. */
+.lw-section.dark {
+  background: var(--lw-navy-900);
+  color: var(--lw-on-dark);
+}
+.lw-section.dark .lw-lead { color: var(--lw-on-dark-2); }
+.lw-section.dark .lw-eyebrow { color: var(--lw-brand-300); }
+.lw-section.dark .lw-eyebrow::before { background: var(--lw-brand-300); }
+/* Headings and links are universal text roles on a dark band, same as .lw-lead —
+   consumers were re-deriving these locally (v0.3.1). */
+.lw-section.dark .lw-h1,
+.lw-section.dark .lw-h2,
+.lw-section.dark .lw-h3 { color: var(--lw-on-dark-1); }
+.lw-section.dark a:not(.lw-btn) { color: var(--lw-brand-400); }
+
+/* ---- Full-page ground (v0.5.1) --------------------------------------------
+   ONE background for the whole page, not a dark hero followed by a light body
+   and a dark band — that reads as three pages stapled together and the seams
+   move as you scroll. Both layers are `position: fixed`, so the composition is
+   dead still under scroll, and both are symmetric about the centre line.
+
+     <div class="dark lw-page-dark" data-band="dark">   dark ground
+     <div class="lw-page-light">                        light ground
+
+   Sections inside go transparent and role tokens re-point on their own — cards,
+   tables and inputs need no per-section overrides. The two grounds share their
+   geometry and differ only in ground colour, glow alpha and artwork ink: the
+   lattice needs a darker stroke on white (hex-lattice-ink.svg) and the mark
+   needs its gradient re-ranged per ground: hero-mark.svg lifts the stops so the
+   navy end does not vanish into navy paper, hero-mark-ink.svg widens them
+   (deep navy -> bright cyan) so the run is legible at low alpha on white. The
+   mark's own two stops sit close in value and flatten to one wash otherwise. */
+
+.lw-page-dark,
+.lw-page-light {
+  position: relative;
+  min-height: 100vh;
+  isolation: isolate;
+  /* `clip`, never `hidden`: hidden would make the wrapper a scroll container and
+     break any sticky descendant (the TopBar). Needed because .lw-hero-dark runs
+     overflow: visible here so the mark is not clipped — which also leaves the
+     travelling sheen free to push the document's scrollable width. The fixed
+     glow layers are unaffected. */
+  overflow-x: clip;
+}
+.lw-page-dark::before, .lw-page-light::before,
+.lw-page-dark::after, .lw-page-light::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+.lw-page-dark::before, .lw-page-light::before { z-index: -2; }
+/* Honeycomb on the LEFT, the mark on the RIGHT (v0.5.2) — the two brand shapes
+   hold opposite ends of the page instead of stacking on the centre line, so
+   neither sits under the copy. The lattice tiles from the left edge and its
+   mask fades right; the mark is anchored to the right edge below.
+
+   The tile is a REGULAR flat-top hexagon — all six sides equal — and the cells
+   SHARE their edges, so the layer reads as one connected comb. Two earlier
+   passes got this wrong: one stretched the hexagon to the mark's 871:1000
+   proportion, leaving the diagonals longer than the flat edges; the next rounded
+   the corners by 9 of the 30-unit side, which made each cell read as a circle
+   AND broke the comb — a generous corner pulls away from its neighbour's, so a
+   gap opens at every shared vertex. The radius is now 3.5: enough to echo the
+   mark's soft corners, small enough that the edges still meet. */
+.lw-page-dark::after, .lw-page-light::after {
+  z-index: -1;
+  background-repeat: repeat;
+  background-position: left top;
+  background-size: 132px 76.2px;
+  -webkit-mask-image: radial-gradient(50rem 38rem at 2% 4%, #000 6%, transparent 80%);
+  mask-image: radial-gradient(50rem 38rem at 2% 4%, #000 6%, transparent 80%);
+}
+
+/* Dark: a cyan crown on the centre line, a brand wash under it, and a matched
+   navy pair on both flanks. Every stop is mirrored left/right. */
+.lw-page-dark { background: var(--lw-navy-deep); color: var(--lw-on-dark); }
+.lw-page-dark::before {
+  background:
+    radial-gradient(52rem 30rem at 84% -3rem, hsl(var(--lw-logo-cyan-c) / 0.30), transparent 66%),
+    radial-gradient(76rem 48rem at 20% -4rem, hsl(var(--lw-brand-500-c) / 0.18), transparent 72%),
+    radial-gradient(40rem 40rem at -6% 46%, hsl(var(--lw-navy-700-c) / 0.45), transparent 70%);
+}
+.lw-page-dark::after { background-image: url("assets/hex-lattice.svg"); opacity: 0.36; }
+
+/* Light: the same composition at a fraction of the alpha. On white a glow has
+   to stay under ~0.12 or it stops reading as light and starts reading as a
+   coloured panel with a visible edge. The LATTICE goes the other way — it is a
+   hairline of a mid-value teal at 0.5 stroke-opacity inside the file, so on
+   white its layer alpha has to sit well above the dark ground's to land at the
+   same visible weight. */
+.lw-page-light { background: var(--lw-bg); color: var(--lw-fg); }
+.lw-page-light::before {
+  background:
+    radial-gradient(52rem 30rem at 84% -3rem, hsl(var(--lw-brand-500-c) / 0.12), transparent 66%),
+    radial-gradient(76rem 48rem at 20% -4rem, hsl(var(--lw-logo-cyan-c) / 0.08), transparent 72%),
+    radial-gradient(40rem 40rem at -6% 46%, hsl(var(--lw-brand-500-c) / 0.06), transparent 70%);
+}
+.lw-page-light::after { background-image: url("assets/hex-lattice-ink.svg"); opacity: 0.55; }
+
+/* ---- Ground motion (v0.6.0) ------------------------------------------------
+   Ambient by exception, same terms as the rest of this file's motion: it
+   is the BACKGROUND only, nothing under the reader's eye moves, and all of it
+   stands down under prefers-reduced-motion.
+
+   Three layers, and every one animates ONLY transform or opacity, so none of
+   them repaints — they run on the compositor:
+
+     glow drift    the wash slides and swells                    26s
+     comb pulse    the honeycomb breathes in and out of view     14s
+     sheen         a soft cyan light travels across the comb     19s
+     mark breathe  the logo swells fractionally                  24s
+
+   v0.5.3 drifted the comb by animating background-position on a fixed,
+   full-viewport pseudo-element, which forced a full-viewport repaint every frame
+   for the life of every page that used it. Translating that layer instead is not
+   an option either: mask-image is painted WITH the element, so a transform drags
+   the radial fade along with the tiles and the fade visibly wanders. Hence a
+   pulse (opacity, safe) for the comb, and a separate travelling element for the
+   sense of movement across it. */
+.lw-page-dark::before, .lw-page-light::before {
+  animation: lwGroundDrift 26s var(--lw-ease-in-out) infinite alternate;
+}
+.lw-page-dark::after { animation: lwCombPulseDark 14s var(--lw-ease-in-out) infinite alternate; }
+.lw-page-light::after { animation: lwCombPulseLight 14s var(--lw-ease-in-out) infinite alternate; }
+.lw-page-dark .lw-hero-dark::after, .lw-page-light .lw-hero-dark::after {
+  animation: lwMarkBreathe 24s var(--lw-ease-in-out) infinite alternate;
+}
+/* The sheen: the hero's ::before, which the full-page ground otherwise has no
+   use for. Oversized and translated, so it never exposes its own edge. */
+.lw-page-dark .lw-hero-dark::before,
+.lw-page-light .lw-hero-dark::before {
+  content: "";
+  position: absolute;
+  top: -40%;
+  left: -60%;
+  width: 80%;
+  height: 180%;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 50%;
+  filter: blur(40px);
+  animation: lwSheen 19s var(--lw-ease-in-out) infinite alternate;
+}
+.lw-page-dark .lw-hero-dark::before { background: radial-gradient(closest-side, hsl(var(--lw-logo-cyan-c) / 0.22), transparent 100%); }
+.lw-page-light .lw-hero-dark::before { background: radial-gradient(closest-side, hsl(var(--lw-brand-500-c) / 0.12), transparent 100%); }
+
+@keyframes lwGroundDrift {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(-3.5%, 2%, 0) scale(1.09); }
+}
+@keyframes lwCombPulseDark {
+  from { opacity: 0.24; }
+  to   { opacity: 0.52; }
+}
+@keyframes lwCombPulseLight {
+  from { opacity: 0.38; }
+  to   { opacity: 0.7; }
+}
+@keyframes lwSheen {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(150%, -6%, 0); }
+}
+@keyframes lwMarkBreathe {
+  from { transform: translateY(-50%) scale(1); }
+  to   { transform: translateY(-50%) scale(1.035); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lw-page-dark::before, .lw-page-light::before,
+  .lw-page-dark::after, .lw-page-light::after,
+  .lw-page-dark .lw-hero-dark::before, .lw-page-light .lw-hero-dark::before,
+  .lw-page-dark .lw-hero-dark::after, .lw-page-light .lw-hero-dark::after {
+    animation: none;
+  }
+  /* With the sheen parked it would sit as a bright blob off the left edge. */
+  .lw-page-dark .lw-hero-dark::before,
+  .lw-page-light .lw-hero-dark::before { display: none; }
+}
+
+/* Inside a full-page ground the hero paints no ground of its own — it keeps
+   only the mark, held against the RIGHT edge opposite the lattice. */
+.lw-page-dark .lw-hero-dark,
+.lw-page-light .lw-hero-dark { background: none; overflow: visible; color: inherit; }
+.lw-page-dark .lw-hero-dark::after,
+.lw-page-light .lw-hero-dark::after {
+  top: 50%;
+  left: auto;
+  right: clamp(12px, 4vw, 72px);
+  transform: translateY(-50%);
+  /* Sized off the hero's HEIGHT, not its width: the mark is taller than it is
+     wide, so a width-sized copy gets clipped top and bottom and stops reading
+     as a hexagon at all. */
+  height: 62%;
+  width: auto;
+  aspect-ratio: 871.1 / 1000;
+}
+/* Opacity high enough that the mark's navy->cyan run is actually legible as a
+   gradient — below ~0.45 on either ground it flattens to one wash. */
+.lw-page-dark .lw-hero-dark::after { opacity: 0.62; }
+.lw-page-light .lw-hero-dark::after {
+  background-image: url("assets/hero-mark-ink.svg");
+  opacity: 0.45;
+}
+/* On a light ground the hero's on-dark text roles have to stand down. */
+.lw-page-light .lw-hero-dark .lw-h1,
+.lw-page-light .lw-hero-dark .lw-h2,
+.lw-page-light .lw-hero-dark .lw-h3 { color: var(--lw-fg); }
+.lw-page-light .lw-hero-dark .lw-lead { color: var(--lw-fg-muted); }
+.lw-page-light .lw-hero-dark .lw-eyebrow,
+.lw-page-light .lw-hero-dark .lw-eyebrow::before { color: var(--lw-brand-text); background: none; }
+.lw-page-light .lw-hero-dark .lw-eyebrow::before { background: var(--lw-brand-500); }
+.lw-page-light .lw-hero-dark h1 em,
+.lw-page-light .lw-hero-dark h2 em { color: var(--lw-brand-text); }
+.lw-page-light .lw-hero-dark .lw-btn-ghost {
+  color: var(--lw-fg);
+  border-color: var(--lw-line-strong);
+}
+.lw-page-light .lw-hero-dark .lw-btn-ghost:hover { background: var(--lw-bg-subtle); }
+/* A section can no longer paint its own band without breaking the ground. */
+.lw-page-dark .lw-section.dark,
+.lw-page-light .lw-section.dark { background: none; }
+
+/* ---- Full-bleed dark hero (v0.4.0) ----------------------------------------
+   The hero background is now DERIVED FROM THE MARK, in three layers:
+
+     1. ground   deep navy, washed by two radials on the mark's own gradient
+                 axis — cyan at the upper right, navy at the lower left, the
+                 same lower-left-navy -> upper-right-cyan run as the logo.
+     2. ::before  a honeycomb lattice (assets/hex-lattice.svg) — the mark's
+                 hexagon tiled as texture, radially masked so it only exists
+                 where the cyan wash is and dissolves before the copy.
+     3. ::after   THE MARK ITSELF (assets/hero-mark.svg), oversized at the upper
+                 right — assets/logo-mark.svg with only its gradient stops
+                 lifted, because the real navy->teal run is too dark to read on
+                 a navy ground. Same single path, so the rounded hexagon and the
+                 node-tipped trajectory are the genuine geometry. It is a
+                 background-image, not a mask: masked artwork renders unreliably
+                 in capture and export paths.
+
+                 An earlier pass hand-drew an approximation of the hexagon here;
+                 it had square corners and the wrong trajectory. Never redraw
+                 the mark — reference it.
+
+   The rectangular hairline grid this replaced was generic tech-page texture and
+   said nothing about LeanWise. --lw-logo-cyan is artwork-only by contract; a
+   hero background is artwork, and this is the one place a UI file may use it.
+   Padding lives here too — the hero previously shipped with none, so consumers
+   had to invent their own vertical rhythm. */
+
+.lw-hero-dark {
+  position: relative;
+  padding: clamp(60px, 7vw, 104px) 0 clamp(52px, 6vw, 88px);
+  background:
+    radial-gradient(58rem 38rem at 88% -12%, hsl(var(--lw-logo-cyan-c) / 0.28), transparent 62%),
+    radial-gradient(50rem 34rem at 4% 108%, hsl(var(--lw-navy-700-c) / 0.55), transparent 66%),
+    radial-gradient(36rem 24rem at 46% -22%, hsl(var(--lw-brand-500-c) / 0.18), transparent 70%),
+    var(--lw-navy-deep);
+  color: var(--lw-on-dark);
+  overflow: hidden;
+  isolation: isolate;
+}
+/* Honeycomb texture — the hexagon, tiled and dissolving. */
+.lw-hero-dark::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  /* The tile is a FLAT-TOP hexagon at the mark's 871:1000 proportion, with the
+     mark's corner rounding. A regular pointy-top hex is the wrong shape. */
+  background: url("assets/hex-lattice.svg") repeat 62% -12% / 132px 101px;
+  opacity: 0.34;
+  -webkit-mask-image: radial-gradient(46rem 30rem at 80% 2%, #000 10%, transparent 74%);
+  mask-image: radial-gradient(46rem 30rem at 80% 2%, #000 10%, transparent 74%);
+  pointer-events: none;
+}
+/* The mark, oversized. */
+.lw-hero-dark::after {
+  content: "";
+  position: absolute;
+  top: 8%;
+  right: 3%;
+  width: min(23rem, 31%);
+  aspect-ratio: 871.1 / 1000;
+  z-index: -1;
+  background: url("assets/hero-mark.svg") no-repeat center / contain;
+  opacity: 0.3;
+  pointer-events: none;
+}
+/* The hero's own vertical rhythm. Eyebrow → headline → lead → actions came out
+   flush against each other, because the roles all zero their margins and nothing
+   here supplied the gap. */
+.lw-hero-dark > .lw-container { display: flex; flex-direction: column; align-items: flex-start; gap: var(--lw-space-20, 20px); }
+.lw-hero-dark .lw-h1,
+.lw-hero-dark .lw-h2,
+.lw-hero-dark .lw-h3 { color: var(--lw-on-dark-1); }
+.lw-hero-dark .lw-lead { color: var(--lw-on-dark-2); }
+.lw-hero-dark .lw-eyebrow { color: var(--lw-brand-300); }
+.lw-hero-dark .lw-eyebrow::before { background: var(--lw-brand-300); }
+.lw-hero-dark .lw-italic-brand,
+.lw-hero-dark .lw-accent,
+/* A bare <em> in a dark-ground headline is the accent convention in practice —
+   style it here so consumers stop forking the ink (v0.3.1). */
+.lw-hero-dark h1 em,
+.lw-section.dark h1 em,
+.lw-hero-dark h2 em,
+.lw-section.dark h2 em { color: var(--lw-brand-400); }
+
+/* The ghost button on the package's own dark grounds: transparent fill,
+   on-dark ink, hairline that reads on navy (v0.3.1). */
+.lw-hero-dark .lw-btn-ghost,
+.lw-section.dark .lw-btn-ghost {
+  background: transparent;
+  color: var(--lw-on-dark-1);
+  border-color: var(--lw-on-dark-line);
+}
+.lw-hero-dark .lw-btn-ghost:hover,
+.lw-section.dark .lw-btn-ghost:hover {
+  background: hsl(var(--lw-navy-700-c) / 0.5);
+  border-color: var(--lw-on-dark-3);
+}
+
+/* ---- Data-viz bars (v0.3.0) -----------------------------------------------
+   Token-filled horizontal bar. Width via --lw-bar-value (a percentage) or an
+   inline width on .fill. Purely presentational — pair with visually-hidden
+   text or aria attributes in the consumer. */
+
+.lw-bar {
+  --lw-bar-value: 0%;
+  position: relative;
+  height: 8px;
+  border-radius: var(--lw-radius-pill);
+  /* --lw-line, not the --lw-border-1 tier: the track has to follow the ground. */
+  background: var(--lw-line);
+  overflow: hidden;
+}
+.lw-bar .fill,
+.lw-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--lw-bar-value);
+  border-radius: inherit;
+  background: var(--lw-brand-500);
+  transition: width var(--lw-duration-slow) var(--lw-ease-out);
+}
+/* An explicit <i class="fill"> node wins over the ::after fill. */
+.lw-bar:has(.fill)::after { display: none; }
+
+/* Meter variant: thicker, inset track. */
+.lw-bar.lw-meter,
+.lw-meter { height: 12px; background: var(--lw-bg-inset); border: 1px solid var(--lw-line); }
+
+/* Dark context (inside .lw-section.dark / .lw-hero-dark): the light track
+   tokens vanish on navy — use the on-dark fills instead. */
+.lw-section.dark .lw-bar,
+.lw-hero-dark .lw-bar {
+  background: var(--lw-on-dark-fill);
+}
+.lw-section.dark .lw-meter,
+.lw-hero-dark .lw-meter {
+  background: var(--lw-on-dark-fill);
+  border-color: var(--lw-on-dark-line);
+}
+.lw-section.dark .lw-bar .fill, .lw-section.dark .lw-bar::after,
+.lw-hero-dark .lw-bar .fill, .lw-hero-dark .lw-bar::after {
+  background: var(--lw-brand-400);
+}
+
+/* ---- Logo rail (v0.3.0) ---------------------------------------------------
+   A logo wall. Default: static wrapping row. `.marquee`: a slow horizontal
+   loop — duplicate the track content ONCE in markup ([track][track]) so the
+   -50% translate lands seamlessly. Reduced motion falls back to the static
+   wrap layout (no animation, no overflow clip). */
+
+.lw-logo-rail {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--lw-space-24) var(--lw-space-48);
+}
+.lw-logo-rail.marquee {
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+.lw-logo-rail.marquee .lw-logo-track {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: var(--lw-space-48);
+  padding-right: var(--lw-space-48);
+  animation: lwMarquee var(--lw-dur-marquee) linear infinite;
+}
+@keyframes lwMarquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-100%); }
+}
+/* A rail item is a MASK over a single ink, not an <img>. Customer marks arrive in a
+   dozen inks and two of them will clash with the page; masking guarantees one ink and
+   one opacity, which is the entire point of a logo rail. */
+/* v0.4.0: this is now the ONLY rail item. The competing `.lw-logo-cell` chip
+   (fixed bordered box, greyscale <img>, name fallback) was a second
+   implementation of the same thing, and the one LogoRail.jsx actually rendered
+   — so the rail's own hover/dark rules, which target .lw-logo-item, never
+   applied. The chip is gone; a mark without an image now degrades to a mono
+   wordmark (.is-text) rather than a bordered placeholder box. */
+.lw-logo-item {
+  display: block;
+  width: 108px; height: 34px;
+  background: currentColor;
+  color: var(--lw-fg);
+  opacity: 0.42;
+  -webkit-mask: var(--lw-logo-src) center / contain no-repeat;
+  mask: var(--lw-logo-src) center / contain no-repeat;
+  transition: opacity var(--lw-duration) var(--lw-ease-out), color var(--lw-duration) var(--lw-ease-out), transform var(--lw-duration) var(--lw-ease-out);
+}
+/* Text fallback: no mask, no box — a wordmark in the rail's single ink. */
+.lw-logo-item.is-text {
+  width: auto; height: auto;
+  background: none;
+  -webkit-mask: none; mask: none;
+  font-family: var(--lw-font-mono);
+  font-size: 12.5px;
+  letter-spacing: 0.13em;
+  word-spacing: var(--lw-word-spacing-caps);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+a.lw-logo-item, .lw-logo-item-interactive { cursor: pointer; }
+a.lw-logo-item:hover, .lw-logo-item-interactive:hover,
+a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
+  opacity: 1; color: var(--lw-brand-text); transform: translateY(-1px); outline: none;
+}
+/* Hovering one mark dims the rest, so the rail reads as a set the visitor is scanning
+   rather than eight logos shouting at once. */
+.lw-logo-rail:hover .lw-logo-item { opacity: 0.24; }
+.lw-logo-rail:hover .lw-logo-item:hover { opacity: 1; }
+.dark .lw-logo-item, [data-band="dark"] .lw-logo-item, .lw-band-dark .lw-logo-item { color: var(--lw-on-dark); opacity: 0.55; }
+.dark .lw-logo-item:hover, [data-band="dark"] .lw-logo-item:hover, .lw-band-dark .lw-logo-item:hover { color: var(--lw-brand-300); }
+
+/* The marquee has to fade at both edges or marks appear to be sliced off by the
+   container. Mask, not a gradient overlay, so it works on any ground. */
+.lw-logo-rail.marquee {
+  -webkit-mask: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.lw-logo-rail.marquee:hover .lw-logo-track { animation-play-state: paused; }
+
+@media (prefers-reduced-motion: reduce) {
+  .lw-logo-item { transition: none; }
+  .lw-logo-rail.marquee { flex-wrap: wrap; overflow: visible; -webkit-mask: none; mask: none; }
+  .lw-logo-rail.marquee .lw-logo-track {
+    animation: none;
+    flex-wrap: wrap;
+    padding-right: 0;
+  }
+  /* With the duplicate track hidden, the rail reads as a plain logo wall. */
+  .lw-logo-rail.marquee .lw-logo-track + .lw-logo-track { display: none; }
+}
+
+/* ---- Stat / KPI ---------------------------------------------------------- */
+
+.lw-stat { display: flex; flex-direction: column; gap: 4px; }
+.lw-stat .n {
+  font-family: var(--lw-font-mono);
+  font-weight: var(--lw-fw-semibold);
+  font-size: clamp(28px, 3.2vw, 40px);
+  letter-spacing: var(--lw-tracking-tight);
+  color: var(--lw-fg);
+  font-variant-numeric: tabular-nums;
+}
+.lw-stat .l {
+  font-family: var(--lw-font-mono);
+  font-size: var(--lw-text-eyebrow);
+  letter-spacing: var(--lw-tracking-eyebrow);
+  word-spacing: var(--lw-word-spacing-caps);
+  text-transform: uppercase;
+  color: var(--lw-fg-subtle);
+}
+/* A number without a unit, a direction and a baseline is decoration. These three
+   parts are what turn a stat into a reading. */
+.lw-stat .u { font-family: var(--lw-font-mono); font-size: 0.5em; font-weight: 500; color: var(--lw-fg-subtle); letter-spacing: 0; margin-left: 2px; }
+.lw-stat-row { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.lw-stat-delta {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: var(--lw-font-mono); font-size: 11px; font-weight: 500;
+  padding: 3px 7px; border-radius: var(--lw-radius-pill);
+  background: var(--lw-neutral-soft); color: var(--lw-neutral-on);
+}
+.lw-stat-delta[data-dir="up"] { background: var(--lw-success-soft); color: var(--lw-success-on); }
+.lw-stat-delta[data-dir="down"] { background: var(--lw-danger-soft); color: var(--lw-danger-on); }
+.lw-stat-delta[data-dir="watch"] { background: var(--lw-warning-soft); color: var(--lw-warning-on); }
+.lw-stat-foot { font-size: 11.5px; color: var(--lw-fg-subtle); }
+/* Meter fills by semantic role, not by hand-picked hex at the call site. */
+.lw-bar[data-tone="cta"] .fill, .lw-bar[data-tone="cta"]::after { background: var(--lw-cta-500); }
+.lw-bar[data-tone="success"] .fill, .lw-bar[data-tone="success"]::after { background: var(--lw-success); }
+.lw-bar[data-tone="warning"] .fill, .lw-bar[data-tone="warning"]::after { background: var(--lw-warning); }
+.lw-bar[data-tone="danger"] .fill, .lw-bar[data-tone="danger"]::after { background: var(--lw-danger); }
+.lw-bar[data-tone="neutral"] .fill, .lw-bar[data-tone="neutral"]::after { background: var(--lw-neutral); }
+/* Target marker — a meter with no target is a bar with no argument. */
+/* The marker sits ON the fill as often as beside it, so it cannot be a single ink:
+   a light core with a dark hairline reads against both the track and the fill. */
+.lw-bar .target { position: absolute; top: -3px; bottom: -3px; width: 2px; border-radius: 1px; background: var(--lw-bg); box-shadow: 0 0 0 1px hsl(220 60% 12% / .45); }
+/* A reading is not clickable, so a plain tile’s default cursor is right — but this
+   rule loads AFTER .lw-card-interactive and was overriding it, so an INTERACTIVE
+   tile promised nothing on hover. Scope it to the non-interactive case. */
+.lw-stat-tile:not(.lw-card-interactive):not([role="button"]) { cursor: default; }
+.lw-stat-tile.lw-card-interactive .lw-bar .fill { transition: width var(--lw-duration-slow) var(--lw-ease-out), background var(--lw-duration) var(--lw-ease-out); }
+.dark .lw-stat .n, [data-band="dark"] .lw-stat .n, .lw-band-dark .lw-stat .n { color: var(--lw-on-dark); }
+.dark .lw-stat .l, [data-band="dark"] .lw-stat .l, .lw-band-dark .lw-stat .l { color: var(--lw-on-dark-3); }
+.dark .lw-bar, [data-band="dark"] .lw-bar, .lw-band-dark .lw-bar { background: var(--lw-on-dark-fill); }
+/* The dark ground lightens the meter fill to the 400 tier — but ONLY where no
+   tone is set. Written as :not([data-tone]) rather than relying on declaration
+   order: this rule and the [data-tone] block above are both (0,3,0), so a tie is
+   resolved by whichever happens to sit lower in the file, which is not a
+   decision anyone made. It shipped as a tie for one release and every warning
+   meter on a dark surface rendered brand cyan — the component silently
+   contradicting the rule its own card states. A tone is semantic; it holds on
+   both grounds or it means nothing.
+
+   The toned fills step to the dark-legible tiers, because the light fills are
+   mixed against white and go muddy on navy. */
+.dark .lw-bar:not([data-tone]) .fill, [data-band="dark"] .lw-bar:not([data-tone]) .fill, .lw-band-dark .lw-bar:not([data-tone]) .fill,
+.dark .lw-bar:not([data-tone])::after, [data-band="dark"] .lw-bar:not([data-tone])::after, .lw-band-dark .lw-bar:not([data-tone])::after { background: var(--lw-brand-400); }
+.dark .lw-bar[data-tone="cta"] .fill, [data-band="dark"] .lw-bar[data-tone="cta"] .fill, .lw-band-dark .lw-bar[data-tone="cta"] .fill,
+.dark .lw-bar[data-tone="cta"]::after, [data-band="dark"] .lw-bar[data-tone="cta"]::after, .lw-band-dark .lw-bar[data-tone="cta"]::after { background: var(--lw-cta-400); }
+.dark .lw-bar[data-tone="success"] .fill, [data-band="dark"] .lw-bar[data-tone="success"] .fill, .lw-band-dark .lw-bar[data-tone="success"] .fill,
+.dark .lw-bar[data-tone="success"]::after, [data-band="dark"] .lw-bar[data-tone="success"]::after, .lw-band-dark .lw-bar[data-tone="success"]::after { background: var(--lw-success-on); }
+.dark .lw-bar[data-tone="warning"] .fill, [data-band="dark"] .lw-bar[data-tone="warning"] .fill, .lw-band-dark .lw-bar[data-tone="warning"] .fill,
+.dark .lw-bar[data-tone="warning"]::after, [data-band="dark"] .lw-bar[data-tone="warning"]::after, .lw-band-dark .lw-bar[data-tone="warning"]::after { background: var(--lw-warning-on); }
+.dark .lw-bar[data-tone="danger"] .fill, [data-band="dark"] .lw-bar[data-tone="danger"] .fill, .lw-band-dark .lw-bar[data-tone="danger"] .fill,
+.dark .lw-bar[data-tone="danger"]::after, [data-band="dark"] .lw-bar[data-tone="danger"]::after, .lw-band-dark .lw-bar[data-tone="danger"]::after { background: var(--lw-danger-on); }
+.dark .lw-bar[data-tone="neutral"] .fill, [data-band="dark"] .lw-bar[data-tone="neutral"] .fill, .lw-band-dark .lw-bar[data-tone="neutral"] .fill,
+.dark .lw-bar[data-tone="neutral"]::after, [data-band="dark"] .lw-bar[data-tone="neutral"]::after, .lw-band-dark .lw-bar[data-tone="neutral"]::after { background: var(--lw-neutral-on); }
+
+/* Animated count-up stat (v0.3.0). Extends the .lw-stat number look. The
+   CONTRACT: markup ships the FINAL value (SSR-safe, JS-free correct); the
+   `animateCounter` helper (@leanwise/design/counter) reads data-target and
+   animates from 0 only when invoked and reduced motion is not requested. */
+.lw-counter {
+  font-family: var(--lw-font-mono);
+  font-weight: var(--lw-fw-semibold);
+  letter-spacing: var(--lw-tracking-tight);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Scroll-driven motion (v0.4.0) -----------------------------------------
+   Progressive enhancement on CSS scroll timelines. Double-gated: browsers
+   without animation-timeline and readers who prefer reduced motion both get
+   the complete static state. These layer ON TOP of the consumer's own
+   IntersectionObserver reveal — never replace it. */
+
+/* Fade + small rise as the element scrolls into view. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .lw-scroll-fade {
+      animation: lwScrollFade linear both;
+      animation-timeline: view();
+      animation-range: entry 10% entry 90%;
+    }
+  }
+}
+@keyframes lwScrollFade {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Page/section scroll progress rail. Consumer sizes and positions the bar;
+   this only drives its scaleX from the document scroll. */
+.lw-scroll-progress {
+  transform-origin: 0 50%;
+  transform: scaleX(1);
+  background: var(--lw-brand-500);
+}
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .lw-scroll-progress {
+      animation: lwScrollGrow linear both;
+      animation-timeline: scroll(root block);
+    }
+  }
+}
+@keyframes lwScrollGrow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* SVG line-draw keyed to scroll. Apply to a path with a known length exported
+   as --lw-draw-len (px). Static state is FULLY DRAWN — SSR and non-supporting
+   browsers show the finished diagram. */
+.lw-draw { stroke-dashoffset: 0; }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .lw-draw {
+      stroke-dasharray: var(--lw-draw-len, 1000);
+      animation: lwDrawIn linear both;
+      animation-timeline: view();
+      animation-range: entry 20% cover 60%;
+    }
+  }
+}
+@keyframes lwDrawIn {
+  from { stroke-dashoffset: var(--lw-draw-len, 1000); }
+  to   { stroke-dashoffset: 0; }
+}
+
+/* ---- Browser frame (v0.4.0) ------------------------------------------------
+   Chrome around a product screenshot: toolbar dots + address pill, soft brand
+   glow. Pure CSS, token colors only. Markup:
+     <figure class="lw-browser-frame">
+       <div class="lw-browser-bar"><i></i><i></i><i></i>
+         <span class="lw-browser-url">app.example.com</span></div>
+       <img … />
+     </figure> */
+.lw-browser-frame {
+  margin: 0;
+  border: 1px solid var(--lw-line);
+  border-radius: var(--lw-radius-lg);
+  overflow: hidden;
+  /* Roles throughout this component. .lw-browser-bar below already used
+     --lw-bg-subtle while the frame and the URL pill used surface-0/surface-2/text-3
+     tiers, so on a dark ground the bar re-pointed and the frame around it did not —
+     one component painting from two palettes. */
+  background: var(--lw-bg);
+  box-shadow: var(--lw-shadow-md), var(--lw-brand-glow);
+}
+.lw-browser-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  background: var(--lw-bg-subtle);
+  border-bottom: 1px solid var(--lw-line);
+}
+.lw-browser-bar i {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--lw-radius-pill);
+  background: hsl(var(--lw-fg-faint-c) / 0.5);
+}
+.lw-browser-url {
+  margin-left: var(--lw-space-8);
+  padding: 3px 12px;
+  border-radius: var(--lw-radius-pill);
+  background: var(--lw-bg-muted);
+  font-family: var(--lw-font-mono);
+  font-size: var(--lw-text-xs);
+  color: var(--lw-fg-subtle);
+  line-height: 1.4;
+}
+.lw-browser-frame img { display: block; width: 100%; height: auto; }
+
+/* ---- SOTA interaction layer (v0.5.0) ---------------------------------------
+   Linear/Vercel-class affordances, all token-driven and reduced-motion safe.
+   Static state is always complete; hover/scroll only ever add. */
+
+/* Cursor spotlight for cards. The consumer sets --lw-mx/--lw-my (px, relative
+   to the card) from a pointermove handler; without JS the card is unchanged. */
+.lw-spotlight { position: relative; overflow: hidden; }
+.lw-spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: var(--lw-z-base);
+  opacity: 0;
+  transition: opacity var(--lw-duration) var(--lw-ease-out);
+  background: radial-gradient(240px circle at var(--lw-mx, 50%) var(--lw-my, 50%),
+    hsl(var(--lw-brand-500-c) / 0.12), transparent 65%);
+  pointer-events: none;
+}
+.lw-spotlight > * { position: relative; z-index: var(--lw-z-raised); }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .lw-spotlight:hover::before { opacity: 1; }
+}
+
+/* Shine sweep across a button face on hover. Pair with .lw-btn. */
+.lw-shine { position: relative; overflow: hidden; }
+/* Literal white, deliberately NOT a surface token: a specular sweep is light, and it
+   must stay white on both grounds. Borrowing --lw-surface-0-c froze to the right value
+   by luck, but it reads as a role used out of role. */
+.lw-shine::after {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0;
+  left: -60%;
+  width: 40%;
+  transform: skewX(-18deg);
+  background: linear-gradient(90deg, transparent,
+    rgba(255, 255, 255, 0.35), transparent);
+  pointer-events: none;
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .lw-shine:hover::after { animation: lwShine var(--lw-dur-shine) var(--lw-ease-out); }
+}
+@keyframes lwShine { to { left: 120%; } }
+
+/* Aurora layer for dark grounds: two slow counter-drifting brand blobs behind
+   the content. Sibling to .lw-wash — use one or the other, not both. */
+.lw-aurora { position: relative; }
+.lw-aurora::before,
+.lw-aurora::after {
+  content: "";
+  position: absolute;
+  z-index: var(--lw-z-base);
+  width: 55%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+}
+.lw-aurora::before {
+  top: -25%; left: -12%;
+  background: radial-gradient(circle, hsl(var(--lw-brand-500-c) / 0.16), transparent 65%);
+}
+.lw-aurora::after {
+  bottom: -30%; right: -10%;
+  background: radial-gradient(circle, hsl(var(--lw-cta-500-c) / 0.07), transparent 65%);
+}
+.lw-aurora > * { position: relative; z-index: var(--lw-z-raised); }
+@media (prefers-reduced-motion: no-preference) {
+  .lw-aurora::before { animation: lwAuroraA var(--lw-dur-aurora-a) ease-in-out infinite alternate; }
+  .lw-aurora::after  { animation: lwAuroraB var(--lw-dur-aurora-b) ease-in-out infinite alternate; }
+}
+@keyframes lwAuroraA {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(10%, 8%, 0) scale(1.15); }
+}
+@keyframes lwAuroraB {
+  from { transform: translate3d(0, 0, 0) scale(1.1); }
+  to   { transform: translate3d(-8%, -10%, 0) scale(1); }
+}
+
+/* Perspective tilt for framed screenshots: rests flat, leans back a touch on
+   hover. Wrap the frame in .lw-tilt-scene for the 3D context. */
+.lw-tilt-scene { perspective: 1200px; }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .lw-tilt {
+    transform-style: preserve-3d;
+    transition: transform var(--lw-duration-slow) var(--lw-ease-out),
+                box-shadow var(--lw-duration-slow) var(--lw-ease-out);
+  }
+  .lw-tilt:hover {
+    transform: rotateX(1.6deg) rotateY(-1.2deg) translateY(-4px);
+    box-shadow: var(--lw-shadow-lg), var(--lw-brand-glow);
+  }
+}
+
+/* Cross-document/page fade for the View Transitions API. The consumer opts the
+   router in; this only shapes the default snapshot animation. */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) { animation-duration: var(--lw-dur-vt-old); }
+  ::view-transition-new(root) { animation-duration: var(--lw-dur-vt-new); }
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation: none; }
+}
+
+/* =============================================================================
+   Console surface primitives (v0.6.0).
+
+   Additive building blocks for the interactive product console (the marketing
+   hero's "see CONNECT run" device). Each is a shell only — pair with the
+   .lw-btn/.lw-pill/.lw-console families above. Every color is an existing
+   --lw-* token; the code surface and its token spans are an ALWAYS-DARK island
+   (like .lw-section.dark), so they read identically in both site themes.
+   ============================================================================= */
+
+/* ---- Run controls (console playback) --------------------------------------
+   A row of console playback buttons (Run / Step / Scrub). This is the layout
+   shell only — children are .lw-btn elements (use .lw-btn-brand for the primary
+   Run action, .lw-btn-ghost for Step/Scrub). An optional range scrubber picks
+   up the brand accent-color. */
+.lw-run-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lw-space-8);
+  flex-wrap: wrap;
+}
+.lw-run-controls .lw-btn { min-height: 36px; }
+.lw-run-controls input[type="range"] { accent-color: var(--lw-brand-500); }
+.lw-run-controls :focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
+
+/* ===========================================================================
+   v0.6.0 layout primitives — the classes FeatureGrid / StoryCard / LogoRail
+   render. These lived site-local in leanwise-ai; they move into the package so
+   the components are self-contained (and so the Ladle docs site and other
+   consumers render them without each shipping a copy). Per-customer optical
+   sizing (`[data-mark='…']`) stays consumer-side: the package owns the base
+   cell, consumers tune their own marks.
+   =========================================================================== */
+
+/* ---- Feature grid — a 3-up hairline-divided grid (→ 1 col under --lw-bp-lg).
+   Each cell: optional mono index/eyebrow + optional icon, then heading + body. */
+.lw-features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--lw-line);
+  border: 1px solid var(--lw-line);
+  border-radius: var(--lw-radius-lg);
+  overflow: hidden;
+}
+/* --lw-bp-lg (1024px) — the same collapse point as Split, so a features band
+   and the layout around it never reflow one breakpoint apart. */
+@media (max-width: 1024px) { .lw-features { grid-template-columns: 1fr; } }
+.lw-feature {
+  position: relative;
+  background: var(--lw-bg);
+  padding: 28px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: background var(--lw-duration) var(--lw-ease-out);
+}
+/* The brand spirit here is a measured rule, not a glow: a 2px brand edge draws in
+   across the top of the cell on hover. transform-origin:left + scaleX means it wipes
+   in like a progress bar rather than fading — instrument, not decoration. */
+.lw-feature::before {
+  content: "";
+  position: absolute; inset: 0 0 auto 0; height: 2px;
+  background: var(--lw-brand-500);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform var(--lw-duration) var(--lw-ease-out);
+}
+.lw-feature-interactive { cursor: pointer; }
+.lw-feature-interactive:hover, .lw-feature-interactive:focus-visible { background: var(--lw-bg-subtle); outline: none; }
+.lw-feature-interactive:hover::before, .lw-feature-interactive:focus-visible::before { transform: scaleX(1); }
+.lw-feature-interactive:focus-visible { box-shadow: inset 0 0 0 2px hsl(var(--lw-brand-500-c) / 0.45); }
+
+/* The index is the cell's spine: a mono numeral with a hairline running off it, so a
+   3-up grid reads as a numbered sequence rather than three unrelated boxes. */
+.lw-feature .num {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--lw-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--lw-brand-text);
+}
+.lw-feature .num::after {
+  content: ""; height: 1px; flex: 1; background: var(--lw-line);
+  transition: background var(--lw-duration) var(--lw-ease-out);
+}
+.lw-feature-interactive:hover .num::after { background: var(--lw-brand-line); }
+.lw-feature .icon { color: var(--lw-brand-text); display: inline-flex; font-size: 20px; line-height: 1; }
+.lw-feature h3 { font-size: 18px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; line-height: 1.25; }
+.lw-feature p { color: var(--lw-fg-subtle); font-size: 14px; line-height: 1.6; margin: 0; text-wrap: pretty; }
+/* Footer link pinned to the bottom so a row of unequal copy still aligns its actions. */
+.lw-feature .lw-feature-more {
+  margin-top: auto; padding-top: 14px;
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 13px; font-weight: var(--lw-fw-medium); color: var(--lw-brand-text);
+}
+.lw-feature .lw-feature-more .arrow { flex: none; transition: transform var(--lw-duration) var(--lw-ease-out); }
+.lw-feature-interactive:hover .lw-feature-more .arrow { transform: translateX(3px); }
+
+.dark .lw-features, [data-band="dark"] .lw-features, .lw-band-dark .lw-features { background: hsl(0 0% 100% / 0.12); border-color: hsl(0 0% 100% / 0.12); }
+.dark .lw-feature, [data-band="dark"] .lw-feature, .lw-band-dark .lw-feature { background: var(--lw-navy-deep); }
+.dark .lw-feature-interactive:hover, [data-band="dark"] .lw-feature-interactive:hover, .lw-band-dark .lw-feature-interactive:hover { background: hsl(0 0% 100% / 0.05); }
+.dark .lw-feature h3, [data-band="dark"] .lw-feature h3, .lw-band-dark .lw-feature h3 { color: var(--lw-on-dark); }
+.dark .lw-feature p, [data-band="dark"] .lw-feature p, .lw-band-dark .lw-feature p { color: var(--lw-on-dark-2); }
+.dark .lw-feature .num::after, [data-band="dark"] .lw-feature .num::after, .lw-band-dark .lw-feature .num::after { background: hsl(0 0% 100% / 0.16); }
+
+@media (prefers-reduced-motion: reduce) {
+  .lw-feature::before { transition: none; }
+  .lw-feature-interactive:hover .lw-feature-more .arrow { transform: none; }
+}
+
+/* ---- Story card — a square mark/monogram tile + body. Hover lift/glow comes
+   from .lw-card-glow on the same element; do NOT add a competing border/transform
+   hover here (it would fight the brand border). */
+.lw-story {
+  background: var(--lw-bg);
+  border: 1px solid var(--lw-line);
+  border-radius: var(--lw-radius-md);
+  padding: 32px;
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+/* In a row of cards the tallest sets the height, so the body column has to fill it
+   and hang its result off the bottom — otherwise a short story leaves a block of
+   dead space under its outcome and reads as broken padding. */
+.lw-story > *:nth-child(2) { display: flex; flex-direction: column; height: 100%; }
+.lw-story .meta { margin-top: auto; }
+/* Two different jobs wearing one class: a customer LOGO tile must stay a neutral box
+   (the artwork brings its own color), but a MONOGRAM is a stand-in for artwork that
+   does not exist — as a grey box with grey initials it just looks unloaded. */
+.lw-story .logo {
+  width: 64px; height: 64px;
+  border-radius: var(--lw-radius-md);
+  background: var(--lw-bg-muted);
+  border: 1px solid var(--lw-line);
+  display: grid; place-items: center;
+  font-family: var(--lw-font-mono); font-size: 11px;
+  color: var(--lw-fg-muted);
+}
+.lw-monogram {
+  width: 56px; height: 56px;
+  border-radius: var(--lw-radius-md);
+  background: var(--lw-brand-500);
+  display: grid; place-items: center;
+  font-family: var(--lw-font-mono); font-size: 15px; font-weight: 600; letter-spacing: .04em;
+  color: var(--lw-on-brand);
+}
+.lw-story .logo img,
+.lw-monogram img { max-width: 48px; max-height: 32px; }
+.lw-story h3 { font-size: 18px; font-weight: 600; letter-spacing: -0.012em; margin: 0 0 8px; line-height: 1.3; text-wrap: balance; }
+.lw-story p { font-size: 14px; color: var(--lw-fg-subtle); line-height: 1.55; margin: 0 0 16px; }
+.lw-story .lw-story-quote {
+  margin: 0 0 16px; padding: 0; border: 0;
+  font-size: 15px; line-height: 1.55; color: var(--lw-fg); font-style: normal;
+}
+.lw-story .lw-story-quote cite {
+  display: block; margin-top: 8px;
+  font-family: var(--lw-font-mono); font-size: 12px; letter-spacing: 0.12em;
+  color: var(--lw-fg-subtle); font-style: normal;
+}
+.lw-story .meta {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  font-family: var(--lw-font-mono); font-size: 12px; letter-spacing: 0.12em; color: var(--lw-fg-subtle);
+  padding-top: 12px; border-top: 1px solid var(--lw-line);
+}
+.lw-story .meta b { color: var(--lw-brand-text); font-weight: 500; }
+/* The quote needs a mark and a spine, or it reads as a paragraph that happens to have
+   quotation marks. A brand hairline down the left is the cheapest honest attribution. */
+.lw-story .lw-story-quote { position: relative; padding-left: 16px; border-left: 2px solid var(--lw-brand-line); }
+.lw-story-result {
+  display: inline-flex; align-items: baseline; gap: 8px;
+  font-family: var(--lw-font-mono); font-size: 12.5px; letter-spacing: .04em;
+  padding: 6px 10px; border-radius: var(--lw-radius-sm);
+  background: var(--lw-cta-soft); color: var(--lw-cta-text);
+}
+.lw-story-result b { font-size: 15px; font-weight: 600; letter-spacing: -.01em; }
+.lw-story.lw-card-interactive:hover, .lw-story-interactive:hover { border-color: hsl(var(--lw-brand-500-c) / .55); box-shadow: var(--lw-shadow-md), var(--lw-brand-glow); transform: translateY(-2px); }
+.lw-story-interactive { cursor: pointer; transition: transform var(--lw-duration) var(--lw-ease-out), border-color var(--lw-duration) var(--lw-ease-out), box-shadow var(--lw-duration) var(--lw-ease-out); }
+.lw-story-interactive:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); border-color: var(--lw-brand-500); }
+.dark .lw-story, [data-band="dark"] .lw-story, .lw-band-dark .lw-story { background: var(--lw-navy-deep); border-color: hsl(0 0% 100% / .12); }
+.dark .lw-story .lw-story-quote, [data-band="dark"] .lw-story .lw-story-quote, .lw-band-dark .lw-story .lw-story-quote { color: var(--lw-on-dark); }
+.dark .lw-story h3, [data-band="dark"] .lw-story h3, .lw-band-dark .lw-story h3 { color: var(--lw-on-dark); }
+.dark .lw-story p, .dark .lw-story .meta, [data-band="dark"] .lw-story p, [data-band="dark"] .lw-story .meta, .lw-band-dark .lw-story p, .lw-band-dark .lw-story .meta { color: var(--lw-on-dark-2); }
+.dark .lw-story .meta, [data-band="dark"] .lw-story .meta, .lw-band-dark .lw-story .meta { border-top-color: hsl(0 0% 100% / .12); }
+@media (prefers-reduced-motion: reduce) { .lw-story-interactive:hover { transform: none; } }

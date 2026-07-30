@@ -1,0 +1,135 @@
+<!-- @dsCard group="Data" name="Data display" subtitle="Table, KpiTile, EmptyState, Console — mono tabular numerics, hairline rows" viewport="1060x1400" -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Data</title>
+<link rel="stylesheet" href="../../preview/_card.css">
+<link rel="stylesheet" href="../../base.css">
+<link rel="stylesheet" href="../../marketing.css">
+<link rel="stylesheet" href="../../product.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../preview/_card.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.pane{padding:20px;display:grid;gap:14px;align-content:start;border-radius:10px}
+.pane.dark{background:var(--lw-navy-deep)}.lbl{font-family:var(--lw-font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--lw-fg-subtle)}
+.pane.dark .lbl{color:var(--lw-on-dark-3)}</style>
+</head><body><div class="card">
+<header><h1>Data display</h1>
+<p class="sub"><b>Every numeric column is mono and tabular.</b> That single decision is what makes a table read as data
+rather than as text: digits line up in a column, so a reader compares magnitudes by eye instead of by parsing. The
+header is mono uppercase for the same reason the eyebrow is — it is a label, not a sentence.</p>
+<p class="sub"><b>Direction is never colour alone.</b> A KPI delta carries an arrow glyph as well as success/danger ink,
+so a colour-blind reader gets the same information as everyone else.</p></header>
+<div class="two"><div class="pane" id="light"></div><div class="pane dark lw-band-dark" id="dark"></div></div>
+<div style="display:flex;flex-direction:column;gap:12px;padding-top:20px;margin-top:6px;border-top:1px solid var(--lw-line)">
+<span class="lbl">why it is built this way</span>
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">Stat & meter</h2>
+<p class="sub"><b>Fill color is semantic, never decorative.</b> The tone comes from
+  <span class="mono">data-tone</span>, so a warning meter is amber because it <i>is</i> a warning —
+  colors picked at the call site for variety carry no meaning and teach the reader nothing. Tiles are
+  real cards: equal height, aligned footers, hover and focus states, and a bar that animates its width
+  from a CSS variable.</p>
+<p class="sub">The number stays mono with <span class="mono">tabular-nums</span> so a count-up cannot
+  reflow the layout, and the markup still ships the <b>final</b> value — no-JS and reduced-motion both
+  render the correct number.</p>
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">Chip &amp; table</h2>
+<p class="sub">Chip contrast, measured live:
+  <span class="mono">success</span> <span class="mono" data-ratio="success-on on success-soft"></span>:1 ·
+  <span class="mono">expiring</span> <span class="mono" data-ratio="cta-text on cta-soft"></span>:1.
+  A badge is text on the <i>tint</i>, never on the page — measuring it against white is the mistake
+  that shipped invisible badges once already.</p>
+<p class="sub"><b>Docs</b> and <b>hit rate</b> are <span class="mono">num</span> columns: mono,
+  <span class="mono">tabular-nums</span>, right-aligned. In a dense table a figure column has to scan
+  as a column, not as prose. A sortable header renders as a real <span class="mono">button</span>, and
+  on a <span class="mono">num</span> column its caret sits to the <i>left</i> of the label — trailing it
+  would push the header text one glyph clear of the figures it names.</p>
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">Console</h2>
+<p class="sub"><b>Fields are grid columns, never padded text.</b> Each line passes
+  <span class="mono">cells</span>, and the columns are real subgrid tracks sized by their widest value.
+  Padding a mono string with runs of spaces is the obvious alternative and it is always wrong: it looks
+  aligned in the source, at exactly one width, until one value grows past what the author counted — and
+  it re-wraps unpredictably as the frame narrows.</p>
+<p class="sub">A <span class="mono">num</span> cell right-aligns with tabular figures, so the doc counts
+  stack. A free-running <span class="mono">text</span> line spans the whole stream instead of being
+  squeezed into the first field, and the prefix column is <i>held</i> even on lines with no timestamp —
+  otherwise a line's fields slide left into the prefix gutter and stop aligning with every line that has
+  one. Details in this specimen are kept short on purpose: a last field wider than its track wraps
+  mid-phrase, which is the one thing the columns exist to prevent.</p>
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">Code block</h2>
+<p class="sub"><b>Highlighting happens on the server, never in the browser.</b> The component takes
+  pre-highlighted <span class="mono">html</span> or raw <span class="mono">code</span> — shipping a
+  highlighter to the client is a runtime cost the reader pays twice, once to download and once to run.
+  When <span class="mono">html</span> is supplied, comment ink is
+  <span class="mono">--lw-on-dark-3</span>, the muted floor on this ground: anything fainter fails AA,
+  and a comment is still text.</p>
+<p class="sub">The copy control confirms <i>in place</i> rather than raising a toast — feedback belongs
+  where the click was. The hex in the sample is <i>sample content</i>, not a style value: it is the
+  argument a caller passes to <span class="mono">brandVars()</span>, which is the one place a raw hex
+  legitimately enters the system (a tenant's brand colour, clamped on arrival).</p></p>
+</div>
+</div>
+<script type="text/babel">
+const LW = window.LeanWiseDesign_f2d907;
+
+const { Table, KpiTile, StatMeter, EmptyState, Console, CodeBlock, Grid, Stack, Button, Chip } = LW;
+const cols = [
+  {key:"src",label:"Source"},{key:"docs",label:"Docs",num:true},
+  {key:"hit",label:"Hit rate",num:true},{key:"st",label:"Status"}
+];
+const rows = [
+  {id:1,src:"Contracts / 2024",docs:"1,284",hit:"94.2%",st:<Chip tone="success">live</Chip>},
+  {id:2,src:"Policy handbook",docs:"312",hit:"88.7%",st:<Chip tone="success">live</Chip>},
+  {id:3,src:"Support transcripts",docs:"9,015",hit:"71.4%",st:<Chip tone="warning">stale</Chip>},
+  {id:4,src:"Legacy wiki",docs:"476",hit:"—",st:<Chip tone="danger">failed</Chip>}
+];
+function Demo() {
+  return (
+    <Stack gap={16}>
+      {/* min=200, not 176: the delta sits BESIDE the number, so a tile has to
+          hold "840ms" + "↓ 60ms" + the gap on one line. At 176 the p95 tile
+          landed on exactly 138px of 138px and tipped into the wrap fallback on
+          sub-pixel rounding — a specimen resting on the boundary teaches the
+          layout the component documents as wrong. `note` is demonstrated on
+          StatMeter's `foot` instead: at any tile width that fits three across,
+          a noted delta cannot stay inline. */}
+      <Grid min={200}>
+        <KpiTile label="Queries / day" icon="search" value="18.4k" delta="12.1%" direction="up" />
+        <KpiTile label="Grounded" icon="shield" accent="pos" value="97.3%" delta="0.4pt" direction="up" />
+        <KpiTile label="p95 latency" icon="clock" value="840ms" delta="60ms" direction="down" tone="pos" />
+      </Grid>
+      <Grid min={190}>
+        {/* The delta carries no ▲: `direction` draws the arrow from the icon set,
+            so a typed triangle would be a second, differently-drawn arrow beside
+            the real one — and the one that never picks up a stroke-weight change. */}
+        <StatMeter label="controls current" value="94" unit="%" delta="6 pts" direction="up" percent={94} target={90} foot="Target 90% · 30-day trend" interactive />
+        <StatMeter label="evidence expiring" value="6" delta="4" direction="up" percent={18} tone="warning" foot="Of 34 artefacts · next in 9 days" interactive />
+      </Grid>
+      <Table columns={cols} rows={rows} caption="Indexed sources" />
+      {/* `cells`, not a space-padded string: the fields align because they ARE
+          columns. Padding mono text with runs of spaces looks aligned in the
+          source and breaks the moment one value is longer than guessed.
+          The details are kept short DELIBERATELY: this specimen sits in a
+          ~374px half-panel, and a last field wider than its track wraps
+          mid-phrase, which is the one thing the columns exist to prevent. A
+          reference example has to fit the box it is demonstrated in — hence
+          minute-precision stamps here rather than seconds, which buys the
+          detail column the ~24px it needs. */}
+      <Console url="ops.leanwise.ai/index" lines={[
+        {t:"09:14",cells:["embed","contracts/2024",{text:"1,284 docs",num:true}],tone:"ok"},
+        {t:"09:15",cells:["reindex","policy-handbook",{text:"312 docs",num:true}],tone:"ok"},
+        {t:"09:15",cells:["skip","legacy-wiki",{text:"parser timeout"}],tone:"warn"},
+        {t:"09:16",cells:["fail","legacy-wiki",{text:"4 unreadable"}],tone:"err"}
+      ]} />
+      {/* Raw `code`, so the copy control is on by default — a snippet a reader
+          has to select by hand is a snippet they mis-copy. */}
+      <CodeBlock filename="theme.js" lang="js" code={'const theme = brandVars("#0C727B");'} />
+      <EmptyState icon="check" title="No evaluations yet"
+        description="Run a suite against this index to see grounding and citation accuracy over time."
+        action={<Button size="sm" style={{marginTop:4}}>Run first evaluation</Button>} />
+    </Stack>
+  );
+}
+ReactDOM.createRoot(document.getElementById("light")).render(<Demo />);
+ReactDOM.createRoot(document.getElementById("dark")).render(<Demo />);
+
+</script></body></html>

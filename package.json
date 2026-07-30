@@ -1,68 +1,109 @@
 {
   "name": "@leanwise/design",
-  "version": "0.9.0",
-  "description": "LeanWise Design System (LDS v4) — the canonical token core for every LeanWiseAI product.",
+  "version": "1.1.0",
+  "description": "LeanWise Design System — token core, CSS layers, React components, twelve templates.",
   "license": "UNLICENSED",
+  "private": false,
   "type": "module",
   "sideEffects": [
     "*.css"
   ],
-  "files": [
-    "*.css",
-    "assets",
-    "fonts",
-    "lib",
-    "bin",
-    "dist",
-    "tailwind-preset.js"
-  ],
+  "main": "./react.js",
+  "types": "./react.d.ts",
   "exports": {
-    "./tokens.css": "./tokens.css",
-    "./shadcn.css": "./shadcn.css",
-    "./fonts.css": "./fonts.css",
-    "./lw.css": "./lw.css",
-    "./tailwind-preset": "./tailwind-preset.js",
-    "./counter": {
-      "types": "./lib/counter.d.ts",
-      "default": "./lib/counter.js"
-    },
-    "./brand": {
-      "types": "./lib/brand.d.ts",
-      "default": "./lib/brand.js"
+    ".": {
+      "types": "./react.d.ts",
+      "default": "./react.js"
     },
     "./react": {
-      "types": "./dist/react/index.d.ts",
-      "import": "./dist/react/index.js",
-      "require": "./dist/react/index.cjs"
+      "types": "./react.d.ts",
+      "default": "./react.js"
     },
+    "./brand": {
+      "types": "./brand.d.ts",
+      "default": "./brand.js"
+    },
+    "./hooks": {
+      "types": "./hooks.d.ts",
+      "default": "./hooks.js"
+    },
+    "./tailwind-preset": {
+      "require": "./tailwind-preset.cjs",
+      "default": "./tailwind-preset.cjs"
+    },
+    "./tokens.css": "./tokens.css",
+    "./fonts.css": "./fonts.css",
+    "./shadcn.css": "./shadcn.css",
+    "./base.css": "./base.css",
+    "./marketing.css": "./marketing.css",
+    "./product.css": "./product.css",
+    "./lw.css": "./lw.css",
+    "./app.css": "./app.css",
+    "./email.css": "./email.css",
+    "./tokens.json": "./tokens.json",
+    "./assets/*": "./assets/*",
     "./fonts/*": "./fonts/*",
-    "./assets/*": "./assets/*"
+    "./templates/*": "./templates/*"
   },
-  "bin": {
-    "lw-token-lint": "./bin/lw-token-lint.mjs",
-    "lw-contrast-check": "./bin/lw-contrast-check.mjs"
-  },
+  "files": [
+    "react.js",
+    "react.d.ts",
+    "brand.js",
+    "brand.d.ts",
+    "hooks.js",
+    "hooks.d.ts",
+    "tailwind-preset.cjs",
+    "tokens.css",
+    "fonts.css",
+    "shadcn.css",
+    "base.css",
+    "marketing.css",
+    "product.css",
+    "lw.css",
+    "app.css",
+    "email.css",
+    "tokens.json",
+    "components",
+    "assets",
+    "fonts",
+    "templates",
+    "README.md"
+  ],
   "scripts": {
-    "check": "node bin/lw-contrast-check.mjs",
-    "build": "tsup",
-    "prepublishOnly": "pnpm build",
-    "ladle": "ladle serve",
-    "ladle:build": "ladle build"
+    "build": "tsup --config templates/_tooling/tsup.config.js",
+    "check:contrast": "node templates/_tooling/lw-contrast-check.mjs",
+    "check:tokens": "node templates/_tooling/lw-token-lint.mjs src",
+    "check:themes": "node templates/_tooling/lw-tokens-dtcg.mjs --check",
+    "check:a11y": "node templates/_tooling/lw-a11y.mjs",
+    "check:visual": "node templates/_tooling/lw-visual.mjs",
+    "check": "npm run check:contrast && npm run check:tokens && npm run check:themes",
+    "check:ci": "npm run check && npm run check:a11y && npm run check:visual",
+    "tokens": "node templates/_tooling/lw-tokens-dtcg.mjs",
+    "prepublishOnly": "npm run check && npm run tokens && npm run build"
+  },
+  "devDependencies": {
+    "axe-core": "^4.10.0",
+    "playwright": "^1.48.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.0"
   },
   "peerDependencies": {
     "react": ">=18",
     "react-dom": ">=18"
   },
-  "devDependencies": {
-    "@ladle/react": "^5.1.1",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
-    "tsup": "^8.5.1",
-    "typescript": "^5.9.2"
+  "peerDependenciesMeta": {
+    "react-dom": {
+      "optional": true
+    }
   },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild"
-    ]
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Okeysir198/leanwise-design.git"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }

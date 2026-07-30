@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Settings & forms" description="Sectioned settings page — Field/Input/Select/Switch with help, error and destructive-action patterns." -->
+<helmet><script src="./ds-base.js"></script></helmet>
+<div class="{{ themeClass }}" data-band="{{ band }}" style="min-height:100vh;background:var(--lw-bg-subtle);color:var(--lw-fg);font-family:var(--lw-font-sans)">
+
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.TopBar" hint-size="100%,56px" brand="LeanWise AI" brand-href="#" logo="{{ true }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.ThemeToggle" hint-size="72px,30px" modes="{{ themeModes }}" value="{{ theme }}" onChange="{{ setTheme }}"></x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Avatar" hint-size="32px,32px" name="Your Name"></x-import>
+</x-import>
+
+<div class="lw-container" style="padding-top:28px;padding-bottom:64px;display:flex;flex-direction:column;gap:24px">
+
+<div style="display:flex;flex-direction:column;gap:8px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Breadcrumbs" hint-size="200px,18px" items="{{ crumbs }}"></x-import>
+<h1 style="margin:0;font-size:27px;font-weight:600;letter-spacing:-.022em">Workspace settings</h1>
+</div>
+
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Tabs" hint-size="100%,40px" label="Settings sections" tabs="{{ tabs }}" value="{{ tab }}" onChange="{{ setTab }}"></x-import>
+
+<div class="lw-split" style="--lw-split-rail:280px;align-items:start">
+
+<div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+
+<section style="background:var(--lw-bg);border:1px solid var(--lw-line);border-radius:var(--lw-radius-lg);padding:24px;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:4px">
+<h2 style="margin:0;font-size:16px;font-weight:600;letter-spacing:-.012em">Identity</h2>
+<p style="margin:0;font-size:13px;color:var(--lw-fg-muted)">How this workspace appears to members and in exported answers.</p>
+</div>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Field" hint-size="100%,70px" label="Workspace name" htmlFor="ws-name" required="{{ true }}" help="Lowercase, no spaces. Used in URLs and API scopes.">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Input" hint-size="100%,40px" id="ws-name" defaultValue="your-workspace"></x-import>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Field" hint-size="100%,120px" label="Answer disclaimer" htmlFor="ws-disc" optional="{{ true }}" help="Appended to every exported answer.">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Textarea" hint-size="100%,96px" id="ws-disc" defaultValue="Generated from indexed source documents. Verify against the cited passage before relying on it."></x-import>
+</x-import>
+</section>
+
+<section style="background:var(--lw-bg);border:1px solid var(--lw-line);border-radius:var(--lw-radius-lg);padding:24px;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:4px">
+<h2 style="margin:0;font-size:16px;font-weight:600;letter-spacing:-.012em">Retrieval</h2>
+<p style="margin:0;font-size:13px;color:var(--lw-fg-muted)">Applies to every query in this workspace.</p>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Field" hint-size="100%,70px" label="Mode" htmlFor="ws-mode" help="Hybrid is the default.">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Select" hint-size="100%,40px" id="ws-mode" options="{{ modes }}" defaultValue="Hybrid"></x-import>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Field" hint-size="100%,70px" label="Passages per answer" htmlFor="ws-k" help="More passages, slower answers.">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Input" hint-size="100%,40px" id="ws-k" type="number" defaultValue="4"></x-import>
+</x-import>
+</div>
+<div style="display:flex;flex-direction:column;gap:14px;padding-top:4px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Switch" hint-size="100%,22px" label="Require a citation for every claim" defaultChecked="{{ true }}"></x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Switch" hint-size="100%,22px" label="Allow model fallback when retrieval is empty"></x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Switch" hint-size="100%,22px" label="Re-embed automatically on upload" defaultChecked="{{ true }}"></x-import>
+</div>
+</section>
+
+<section style="background:var(--lw-bg);border:1px solid var(--lw-line);border-radius:var(--lw-radius-lg);padding:24px;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:4px">
+<h2 style="margin:0;font-size:16px;font-weight:600;letter-spacing:-.012em">API access</h2>
+<p style="margin:0;font-size:13px;color:var(--lw-fg-muted)">Keys are shown once. Rotate rather than share.</p>
+</div>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Field" hint-size="100%,70px" label="Live key" htmlFor="ws-key" error="This key was revoked on 12 June and can no longer authenticate.">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Input" hint-size="100%,40px" id="ws-key" defaultValue="lw_live_8f2a91c4…" invalid="{{ true }}"></x-import>
+</x-import>
+<div style="display:flex;gap:8px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="140px,40px" variant="brand">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="17px,17px" name="retry" size="17"></x-import>
+<span>Rotate key</span>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="150px,40px" variant="ghost">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="17px,17px" name="list" size="17"></x-import>
+<span>View audit log</span>
+</x-import>
+</div>
+</section>
+
+<section style="background:var(--lw-bg);border:1px solid var(--lw-danger-soft);border-radius:var(--lw-radius-lg);padding:24px;display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;flex-direction:column;gap:4px">
+<h2 style="margin:0;font-size:16px;font-weight:600;letter-spacing:-.012em;color:var(--lw-danger-on)">Delete workspace</h2>
+<p style="margin:0;font-size:13px;color:var(--lw-fg-muted);max-width:60ch">Removes the index, every uploaded document and all query history. Source files in connected storage are not touched. This cannot be undone.</p>
+</div>
+<div><x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="180px,40px" variant="danger" onClick="{{ openDelete }}">Delete this workspace</x-import></div>
+</section>
+
+<div style="display:flex;justify-content:flex-end;gap:8px;padding-top:4px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="90px,40px" variant="ghost">Cancel</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="130px,40px">Save changes</x-import>
+</div>
+
+</div>
+
+<aside style="display:flex;flex-direction:column;gap:12px;background:var(--lw-bg);border:1px solid var(--lw-line);border-radius:var(--lw-radius-lg);padding:20px;position:sticky;top:76px">
+<span style="font-family:var(--lw-font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--lw-fg-subtle)">On this page</span>
+<a href="#" style="font-size:13px;color:var(--lw-brand-text);text-decoration:none">Identity</a>
+<a href="#" style="font-size:13px;color:var(--lw-fg-muted);text-decoration:none">Retrieval</a>
+<a href="#" style="font-size:13px;color:var(--lw-fg-muted);text-decoration:none">API access</a>
+<a href="#" style="font-size:13px;color:var(--lw-fg-muted);text-decoration:none">Delete workspace</a>
+</aside>
+
+</div>
+</div>
+
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Dialog" hint-size="480px,260px" open="{{ deleteOpen }}" onClose="{{ closeDelete }}" title="Delete your-workspace?" description="41,208 chunks across 5 sources will be removed, along with 18,400 stored queries. Connected storage is untouched." footer="{{ deleteActions }}"></x-import>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1240,&quot;height&quot;:1000},&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;\&quot;light\&quot; | \&quot;dark\&quot;&quot;,&quot;section&quot;:&quot;Theme&quot;}}">
+class Component extends DCLogic {
+  state = { tab: "general", deleteOpen: false, theme: null };
+  renderVals() {
+    // One owner of theme. The page paints its band from this value and the
+    // toggle is driven by it — an uncontrolled toggle would write the document
+    // root while the wrapper stayed on the prop, rendering half a theme.
+    const theme = this.state.theme || this.props.theme || "light";
+    const light = theme !== "dark";
+    const NS = window.LeanWiseDesign_f2d907;
+    return {
+      theme,
+      setTheme: (v) => this.setState({ theme: v }),
+      // Two themes, so the control offers two — not a third mode hidden by CSS.
+      themeModes: ["light", "dark"],
+      // The dialog's own footer slot, so the actions sit on the pinned bar and
+      // stay reachable when the body scrolls.
+      deleteActions: NS && NS.Button ? [
+        React.createElement(NS.Button, { key: "c", variant: "ghost", onClick: () => this.setState({ deleteOpen: false }) }, "Cancel"),
+        React.createElement(NS.Button, { key: "d", variant: "danger", onClick: () => this.setState({ deleteOpen: false }) }, "Delete workspace")
+      ] : null,
+      themeClass: light ? "" : "dark",
+      band: light ? "light" : "dark",
+      tab: this.state.tab,
+      setTab: (v) => this.setState({ tab: v }),
+      deleteOpen: this.state.deleteOpen,
+      openDelete: () => this.setState({ deleteOpen: true }),
+      closeDelete: () => this.setState({ deleteOpen: false }),
+      crumbs: [{ label: "your-workspace", href: "#" }, { label: "settings" }],
+      tabs: [
+        { value: "general", label: "General" },
+        { value: "members", label: "Members", count: 14 },
+        { value: "sources", label: "Sources", count: 5 },
+        { value: "billing", label: "Billing" }
+      ],
+      modes: ["Hybrid", "Semantic", "Keyword"]
+    };
+  }
+}
+
+</script>
+</body>
+</html>

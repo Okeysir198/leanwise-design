@@ -1,0 +1,34 @@
+import { Icon } from "../primitives/Icon.jsx";
+const cx = (...a) => a.filter(Boolean).join(" ");
+
+/**
+ * The touch answer to `Sidebar`. Three to five DESTINATIONS, never actions — a
+ * tab bar that mixes "Home" with "New" teaches nobody where they are, and the
+ * one thing a tab bar has to communicate is location.
+ *
+ * It reserves the home indicator with `--lw-safe-bottom` rather than a magic
+ * 34px: the inset is 0 on a device without one, so the same rule is right
+ * everywhere. The 44px target comes from the bar height, not from padding.
+ */
+export function BottomNav({ items = [], value, onChange, label = "Main", className, ...rest }) {
+  if (items.length > 5 && typeof console !== "undefined") {
+    console.warn("BottomNav: " + items.length + " items. Past five, labels truncate and the bar stops being scannable — use a sidebar or a More destination.");
+  }
+  return (
+    <nav className={cx("lw-bottom-nav", className)} aria-label={label} {...rest}>
+      {items.map((it) => {
+        const on = it.value === value;
+        const Tag = it.href ? "a" : "button";
+        return (
+          <Tag key={it.value} href={it.href || undefined} type={it.href ? undefined : "button"}
+            aria-current={on ? "page" : undefined}
+            onClick={it.href ? undefined : () => onChange && onChange(it.value)}>
+            <Icon name={it.icon} size={21} />
+            <span className="lw-bn-label">{it.label}</span>
+            {it.badge != null && <span className="lw-sr-only">{it.badge + " unread"}</span>}
+          </Tag>
+        );
+      })}
+    </nav>
+  );
+}

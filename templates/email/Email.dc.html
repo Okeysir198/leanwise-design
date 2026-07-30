@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Transactional email" description="A 600px table-based email that survives Outlook: literal values, padded-anchor buttons, one max-width breakpoint, and a plain-text version beside it." -->
+<helmet><link rel="stylesheet" href="../../email.css"><script src="./ds-base.js"></script></helmet>
+<div style="min-height:100vh;padding:32px 16px;background:#F6F8FA">
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="lw-em-body">
+<tr><td align="center">
+
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" class="lw-em-shell" style="width:600px;max-width:600px;background:#FFFFFF">
+
+<tr><td class="lw-em-head" style="padding:24px 32px;background:#024576">
+<a href="#" class="lw-em-brand" style="font-size:15px;font-weight:600;letter-spacing:-.01em;color:#FFFFFF;text-decoration:none">LeanWise AI</a>
+</td></tr>
+
+<tr><td class="lw-em-pad" style="padding:32px 32px 8px">
+<p class="lw-em-eyebrow" style="margin:0 0 10px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#4A5567">{{ eyebrow }}</p>
+<h1 class="lw-em-h1" style="margin:0;font-size:24px;line-height:1.25;font-weight:600;letter-spacing:-.02em;color:#0B1220">{{ headline }}</h1>
+</td></tr>
+
+<tr><td class="lw-em-pad-b" style="padding:14px 32px 8px">
+<p class="lw-em-p" style="margin:0;font-size:15px;line-height:1.62;color:#4A5567">{{ intro }}</p>
+</td></tr>
+
+<tr><td style="padding:8px 32px 20px">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="lw-em-panel" style="background:#F6F8FA;border:1px solid #E3E8EF;border-radius:8px">
+<tr><td style="padding:18px 20px">
+<sc-for list="{{ facts }}" as="f" hint-placeholder-count="4">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+<td style="padding:5px 0;font-size:13px;color:#6B7684">{{ f.k }}</td>
+<td align="right" class="lw-em-mono" style="padding:5px 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:13px;color:#0B1220">{{ f.v }}</td>
+</tr></table>
+</sc-for>
+</td></tr>
+</table>
+</td></tr>
+
+<tr><td style="padding:4px 32px 28px">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+<td class="lw-em-btn" style="background:#0C727B;border-radius:8px">
+<a href="#" style="display:inline-block;padding:13px 26px;font-size:15px;font-weight:600;line-height:1;color:#FFFFFF;text-decoration:none">{{ ctaLabel }}</a>
+</td>
+<td style="width:10px">&nbsp;</td>
+<td class="lw-em-btn lw-em-btn-ghost" style="background:#FFFFFF;border:1px solid #CBD3DE;border-radius:8px">
+<a href="#" style="display:inline-block;padding:12px 22px;font-size:15px;font-weight:500;line-height:1;color:#0B1220;text-decoration:none">View the source</a>
+</td>
+</tr></table>
+</td></tr>
+
+<tr><td style="padding:0 32px"><div class="lw-em-rule" style="height:1px;line-height:1px;font-size:0;background:#E3E8EF">&nbsp;</div></td></tr>
+
+<tr><td class="lw-em-foot" style="padding:22px 32px 32px">
+<p class="lw-em-small" style="margin:0 0 10px;font-size:12.5px;line-height:1.55;color:#6B7684">{{ footLine }}</p>
+<p class="lw-em-small" style="margin:0;font-size:12.5px;line-height:1.55;color:#6B7684">
+<a href="#" style="color:#0C727B">Notification settings</a> · <a href="#" style="color:#0C727B">Unsubscribe from digests</a>
+</p>
+</td></tr>
+
+</table>
+
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:600px">
+<tr><td style="padding:16px 32px 0">
+<p class="lw-em-small" style="margin:0;font-size:11.5px;line-height:1.5;color:#8A94A6">LeanWise AI · sent because you own a source in this workspace</p>
+</td></tr>
+</table>
+
+</td></tr>
+</table>
+
+<div style="max-width:600px;margin:32px auto 0;padding:20px;border:1px dashed #CBD3DE;border-radius:8px;background:#FFFFFF">
+<p style="margin:0 0 10px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#6B7684">Plain-text part — ship both</p>
+<pre style="margin:0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;line-height:1.6;color:#4A5567;white-space:pre-wrap">{{ plain }}</pre>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:760,&quot;height&quot;:1000},&quot;eyebrow&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Index rebuilt&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;headline&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;contracts/2024 is ready to query&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;intro&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;The rebuild finished cleanly.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;source&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;contracts/2024&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;docs&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;1,284&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;chunks&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;41,208&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;duration&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;6m 12s&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;ctaLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Open in LeanWise&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const p = this.props;
+    const source = p.source ?? "contracts/2024";
+    const chunks = p.chunks ?? "41,208";
+
+    // The plain-text part is not a fallback nobody reads — it is what a screen
+    // reader in a text-only client gets, and what spam filters weigh. Generating
+    // it from the same values is the only way it stays true.
+    const plain = [
+      "INDEX REBUILT",
+      "",
+      source + " finished re-indexing.",
+      "",
+      "Source:    " + source,
+      "Documents: " + (p.docs ?? "1,284"),
+      "Chunks:    " + chunks,
+      "Duration:  " + (p.duration ?? "6m 12s"),
+      "",
+      "Open the source: https://app.leanwise.ai/sources/contracts-2024",
+      "",
+      "Sent because you own a source in this workspace.",
+      "Notification settings: https://app.leanwise.ai/settings/notifications",
+    ].join("\n");
+
+    return {
+      eyebrow: p.eyebrow ?? "Index rebuilt",
+      headline: p.headline ?? (source + " is ready to query"),
+      intro: p.intro ?? "The rebuild finished cleanly. Queries are already being served from the new index — the old one was kept live until this one passed evaluation, so nothing went dark.",
+      facts: [
+        { k: "Source", v: source },
+        { k: "Documents", v: p.docs ?? "1,284" },
+        { k: "Chunks", v: chunks },
+        { k: "Duration", v: p.duration ?? "6m 12s" },
+      ],
+      ctaLabel: p.ctaLabel ?? "Open in LeanWise",
+      footLine: "You are getting this because you own this source. Digest emails can be turned off without losing failure alerts — those are the ones you actually need.",
+      plain,
+    };
+  }
+}
+</script>
+</body>
+</html>

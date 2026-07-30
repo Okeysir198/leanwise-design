@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="AI product app shell" description="Branded collapsible rail with grouped session history, breadcrumbs and new-chat in the bar, citations in a dialog, provenance panel on demand — the VSS/Ask starting point." -->
+<helmet><script src="./ds-base.js"></script></helmet>
+<div style="height:100vh;display:flex;background:var(--lw-bg);color:var(--lw-fg);font-family:var(--lw-font-sans);overflow:hidden">
+
+<div style="width:var(--lw-sidebar-w,252px);flex:none;display:flex;flex-direction:column;min-height:0;background:var(--lw-bg-subtle);border-right:1px solid var(--lw-line);overflow:hidden;transition:width .2s cubic-bezier(.2,.7,.3,1)" data-collapsed="{{ navCollapsedAttr }}">
+
+<div data-collapse-center="" style="display:flex;align-items:center;height:56px;flex:none;padding:0 14px;border-bottom:1px solid var(--lw-line)">
+<a href="#" aria-label="LeanWise AI — home" style="min-width:0;font-size:var(--lw-text-sm);font-weight:var(--lw-fw-semibold);letter-spacing:-.012em;color:var(--lw-brand-text);text-decoration:none">
+<span style="display:flex;align-items:center;gap:9px;min-width:0"><span class="brand-mark" aria-hidden="true"></span><span data-collapse-hide="">LeanWise AI</span></span>
+</a>
+</div>
+
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Sidebar" hint-size="100%,180px" items="{{ navItems }}" collapsed="{{ navCollapsed }}" data-embedded="true" data-comment-anchor="0e13ae447c-nav"></x-import>
+
+<div data-collapse-hide="" style="flex:1;min-height:0;border-top:1px solid var(--lw-line);margin-top:8px">
+<div style="height:100%;display:flex;flex-direction:column;min-height:0">
+<div class="lw-scroll" style="flex:1;min-height:0;overflow:auto;padding:4px 8px 12px">
+<sc-for list="{{ sessionGroups }}" as="g" hint-placeholder-count="2">
+<div style="display:flex;flex-direction:column;gap:2px">
+<span class="lw-nav-group">{{ g.label }}</span>
+<sc-for list="{{ g.items }}" as="s" hint-placeholder-count="3">
+<button type="button" class="lw-nav-item" onClick="{{ s.open }}" aria-current="{{ s.current }}" style="flex-direction:column;gap:2px;align-items:flex-start;padding:8px 10px">
+<span style="font-size:var(--lw-text-sm);font-weight:var(--lw-fw-medium);color:inherit;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ s.title }}</span>
+<span style="font-family:var(--lw-font-mono);font-size:10px;color:var(--lw-fg-subtle)">{{ s.meta }}</span>
+</button>
+</sc-for>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+
+<div data-collapse-center="" style="display:flex;align-items:center;gap:10px;flex:none;margin-top:auto;padding:10px 14px;border-top:1px solid var(--lw-line)">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Avatar" hint-size="32px,32px" name="Your Name" data-comment-anchor="7840887454-span"></x-import>
+<span data-collapse-hide="" style="min-width:0;line-height:1.3">
+<span style="display:block;font-size:var(--lw-text-sm);font-weight:var(--lw-fw-medium);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Your Name</span>
+<span style="display:block;font-family:var(--lw-font-mono);font-size:10px;color:var(--lw-fg-subtle);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">you@leanwise.ai</span>
+</span>
+</div>
+</div>
+
+<div style="flex:1;min-width:0;display:flex;flex-direction:column">
+
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.TopBar" hint-size="100%,56px">
+<div style="order:-1;display:flex;align-items:center;gap:12px;flex:0 1 auto;min-width:0;margin-right:16px;overflow:hidden;white-space:nowrap">
+<button type="button" onClick="{{ toggleNav }}" aria-expanded="{{ navExpanded }}" aria-label="{{ navToggleLabel }}" title="{{ navToggleLabel }}" class="lw-icon-btn" style-hover="color:var(--lw-brand-text)">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="21px,21px" name="sidebar" size="21"></x-import>
+</button>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Breadcrumbs" hint-size="220px,18px" items="{{ crumbs }}" data-comment-anchor="822b6aa8b6-nav"></x-import>
+</div>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="112px,32px" size="sm" onClick="{{ newChat }}" title="Start a new session">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="17px,17px" name="plus" size="17"></x-import>
+<span>New chat</span>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.ThemeToggle" hint-size="72px,30px" modes="{{ themeModes }}"></x-import>
+<button type="button" onClick="{{ toggleRail }}" aria-expanded="{{ railExpanded }}" aria-label="Toggle provenance panel" title="Toggle provenance panel" data-comment-anchor="6c5416d3f0-button" class="lw-icon-btn" style-hover="color:var(--lw-brand-text)">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="21px,21px" name="sidebar-right" size="21"></x-import>
+</button>
+</x-import>
+
+<div style="flex:1;display:flex;min-height:0">
+
+<main style="flex:1;min-width:0;display:flex;flex-direction:column;min-height:0">
+<div style="flex:1;overflow:auto;padding:24px 32px 8px" class="lw-scroll" data-comment-anchor="901ad2c8b5-div">
+<div style="max-width:72ch;margin:0 auto">
+
+<sc-if value="{{ hasThread }}" hint-placeholder-val="{{ true }}">
+<div>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Message" hint-size="100%,80px" role="user" who="You">Which contracts auto-renew before the end of Q3?
+<div class="lw-msg-actions">
+<button type="button" aria-label="Edit question" title="Edit" class="lw-icon-btn" style-hover="color:var(--lw-brand-text)">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="17px,17px" name="edit" size="17"></x-import>
+</button>
+</div>
+</x-import>
+
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Message" hint-size="100%,200px" role="ai" streaming="{{ streaming }}" data-comment-anchor="b4f0369b6b-div">
+<p style="margin:0">Four agreements auto-renew before 30 September.</p>
+<p style="margin:.7em 0 0">The <b>master services agreement</b> renews on 12 August with a 60-day notice window, so the decision date has already passed <x-import component-from-global-scope="LeanWiseDesign_f2d907.SourceChip" hint-size="20px,18px" n="1"></x-import>. <b>Statement of work 3</b> and the <b>amended agreement</b> both renew on 1 September <x-import component-from-global-scope="LeanWiseDesign_f2d907.SourceChip" hint-size="20px,18px" n="2"></x-import><x-import component-from-global-scope="LeanWiseDesign_f2d907.SourceChip" hint-size="20px,18px" n="3"></x-import>, and the <b>framework agreement</b> renews on 22 September under an evergreen clause <x-import component-from-global-scope="LeanWiseDesign_f2d907.SourceChip" hint-size="20px,18px" n="4"></x-import>.</p>
+<p style="margin:.7em 0 0">No other agreement in the indexed corpus has a renewal date inside the window.</p>
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:14px">
+<button type="button" onClick="{{ openSources }}" aria-label="Show the 4 cited passages" title="4 citations" class="lw-icon-btn" style="width:auto;gap:7px;height:28px;padding:0 4px;color:var(--lw-fg-muted);font-family:var(--lw-font-mono);font-size:11px;letter-spacing:.04em;cursor:pointer" style-hover="color:var(--lw-brand-text)">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="18px,18px" name="list" size="18"></x-import>4
+</button>
+<span style="flex:1"></span>
+<div class="lw-msg-actions">
+<button type="button" aria-label="Copy answer" title="Copy" class="lw-icon-btn" style-hover="color:var(--lw-brand-text)">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="17px,17px" name="copy" size="17"></x-import>
+</button>
+<button type="button" aria-label="Regenerate answer" title="Retry" class="lw-icon-btn" style-hover="color:var(--lw-brand-text)">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="17px,17px" name="retry" size="17"></x-import>
+</button>
+<button type="button" aria-label="Export answer" title="Export" class="lw-icon-btn" style-hover="color:var(--lw-brand-text)">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="17px,17px" name="download" size="17"></x-import>
+</button>
+</div>
+</div>
+</x-import>
+</div>
+</sc-if>
+
+<sc-if value="{{ isNewChat }}" hint-placeholder-val="{{ false }}">
+<div style="padding:64px 0;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center">
+<span style="width:36px;height:36px;border-radius:var(--lw-radius-sm);display:grid;place-items:center;background:var(--lw-brand-500);color:var(--lw-on-brand)">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="19px,19px" name="spark" size="19"></x-import>
+</span>
+<h1 style="margin:8px 0 0;font-size:var(--lw-text-h3);font-weight:var(--lw-fw-semibold);letter-spacing:var(--lw-tracking-tight)">New session</h1>
+<p style="margin:0;max-width:46ch;font-size:var(--lw-text-sm);color:var(--lw-fg-muted);text-wrap:pretty">Ask anything about the indexed corpus. Every claim in the answer resolves to a passage you can open.</p>
+<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:8px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="200px,30px" size="sm" variant="ghost">Which contracts auto-renew?</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="176px,30px" size="sm" variant="ghost">Summarise indemnity terms</x-import>
+</div>
+</div>
+</sc-if>
+
+</div>
+</div>
+
+<div style="padding:8px 32px 18px;background:var(--lw-bg)">
+<div style="max-width:72ch;margin:0 auto">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.PromptInput" hint-size="100%,112px" value="{{ prompt }}" onChange="{{ setPrompt }}" onSubmit="{{ send }}" data-comment-anchor="7424304326-div">
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;width:100%">
+<button type="button" aria-label="Attach a document" title="Attach a document" class="lw-icon-btn" style-hover="color:var(--lw-brand-text)">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="19px,19px" name="paperclip" size="19"></x-import>
+</button>
+<button type="button" aria-label="Choose which sources to search" title="All sources" class="lw-icon-btn" style-hover="color:var(--lw-brand-text)">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="19px,19px" name="layers" size="19"></x-import>
+</button>
+<span style="flex:1"></span>
+<span class="lw-prompt-hint">⇧⏎ for newline</span>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="32px,32px" size="sm" iconOnly="{{ true }}" onClick="{{ send }}" aria-label="Send" title="Send">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="16px,16px" name="send" size="16"></x-import>
+</x-import>
+</div>
+</x-import>
+<p style="margin:8px 0 0;text-align:center;font-size:11.5px;color:var(--lw-fg-subtle);text-wrap:pretty">AI can make mistakes. Please double-check responses.</p>
+</div>
+</div>
+</main>
+
+<sc-if value="{{ railOpen }}" hint-placeholder-val="{{ false }}">
+<aside style="width:340px;flex:none;border-left:1px solid var(--lw-line);background:var(--lw-bg-subtle);display:flex;flex-direction:column;min-height:0">
+<div style="padding:0 8px 0 18px;height:56px;flex:none;border-bottom:1px solid var(--lw-line);display:flex;align-items:center;gap:8px">
+<span style="flex:1;font-family:var(--lw-font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--lw-fg-subtle)">Provenance</span>
+<button type="button" onClick="{{ closeRail }}" aria-label="Close provenance panel" title="Close" class="lw-icon-btn" style-hover="color:var(--lw-brand-text)">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="17px,17px" name="close" size="17"></x-import>
+</button>
+</div>
+<div style="flex:1;overflow:auto;padding:16px 18px;display:flex;flex-direction:column;gap:20px" class="lw-scroll" data-comment-anchor="76149bb023-div">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.SourceList" hint-size="100%,220px" sources="{{ sources }}"></x-import>
+<div style="display:flex;flex-direction:column;gap:10px">
+<span style="font-family:var(--lw-font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--lw-fg-subtle)">Trace</span>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.AgentTrace" hint-size="100%,160px" steps="{{ steps }}"></x-import>
+</div>
+</div>
+</aside>
+</sc-if>
+
+</div>
+</div>
+
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Dialog" hint-size="0,0" open="{{ sourcesOpen }}" onClose="{{ closeSources }}" title="{{ dialogTitle }}" width="760">
+
+<sc-if value="{{ isCitationList }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="margin:0 0 2px;font-size:var(--lw-text-sm);color:var(--lw-fg-muted)">The passages this answer was composed from, in the order they are cited. Open one to read the whole document.</p>
+<sc-for list="{{ citations }}" as="s" hint-placeholder-count="4">
+<button type="button" onClick="{{ s.open }}" style="display:flex;align-items:flex-start;gap:12px;width:100%;text-align:left;padding:14px;border:1px solid var(--lw-line);border-radius:var(--lw-radius-md);background:var(--lw-bg-subtle);font-family:inherit;color:var(--lw-fg);cursor:pointer" style-hover="border-color:var(--lw-brand-400)">
+<span style="width:20px;height:20px;flex:none;border-radius:4px;display:grid;place-items:center;background:var(--lw-brand-soft);color:var(--lw-brand-text);font-family:var(--lw-font-mono);font-size:11px">{{ s.n }}</span>
+<span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px">
+<span style="font-size:var(--lw-text-sm);font-weight:var(--lw-fw-semibold)">{{ s.title }}</span>
+<span style="font-family:var(--lw-font-mono);font-size:10.5px;color:var(--lw-fg-subtle)">{{ s.meta }}</span>
+<span style="font-size:13px;line-height:1.6;color:var(--lw-fg-muted);border-left:2px solid var(--lw-line-strong);padding-left:10px;text-wrap:pretty">{{ s.excerpt }}</span>
+<span style="font-family:var(--lw-font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--lw-brand-text)">Read full document</span>
+</span>
+<span style="flex:none;color:var(--lw-fg-subtle);margin-top:2px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="17px,17px" name="chevron-right" size="17"></x-import>
+</span>
+</button>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ isSourceDetail }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;align-items:center;gap:10px;padding-bottom:12px;border-bottom:1px solid var(--lw-line)">
+<button type="button" onClick="{{ backToCitations }}" aria-label="Back to citations" title="Back to citations" class="lw-icon-btn" style="width:auto;gap:6px;padding:0 4px;color:var(--lw-fg-muted);font-family:var(--lw-font-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer" style-hover="color:var(--lw-brand-text)">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="16px,16px" name="chevron-left" size="16"></x-import>Citations
+</button>
+<span style="flex:1"></span>
+<span style="font-family:var(--lw-font-mono);font-size:10.5px;color:var(--lw-fg-subtle)">{{ detailMeta }}</span>
+</div>
+<div class="lw-scroll" style="max-height:56vh;overflow:auto;padding-right:4px;display:flex;flex-direction:column;gap:12px">
+<sc-for list="{{ detailParas }}" as="p" hint-placeholder-count="6">
+<div>
+<sc-if value="{{ p.isHeading }}" hint-placeholder-val="{{ false }}">
+<h3 style="margin:6px 0 0;font-family:var(--lw-font-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--lw-fg-subtle)">{{ p.text }}</h3>
+</sc-if>
+<sc-if value="{{ p.isCited }}" hint-placeholder-val="{{ false }}">
+<p style="margin:0;padding:12px 14px;border-radius:var(--lw-radius-md);background:var(--lw-brand-soft);border-left:3px solid var(--lw-brand-500);font-size:13.5px;line-height:1.7;color:var(--lw-fg);text-wrap:pretty">{{ p.text }}</p>
+</sc-if>
+<sc-if value="{{ p.isPlain }}" hint-placeholder-val="{{ true }}">
+<p style="margin:0;font-size:13.5px;line-height:1.7;color:var(--lw-fg-muted);text-wrap:pretty">{{ p.text }}</p>
+</sc-if>
+</div>
+</sc-for>
+</div>
+<p style="margin:0;font-size:11.5px;color:var(--lw-fg-subtle)">Highlighted passage is the one cited in the answer.</p>
+</div>
+</sc-if>
+
+</x-import>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;navCollapsed&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Shell&quot;},&quot;railOpen&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Shell&quot;}}">
+class Component extends DCLogic {
+  state = { prompt: "", streaming: true, thread: true, nav: null, rail: null, active: "renewals", sourcesOpen: false };
+  componentDidMount() {
+    // The caret must stop when the stream stops, or the UI claims to still be
+    // thinking. Templates ship a finished answer, so it settles after a beat.
+    this._t = setTimeout(() => this.setState({ streaming: false }), 2600);
+  }
+  componentWillUnmount() { clearTimeout(this._t); }
+  // Nav icons live in data, so they are elements rather than markup — the one
+  // place this template builds React by hand, and only ever an icon.
+  icon(name, fallback = "more") {
+    const NS = window.LeanWiseDesign_f2d907;
+    if (!NS || !NS.Icon) return null;
+    // Resolved against the COMPILED set, not against intent. A glyph added in the
+    // same change as its first use is not in the bundle until the next build, and
+    // a nav row with an empty icon slot is worse than a stand-in. Once the real
+    // name compiles this picks it up with no edit here.
+    const set = NS.IconNames || [];
+    const resolved = set.length && !set.includes(name) ? fallback : name;
+    return React.createElement(NS.Icon, { name: resolved, size: 19 });
+  }
+  // Each source carries the cited passage AND the document it came from, so the
+  // dialog can show the claim in its own context rather than as a floating quote.
+  sources() {
+    return [
+      { n: 1, title: "Master services agreement", meta: "contracts/2024 · p.14 · 94% match",
+        excerpt: "This Agreement shall automatically renew for successive twelve (12) month terms unless either party gives written notice of non-renewal no later than sixty (60) days before the end of the then-current term.",
+        doc: [
+          { kind: "h", text: "4. Term and renewal" },
+          { text: "4.1 The initial term of this Agreement begins on the Effective Date and continues for twelve (12) months unless terminated earlier in accordance with Section 9." },
+          { kind: "cite", text: "4.2 This Agreement shall automatically renew for successive twelve (12) month terms unless either party gives written notice of non-renewal no later than sixty (60) days before the end of the then-current term." },
+          { text: "4.3 The renewal date for the current term is 12 August. Notice of non-renewal must therefore be served no later than 13 June of the same year." },
+          { text: "4.4 Fees for any renewal term are those set out in the then-current price list, save that no increase shall exceed five per cent (5%) of the fees payable in the preceding term." },
+          { kind: "h", text: "5. Charges" },
+          { text: "5.1 Charges are invoiced monthly in arrears and payable within thirty (30) days of the invoice date." }
+        ] },
+      { n: 2, title: "Statement of work 3", meta: "contracts/2024 · p.2 · 88% match",
+        excerpt: "The term of this SOW commences on 1 September and renews annually on the same date, subject to the notice provisions of the master agreement.",
+        doc: [
+          { kind: "h", text: "1. Scope" },
+          { text: "1.1 The Supplier shall provide the managed data services described in Schedule A for the sites listed in Schedule B." },
+          { kind: "h", text: "2. Term" },
+          { kind: "cite", text: "2.1 The term of this SOW commences on 1 September and renews annually on the same date, subject to the notice provisions of the master agreement." },
+          { text: "2.2 Either party may decline renewal by written notice under clause 4.2 of the master services agreement. Nothing in this SOW extends or shortens that notice period." },
+          { text: "2.3 Where this SOW is renewed, the service levels in Schedule C continue unchanged unless amended in writing." }
+        ] },
+      { n: 3, title: "Master services agreement (amended)", meta: "contracts/2023 · p.31 · 81% match",
+        excerpt: "Section 4.2 is amended to align the renewal date of all active statements of work to 1 September of each calendar year.",
+        doc: [
+          { kind: "h", text: "Amendment 2 — renewal alignment" },
+          { text: "This amendment is made between the parties on 14 November and takes effect from the date of the last signature below." },
+          { kind: "cite", text: "1. Section 4.2 is amended to align the renewal date of all active statements of work to 1 September of each calendar year." },
+          { text: "2. Where a statement of work would otherwise have renewed on a different date, its current term is extended to 31 August and the aligned term begins the following day." },
+          { text: "3. All other terms of the master services agreement remain in full force and effect." }
+        ] },
+      { n: 4, title: "Framework agreement", meta: "contracts/2022 · p.7 · 76% match",
+        excerpt: "Following the initial term the agreement continues on an evergreen basis, renewing on 22 September each year until terminated on ninety (90) days notice.",
+        doc: [
+          { kind: "h", text: "3. Duration" },
+          { text: "3.1 The initial term is thirty-six (36) months from 22 September, during which neither party may terminate for convenience." },
+          { kind: "cite", text: "3.2 Following the initial term the agreement continues on an evergreen basis, renewing on 22 September each year until terminated on ninety (90) days notice." },
+          { text: "3.3 Notice under clause 3.2 must be given in writing to the contract manager named in Schedule 1 and takes effect at the end of the then-current annual term." },
+          { text: "3.4 Call-off contracts placed before termination continue to their own expiry, and the terms of this agreement continue to govern them." }
+        ] }
+    ];
+  }
+  renderVals() {
+    // Collapse states are live, seeded from props so the template can also be
+    // previewed in either position without clicking.
+    const navCollapsed = this.state.nav ?? (this.props.navCollapsed ?? false);
+    // The thread owns the window by default; provenance is summoned when it is
+    // wanted, so reading is not permanently taxed 340px.
+    const railOpen = this.state.rail ?? (this.props.railOpen ?? false);
+    const groups = [
+      { label: "Today", items: [
+        { id: "renewals", title: "Renewals before Q3 close", meta: "4 sources" },
+        { id: "indemnity", title: "Indemnity caps across MSAs", meta: "7 sources" }
+      ] },
+      { label: "Previous 7 days", items: [
+        { id: "dpa", title: "Which DPAs name subprocessors", meta: "12 sources" },
+        { id: "termination", title: "Termination for convenience", meta: "5 sources" },
+        { id: "sla", title: "SLA credits owed in 2024", meta: "9 sources" }
+      ] }
+    ];
+    return {
+      prompt: this.state.prompt,
+      streaming: this.state.streaming,
+      hasThread: this.state.thread,
+      isNewChat: !this.state.thread,
+      navCollapsed,
+      navCollapsedAttr: navCollapsed ? "true" : undefined,
+      // The collapse control sits in the rail header, next to what it collapses,
+      // and reads as a labelled expander rather than a bare glyph.
+      navToggleLabel: navCollapsed ? "Expand navigation" : "Collapse navigation",
+      navExpanded: navCollapsed ? "false" : "true",
+      toggleNav: () => this.setState({ nav: !navCollapsed }),
+      railOpen,
+      railExpanded: railOpen ? "true" : "false",
+      toggleRail: () => this.setState({ rail: !railOpen }),
+      closeRail: () => this.setState({ rail: false }),
+      // Citations open a dialog rather than the panel: the question a reader has
+      // at a citation is "what does the source actually say", which wants the
+      // passage in front of them, not a list beside them.
+      sourcesOpen: this.state.sourcesOpen,
+      openSources: () => this.setState({ sourcesOpen: true, detail: null }),
+      closeSources: () => this.setState({ sourcesOpen: false, detail: null }),
+      // The dialog is one surface with two views: the citation list, and the
+      // whole document with the cited passage marked in place. A passage without
+      // its document cannot be checked, which is the only reason to open it.
+      isCitationList: this.state.sourcesOpen && !this.state.detail,
+      isSourceDetail: !!this.state.detail,
+      dialogTitle: this.state.detail ? this.state.detail.title : "Citations",
+      detailMeta: this.state.detail ? this.state.detail.meta : "",
+      detailParas: this.state.detail
+        ? this.state.detail.doc.map((p) => ({
+            text: p.text,
+            isHeading: p.kind === "h",
+            isCited: p.kind === "cite",
+            isPlain: !p.kind
+          }))
+        : [],
+      backToCitations: () => this.setState({ detail: null }),
+      citations: this.sources().map((s) => ({ ...s, open: () => this.setState({ detail: s }) })),
+      sessionGroups: groups.map((g) => ({
+        label: g.label,
+        items: g.items.map((s) => ({
+          ...s,
+          // aria-current carries the active state; the tint comes from the
+          // system's own .lw-nav-item[aria-current] rule, not an inline style.
+          current: s.id === this.state.active ? "true" : undefined,
+          open: () => this.setState({ active: s.id, thread: true })
+        }))
+      })),
+      newChat: () => this.setState({ thread: false, active: null, prompt: "", streaming: false, rail: false, sourcesOpen: false }),
+      setPrompt: (v) => this.setState({ prompt: v }),
+      send: () => this.setState({ prompt: "", thread: true, active: this.state.active || "renewals", streaming: true }),
+      themeModes: ["light", "dark"],
+      // The SAME list the Dashboard template declares, so the two screens read
+      // as one product. Only `current` differs between them.
+      navItems: [
+        { group: "Workspace" },
+        { href: "#overview", label: "Overview", icon: this.icon("chart", "monitor") },
+        { href: "#ask", label: "Ask", icon: this.icon("spark"), current: true },
+        { href: "#sources", label: "Sources", icon: this.icon("layers"), badge: "12" },
+        { href: "#evaluations", label: "Evaluations", icon: this.icon("check") },
+        { group: "Admin" },
+        { href: "#members", label: "Members", icon: this.icon("users") },
+        { href: "#settings", label: "Settings", icon: this.icon("settings") }
+      ],
+      crumbs: [
+        { label: "your-workspace", href: "#" },
+        { label: "ask", href: "#" },
+        { label: "renewals Q3" }
+      ],
+      sources: this.sources(),
+      steps: [
+        { label: "Parsed the question", meta: "intent: date-filter · entity: contract", state: "done" },
+        { label: "Retrieved 41 candidates", meta: "hybrid · 240ms", state: "done" },
+        { label: "Reranked to top 4", meta: "cross-encoder · 180ms", state: "done" },
+        { label: "Composed with citations", meta: "4 of 4 claims grounded", state: "done" }
+      ]
+    };
+  }
+}
+
+</script>
+</body>
+</html>

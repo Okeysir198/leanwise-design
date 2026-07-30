@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Data export & reports" description="The pattern for work that takes longer than a click: queue it, show real progress, deliver it somewhere, and make a failure retryable without rebuilding the request." -->
+<helmet><script src="./ds-base.js"></script></helmet>
+<div class="{{ themeClass }}" data-band="{{ band }}" style="min-height:100vh;background:var(--lw-bg);color:var(--lw-fg);font-family:var(--lw-font-sans)">
+
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.AppBar" hint-size="100%,56px" brand="LeanWise AI" crumbs="{{ crumbs }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.ThemeToggle" hint-size="72px,30px" value="{{ theme }}" onChange="{{ setTheme }}"></x-import>
+</x-import>
+
+<div class="lw-page" style="padding:32px 0 64px;display:flex;flex-direction:column;gap:24px">
+
+<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
+<div style="display:flex;flex-direction:column;gap:6px">
+<p class="lw-eyebrow" style="margin:0">Reporting</p>
+<h1 style="margin:0;font-size:27px;font-weight:600;letter-spacing:-.022em">Exports</h1>
+<p style="margin:0;max-width:64ch;font-size:var(--lw-text-sm);color:var(--lw-fg-muted);line-height:1.6;text-wrap:pretty">Anything that takes longer than a click is queued, not awaited. The browser is not a place to hold a five-minute job — close the tab and the export still lands.</p>
+</div>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="140px,40px" onClick="{{ openBuilder }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="16px,16px" name="download" size="16"></x-import>
+<span>New export</span>
+</x-import>
+</div>
+
+<sc-if value="{{ hasJobs }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{ jobs }}" as="j" hint-placeholder-count="4">
+<div class="lw-job" data-status="{{ j.status }}" style="display:flex;align-items:center;gap:16px;padding:16px 18px;border:1px solid var(--lw-line);border-radius:var(--lw-radius-lg);background:var(--lw-bg)">
+<span class="lw-job-ic">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="17px,17px" name="{{ j.icon }}" size="17"></x-import>
+</span>
+<span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:5px">
+<span style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+<span style="font-size:var(--lw-text-sm);font-weight:var(--lw-fw-medium)">{{ j.title }}</span>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Chip" hint-size="80px,20px" tone="{{ j.tone }}">{{ j.statusLabel }}</x-import>
+</span>
+<sc-if value="{{ j.running }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Progress" hint-size="100%,3px" value="{{ j.pctNum }}" label="Export progress"></x-import>
+</sc-if>
+<span class="lw-job-meta">{{ j.meta }}</span>
+</span>
+<span style="flex:none;display:flex;align-items:center;gap:8px">
+<sc-if value="{{ j.canDownload }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="110px,32px" size="sm" variant="ghost">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="15px,15px" name="download" size="15"></x-import>
+<span>Download</span>
+</x-import>
+</sc-if>
+<sc-if value="{{ j.canRetry }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="90px,32px" size="sm" onClick="{{ j.retry }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="15px,15px" name="retry" size="15"></x-import>
+<span>Retry</span>
+</x-import>
+</sc-if>
+<sc-if value="{{ j.canCancel }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="80px,32px" size="sm" variant="ghost" onClick="{{ j.cancel }}">Cancel</x-import>
+</sc-if>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Menu" hint-size="32px,32px" items="{{ j.menu }}" label="Export actions" placement="bottom-end" trigger="{{ j.menuTrigger }}"></x-import>
+</span>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ noJobs }}" hint-placeholder-val="{{ false }}">
+<div style="border:1px solid var(--lw-line);border-radius:var(--lw-radius-lg);background:var(--lw-bg-subtle)">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.StateView" hint-size="100%,240px" variant="empty" icon="download" title="No exports yet" description="Build one from any filtered view, or start from scratch here. Finished exports stay downloadable for 30 days." action="{{ emptyAction }}"></x-import>
+</div>
+</sc-if>
+
+<div style="padding-top:8px">
+<span style="display:block;margin-bottom:10px;font-family:var(--lw-font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--lw-fg-subtle)">Scheduled</span>
+<div style="display:flex;flex-direction:column;gap:8px">
+<sc-for list="{{ schedules }}" as="s" hint-placeholder-count="2">
+<div style="display:flex;align-items:center;gap:14px;padding:14px 18px;border:1px solid var(--lw-line);border-radius:var(--lw-radius-md);background:var(--lw-bg-subtle)">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="16px,16px" name="clock" size="16"></x-import>
+<span style="flex:1;min-width:0;font-size:var(--lw-text-sm)">{{ s.title }}</span>
+<span style="font-family:var(--lw-font-mono);font-size:var(--lw-text-xs);color:var(--lw-fg-subtle)">{{ s.when }}</span>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Switch" hint-size="60px,24px" checked="{{ s.on }}" onChange="{{ s.toggle }}" label="{{ s.label }}"></x-import>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Drawer" hint-size="440px,100%" open="{{ builderOpen }}" onClose="{{ closeBuilder }}" title="New export" description="Nothing is generated until you queue it." footer="{{ builderFooter }}">
+<div style="display:flex;flex-direction:column;gap:16px;margin-top:16px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Field" hint-size="100%,72px" label="What to export">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Select" hint-size="100%,40px" options="{{ datasets }}" value="{{ dataset }}" onChange="{{ setDataset }}" aria-label="What to export"></x-import>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Field" hint-size="100%,72px" label="Period">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.DatePicker" hint-size="100%,40px" range="{{ true }}" value="{{ range }}" onChange="{{ setRange }}" label="Period"></x-import>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Field" hint-size="100%,72px" label="Columns" help="Fewer columns, faster export.">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Combobox" hint-size="100%,40px" multiple="{{ true }}" options="{{ columnOptions }}" value="{{ columns }}" onChange="{{ setColumns }}" label="Columns"></x-import>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Field" hint-size="100%,72px" label="Format">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Segmented" hint-size="100%,36px" label="Format" options="{{ formats }}" value="{{ format }}" onChange="{{ setFormat }}"></x-import>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Field" hint-size="100%,72px" label="Deliver to" help="{{ deliveryHelp }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Select" hint-size="100%,40px" options="{{ deliveries }}" value="{{ delivery }}" onChange="{{ setDelivery }}" aria-label="Deliver to"></x-import>
+</x-import>
+<div style="padding:12px 14px;border:1px solid var(--lw-line);border-radius:var(--lw-radius-md);background:var(--lw-bg-subtle);font-size:var(--lw-text-sm);color:var(--lw-fg-muted);line-height:1.55">
+<b style="color:var(--lw-fg);font-weight:var(--lw-fw-medium)">{{ estimateTitle }}</b><br>{{ estimateBody }}
+</div>
+</div>
+</x-import>
+
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.ToastRegion" hint-size="340px,60px">{{ toasts }}</x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1180,&quot;height&quot;:900}}">
+const COLUMNS = ["Source", "Status", "Documents", "Chunks", "Owner", "Refresh", "p95 latency", "Last indexed"];
+
+class Component extends DCLogic {
+  state = {
+    theme: "light",
+    builderOpen: false,
+    dataset: "sources",
+    range: null,
+    columns: ["Source", "Status", "Chunks", "Owner"],
+    format: "csv",
+    delivery: "download",
+    toast: null,
+    schedules: [
+      { id: 1, title: "Weekly retrieval health report", when: "Mondays 07:00 UTC", on: true },
+      { id: 2, title: "Monthly source inventory", when: "1st, 06:00 UTC", on: false },
+    ],
+    jobs: [
+      { id: 1, title: "Sources · 1 Jul – 30 Jul · CSV", status: "running", pct: 62, rows: 184000, started: "2m ago" },
+      { id: 2, title: "Query log · last 7 days · JSONL", status: "done", size: "18.4 MB", finished: "14m ago" },
+      { id: 3, title: "Answer audit · Q2 · XLSX", status: "failed", error: "Row 412,880: value too long for column \"snippet\"", finished: "1h ago" },
+      { id: 4, title: "Chunk embeddings · all time · Parquet", status: "queued", position: 2 },
+    ],
+  };
+
+  // Progress is faked here so the specimen shows real motion; in a product this
+  // is a poll or a socket. What matters is that the bar reflects ROWS done, not
+  // time elapsed — a time-based bar that stalls at 90% is worse than no bar.
+  componentDidMount() {
+    this.timer = window.setInterval(() => {
+      this.setState(st => ({
+        jobs: st.jobs.map(j => j.status !== "running" ? j
+          : j.pct >= 100 ? { ...j, status: "done", size: "24.1 MB", finished: "just now" }
+          : { ...j, pct: Math.min(100, j.pct + 4) }),
+      }));
+    }, 1200);
+  }
+  componentWillUnmount() { window.clearInterval(this.timer); }
+
+  queue() {
+    const label = {
+      sources: "Sources", queries: "Query log", answers: "Answer audit", chunks: "Chunk embeddings",
+    }[this.state.dataset];
+    const fmt = this.state.format.toUpperCase();
+    this.setState(st => ({
+      builderOpen: false,
+      toast: "queued",
+      jobs: [{ id: Date.now(), title: label + " · custom range · " + fmt, status: "queued", position: 1 }, ...st.jobs],
+    }));
+  }
+
+  renderVals() {
+    const s = this.state;
+    const R = React.createElement;
+    const NS = window.LeanWiseDesign_f2d907;
+    const B = NS.Button;
+
+    const jobs = s.jobs.map(j => {
+      const running = j.status === "running";
+      const failed = j.status === "failed";
+      const done = j.status === "done";
+      return {
+        ...j,
+        running,
+        // No style holes in this template: the percentage goes to Progress as a
+        // NUMBER and the component owns the width, so nothing here has to paint a
+        // value that cannot exist until the logic class lands.
+        pctNum: j.pct || 0,
+        icon: failed ? "x-circle" : done ? "check" : running ? "retry" : "clock",
+        tone: failed ? "danger" : done ? "success" : running ? "brand" : "neutral",
+        statusLabel: failed ? "Failed" : done ? "Ready" : running ? "Running" : "Queued",
+        // No colours here: the row carries data-status and app.css owns the tints,
+        // so they re-point on the dark ground without this class knowing about it.
+        // A failure states the row and the reason. "Export failed" sends the user
+        // back to rebuild a request they cannot see was fine.
+        meta: failed ? j.error
+          : done ? j.size + " · finished " + j.finished + " · link expires in 30 days"
+          : running ? (j.pct || 0) + "% · " + Math.round((j.rows || 0) * (j.pct || 0) / 100).toLocaleString() + " of " + (j.rows || 0).toLocaleString() + " rows · started " + j.started
+          : "Position " + j.position + " in the queue",
+        canDownload: done,
+        canRetry: failed,
+        canCancel: running || j.status === "queued",
+        retry: () => this.setState(st => ({
+          jobs: st.jobs.map(x => x.id === j.id ? { ...x, status: "running", pct: 0, rows: 412880, started: "just now" } : x),
+          toast: "retried",
+        })),
+        cancel: () => this.setState(st => ({ jobs: st.jobs.filter(x => x.id !== j.id), toast: "cancelled" })),
+        menu: [
+          { value: "copy", label: "Duplicate this export", icon: "copy" },
+          { value: "schedule", label: "Turn into a schedule", icon: "clock" },
+          { type: "separator" },
+          { value: "delete", label: "Delete", icon: "trash", danger: true,
+            onSelect: () => this.setState(st => ({ jobs: st.jobs.filter(x => x.id !== j.id) })) },
+        ],
+        menuTrigger: R("button", { type: "button", className: "lw-icon-btn", "aria-label": "Export actions" },
+          R(NS.Icon, { name: "more-vertical", size: 16 })),
+      };
+    });
+
+    const heavy = s.dataset === "chunks";
+
+    return {
+      themeClass: s.theme === "dark" ? "dark" : "",
+      band: s.theme === "dark" ? "dark" : "light",
+      theme: s.theme,
+      setTheme: (t) => this.setState({ theme: t }),
+      crumbs: [{ label: "Workspace", href: "#" }, { label: "Reporting", href: "#" }, { label: "Exports" }],
+
+      jobs,
+      hasJobs: jobs.length > 0,
+      noJobs: jobs.length === 0,
+      emptyAction: R(B, { size: "sm", onClick: () => this.setState({ builderOpen: true }) }, "New export"),
+
+      schedules: s.schedules.map(x => ({
+        ...x,
+        label: x.title,
+        toggle: () => this.setState(st => ({
+          schedules: st.schedules.map(y => y.id === x.id ? { ...y, on: !y.on } : y),
+          toast: x.on ? "schedPaused" : "schedOn",
+        })),
+      })),
+
+      builderOpen: s.builderOpen,
+      openBuilder: () => this.setState({ builderOpen: true }),
+      closeBuilder: () => this.setState({ builderOpen: false }),
+      datasets: [
+        { value: "sources", label: "Sources (184 rows)" },
+        { value: "queries", label: "Query log (1.2M rows)" },
+        { value: "answers", label: "Answer audit (412k rows)" },
+        { value: "chunks", label: "Chunk embeddings (48M rows)" },
+      ],
+      dataset: s.dataset,
+      setDataset: (e) => this.setState({ dataset: e.target.value }),
+      range: s.range,
+      setRange: (r) => this.setState({ range: r }),
+      columnOptions: COLUMNS,
+      columns: s.columns,
+      setColumns: (c) => this.setState({ columns: c }),
+      formats: [{ value: "csv", label: "CSV" }, { value: "xlsx", label: "XLSX" }, { value: "jsonl", label: "JSONL" }],
+      format: s.format,
+      setFormat: (f) => this.setState({ format: f }),
+      deliveries: [
+        { value: "download", label: "Download when ready" },
+        { value: "email", label: "Email me a link" },
+        { value: "bucket", label: "Write to our S3 bucket" },
+      ],
+      delivery: s.delivery,
+      setDelivery: (e) => this.setState({ delivery: e.target.value }),
+      // Delivery is a real decision, so the help text says what each one costs
+      // the user rather than restating the label.
+      deliveryHelp: s.delivery === "download" ? "You have to be here when it finishes. Fine for small exports."
+        : s.delivery === "email" ? "Close the tab freely — the link arrives when the job lands."
+        : "Lands in s3://acme-legal-exports/leanwise/. Credentials are managed in Settings.",
+
+      // Tell the user BEFORE they queue it. A four-hour job that gives no warning
+      // is a support ticket, and a cancelled job is wasted compute either way.
+      estimateTitle: heavy ? "This one is large" : "Estimated size",
+      estimateBody: heavy
+        ? "48M rows across " + s.columns.length + " columns is roughly 40 minutes and about 6 GB. Email or bucket delivery is strongly recommended."
+        : (s.columns.length ? s.columns.length + " columns" : "No columns selected") + " · usually under a minute · a few MB.",
+      builderFooter: R(React.Fragment, null,
+        R(B, { variant: "ghost", onClick: () => this.setState({ builderOpen: false }) }, "Cancel"),
+        R(B, { disabled: !s.columns.length, onClick: () => this.queue() }, "Queue export")),
+
+      toasts: s.toast ? R(NS.Toast, {
+        tone: s.toast === "cancelled" ? "warn" : "ok",
+        onClose: () => this.setState({ toast: null }),
+      }, s.toast === "queued" ? "Export queued. You can close this tab."
+        : s.toast === "retried" ? "Retrying with the same settings."
+        : s.toast === "cancelled" ? "Export cancelled. Nothing was charged."
+        : s.toast === "schedOn" ? "Schedule on. First run at the next slot."
+        : "Schedule paused.") : null,
+    };
+  }
+}
+</script>
+</body>
+</html>

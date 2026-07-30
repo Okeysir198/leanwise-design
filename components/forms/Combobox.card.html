@@ -1,0 +1,59 @@
+<!-- @dsCard group="Forms" name="Combobox" subtitle="Single, multi and async — focus stays in the input, aria-activedescendant names the row" viewport="1000x640" -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Combobox</title>
+<link rel="stylesheet" href="../../preview/_card.css">
+<link rel="stylesheet" href="../../base.css">
+<link rel="stylesheet" href="../../marketing.css">
+<link rel="stylesheet" href="../../product.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.pane{padding:20px;display:grid;gap:16px;align-content:start;border-radius:10px;min-height:320px}
+.pane.dark{background:var(--lw-navy-deep)}.lbl{font-family:var(--lw-font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--lw-fg-subtle)}
+.pane.dark .lbl{color:var(--lw-on-dark-3)}
+code{font-family:var(--lw-font-mono);font-size:12px;background:var(--lw-bg-inset);padding:1px 5px;border-radius:2px}</style>
+</head><body><div class="card">
+<header><h1>Combobox</h1>
+<p class="sub"><b>Focus stays in the input; the active option is named by <code>aria-activedescendant</code>.</b> That is
+the ARIA 1.2 combobox pattern, and it is the opposite of <code>Menu</code> — moving real focus into the list would take
+it out of the field the user is still typing in. Menu has nothing to type into, so there focus moves.</p>
+<p class="sub"><b>The field is the anchor and the input inside it is bare</b>, so the focus ring wraps the whole
+control — the same arrangement as <code>InputGroup</code>, for the same reason. Invalid selects on
+<code>:has([aria-invalid])</code>, never a class. <b>When <code>onSearch</code> is present the component stops
+filtering locally</b>: the options you pass ARE the result, and filtering them again hides rows the server
+deliberately returned.</p></header>
+<div class="two"><div class="pane" id="light"></div><div class="pane dark lw-band-dark" id="dark"></div></div>
+</div>
+<script type="text/babel">
+const LW = window.LeanWiseDesign_f2d907;
+const { Combobox, Field, Stack } = LW;
+
+const sources = [
+  { value: "contracts", label: "contracts/2024", meta: "41,208" },
+  { value: "handbook", label: "policies/handbook", meta: "3,860" },
+  { value: "tickets", label: "support/tickets", meta: "12,004" },
+  { value: "specs", label: "product/specs", meta: "8,412" },
+  { value: "legal", label: "legal/archive", meta: "0", disabled: true },
+];
+
+function Demo() {
+  const [one, setOne] = React.useState("handbook");
+  const [many, setMany] = React.useState(["contracts", "tickets"]);
+  return (
+    <Stack gap={16}>
+      <Field label="Source" help="Type to filter. Arrows move, Enter picks.">
+        <Combobox options={sources} value={one} onChange={setOne} placeholder="Choose a source" label="Source" />
+      </Field>
+      <Field label="Include in this query" help="Backspace removes the last token; each token has its own control.">
+        <Combobox multiple options={sources} value={many} onChange={setMany} placeholder="Add sources" label="Include in this query" />
+      </Field>
+      <Field label="Restricted" error="Pick a source you have access to.">
+        <Combobox options={sources} invalid placeholder="No access" label="Restricted" />
+      </Field>
+    </Stack>
+  );
+}
+ReactDOM.createRoot(document.getElementById("light")).render(<Demo />);
+ReactDOM.createRoot(document.getElementById("dark")).render(<Demo />);
+</script></body></html>

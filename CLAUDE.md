@@ -4,232 +4,199 @@ Guidance for Claude Code when working in this repository.
 
 ## What this is
 
-The **`@leanwise/design` token core** — the canonical source of colors, radii, type scale,
-motion, and the WCAG contrast contract for every LeanWise product. **Tokens + a Tailwind preset
-+ two enforcement CLIs**, plus an **optional React layer** (`./react`) that renders the `.lw-*`
-marketing classes.
+**`@leanwise/design` v1.1.0** — the LeanWise design system. Tokens, five CSS layers, a Tailwind
+preset, ~65 React components across eight categories, twelve page templates, and **five gates**
+that turn the style guide into build failures.
 
-The token core is the product; the React layer is a convenience on top of it and only
-`leanwise-ai` consumes it. **It is not a shadcn replacement** — each consumer still owns its own
-shadcn copy for `Button`/`Select`/form primitives, and this package owns the *contract* those
-copies render against. Do not grow `./react` into a general component library; a component that
-needs a token belongs here, a component that needs product logic does not.
+The repo is the **working copy of a Claude Design project** (`f2d90781-f891-45e3-bc88-ddb55e6f9444`,
+"LeanWise Design"). The design project is the authoring surface; this repo is what consumers
+install. Edits made here do **not** flow back — see "The design-project round-trip" below.
 
-README is the user-facing doc; this file is the *maintainer* doc.
+`README.md` is the user-facing doc and the component index. `CONTRIBUTING.md` is the PR
+checklist. `REVIEW.md` is the standing audit — **read its finding 1 before touching the CSS
+layers.** This file is the *maintainer* doc: the things none of those say.
 
 ### Commands
 
 ```bash
-pnpm check        # WCAG gate — node bin/lw-contrast-check.mjs. Run on EVERY token change.
-pnpm build        # tsup → dist/react (esm + cjs + d.ts). Also runs on prepublishOnly.
-pnpm ladle        # component preview harness for src/react (ladle.config.mjs)
-pnpm ladle:build  # static preview → build/ (gitignored; dev-only, never shipped)
-npx lw-token-lint <consumer>/src
+npm install
+npm run check          # contrast + token lint + theme completeness. Run on EVERY token change.
+npm run check:ci       # the above plus a11y + visual (both need a browser)
+npm run check:a11y     # axe over every @dsCard — needs `npx playwright install chromium`
+npm run check:visual   # every card x light/dark x comfortable/compact
+npm run tokens         # regenerate tokens.json (DTCG). Gitignored — generated, not committed.
+npm run build          # tsup, config at templates/_tooling/tsup.config.js
 ```
 
-**CI runs the contrast gate only** (`.github/workflows/check.yml`, every push/PR). `lw-token-lint`
-has no CI job here — it lints *consumer* source, so it must be run by hand in each consumer before
-a pin bump. A green tag proves contrast, not token discipline.
+**CI runs all five** (`.github/workflows/ci.yml`, every push/PR). Local `npm run check` is
+deliberately the three that need no browser.
 
-This repo uses **pnpm** (`pnpm-lock.yaml` at root); consumers vary — see the table below.
-
-### Consumers (the suite — keep them in lockstep)
-
-| Consumer | Pin | Installed | Consumes | Package manager |
-|---|---|---|---|---|
-| `leanwise-ai` | `#v0.8.1` | 0.8.1 | `tokens.css` + `lw.css` (the `.lw-*` marketing layer) + `./assets` + `./react` | pnpm |
-| `P20260707-vss/frontend` | `#v0.2.3` | 0.2.3 | `tokens.css` + `shadcn.css` + Tailwind preset + `./brand` | pnpm |
-| `P20260706-rag-service/frontend` | `#v0.2.2` | **0.2.1 — drifted** | `tokens.css` (vanilla CSS, no preset) | npm |
-
-All three are behind the current tag (**v0.9.0**, which moved the CTA ramp to amber).
-
-A token change is a reviewable one-line bump in each consumer, on that consumer's schedule.
-**Suite skew is the failure mode** — when one consumer lags, it re-hand-rolls the very patterns
-the package factored out (leanwise-ai hand-composed `--lw-brand-500-c` radials for a release
-because `bg-hero-aside`/`bg-brand-wash` didn't exist at its pinned tag). After any release, bump
-all three; the lockfile-check gotcha below is how a "bump" silently no-ops.
-
-### The v0.2.x consumers — read before bumping them
-
-VSS and rag-service are ~7 minor versions behind and were **deliberately left on their pins**
-when v0.7.0 moved the brand hue. Do not bump them in one jump:
-
-1. **rag-service's install is drifted** — pinned `v0.2.2`, `node_modules` resolved `0.2.1`. Its
-   current build was never verified against its own pin, so any bug you see there may predate
-   the token change entirely. Fix the drift and rebuild *first*, in its own commit.
-2. **Then** bump each to current, and eyeball. VSS spreads brand utilities across ~63 sites in
-   *components* (`SourceViewer.tsx`, `ui/button.tsx`, `Landing.tsx`), not stylesheets, so its QA
-   is component-by-component. rag-service concentrates ~98 in `src/styles/chat.css` + `app.css`.
-3. rag-service also hardcodes the brand at `src/routes/admin/w.$slug.tsx:720,728`
-   (`draft.branding?.accent || "#14B8A6"` and the matching placeholder) — the only real brand
-   hardcode in any consumer. It must move to the new cyan or tenants inherit a stale default.
-4. Their `dist/` builds bake the old teal. A pin bump without a rebuild still serves teal.
-
-Sequence drift-fix → version bump → hue change, so breakage is attributable to one of the three.
+⚠️ **`npm run check:tokens` lints `src`, which does not exist in this repo.** The lint is written
+to run against *consumer* source; in-repo it is a near no-op. Point it at a consumer by hand
+(`node templates/_tooling/lw-token-lint.mjs <consumer>/src`) before any pin bump — a green CI
+here proves contrast and theme parity, not token discipline downstream.
 
 ## Layout
 
 ```
-tokens.css          THE source of truth — HSL channel triples + derived colors, light + dark.
-                      Authored once as a triple (--lw-brand-500-c: 185 82% 26.5%) and derived
-                      (--lw-brand-500: hsl(var(--lw-brand-500-c))). Edit the triple; NEVER the
-                      derived line; never a hex in a consumer.
-assets/             the logo. logo-mark.svg (gradient, for <img>), logo-mark-mono.svg
-                      (currentColor, for inlining on dark), logo-lockup.svg (mark + wordmark),
-                      plus PNG fallbacks re-exported FROM the SVGs. build-logo.py regenerates
-                      all of them — edit that, never the SVG by hand. See "The logo" below.
-shadcn.css          maps --primary/--background/--accent/… onto tokens (no values of its own).
-tailwind-preset.js  Tailwind v3 preset — registers cta/success/warning/brand/navy as REAL
-                      utilities so devs never reach for the bg-[hsl(var(--x))] escape hatch.
-lw.css              the .lw-* marketing classes (+ 44px touch targets, iOS-zoom guard) — only
-                      leanwise-ai consumes this layer.
-fonts.css + fonts/  Geist + Geist Mono, self-hosted, incl. Vietnamese subsets.
-lib/brand.js        brandVars() / inkOn() / monogram() — runtime per-tenant theming.
-                      lib/counter.js is exported as ./counter.
-bin/                the two CLIs (below).
-.ladle/             the preview stories (components/composites/code/console/theme) + css.ts, the
-                      shared side-effect import of fonts+tokens+lw.css. Ladle has no preview.tsx,
-                      so every story imports css.ts itself.
-src/react/          SOURCE of the ./react layer — Button, Eyebrow, Card, CodeBlock, Console,
-                      StoryCard, FeatureGrid, LogoRail, ThemeToggle + hooks/ + icons/. Renders
-                      the .lw-* classes and bundles NO css: the consumer imports lw.css itself.
-                      react/react-dom are peerDeps. Edit here, never in dist/.
-dist/react/         BUILD OUTPUT (tsup.config.ts) — committed because consumers install this
-                      package straight from a git tag, so there is no publish step to build it.
-                      A token change alone needs no rebuild; a src/react change DOES — run
-                      `pnpm build` and commit dist/ in the same commit, or the tag ships stale
-                      components. build/ is the built ladle preview — gitignored, not shipped.
+tokens.css        THE source of truth — HSL channel triples + derived colors, all theme scopes.
+                    Authored once as a triple; the derived line is generated. Edit the triple;
+                    NEVER the derived line; never a hex in a consumer.
+base.css          shared controls — the layer every surface needs.
+marketing.css     grounds + hero. product.css    app surfaces.
+                    Load order: tokens -> base -> marketing and/or product.
+lw.css / app.css  @import SHIMS kept for one major. Do NOT load them alongside the real
+                    layers — you get the rules twice.
+email.css         literal hex + table layout on purpose: mail clients have no custom properties.
+shadcn.css        maps --primary/--background/--accent onto tokens (no values of its own).
+fonts.css+fonts/  Geist + Geist Mono, self-hosted, incl. Vietnamese subsets.
+react.js/.d.ts    the barrel — re-exports every components/<cat>/*.jsx.
+brand.js hooks.js runtime per-tenant theming; the hooks the components share.
+tailwind-preset.cjs  registers cta/success/warning/brand/navy as REAL utilities so nobody
+                    reaches for the bg-[hsl(var(--x))] escape hatch.
+components/       ai data forms layout marketing nav overlays primitives —
+                    .jsx + .d.ts pairs, plus *.card.html preview cards.
+                    Ships .jsx SOURCE deliberately: the consumer's bundler does the transform.
+                    Styling lives in the CSS layer, never in a .jsx.
+templates/        twelve page templates, each *.dc.html + ds-base.js + support.js + .thumbnail.
+                    ds-base.js and support.js are GENERATED and byte-identical across all
+                    twelve — never hand-edit one copy.
+templates/_tooling/  the five gates + tsup.config.js. Note the PATH assumption: ROOT is TWO
+                    levels up, because the folder sits under templates/.
+preview/          thirteen foundation cards + _card.css/_card.js/_fonts.css.
+_ds_bundle.js     compiled browser bundle + card index, namespace `LeanWiseDesign_f2d907`.
+_ds_manifest.json   A card declares itself with a first-line `<!-- @dsCard group="..." -->`
+                    marker; the a11y and visual gates enumerate cards from that marker.
+scraps/ uploads/  screenshots kept from the build. Not shipped (not in package.json#files).
 ```
 
-## The two CLIs — both must stay green
+`tokens.json` is generated by `npm run tokens` and **gitignored** — but it is in
+`package.json#exports`. A consumer installing straight from a git tag gets a broken
+`./tokens.json` subpath. Either run `npm run tokens` and commit it before tagging, or accept
+that the subpath is publish-only.
 
-`bin/lw-token-lint.mjs` — **the load-bearing part of the package.** A shared token file does not
-make products consistent; nothing stops a dev writing `bg-emerald-500` next to it. This turns the
-style guide into build failures. Four rules: `raw-hex`, `palette-escape` (covers
-`bg|text|border|ring|fill|stroke|from|to|via|accent|caret|divide|outline|decoration` + the
-Tailwind palette names), `arbitrary-token` (any `var(--…)` inside `[…]`), and `>1 variant="cta"`
-per file. **It is a deny-list, not a contract checker** — it cannot detect a utility the preset
-no longer registers, so a removed utility compiles, lints green, and renders unstyled. The
-current consumers are safe only by coincidence; if you remove a utility, grep the consumers for
-it before cutting the tag.
+## The five gates — all must stay green
 
-`bin/lw-contrast-check.mjs` — the WCAG AA gate. Parses `tokens.css` for the authored triples,
-scoped per block (`:root` and `.dark` separately — scanning the whole file lets the last
-declaration win and silently resolves a light token to its dark value), and fails if any of the
-pair in the MANIFEST drops under 4.5:1 (64 pairs as of v0.9.0). **Run it on every token change.**
-It exists because white-on-CTA (2.80 on the old orange; 1.77 on today's amber) shipped in a doc
-for months; a number in CI catches what an eyeball doesn't.
+- **`lw-contrast-check.mjs`** — the WCAG AA gate. Parses `tokens.css` per theme block, resolves
+  `var()` chains, evaluates a derived MANIFEST, and **enforces dark-block parity**. It also
+  asserts the **logo SVG gradient stops** (`offset 0` -> navy-700, `offset 1` -> logo-cyan)
+  match `tokens.css` — the gradient stops must be literal hex because custom properties do not
+  cascade into an SVG loaded through `<img>`, so this is the only guard on that second home for
+  a brand value. Run it on every token change.
+- **`lw-token-lint.mjs`** — a **deny-list, not a contract checker**: raw hex, palette escape,
+  arbitrary `var()` inside `[…]`, more than one `variant="cta"` per file. It cannot see a
+  utility the preset no longer registers, so a removed utility compiles, lints green, and
+  renders unstyled. **Grep the consumers before you remove a utility.**
+- **`lw-tokens-dtcg.mjs`** — the DTCG generator; `--check` fails when a channel is not
+  re-pointed in *every* theme scope. This is what stops a token existing in light and silently
+  inheriting in dark.
+- **`lw-a11y.mjs`** — axe over every `@dsCard`. serious/critical fail; moderate/minor report.
+- **`lw-visual.mjs`** — every card x light/dark x comfortable/compact. A **missing** baseline
+  records rather than fails, so adding a card does not break its own first PR.
 
-Coverage is manifest-driven: `MANIFEST` at the top of the script is the single place a pair is
-added, and the resolver supplies the color by chasing `var()` chains. That is what makes a
-**role-token entry** (`fg: "cta-text"`) worth more than a literal one (`fg: "cta-400"`) — it
-fails the moment someone re-points the alias, in the theme they broke it in. Prefer role tokens
-when adding coverage; keep the literal entry too when the palette value itself is load-bearing.
+## Facts worth not re-deriving
 
-```bash
-node bin/lw-contrast-check.mjs     # all MANIFEST pairs ≥ AA
-npx lw-token-lint <consumer>/src   # run in each consumer
-```
+- **Brand.** Cyan `#0C727B` (`--lw-brand-500`, white ink 5.66), navy `#024576` (`--lw-navy-700`),
+  amber `#FCB603` (`--lw-cta-500`, navy ink 10.54). `--lw-logo-cyan` `#0A8799` is **artwork-only**
+  — no UI rule may consume it. The palette was sampled FROM the mark, not picked; if you re-tune
+  it, re-sample the mark and erode the anti-aliased edges first.
+- **Ink follows the FILL's lightness, not the brand.** White on brand teal; navy on the amber CTA
+  and the status fills. Do not "restore" a uniform rule — the contrast gate will fail.
+- **A fill color is usually not a text color.** Hence the three-way `fill` / `text` / `ink` split.
+  Brand is the exception: brand-500 reads on white, so `--lw-brand-text-c` points at the fill on
+  light and at brand-400 on dark.
+- **`--primary` is cyan; amber is the `cta` *variant*, one per view.** Shadcn's `--primary` drives
+  the default Button — amber there makes every button a CTA. `--accent` is a ghost-button *hover
+  surface*, not a brand color; per-tenant theming overrides `--primary`/`--ring` only.
+- **Density is scoped, not global.** `--lw-control-h-*`, `--lw-row-h`, `--lw-card-pad`,
+  `--lw-stack-gap` are driven by `data-density`. The 44px coarse-pointer minimum lives on the
+  token, so anything with a height reads a density token or carries a comment saying why not.
 
-## The logo (and how the brand was sampled)
+## The design-project round-trip
 
-The palette is derived FROM the mark, not the other way round — and getting that *approximately*
-right is not the same as getting it right. Two rounds of this:
+The Claude Design project is the authoring surface. This repo was replaced wholesale from it at
+v1.1.0. There is **no sync**: a change made here is invisible to the design project, and the next
+wholesale pull would overwrite it.
 
-- **v0.7.0** moved the ramp off Tailwind's stock `teal-500` (173°) into the mark's band, but
-  sampled by averaging across the whole gradient. That put brand-500 at 192° 78% **47%**.
-- **v0.8.0** re-sampled properly: solid ink only, **eroding anti-aliased edges first** (they drift
-  toward black and drag the reading), endpoints taken as percentiles along the gradient axis, and
-  cross-checked over all five renditions in `leanwise-ai/feedbacks/.../Pictures`. They agree
-  tightly — cyan **187.6° 88% 32%**, navy **205.2° 97% 23.5%**. v0.7.x was 4° too blue, 10 points
-  flat, and **15 points too light**; the navy was **31 saturation points** flat. It read as pale
-  sky against a deep teal mark, which is exactly what Truong reported.
+- Small, surgical changes (a token, a gate, a bug in one component): make them here, and mirror
+  them into the design project by hand if the project is still being authored against.
+- Anything structural: make it in the design project and re-pull.
 
-If you re-tune the brand again: re-sample the mark, erode the edges, and **check the CONNECT deck**
-(`presentation/leanwise-ai-presentation.html`, `--accent`). The deck independently landed on
-`#0C757C`, ~5 points darker than the mark — which is where white ink clears AA. That is not a
-coincidence, it is the constraint. Do not pick from a palette.
-
-**`--lw-logo-cyan` is not `brand-500`, on purpose.** The mark's own cyan fits no UI role: too dark
-to read on the navy paper (4.05), too light to carry white ink (4.25). brand-500 is ~5 points
-darker so the fill works. The logo carries no text, so it keeps the true colour. That is the only
-token here that exists purely for artwork, and no UI rule may consume it.
-
-`assets/build-logo.py` regenerates the SVGs — never hand-edit them. Geometry is an **autotrace**
-of `logo-4.png` committed as `assets/logo-paths.json` (mark IoU 0.991, wordmark 0.975); the old
-authored hexagon topped out at 0.845. `tools/trace-logo.py` re-traces, needs `vtracer`, and should
-run only when the ART changes — a colour change is just `build-logo.py`. Its docstring records the
-one bug worth remembering: **vtracer puts a `transform="translate(...)"` on every path**, and
-extracting only `d` silently stacks every subpath at the origin.
-
-The one rule that lives here rather than there: the gradient stops are **literal hexes**, because
-CSS custom properties do not cascade into an SVG loaded through `<img>`. That is a second home
-for a brand value, so it is generated from `tokens.css` and **`lw-contrast-check` fails if the two
-disagree** — `lw-token-lint` cannot see inside `.svg`, so this is the only thing guarding it.
-
-## Three rules that are not obvious (defended by the contrast gate)
-
-1. **Ink follows the fill's LIGHTNESS, not the brand.** v0.8.0 re-sampled brand-500 off the mark
-   and it came out 20 points darker, which flipped this: white on teal `#0C727B` is 5.68 and navy
-   is 3.31, so `--lw-on-brand` is now WHITE. The CTA amber and the status fills are still light, so
-   they keep navy — that is `--lw-on-cta` / `--lw-on-status`. Do not "restore" the old rule; the
-   gate will fail.
-2. **A fill color is usually not a text color.** Still true for status and CTA. Brand is now the
-   exception: brand-500 reads on white at 5.68, so `--lw-brand-text-c` points at the fill on
-   light and at brand-400 on dark.
-   This is the three-way `fill` / `text` / `ink` split — most systems conflate it.
-3. **`--primary` is cyan; amber is the `cta` *variant*, one per view.** Shadcn's `--primary`
-   drives the default Button; putting amber there makes every button a CTA. And `--accent` is a
-   ghost-button **hover surface**, not a brand color — per-tenant theming overrides
-   `--primary`/`--ring` only (via `brandVars()`), never `--accent`.
+Pulling is `DesignSync list_files` / `get_file` against project id
+`f2d90781-f891-45e3-bc88-ddb55e6f9444`. Two things that cost a session to learn:
+**DesignSync is not reachable from subagents** — do the fetches in the main loop — and
+`get_file` caps at 256 KiB and reports `truncated: true` rather than silently clipping.
 
 ## Releasing — the tag invariant (do not get this wrong)
 
-The git tag, `package.json#version`, and the committed content **must all agree.** This bit us:
-`v0.2.2` was cut without bumping `package.json` past `0.2.1`, so every installed copy *reported*
-`0.2.1` while containing v0.2.2 content — and any future `version >= 0.2.2` check lies. For a
-package whose thesis is "consistency is a dependency, not a discipline," the metadata lie is the
-one defect that most directly undercuts the pitch.
+The git tag, `package.json#version`, and the committed content **must all agree.** This bit us
+before: `v0.2.2` was cut without bumping past `0.2.1`, so every installed copy *reported* `0.2.1`
+while containing v0.2.2 content, and any `version >= 0.2.2` check lies. For a package whose thesis
+is "consistency is a dependency, not a discipline," the metadata lie is the defect that most
+directly undercuts the pitch.
 
 To release `vX.Y.Z`:
 
-1. Make the token/preset change. Run **both** CLIs green from the package root.
-2. Bump `package.json#version` to `X.Y.Z` **in the same commit** as the change.
-3. `git tag vX.Y.Z` on that commit and `git push && git push --tags`.
-4. Bump the pin in **all three consumers** (`#vX.Y(Z-1)` → `#vX.Y.Z`) and refresh each lockfile.
+1. Make the change. Run `npm run check` green; run the browser gates or let CI.
+2. Bump `package.json#version` **in the same commit**.
+3. `git tag vX.Y.Z` on that commit, `git push && git push --tags`.
+4. Bump the pin in each consumer and refresh its lockfile.
 
-**Do not move a published tag** (force-push a tag someone may have cached) to fix a missed bump —
-cut the next version instead. A re-pointed tag breaks reproducibility for anyone who already
-fetched the tarball, and the hash mismatch surfaces as a confusing cache error, not a clean
-update.
+**Never move a published tag** to fix a missed bump — cut the next version. A re-pointed tag
+breaks reproducibility for anyone who already fetched the tarball, and surfaces as a confusing
+cache error rather than a clean update.
 
 ### The lockfile-no-op gotcha
 
-After moving a consumer's pin, `pnpm install` / `npm install` may report **"up to date"** and
-keep the *old* resolved commit — npm/pnpm cache git deps by commit hash and the lockfile's
-`resolved` entry pins the old one. Always verify the install actually moved:
+After moving a consumer's pin, `npm/pnpm install` may say **"up to date"** and keep the *old*
+resolved commit — git deps are cached by hash and the lockfile pins the old one. Verify:
 
 ```bash
 grep "leanwise-design" <consumer>/<lockfile>   # resolved commit must be the new tag's SHA
-grep -c "lw-text-display" <consumer>/node_modules/@leanwise/design/tokens.css   # a marker added in the new tag
 ```
 
-If it didn't move: `rm -rf node_modules/@leanwise/design` and reinstall explicitly
-(`npm install @leanwise/design@github:Okeysir198/leanwise-design#vX.Y.Z`). "up to date" is not
-"on the new version."
+If it did not move: `rm -rf node_modules/@leanwise/design` and reinstall explicitly. "Up to date"
+is not "on the new version."
+
+## Consumers
+
+| Consumer | Pin | Consumes | Package manager |
+|---|---|---|---|
+| `leanwise-ai` | `#v0.8.1` | `tokens.css` + `lw.css` + `./assets` + `./react` | pnpm |
+| `P20260707-vss/frontend` | `#v0.2.3` | `tokens.css` + `shadcn.css` + preset + `./brand` | pnpm |
+| `P20260706-rag-service/frontend` | `#v0.2.2` (installed **0.2.1 — drifted**) | `tokens.css`, vanilla | npm |
+
+**All three are many versions behind v1.1.0 and none of them can be bumped in one jump.** v1.1.0
+restructures the CSS layers, moves the CLIs under `templates/_tooling`, drops `dist/`, and points
+`main` at a flat `./react.js`. Before any consumer bump:
+
+1. Fix rag-service's install drift and rebuild **first, in its own commit** — its current build was
+   never verified against its own pin, so a bug there may predate any token change.
+2. rag-service hardcodes the brand at `src/routes/admin/w.$slug.tsx:720,728`
+   (`draft.branding?.accent || "#14B8A6"`) — the only real brand hardcode in any consumer. It must
+   move or tenants inherit a stale default.
+3. VSS spreads brand utilities across ~63 sites in *components*, so its QA is component-by-component;
+   rag-service concentrates ~98 in `src/styles/chat.css` + `app.css`.
+4. A pin bump without a rebuild still serves the old palette from `dist/`.
+
+Sequence drift-fix -> version bump -> layer migration, so breakage is attributable to one of three.
 
 ## What not to do here
 
-- **Don't edit a derived color line** (`--lw-x: hsl(var(--lw-x-c))`) — edit the `-c` triple. The
-  triple is what Tailwind composes and what `brandVars()` synthesizes tints from.
-- **Don't add a 4/8-digit hex** (`#RGBA`, `#RRGGBBAA`) thinking the lint catches it — `raw-hex`
-  only matches 3/6 digits. Keep hex out of `tokens.css` triples entirely (they're HSL).
-- **Don't `--on-dark*` in a triple-aware way** — those tokens are raw hex/rgba, the one
-  inconsistency; they can't be re-tinted by `brandVars()`. Leave them unless you're migrating the
-  whole set.
-- **Don't ship without both bins green**, and don't add a consumer-side escape hatch
-  (`// lw-token-lint-allow`) without a reviewer's eyes — it disables the arbitrary-token rule for
-  that line, the rule that exists because of a real `--accent` footgun.
+- Don't edit a derived color line — edit the `-c` triple. The triple is what Tailwind composes and
+  what `brandVars()` synthesizes tints from.
+- Don't load `lw.css`/`app.css` alongside `base.css` + `marketing.css`/`product.css`.
+- Don't hand-edit `ds-base.js` or `support.js` in one template — twelve copies, all generated.
+- Don't add a 4/8-digit hex (`#RGBA`, `#RRGGBBAA`) thinking the lint catches it — `raw-hex` only
+  matches 3/6 digits. Keep hex out of `tokens.css` entirely (it is HSL).
+- Don't style inside a `.jsx`. The CSS layer is the single source of styling; that is what keeps
+  the React and vanilla consumers from drifting.
+- Don't ship with a gate red, and don't add a consumer-side escape hatch
+  (`// lw-token-lint-allow`) without a reviewer — it disables the arbitrary-token rule for that
+  line, the rule that exists because of a real `--accent` footgun.
+- Don't grow this into a shadcn replacement. Each consumer still owns its own shadcn copy for
+  `Button`/`Select`/form primitives; this package owns the *contract* those copies render against.
+  A component that needs a token belongs here; one that needs product logic does not.
 
 ## Ownership
 

@@ -1,0 +1,76 @@
+@import url("_fonts.css");
+@import url("../tokens.css");
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  font-family: var(--lw-font-sans);
+  background: var(--lw-bg);
+  color: var(--lw-fg);
+  -webkit-font-smoothing: antialiased;
+}
+.card { padding: 28px 30px 30px; display: grid; gap: 18px; align-content: start; }
+.card > header { display: grid; gap: 4px; }
+/* The card's OWN title only. Unscoped, this out-specified .lw-h1 and shrank
+   every demo heading a card rendered (the marketing hero shipped at 15px). */
+.card > header h1 {
+  margin: 0; font-size: 15px; font-weight: 600; letter-spacing: -0.01em;
+  color: var(--lw-fg);
+}
+.card .sub { margin: 0; font-size: 12.5px; color: var(--lw-fg-subtle); line-height: 1.5; max-width: 68ch; }
+.mono { font-family: var(--lw-font-mono); font-variant-numeric: tabular-nums; }
+/* Row label. Cards were each defining .lbl locally and the ones that forgot got
+   15px body text in a 60px column — "space-4" wrapped onto two lines. */
+.lbl { font-family: var(--lw-font-mono); font-size: 11px; letter-spacing: .06em; color: var(--lw-fg-subtle); white-space: nowrap; }
+.grid { display: grid; gap: 10px; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+
+/* swatches */
+.sw { border-radius: 6px; padding: 12px 12px 10px; display: grid; gap: 2px; min-height: 84px; align-content: end; }
+.sw b { font-size: 12px; font-weight: 600; }
+.sw span { font-family: var(--lw-font-mono); font-size: 10.5px; opacity: .85; }
+.ramp { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 0; border-radius: 8px; overflow: hidden; }
+.ramp .sw { border-radius: 0; }
+
+/* panes */
+.panes { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.pane svg { max-width: 110px; }
+.pane { border-radius: 10px; padding: 20px; display: grid; gap: 12px; align-content: start;
+        background: var(--lw-bg-subtle); color: var(--lw-fg);
+        box-shadow: inset 0 0 0 1px var(--lw-line); }
+.pane .lbl { font-family: var(--lw-font-mono); font-size: 10px; letter-spacing: .14em;
+             text-transform: uppercase; color: var(--lw-fg-subtle); }
+
+/* generic */
+table { border-collapse: collapse; width: 100%; font-size: 12.5px; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--lw-line); }
+th { font-family: var(--lw-font-mono); font-size: 10px; letter-spacing: .1em;
+     text-transform: uppercase; color: var(--lw-fg-subtle); font-weight: 400; }
+tr:last-child td { border-bottom: 0; }
+td.n { text-align: right; font-family: var(--lw-font-mono); font-variant-numeric: tabular-nums; }
+/* A token name is an identifier, not prose: wrapped across two lines ("brand-\n500")
+   it stops being scannable and doubles the row height. */
+td.mono, th:first-child { white-space: nowrap; }
+/* The logo SVGs carry width/height (they must — mask-size:contain needs an
+   intrinsic size). Left alone they lay out at 871px and blow the card open. */
+svg { display: block; width: 100%; height: auto; }
+
+.pill { font-family: var(--lw-font-mono); font-size: 10px; letter-spacing: .06em;
+        padding: 2px 6px; border-radius: 4px; background: var(--lw-brand-soft, rgba(0,0,0,.06));
+        color: var(--lw-brand-text); }
+
+/* -----------------------------------------------------------------------------
+   Always-dark panes. tokens.css ships `:where(.lw-band-dark)` for exactly this
+   case — a local always-dark section inside a page of either theme — so a dark
+   pane wears that class and inherits every re-point. Never copy token values here.
+
+       <div class="pane dark lw-band-dark"> … </div>
+   -------------------------------------------------------------------------- */
+/* There is deliberately NO `.pane.dark` rule. `.pane` paints from the semantic ROLES
+   (--lw-bg-subtle, --lw-fg, --lw-line, --lw-fg-subtle) and `.lw-band-dark` re-points
+   every one of them — custom properties cascade by VALUE, so a `:where()` band at
+   specificity 0,0,0 still wins without out-specifying anything. This block used to
+   restate background, ink and label colour because `.pane` painted from raw tiers
+   (--lw-surface-1 / --lw-text-1 / --lw-border-1) that no scope re-points; fixing the
+   source deleted all three overrides. If you find yourself re-adding one, the paint
+   is coming from a raw tier again. */

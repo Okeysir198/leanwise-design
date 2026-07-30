@@ -1,0 +1,119 @@
+<!-- @dsCard group="Type" name="Eyebrow" subtitle="The signature label — mono, uppercase, wide-tracked, with the mark's hexagon" width="760" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eyebrow</title>
+<link rel="stylesheet" href="_card.css">
+<link rel="stylesheet" href="../base.css">
+<link rel="stylesheet" href="../marketing.css">
+<!-- product.css too: the dark-band eyebrow rule lives there, so a card that
+     omitted it could not show what an app screen actually renders — it showed
+     the light-page node on navy and looked like a token bug. A specimen has to
+     load every layer that styles what it specimens. -->
+<link rel="stylesheet" href="../product.css">
+<script src="_card.js"></script>
+<style>
+.specs{display:grid;gap:0}
+/* One label column width shared with the comparison below, so the two blocks
+   share a vertical rhythm instead of each inventing its own indent. */
+.pair{display:grid;grid-template-columns:112px minmax(0,1fr);align-items:center;gap:20px;padding:11px 0;border-bottom:1px solid var(--lw-line)}
+.pair p{margin:0}
+.pair:last-child{border-bottom:0}
+.pair .tok{font-family:var(--lw-font-mono);font-size:10px;letter-spacing:.12em;word-spacing:var(--lw-word-spacing-caps);text-transform:uppercase;color:var(--lw-fg-subtle)}
+.grounds{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:4px}
+.ground{padding:18px;border-radius:var(--lw-radius-lg);border:1px solid var(--lw-line)}
+.ground.navy{background:var(--lw-navy-deep);border-color:transparent}
+.compare{display:grid;gap:0;border:1px solid var(--lw-line);border-radius:var(--lw-radius-lg);overflow:hidden;margin-top:4px}
+/* Four tracks: label, a FIXED specimen column, the ratio, then a spacer that
+   takes the slack. The specimen column is fixed so the ratios form a column of
+   their own; the spacer is what keeps that column beside the specimens instead
+   of flung against the frame edge, where a figure reads as belonging to no row.
+   112 and 356 are the measured maxima — the widest label is 109px and the widest
+   specimen (shipped, which OPENS the word spaces) is 353px. Undersize either and
+   a row wraps, which in a comparison of one phrase is the whole point lost. The
+   ratio track is a FIXED 48px, not max-content: each row is its own grid, so a
+   content-sized track resolves per row and "5.2:1" would sit at a different x
+   from "≫" — a column of figures that does not line up is not a column. */
+.compare > div{display:grid;grid-template-columns:112px 356px 48px minmax(0,1fr);align-items:center;gap:20px;padding:12px 18px}
+.compare > div + div{border-top:1px solid var(--lw-line)}
+.compare .tag{font-family:var(--lw-font-mono);font-size:10px;letter-spacing:.12em;word-spacing:var(--lw-word-spacing-caps);text-transform:uppercase;color:var(--lw-fg-subtle);white-space:nowrap}
+.compare .ratio{font-family:var(--lw-font-mono);font-variant-numeric:tabular-nums;font-size:11px;color:var(--lw-fg-subtle);text-align:right}
+.compare .is-now{color:var(--lw-brand-text)}
+/* The demo runs at 18px — not the label's 12px, where the whole treatment is under
+   4px across this phrase and a card cannot honestly show it. Large enough to read
+   the difference, small enough that four rows do not shout. EVERY figure printed
+   below is derived at THIS size; change it and the ratios must be recomputed. */
+.compare .lw-eyebrow{margin:0;font-size:18px;white-space:nowrap}
+.ls-none{letter-spacing:0}
+.ws-none{word-spacing:normal}
+.ws-tight{word-spacing:calc(-1 * var(--lw-tracking-eyebrow))}
+</style>
+</head>
+<body>
+<div class="card">
+  <header>
+    <h1>Eyebrow</h1>
+    <p class="sub">The shipped <span class="mono">.lw-eyebrow</span>, not a copy of its styles — this card
+      renders the class, so a change to the motif shows up here first. Mono, uppercase,
+      <span class="mono">0.14em</span> tracking, and the mark's hexagon as the node.</p>
+    <p class="sub"><b>Tracking is what makes it a label.</b> At 12px an uppercase string without it reads
+      as shouting; with it, it reads as a caption to whatever follows. The ink is the subtle tier, not the
+      brand — only the <i>node</i> is cyan, so a page can carry many labels and still have one accent.</p>
+  </header>
+  <div class="specs">
+    <div class="pair"><span class="tok">default</span><p class="lw-eyebrow">Evidence automation</p></div>
+    <div class="pair"><span class="tok">muted</span><p class="lw-eyebrow muted">Not yet run</p></div>
+    <div class="pair"><span class="tok">subset</span><p class="lw-eyebrow">Bảo mật &amp; tuân thủ</p></div>
+  </div>
+  <div class="compare">
+    <div><span class="tag">no tracking</span><p class="lw-eyebrow ws-none ls-none">Retrieval integrity check</p><span class="ratio" title="Letter white is sub-pixel untracked, so a precise ratio here is an artefact of measurement method">&#8811;</span><span></span></div>
+    <div><span class="tag">tracked only</span><p class="lw-eyebrow ws-none">Retrieval integrity check</p><span class="ratio">5.2:1</span><span></span></div>
+    <div><span class="tag">space tightened</span><p class="lw-eyebrow ws-tight">Retrieval integrity check</p><span class="ratio">4.4:1</span><span></span></div>
+    <div><span class="tag is-now">shipped</span><p class="lw-eyebrow">Retrieval integrity check</p><span class="ratio is-now">5.8:1</span><span></span></div>
+  </div>
+  <p class="sub"><b>What the ratio column measures.</b> White between words divided by white between
+    letters, at the 18px the specimens above are rendered at. Letter white is
+    <span class="mono">sidebearing + tracking</span>; word white is
+    <span class="mono">sidebearing + space advance + word-spacing + 2&times;tracking</span>, the space
+    taking a tracking step on each side, and the sidebearing is cap ink averaged across this specimen
+    string rather than measured off one glyph. The figures are size-specific and do not transfer.</p>
+  <p class="sub"><b>The untracked row carries <span class="mono">&#8811;</span> rather than a number</b>,
+    and that is not a hedge. Untracked, letter white is a sub-pixel 0.63px, so the ratio is hypersensitive
+    to how that cap ink is averaged: two defensible methods disagree by roughly a tenth on this row, while
+    agreeing to within about 0.3 on the three tracked ones. So the tracked rows carry figures and this one
+    does not &mdash; a precise number that moves with measurement technique would be the least honest thing
+    on a card whose whole argument is measured. What matters is not in dispute: untracked, the face
+    separates words <i>far</i> harder than it separates letters, and you read words without trying.</p>
+  <p class="sub"><b>Tracking is what disturbs the balance.</b> It opens <i>every</i> gap by one step.
+    A letter gap starts near zero, so one step is a several-hundred-percent change; a word gap starts
+    already wide, so the same step barely moves it. The ratio collapses to 5.2:1 &mdash; the letters catch
+    up with the words, and the phrase starts reading as loose rubble rather than three words. That is the wide-tracked-caps defect, and it is a legibility problem, not a symmetry one:
+    the gaps were always equal to each other.</p>
+  <p class="sub"><b>So the word space opens too.</b>
+    <span class="mono">word-spacing: var(--lw-word-spacing-caps)</span> &mdash; <span class="mono">+0.10em</span>,
+    lifting the word boundary's lead to 5.8:1. It is the letterpress rule: when you letterspace
+    capitals, you open the word spaces to match. Tightening the space instead is the intuitive move
+    and the wrong one &mdash; the third row above is that mistake, at 4.4:1, below even the untreated
+    row. Every wide-tracked uppercase label in the system carries the pair: nav groups, table heads,
+    KPI labels, chips, code-block languages.</p>
+  <div class="grounds">
+    <div class="ground"><p class="lw-eyebrow" style="margin:0">Retrieval integrity</p></div>
+    <div class="ground navy lw-band-dark"><p class="lw-eyebrow" style="margin:0">Retrieval integrity</p></div>
+  </div>
+  <p class="sub"><b>The node re-points with the ground.</b> On navy the hexagon takes
+    <span class="mono">--lw-brand-400</span> &mdash; the 500 cyan the light page uses sits at about 3.2:1
+    against this ground and goes muddy. The label's ink re-points too, but by a different route: it reads
+    <span class="mono">--lw-fg-subtle</span>, which every dark scope already re-aims, so the text needs no
+    brand rule of its own and the motif's rule holds on both grounds &mdash; one accent, on the node.
+    Both sides are the same markup; only the tokens moved.</p>
+  <p class="sub"><b>Two dark scopes, two tiers, on purpose.</b> A dark marketing <i>section</i>
+    (<span class="mono">.lw-section.dark</span>) turns the whole eyebrow <span class="mono">brand-300</span>,
+    because there it is a display label with room to be loud. A dark <i>app</i> band
+    (<span class="mono">[data-band="dark"]</span>, which every template here sets) takes
+    <span class="mono">brand-400</span> on the node only, because an app screen carries many labels and can
+    afford one accent each. The swatch below is the app-band marker, so this card shows the app tier.</p>
+</div>
+</body>
+</html>

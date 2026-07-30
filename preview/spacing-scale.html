@@ -1,0 +1,41 @@
+<!-- @dsCard group="Spacing" name="Spacing scale" subtitle="The rhythm every layout composes from" width="760" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spacing scale</title>
+<link rel="stylesheet" href="_card.css">
+<script src="_card.js"></script>
+<style>
+  .bar { height: 12px; border-radius: 3px; background: var(--lw-brand-500); opacity: .85; }
+</style>
+</head>
+<body>
+<div class="card">
+  <header>
+    <h1>Spacing scale</h1>
+    <p class="sub">The rhythm every layout composes from. Each bar is sized by the token itself
+    (<span class="mono">width: var(--lw-space-N)</span>), so the drawing cannot disagree with the
+    scale. All twelve steps.</p>
+  </header>
+  <div class="grid">
+    <div class="row" style="gap:12px"><span class="lbl" style="width:60px">space-4</span><div class="bar" style="width:var(--lw-space-4)"></div><span class="mono" style="font-size:10.5px;color:var(--lw-text-4)">4px</span></div>
+    <div class="row" style="gap:12px"><span class="lbl" style="width:60px">space-8</span><div class="bar" style="width:var(--lw-space-8)"></div><span class="mono" style="font-size:10.5px;color:var(--lw-text-4)">8px</span></div>
+    <div class="row" style="gap:12px"><span class="lbl" style="width:60px">space-12</span><div class="bar" style="width:var(--lw-space-12)"></div><span class="mono" style="font-size:10.5px;color:var(--lw-text-4)">12px</span></div>
+    <div class="row" style="gap:12px"><span class="lbl" style="width:60px">space-16</span><div class="bar" style="width:var(--lw-space-16)"></div><span class="mono" style="font-size:10.5px;color:var(--lw-text-4)">16px</span></div>
+    <div class="row" style="gap:12px"><span class="lbl" style="width:60px">space-20</span><div class="bar" style="width:var(--lw-space-20)"></div><span class="mono" style="font-size:10.5px;color:var(--lw-text-4)">20px</span></div>
+    <div class="row" style="gap:12px"><span class="lbl" style="width:60px">space-24</span><div class="bar" style="width:var(--lw-space-24)"></div><span class="mono" style="font-size:10.5px;color:var(--lw-text-4)">24px</span></div>
+    <div class="row" style="gap:12px"><span class="lbl" style="width:60px">space-32</span><div class="bar" style="width:var(--lw-space-32)"></div><span class="mono" style="font-size:10.5px;color:var(--lw-text-4)">32px</span></div>
+    <div class="row" style="gap:12px"><span class="lbl" style="width:60px">space-40</span><div class="bar" style="width:var(--lw-space-40)"></div><span class="mono" style="font-size:10.5px;color:var(--lw-text-4)">40px</span></div>
+    <div class="row" style="gap:12px"><span class="lbl" style="width:60px">space-48</span><div class="bar" style="width:var(--lw-space-48)"></div><span class="mono" style="font-size:10.5px;color:var(--lw-text-4)">48px</span></div>
+    <div class="row" style="gap:12px"><span class="lbl" style="width:60px">space-64</span><div class="bar" style="width:var(--lw-space-64)"></div><span class="mono" style="font-size:10.5px;color:var(--lw-text-4)">64px</span></div>
+    <div class="row" style="gap:12px"><span class="lbl" style="width:60px">space-80</span><div class="bar" style="width:var(--lw-space-80)"></div><span class="mono" style="font-size:10.5px;color:var(--lw-text-4)">80px</span></div>
+    <div class="row" style="gap:12px"><span class="lbl" style="width:60px">space-96</span><div class="bar" style="width:var(--lw-space-96)"></div><span class="mono" style="font-size:10.5px;color:var(--lw-text-4)">96px</span></div>
+  </div>
+  <p class="sub"><b>Named by pixel value, deliberately.</b> <span class="mono">--lw-space-24</span> is
+  24px. Always. An index name states nothing about its value, so two scales a hyphen apart can mean
+  different pixels and read as identical. The name is the value; the collision cannot occur.</p>
+</div>
+</body>
+</html>

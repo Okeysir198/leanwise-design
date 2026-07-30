@@ -1,0 +1,70 @@
+<!-- @dsCard group="Type" name="Type scale" subtitle="Geist, self-hosted — every role with its measured size, weight and leading" width="760" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Type scale</title>
+<link rel="stylesheet" href="_card.css">
+<script src="_card.js"></script>
+<style>
+/* Grid rows, not a flex line: at the display size the specimen and its spec
+   column would otherwise collide on the same baseline. The spec column is fixed
+   so eight rows of numerals line up as a column to be compared. */
+.row{display:grid;grid-template-columns:64px minmax(0,1fr) 132px;align-items:baseline;gap:20px;padding:14px 0;border-bottom:1px solid var(--lw-line)}
+.row:last-child{border-bottom:0}
+.tok{font-family:var(--lw-font-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--lw-fg-subtle)}
+/* The specimen must not wrap: a wrapped display line reads as two rows and
+   breaks the baseline the spec column is measured against. */
+.spec-text{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--lw-fg)}
+.vals{font-family:var(--lw-font-mono);font-size:10.5px;line-height:1.5;color:var(--lw-fg-subtle);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.vals b{display:block;font-weight:400;color:var(--lw-fg-muted)}
+</style>
+</head>
+<body>
+<div class="card">
+  <header>
+    <h1>Type scale</h1>
+    <p class="sub">Geist, self-hosted, with Vietnamese subsets. Eight roles — four headings, three text
+      sizes, one eyebrow. The numbers on the right are read from the rendered specimen, not typed in,
+      so this card cannot drift from the tokens.</p>
+    <p class="sub"><b>The four heading roles are fluid</b> — <span class="mono">clamp()</span> against the
+      viewport, so a hero on a phone is not a desktop hero scaled down. Body, sm and eyebrow are fixed:
+      reading size is not a function of window width.</p>
+  </header>
+  <div id="rows"></div>
+</div>
+<script>
+const ROLES = [
+  ["display", "--lw-text-display", 500, "--lw-lh-tight",  "--lw-tracking-tighter"],
+  ["h1",      "--lw-text-h1",      600, "--lw-lh-tight",  "--lw-tracking-tighter"],
+  ["h2",      "--lw-text-h2",      600, "--lw-lh-snug",   "--lw-tracking-tight"],
+  ["h3",      "--lw-text-h3",      600, "--lw-lh-snug",   "--lw-tracking-tight"],
+  ["lead",    "--lw-text-lead",    400, "--lw-lh-normal", "--lw-tracking-normal"],
+  ["body",    "--lw-text-body",    400, "--lw-lh-normal", "--lw-tracking-normal"],
+  ["sm",      "--lw-text-sm",      400, "--lw-lh-normal", "--lw-tracking-normal"],
+  ["eyebrow", "--lw-text-eyebrow", 500, "--lw-lh-normal", "--lw-tracking-wide"]
+];
+const SAMPLE = "Kiểm soát tuân thủ";
+const root = getComputedStyle(document.documentElement);
+document.getElementById("rows").innerHTML = ROLES.map(([name, size, weight, lh, track]) => `
+<div class="row">
+  <span class="tok">${name}</span>
+  <span class="spec-text" data-role="${name}" style="font-size:var(${size});font-weight:${weight};line-height:var(${lh});letter-spacing:var(${track});${name === "eyebrow" ? "text-transform:uppercase" : ""}">${SAMPLE}</span>
+  <span class="vals" data-vals="${name}"></span>
+</div>`).join("");
+for (const [name, size, weight, lh] of ROLES) {
+  const el = document.querySelector(`[data-role="${name}"]`);
+  const cs = getComputedStyle(el);
+  const px = Math.round(parseFloat(cs.fontSize) * 10) / 10;
+  // A fluid role is labelled as one with its authored ceiling: measured alone,
+  // `lead` and `body` both read 16px in a narrow card and look like one role
+  // entered twice.
+  const raw = root.getPropertyValue(size).trim();
+  const ceil = raw.startsWith("clamp(") ? raw.replace(/\)$/, "").split(",").pop().trim() : null;
+  document.querySelector(`[data-vals="${name}"]`).innerHTML =
+    `<b>${px}px${ceil && ceil !== px + "px" ? ` → ${ceil}` : ""}</b>${weight} · ${root.getPropertyValue(lh).trim()} · ${cs.letterSpacing === "normal" ? "0" : Math.round(parseFloat(cs.letterSpacing) * 100) / 100 + "px"}`;
+}
+</script>
+</body>
+</html>

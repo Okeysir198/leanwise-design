@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Search + filter + results" description="Faceted search with applied-filter chips, three distinct result states (no query / no results / results), and the empty-vs-no-results distinction most products get wrong." -->
+<helmet><script src="./ds-base.js"></script></helmet>
+<div class="{{ themeClass }}" data-band="{{ band }}" style="min-height:100vh;background:var(--lw-bg);color:var(--lw-fg);font-family:var(--lw-font-sans)">
+
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.AppBar" hint-size="100%,56px" brand="LeanWise AI">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.ThemeToggle" hint-size="72px,30px" value="{{ theme }}" onChange="{{ setTheme }}"></x-import>
+</x-import>
+
+<div class="lw-page" style="padding:32px 0 64px;display:flex;flex-direction:column;gap:20px">
+
+<div style="display:flex;flex-direction:column;gap:6px">
+<p class="lw-eyebrow" style="margin:0">Search</p>
+<h1 style="margin:0;font-size:27px;font-weight:600;letter-spacing:-.022em">Everything in this workspace</h1>
+<p style="margin:0;max-width:62ch;font-size:var(--lw-text-sm);color:var(--lw-fg-muted);line-height:1.6;text-wrap:pretty">Documents, sources and saved answers. The query and every facet live in the URL, so a result set is a link a colleague can open — a filtered view that cannot be shared is a screenshot waiting to happen.</p>
+</div>
+
+<form style="display:flex;flex-direction:column;gap:12px" onSubmit="{{ onSubmit }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.InputGroup" hint-size="100%,48px" prefix="{{ searchIcon }}" suffix="{{ searchHint }}">
+<input value="{{ query }}" onChange="{{ onQuery }}" placeholder="Search documents, sources and answers" aria-label="Search" style="flex:1;min-width:0;border:0;background:none;outline:none;font:inherit;font-size:var(--lw-text-body);color:var(--lw-fg)">
+</x-import>
+<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+<sc-for list="{{ facetGroups }}" as="g" hint-placeholder-count="3">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Menu" hint-size="120px,32px" items="{{ g.items }}" label="{{ g.label }}" onSelect="{{ g.onSelect }}" trigger="{{ g.trigger }}"></x-import>
+</sc-for>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.DatePicker" hint-size="230px,32px" range="{{ true }}" size="sm" value="{{ range }}" onChange="{{ setRange }}" label="Date modified" placeholder="Any date"></x-import>
+<span style="flex:1"></span>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Select" hint-size="150px,32px" options="{{ sortOptions }}" value="{{ sort }}" onChange="{{ onSort }}" aria-label="Sort results"></x-import>
+</div>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.FilterBar" hint-size="100%,26px" filters="{{ chips }}" onRemove="{{ removeChip }}" onClear="{{ clearAll }}"></x-import>
+</form>
+
+<sc-if value="{{ isIdle }}" hint-placeholder-val="{{ false }}">
+<div style="border:1px solid var(--lw-line);border-radius:var(--lw-radius-lg);background:var(--lw-bg-subtle)">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.StateView" hint-size="100%,240px" variant="empty" icon="search" title="Search the workspace" description="Start typing, or narrow by type, owner and date first. Facets are additive within a group and exclusive across groups."></x-import>
+</div>
+</sc-if>
+
+<sc-if value="{{ isLoading }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.StateView" hint-size="100%,160px" variant="loading" lines="{{ 5 }}"></x-import>
+</sc-if>
+
+<sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+<div style="border:1px solid var(--lw-line);border-radius:var(--lw-radius-lg);background:var(--lw-bg-subtle)">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.StateView" hint-size="100%,260px" variant="empty" icon="filter" title="{{ emptyTitle }}" description="Nothing matches this combination. Widen it by removing a facet — the narrowest one first." action="{{ emptyAction }}"></x-import>
+</div>
+</sc-if>
+
+<sc-if value="{{ hasResults }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:4px">
+<p style="margin:0 0 8px;font-family:var(--lw-font-mono);font-size:var(--lw-text-xs);color:var(--lw-fg-subtle);font-variant-numeric:tabular-nums" aria-live="polite">{{ countLine }}</p>
+<sc-for list="{{ results }}" as="r" hint-placeholder-count="6">
+<a href="#" style="display:flex;gap:14px;padding:16px 12px;border-radius:var(--lw-radius-md);border-bottom:1px solid var(--lw-line);text-decoration:none;color:inherit" style-hover="background:var(--lw-bg-subtle)">
+<span style="flex:none;display:grid;place-items:center;width:32px;height:32px;border-radius:var(--lw-radius-md);background:var(--lw-bg-inset);color:var(--lw-fg-subtle)">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="16px,16px" name="{{ r.icon }}" size="16"></x-import>
+</span>
+<span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px">
+<span style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+<span style="font-size:var(--lw-text-sm);font-weight:var(--lw-fw-medium)">{{ r.title }}</span>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Chip" hint-size="70px,20px" tone="{{ r.tone }}">{{ r.kind }}</x-import>
+</span>
+<span style="font-size:var(--lw-text-sm);color:var(--lw-fg-muted);line-height:1.55;text-wrap:pretty">{{ r.snippet }}</span>
+<span style="font-family:var(--lw-font-mono);font-size:var(--lw-text-xs);color:var(--lw-fg-subtle)">{{ r.meta }}</span>
+</span>
+</a>
+</sc-for>
+<div style="margin-top:16px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Pagination" hint-size="100%,32px" page="{{ page }}" pageSize="{{ 10 }}" total="{{ total }}" onPageChange="{{ setPage }}"></x-import>
+</div>
+</div>
+</sc-if>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1100,&quot;height&quot;:900}}">
+const KINDS = [
+  { kind: "Document", tone: "neutral", icon: "file" },
+  { kind: "Source", tone: "brand", icon: "database" },
+  { kind: "Answer", tone: "success", icon: "spark" },
+];
+const OWNERS = ["A. Mensah", "R. Okafor", "J. Tran", "M. Silva"];
+const TITLES = [
+  "Termination notice period — master services agreement",
+  "Data residency addendum (EU)",
+  "How long is the notice period for enterprise contracts?",
+  "Support escalation matrix, revised",
+  "contracts/2024",
+  "Renewal uplift caps by region",
+  "Which sources feed the pricing answer?",
+  "Security questionnaire — SOC 2 responses",
+  "policies/handbook",
+  "Onboarding checklist for new workspaces",
+  "What changed in the July index rebuild?",
+  "Vendor risk tiering criteria",
+];
+const ALL = TITLES.map((title, i) => ({
+  id: i + 1,
+  title,
+  ...KINDS[i % 3],
+  owner: OWNERS[i % 4],
+  snippet: "…either party may terminate for convenience on sixty days' written notice, rising to ninety days after the second renewal term…",
+  meta: OWNERS[i % 4] + " · updated " + (i + 2) + " days ago · " + (12 + i * 3) + " matches",
+}));
+
+class Component extends DCLogic {
+  state = {
+    theme: "light",
+    query: "notice period",
+    facets: [{ id: "k-Document", key: "type", value: "Document" }],
+    range: null,
+    sort: "relevance",
+    page: 1,
+    phase: "results", // idle | loading | results
+  };
+
+  // Facets are additive WITHIN a group and exclusive ACROSS groups, and the chip
+  // row is the only place that is visible — a filter you cannot see is one you
+  // forget you set, and then the empty result looks like a broken product.
+  toggleFacet(key, value) {
+    const id = key + "-" + value;
+    this.setState(st => ({
+      page: 1,
+      facets: st.facets.some(f => f.id === id)
+        ? st.facets.filter(f => f.id !== id)
+        : [...st.facets, { id, key, value }],
+    }));
+  }
+
+  matches() {
+    const q = this.state.query.trim().toLowerCase();
+    const byKey = {};
+    for (const f of this.state.facets) (byKey[f.key] = byKey[f.key] || []).push(f.value);
+    return ALL.filter(r => {
+      if (byKey.type && !byKey.type.includes(r.kind)) return false;
+      if (byKey.owner && !byKey.owner.includes(r.owner)) return false;
+      if (!q) return true;
+      return (r.title + " " + r.snippet).toLowerCase().includes(q);
+    });
+  }
+
+  renderVals() {
+    const s = this.state;
+    const R = React.createElement;
+    const NS = window.LeanWiseDesign_f2d907;
+    const rows = this.matches();
+    const total = rows.length;
+    const start = (s.page - 1) * 10;
+
+    const facetMenu = (label, key, values) => ({
+      label,
+      items: values.map(v => ({
+        value: v, label: v,
+        checked: s.facets.some(f => f.id === key + "-" + v),
+      })),
+      onSelect: (v) => this.toggleFacet(key, v),
+      trigger: R(NS.Button, { size: "sm", variant: "ghost" },
+        R(NS.Icon, { name: "chevrons-up-down", size: 14 }), label),
+    });
+
+    return {
+      themeClass: s.theme === "dark" ? "dark" : "",
+      band: s.theme === "dark" ? "dark" : "light",
+      theme: s.theme,
+      setTheme: (t) => this.setState({ theme: t }),
+
+      query: s.query,
+      onQuery: (e) => this.setState({ query: e.target.value, page: 1, phase: e.target.value ? "results" : "idle" }),
+      onSubmit: (e) => e.preventDefault(),
+      searchIcon: R(NS.Icon, { name: "search", size: 17 }),
+      searchHint: "↵",
+
+      facetGroups: [
+        facetMenu("Type", "type", ["Document", "Source", "Answer"]),
+        facetMenu("Owner", "owner", OWNERS),
+      ],
+      range: s.range,
+      setRange: (r) => this.setState({ range: r, page: 1 }),
+      sortOptions: [
+        { value: "relevance", label: "Most relevant" },
+        { value: "recent", label: "Most recent" },
+        { value: "title", label: "Title A–Z" },
+      ],
+      sort: s.sort,
+      onSort: (e) => this.setState({ sort: e.target.value }),
+
+      chips: s.facets.map(f => ({ id: f.id, key: f.key, value: f.value })),
+      removeChip: (c) => this.setState(st => ({ facets: st.facets.filter(f => f.id !== c.id), page: 1 })),
+      clearAll: () => this.setState({ facets: [], page: 1 }),
+
+      // Three states, not two. "No query yet" is an invitation; "no results" is a
+      // dead end that needs a way out. Collapsing them into one screen is why so
+      // many products greet a new user with the word "empty".
+      isIdle: s.phase === "idle",
+      isLoading: s.phase === "loading",
+      isEmpty: s.phase === "results" && total === 0,
+      hasResults: s.phase === "results" && total > 0,
+
+      emptyTitle: s.query ? 'No matches for "' + s.query + '"' : "No matches for those facets",
+      emptyAction: R(NS.Button, { size: "sm", onClick: () => this.setState({ facets: [], page: 1 }) }, "Clear all facets"),
+
+      countLine: total.toLocaleString() + (total === 1 ? " result" : " results")
+        + (s.query ? ' for "' + s.query + '"' : "")
+        + (s.facets.length ? " · " + s.facets.length + " facet" + (s.facets.length > 1 ? "s" : "") : ""),
+      results: rows.slice(start, start + 10),
+      total,
+      page: s.page,
+      setPage: (p) => this.setState({ page: p }),
+    };
+  }
+}
+</script>
+</body>
+</html>

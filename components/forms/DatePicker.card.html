@@ -1,0 +1,55 @@
+<!-- @dsCard group="Forms" name="DatePicker, FileUpload, Stepper" subtitle="Presets are the point of a range picker; a dropzone is a label around a real input" viewport="1080x700" -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Date, upload, stepper</title>
+<link rel="stylesheet" href="../../preview/_card.css">
+<link rel="stylesheet" href="../../base.css">
+<link rel="stylesheet" href="../../marketing.css">
+<link rel="stylesheet" href="../../product.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.lbl{font-family:var(--lw-font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--lw-fg-subtle);display:block;margin-bottom:8px}
+code{font-family:var(--lw-font-mono);font-size:12px;background:var(--lw-bg-inset);padding:1px 5px;border-radius:2px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.pane{padding:20px;display:grid;gap:16px;align-content:start;border-radius:10px}
+.pane.dark{background:var(--lw-navy-deep)}.pane.dark .lbl{color:var(--lw-on-dark-3)}</style>
+</head><body><div class="card">
+<header><h1>Date, upload, progress</h1>
+<p class="sub"><b>The presets are the point of a range picker.</b> "Last 7 days" is what a user wants nine times out of
+ten, and making them build it from two clicks on a grid is the difference between a control and a chore. The grid is
+real buttons with a roving tabindex — a date grid is only usable by keyboard if each cell can hold focus. Month and
+weekday names come from <code>Intl</code>, so it localises with the browser.</p>
+<p class="sub"><b>The dropzone is a <code>&lt;label&gt;</code> wrapping a real file input</b>, so the click target, the
+keyboard path and the accessible name are the platform's. Drag is the enhancement. The drag counter is not
+decoration: <code>dragleave</code> fires when the pointer crosses onto a child, so a boolean flickers off every time
+the cursor passes the icon.</p></header>
+<div class="two"><div class="pane" id="light"></div><div class="pane dark lw-band-dark" id="dark"></div></div>
+</div>
+<script type="text/babel">
+const LW = window.LeanWiseDesign_f2d907;
+const { DatePicker, FileUpload, Stepper, Field, Stack } = LW;
+
+function Demo(){
+  const [d,setD]=React.useState(new Date(2026,6,24));
+  const [r,setR]=React.useState({start:new Date(2026,6,20),end:new Date(2026,6,29)});
+  const [files,setFiles]=React.useState([
+    {id:1,name:"contracts-2024-q1.pdf",size:2411724,state:"done"},
+    {id:2,name:"handbook-v9.docx",size:840112,state:"uploading",progress:62},
+    {id:3,name:"scan-0042.tiff",size:51203344,state:"error",error:"Unsupported format — PDF, DOCX or TXT"},
+  ]);
+  return (
+    <Stack gap={16}>
+      <span className="lbl">stepper — the marker carries the state</span>
+      <Stepper current={2} steps={[{label:"Connect"},{label:"Map fields"},{label:"Review"},{label:"Publish"}]} />
+      <Field label="Effective date"><DatePicker value={d} onChange={setD} label="Effective date" /></Field>
+      <Field label="Reporting period" help="Presets first — the grid is for the tenth case."><DatePicker range value={r} onChange={setR} label="Reporting period" /></Field>
+      <span className="lbl">upload</span>
+      <FileUpload multiple accept=".pdf,.docx,.txt" maxSize={20*1024*1024} files={files}
+        onFiles={fs=>setFiles(x=>[...x,...fs.map((f,i)=>({id:Date.now()+i,name:f.name,size:f.size,state:"queued"}))])}
+        onRemove={f=>setFiles(x=>x.filter(y=>y.id!==f.id))} />
+    </Stack>
+  );
+}
+ReactDOM.createRoot(document.getElementById("light")).render(<Demo />);
+ReactDOM.createRoot(document.getElementById("dark")).render(<Demo />);
+</script></body></html>

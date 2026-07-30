@@ -1,0 +1,8 @@
+/* @leanwise/design — app.css is now a SHIM for product.css.
+ *
+ * Renamed so the three layers say what they hold: base (shared controls),
+ * marketing (page compositions), product (app surfaces). Kept for one full major.
+ *
+ * A product app imports: tokens.css → base.css → product.css.
+ */
+@import url("./product.css");

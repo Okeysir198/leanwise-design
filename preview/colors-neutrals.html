@@ -1,0 +1,95 @@
+<!-- @dsCard group="Colors" name="Neutrals & navy" subtitle="The navy anchor, the surface/text scale it grounds — and where the two navies disagree" width="760" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Neutrals &amp; navy</title>
+<link rel="stylesheet" href="_card.css">
+<script src="_card.js"></script>
+<style>
+.ramp.light{box-shadow:inset 0 0 0 1px var(--lw-border-1)}
+.ramp.light .sw+.sw{box-shadow:inset 1px 0 0 var(--lw-border-1)}
+.specimen{display:grid;grid-template-columns:1fr auto;gap:4px 16px;align-items:baseline;padding:16px 18px;border-radius:10px;background:var(--lw-surface-0);box-shadow:inset 0 0 0 1px var(--lw-border-1)}
+.specimen .t{font-size:15px;line-height:1.4}
+.specimen .r{font-family:var(--lw-font-mono);font-size:10.5px;color:var(--lw-text-3);font-variant-numeric:tabular-nums;white-space:nowrap}
+.verdict{display:grid;gap:10px;padding:16px 18px;border-radius:10px;background:var(--lw-surface-2);gap:12px}
+.verdict h2{margin:0;font-size:11px;font-family:var(--lw-font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--lw-text-3);font-weight:400}
+.verdict ul{margin:0;padding-left:1.1em;display:grid;gap:8px}
+.verdict li{font-size:12.5px;line-height:1.55;color:var(--lw-text-2);max-width:64ch}
+.verdict li b{color:var(--lw-text-1)}
+.hue{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-family:var(--lw-font-mono);font-size:11px;color:var(--lw-text-2);font-variant-numeric:tabular-nums}
+.hue i{font-style:normal;color:var(--lw-text-3)}
+</style>
+</head>
+<body>
+<div class="card">
+  <header>
+    <h1>Neutrals &amp; navy</h1>
+    <p class="sub">The navy anchor and the surface/text scale it grounds. Every hex and ratio below is
+    read back from <span class="mono">tokens.css</span> at render time — nothing here is transcribed.</p>
+  </header>
+
+  <div class="ramp">
+    <div class="sw" data-swatch="navy-700"><b>navy-700</b></div>
+    <div class="sw" data-swatch="navy-900"><b>navy-900</b></div>
+    <div class="sw" data-swatch="navy-deep"><b>navy-deep</b></div>
+  </div>
+  <p class="sub">One family, three jobs. <span class="mono">navy-700</span> is sampled from the mark at full
+  saturation and never moves — it is the gradient's dark stop. <span class="mono">900</span> and
+  <span class="mono">deep</span> are the <em>surface</em> tiers, so they step toward the dark theme's own hue
+  and shed chroma: a dark band and a dark card now read as the same colour.</p>
+
+  <div class="ramp light">
+    <div class="sw" data-swatch="surface-0"><b>surface-0</b></div>
+    <div class="sw" data-swatch="surface-1"><b>surface-1</b></div>
+    <div class="sw" data-swatch="surface-2"><b>surface-2</b></div>
+    <div class="sw" data-swatch="surface-3"><b>surface-3</b></div>
+  </div>
+  <p class="sub">The page, then three lifts. Hairlines sit above them:
+  <span class="mono">border-1</span> for structure, <span class="mono">border-2</span> when a division
+  needs to be felt.</p>
+
+  <div class="specimen">
+    <div class="t" style="color:var(--lw-text-1)">text-1 — headings and primary copy</div>
+    <div class="r" data-ratio="text-1 on surface-0"></div>
+    <div class="t" style="color:var(--lw-text-2)">text-2 — secondary copy, long-form body</div>
+    <div class="r" data-ratio="text-2 on surface-0"></div>
+    <div class="t" style="color:var(--lw-text-3)">text-3 — the muted floor: labels, captions</div>
+    <div class="r" data-ratio="text-3 on surface-0"></div>
+    <div class="t" style="color:var(--lw-text-4)">text-4 — decorative hairline text only</div>
+    <div class="r" data-ratio="text-4 on surface-0"></div>
+  </div>
+  <p class="sub"><b>text-4 fails AA as body text and that is intentional.</b> If the number beside it is
+  under 4.5, the token is being used correctly. <span class="mono">text-3</span> at ~4.8 clears AA but has
+  almost no headroom — it is a floor, not a default.</p>
+
+  <div class="verdict">
+    <h2>Assessment</h2>
+    <div class="hue">
+      <i>navy-700</i><span>205.2° · 97% S — the mark, unmoved: artwork, gradient, hover</span>
+      <i>navy-900</i><span>213.0° · 72% S — tooltips, ink buttons, dark bands</span>
+      <i>navy-deep</i><span>217.0° · 66% S — the full-bleed dark ground, code surface</span>
+      <i>dark paper</i><span>220.0° · 47% S — <span class="mono">--lw-bg</span> on dark</span>
+      <i>surfaces</i><span>210–220° · 17–23% S — cool grey, same family as the paper</span>
+    </div>
+    <ul>
+      <li><b>The neutrals were already right.</b> Cool grey at 210–220° is the correct temperature beside a
+      blue-navy, the four surfaces stack closely enough not to band, and the text tiers cover every real need
+      with exactly one deliberate sub-AA tier.</li>
+      <li><b>The navy was two navies, and now it is one.</b> The ramp used to run 205–208° at 95–97%
+      saturation while the dark theme's paper sat at 220°/47% — 14° and ~49 saturation points apart, so a
+      dark band and a dark card did not read as the same system. The ramp now bridges the two: the mark's
+      tier is untouched, and the tiers actually used as <em>grounds</em> step toward the paper's hue and shed
+      chroma. Still deep and unmistakably blue — never slate.</li>
+      <li><b>Why 700 did not move.</b> It is the stop <span class="mono">--lw-gradient-brand</span> feeds and
+      the contrast gate pins at offset 0. Softening it would have desaturated the logo to fix a surface
+      problem — the wrong trade.</li>
+      <li><b>Nothing lost on contrast.</b> White ink reads 15.75 on navy-900 and 17.94 on navy-deep; the
+      <span class="mono">.lw-code</span> comment floor still clears AA at 4.91 and cyan syntax at 7.71. The
+      ramp got calmer, not lighter.</li>
+    </ul>
+  </div>
+</div>
+</body>
+</html>

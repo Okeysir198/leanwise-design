@@ -1,0 +1,85 @@
+<!-- @dsCard group="Spacing" name="Radii" subtitle="A 4px-based geometric scale — tight on controls, soft only on surfaces" width="760" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Radii</title>
+<link rel="stylesheet" href="_card.css">
+<script src="_card.js"></script>
+<style>
+  .tiles{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
+  .tile{display:grid;gap:6px;justify-items:center}
+  .tile>div{width:100%;height:56px;background:var(--lw-brand-500);position:relative;cursor:pointer;transition:transform var(--lw-duration) var(--lw-ease-out),background var(--lw-duration) var(--lw-ease-out),box-shadow var(--lw-duration) var(--lw-ease-out)}
+  .tile>div:hover{transform:translateY(-3px);background:var(--lw-brand-600);box-shadow:var(--lw-shadow-md)}
+  .tile>div:focus-visible{outline:none;box-shadow:var(--lw-focus-ring)}
+  .tiles:hover .tile>div:not(:hover){opacity:.42}
+  .tile>div{opacity:1;transition:opacity var(--lw-duration) var(--lw-ease-out),transform var(--lw-duration) var(--lw-ease-out),background var(--lw-duration) var(--lw-ease-out),box-shadow var(--lw-duration) var(--lw-ease-out)}
+  .tile:hover>span{color:var(--lw-brand-text)}
+  @media (prefers-reduced-motion: reduce){.tile>div:hover{transform:none}}
+  .tile>div::after{content:"";position:absolute;inset:6px;border:1px dashed hsl(0 0% 100% / .35);border-radius:inherit}
+  .tile>span{font-size:10px;color:var(--lw-text-3);font-family:var(--lw-font-mono)}
+  .nest{display:flex;gap:14px;flex-wrap:wrap}
+  .panel{background:var(--lw-surface-2);border:1px solid var(--lw-border-1);padding:12px;display:grid;gap:8px;min-width:210px}
+  .field{background:var(--lw-surface-0);border:1px solid var(--lw-border-1);padding:9px 11px;font-size:12px;color:var(--lw-text-3)}
+  .btn{background:var(--lw-brand-500);color:var(--lw-on-brand);font-size:12px;font-weight:600;padding:9px 14px;text-align:center}
+  .chiprow{display:flex;gap:6px}
+  .chip{background:var(--lw-brand-soft);color:var(--lw-brand-text);font-size:10.5px;padding:3px 7px;font-family:var(--lw-font-mono)}
+</style>
+</head>
+<body>
+<div class="card">
+  <header>
+    <h1>Radii</h1>
+    <p class="sub">Seven tiers on a 4px geometric scale: <b>2 · 4 · 8 · 12 · 16 · 24 · pill</b>. Every
+    tier lands on the spacing grid, so an inner radius minus its padding is always another real token.
+    Tight radii on controls and soft ones reserved for surfaces is what makes an interface read as
+    software rather than as a consumer app. Hover a tier to isolate it.</p>
+  </header>
+  <div class="tiles">
+    <div class="tile"><div tabindex="0" style="border-radius:var(--lw-radius-xs)"></div><span>xs · 2</span></div>
+    <div class="tile"><div tabindex="0" style="border-radius:var(--lw-radius-sm)"></div><span>sm · 4</span></div>
+    <div class="tile"><div tabindex="0" style="border-radius:var(--lw-radius-md)"></div><span>md · 8</span></div>
+    <div class="tile"><div tabindex="0" style="border-radius:var(--lw-radius-lg)"></div><span>lg · 12</span></div>
+    <div class="tile"><div tabindex="0" style="border-radius:var(--lw-radius-xl)"></div><span>xl · 16</span></div>
+    <div class="tile"><div tabindex="0" style="border-radius:var(--lw-radius-2xl)"></div><span>2xl · 24</span></div>
+    <div class="tile"><div tabindex="0" style="border-radius:var(--lw-radius-pill)"></div><span>pill</span></div>
+  </div>
+  <p class="sub">The dashed inset above is the <b>concentric rule</b>: a child inset by <i>p</i> takes
+  radius <span class="mono">outer − p</span>. On this scale that subtraction always lands on another
+  tier — 12 minus 4 is 8, 16 minus 4 is 12. An arithmetic +4 run cannot do that.</p>
+  <div class="nest">
+    <div class="panel" style="border-radius:var(--lw-radius-lg)">
+      <div class="chiprow">
+        <span class="chip" style="border-radius:var(--lw-radius-xs)">xs</span>
+        <span class="chip" style="border-radius:var(--lw-radius-xs)">chip</span>
+      </div>
+      <div class="field" style="border-radius:var(--lw-radius-sm)">input · sm</div>
+      <div class="btn" style="border-radius:var(--lw-radius-md)">Button · md</div>
+      <span class="lbl">card · lg 12</span>
+    </div>
+    <div class="panel" style="border-radius:var(--lw-radius-xl);background:var(--lw-navy-deep);border-color:transparent;color:var(--lw-on-dark)">
+      <div class="field" style="border-radius:var(--lw-radius-sm);background:transparent;border-color:hsl(0 0% 100% / .16);color:var(--lw-on-dark-2)">input · sm</div>
+      <div class="btn" style="border-radius:var(--lw-radius-md);background:var(--lw-cta-500);color:var(--lw-on-cta)">CTA · md</div>
+      <span class="lbl" style="color:rgba(255,255,255,.6)">panel · xl 16</span>
+    </div>
+  </div>
+  <table>
+    <thead><tr><th>Token</th><th>Value</th><th>Where</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">--lw-radius-xs</td><td class="n">2px</td><td>chips, tags, inline code</td></tr>
+      <tr><td class="mono">--lw-radius-sm</td><td class="n">4px</td><td>inputs, checkboxes, small controls</td></tr>
+      <tr><td class="mono">--lw-radius-md</td><td class="n">8px</td><td>the default — buttons, fields; shadcn <span class="mono">--radius</span> maps here</td></tr>
+      <tr><td class="mono">--lw-radius-lg</td><td class="n">12px</td><td>cards, popovers, menus</td></tr>
+      <tr><td class="mono">--lw-radius-xl</td><td class="n">16px</td><td>panels, modals, sheets</td></tr>
+      <tr><td class="mono">--lw-radius-2xl</td><td class="n">24px</td><td>full-bleed sections and hero surfaces only</td></tr>
+      <tr><td class="mono">--lw-radius-pill</td><td class="n">999px</td><td>badges, avatars, segmented controls</td></tr>
+    </tbody>
+  </table>
+  <p class="sub"><b>The default is 8px</b>, and it is what shadcn's <span class="mono">--radius</span>
+  resolves to, so it sets the tone for every control in an app. Eight reads crisp; ten reads pillowy.
+  Reserve <span class="mono">2xl</span> for full-bleed surfaces — a soft radius on a control makes
+  software look like a consumer app.</p>
+</div>
+</body>
+</html>

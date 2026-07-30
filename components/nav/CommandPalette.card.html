@@ -1,0 +1,52 @@
+<!-- @dsCard group="Navigation" name="CommandPalette" subtitle="A dialog, not a popover — and it does not bind ⌘K for you" viewport="960x620" -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Command palette</title>
+<link rel="stylesheet" href="../../preview/_card.css">
+<link rel="stylesheet" href="../../base.css">
+<link rel="stylesheet" href="../../marketing.css">
+<link rel="stylesheet" href="../../product.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.lbl{font-family:var(--lw-font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--lw-fg-subtle);display:block;margin-bottom:8px}
+code{font-family:var(--lw-font-mono);font-size:12px;background:var(--lw-bg-inset);padding:1px 5px;border-radius:2px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.pane{padding:20px;display:grid;gap:16px;align-content:start;border-radius:10px}
+.pane.dark{background:var(--lw-navy-deep)}.pane.dark .lbl{color:var(--lw-on-dark-3)}</style>
+</head><body><div class="card">
+<header><h1>Command palette</h1>
+<p class="sub"><b>A dialog, not a popover.</b> It is modal, it takes the whole keyboard, and the page behind it should
+be inert — so it is the native element with the platform's focus trap, for the same reason <code>Dialog</code> is.</p>
+<p class="sub"><b>It does not bind ⌘K.</b> A component that installs a global key handler fights the host app for the
+shortcut and cannot be turned off on the one screen where ⌘K means something else. Bind it where you mount it.
+Matching is a scored <b>subsequence</b>, not a substring: "opdb" finds "Open database", and an early contiguous match
+ranks above a scattered one — a palette that returns the right row ninth is one people stop using.</p></header>
+<div class="pane" id="root" style="min-height:180px"></div>
+</div>
+<script type="text/babel">
+const LW = window.LeanWiseDesign_f2d907;
+const { CommandPalette, Button, Cluster } = LW;
+const commands=[
+  {id:1,group:"Sources",label:"Open database",icon:"database",kbd:"⌘O",keywords:["db","connect"]},
+  {id:2,group:"Sources",label:"Re-index contracts/2024",icon:"retry"},
+  {id:3,group:"Sources",label:"Upload documents",icon:"upload"},
+  {id:4,group:"Workspace",label:"Invite a teammate",icon:"users",kbd:"⌘I"},
+  {id:5,group:"Workspace",label:"Switch theme",icon:"moon"},
+  {id:6,group:"Workspace",label:"Open settings",icon:"settings",kbd:"⌘,"},
+  {id:7,group:"Danger",label:"Delete this workspace",icon:"trash"},
+];
+function Demo(){
+  const [open,setOpen]=React.useState(false);
+  // Bound HERE, by the host — which is the whole point.
+  React.useEffect(()=>{
+    const h=(e)=>{ if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();setOpen(o=>!o);} };
+    window.addEventListener("keydown",h); return ()=>window.removeEventListener("keydown",h);
+  },[]);
+  return (<>
+    <Cluster><Button onClick={()=>setOpen(true)}>Open palette</Button>
+      <span className="lw-menu-kbd">or ⌘K</span></Cluster>
+    <CommandPalette open={open} onClose={()=>setOpen(false)} commands={commands} onRun={()=>{}} />
+  </>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo />);
+</script></body></html>

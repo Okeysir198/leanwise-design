@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Marketing landing page" description="One continuous ground, light or dark, carrying the honeycomb left and the mark right with ambient drift; left-aligned hero, three guarantees, grounded-answer proof, use cases, one CTA. Placeholder copy describes the product only — no invented customers, logos or metrics." -->
+<helmet><script src="./ds-base.js"></script></helmet>
+<div class="{{ pageClass }}" data-band="{{ band }}" style="font-family:var(--lw-font-sans)">
+
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.TopBar" hint-size="100%,56px" class-name="nav-center" brand="LeanWise AI" brand-href="#" logo="{{ true }}" links="{{ navLinks }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="150px,36px" variant="brand" size="sm">Book a walkthrough</x-import>
+</x-import>
+
+<section class="lw-hero-dark">
+<div class="lw-container" style="display:flex;flex-direction:column;gap:14px;align-items:flex-start;max-width:min(var(--lw-col-max),1180px)">
+<p class="lw-eyebrow">Retrieval you can audit</p>
+<h1 class="lw-h1" style="max-width:17ch;margin:0">Answers your team can <em>defend</em>.</h1>
+<p class="lw-lead" style="max-width:50ch;margin:0">Every response is grounded in your own documents and shows the passage it came from — so an answer is the start of a review, not a claim you take on trust.</p>
+<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:6px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="200px,48px" variant="cta" size="lg">Book a walkthrough</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="150px,48px" variant="ghost" size="lg">Read the spec</x-import>
+</div>
+<p style="font-family:var(--lw-font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--lw-brand-text);margin:14px 0 0">Runs in your tenant · Documents never leave it</p>
+</div>
+</section>
+
+<section class="lw-section">
+<div class="lw-container" style="display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;flex-direction:column;gap:8px;max-width:52ch">
+<p class="lw-eyebrow">How it works</p>
+<h2 class="lw-h2" style="margin:0">Three guarantees, not three features.</h2>
+</div>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.FeatureGrid" hint-size="100%,240px" features="{{ features }}"></x-import>
+</div>
+</section>
+
+<section class="lw-section">
+<div class="lw-container" style="display:grid;gap:40px;grid-template-columns:minmax(0,5fr) minmax(0,6fr);align-items:center">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p class="lw-eyebrow">See the passage, not the promise</p>
+<h2 class="lw-h2" style="margin:0">Every claim carries its source.</h2>
+<p class="lw-lead" style="max-width:44ch;margin:0">Citations resolve to the exact page they came from. When retrieval is weak the confidence meter says so, rather than dressing a guess as an answer.</p>
+</div>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Console" hint-size="100%,240px" url="app.leanwise.ai/ask" lines="{{ consoleLines }}"></x-import>
+</div>
+</section>
+
+<section class="lw-section">
+<div class="lw-container" style="display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;flex-direction:column;gap:8px;max-width:52ch">
+<p class="lw-eyebrow">Where teams put it</p>
+<h2 class="lw-h2" style="margin:0">Work that has to survive a second reader.</h2>
+</div>
+<div class="lw-grid" style="--lw-grid-min:260px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Card" hint-size="100%,180px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.CardHead" hint-size="100%,40px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.CardTitle" hint-size="100%,24px">Contract review</x-import>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.CardBody" hint-size="100%,60px">Ask across an agreement portfolio and read the clause the answer rests on, in the document it came from.</x-import>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Card" hint-size="100%,180px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.CardHead" hint-size="100%,40px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.CardTitle" hint-size="100%,24px">Internal knowledge</x-import>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.CardBody" hint-size="100%,60px">Policies, runbooks and specs answered from the current version, with the page that says so.</x-import>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Card" hint-size="100%,180px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.CardHead" hint-size="100%,40px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.CardTitle" hint-size="100%,24px">Regulatory response</x-import>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.CardBody" hint-size="100%,60px">Draft against the source of record and hand the reviewer the citation trail alongside the draft.</x-import>
+</x-import>
+</div>
+</div>
+</section>
+
+<section class="lw-section tight">
+<div class="lw-container">
+<div style="display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;padding:44px 24px;border:1px solid var(--lw-line);border-radius:var(--lw-radius-2xl);background:var(--lw-bg-subtle)">
+<h2 class="lw-h2" style="max-width:22ch;margin:0">Bring one corpus. See it answer.</h2>
+<p class="lw-lead" style="max-width:48ch;margin:0">A walkthrough runs on your documents, not a demo set.</p>
+<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:6px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="200px,48px" variant="cta" size="lg">Book a walkthrough</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="130px,48px" variant="ghost" size="lg">Talk to sales</x-import>
+</div>
+</div>
+</div>
+</section>
+
+<footer style="border-top:1px solid var(--lw-line);padding:24px 0">
+<div class="lw-container" style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between">
+<span style="font-family:var(--lw-font-mono);font-size:11px;color:var(--lw-fg-muted)">© LeanWise AI</span>
+<nav style="display:flex;gap:20px;font-family:var(--lw-font-mono);font-size:11px">
+<a href="#" style="color:var(--lw-fg-muted);text-decoration:none" style-hover="color:var(--lw-brand-text)">Privacy</a>
+<a href="#" style="color:var(--lw-fg-muted);text-decoration:none" style-hover="color:var(--lw-brand-text)">Security</a>
+<a href="#" style="color:var(--lw-fg-muted);text-decoration:none" style-hover="color:var(--lw-brand-text)">Status</a>
+</nav>
+</div>
+</footer>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900},&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;\&quot;dark\&quot; | \&quot;light\&quot;&quot;,&quot;section&quot;:&quot;Theme&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const light = this.props.theme === "light";
+    return {
+      pageClass: light ? "lw-page-light" : "dark lw-page-dark",
+      band: light ? "light" : "dark",
+      navLinks: [
+        { href: "#", label: "Product", current: true },
+        { href: "#", label: "Customers" },
+        { href: "#", label: "Resources" },
+        { href: "#", label: "Pricing" },
+        { href: "#", label: "About" }
+      ],
+      features: [
+        { title: "Grounded by default", body: "Every claim carries the passage it came from. No citation, no answer.", href: "#" },
+        { title: "Hybrid retrieval", body: "Semantic and keyword search over one index, reranked before the model sees it.", href: "#" },
+        { title: "Evaluated continuously", body: "Grounding and citation accuracy tracked per source, per release.", href: "#" }
+      ],
+      // The two machine lines carry `cells`, so their fields align as real
+      // columns; the two conversational lines stay free-running `text` and span
+      // the stream. Runs of spaces cannot align anything — they only look
+      // aligned in the source, at one width, until a value grows.
+      consoleLines: [
+        { t: "→", text: "Which agreements auto-renew this quarter?" },
+        { cells: ["retrieve", "hybrid", { text: "rerank top 4", muted: true }], tone: "ok" },
+        { t: "←", text: "Four, each with the renewal clause cited." },
+        { cells: ["grounding", "0.91", { text: "every claim cited", muted: true }], tone: "ok" }
+      ]
+    };
+  }
+}
+
+</script>
+</body>
+</html>

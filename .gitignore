@@ -1,2 +1,5 @@
-node_modules
-build
+node_modules/
+.visual/current/
+tokens.json
+*.log
+.DS_Store
