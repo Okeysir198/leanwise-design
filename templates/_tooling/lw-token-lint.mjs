@@ -52,15 +52,15 @@ const arg = process.argv[2];
 // Function declaration is hoisted, so it is callable here despite being defined
 // at the bottom of the file.
 if (!arg || arg === "--css") {
-  const errs = cssSelfCheck();
+  const errs = cssSelfCheck().concat(jsxSelfCheck());
   if (errs.length) {
     for (const e of errs) {
       console.error(`${e.file || "css"}  [${e.rule}]  ${e.hit}\n    in \`${e.selector}\` — ${e.msg}`);
     }
-    console.error(`\n\x1b[31m${errs.length} CSS token violation(s).\x1b[0m See @leanwise/design/CLAUDE.md.\n`);
+    console.error(`\n\x1b[31m${errs.length} self-check violation(s).\x1b[0m See @leanwise/design/CLAUDE.md.\n`);
     process.exit(1);
   }
-  console.log(`\x1b[32mCSS self-check clean.\x1b[0m`);
+  console.log(`\x1b[32mSelf-check clean.\x1b[0m`);
   process.exit(0);
 }
 
@@ -230,6 +230,48 @@ function checkOneCss(raw) {
         }
       }
     }
+  }
+  return errs;
+}
+
+/**
+ * Rule 7: a component that references `React.` must import it.
+ *
+ * The build sets `jsx: "automatic"`, so esbuild injects `jsx`/`jsxs` from
+ * react/jsx-runtime and NOT the `React` identifier. Eighteen components called
+ * React.useRef / useId / useState with no import; the JSX compiled, the build
+ * passed, the preview cards worked (they get React as a UMD global) — and the
+ * published package threw `ReferenceError: React is not defined` on import for
+ * anyone using a bundler. A failure that only appears downstream is exactly
+ * what a self-check is for.
+ */
+function jsxSelfCheck() {
+  const errs = [];
+  const dir = join(PKG_ROOT, "components");
+  if (!existsSync(dir)) return errs;
+  // Its own traversal: walk() closes over EXT, a const declared below in the
+  // TSX-mode section, which this self-check runs before.
+  const jsx = [];
+  const scan = (d) => {
+    for (const entry of readdirSync(d)) {
+      if (entry === "node_modules" || entry.startsWith(".")) continue;
+      const p2 = join(d, entry);
+      if (statSync(p2).isDirectory()) scan(p2);
+      else if (extname(p2) === ".jsx") jsx.push(p2);
+    }
+  };
+  scan(dir);
+  for (const file of jsx) {
+    const src = readFileSync(file, "utf8");
+    if (!/\bReact\./.test(src)) continue;
+    if (/^import \* as React from "react";/m.test(src)) continue;
+    errs.push({
+      rule: "missing-react-import",
+      hit: relative(PKG_ROOT, file),
+      selector: "-",
+      file: relative(PKG_ROOT, file),
+      msg: 'references `React.` without `import * as React from "react";` — the automatic JSX runtime does not provide the React binding, so this throws for a bundling consumer',
+    });
   }
   return errs;
 }

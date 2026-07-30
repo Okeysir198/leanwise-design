@@ -26,6 +26,10 @@ jobs:
         run: npm run check:tokens
       - name: Theme completeness
         run: npm run check:themes
+      # The barrel's types are generated from react.js; a drifted react.d.ts
+      # broke `npm run build` (and prepublishOnly) for two releases.
+      - name: Barrel types
+        run: npm run check:dts
 
       - name: Install Chromium
         run: npx playwright install --with-deps chromium

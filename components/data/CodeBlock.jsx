@@ -1,3 +1,4 @@
+import * as React from "react";
 import { Icon } from "../primitives/Icon.jsx";
 
 const cx = (...a) => a.filter(Boolean).join(" ");

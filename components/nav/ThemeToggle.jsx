@@ -1,3 +1,4 @@
+import * as React from "react";
 import { Icon } from "../primitives/Icon.jsx";
 import { paint, THEME_KEY } from "../../hooks.js";
 const cx = (...a) => a.filter(Boolean).join(" ");

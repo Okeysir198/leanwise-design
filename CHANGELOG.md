@@ -10,7 +10,26 @@ and would not be at five.
 
 ## [Unreleased]
 
-Nothing yet.
+### Fixed
+
+- **`npm run build` was broken, and with it `prepublishOnly`.** `react.d.ts` was a hand-written
+  types barrel beside `react.js`, which is the real export list, and the two had drifted: four
+  re-exports pointed at a sibling's file (`Container` from `Page`, `Split` from `Grid`,
+  `InputGroup` from `Input`, `SourceList` from `SourceChip`) and **31 components had no types at
+  all** — Icon, DataGrid, both charts, Popover, Menu, Drawer, Combobox, DatePicker and more.
+  rollup-plugin-dts refuses a re-export the target does not declare, so `dts: true` failed hard
+  on the first of those; the other 31 failed quietly, as an error in the consumer's editor.
+  `react.d.ts` is now GENERATED from `react.js` by `lw-dts-barrel.mjs` (`npm run dts`), covers
+  all 82 exports plus 71 `*Props` types, and `check:dts` fails when the committed file is stale.
+- **The published package threw `ReferenceError: React is not defined` on import.** Eighteen
+  components called `React.useRef` / `useId` / `useState` without importing React. The build
+  sets `jsx: "automatic"`, which injects `jsx`/`jsxs` from `react/jsx-runtime` and *not* the
+  `React` binding — so the JSX compiled, the build passed, and the preview cards worked because
+  they get React as a UMD global. Only a consumer bundling the package saw it. The import is
+  added, and `check:tokens`'s self-check now asserts it for every `components/**/*.jsx`.
+
+Both were caught by the review pass in the previous commit and are fixed here rather than
+folded into it: they are correctness, and a cleanup commit should stay a cleanup commit.
 
 ## [1.1.3] — 2026-07-30
 

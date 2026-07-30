@@ -1,3 +1,4 @@
+import * as React from "react";
 const cx = (...a) => a.filter(Boolean).join(" ");
 
 /* Where the panel lands, given the anchor and the space actually available.

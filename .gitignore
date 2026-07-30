@@ -1,4 +1,7 @@
 node_modules/
+# tsup output. v1.1.0 dropped the committed dist/ — package.json#main points at
+# the flat ./react.js and consumers install from a git tag.
+dist/
 # Both halves. Comparison is a byte-exact PNG match, so a baseline is valid only
 # on the machine that recorded it — committing this box's set would make CI
 # permanently red rather than green. CI must record its own inside its image.
