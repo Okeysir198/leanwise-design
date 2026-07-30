@@ -167,6 +167,16 @@ of it is the same: **things that were true at the root and wrong everywhere else
 - README's install pin, its Tailwind snippet (`export default` + `require` is a
   `ReferenceError` in an ESM config), and the gate count in README, CONTRIBUTING and REVIEW.
 
+### Fixed — `email.css` drift, now gated
+
+`email.css` carries literal hex on purpose (mail clients have no custom properties), which
+makes it a second home for palette values — and six had drifted from `tokens.css`:
+`--lw-text-2`, `--lw-text-3`, `--lw-border-1`, `--lw-border-2`, `--lw-surface-1` and the dark
+`--lw-fg-muted`. `--lw-text-3` was the one that mattered: v1.1.3 moved the muted floor to
+clear AA on surface-3, and email kept the old `#6B7684` — so the one surface that cannot be
+re-themed after it is sent had the pre-fix value baked in. `emailLiterals()` in the contrast
+gate now asserts them, the same way `logoStops()` asserts the SVG gradient.
+
 ### Known gaps, unchanged
 
 - `check:visual` still cannot fail in CI. `_ds_bundle.js` is still generated in the design

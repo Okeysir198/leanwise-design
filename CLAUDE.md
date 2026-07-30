@@ -52,6 +52,9 @@ marketing.css     grounds + hero. product.css    app surfaces.
 lw.css / app.css  @import SHIMS kept for one major. Do NOT load them alongside the real
                     layers — you get the rules twice.
 email.css         literal hex + table layout on purpose: mail clients have no custom properties.
+                    That makes it a SECOND HOME for palette values, so the contrast gate
+                    asserts its literals against tokens.css — six had drifted, including the
+                    v1.1.3 muted floor. Move a token, move the literal with it.
 shadcn.css        maps --primary/--background/--accent onto tokens (no values of its own).
 fonts.css+fonts/  Geist + Geist Mono, self-hosted, incl. Vietnamese subsets.
 react.js/.d.ts    the barrel — re-exports every components/<cat>/*.jsx.
@@ -93,7 +96,10 @@ so `check:themes` fails when `tokens.json` does not match what `tokens.css` woul
   asserts the **logo SVG gradient stops** (`offset 0` -> navy-700, `offset 1` -> logo-cyan)
   match `tokens.css` — the gradient stops must be literal hex because custom properties do not
   cascade into an SVG loaded through `<img>`, so this is the only guard on that second home for
-  a brand value. Run it on every token change.
+  a brand value. It asserts **`email.css`'s literals** the same way and for the same reason.
+  It also carries a **non-text group (WCAG 1.4.11, 3:1)** for control boundaries and focus
+  indicators — until v1.1.5 every pair was a TEXT pair, `AA_LARGE` was dead code, and control
+  borders were shipping at 1.47:1. Run it on every token change.
 - **`lw-token-lint.mjs`** — a **deny-list, not a contract checker**: raw hex, palette escape,
   arbitrary `var()` inside `[…]`, more than one `variant="cta"` per file. It cannot see a
   utility the preset no longer registers, so a removed utility compiles, lints green, and

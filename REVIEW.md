@@ -3,160 +3,232 @@
 Standing audit. `CHANGELOG.md` records what moved; this file records what is true, what is
 still open, and why. Re-read it before touching the CSS layers or the gates.
 
-**Scope reviewed:** `tokens.css`, `base.css`, `marketing.css`, `product.css`, `email.css`,
-the barrel's component exports, the specimen cards, the twelve templates, and every gate.
-Counts are deliberately not restated here — `npm run check:dts` prints the export count and
-`npm run check:a11y` the card count, and a number in prose is a second home that goes stale.
-It already had: this line read "83 exports … 5 gates" when the barrel exported 82 and there
-were six.
+**Scope:** the token core and five CSS layers, the React barrel and its components, the six
+gates, packaging, the twelve templates and the specimen cards.
+
+Counts are deliberately not restated in prose — `npm run check:dts` prints the export count,
+`npm run check:a11y` the card count, `npm run check:themes` the token count. A number in a
+document is a second home that goes stale, and this line proved it: it read "83 exports … 5
+gates" when the barrel exported 82 and there were six.
+
+**Last pass:** v1.1.5, a full-codebase review. Everything under *Resolved* is from it.
 
 ---
 
 ## Verdict
 
-Coverage is closed and the structural problem the last pass found is fixed. Nine findings were
-open; **seven are resolved, two are blocked on a machine that can run `npm install`.**
+The system now largely audits itself, and the v1.1.5 pass is the evidence: the two defects
+that mattered most were **gates reporting success while measuring nothing**, and both were
+invisible from inside the codebase's own output.
 
-What is left is not design work. It is one build, one publish, and the honest admission that
-`check:visual` still cannot fail in CI — its baselines are byte-exact PNGs and `.visual/` is
-gitignored, so every CI run records a fresh set and compares nothing. Making it real needs
-baselines recorded inside the CI image, not this box's.
-
----
-
-## Resolved
-
-### 1. The layer names lied — **fixed**
-
-`.lw-btn` lived in `lw.css`, "the marketing layer", so an app that loaded only the product
-layer got correct forms, tables and overlays and unstyled buttons. Split into three layers
-named for their contents:
-
-| File | Holds | Who drops it |
-|---|---|---|
-| `base.css` | reset, type, buttons, pills, cards, chips, console, code surface, file tree, status chip, brand mark, pointer list | nobody |
-| `marketing.css` | grounds, hero, sections, features, stories, logo rail, data-viz bars, browser frame, ambient motion | a product app |
-| `product.css` | layout, forms, data, overlays, shell, AI, mobile bars | a marketing page |
-
-Load order is `tokens` → `base` → the layer you need. `lw.css` and `app.css` survive as
-`@import` shims for one full major, and **product.css deliberately does not `@import` base** —
-an import there would apply those rules a second time in a page that also loads marketing, and
-silently reorder the cascade between the two. Load order belongs to the consumer.
-
-The pointer-affordance list stayed at the foot of `base.css` with the product layer loading
-after it, which is the arrangement it already had inside `lw.css` — rule 7 is about that order,
-and it is the one thing a careless split would have broken.
-
-All 34 cards and 12 `ds-base.js` loaders now name the real layers.
-
-### 2. `check:themes` was wrong on its first run — **fixed**
-
-Ran the gate's logic by hand. It flagged four tokens: `--lw-on-brand-c`, `--lw-on-cta-c`,
-`--lw-on-status-c`, `--lw-on-danger-c` — none of which is a bug. Those inks sit on fills that
-do **not** follow the theme, so an ink that did would put 1.77 contrast on the amber. The gate
-now exempts `--lw-on-*` with the reasoning inline, and reports clean. **The gate encoding the
-rule backwards is exactly what a first run is for.**
-
-### 3. The copy-pasted topbar — **fixed**
-
-`AppBar` now owns brand + breadcrumbs + actions, and the three new templates use it. The two
-bugs the copies had are impossible in it: the lead holder is `flex: 0 1 auto` (TopBar already
-ships a `flex: 1` spacer, so a second claimant splits the slack and ellipsises the breadcrumbs
-with a third of the row empty) and the brand is `flex: none; white-space: nowrap`.
-
-`dashboard` and `ai-app-shell` keep their own bars — they carry a collapsing rail with
-`data-collapse-*` hooks that `AppBar` does not model. **Migrate them the next time either is
-touched**, and if a third shell needs the same, teach `AppBar` the rail instead of copying.
-
-### 4. Icons reviewed at real size — **two redrawn**
-
-- `sort-asc` / `sort-desc` signalled direction **by line length alone** — three bars getting
-  longer or shorter, which is one cue where rule 6 requires two, and unreadable in a 13px
-  table header. Both now carry an arrow.
-- `pin` was drawn at an angle and read as an unidentifiable wedge at 16px. Redrawn head-on:
-  cap, tapering shaft, point.
-
-The remaining 30 are consistent in weight and grid. `inbox`, `folder`, `thumbs-up/down` and
-`mic-off` carry the most geometry and hold up at 16px on both grounds.
-
-### 5. The density boundary — **documented**
-
-README §Density now carries the table of what responds to `data-density` and what does not.
-**The chrome staying put is the point, not an oversight:** a compact table inside a comfortable
-shell is the common case, a 32px top bar looks broken, and an avatar that shrinks with a table
-makes a person's face a density setting. Extend into the shell only on request, and add the row
-to that table when you do.
-
-### 6. Charts — **policy stated**
-
-The trade is recorded in README §Charts: ~120 lines of tokenised SVG each is right for a
-dashboard and will not survive brushing, zoom or mixed axes. **The trigger to adopt a library
-is the third chart type, not a feature request on the first two.**
-
-### 7. `RichText`'s engine — **contract stated, swap still triggered**
-
-The README row now shows the swap concretely
-(`<RichText tools={…}><EditorContent editor={editor} /></RichText>`). The default
-`contenteditable` + `execCommand` surface stays, labelled a shim in the source, the types and
-the card. Fine for a comment box; **swap before any product ships a document editor.** Not
-blocking, because nothing ships one today.
+What is left divides cleanly. The *Open* items are real and mostly mechanical; none is a
+correctness bug in what ships to a browser today. The one structural gap is `_ds_bundle.js` —
+the cards render from a compiled artifact this repo cannot regenerate, so the a11y and visual
+gates are testing something that has already drifted from the `.jsx` sources.
 
 ---
 
-## Open — both blocked on a machine that can install
+## Resolved in v1.1.5
 
-### 8. The build is configured but has never run
+Full detail in the CHANGELOG. The two patterns worth remembering:
 
-`templates/_tooling/tsup.config.js` and `npm run build` are committed (it lives there for the
-reason the README gives about the other Node scripts — every other directory is compiled into
-the browser bundle, and a config that imports `tsup` cannot be): ESM, external React, `dts`, sourcemaps
-pointing back at the `.jsx` so "one file to read and patch" survives the build. CSS stays
-unbuilt on purpose — a bundler would rewrite `marketing.css`'s asset URLs (the hero mark, the
-hex lattice) to hashed names the README documents by their real filenames.
+### A derived role must be re-derived in every scope that re-points its channel
 
-**`exports` still points at source.** Flip it to `dist/` in the same commit as the first
-successful build, never before — a package whose exports name files that do not exist yet is
-worse than the `babel-loader` tax it is trying to remove.
+`--lw-fg: hsl(var(--lw-fg-c))` is substituted where it is **declared**, so a scope that
+re-points only `--lw-fg-c` inherits the page-theme *colour*. This was live in `.dark` (used as
+a scoped subtree throughout the layers), in every `shadcn.css` alias, and in the two
+chart-chrome tokens.
 
-Then the registry: off `github:` to GitHub Packages. A git dep cannot express a range, so every
-consumer pins a tag and nobody ever upgrades.
+It survived because **at `<html>` it happens to work** — the declaration and the override land
+on the same element. The case everyone demos is the one that cannot fail. That is the shape to
+watch for generally, not just here.
 
-### 9. `check:a11y` and `check:visual` have never executed
+The `:where(...)` block at the foot of `tokens.css` is where a new role goes.
 
-Written, wired into CI, and unrunnable here — Playwright cannot be installed. `check:themes`
-was runnable by hand and is green (finding 2); the other two are not.
+### A gate that cannot fail is worse than no gate
 
-Expect the first CI run to **record 136 visual baselines** (34 cards × light/dark ×
-comfortable/compact) rather than fail — that is by design — and expect **real axe findings**
-across 34 cards on the first pass. Budget a session for triage rather than treating it as a
-regression. Serious and critical fail the build; moderate and minor report and pass, so the
-gate can be adopted before the backlog is clear.
+Four instances, all reporting green:
+
+- **`tokens.json`'s `base` theme was the dark palette.** The DTCG generator read the selector
+  alone, and the `:root` nested inside `@media (prefers-color-scheme: dark)` has selector
+  `:root` — so dark overwrote light in source order. The re-point loop was then comparing dark
+  against a base that was already dark and reporting "every themable channel re-pointed" with
+  no discriminating power left. Designers pulling the file into Tokens Studio got the dark
+  palette labelled base.
+- **Zero cards was a pass** in both browser gates. `Promise.all([])` resolves immediately and
+  the a11y gate printed "0 cards — no violations".
+- **The token lint skipped every selector without `.lw-`** and had no colour rule over the
+  package's own layers at all — so a hex in `product.css` was invisible to all six gates
+  simultaneously.
+- **The contrast manifest had no non-text pairs,** leaving WCAG 1.4.11 unmeasured. Control
+  borders were shipping at **1.47:1** on light and 1.76:1 on dark. `AA_LARGE` was dead code.
+
+Each is now closed, and the coverage that closed them is itself checked: `_cards.mjs`
+cross-checks the manifest against the filesystem, `raw-color` polices the layers, and the
+non-text group makes `AA_LARGE` live.
+
+### Everything else
+
+The React layer (no component forwarded a ref; menu selection dropped focus to `<body>`;
+Calendar's `role="grid"` had 42 gridcells as direct children and a roving tabindex that could
+strand the keyboard user; `onClose` fired twice on Escape), the templates (no `lang`, no main
+landmark, no skip links), and the specimen cards (ratio readouts never flattened alpha, so the
+whole soft-tint column was measured against full-strength colour and printed as data).
+
+**`email.css` drift is now gated.** Six literals had diverged from `tokens.css`, including the
+v1.1.3 muted-floor fix that never reached it — the one surface that cannot be re-themed after
+send was carrying the pre-fix value. `emailLiterals()` in the contrast gate asserts them the
+same way `logoStops()` asserts the SVG gradient, and for the same reason: a file that must
+carry literal hex is a second home for palette values.
+
+---
+
+## Open
+
+Ordered by what would hurt most to leave.
+
+### 1. `_ds_bundle.js` has no generator here — **structural**
+
+The cards render from this compiled browser bundle, not from `components/**/*.jsx`. It is
+generated in the Claude Design project, so **a `.jsx` fix is invisible to `check:a11y` and
+`check:visual` until the bundle catches up** — which means the v1.1.5 component fixes (the
+Calendar grid, the Popover focus restore, the Menu ARIA ownership) are not covered by either
+browser gate today.
+
+v1.1.3 mirrored two ARIA fixes into the bundle by hand. That is a stopgap and it does not
+scale. Generating it here with esbuild is roughly 60 lines and would make both browser gates
+test the source they are supposed to be testing. **This is the highest-value remaining item.**
+
+### 2. `check:visual` still cannot fail in CI
+
+`.visual/` is gitignored, so every CI run records 136 fresh baselines and compares nothing.
+The gate says so out loud rather than printing "no visual change".
+
+Byte-exact PNG comparison is also not achievable across machines — font hinting and Chromium
+build differences guarantee mismatch. Making this real needs **both** baselines recorded
+inside the CI image **and** a pixel-tolerance comparator (`pixelmatch`, ~0.1%) rather than the
+current SHA-256 equality. Do not commit this box's baselines; that makes CI permanently red
+rather than green.
+
+### 3. The `@media (prefers-color-scheme: dark)` path is ungated end to end
+
+The contrast gate builds its canonical dark scope from `.dark` only, and treats parity
+differences in the media block as **warnings**. So for a consumer that sets no class and
+relies on the OS preference — the default for a plain marketing page — the palette actually
+rendered is measured by nothing.
+
+The fix is a third canonical scope (`light ⊕ media-dark`) evaluated against every
+`scope: "dark"` manifest entry. That converts a standing warning into a pass or a real failure.
+
+### 4. Card CSS duplication
+
+22 cards redefine `.pane` and 20 carry inline `.lbl` blocks, despite both living in
+`preview/_card.css`. Because the inline `<style>` follows the `<link>`, every local copy wins —
+so the shared rule is dead code for two-thirds of the cards and the "panes look the same
+across cards" invariant is unenforced. Worse, a local `.pane { background: var(--lw-bg) }` is
+the tier-ish override that `_card.css`'s own comment says was deliberately deleted.
+
+### 5. The cards depend on `unpkg.com`
+
+21 component cards load React, ReactDOM and `@babel/standalone` from the CDN, which makes both
+browser gates network-dependent and unrunnable air-gapped. The a11y gate refuses to score a
+blank card, so this fails loudly rather than passing vacuously — but a CDN hiccup is a
+nondeterministic build failure, and it also leaks the Chromium process (the worker throws
+before `browser.close()`).
+
+Vendor the three UMD builds under `preview/_vendor/`, and wrap the worker body in
+`try/finally`.
+
+### 6. `preview/_fonts.css` duplicates `fonts/`
+
+140 KB of base64 data URIs mirroring 168 KB of `.woff2` on disk, with no generator linking
+them. Re-subset the fonts and it goes stale silently — the exact failure `tokens.json` has a
+gate for. `_card.css` already `@import`s `../tokens.css`, which imports `fonts.css`, so the
+inline copy may be entirely redundant.
+
+### 7. Two sibling components, two APIs for one concept
+
+`Table` uses `columns[].label` + `onSort(key, dir)`; `DataGrid` uses `columns[].header` +
+`onSort({key, dir})`. A consumer moving from one to the other rewrites every column
+definition. Pick one shape and deprecate the other on the documented cycle.
+
+### 8. Smaller, verified, unfixed
+
+- `Segmented` and `ThemeToggle` use `aria-pressed` on a mutually exclusive set; the correct
+  pattern is `radiogroup`/`radio` + `aria-checked`. System-wide call, not a one-off.
+- Chart series and x-labels key on their name/label, so duplicates collide (repeated month
+  names across a two-year range is the common case).
+- `ActivityFeed` defaults `now` to `Date.now()` during render — a hydration mismatch for the
+  first SSR consumer. `Calendar` had the same shape and was fixed; this one was not.
+- 36 inline `style={{}}` sites remain in components. Roughly a third are legitimate
+  (custom-property injection, measured values); the rest are static styling that belongs in
+  the CSS layer.
+- Physical CSS properties where the logical form is available. Two are actively misleading:
+  `data-side="start"` and `data-edge="start"` are logical APIs implemented as left/right, so
+  an RTL consumer gets a drawer on the wrong edge from an API named for the correct one.
+- `templates/pitch-deck/deck-stage.js` (2,969 lines) is a thirteenth file in the templates
+  tree, unique to one template, covered by no gate, and it mirrors `PRINT_BASELINE_CSS` into
+  `apps/web deck-stage-export.ts` in another repo with no check on the pairing.
+
+### 9. The pre-1.1.0 changelog gap
+
+`v0.1.1` through `v0.9.0` have no entries. This is now stated explicitly in `CHANGELOG.md`
+rather than looking like data loss, but the gap matters: **all three consumers are pinned
+inside it** (`v0.8.1`, `v0.2.3`, `v0.2.2`), so it covers exactly the span a consumer bump has
+to reason about. Reconstructing it from `git log v0.1.1..v1.1.0` is a prerequisite for the
+first bump, not an archival nicety.
+
+---
+
+## Carried forward — judgement, not defects
+
+These were recorded in earlier passes, remain true, and no gate can see them.
+
+- **`dashboard` and `ai-app-shell` keep their own top bars.** They carry a collapsing rail with
+  `data-collapse-*` hooks that `AppBar` does not model. Migrate the next time either is
+  touched; if a third shell needs the same, teach `AppBar` the rail rather than copying.
+- **Density is scoped to content, not chrome,** and that is the point. A compact table inside a
+  comfortable shell is the common case; a 32px top bar looks broken, and an avatar that shrinks
+  with a table makes a person's face a density setting. Extend into the shell only on request,
+  and add the row to README §Density when you do.
+- **Charts: the trigger to adopt a library is the third chart type,** not a feature request on
+  the first two. ~120 lines of tokenised SVG each is right for a dashboard and will not survive
+  brushing, zoom or mixed axes.
+- **`RichText`'s `contenteditable` + `execCommand` is a shim,** labelled as one in the source,
+  the types and the card. Fine for a comment box. Swap before any product ships a document
+  editor; nothing does today.
+- **The registry.** A git dep cannot express a range, so every consumer pins a tag and nobody
+  ever upgrades. Moving to GitHub Packages is what makes a version range possible. Note that
+  `exports` points at **source** by deliberate v1.1.0 decision — `dist/` is a type-check
+  artifact and is neither shipped nor exported. Do not "fix" `files` to include it.
 
 ---
 
 ## What is healthy
 
-- **The token core.** 442 tokens, HSL channels plus derived values, eight theme scopes, AA
-  measured in a browser against the real cascade rather than parsed from a file.
+- **The token core.** HSL channels plus derived roles, twelve theme scopes, contrast measured
+  from the parsed cascade rather than asserted in prose.
 - **The reasoning is written down.** Every non-obvious rule traces to a specific bug. That is
   institutional memory, and it is rarer than the code.
 - **The cards are a real fixture set** — composition per folder, state matrix where there is a
-  state axis. They are why visual regression and axe were nearly free to add, and why the
-  icon eye-pass took minutes.
-- **The patterns are settled, not just the components.** The decision table under §Templates is
-  what stops five teams re-litigating disable-vs-hide.
-- **Two of this pass's findings came from the system auditing itself** — the gate caught its own
-  inverted rule, and the specimen card caught two glyphs. That is the machinery working.
+  state axis. They are why visual regression and axe were nearly free to add. (Subject to
+  Open 1: they render from the bundle, not the source.)
+- **The system caught its own regression.** The v1.1.5 collapse of the on-dark alphas moved a
+  dark table header from 4.56 to 4.33, and `check:a11y` failed the run. The fix added a
+  manifest pair, so the next person to move that overlay gets a number rather than a
+  rendered-only finding on one card. That loop closing is the machinery working.
 
 ---
 
 ## Re-running this audit
 
 ```bash
-npm run check        # contrast, token lint, theme completeness
+npm run check        # contrast (incl. non-text 3:1, logo stops, email literals),
+                     # token lint, theme completeness, barrel types
 npm run check:ci     # the above plus axe and visual regression
+npm run build        # rollup-plugin-dts resolution — what check:dts only approximates
 ```
 
-No gate can see findings 1, 3, 4, 5, 6 or 7 — layer architecture, component duplication,
-optical weight and policy are judgement, which is why this file exists and why the audit is
-worth repeating by hand each release.
+No gate can see the *Carried forward* section, or Open 4, 6, 7 and 9 — architecture,
+duplication, API shape and documentation are judgement. That is why this file exists and why
+the audit is worth repeating by hand each release.

@@ -545,6 +545,56 @@ for (const entry of MANIFEST) {
    Without this, moving the brand ramp ships a stale-coloured logo with every
    gate green. v0.7.0 moved the hue 19°; the next move would have.
    ============================================================================= */
+/* -----------------------------------------------------------------------------
+   email.css literals must equal what tokens.css resolves to.
+
+   Same argument as the logo gradient stops above, same failure mode. Mail
+   clients have no custom properties, so email.css carries literal hex ON
+   PURPOSE — which makes it a SECOND HOME for palette values, and a second home
+   drifts. Its own comment says the values are "resolved from tokens.css"; six
+   of them were not. `--lw-text-3` was the worst: v1.1.3 moved the muted floor
+   to clear AA on surface-3 and email kept the old #6B7684, so the one surface
+   that cannot be re-themed after send had the pre-fix value baked in.
+
+   Nothing else can see this. The lint skips email.css by design (literals are
+   correct there) and the contrast gate only reads tokens.css.
+   -------------------------------------------------------------------------- */
+const EMAIL_LITERALS = [
+  { token: "text-1",    scope: "light" },
+  { token: "text-2",    scope: "light" },
+  { token: "text-3",    scope: "light" },
+  { token: "border-1",  scope: "light" },
+  { token: "border-2",  scope: "light" },
+  { token: "surface-1", scope: "light" },
+  { token: "brand-500", scope: "light" },
+  { token: "navy-700",  scope: "light" },
+  { token: "cta-500",   scope: "light" },
+  { token: "fg-muted",  scope: "dark" },
+];
+
+function emailLiterals() {
+  const fails = [];
+  const toHex = ({ r, g, b }) =>
+    "#" + [r, g, b].map((v) => Math.round(v * 255).toString(16).padStart(2, "0")).join("").toUpperCase();
+  let css;
+  try { css = readFileSync(join(ROOT, "email.css"), "utf8"); }
+  catch { return ["email.css is missing"]; }
+  const present = new Set([...css.matchAll(/#[0-9A-Fa-f]{6}\b/g)].map((m) => m[0].toUpperCase()));
+
+  for (const { token, scope } of EMAIL_LITERALS) {
+    const rgb = resolveColor(token, scope);
+    if (!rgb) { fails.push(`--lw-${token}-c did not resolve in the ${scope} scope`); continue; }
+    const want = toHex(rgb);
+    if (!present.has(want)) {
+      fails.push(
+        `email.css does not contain ${want} — the ${scope} value of --lw-${token}. ` +
+        `If that token moved, move the literal with it; email.css cannot read a custom property.`,
+      );
+    }
+  }
+  return fails;
+}
+
 function logoStops() {
   const fails = [];
   const want = [
@@ -679,6 +729,7 @@ for (const c of composedPairs()) {
 
 const { failPairs: parityFails, warnings: parityWarnings } = parity();
 const logoFails = logoStops();
+const emailFails = emailLiterals();
 
 console.log(`\n${C.bold}LeanWise Design System — derived WCAG contrast gate${C.reset}`);
 console.log(`${C.dim}canonical scopes: light (:root) + dark (:root ⊕ .dark)${C.reset}\n`);
@@ -724,6 +775,13 @@ if (logoFails.length) {
   for (const m of logoFails) console.log(`  ${C.red}✗${C.reset} ${m}`);
   console.log();
   failed += logoFails.length;
+}
+
+if (emailFails.length) {
+  console.log(`${C.bold}email.css literals (hard fail — drifted from tokens.css)${C.reset}`);
+  for (const m of emailFails) console.log(`  ${C.red}✗${C.reset} ${m}`);
+  console.log();
+  failed += emailFails.length;
 }
 
 if (parityWarnings.length) {
