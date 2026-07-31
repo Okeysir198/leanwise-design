@@ -59,7 +59,20 @@
   --destructive-foreground: var(--lw-on-danger-c);   /* white — the one exception */
 
   --border: var(--lw-line-c);
-  --input: var(--lw-line-strong-c);
+  /* --input is a CONTROL BOUNDARY, not a divider — WCAG 1.4.11 asks 3:1 of it.
+     This pointed at --lw-line-strong (#D1D5DB, 1.47:1 on the page), which is the
+     strong DIVIDER tier. The design system's own controls do not use it: .lw-input,
+     .lw-input-group, .lw-switch .track and .lw-check .box all take
+     --lw-line-control, whose token comment already records the measurement —
+     "#848F9F — 3.29 on surface-0, 3.14 on surface-1".
+
+     So a shadcn consumer's input, select, switch and checkbox were rendering a
+     1.47:1 boundary while the vanilla controls beside them rendered 3.29:1. Same
+     design system, same control, two different answers, and only the bridge was
+     wrong. The v1.1.5 non-text contrast group added the 3:1 rule for exactly this
+     class of defect; this alias is written in shadcn names, so no --lw-* manifest
+     pair covered it. */
+  --input: var(--lw-line-control-c);
   --ring: var(--lw-brand-500-c);
 
   --radius: var(--lw-radius-md);   /* 8px — the same as shadcn's default, on purpose */

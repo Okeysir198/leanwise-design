@@ -1,7 +1,7 @@
 {
   "name": "@leanwise/design",
   "version": "1.1.8",
-  "description": "LeanWise Design System — token core, CSS layers, React components, twelve templates.",
+  "description": "LeanWise Design System \u2014 token core, CSS layers, React components, twelve templates.",
   "license": "UNLICENSED",
   "private": false,
   "type": "module",
@@ -51,6 +51,9 @@
     "./templates/*": "./templates/*",
     "./package.json": "./package.json"
   },
+  "bin": {
+    "lw-token-lint": "./templates/_tooling/lw-token-lint.mjs"
+  },
   "files": [
     "react.js",
     "react.d.ts",
@@ -75,6 +78,8 @@
     "fonts",
     "templates",
     "!templates/_tooling",
+    "templates/_tooling/lw-token-lint.mjs",
+    "templates/_tooling/_css.mjs",
     "README.md"
   ],
   "scripts": {

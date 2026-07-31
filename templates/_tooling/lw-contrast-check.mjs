@@ -939,6 +939,68 @@ if (parityWarnings.length) {
   console.log(`${C.dim}  reach the same colour by different declarations. Fix tokens.css, not this gate.${C.reset}\n`);
 }
 
+/* =============================================================================
+   SHADCN BRIDGE BINDINGS — the aliases whose NAME carries a contrast obligation.
+
+   Everything above reads tokens.css and measures --lw-* pairs. shadcn.css is a
+   second surface this gate never opened, and an alias there can point a correct
+   token at the wrong ROLE without moving a single colour — so every pair in the
+   manifest passes while a consumer renders the wrong tier.
+
+   That is not hypothetical. `--input` pointed at --lw-line-strong (#D1D5DB, the
+   strong DIVIDER, 1.47:1 on the page) while the design system's OWN controls —
+   .lw-input, .lw-input-group, .lw-switch .track, .lw-check .box — all use
+   --lw-line-control, whose token comment already recorded "3.29 on surface-0".
+   Same system, same control, two answers, and only the bridge was wrong. The
+   1.4.11 group added in v1.1.5 could not see it: it validates the TOKEN, and the
+   token was fine.
+
+   Keep this list short. It is for aliases where the shadcn NAME states a role
+   whose contrast tier is not negotiable — a control boundary, a focus ring. An
+   alias that is merely a surface or a fill belongs in MANIFEST, not here.
+   ============================================================================= */
+
+const SHADCN_PATH = join(ROOT, "shadcn.css");
+const shadcnCss = stripComments(readFileSync(SHADCN_PATH, "utf8"));
+
+/** alias -> the token(s) it may legitimately resolve to, and why. */
+const ALIAS_BINDINGS = [
+  {
+    alias: "--input",
+    allow: ["--lw-line-control-c"],
+    why: "a CONTROL boundary (WCAG 1.4.11, 3:1) — not --lw-line-strong, which is the divider tier at 1.47:1",
+  },
+  {
+    alias: "--ring",
+    allow: ["--lw-brand-500-c", "--lw-brand-400-c"],
+    why: "the focus indicator — must be the brand, and must clear 3:1 against the ground",
+  },
+];
+
+const bindingFails = [];
+for (const { alias, allow, why } of ALIAS_BINDINGS) {
+  // Every declaration of the alias, in source order; the cascade gives the last
+  // one per scope, and a scope-specific override (e.g. --ring on .dark) is
+  // legitimate, so ALL of them must be in the allow-list.
+  const found = [...shadcnCss.matchAll(new RegExp(`${alias}:\\s*var\\((--lw-[a-z0-9-]+)\\)`, "g"))].map((m) => m[1]);
+  if (!found.length) {
+    bindingFails.push(`${alias} is not declared in shadcn.css — the bridge no longer emits a name consumers rely on`);
+    continue;
+  }
+  for (const token of found) {
+    if (!allow.includes(token)) {
+      bindingFails.push(`${alias} -> var(${token}); expected one of ${allow.join(", ")} — ${why}`);
+    }
+  }
+}
+
+if (bindingFails.length) {
+  console.log(`${C.bold}shadcn bridge bindings (hard fail — an alias points at the wrong role)${C.reset}`);
+  for (const m of bindingFails) console.log(`  ${C.red}✗${C.reset} ${m}`);
+  console.log();
+  failed += bindingFails.length;
+}
+
 const pairCount = rows.filter((r) => r.status !== "MISS").length;
 
 if (failed) {
