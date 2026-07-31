@@ -61,4 +61,4 @@ export interface DataGridProps<R = any> extends Omit<React.HTMLAttributes<HTMLDi
  * windowing. Deliberately not an extension of `Table` — reach for `Table` first;
  * a static list should not pay for grid machinery.
  */
-export declare function DataGrid<R = any>(props: DataGridProps<R>): JSX.Element;
+export declare function DataGrid<R = any>(props: DataGridProps<R>): React.JSX.Element;

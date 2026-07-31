@@ -11,4 +11,4 @@ export interface AvatarProps extends React.HTMLAttributes<HTMLSpanElement> {
  * that says nothing to a screen reader. Two initials maximum — three stops being
  * legible at `sm`, which is the size a table row uses.
  */
-export declare function Avatar(props: AvatarProps): JSX.Element;
+export declare function Avatar(props: AvatarProps): React.JSX.Element;

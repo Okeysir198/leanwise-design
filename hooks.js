@@ -1,3 +1,4 @@
+"use client";
 /**
  * Runtime hooks — @leanwise/design/hooks
  *

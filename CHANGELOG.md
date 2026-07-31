@@ -122,6 +122,66 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
   above, with the one-line command to verify a row against the consumer's own `package.json`.
   Real drift today is VSS (`#v0.2.3`) and rag-service (`#v0.2.2`).
 
+### Added — packaging, and the four defects it had been hiding
+
+- **`"use client"` — 27 modules now declare it; the package had ZERO.** `<Combobox>`,
+  `<DataGrid>`, `<Dialog>` and `useTheme()` all threw the moment an App Router page rendered
+  them from a server component — which is the default for every page in every Next app since
+  2023, and therefore for every app this system is meant to be the foundation of.
+
+  The directive is in the SOURCE, per file. A build-time banner cannot work: a bundled chunk
+  carries only one directive, so it would have to mark everything client and throw away the
+  **50 server-safe** components. `check:rsc` gates it **both** ways, so "put it on everything"
+  is not the cheap fix — a server component is the one that ships the consumer no JS.
+
+  `Icon` was one `React.useEffect` away from being client, and it is imported by a third of
+  the barrel — one dev-only `console.warn` would have dragged Avatar, Button, Chip, the nav
+  and half the data components across the boundary with it. It warns during render instead.
+
+- **`dist/` is built and COMMITTED.** It had never existed for any consumer: `prepublishOnly`
+  is the only hook and a git install runs no lifecycle script. Built per file with esbuild
+  (77 files, 400 KB, no sourcemaps — they were larger than the code and would churn every
+  diff). `exports` gains a `source` condition pointing at the `.jsx`, which still ships.
+
+- **`check:types` — and there was no `tsconfig.json` at all, so `tsc` had never run over the
+  72 hand-written `.d.ts` files that ARE this package's public API.** The first run found
+  **87 errors**:
+  - 72 × `Cannot find namespace 'JSX'` — React 19 removed the global namespace.
+  - 13 × interfaces that did not extend cleanly, because a prop shadows a DOM attribute of
+    the same name with a different type (`title`, `onChange`, `size`, `prefix`, `role`). A
+    consumer passing `title={<span/>}` to `<Artifact>` got a type error.
+  - `iconNames` declared twice.
+  - `IconName` listed **46 of the 78 real glyphs** — so `<Icon name="filter" />`, which the
+    component renders perfectly, was a type error. It is generated from `Icon.jsx` now.
+
+  `skipLibCheck: false` is set deliberately and must not be softened: TypeScript's default of
+  `true` skips `.d.ts` files, which is exactly why all of the above survived.
+
+- **`check:pack`** — `npm pack`, install the tarball into a scratch dir, and assert the
+  package works from *there*. Every distribution defect this package shipped was invisible to
+  every other gate, because every other gate runs against the working tree where the files
+  exist whether or not `files` would pack them.
+
+- **`forwardRef` on the five composite form controls** (`Combobox`, `DatePicker`,
+  `FileUpload`, `RichText`, `Segmented`). The five simple controls have had it since v1.0;
+  these five did not, which made them the ones a real form could not use. The ref is
+  redirected to the FOCUSABLE element via `useImperativeHandle` — a form library calls
+  `.focus()` on what it is given, and focusing a wrapper `<div>` does nothing.
+
+### Changed — packaging
+
+- **The gates moved from `templates/_tooling/` to `tools/`.** The old location needed a
+  `"!templates/_tooling"` exclusion plus a re-include in `files` — a pattern npm honours and
+  **pnpm does not** — so the `lw-token-lint` bin was simply absent in a pnpm install, and a
+  consumer wrote a 53-line workaround whose own header calls it *"a lint that silently stops
+  linting."* `tools/` needs no exclusion and the bin now packs unconditionally.
+
+- **`templates/` no longer ships. The tarball is 1.06 MB → 0.64 MB.** It was 1.4 MB, 816 KB of
+  it twelve BYTE-IDENTICAL copies of `support.js`, and it shipped **broken** regardless: every
+  `ds-base.js` in it loads `_ds_bundle.js`, which `files` has never carried, so a consumer who
+  opened a packed template got a blank page. Authoring artifacts — the same verdict `REVIEW.md`
+  §3 already reached for the preview cards. `check:pack` asserts they stay out.
+
 ### Acceptance — measured against a real consumer, not a fixture
 
 `tss-app` (Next 16 App Router + Tailwind v4 + shadcn, 261 components) compiled with and

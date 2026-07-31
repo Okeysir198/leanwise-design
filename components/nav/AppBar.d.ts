@@ -21,4 +21,4 @@ export interface AppBarProps extends React.HTMLAttributes<HTMLElement> {
  * `flex: 1` spacer, and a second claimant splits the slack and truncates the
  * breadcrumbs with the row half empty.
  */
-export declare function AppBar(props: AppBarProps): JSX.Element;
+export declare function AppBar(props: AppBarProps): React.JSX.Element;

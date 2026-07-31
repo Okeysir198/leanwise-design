@@ -5,4 +5,4 @@ export interface ConfidenceMeterProps extends React.HTMLAttributes<HTMLSpanEleme
   value?: number;
   label?: string;
 }
-export declare function ConfidenceMeter(props: ConfidenceMeterProps): JSX.Element;
+export declare function ConfidenceMeter(props: ConfidenceMeterProps): React.JSX.Element;

@@ -13,4 +13,8 @@ export interface SegmentedProps extends Omit<React.HTMLAttributes<HTMLDivElement
  * which describes N independent toggles). One tab stop for the whole set, with
  * Arrow / Home / End moving AND selecting, per the WAI-ARIA radio-group pattern.
  */
-export declare function Segmented(props: SegmentedProps): JSX.Element;
+/** forwardRef since v1.2 — the ref reaches the radiogroup container, so react-hook-form's
+ *  register(), a Controller's field.ref and .focus()-on-error all work. */
+export declare const Segmented: React.ForwardRefExoticComponent<
+  SegmentedProps & React.RefAttributes<HTMLDivElement>
+>;

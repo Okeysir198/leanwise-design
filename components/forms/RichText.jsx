@@ -1,3 +1,4 @@
+"use client";
 import * as React from "react";
 import { Icon } from "../primitives/Icon.jsx";
 const cx = (...a) => a.filter(Boolean).join(" ");
@@ -28,11 +29,21 @@ const TOOLS = [
  * what it is: fine for a comment box, not for a document. `renderToolbar` and
  * `children` let you keep this chrome and bring your own surface.
  */
-export function RichText({
+/* forwardRef, for the same reason Input.jsx gives: without it react-hook-form's
+   register(), a Controller's field.ref, an imperative .focus() on a validation
+   error and every scroll-to-error silently do nothing. The five simple controls
+   have had this since v1.0; these five composites did not, which made them the
+   ones a real form could not use.
+
+   The ref is redirected to the FOCUSABLE element via useImperativeHandle rather
+   than to the wrapper — a form library calls .focus() on what it is given, and
+   focusing a <div> does nothing. Here that is the contenteditable surface. */
+export const RichText = React.forwardRef(function RichText({
   value, onChange, placeholder = "Write something…", tools, maxLength,
   label, readOnly, footer, children, className, ...rest
-}) {
+}, forwardedRef) {
   const ref = React.useRef(null);
+  React.useImperativeHandle(forwardedRef, () => ref.current, []);
   // The toolbar's aria-controls was the literal string "rt" — an IDREF pointing at
   // nothing, in every instance on the page. A dangling IDREF is worse than no
   // attribute: a screen reader announces a relationship that does not exist.
@@ -118,4 +129,4 @@ export function RichText({
       )}
     </div>
   );
-}
+});

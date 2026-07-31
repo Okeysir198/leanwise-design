@@ -38,4 +38,8 @@ export interface ComboboxProps {
  * because moving real focus into the list takes it out of the field the user is
  * still typing in.
  */
-export declare function Combobox(props: ComboboxProps): JSX.Element;
+/** forwardRef since v1.2 — the ref reaches the combobox <input>, so react-hook-form's
+ *  register(), a Controller's field.ref and .focus()-on-error all work. */
+export declare const Combobox: React.ForwardRefExoticComponent<
+  ComboboxProps & React.RefAttributes<HTMLInputElement>
+>;

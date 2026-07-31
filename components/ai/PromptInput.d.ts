@@ -17,4 +17,4 @@ export interface PromptInputProps extends Omit<React.HTMLAttributes<HTMLDivEleme
   /** Accessible name for the textarea. Defaults to "Prompt". */
   label?: string;
 }
-export declare function PromptInput(props: PromptInputProps): JSX.Element;
+export declare function PromptInput(props: PromptInputProps): React.JSX.Element;

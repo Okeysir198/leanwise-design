@@ -17,4 +17,4 @@ export interface ThemeToggleProps extends Omit<React.HTMLAttributes<HTMLDivEleme
  * (v1.1.7 — it was `aria-pressed`), with a roving tabindex and arrow-key
  * navigation. Same contract as `Segmented`.
  */
-export declare function ThemeToggle(props: ThemeToggleProps): JSX.Element;
+export declare function ThemeToggle(props: ThemeToggleProps): React.JSX.Element;

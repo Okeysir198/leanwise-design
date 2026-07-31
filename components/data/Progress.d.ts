@@ -14,4 +14,4 @@ export interface ProgressProps extends React.HTMLAttributes<HTMLSpanElement> {
  * known extent use `Skeleton` — a bar that moves without knowing how far along
  * it is reports a number it does not have.
  */
-export declare function Progress(props: ProgressProps): JSX.Element;
+export declare function Progress(props: ProgressProps): React.JSX.Element;

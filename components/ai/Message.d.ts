@@ -10,4 +10,4 @@ export interface MessageProps extends React.HTMLAttributes<HTMLDivElement> {
   streaming?: boolean;
   footer?: React.ReactNode;
 }
-export declare function Message(props: MessageProps): JSX.Element;
+export declare function Message(props: MessageProps): React.JSX.Element;

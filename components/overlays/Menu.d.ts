@@ -32,4 +32,4 @@ export interface MenuProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "o
  * typeahead jumps to a letter, Esc closes and returns focus to the trigger.
  * Focus moves WITH the highlight, so a screen reader follows the sighted user.
  */
-export declare function Menu(props: MenuProps): JSX.Element;
+export declare function Menu(props: MenuProps): React.JSX.Element;

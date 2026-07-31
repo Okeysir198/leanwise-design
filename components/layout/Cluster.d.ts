@@ -12,4 +12,4 @@ export interface ClusterProps extends React.HTMLAttributes<HTMLElement> {
  * first time someone adds a fourth item or translates the labels into German.
  * `align="baseline"` when the items have different type sizes; `center` otherwise.
  */
-export declare function Cluster(props: ClusterProps): JSX.Element;
+export declare function Cluster(props: ClusterProps): React.JSX.Element;

@@ -1,0 +1,30 @@
+{
+  // The type gate. There was no tsconfig at all until v1.2, so `tsc` never ran over
+  // the 72 hand-written .d.ts files this package ships — and three defects survived
+  // in them for months.
+  //
+  // `skipLibCheck: false` is the whole point and must not be softened. TypeScript's
+  // default is `true`, which skips checking .d.ts files — i.e. it skips exactly the
+  // files that ARE this package's public API. Every one of the three defects the
+  // first run found (a `JSX.Element` React 19 removed, an IconName union missing 32
+  // of its 78 members, a duplicate declaration) is invisible under the default.
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": false,
+    "allowJs": false,
+    "checkJs": false,
+    "forceConsistentCasingInFileNames": true,
+    "types": []
+  },
+  // Only the declarations. The .jsx sources are not typechecked — they are plain
+  // JS with hand-written companions, and turning on checkJs here would be a
+  // different, much larger project.
+  "include": ["**/*.d.ts", "**/*.d.cts"],
+  "exclude": ["node_modules", "dist", "templates", "preview", "_ds_bundle.js"]
+}

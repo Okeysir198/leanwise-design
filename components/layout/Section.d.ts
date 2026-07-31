@@ -10,4 +10,4 @@ export interface SectionProps extends React.HTMLAttributes<HTMLElement> {
  * own tokens instead of each one needing a prop — which is why a card inside a dark
  * section needs no `dark` of its own. Max two background treatments per page.
  */
-export declare function Section(props: SectionProps): JSX.Element;
+export declare function Section(props: SectionProps): React.JSX.Element;

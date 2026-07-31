@@ -1,4 +1,4 @@
-/* @ds-bundle: {"format":4,"namespace":"LeanWiseDesign_f2d907","generator":"templates/_tooling/lw-bundle.mjs","esbuild":"0.27.7","components":[{"name":"AgentTrace","sourcePath":"components/ai/AgentTrace.jsx"},{"name":"Artifact","sourcePath":"components/ai/Artifact.jsx"},{"name":"ConfidenceMeter","sourcePath":"components/ai/ConfidenceMeter.jsx"},{"name":"DiffReview","sourcePath":"components/ai/DiffReview.jsx"},{"name":"Feedback","sourcePath":"components/ai/Feedback.jsx"},{"name":"Message","sourcePath":"components/ai/Message.jsx"},{"name":"PromptInput","sourcePath":"components/ai/PromptInput.jsx"},{"name":"SourceChip","sourcePath":"components/ai/SourceChip.jsx"},{"name":"SourceList","sourcePath":"components/ai/SourceList.jsx"},{"name":"ToolCall","sourcePath":"components/ai/ToolCall.jsx"},{"name":"ActivityFeed","sourcePath":"components/data/ActivityFeed.jsx"},{"name":"timeAgo","sourcePath":"components/data/ActivityFeed.jsx"},{"name":"BarChart","sourcePath":"components/data/BarChart.jsx"},{"name":"CHART_PAD","sourcePath":"components/data/chart-parts.jsx"},{"name":"CHART_W","sourcePath":"components/data/chart-parts.jsx"},{"name":"DataTable","sourcePath":"components/data/chart-parts.jsx"},{"name":"Legend","sourcePath":"components/data/chart-parts.jsx"},{"name":"SERIES","sourcePath":"components/data/chart-parts.jsx"},{"name":"CodeBlock","sourcePath":"components/data/CodeBlock.jsx"},{"name":"Console","sourcePath":"components/data/Console.jsx"},{"name":"DataGrid","sourcePath":"components/data/DataGrid.jsx"},{"name":"EmptyState","sourcePath":"components/data/EmptyState.jsx"},{"name":"FilterBar","sourcePath":"components/data/FilterBar.jsx"},{"name":"Toolbar","sourcePath":"components/data/FilterBar.jsx"},{"name":"KpiTile","sourcePath":"components/data/KpiTile.jsx"},{"name":"LineChart","sourcePath":"components/data/LineChart.jsx"},{"name":"Pagination","sourcePath":"components/data/Pagination.jsx"},{"name":"Progress","sourcePath":"components/data/Progress.jsx"},{"name":"StateView","sourcePath":"components/data/StateView.jsx"},{"name":"StatMeter","sourcePath":"components/data/StatMeter.jsx"},{"name":"Table","sourcePath":"components/data/Table.jsx"},{"name":"Calendar","sourcePath":"components/forms/Calendar.jsx"},{"name":"Checkbox","sourcePath":"components/forms/Checkbox.jsx"},{"name":"Combobox","sourcePath":"components/forms/Combobox.jsx"},{"name":"DatePicker","sourcePath":"components/forms/DatePicker.jsx"},{"name":"RANGE_PRESETS","sourcePath":"components/forms/DatePicker.jsx"},{"name":"Field","sourcePath":"components/forms/Field.jsx"},{"name":"FileUpload","sourcePath":"components/forms/FileUpload.jsx"},{"name":"formatBytes","sourcePath":"components/forms/FileUpload.jsx"},{"name":"Input","sourcePath":"components/forms/Input.jsx"},{"name":"InputGroup","sourcePath":"components/forms/InputGroup.jsx"},{"name":"RichText","sourcePath":"components/forms/RichText.jsx"},{"name":"Segmented","sourcePath":"components/forms/Segmented.jsx"},{"name":"Select","sourcePath":"components/forms/Select.jsx"},{"name":"Stepper","sourcePath":"components/forms/Stepper.jsx"},{"name":"Switch","sourcePath":"components/forms/Switch.jsx"},{"name":"Textarea","sourcePath":"components/forms/Textarea.jsx"},{"name":"Cluster","sourcePath":"components/layout/Cluster.jsx"},{"name":"Container","sourcePath":"components/layout/Container.jsx"},{"name":"Grid","sourcePath":"components/layout/Grid.jsx"},{"name":"Page","sourcePath":"components/layout/Page.jsx"},{"name":"Section","sourcePath":"components/layout/Section.jsx"},{"name":"Split","sourcePath":"components/layout/Split.jsx"},{"name":"Stack","sourcePath":"components/layout/Stack.jsx"},{"name":"FeatureGrid","sourcePath":"components/marketing/FeatureGrid.jsx"},{"name":"Hero","sourcePath":"components/marketing/Hero.jsx"},{"name":"LogoRail","sourcePath":"components/marketing/LogoRail.jsx"},{"name":"StoryCard","sourcePath":"components/marketing/StoryCard.jsx"},{"name":"AppBar","sourcePath":"components/nav/AppBar.jsx"},{"name":"BottomNav","sourcePath":"components/nav/BottomNav.jsx"},{"name":"Breadcrumbs","sourcePath":"components/nav/Breadcrumbs.jsx"},{"name":"CommandPalette","sourcePath":"components/nav/CommandPalette.jsx"},{"name":"score","sourcePath":"components/nav/CommandPalette.jsx"},{"name":"NavItem","sourcePath":"components/nav/Sidebar.jsx"},{"name":"Sidebar","sourcePath":"components/nav/Sidebar.jsx"},{"name":"Tabs","sourcePath":"components/nav/Tabs.jsx"},{"name":"ThemeToggle","sourcePath":"components/nav/ThemeToggle.jsx"},{"name":"TopBar","sourcePath":"components/nav/TopBar.jsx"},{"name":"Dialog","sourcePath":"components/overlays/Dialog.jsx"},{"name":"Drawer","sourcePath":"components/overlays/Drawer.jsx"},{"name":"Menu","sourcePath":"components/overlays/Menu.jsx"},{"name":"Popover","sourcePath":"components/overlays/Popover.jsx"},{"name":"Toast","sourcePath":"components/overlays/Toast.jsx"},{"name":"ToastRegion","sourcePath":"components/overlays/Toast.jsx"},{"name":"Tooltip","sourcePath":"components/overlays/Tooltip.jsx"},{"name":"Avatar","sourcePath":"components/primitives/Avatar.jsx"},{"name":"Button","sourcePath":"components/primitives/Button.jsx"},{"name":"Card","sourcePath":"components/primitives/Card.jsx"},{"name":"CardBody","sourcePath":"components/primitives/Card.jsx"},{"name":"CardFoot","sourcePath":"components/primitives/Card.jsx"},{"name":"CardHead","sourcePath":"components/primitives/Card.jsx"},{"name":"CardTitle","sourcePath":"components/primitives/Card.jsx"},{"name":"Chip","sourcePath":"components/primitives/Chip.jsx"},{"name":"Eyebrow","sourcePath":"components/primitives/Eyebrow.jsx"},{"name":"Icon","sourcePath":"components/primitives/Icon.jsx"},{"name":"iconNames","sourcePath":"components/primitives/Icon.jsx"},{"name":"IconNames","sourcePath":"components/primitives/Icon.jsx"},{"name":"Skeleton","sourcePath":"components/primitives/Skeleton.jsx"},{"name":"THEME_KEY","sourcePath":"hooks.js"}],"sourceHashes":{"components/_deprecate.js":"1c84a2fda110","components/_radio-group.js":"81ace662920c","components/ai/AgentTrace.jsx":"a89cdd6dbfea","components/ai/Artifact.jsx":"9be6c863b2c9","components/ai/ConfidenceMeter.jsx":"30190dcfb803","components/ai/DiffReview.jsx":"2e69477c2fa7","components/ai/Feedback.jsx":"d5964c0877ae","components/ai/Message.jsx":"e507e32b90ca","components/ai/PromptInput.jsx":"93ca1175d24c","components/ai/SourceChip.jsx":"b8ec3e12c238","components/ai/SourceList.jsx":"092a0ded3834","components/ai/ToolCall.jsx":"7b5739862331","components/data/ActivityFeed.jsx":"202338052b32","components/data/BarChart.jsx":"96968a9ba35f","components/data/CodeBlock.jsx":"3dc3d6fd7654","components/data/Console.jsx":"6528c9c3ca1e","components/data/DataGrid.jsx":"8cdadded6dd7","components/data/EmptyState.jsx":"7340a557f731","components/data/FilterBar.jsx":"f994b3f9efb3","components/data/KpiTile.jsx":"4568571b1cff","components/data/LineChart.jsx":"6fa9e64d83f3","components/data/Pagination.jsx":"00b59bf98c2a","components/data/Progress.jsx":"eb02438a3b31","components/data/StatMeter.jsx":"55ec9c1db508","components/data/StateView.jsx":"1db574af4cf3","components/data/Table.jsx":"d7e6202acfaa","components/data/_columns.js":"d862780d1495","components/data/chart-parts.jsx":"424a7143968b","components/forms/Calendar.jsx":"a8b98c5e474d","components/forms/Checkbox.jsx":"fa0052232568","components/forms/Combobox.jsx":"effcb9c89eb2","components/forms/DatePicker.jsx":"ff5d4acd3aab","components/forms/Field.jsx":"8fcbc8cffbfa","components/forms/FileUpload.jsx":"f411f4b3eab3","components/forms/Input.jsx":"a43b7b4b5564","components/forms/InputGroup.jsx":"71d8de495436","components/forms/RichText.jsx":"b52038544d38","components/forms/Segmented.jsx":"c47f5c13ae0e","components/forms/Select.jsx":"378e70b32827","components/forms/Stepper.jsx":"646dd2a208b6","components/forms/Switch.jsx":"cc99b023531b","components/forms/Textarea.jsx":"2d2aa2984da3","components/layout/Cluster.jsx":"2e15367fe28d","components/layout/Container.jsx":"6eda4bc56e54","components/layout/Grid.jsx":"8a093fe6ed4b","components/layout/Page.jsx":"51d1753d201a","components/layout/Section.jsx":"4507aff3c57c","components/layout/Split.jsx":"6786154d4ebd","components/layout/Stack.jsx":"005a591d8c24","components/marketing/FeatureGrid.jsx":"09e859da09fb","components/marketing/Hero.jsx":"ba4893068f68","components/marketing/LogoRail.jsx":"1bedd4cadb90","components/marketing/StoryCard.jsx":"9a4eccdac2e3","components/nav/AppBar.jsx":"b1f55c9de347","components/nav/BottomNav.jsx":"8a8a87546d43","components/nav/Breadcrumbs.jsx":"f7b653d6c1cb","components/nav/CommandPalette.jsx":"423b773d3cb9","components/nav/Sidebar.jsx":"77e19c558ca7","components/nav/Tabs.jsx":"aa257bee70e5","components/nav/ThemeToggle.jsx":"1ac968b42a6a","components/nav/TopBar.jsx":"6d5288e5af01","components/overlays/Dialog.jsx":"ea0d21d1ade3","components/overlays/Drawer.jsx":"aced1554db7e","components/overlays/Menu.jsx":"24aea6b0fbbe","components/overlays/Popover.jsx":"c61b0eecf922","components/overlays/Toast.jsx":"d6b810dcb7d3","components/overlays/Tooltip.jsx":"7b19e7dc9711","components/primitives/Avatar.jsx":"277ea4c7ca39","components/primitives/Button.jsx":"771ccb11e4a8","components/primitives/Card.jsx":"4a9c9f081c1b","components/primitives/Chip.jsx":"458e477fd284","components/primitives/Eyebrow.jsx":"ac1cc5e5856f","components/primitives/Icon.jsx":"a1c4967a3c9f","components/primitives/Skeleton.jsx":"76129a849b43","hooks.js":"30ac62109ad3","react.js":"96067cc59a1c"},"inlinedExternals":[],"unexposedExports":[{"name":"__resetDeprecations","sourcePath":"components/_deprecate.js"},{"name":"deprecate","sourcePath":"components/_deprecate.js"},{"name":"useRadioGroup","sourcePath":"components/_radio-group.js"},{"name":"colHeader","sourcePath":"components/data/_columns.js"},{"name":"emitSort","sourcePath":"components/data/_columns.js"},{"name":"legacySortArgs","sourcePath":"components/data/_columns.js"},{"name":"Grid","sourcePath":"components/data/chart-parts.jsx"},{"name":"cx","sourcePath":"components/data/chart-parts.jsx"},{"name":"frame","sourcePath":"components/data/chart-parts.jsx"},{"name":"nf","sourcePath":"components/data/chart-parts.jsx"},{"name":"ticks","sourcePath":"components/data/chart-parts.jsx"},{"name":"animateCounter","sourcePath":"hooks.js"},{"name":"paint","sourcePath":"hooks.js"},{"name":"persist","sourcePath":"hooks.js"},{"name":"useDeterministicCascade","sourcePath":"hooks.js"},{"name":"useReducedMotion","sourcePath":"hooks.js"},{"name":"useReveal","sourcePath":"hooks.js"},{"name":"useSpotlight","sourcePath":"hooks.js"},{"name":"useTheme","sourcePath":"hooks.js"}]} */
+/* @ds-bundle: {"format":4,"namespace":"LeanWiseDesign_f2d907","generator":"templates/_tooling/lw-bundle.mjs","esbuild":"0.27.7","components":[{"name":"AgentTrace","sourcePath":"components/ai/AgentTrace.jsx"},{"name":"Artifact","sourcePath":"components/ai/Artifact.jsx"},{"name":"ConfidenceMeter","sourcePath":"components/ai/ConfidenceMeter.jsx"},{"name":"DiffReview","sourcePath":"components/ai/DiffReview.jsx"},{"name":"Feedback","sourcePath":"components/ai/Feedback.jsx"},{"name":"Message","sourcePath":"components/ai/Message.jsx"},{"name":"PromptInput","sourcePath":"components/ai/PromptInput.jsx"},{"name":"SourceChip","sourcePath":"components/ai/SourceChip.jsx"},{"name":"SourceList","sourcePath":"components/ai/SourceList.jsx"},{"name":"ToolCall","sourcePath":"components/ai/ToolCall.jsx"},{"name":"ActivityFeed","sourcePath":"components/data/ActivityFeed.jsx"},{"name":"timeAgo","sourcePath":"components/data/ActivityFeed.jsx"},{"name":"BarChart","sourcePath":"components/data/BarChart.jsx"},{"name":"CHART_PAD","sourcePath":"components/data/chart-parts.jsx"},{"name":"CHART_W","sourcePath":"components/data/chart-parts.jsx"},{"name":"DataTable","sourcePath":"components/data/chart-parts.jsx"},{"name":"Legend","sourcePath":"components/data/chart-parts.jsx"},{"name":"SERIES","sourcePath":"components/data/chart-parts.jsx"},{"name":"CodeBlock","sourcePath":"components/data/CodeBlock.jsx"},{"name":"Console","sourcePath":"components/data/Console.jsx"},{"name":"DataGrid","sourcePath":"components/data/DataGrid.jsx"},{"name":"EmptyState","sourcePath":"components/data/EmptyState.jsx"},{"name":"FilterBar","sourcePath":"components/data/FilterBar.jsx"},{"name":"Toolbar","sourcePath":"components/data/FilterBar.jsx"},{"name":"KpiTile","sourcePath":"components/data/KpiTile.jsx"},{"name":"LineChart","sourcePath":"components/data/LineChart.jsx"},{"name":"Pagination","sourcePath":"components/data/Pagination.jsx"},{"name":"Progress","sourcePath":"components/data/Progress.jsx"},{"name":"StateView","sourcePath":"components/data/StateView.jsx"},{"name":"StatMeter","sourcePath":"components/data/StatMeter.jsx"},{"name":"Table","sourcePath":"components/data/Table.jsx"},{"name":"Calendar","sourcePath":"components/forms/Calendar.jsx"},{"name":"Checkbox","sourcePath":"components/forms/Checkbox.jsx"},{"name":"Combobox","sourcePath":"components/forms/Combobox.jsx"},{"name":"DatePicker","sourcePath":"components/forms/DatePicker.jsx"},{"name":"RANGE_PRESETS","sourcePath":"components/forms/DatePicker.jsx"},{"name":"Field","sourcePath":"components/forms/Field.jsx"},{"name":"FileUpload","sourcePath":"components/forms/FileUpload.jsx"},{"name":"formatBytes","sourcePath":"components/forms/FileUpload.jsx"},{"name":"Input","sourcePath":"components/forms/Input.jsx"},{"name":"InputGroup","sourcePath":"components/forms/InputGroup.jsx"},{"name":"RichText","sourcePath":"components/forms/RichText.jsx"},{"name":"Segmented","sourcePath":"components/forms/Segmented.jsx"},{"name":"Select","sourcePath":"components/forms/Select.jsx"},{"name":"Stepper","sourcePath":"components/forms/Stepper.jsx"},{"name":"Switch","sourcePath":"components/forms/Switch.jsx"},{"name":"Textarea","sourcePath":"components/forms/Textarea.jsx"},{"name":"Cluster","sourcePath":"components/layout/Cluster.jsx"},{"name":"Container","sourcePath":"components/layout/Container.jsx"},{"name":"Grid","sourcePath":"components/layout/Grid.jsx"},{"name":"Page","sourcePath":"components/layout/Page.jsx"},{"name":"Section","sourcePath":"components/layout/Section.jsx"},{"name":"Split","sourcePath":"components/layout/Split.jsx"},{"name":"Stack","sourcePath":"components/layout/Stack.jsx"},{"name":"FeatureGrid","sourcePath":"components/marketing/FeatureGrid.jsx"},{"name":"Hero","sourcePath":"components/marketing/Hero.jsx"},{"name":"LogoRail","sourcePath":"components/marketing/LogoRail.jsx"},{"name":"StoryCard","sourcePath":"components/marketing/StoryCard.jsx"},{"name":"AppBar","sourcePath":"components/nav/AppBar.jsx"},{"name":"BottomNav","sourcePath":"components/nav/BottomNav.jsx"},{"name":"Breadcrumbs","sourcePath":"components/nav/Breadcrumbs.jsx"},{"name":"CommandPalette","sourcePath":"components/nav/CommandPalette.jsx"},{"name":"score","sourcePath":"components/nav/CommandPalette.jsx"},{"name":"NavItem","sourcePath":"components/nav/Sidebar.jsx"},{"name":"Sidebar","sourcePath":"components/nav/Sidebar.jsx"},{"name":"Tabs","sourcePath":"components/nav/Tabs.jsx"},{"name":"ThemeToggle","sourcePath":"components/nav/ThemeToggle.jsx"},{"name":"TopBar","sourcePath":"components/nav/TopBar.jsx"},{"name":"Dialog","sourcePath":"components/overlays/Dialog.jsx"},{"name":"Drawer","sourcePath":"components/overlays/Drawer.jsx"},{"name":"Menu","sourcePath":"components/overlays/Menu.jsx"},{"name":"Popover","sourcePath":"components/overlays/Popover.jsx"},{"name":"Toast","sourcePath":"components/overlays/Toast.jsx"},{"name":"ToastRegion","sourcePath":"components/overlays/Toast.jsx"},{"name":"Tooltip","sourcePath":"components/overlays/Tooltip.jsx"},{"name":"Avatar","sourcePath":"components/primitives/Avatar.jsx"},{"name":"Button","sourcePath":"components/primitives/Button.jsx"},{"name":"Card","sourcePath":"components/primitives/Card.jsx"},{"name":"CardBody","sourcePath":"components/primitives/Card.jsx"},{"name":"CardFoot","sourcePath":"components/primitives/Card.jsx"},{"name":"CardHead","sourcePath":"components/primitives/Card.jsx"},{"name":"CardTitle","sourcePath":"components/primitives/Card.jsx"},{"name":"Chip","sourcePath":"components/primitives/Chip.jsx"},{"name":"Eyebrow","sourcePath":"components/primitives/Eyebrow.jsx"},{"name":"Icon","sourcePath":"components/primitives/Icon.jsx"},{"name":"iconNames","sourcePath":"components/primitives/Icon.jsx"},{"name":"IconNames","sourcePath":"components/primitives/Icon.jsx"},{"name":"Skeleton","sourcePath":"components/primitives/Skeleton.jsx"},{"name":"THEME_KEY","sourcePath":"hooks.js"}],"sourceHashes":{"components/_deprecate.js":"1c84a2fda110","components/_radio-group.js":"26caa936f1de","components/ai/AgentTrace.jsx":"a89cdd6dbfea","components/ai/Artifact.jsx":"9be6c863b2c9","components/ai/ConfidenceMeter.jsx":"30190dcfb803","components/ai/DiffReview.jsx":"8a779a568c23","components/ai/Feedback.jsx":"71d0b9b5059a","components/ai/Message.jsx":"e507e32b90ca","components/ai/PromptInput.jsx":"93ca1175d24c","components/ai/SourceChip.jsx":"b8ec3e12c238","components/ai/SourceList.jsx":"092a0ded3834","components/ai/ToolCall.jsx":"57d638af173a","components/data/ActivityFeed.jsx":"fefc066b3fb2","components/data/BarChart.jsx":"96968a9ba35f","components/data/CodeBlock.jsx":"5b95cf570b51","components/data/Console.jsx":"6528c9c3ca1e","components/data/DataGrid.jsx":"4c4eeb26cff0","components/data/EmptyState.jsx":"7340a557f731","components/data/FilterBar.jsx":"48ecb22a8e7c","components/data/KpiTile.jsx":"4568571b1cff","components/data/LineChart.jsx":"6fa9e64d83f3","components/data/Pagination.jsx":"0c222c040f87","components/data/Progress.jsx":"eb02438a3b31","components/data/StatMeter.jsx":"55ec9c1db508","components/data/StateView.jsx":"1db574af4cf3","components/data/Table.jsx":"2a8a72b119f2","components/data/_columns.js":"d862780d1495","components/data/chart-parts.jsx":"424a7143968b","components/forms/Calendar.jsx":"a62cac7fac06","components/forms/Checkbox.jsx":"fa0052232568","components/forms/Combobox.jsx":"fb1e6c5fa5f5","components/forms/DatePicker.jsx":"692aed22fa29","components/forms/Field.jsx":"168c64395659","components/forms/FileUpload.jsx":"dfbd15736bd0","components/forms/Input.jsx":"a43b7b4b5564","components/forms/InputGroup.jsx":"71d8de495436","components/forms/RichText.jsx":"353ca85911ca","components/forms/Segmented.jsx":"aaa2f1b3bb65","components/forms/Select.jsx":"378e70b32827","components/forms/Stepper.jsx":"646dd2a208b6","components/forms/Switch.jsx":"cc99b023531b","components/forms/Textarea.jsx":"2d2aa2984da3","components/layout/Cluster.jsx":"2e15367fe28d","components/layout/Container.jsx":"6eda4bc56e54","components/layout/Grid.jsx":"8a093fe6ed4b","components/layout/Page.jsx":"51d1753d201a","components/layout/Section.jsx":"4507aff3c57c","components/layout/Split.jsx":"6786154d4ebd","components/layout/Stack.jsx":"005a591d8c24","components/marketing/FeatureGrid.jsx":"09e859da09fb","components/marketing/Hero.jsx":"ba4893068f68","components/marketing/LogoRail.jsx":"1bedd4cadb90","components/marketing/StoryCard.jsx":"9a4eccdac2e3","components/nav/AppBar.jsx":"b1f55c9de347","components/nav/BottomNav.jsx":"c1a544beec48","components/nav/Breadcrumbs.jsx":"f7b653d6c1cb","components/nav/CommandPalette.jsx":"a4b1b4576446","components/nav/Sidebar.jsx":"77e19c558ca7","components/nav/Tabs.jsx":"09d2bf40f0e0","components/nav/ThemeToggle.jsx":"e5a3292ee1e1","components/nav/TopBar.jsx":"6d5288e5af01","components/overlays/Dialog.jsx":"0c2932349cf9","components/overlays/Drawer.jsx":"815022e45cc7","components/overlays/Menu.jsx":"20db093c83a9","components/overlays/Popover.jsx":"717f23c3c127","components/overlays/Toast.jsx":"d6b810dcb7d3","components/overlays/Tooltip.jsx":"7b19e7dc9711","components/primitives/Avatar.jsx":"277ea4c7ca39","components/primitives/Button.jsx":"c29f216778a0","components/primitives/Card.jsx":"4a9c9f081c1b","components/primitives/Chip.jsx":"458e477fd284","components/primitives/Eyebrow.jsx":"ac1cc5e5856f","components/primitives/Icon.jsx":"4f15be56cb24","components/primitives/Skeleton.jsx":"76129a849b43","hooks.js":"8d667ef2c9e2","react.js":"96067cc59a1c"},"inlinedExternals":[],"unexposedExports":[{"name":"__resetDeprecations","sourcePath":"components/_deprecate.js"},{"name":"deprecate","sourcePath":"components/_deprecate.js"},{"name":"useRadioGroup","sourcePath":"components/_radio-group.js"},{"name":"colHeader","sourcePath":"components/data/_columns.js"},{"name":"emitSort","sourcePath":"components/data/_columns.js"},{"name":"legacySortArgs","sourcePath":"components/data/_columns.js"},{"name":"Grid","sourcePath":"components/data/chart-parts.jsx"},{"name":"cx","sourcePath":"components/data/chart-parts.jsx"},{"name":"frame","sourcePath":"components/data/chart-parts.jsx"},{"name":"nf","sourcePath":"components/data/chart-parts.jsx"},{"name":"ticks","sourcePath":"components/data/chart-parts.jsx"},{"name":"animateCounter","sourcePath":"hooks.js"},{"name":"paint","sourcePath":"hooks.js"},{"name":"persist","sourcePath":"hooks.js"},{"name":"useDeterministicCascade","sourcePath":"hooks.js"},{"name":"useReducedMotion","sourcePath":"hooks.js"},{"name":"useReveal","sourcePath":"hooks.js"},{"name":"useSpotlight","sourcePath":"hooks.js"},{"name":"useTheme","sourcePath":"hooks.js"}]} */
 (() => {
   var __create = Object.create;
   var __defProp = Object.defineProperty;
@@ -37,6 +37,14 @@
     }
   });
 
+  // ds-shim:ds:jsx-runtime
+  var require_ds_jsx_runtime = __commonJS({
+    "ds-shim:ds:jsx-runtime"(exports, module) {
+      init_ds_inject_react();
+      module.exports = globalThis.React;
+    }
+  });
+
   // ds-shim:ds:react
   var require_ds_react = __commonJS({
     "ds-shim:ds:react"(exports, module) {
@@ -53,14 +61,16 @@
 
   // components/primitives/Avatar.jsx
   init_ds_inject_react();
+  var import_jsx_runtime = __toESM(require_ds_jsx_runtime(), 1);
   var cx = (...a) => a.filter(Boolean).join(" ");
   function Avatar({ name = "", src, size = "md", className, ...rest }) {
     const initials = name.trim().split(/\s+/).slice(0, 2).map((w) => w[0] || "").join("").toUpperCase();
-    return /* @__PURE__ */ React.createElement("span", { className: cx("lw-avatar", size === "sm" && "lw-avatar-sm", size === "lg" && "lw-avatar-lg", className), title: name || void 0, ...rest }, src ? /* @__PURE__ */ React.createElement("img", { src, alt: name }) : initials);
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: cx("lw-avatar", size === "sm" && "lw-avatar-sm", size === "lg" && "lw-avatar-lg", className), title: name || void 0, ...rest, children: src ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", { src, alt: name }) : initials });
   }
 
   // components/primitives/Button.jsx
   init_ds_inject_react();
+  var import_jsx_runtime2 = __toESM(require_ds_jsx_runtime(), 1);
   var cx2 = (...a) => a.filter(Boolean).join(" ");
   function Button({
     variant = "brand",
@@ -75,7 +85,7 @@
     ...rest
   }) {
     const Tag = as || (rest.href ? "a" : "button");
-    return /* @__PURE__ */ React.createElement(
+    return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
       Tag,
       {
         className: cx2(
@@ -97,69 +107,74 @@
           }
           onClick && onClick(e);
         },
-        ...rest
-      },
-      children
+        ...rest,
+        children
+      }
     );
   }
 
   // components/primitives/Card.jsx
   init_ds_inject_react();
+  var import_jsx_runtime3 = __toESM(require_ds_jsx_runtime(), 1);
   var cx3 = (...a) => a.filter(Boolean).join(" ");
   function Card({ interactive = false, glow = false, selected, as, className, children, ...rest }) {
     const Tag = as || (interactive ? rest.href ? "a" : "button" : "div");
-    return /* @__PURE__ */ React.createElement(
+    return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
       Tag,
       {
         className: cx3("lw-card", interactive && "lw-card-interactive", glow && "lw-card-glow", className),
         "aria-pressed": interactive && selected != null ? !!selected : void 0,
         "data-selected": selected ? "true" : void 0,
         type: Tag === "button" ? "button" : void 0,
-        ...rest
-      },
-      children
+        ...rest,
+        children
+      }
     );
   }
   function CardHead({ className, children, ...rest }) {
-    return /* @__PURE__ */ React.createElement("div", { className: cx3("lw-card-head", className), ...rest }, children);
+    return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { className: cx3("lw-card-head", className), ...rest, children });
   }
   function CardTitle({ as: Tag = "h3", className, children, ...rest }) {
-    return /* @__PURE__ */ React.createElement(Tag, { className: cx3("lw-card-title", className), ...rest }, children);
+    return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(Tag, { className: cx3("lw-card-title", className), ...rest, children });
   }
   function CardBody({ className, children, ...rest }) {
-    return /* @__PURE__ */ React.createElement("p", { className: cx3("lw-card-body", className), ...rest }, children);
+    return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { className: cx3("lw-card-body", className), ...rest, children });
   }
   function CardFoot({ className, children, ...rest }) {
-    return /* @__PURE__ */ React.createElement("div", { className: cx3("lw-card-foot", className), ...rest }, children);
+    return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { className: cx3("lw-card-foot", className), ...rest, children });
   }
 
   // components/primitives/Chip.jsx
   init_ds_inject_react();
+  var import_jsx_runtime4 = __toESM(require_ds_jsx_runtime(), 1);
   var cx4 = (...a) => a.filter(Boolean).join(" ");
   function Chip({ tone = "brand", className, children, ...rest }) {
-    return /* @__PURE__ */ React.createElement("span", { className: cx4("lw-chip", tone !== "brand" && `lw-chip-${tone}`, className), ...rest }, children);
+    return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: cx4("lw-chip", tone !== "brand" && `lw-chip-${tone}`, className), ...rest, children });
   }
 
   // components/primitives/Eyebrow.jsx
   init_ds_inject_react();
+  var import_jsx_runtime5 = __toESM(require_ds_jsx_runtime(), 1);
   var cx5 = (...a) => a.filter(Boolean).join(" ");
   function Eyebrow({ as: Tag = "p", className, children, ...rest }) {
-    return /* @__PURE__ */ React.createElement(Tag, { className: cx5("lw-eyebrow", className), ...rest }, children);
+    return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(Tag, { className: cx5("lw-eyebrow", className), ...rest, children });
   }
 
   // components/primitives/Skeleton.jsx
   init_ds_inject_react();
+  var import_jsx_runtime6 = __toESM(require_ds_jsx_runtime(), 1);
   var cx6 = (...a) => a.filter(Boolean).join(" ");
   function Skeleton({ shape = "block", width, height, lines, className, style, ...rest }) {
     if (lines) {
-      return /* @__PURE__ */ React.createElement("span", { className: cx6("lw-skeleton-lines", className), style, "aria-hidden": "true", ...rest }, Array.from({ length: lines }, (_, i) => /* @__PURE__ */ React.createElement("span", { key: i, className: "lw-skeleton text" })));
+      return /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { className: cx6("lw-skeleton-lines", className), style, "aria-hidden": "true", ...rest, children: Array.from({ length: lines }, (_, i) => /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { className: "lw-skeleton text" }, i)) });
     }
-    return /* @__PURE__ */ React.createElement("span", { className: cx6("lw-skeleton", shape !== "block" && shape, className), style: { width, height, ...style }, "aria-hidden": "true", ...rest });
+    return /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { className: cx6("lw-skeleton", shape !== "block" && shape, className), style: { width, height, ...style }, "aria-hidden": "true", ...rest });
   }
 
   // components/primitives/Icon.jsx
   init_ds_inject_react();
   var React2 = __toESM(require_ds_react(), 1);
+  var import_jsx_runtime7 = __toESM(require_ds_jsx_runtime(), 1);
   var cx7 = (...a) => a.filter(Boolean).join(" ");
   var ICONS = {
     sidebar: ["M4 5.5A2 2 0 0 1 6 3.5h12a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z", "M10 3.5v17"],
@@ -258,13 +273,12 @@
   var warned = /* @__PURE__ */ new Set();
   function Icon({ name, size = 16, strokeWidth = 1.6, label, className, style, ...rest }) {
     const known = ICONS[name];
-    React2.useEffect(() => {
-      if (known || warned.has(name) || typeof console === "undefined") return;
+    if (!known && !warned.has(name) && typeof console !== "undefined") {
       warned.add(name);
       console.warn(`Icon: no glyph named "${name}". Known names: ${Object.keys(ICONS).join(", ")}`);
-    }, [known, name]);
+    }
     const paths = known || UNKNOWN;
-    return /* @__PURE__ */ React2.createElement(
+    return /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
       "svg",
       {
         className: cx7("lw-icon", className),
@@ -281,9 +295,9 @@
         "aria-label": label,
         "aria-hidden": label ? void 0 : "true",
         "data-unknown": known ? void 0 : "true",
-        ...rest
-      },
-      paths.map((d, i) => /* @__PURE__ */ React2.createElement("path", { key: i, d }))
+        ...rest,
+        children: paths.map((d, i) => /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("path", { d }, i))
+      }
     );
   }
   var iconNames = Object.keys(ICONS);
@@ -291,101 +305,121 @@
 
   // components/layout/Page.jsx
   init_ds_inject_react();
+  var import_jsx_runtime8 = __toESM(require_ds_jsx_runtime(), 1);
   var cx8 = (...a) => a.filter(Boolean).join(" ");
   function Page({ className, children, ...rest }) {
-    return /* @__PURE__ */ React.createElement("div", { className: cx8("lw-page", className), ...rest }, children);
+    return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: cx8("lw-page", className), ...rest, children });
   }
 
   // components/layout/Container.jsx
   init_ds_inject_react();
+  var import_jsx_runtime9 = __toESM(require_ds_jsx_runtime(), 1);
   var cx9 = (...a) => a.filter(Boolean).join(" ");
   function Container({ className, children, ...rest }) {
-    return /* @__PURE__ */ React.createElement("div", { className: cx9("lw-container", className), ...rest }, children);
+    return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: cx9("lw-container", className), ...rest, children });
   }
 
   // components/layout/Stack.jsx
   init_ds_inject_react();
+  var import_jsx_runtime10 = __toESM(require_ds_jsx_runtime(), 1);
   var cx10 = (...a) => a.filter(Boolean).join(" ");
   function Stack({ gap = 16, as: Tag = "div", className, children, ...rest }) {
-    return /* @__PURE__ */ React.createElement(Tag, { className: cx10("lw-stack", gap !== 16 && `lw-stack-${gap}`, className), ...rest }, children);
+    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Tag, { className: cx10("lw-stack", gap !== 16 && `lw-stack-${gap}`, className), ...rest, children });
   }
 
   // components/layout/Cluster.jsx
   init_ds_inject_react();
+  var import_jsx_runtime11 = __toESM(require_ds_jsx_runtime(), 1);
   var cx11 = (...a) => a.filter(Boolean).join(" ");
   function Cluster({ gap = 8, justify, align, as: Tag = "div", className, children, ...rest }) {
-    return /* @__PURE__ */ React.createElement(Tag, { className: cx11(
+    return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(Tag, { className: cx11(
       "lw-cluster",
       gap !== 8 && `lw-cluster-${gap}`,
       justify === "between" && "lw-cluster-between",
       justify === "end" && "lw-cluster-end",
       align === "baseline" && "lw-cluster-baseline",
       className
-    ), ...rest }, children);
+    ), ...rest, children });
   }
 
   // components/layout/Grid.jsx
   init_ds_inject_react();
+  var import_jsx_runtime12 = __toESM(require_ds_jsx_runtime(), 1);
   var cx12 = (...a) => a.filter(Boolean).join(" ");
   function Grid({ min, gap = 16, as: Tag = "div", className, style, children, ...rest }) {
-    return /* @__PURE__ */ React.createElement(
+    return /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
       Tag,
       {
         className: cx12("lw-grid", gap === 24 && "lw-grid-24", className),
         style: min ? { "--lw-grid-min": typeof min === "number" ? min + "px" : min, ...style } : style,
-        ...rest
-      },
-      children
+        ...rest,
+        children
+      }
     );
   }
 
   // components/layout/Split.jsx
   init_ds_inject_react();
+  var import_jsx_runtime13 = __toESM(require_ds_jsx_runtime(), 1);
   var cx13 = (...a) => a.filter(Boolean).join(" ");
   function Split({ rail = 320, side = "end", as: Tag = "div", className, style, children, ...rest }) {
-    return /* @__PURE__ */ React.createElement(
+    return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
       Tag,
       {
         className: cx13("lw-split", side === "start" && "lw-split-start", className),
         style: { "--lw-split-rail": typeof rail === "number" ? rail + "px" : rail, ...style },
-        ...rest
-      },
-      children
+        ...rest,
+        children
+      }
     );
   }
 
   // components/layout/Section.jsx
   init_ds_inject_react();
+  var import_jsx_runtime14 = __toESM(require_ds_jsx_runtime(), 1);
   var cx14 = (...a) => a.filter(Boolean).join(" ");
   function Section({ dark = false, tight = false, className, children, ...rest }) {
-    return /* @__PURE__ */ React.createElement(
+    return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
       "section",
       {
         className: cx14("lw-section", tight && "tight", dark && "dark lw-band-dark", className),
         "data-band": dark ? "dark" : void 0,
-        ...rest
-      },
-      children
+        ...rest,
+        children
+      }
     );
   }
 
   // components/forms/Field.jsx
   init_ds_inject_react();
   var React3 = __toESM(require_ds_react(), 1);
+  var import_jsx_runtime15 = __toESM(require_ds_jsx_runtime(), 1);
   var cx15 = (...a) => a.filter(Boolean).join(" ");
   function Field({ label, help, error, required, optional, htmlFor, className, children, ...rest }) {
     const auto = React3.useId();
     const id = htmlFor || auto;
     const msgId = id + "-msg";
-    return /* @__PURE__ */ React3.createElement("div", { className: cx15("lw-field", className), ...rest }, label && /* @__PURE__ */ React3.createElement("label", { className: "lw-label", htmlFor: id }, label, required && /* @__PURE__ */ React3.createElement(React3.Fragment, null, /* @__PURE__ */ React3.createElement("span", { className: "req", "aria-hidden": "true" }, "*"), /* @__PURE__ */ React3.createElement("span", { className: "lw-sr-only" }, "(required)")), optional && /* @__PURE__ */ React3.createElement("span", { className: "opt" }, "optional")), typeof children === "function" ? children({ id, "aria-describedby": error || help ? msgId : void 0, "aria-invalid": error ? "true" : void 0, required }) : children, error ? /* @__PURE__ */ React3.createElement("span", { className: "lw-error", id: msgId, role: "alert" }, error) : help ? /* @__PURE__ */ React3.createElement("span", { className: "lw-help", id: msgId }, help) : null);
+    return /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { className: cx15("lw-field", className), ...rest, children: [
+      label && /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("label", { className: "lw-label", htmlFor: id, children: [
+        label,
+        required && /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(import_jsx_runtime15.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { className: "req", "aria-hidden": "true", children: "*" }),
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { className: "lw-sr-only", children: "(required)" })
+        ] }),
+        optional && /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { className: "opt", children: "optional" })
+      ] }),
+      typeof children === "function" ? children({ id, "aria-describedby": error || help ? msgId : void 0, "aria-invalid": error ? "true" : void 0, required }) : children,
+      error ? /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { className: "lw-error", id: msgId, role: "alert", children: error }) : help ? /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { className: "lw-help", id: msgId, children: help }) : null
+    ] });
   }
 
   // components/forms/Input.jsx
   init_ds_inject_react();
   var React4 = __toESM(require_ds_react(), 1);
+  var import_jsx_runtime16 = __toESM(require_ds_jsx_runtime(), 1);
   var cx16 = (...a) => a.filter(Boolean).join(" ");
   var Input = React4.forwardRef(function Input2({ size = "md", invalid, className, ...rest }, ref) {
-    return /* @__PURE__ */ React4.createElement(
+    return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
       "input",
       {
         ref,
@@ -398,45 +432,62 @@
 
   // components/forms/InputGroup.jsx
   init_ds_inject_react();
+  var import_jsx_runtime17 = __toESM(require_ds_jsx_runtime(), 1);
   var cx17 = (...a) => a.filter(Boolean).join(" ");
   function InputGroup({ prefix, suffix, className, children, ...rest }) {
-    return /* @__PURE__ */ React.createElement("div", { className: cx17("lw-input-group", className), ...rest }, prefix && /* @__PURE__ */ React.createElement("span", { className: "affix" }, prefix), children, suffix && /* @__PURE__ */ React.createElement("span", { className: "affix mono" }, suffix));
+    return /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: cx17("lw-input-group", className), ...rest, children: [
+      prefix && /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { className: "affix", children: prefix }),
+      children,
+      suffix && /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { className: "affix mono", children: suffix })
+    ] });
   }
 
   // components/forms/Textarea.jsx
   init_ds_inject_react();
   var React5 = __toESM(require_ds_react(), 1);
+  var import_jsx_runtime18 = __toESM(require_ds_jsx_runtime(), 1);
   var cx18 = (...a) => a.filter(Boolean).join(" ");
   var Textarea = React5.forwardRef(function Textarea2({ invalid, className, ...rest }, ref) {
-    return /* @__PURE__ */ React5.createElement("textarea", { ref, className: cx18("lw-textarea", className), "aria-invalid": invalid ? "true" : void 0, ...rest });
+    return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("textarea", { ref, className: cx18("lw-textarea", className), "aria-invalid": invalid ? "true" : void 0, ...rest });
   });
 
   // components/forms/Select.jsx
   init_ds_inject_react();
   var React6 = __toESM(require_ds_react(), 1);
+  var import_jsx_runtime19 = __toESM(require_ds_jsx_runtime(), 1);
   var cx19 = (...a) => a.filter(Boolean).join(" ");
   var Select = React6.forwardRef(function Select2({ options, invalid, className, children, ...rest }, ref) {
-    return /* @__PURE__ */ React6.createElement("select", { ref, className: cx19("lw-select", className), "aria-invalid": invalid ? "true" : void 0, ...rest }, options ? options.map((o) => {
+    return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("select", { ref, className: cx19("lw-select", className), "aria-invalid": invalid ? "true" : void 0, ...rest, children: options ? options.map((o) => {
       const v = typeof o === "string" ? o : o.value;
       const l = typeof o === "string" ? o : o.label;
-      return /* @__PURE__ */ React6.createElement("option", { key: v, value: v }, l);
-    }) : children);
+      return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("option", { value: v, children: l }, v);
+    }) : children });
   });
 
   // components/forms/Switch.jsx
   init_ds_inject_react();
   var React7 = __toESM(require_ds_react(), 1);
+  var import_jsx_runtime20 = __toESM(require_ds_jsx_runtime(), 1);
   var cx20 = (...a) => a.filter(Boolean).join(" ");
   var Switch = React7.forwardRef(function Switch2({ label, className, ...rest }, ref) {
-    return /* @__PURE__ */ React7.createElement("label", { className: cx20("lw-switch", className) }, /* @__PURE__ */ React7.createElement("input", { ref, type: "checkbox", role: "switch", ...rest }), /* @__PURE__ */ React7.createElement("span", { className: "track" }), label && /* @__PURE__ */ React7.createElement("span", { className: "lw-switch-text" }, label));
+    return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("label", { className: cx20("lw-switch", className), children: [
+      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("input", { ref, type: "checkbox", role: "switch", ...rest }),
+      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { className: "track" }),
+      label && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { className: "lw-switch-text", children: label })
+    ] });
   });
 
   // components/forms/Checkbox.jsx
   init_ds_inject_react();
   var React8 = __toESM(require_ds_react(), 1);
+  var import_jsx_runtime21 = __toESM(require_ds_jsx_runtime(), 1);
   var cx21 = (...a) => a.filter(Boolean).join(" ");
   var Checkbox = React8.forwardRef(function Checkbox2({ label, radio = false, className, ...rest }, ref) {
-    return /* @__PURE__ */ React8.createElement("label", { className: cx21("lw-check", radio && "radio", className) }, /* @__PURE__ */ React8.createElement("input", { ref, type: radio ? "radio" : "checkbox", ...rest }), /* @__PURE__ */ React8.createElement("span", { className: "box" }), label && /* @__PURE__ */ React8.createElement("span", { className: "lw-check-text" }, label));
+    return /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("label", { className: cx21("lw-check", radio && "radio", className), children: [
+      /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("input", { ref, type: radio ? "radio" : "checkbox", ...rest }),
+      /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("span", { className: "box" }),
+      label && /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("span", { className: "lw-check-text", children: label })
+    ] });
   });
 
   // components/forms/Segmented.jsx
@@ -468,15 +519,17 @@
   }
 
   // components/forms/Segmented.jsx
+  var import_jsx_runtime22 = __toESM(require_ds_jsx_runtime(), 1);
   var cx22 = (...a) => a.filter(Boolean).join(" ");
-  function Segmented({ options = [], value, onChange, label, className, ...rest }) {
+  var Segmented = React10.forwardRef(function Segmented2({ options = [], value, onChange, label, className, ...rest }, forwardedRef) {
     const opts = options.map((o) => typeof o === "string" ? { value: o, label: o } : o);
     const { ref, onKeyDown, tabIndexFor } = useRadioGroup(
       opts.map((o) => o.value),
       value,
       (v) => onChange && onChange(v)
     );
-    return /* @__PURE__ */ React10.createElement(
+    React10.useImperativeHandle(forwardedRef, () => ref.current, []);
+    return /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
       "div",
       {
         ref,
@@ -484,22 +537,22 @@
         role: "radiogroup",
         "aria-label": label,
         onKeyDown,
-        ...rest
-      },
-      opts.map((o, i) => /* @__PURE__ */ React10.createElement(
-        "button",
-        {
-          key: o.value,
-          type: "button",
-          role: "radio",
-          "aria-checked": value === o.value,
-          tabIndex: tabIndexFor(i),
-          onClick: () => onChange && onChange(o.value)
-        },
-        o.label
-      ))
+        ...rest,
+        children: opts.map((o, i) => /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
+          "button",
+          {
+            type: "button",
+            role: "radio",
+            "aria-checked": value === o.value,
+            tabIndex: tabIndexFor(i),
+            onClick: () => onChange && onChange(o.value),
+            children: o.label
+          },
+          o.value
+        ))
+      }
     );
-  }
+  });
 
   // components/forms/Combobox.jsx
   init_ds_inject_react();
@@ -508,6 +561,7 @@
   // components/overlays/Popover.jsx
   init_ds_inject_react();
   var React11 = __toESM(require_ds_react(), 1);
+  var import_jsx_runtime23 = __toESM(require_ds_jsx_runtime(), 1);
   var cx23 = (...a) => a.filter(Boolean).join(" ");
   function place(anchorRect, panelRect, placement, offset) {
     const vw = window.innerWidth, vh = window.innerHeight, pad = 8;
@@ -641,27 +695,31 @@
         if (!e.defaultPrevented) setOpen(!open);
       }
     }) : trigger;
-    return /* @__PURE__ */ React11.createElement(React11.Fragment, null, /* @__PURE__ */ React11.createElement("span", { className: "lw-popover-anchor", ref: anchorRef }, triggerEl), /* @__PURE__ */ React11.createElement(
-      "div",
-      {
-        ref: panelRef,
-        id: uid,
-        popover: "manual",
-        role: open ? role : void 0,
-        "aria-label": open ? label : void 0,
-        "aria-hidden": open ? void 0 : true,
-        tabIndex: -1,
-        className: cx23("lw-popover", padded && "lw-popover-pad", className),
-        ...rest
-      },
-      open && children
-    ));
+    return /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)(import_jsx_runtime23.Fragment, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("span", { className: "lw-popover-anchor", ref: anchorRef, children: triggerEl }),
+      /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
+        "div",
+        {
+          ref: panelRef,
+          id: uid,
+          popover: "manual",
+          role: open ? role : void 0,
+          "aria-label": open ? label : void 0,
+          "aria-hidden": open ? void 0 : true,
+          tabIndex: -1,
+          className: cx23("lw-popover", padded && "lw-popover-pad", className),
+          ...rest,
+          children: open && children
+        }
+      )
+    ] });
   }
 
   // components/forms/Combobox.jsx
+  var import_jsx_runtime24 = __toESM(require_ds_jsx_runtime(), 1);
   var cx24 = (...a) => a.filter(Boolean).join(" ");
   var norm = (o) => typeof o === "string" || typeof o === "number" ? { value: o, label: String(o) } : o;
-  function Combobox({
+  var Combobox = React12.forwardRef(function Combobox2({
     options = [],
     value,
     onChange,
@@ -677,12 +735,13 @@
     label,
     className,
     ...rest
-  }) {
+  }, forwardedRef) {
     const opts = React12.useMemo(() => options.map(norm), [options]);
     const [open, setOpen] = React12.useState(false);
     const [query, setQuery] = React12.useState("");
     const [active, setActive] = React12.useState(0);
     const inputRef = React12.useRef(null);
+    React12.useImperativeHandle(forwardedRef, () => inputRef.current, []);
     const listRef = React12.useRef(null);
     const uid = React12.useId();
     const listId = uid + "-list";
@@ -742,55 +801,60 @@
       }
       if (e.key === "Backspace" && multiple && !query && selected.length) return remove(selected[selected.length - 1]);
     };
-    const field = /* @__PURE__ */ React12.createElement(
+    const field = /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)(
       "div",
       {
         className: cx24("lw-combo", size === "sm" && "lw-combo-sm", size === "lg" && "lw-combo-lg", className),
         "data-disabled": disabled ? "true" : void 0,
         onMouseDown: (e) => {
           if (e.target === e.currentTarget && inputRef.current) inputRef.current.focus();
-        }
-      },
-      selectedOpts.map((o) => /* @__PURE__ */ React12.createElement("span", { key: o.value, className: "lw-combo-token" }, /* @__PURE__ */ React12.createElement("span", null, o.label), /* @__PURE__ */ React12.createElement(
-        "button",
-        {
-          type: "button",
-          "aria-label": "Remove " + o.label,
-          onMouseDown: (e) => e.preventDefault(),
-          onClick: () => remove(o.value)
         },
-        /* @__PURE__ */ React12.createElement(Icon, { name: "close", size: 11 })
-      ))),
-      /* @__PURE__ */ React12.createElement(
-        "input",
-        {
-          ref: inputRef,
-          id: inputId,
-          role: "combobox",
-          type: "text",
-          autoComplete: "off",
-          "aria-expanded": open,
-          "aria-controls": open ? listId : void 0,
-          "aria-autocomplete": "list",
-          "aria-label": label,
-          "aria-activedescendant": open && shown[active] ? listId + "-" + active : void 0,
-          "aria-invalid": invalid ? "true" : void 0,
-          disabled,
-          placeholder: current ? void 0 : multiple && selectedOpts.length ? "" : placeholder,
-          value: !multiple && current && !query ? current.label : query,
-          onChange: (e) => {
-            setQuery(e.target.value);
-            setActive(0);
-            setOpen(true);
-            onSearch && onSearch(e.target.value);
-          },
-          onKeyDown,
-          onFocus: () => setOpen(true)
-        }
-      ),
-      /* @__PURE__ */ React12.createElement("span", { className: "lw-combo-chev" }, /* @__PURE__ */ React12.createElement(Icon, { name: "chevrons-up-down", size: 15 }))
+        children: [
+          selectedOpts.map((o) => /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)("span", { className: "lw-combo-token", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("span", { children: o.label }),
+            /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
+              "button",
+              {
+                type: "button",
+                "aria-label": "Remove " + o.label,
+                onMouseDown: (e) => e.preventDefault(),
+                onClick: () => remove(o.value),
+                children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Icon, { name: "close", size: 11 })
+              }
+            )
+          ] }, o.value)),
+          /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
+            "input",
+            {
+              ref: inputRef,
+              id: inputId,
+              role: "combobox",
+              type: "text",
+              autoComplete: "off",
+              "aria-expanded": open,
+              "aria-controls": open ? listId : void 0,
+              "aria-autocomplete": "list",
+              "aria-label": label,
+              "aria-activedescendant": open && shown[active] ? listId + "-" + active : void 0,
+              "aria-invalid": invalid ? "true" : void 0,
+              disabled,
+              placeholder: current ? void 0 : multiple && selectedOpts.length ? "" : placeholder,
+              value: !multiple && current && !query ? current.label : query,
+              onChange: (e) => {
+                setQuery(e.target.value);
+                setActive(0);
+                setOpen(true);
+                onSearch && onSearch(e.target.value);
+              },
+              onKeyDown,
+              onFocus: () => setOpen(true)
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("span", { className: "lw-combo-chev", children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Icon, { name: "chevrons-up-down", size: 15 }) })
+        ]
+      }
     );
-    return /* @__PURE__ */ React12.createElement(
+    return /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
       Popover,
       {
         trigger: field,
@@ -801,35 +865,38 @@
         matchWidth: true,
         placement: "bottom-start",
         label,
-        ...rest
-      },
-      loading ? /* @__PURE__ */ React12.createElement("div", { id: listId, role: "listbox", "aria-busy": "true", className: "lw-listbox-empty" }, "Searching…") : !shown.length ? /* @__PURE__ */ React12.createElement("div", { id: listId, role: "listbox", className: "lw-listbox-empty" }, emptyText) : /* @__PURE__ */ React12.createElement("ul", { ref: listRef, className: "lw-listbox", id: listId, role: "listbox", "aria-multiselectable": multiple || void 0 }, shown.map((o, i) => {
-        const isSel = multiple ? selected.includes(o.value) : o.value === value;
-        return /* @__PURE__ */ React12.createElement(
-          "li",
-          {
-            key: o.value,
-            id: listId + "-" + i,
-            className: "lw-option",
-            role: "option",
-            "aria-selected": isSel,
-            "aria-disabled": o.disabled ? "true" : void 0,
-            "data-active": i === active ? "true" : void 0,
-            onMouseEnter: () => setActive(i),
-            onMouseDown: (e) => e.preventDefault(),
-            onClick: () => commit(o)
-          },
-          /* @__PURE__ */ React12.createElement("span", { className: "lw-option-lead" }, isSel && /* @__PURE__ */ React12.createElement(Icon, { name: "checkmark", size: 14 })),
-          /* @__PURE__ */ React12.createElement("span", { className: "lw-option-text" }, o.label),
-          o.meta && /* @__PURE__ */ React12.createElement("span", { className: "lw-option-meta" }, o.meta)
-        );
-      }))
+        ...rest,
+        children: loading ? /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("div", { id: listId, role: "listbox", "aria-busy": "true", className: "lw-listbox-empty", children: "Searching…" }) : !shown.length ? /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("div", { id: listId, role: "listbox", className: "lw-listbox-empty", children: emptyText }) : /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("ul", { ref: listRef, className: "lw-listbox", id: listId, role: "listbox", "aria-multiselectable": multiple || void 0, children: shown.map((o, i) => {
+          const isSel = multiple ? selected.includes(o.value) : o.value === value;
+          return /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)(
+            "li",
+            {
+              id: listId + "-" + i,
+              className: "lw-option",
+              role: "option",
+              "aria-selected": isSel,
+              "aria-disabled": o.disabled ? "true" : void 0,
+              "data-active": i === active ? "true" : void 0,
+              onMouseEnter: () => setActive(i),
+              onMouseDown: (e) => e.preventDefault(),
+              onClick: () => commit(o),
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("span", { className: "lw-option-lead", children: isSel && /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Icon, { name: "checkmark", size: 14 }) }),
+                /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("span", { className: "lw-option-text", children: o.label }),
+                o.meta && /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("span", { className: "lw-option-meta", children: o.meta })
+              ]
+            },
+            o.value
+          );
+        }) })
+      }
     );
-  }
+  });
 
   // components/forms/Calendar.jsx
   init_ds_inject_react();
   var React13 = __toESM(require_ds_react(), 1);
+  var import_jsx_runtime25 = __toESM(require_ds_jsx_runtime(), 1);
   var cx25 = (...a) => a.filter(Boolean).join(" ");
   var day = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate());
   var same = (a, b) => a && b && day(a).getTime() === day(b).getTime();
@@ -918,40 +985,51 @@
         return moveFocus(addDays(focused, 6 - (focused.getDay() - weekStart + 7) % 7));
       }
     };
-    return /* @__PURE__ */ React13.createElement("div", { className: cx25("lw-cal", className), ...rest }, /* @__PURE__ */ React13.createElement("div", { className: "lw-cal-head" }, /* @__PURE__ */ React13.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": "Previous month", onClick: () => setMonth(addMonths(view, -1)) }, /* @__PURE__ */ React13.createElement(Icon, { name: "chevron-left", size: 16 })), /* @__PURE__ */ React13.createElement("div", { className: "lw-cal-month", "aria-live": "polite" }, fmtMonth.format(view)), /* @__PURE__ */ React13.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": "Next month", onClick: () => setMonth(addMonths(view, 1)) }, /* @__PURE__ */ React13.createElement(Icon, { name: "chevron-right", size: 16 }))), /* @__PURE__ */ React13.createElement("div", { ref: gridRef, className: "lw-cal-grid", role: "grid", onKeyDown, onMouseLeave: () => setHover(null) }, /* @__PURE__ */ React13.createElement("div", { role: "row", className: "lw-cal-dow-row" }, dows.map((d, i) => /* @__PURE__ */ React13.createElement("div", { key: i, role: "columnheader", className: "lw-cal-dow" }, d))), /* @__PURE__ */ React13.createElement("div", { role: "rowgroup", className: "lw-cal-weeks" }, weeks.map((week, w) => /* @__PURE__ */ React13.createElement("div", { key: w, role: "row", className: "lw-cal-week" }, week.map((d, i) => {
-      const outside = d.getMonth() !== view.getMonth();
-      const selected = isSelected(d);
-      const end = range ? sel.end || hover : null;
-      const off = disabled(d);
-      return /* @__PURE__ */ React13.createElement(
-        "button",
-        {
-          key: i,
-          type: "button",
-          role: "gridcell",
-          className: "lw-cal-day",
-          tabIndex: same(d, focused) ? 0 : -1,
-          "aria-selected": selected,
-          "aria-label": fmtFull.format(d),
-          "aria-disabled": off || void 0,
-          "data-outside": outside ? "true" : void 0,
-          "data-today": today && same(d, today) ? "true" : void 0,
-          "data-in-range": inRange(d) ? "true" : void 0,
-          "data-edge": range && selected ? same(d, sel.start) && end ? "start" : same(d, sel.end) ? "end" : void 0 : void 0,
-          onMouseEnter: () => range && sel.start && !sel.end && setHover(day(d)),
-          onFocus: () => setFocused(day(d)),
-          onClick: () => {
-            if (!off) pick(d);
-          }
-        },
-        d.getDate()
-      );
-    }))))));
+    return /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)("div", { className: cx25("lw-cal", className), ...rest, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)("div", { className: "lw-cal-head", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("button", { type: "button", className: "lw-icon-btn", "aria-label": "Previous month", onClick: () => setMonth(addMonths(view, -1)), children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(Icon, { name: "chevron-left", size: 16 }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("div", { className: "lw-cal-month", "aria-live": "polite", children: fmtMonth.format(view) }),
+        /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("button", { type: "button", className: "lw-icon-btn", "aria-label": "Next month", onClick: () => setMonth(addMonths(view, 1)), children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(Icon, { name: "chevron-right", size: 16 }) })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)("div", { ref: gridRef, className: "lw-cal-grid", role: "grid", onKeyDown, onMouseLeave: () => setHover(null), children: [
+        /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("div", { role: "row", className: "lw-cal-dow-row", children: dows.map((d, i) => /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("div", { role: "columnheader", className: "lw-cal-dow", children: d }, i)) }),
+        /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("div", { role: "rowgroup", className: "lw-cal-weeks", children: weeks.map((week, w) => /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("div", { role: "row", className: "lw-cal-week", children: week.map((d, i) => {
+          const outside = d.getMonth() !== view.getMonth();
+          const selected = isSelected(d);
+          const end = range ? sel.end || hover : null;
+          const off = disabled(d);
+          return /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
+            "button",
+            {
+              type: "button",
+              role: "gridcell",
+              className: "lw-cal-day",
+              tabIndex: same(d, focused) ? 0 : -1,
+              "aria-selected": selected,
+              "aria-label": fmtFull.format(d),
+              "aria-disabled": off || void 0,
+              "data-outside": outside ? "true" : void 0,
+              "data-today": today && same(d, today) ? "true" : void 0,
+              "data-in-range": inRange(d) ? "true" : void 0,
+              "data-edge": range && selected ? same(d, sel.start) && end ? "start" : same(d, sel.end) ? "end" : void 0 : void 0,
+              onMouseEnter: () => range && sel.start && !sel.end && setHover(day(d)),
+              onFocus: () => setFocused(day(d)),
+              onClick: () => {
+                if (!off) pick(d);
+              },
+              children: d.getDate()
+            },
+            i
+          );
+        }) }, w)) })
+      ] })
+    ] });
   }
 
   // components/forms/DatePicker.jsx
   init_ds_inject_react();
   var React14 = __toESM(require_ds_react(), 1);
+  var import_jsx_runtime26 = __toESM(require_ds_jsx_runtime(), 1);
   var cx26 = (...a) => a.filter(Boolean).join(" ");
   var day2 = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate());
   var shift = (n) => {
@@ -965,7 +1043,7 @@
     { label: "Last 30 days", get: () => ({ start: shift(-29), end: day2(/* @__PURE__ */ new Date()) }) },
     { label: "Last 90 days", get: () => ({ start: shift(-89), end: day2(/* @__PURE__ */ new Date()) }) }
   ];
-  function DatePicker({
+  var DatePicker = React14.forwardRef(function DatePicker2({
     value,
     onChange,
     range,
@@ -981,7 +1059,7 @@
     id,
     className,
     ...rest
-  }) {
+  }, forwardedRef) {
     const [open, setOpen] = React14.useState(false);
     const uid = React14.useId();
     const fmt2 = new Intl.DateTimeFormat(locale, { day: "numeric", month: "short", year: "numeric" });
@@ -997,21 +1075,24 @@
       const r = p.get();
       return r.start.getTime() === day2(value.start).getTime() && r.end.getTime() === day2(value.end).getTime();
     }) : -1;
-    const field = /* @__PURE__ */ React14.createElement(
+    const field = /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)(
       "button",
       {
+        ref: forwardedRef,
         type: "button",
         id: id || uid,
         disabled,
         "aria-invalid": invalid ? "true" : void 0,
         "aria-label": label,
         className: cx26("lw-input", "lw-datefield", size === "sm" && "lw-input-sm", size === "lg" && "lw-input-lg", className),
-        "data-placeholder": text ? void 0 : "true"
-      },
-      /* @__PURE__ */ React14.createElement(Icon, { name: "calendar", size: 15, className: "lw-datefield-ic" }),
-      /* @__PURE__ */ React14.createElement("span", { className: "lw-datefield-text" }, text || placeholder || (range ? "Pick a range" : "Pick a date"))
+        "data-placeholder": text ? void 0 : "true",
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(Icon, { name: "calendar", size: 15, className: "lw-datefield-ic" }),
+          /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("span", { className: "lw-datefield-text", children: text || placeholder || (range ? "Pick a range" : "Pick a date") })
+        ]
+      }
     );
-    return /* @__PURE__ */ React14.createElement(
+    return /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
       Popover,
       {
         trigger: field,
@@ -1021,40 +1102,44 @@
         role: "dialog",
         label: label || (range ? "Choose a date range" : "Choose a date"),
         placement: "bottom-start",
-        ...rest
-      },
-      /* @__PURE__ */ React14.createElement("div", { className: "lw-cal-wrap" }, range && presets.length > 0 && /* @__PURE__ */ React14.createElement("div", { className: "lw-cal-presets" }, presets.map((p, i) => (
-        /* aria-current, not aria-pressed. These are shortcut ACTIONS —
-           each applies a range and closes the panel — so `aria-pressed`
-           announced four toggle buttons, three of them "not pressed",
-           for a set where at most one is ever the current range and often
-           none is. aria-current is the idiom for "this one in the set is
-           the current one" and claims nothing about togglability. */
-        /* @__PURE__ */ React14.createElement(
-          "button",
-          {
-            key: p.label,
-            type: "button",
-            className: "lw-cal-preset",
-            "aria-current": i === activePreset ? "true" : void 0,
-            onClick: () => {
-              onChange && onChange(p.get());
-              setOpen(false);
-            }
-          },
-          p.label
-        )
-      ))), /* @__PURE__ */ React14.createElement(Calendar, { value, onChange: (v) => {
-        onChange && onChange(v);
-        if (!range) setOpen(false);
-        else if (v && v.end) setOpen(false);
-      }, range, min, max, locale }))
+        ...rest,
+        children: /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)("div", { className: "lw-cal-wrap", children: [
+          range && presets.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("div", { className: "lw-cal-presets", children: presets.map((p, i) => (
+            /* aria-current, not aria-pressed. These are shortcut ACTIONS —
+               each applies a range and closes the panel — so `aria-pressed`
+               announced four toggle buttons, three of them "not pressed",
+               for a set where at most one is ever the current range and often
+               none is. aria-current is the idiom for "this one in the set is
+               the current one" and claims nothing about togglability. */
+            /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
+              "button",
+              {
+                type: "button",
+                className: "lw-cal-preset",
+                "aria-current": i === activePreset ? "true" : void 0,
+                onClick: () => {
+                  onChange && onChange(p.get());
+                  setOpen(false);
+                },
+                children: p.label
+              },
+              p.label
+            )
+          )) }),
+          /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(Calendar, { value, onChange: (v) => {
+            onChange && onChange(v);
+            if (!range) setOpen(false);
+            else if (v && v.end) setOpen(false);
+          }, range, min, max, locale })
+        ] })
+      }
     );
-  }
+  });
 
   // components/forms/FileUpload.jsx
   init_ds_inject_react();
   var React15 = __toESM(require_ds_react(), 1);
+  var import_jsx_runtime27 = __toESM(require_ds_jsx_runtime(), 1);
   var cx27 = (...a) => a.filter(Boolean).join(" ");
   var KB = 1024;
   function formatBytes(n) {
@@ -1067,7 +1152,7 @@
     }
     return (i === 0 ? v : v.toFixed(v < 10 ? 1 : 0)) + " " + u[i];
   }
-  function FileUpload({
+  var FileUpload = React15.forwardRef(function FileUpload2({
     files = [],
     onFiles,
     onRemove,
@@ -1079,10 +1164,11 @@
     hint,
     className,
     ...rest
-  }) {
+  }, forwardedRef) {
     const [over, setOver] = React15.useState(0);
     const [rejected, setRejected] = React15.useState(null);
     const inputRef = React15.useRef(null);
+    React15.useImperativeHandle(forwardedRef, () => inputRef.current, []);
     const take = (list) => {
       const arr = Array.from(list || []);
       if (!arr.length) return;
@@ -1091,92 +1177,110 @@
       const ok = maxSize ? arr.filter((f) => f.size <= maxSize) : arr;
       if (ok.length && onFiles) onFiles(multiple ? ok : ok.slice(0, 1));
     };
-    return /* @__PURE__ */ React15.createElement("div", { className: cx27(className), ...rest }, /* @__PURE__ */ React15.createElement(
-      "label",
-      {
-        className: "lw-dropzone",
-        "data-over": over > 0 ? "true" : void 0,
-        "data-disabled": disabled ? "true" : void 0,
-        onDragEnter: (e) => {
-          e.preventDefault();
-          if (!disabled) setOver((o) => o + 1);
-        },
-        onDragOver: (e) => e.preventDefault(),
-        onDragLeave: () => setOver((o) => Math.max(0, o - 1)),
-        onDrop: (e) => {
-          e.preventDefault();
-          setOver(0);
-          if (!disabled) take(e.dataTransfer.files);
-        }
-      },
-      /* @__PURE__ */ React15.createElement(
-        "input",
+    return /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("div", { className: cx27(className), ...rest, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(
+        "label",
         {
-          ref: inputRef,
-          type: "file",
-          accept,
-          multiple,
-          disabled,
-          onChange: (e) => {
-            take(e.target.files);
-            e.target.value = "";
-          }
+          className: "lw-dropzone",
+          "data-over": over > 0 ? "true" : void 0,
+          "data-disabled": disabled ? "true" : void 0,
+          onDragEnter: (e) => {
+            e.preventDefault();
+            if (!disabled) setOver((o) => o + 1);
+          },
+          onDragOver: (e) => e.preventDefault(),
+          onDragLeave: () => setOver((o) => Math.max(0, o - 1)),
+          onDrop: (e) => {
+            e.preventDefault();
+            setOver(0);
+            if (!disabled) take(e.dataTransfer.files);
+          },
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
+              "input",
+              {
+                ref: inputRef,
+                type: "file",
+                accept,
+                multiple,
+                disabled,
+                onChange: (e) => {
+                  take(e.target.files);
+                  e.target.value = "";
+                }
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(Icon, { name: "upload", size: 20 }),
+            /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("span", { className: "lw-dz-title", children: title }),
+            /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("span", { className: "lw-dz-hint", children: hint || (accept ? accept + (maxSize ? " · up to " + formatBytes(maxSize) : "") : maxSize ? "Up to " + formatBytes(maxSize) : "or click to browse") })
+          ]
         }
       ),
-      /* @__PURE__ */ React15.createElement(Icon, { name: "upload", size: 20 }),
-      /* @__PURE__ */ React15.createElement("span", { className: "lw-dz-title" }, title),
-      /* @__PURE__ */ React15.createElement("span", { className: "lw-dz-hint" }, hint || (accept ? accept + (maxSize ? " · up to " + formatBytes(maxSize) : "") : maxSize ? "Up to " + formatBytes(maxSize) : "or click to browse"))
-    ), rejected && /* @__PURE__ */ React15.createElement("div", { className: "lw-error", role: "alert" }, rejected), files.length > 0 && /* @__PURE__ */ React15.createElement("div", { className: "lw-file-list" }, files.map((f, i) => /* @__PURE__ */ React15.createElement(
-      "div",
-      {
-        key: f.id ?? f.name + i,
-        className: "lw-file-row",
-        "data-state": f.state,
-        style: f.progress != null ? { "--lw-file-pct": f.progress + "%" } : void 0
-      },
-      /* @__PURE__ */ React15.createElement("span", { className: "lw-file-ic" }, /* @__PURE__ */ React15.createElement(Icon, { name: f.state === "error" ? "x-circle" : f.state === "done" ? "check" : "file", size: 16 })),
-      /* @__PURE__ */ React15.createElement("span", { className: "lw-file-main" }, /* @__PURE__ */ React15.createElement("span", { className: "lw-file-name" }, f.name), f.state === "uploading" && f.progress != null ? /* @__PURE__ */ React15.createElement("span", { className: "lw-file-bar" }, /* @__PURE__ */ React15.createElement("i", null)) : /* @__PURE__ */ React15.createElement("span", { className: "lw-file-meta" }, f.error || formatBytes(f.size))),
-      onRemove && /* @__PURE__ */ React15.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": "Remove " + f.name, onClick: () => onRemove(f) }, /* @__PURE__ */ React15.createElement(Icon, { name: "close", size: 15 }))
-    ))));
-  }
+      rejected && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "lw-error", role: "alert", children: rejected }),
+      files.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "lw-file-list", children: files.map((f, i) => /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(
+        "div",
+        {
+          className: "lw-file-row",
+          "data-state": f.state,
+          style: f.progress != null ? { "--lw-file-pct": f.progress + "%" } : void 0,
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("span", { className: "lw-file-ic", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(Icon, { name: f.state === "error" ? "x-circle" : f.state === "done" ? "check" : "file", size: 16 }) }),
+            /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("span", { className: "lw-file-main", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("span", { className: "lw-file-name", children: f.name }),
+              f.state === "uploading" && f.progress != null ? /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("span", { className: "lw-file-bar", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("i", {}) }) : /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("span", { className: "lw-file-meta", children: f.error || formatBytes(f.size) })
+            ] }),
+            onRemove && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("button", { type: "button", className: "lw-icon-btn", "aria-label": "Remove " + f.name, onClick: () => onRemove(f), children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(Icon, { name: "close", size: 15 }) })
+          ]
+        },
+        f.id ?? f.name + i
+      )) })
+    ] });
+  });
 
   // components/forms/Stepper.jsx
   init_ds_inject_react();
+  var import_jsx_runtime28 = __toESM(require_ds_jsx_runtime(), 1);
   var cx28 = (...a) => a.filter(Boolean).join(" ");
   function Stepper({ steps = [], current = 0, onStepChange, vertical, label = "Progress", className, ...rest }) {
-    return /* @__PURE__ */ React.createElement(
+    return /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
       "div",
       {
         className: cx28("lw-stepper", vertical && "lw-stepper-vertical", className),
         role: "group",
         "aria-label": label,
-        ...rest
-      },
-      steps.map((s, i) => {
-        const state = s.state || (i < current ? "done" : i === current ? "current" : "upcoming");
-        const reachable = onStepChange && (state === "done" || state === "error");
-        const Tag = reachable ? "button" : "div";
-        return /* @__PURE__ */ React.createElement(
-          Tag,
-          {
-            key: s.key ?? i,
-            className: "lw-stepper-step",
-            "data-state": state,
-            type: reachable ? "button" : void 0,
-            "aria-current": state === "current" ? "step" : void 0,
-            onClick: reachable ? () => onStepChange(i) : void 0
-          },
-          /* @__PURE__ */ React.createElement("span", { className: "lw-stepper-marker", "aria-hidden": "true" }, state === "done" ? /* @__PURE__ */ React.createElement(Icon, { name: "checkmark", size: 14 }) : state === "error" ? /* @__PURE__ */ React.createElement(Icon, { name: "close", size: 14 }) : i + 1),
-          /* @__PURE__ */ React.createElement("span", { className: "lw-stepper-label" }, s.label, /* @__PURE__ */ React.createElement("span", { className: "lw-sr-only" }, " — " + (state === "done" ? "completed" : state === "current" ? "current step" : state === "error" ? "needs attention" : "not started"))),
-          s.hint && /* @__PURE__ */ React.createElement("span", { className: "lw-stepper-hint" }, s.hint)
-        );
-      })
+        ...rest,
+        children: steps.map((s, i) => {
+          const state = s.state || (i < current ? "done" : i === current ? "current" : "upcoming");
+          const reachable = onStepChange && (state === "done" || state === "error");
+          const Tag = reachable ? "button" : "div";
+          return /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)(
+            Tag,
+            {
+              className: "lw-stepper-step",
+              "data-state": state,
+              type: reachable ? "button" : void 0,
+              "aria-current": state === "current" ? "step" : void 0,
+              onClick: reachable ? () => onStepChange(i) : void 0,
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("span", { className: "lw-stepper-marker", "aria-hidden": "true", children: state === "done" ? /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(Icon, { name: "checkmark", size: 14 }) : state === "error" ? /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(Icon, { name: "close", size: 14 }) : i + 1 }),
+                /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)("span", { className: "lw-stepper-label", children: [
+                  s.label,
+                  /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("span", { className: "lw-sr-only", children: " — " + (state === "done" ? "completed" : state === "current" ? "current step" : state === "error" ? "needs attention" : "not started") })
+                ] }),
+                s.hint && /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("span", { className: "lw-stepper-hint", children: s.hint })
+              ]
+            },
+            s.key ?? i
+          );
+        })
+      }
     );
   }
 
   // components/forms/RichText.jsx
   init_ds_inject_react();
   var React16 = __toESM(require_ds_react(), 1);
+  var import_jsx_runtime29 = __toESM(require_ds_jsx_runtime(), 1);
   var cx29 = (...a) => a.filter(Boolean).join(" ");
   var TOOLS = [
     { id: "bold", icon: "spark", label: "Bold", cmd: "bold", glyph: "B" },
@@ -1191,7 +1295,7 @@
     { id: "link", icon: "link", label: "Link", cmd: "createLink", prompt: "Link URL" },
     { id: "clear", icon: "undo", label: "Clear formatting", cmd: "removeFormat" }
   ];
-  function RichText({
+  var RichText = React16.forwardRef(function RichText2({
     value,
     onChange,
     placeholder = "Write something…",
@@ -1203,8 +1307,9 @@
     children,
     className,
     ...rest
-  }) {
+  }, forwardedRef) {
     const ref = React16.useRef(null);
+    React16.useImperativeHandle(forwardedRef, () => ref.current, []);
     const bodyId = React16.useId();
     const [active, setActive] = React16.useState({});
     const list = tools ? TOOLS.filter((t) => t.sep || tools.includes(t.id)) : TOOLS;
@@ -1244,41 +1349,53 @@
     const syncLen = () => setLen((ref.current && ref.current.textContent || "").length);
     React16.useEffect(syncLen, [value]);
     const over = maxLength != null && len > maxLength;
-    return /* @__PURE__ */ React16.createElement("div", { className: cx29("lw-editor", className), ...rest }, /* @__PURE__ */ React16.createElement("div", { className: "lw-editor-bar", role: "group", "aria-label": (label || "Editor") + " formatting", "aria-controls": children ? void 0 : bodyId }, list.map((t, i) => t.sep ? /* @__PURE__ */ React16.createElement("span", { key: "s" + i, className: "sep", "aria-hidden": "true" }) : /* @__PURE__ */ React16.createElement(
-      "button",
-      {
-        key: t.id,
-        type: "button",
-        className: "lw-icon-btn",
-        "aria-label": t.label,
-        title: t.label,
-        "aria-pressed": !!active[t.id],
-        disabled: readOnly,
-        onMouseDown: (e) => e.preventDefault(),
-        onClick: () => run(t)
-      },
-      t.glyph ? /* @__PURE__ */ React16.createElement("span", { className: "lw-editor-glyph", "data-glyph": t.id }, t.glyph) : /* @__PURE__ */ React16.createElement(Icon, { name: t.icon, size: 15 })
-    ))), children || /* @__PURE__ */ React16.createElement(
-      "div",
-      {
-        ref,
-        id: bodyId,
-        className: "lw-editor-body",
-        contentEditable: !readOnly,
-        suppressContentEditableWarning: true,
-        role: "textbox",
-        "aria-multiline": "true",
-        "aria-label": label,
-        "data-placeholder": placeholder,
-        onInput: () => {
-          syncLen();
-          onChange && onChange(ref.current.innerHTML);
+    return /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)("div", { className: cx29("lw-editor", className), ...rest, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("div", { className: "lw-editor-bar", role: "group", "aria-label": (label || "Editor") + " formatting", "aria-controls": children ? void 0 : bodyId, children: list.map((t, i) => t.sep ? /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("span", { className: "sep", "aria-hidden": "true" }, "s" + i) : /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
+        "button",
+        {
+          type: "button",
+          className: "lw-icon-btn",
+          "aria-label": t.label,
+          title: t.label,
+          "aria-pressed": !!active[t.id],
+          disabled: readOnly,
+          onMouseDown: (e) => e.preventDefault(),
+          onClick: () => run(t),
+          children: t.glyph ? /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("span", { className: "lw-editor-glyph", "data-glyph": t.id, children: t.glyph }) : /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(Icon, { name: t.icon, size: 15 })
         },
-        onKeyUp: syncActive,
-        onMouseUp: syncActive
-      }
-    ), (footer || maxLength != null) && /* @__PURE__ */ React16.createElement("div", { className: "lw-editor-foot" }, footer, /* @__PURE__ */ React16.createElement("span", { className: "lw-editor-spacer" }), maxLength != null && /* @__PURE__ */ React16.createElement("span", { className: "lw-editor-count", "data-over": over ? "true" : void 0, "aria-live": "polite" }, len, " / ", maxLength)));
-  }
+        t.id
+      )) }),
+      children || /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
+        "div",
+        {
+          ref,
+          id: bodyId,
+          className: "lw-editor-body",
+          contentEditable: !readOnly,
+          suppressContentEditableWarning: true,
+          role: "textbox",
+          "aria-multiline": "true",
+          "aria-label": label,
+          "data-placeholder": placeholder,
+          onInput: () => {
+            syncLen();
+            onChange && onChange(ref.current.innerHTML);
+          },
+          onKeyUp: syncActive,
+          onMouseUp: syncActive
+        }
+      ),
+      (footer || maxLength != null) && /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)("div", { className: "lw-editor-foot", children: [
+        footer,
+        /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("span", { className: "lw-editor-spacer" }),
+        maxLength != null && /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)("span", { className: "lw-editor-count", "data-over": over ? "true" : void 0, "aria-live": "polite", children: [
+          len,
+          " / ",
+          maxLength
+        ] })
+      ] })
+    ] });
+  });
 
   // components/data/Table.jsx
   init_ds_inject_react();
@@ -1330,10 +1447,11 @@
   }
 
   // components/data/Table.jsx
+  var import_jsx_runtime30 = __toESM(require_ds_jsx_runtime(), 1);
   var cx30 = (...a) => a.filter(Boolean).join(" ");
   function Table({ columns, rows, hover = true, compact = false, caption, sort: sortState, onSort, className, children, ...rest }) {
     const legacyArgs = legacySortArgs("Table", columns || [], onSort);
-    const head = columns && /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, columns.map((c) => {
+    const head = columns && /* @__PURE__ */ (0, import_jsx_runtime30.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime30.jsx)("tr", { children: columns.map((c) => {
       const sortable = (c.sortable || c.sort) && onSort;
       let sort;
       if (sortState && sortState.key === c.key) {
@@ -1343,30 +1461,52 @@
       } else {
         sort = c.sort === "asc" ? "ascending" : c.sort === "desc" ? "descending" : c.sort;
       }
-      return /* @__PURE__ */ React.createElement(
+      return /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
         "th",
         {
-          key: c.key,
           className: c.num ? "num" : void 0,
           scope: "col",
-          "aria-sort": sortable ? sort || "none" : sort || void 0
+          "aria-sort": sortable ? sort || "none" : sort || void 0,
+          children: sortable ? /* @__PURE__ */ (0, import_jsx_runtime30.jsxs)("button", { type: "button", onClick: () => emitSort(onSort, legacyArgs, c.key, sort === "ascending" ? "desc" : "asc"), children: [
+            colHeader("Table", c),
+            /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(Icon, { name: sort === "descending" ? "chevron-down" : "chevron-up", size: 12 })
+          ] }) : colHeader("Table", c)
         },
-        sortable ? /* @__PURE__ */ React.createElement("button", { type: "button", onClick: () => emitSort(onSort, legacyArgs, c.key, sort === "ascending" ? "desc" : "asc") }, colHeader("Table", c), /* @__PURE__ */ React.createElement(Icon, { name: sort === "descending" ? "chevron-down" : "chevron-up", size: 12 })) : colHeader("Table", c)
+        c.key
       );
-    })));
-    return /* @__PURE__ */ React.createElement("div", { className: "lw-table-wrap lw-scroll" }, /* @__PURE__ */ React.createElement("table", { className: cx30("lw-table", hover && "lw-table-hover", compact && "lw-table-compact", className), ...rest }, caption && /* @__PURE__ */ React.createElement("caption", { className: "lw-sr-only" }, caption), head, rows ? /* @__PURE__ */ React.createElement("tbody", null, rows.map((r, i) => /* @__PURE__ */ React.createElement("tr", { key: r.id ?? i }, columns.map((c) => /* @__PURE__ */ React.createElement("td", { key: c.key, className: cx30(c.num && "num", c.muted && "muted") }, r[c.key]))))) : children));
+    }) }) });
+    return /* @__PURE__ */ (0, import_jsx_runtime30.jsx)("div", { className: "lw-table-wrap lw-scroll", children: /* @__PURE__ */ (0, import_jsx_runtime30.jsxs)("table", { className: cx30("lw-table", hover && "lw-table-hover", compact && "lw-table-compact", className), ...rest, children: [
+      caption && /* @__PURE__ */ (0, import_jsx_runtime30.jsx)("caption", { className: "lw-sr-only", children: caption }),
+      head,
+      rows ? /* @__PURE__ */ (0, import_jsx_runtime30.jsx)("tbody", { children: rows.map((r, i) => /* @__PURE__ */ (0, import_jsx_runtime30.jsx)("tr", { children: columns.map((c) => /* @__PURE__ */ (0, import_jsx_runtime30.jsx)("td", { className: cx30(c.num && "num", c.muted && "muted"), children: r[c.key] }, c.key)) }, r.id ?? i)) }) : children
+    ] }) });
   }
 
   // components/data/KpiTile.jsx
   init_ds_inject_react();
+  var import_jsx_runtime31 = __toESM(require_ds_jsx_runtime(), 1);
   var cx31 = (...a) => a.filter(Boolean).join(" ");
   function KpiTile({ label, value, icon, accent = "brand", delta, direction, tone, note, className, ...rest }) {
     const ink = tone || (direction === "up" ? "pos" : direction === "down" ? "neg" : void 0);
-    return /* @__PURE__ */ React.createElement("div", { className: cx31("lw-kpi", className), ...rest }, /* @__PURE__ */ React.createElement("span", { className: "lw-kpi-head" }, /* @__PURE__ */ React.createElement("span", { className: "k" }, label), icon && /* @__PURE__ */ React.createElement("span", { className: "lw-kpi-badge", "data-accent": accent }, /* @__PURE__ */ React.createElement(Icon, { name: icon, size: 18 }))), /* @__PURE__ */ React.createElement("span", { className: "lw-kpi-row" }, /* @__PURE__ */ React.createElement("span", { className: "v" }, value), (delta || note) && /* @__PURE__ */ React.createElement("span", { className: cx31("d", direction, ink) }, direction && /* @__PURE__ */ React.createElement(Icon, { name: direction === "up" ? "arrow-up" : "arrow-down", size: 13 }), delta, note && /* @__PURE__ */ React.createElement("span", { className: "w" }, note))));
+    return /* @__PURE__ */ (0, import_jsx_runtime31.jsxs)("div", { className: cx31("lw-kpi", className), ...rest, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime31.jsxs)("span", { className: "lw-kpi-head", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime31.jsx)("span", { className: "k", children: label }),
+        icon && /* @__PURE__ */ (0, import_jsx_runtime31.jsx)("span", { className: "lw-kpi-badge", "data-accent": accent, children: /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(Icon, { name: icon, size: 18 }) })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime31.jsxs)("span", { className: "lw-kpi-row", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime31.jsx)("span", { className: "v", children: value }),
+        (delta || note) && /* @__PURE__ */ (0, import_jsx_runtime31.jsxs)("span", { className: cx31("d", direction, ink), children: [
+          direction && /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(Icon, { name: direction === "up" ? "arrow-up" : "arrow-down", size: 13 }),
+          delta,
+          note && /* @__PURE__ */ (0, import_jsx_runtime31.jsx)("span", { className: "w", children: note })
+        ] })
+      ] })
+    ] });
   }
 
   // components/data/StatMeter.jsx
   init_ds_inject_react();
+  var import_jsx_runtime32 = __toESM(require_ds_jsx_runtime(), 1);
   var cx32 = (...a) => a.filter(Boolean).join(" ");
   function StatMeter({ label, value, unit, delta, direction, percent, target, tone, foot, interactive = false, className, ...rest }) {
     const onKeyDown = (e) => {
@@ -1374,46 +1514,66 @@
       e.preventDefault();
       rest.onClick && rest.onClick(e);
     };
-    return /* @__PURE__ */ React.createElement(
+    return /* @__PURE__ */ (0, import_jsx_runtime32.jsxs)(
       "div",
       {
         className: cx32("lw-card", "lw-stat-tile", interactive && "lw-card-interactive", className),
         role: interactive ? "button" : void 0,
         tabIndex: interactive ? 0 : void 0,
         onKeyDown: interactive ? onKeyDown : void 0,
-        ...rest
-      },
-      label && /* @__PURE__ */ React.createElement("span", { className: "lw-card-eyebrow" }, label),
-      /* @__PURE__ */ React.createElement("div", { className: "lw-stat-row" }, /* @__PURE__ */ React.createElement("div", { className: "lw-stat" }, /* @__PURE__ */ React.createElement("span", { className: "n" }, value, unit && /* @__PURE__ */ React.createElement("span", { className: "u" }, unit))), delta && /* @__PURE__ */ React.createElement("span", { className: "lw-stat-delta", "data-dir": direction }, (direction === "up" || direction === "down") && /* @__PURE__ */ React.createElement(Icon, { name: "arrow-" + direction, size: 13 }), delta)),
-      percent != null && /* @__PURE__ */ React.createElement(
-        "div",
-        {
-          className: "lw-bar",
-          "data-tone": tone,
-          style: { "--lw-bar-value": percent + "%" },
-          role: "meter",
-          "aria-valuenow": percent,
-          "aria-valuemin": 0,
-          "aria-valuemax": 100,
-          "aria-label": typeof label === "string" ? label : void 0,
-          "aria-valuetext": target != null ? percent + "% of a " + target + "% target" : void 0
-        },
-        /* @__PURE__ */ React.createElement("i", { className: "fill" }),
-        target != null && /* @__PURE__ */ React.createElement("span", { className: "target", style: { insetInlineStart: target + "%" } })
-      ),
-      foot && /* @__PURE__ */ React.createElement("span", { className: "lw-stat-foot" }, foot)
+        ...rest,
+        children: [
+          label && /* @__PURE__ */ (0, import_jsx_runtime32.jsx)("span", { className: "lw-card-eyebrow", children: label }),
+          /* @__PURE__ */ (0, import_jsx_runtime32.jsxs)("div", { className: "lw-stat-row", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime32.jsx)("div", { className: "lw-stat", children: /* @__PURE__ */ (0, import_jsx_runtime32.jsxs)("span", { className: "n", children: [
+              value,
+              unit && /* @__PURE__ */ (0, import_jsx_runtime32.jsx)("span", { className: "u", children: unit })
+            ] }) }),
+            delta && /* @__PURE__ */ (0, import_jsx_runtime32.jsxs)("span", { className: "lw-stat-delta", "data-dir": direction, children: [
+              (direction === "up" || direction === "down") && /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(Icon, { name: "arrow-" + direction, size: 13 }),
+              delta
+            ] })
+          ] }),
+          percent != null && /* @__PURE__ */ (0, import_jsx_runtime32.jsxs)(
+            "div",
+            {
+              className: "lw-bar",
+              "data-tone": tone,
+              style: { "--lw-bar-value": percent + "%" },
+              role: "meter",
+              "aria-valuenow": percent,
+              "aria-valuemin": 0,
+              "aria-valuemax": 100,
+              "aria-label": typeof label === "string" ? label : void 0,
+              "aria-valuetext": target != null ? percent + "% of a " + target + "% target" : void 0,
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime32.jsx)("i", { className: "fill" }),
+                target != null && /* @__PURE__ */ (0, import_jsx_runtime32.jsx)("span", { className: "target", style: { insetInlineStart: target + "%" } })
+              ]
+            }
+          ),
+          foot && /* @__PURE__ */ (0, import_jsx_runtime32.jsx)("span", { className: "lw-stat-foot", children: foot })
+        ]
+      }
     );
   }
 
   // components/data/EmptyState.jsx
   init_ds_inject_react();
+  var import_jsx_runtime33 = __toESM(require_ds_jsx_runtime(), 1);
   var cx33 = (...a) => a.filter(Boolean).join(" ");
   function EmptyState({ icon, glyph, title, description, action, className, children, ...rest }) {
-    return /* @__PURE__ */ React.createElement("div", { className: cx33("lw-empty", className), ...rest }, (icon || glyph) && /* @__PURE__ */ React.createElement("span", { className: "glyph", "aria-hidden": "true" }, icon ? /* @__PURE__ */ React.createElement(Icon, { name: icon, size: 22 }) : glyph), /* @__PURE__ */ React.createElement("span", { className: "t" }, title), description && /* @__PURE__ */ React.createElement("span", { className: "s" }, description), action || children);
+    return /* @__PURE__ */ (0, import_jsx_runtime33.jsxs)("div", { className: cx33("lw-empty", className), ...rest, children: [
+      (icon || glyph) && /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("span", { className: "glyph", "aria-hidden": "true", children: icon ? /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(Icon, { name: icon, size: 22 }) : glyph }),
+      /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("span", { className: "t", children: title }),
+      description && /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("span", { className: "s", children: description }),
+      action || children
+    ] });
   }
 
   // components/data/StateView.jsx
   init_ds_inject_react();
+  var import_jsx_runtime34 = __toESM(require_ds_jsx_runtime(), 1);
   var cx34 = (...a) => a.filter(Boolean).join(" ");
   var PRESETS = {
     empty: { icon: "inbox", title: "Nothing here yet" },
@@ -1425,43 +1585,67 @@
   function StateView({ variant = "empty", icon, title, description, action, actionLabel, onAction, lines = 3, className, children, ...rest }) {
     const p = PRESETS[variant] || PRESETS.empty;
     if (variant === "loading") {
-      return /* @__PURE__ */ React.createElement("div", { className: cx34("lw-state", className), "data-variant": "loading", role: "status", "aria-busy": "true", ...rest }, /* @__PURE__ */ React.createElement("span", { className: "lw-sr-only" }, title || p.title), /* @__PURE__ */ React.createElement(Skeleton, { lines }));
+      return /* @__PURE__ */ (0, import_jsx_runtime34.jsxs)("div", { className: cx34("lw-state", className), "data-variant": "loading", role: "status", "aria-busy": "true", ...rest, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime34.jsx)("span", { className: "lw-sr-only", children: title || p.title }),
+        /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(Skeleton, { lines })
+      ] });
     }
     const isAlert = variant === "error" || variant === "offline";
     const label = actionLabel || p.actionLabel;
-    return /* @__PURE__ */ React.createElement(
+    return /* @__PURE__ */ (0, import_jsx_runtime34.jsxs)(
       "div",
       {
         className: cx34("lw-state", className),
         "data-variant": variant,
         role: isAlert ? "alert" : void 0,
-        ...rest
-      },
-      (icon || p.icon) && /* @__PURE__ */ React.createElement("span", { className: "lw-state-ic" }, /* @__PURE__ */ React.createElement(Icon, { name: icon || p.icon, size: 20 })),
-      /* @__PURE__ */ React.createElement("span", { className: "lw-state-title" }, title || p.title),
-      (description || p.description) && /* @__PURE__ */ React.createElement("p", { className: "lw-state-desc" }, description || p.description),
-      children,
-      (action || label && onAction) && /* @__PURE__ */ React.createElement("div", { className: "lw-state-actions" }, action || /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-btn lw-btn-sm", onClick: onAction }, label))
+        ...rest,
+        children: [
+          (icon || p.icon) && /* @__PURE__ */ (0, import_jsx_runtime34.jsx)("span", { className: "lw-state-ic", children: /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(Icon, { name: icon || p.icon, size: 20 }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime34.jsx)("span", { className: "lw-state-title", children: title || p.title }),
+          (description || p.description) && /* @__PURE__ */ (0, import_jsx_runtime34.jsx)("p", { className: "lw-state-desc", children: description || p.description }),
+          children,
+          (action || label && onAction) && /* @__PURE__ */ (0, import_jsx_runtime34.jsx)("div", { className: "lw-state-actions", children: action || /* @__PURE__ */ (0, import_jsx_runtime34.jsx)("button", { type: "button", className: "lw-btn lw-btn-sm", onClick: onAction, children: label }) })
+        ]
+      }
     );
   }
 
   // components/data/Console.jsx
   init_ds_inject_react();
+  var import_jsx_runtime35 = __toESM(require_ds_jsx_runtime(), 1);
   var cx35 = (...a) => a.filter(Boolean).join(" ");
   function Console({ url = "leanwise.ai", title, lines, foot, className, children, ...rest }) {
     const cellCount = lines ? lines.reduce((n, l) => Math.max(n, l.cells ? l.cells.length : 0), 0) : 0;
     const logStyle = cellCount ? {
       gridTemplateColumns: "max-content " + "max-content ".repeat(Math.max(0, cellCount - 1)) + "minmax(0, max-content) 1fr"
     } : void 0;
-    return /* @__PURE__ */ React.createElement("div", { className: cx35("lw-console", className), ...rest }, /* @__PURE__ */ React.createElement("div", { className: "lw-console-h" }, /* @__PURE__ */ React.createElement("span", { className: "left" }, /* @__PURE__ */ React.createElement("span", { className: "lights" }, /* @__PURE__ */ React.createElement("i", null), /* @__PURE__ */ React.createElement("i", null), /* @__PURE__ */ React.createElement("i", null)), title), url && /* @__PURE__ */ React.createElement("span", { className: "url" }, url)), /* @__PURE__ */ React.createElement("div", { className: "lw-console-body" }, lines ? /* @__PURE__ */ React.createElement("div", { className: "lw-console-log", role: "log", style: logStyle }, lines.map((l, i) => /* @__PURE__ */ React.createElement("div", { key: i, className: cx35("lw-console-line", l.tone) }, (l.t || cellCount > 0) && /* @__PURE__ */ React.createElement("span", { className: "t" }, l.t), l.cells ? l.cells.map((c, j) => {
-      const cell = typeof c === "string" ? { text: c } : c || {};
-      return /* @__PURE__ */ React.createElement("span", { key: j, className: cx35("lw-console-cell", cell.num && "num", cell.muted && "muted") }, cell.text);
-    }) : /* @__PURE__ */ React.createElement("span", { className: "lw-console-span" }, l.text)))) : children), foot && /* @__PURE__ */ React.createElement("div", { className: "lw-console-foot" }, foot));
+    return /* @__PURE__ */ (0, import_jsx_runtime35.jsxs)("div", { className: cx35("lw-console", className), ...rest, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime35.jsxs)("div", { className: "lw-console-h", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime35.jsxs)("span", { className: "left", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime35.jsxs)("span", { className: "lights", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime35.jsx)("i", {}),
+            /* @__PURE__ */ (0, import_jsx_runtime35.jsx)("i", {}),
+            /* @__PURE__ */ (0, import_jsx_runtime35.jsx)("i", {})
+          ] }),
+          title
+        ] }),
+        url && /* @__PURE__ */ (0, import_jsx_runtime35.jsx)("span", { className: "url", children: url })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime35.jsx)("div", { className: "lw-console-body", children: lines ? /* @__PURE__ */ (0, import_jsx_runtime35.jsx)("div", { className: "lw-console-log", role: "log", style: logStyle, children: lines.map((l, i) => /* @__PURE__ */ (0, import_jsx_runtime35.jsxs)("div", { className: cx35("lw-console-line", l.tone), children: [
+        (l.t || cellCount > 0) && /* @__PURE__ */ (0, import_jsx_runtime35.jsx)("span", { className: "t", children: l.t }),
+        l.cells ? l.cells.map((c, j) => {
+          const cell = typeof c === "string" ? { text: c } : c || {};
+          return /* @__PURE__ */ (0, import_jsx_runtime35.jsx)("span", { className: cx35("lw-console-cell", cell.num && "num", cell.muted && "muted"), children: cell.text }, j);
+        }) : /* @__PURE__ */ (0, import_jsx_runtime35.jsx)("span", { className: "lw-console-span", children: l.text })
+      ] }, i)) }) : children }),
+      foot && /* @__PURE__ */ (0, import_jsx_runtime35.jsx)("div", { className: "lw-console-foot", children: foot })
+    ] });
   }
 
   // components/data/CodeBlock.jsx
   init_ds_inject_react();
   var React17 = __toESM(require_ds_react(), 1);
+  var import_jsx_runtime36 = __toESM(require_ds_jsx_runtime(), 1);
   var cx36 = (...a) => a.filter(Boolean).join(" ");
   function CodeBlock({ code, html, filename, lang, copy = true, className, ...rest }) {
     const [copied, setCopied] = React17.useState(false);
@@ -1478,21 +1662,31 @@
       } catch (e) {
       }
     };
-    return /* @__PURE__ */ React17.createElement("figure", { className: cx36("lw-code", className), ...rest }, (filename || lang || canCopy) && /* @__PURE__ */ React17.createElement("figcaption", { className: "lw-code-head" }, /* @__PURE__ */ React17.createElement("span", { className: "fn" }, filename), /* @__PURE__ */ React17.createElement("span", { className: "end" }, lang && /* @__PURE__ */ React17.createElement("span", { className: "lang" }, lang), canCopy && /* @__PURE__ */ React17.createElement(
-      "button",
-      {
-        type: "button",
-        className: "lw-icon-btn",
-        onClick: onCopy,
-        "aria-label": copied ? "Copied" : "Copy code",
-        title: copied ? "Copied" : "Copy code"
-      },
-      /* @__PURE__ */ React17.createElement(Icon, { name: copied ? "check" : "copy", size: 15 })
-    ))), /* @__PURE__ */ React17.createElement("pre", null, /* @__PURE__ */ React17.createElement("code", { dangerouslySetInnerHTML: html ? { __html: html } : void 0 }, html ? void 0 : code)));
+    return /* @__PURE__ */ (0, import_jsx_runtime36.jsxs)("figure", { className: cx36("lw-code", className), ...rest, children: [
+      (filename || lang || canCopy) && /* @__PURE__ */ (0, import_jsx_runtime36.jsxs)("figcaption", { className: "lw-code-head", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("span", { className: "fn", children: filename }),
+        /* @__PURE__ */ (0, import_jsx_runtime36.jsxs)("span", { className: "end", children: [
+          lang && /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("span", { className: "lang", children: lang }),
+          canCopy && /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(
+            "button",
+            {
+              type: "button",
+              className: "lw-icon-btn",
+              onClick: onCopy,
+              "aria-label": copied ? "Copied" : "Copy code",
+              title: copied ? "Copied" : "Copy code",
+              children: /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(Icon, { name: copied ? "check" : "copy", size: 15 })
+            }
+          )
+        ] })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("pre", { children: /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("code", { dangerouslySetInnerHTML: html ? { __html: html } : void 0, children: html ? void 0 : code }) })
+    ] });
   }
 
   // components/data/Pagination.jsx
   init_ds_inject_react();
+  var import_jsx_runtime37 = __toESM(require_ds_jsx_runtime(), 1);
   var cx37 = (...a) => a.filter(Boolean).join(" ");
   function pages(page, count) {
     const out = [];
@@ -1524,54 +1718,65 @@
     const to = total ? Math.min(page * pageSize, total) : 0;
     const nf2 = new Intl.NumberFormat();
     const go = (p) => onPageChange && onPageChange(Math.min(Math.max(1, p), count));
-    return /* @__PURE__ */ React.createElement("nav", { className: cx37("lw-pagination", className), "aria-label": label, ...rest }, /* @__PURE__ */ React.createElement("span", { className: "lw-pag-info" }, cursor ? "Page " + page : total ? nf2.format(from) + "–" + nf2.format(to) + " of " + nf2.format(total) : ""), /* @__PURE__ */ React.createElement("span", { className: "lw-spacer" }), onPageSizeChange && !cursor && /* @__PURE__ */ React.createElement(
-      "select",
-      {
-        className: "lw-input lw-input-sm lw-pag-size",
-        "aria-label": "Rows per page",
-        value: pageSize,
-        onChange: (e) => onPageSizeChange(Number(e.target.value))
-      },
-      pageSizes.map((s) => /* @__PURE__ */ React.createElement("option", { key: s, value: s }, s, " / page"))
-    ), /* @__PURE__ */ React.createElement(
-      "button",
-      {
-        type: "button",
-        className: "lw-pag-btn",
-        "aria-label": "Previous page",
-        disabled: cursor ? !hasPrev : page <= 1,
-        onClick: () => go(page - 1)
-      },
-      /* @__PURE__ */ React.createElement(Icon, { name: "chevron-left", size: 15 })
-    ), !cursor && pages(page, count).map(
-      (p, i) => p === "gap" ? /* @__PURE__ */ React.createElement("span", { key: "g" + i, className: "lw-pag-gap", "aria-hidden": "true" }, "…") : /* @__PURE__ */ React.createElement(
+    return /* @__PURE__ */ (0, import_jsx_runtime37.jsxs)("nav", { className: cx37("lw-pagination", className), "aria-label": label, ...rest, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime37.jsx)("span", { className: "lw-pag-info", children: cursor ? "Page " + page : total ? nf2.format(from) + "–" + nf2.format(to) + " of " + nf2.format(total) : "" }),
+      /* @__PURE__ */ (0, import_jsx_runtime37.jsx)("span", { className: "lw-spacer" }),
+      onPageSizeChange && !cursor && /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(
+        "select",
+        {
+          className: "lw-input lw-input-sm lw-pag-size",
+          "aria-label": "Rows per page",
+          value: pageSize,
+          onChange: (e) => onPageSizeChange(Number(e.target.value)),
+          children: pageSizes.map((s) => /* @__PURE__ */ (0, import_jsx_runtime37.jsxs)("option", { value: s, children: [
+            s,
+            " / page"
+          ] }, s))
+        }
+      ),
+      /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(
         "button",
         {
-          key: p,
           type: "button",
           className: "lw-pag-btn",
-          "aria-label": "Page " + p,
-          "aria-current": p === page ? "page" : void 0,
-          onClick: () => go(p)
-        },
-        p
+          "aria-label": "Previous page",
+          disabled: cursor ? !hasPrev : page <= 1,
+          onClick: () => go(page - 1),
+          children: /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(Icon, { name: "chevron-left", size: 15 })
+        }
+      ),
+      !cursor && pages(page, count).map(
+        (p, i) => p === "gap" ? /* @__PURE__ */ (0, import_jsx_runtime37.jsx)("span", { className: "lw-pag-gap", "aria-hidden": "true", children: "…" }, "g" + i) : /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(
+          "button",
+          {
+            type: "button",
+            className: "lw-pag-btn",
+            "aria-label": "Page " + p,
+            "aria-current": p === page ? "page" : void 0,
+            onClick: () => go(p),
+            children: p
+          },
+          p
+        )
+      ),
+      /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(
+        "button",
+        {
+          type: "button",
+          className: "lw-pag-btn",
+          "aria-label": "Next page",
+          disabled: cursor ? !hasNext : page >= count,
+          onClick: () => go(page + 1),
+          children: /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(Icon, { name: "chevron-right", size: 15 })
+        }
       )
-    ), /* @__PURE__ */ React.createElement(
-      "button",
-      {
-        type: "button",
-        className: "lw-pag-btn",
-        "aria-label": "Next page",
-        disabled: cursor ? !hasNext : page >= count,
-        onClick: () => go(page + 1)
-      },
-      /* @__PURE__ */ React.createElement(Icon, { name: "chevron-right", size: 15 })
-    ));
+    ] });
   }
 
   // components/data/DataGrid.jsx
   init_ds_inject_react();
   var React18 = __toESM(require_ds_react(), 1);
+  var import_jsx_runtime38 = __toESM(require_ds_jsx_runtime(), 1);
   var cx38 = (...a) => a.filter(Boolean).join(" ");
   function DataGrid({
     columns = [],
@@ -1665,105 +1870,143 @@
     const padTop = win ? start * rowHeight : 0;
     const padBottom = win ? Math.max(0, (rows.length - start - slice.length) * rowHeight) : 0;
     const total = (selectable ? SEL_W : 0) + widths.reduce((s, w) => s + (w || DEFAULT_W), 0);
-    return /* @__PURE__ */ React18.createElement("div", { className: cx38("lw-dgrid", className), ...rest }, selectable && selSet.size > 0 && /* @__PURE__ */ React18.createElement("div", { className: "lw-dgrid-selbar" }, /* @__PURE__ */ React18.createElement("span", { className: "count" }, selSet.size), /* @__PURE__ */ React18.createElement("span", null, "selected"), /* @__PURE__ */ React18.createElement("span", { className: "lw-spacer" }), selectionActions, /* @__PURE__ */ React18.createElement("button", { type: "button", className: "lw-filter-clear", onClick: () => onSelectionChange && onSelectionChange([]) }, "Clear")), /* @__PURE__ */ React18.createElement(
-      "div",
-      {
-        ref: scrollRef,
-        className: "lw-dgrid-scroll",
-        style: { maxHeight: height },
-        onScroll: win ? (e) => setScrollTop(e.currentTarget.scrollTop) : void 0
-      },
-      /* @__PURE__ */ React18.createElement("table", { style: { minWidth: total }, "aria-label": label, "aria-rowcount": rows.length }, /* @__PURE__ */ React18.createElement("colgroup", null, selectable && /* @__PURE__ */ React18.createElement("col", { style: { width: SEL_W } }), columns.map((c, i) => /* @__PURE__ */ React18.createElement("col", { key: c.key, style: { width: widths[i] || DEFAULT_W } }))), /* @__PURE__ */ React18.createElement("thead", null, /* @__PURE__ */ React18.createElement("tr", null, selectable && /* @__PURE__ */ React18.createElement("th", { "data-pin": "true", style: { insetInlineStart: 0 }, scope: "col" }, /* @__PURE__ */ React18.createElement("span", { className: "lw-dgrid-check" }, /* @__PURE__ */ React18.createElement("label", { className: "lw-check" }, /* @__PURE__ */ React18.createElement(
-        "input",
+    return /* @__PURE__ */ (0, import_jsx_runtime38.jsxs)("div", { className: cx38("lw-dgrid", className), ...rest, children: [
+      selectable && selSet.size > 0 && /* @__PURE__ */ (0, import_jsx_runtime38.jsxs)("div", { className: "lw-dgrid-selbar", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("span", { className: "count", children: selSet.size }),
+        /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("span", { children: "selected" }),
+        /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("span", { className: "lw-spacer" }),
+        selectionActions,
+        /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("button", { type: "button", className: "lw-filter-clear", onClick: () => onSelectionChange && onSelectionChange([]), children: "Clear" })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime38.jsxs)(
+        "div",
         {
-          type: "checkbox",
-          checked: allOn,
-          ref: (el) => {
-            if (el) el.indeterminate = someOn;
-          },
-          onChange: toggleAll,
-          "aria-label": allOn ? "Clear selection" : "Select all rows"
+          ref: scrollRef,
+          className: "lw-dgrid-scroll",
+          style: { maxHeight: height },
+          onScroll: win ? (e) => setScrollTop(e.currentTarget.scrollTop) : void 0,
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime38.jsxs)("table", { style: { minWidth: total }, "aria-label": label, "aria-rowcount": rows.length, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime38.jsxs)("colgroup", { children: [
+                selectable && /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("col", { style: { width: SEL_W } }),
+                columns.map((c, i) => /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("col", { style: { width: widths[i] || DEFAULT_W } }, c.key))
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime38.jsxs)("tr", { children: [
+                selectable && /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("th", { "data-pin": "true", style: { insetInlineStart: 0 }, scope: "col", children: /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("span", { className: "lw-dgrid-check", children: /* @__PURE__ */ (0, import_jsx_runtime38.jsxs)("label", { className: "lw-check", children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(
+                    "input",
+                    {
+                      type: "checkbox",
+                      checked: allOn,
+                      ref: (el) => {
+                        if (el) el.indeterminate = someOn;
+                      },
+                      onChange: toggleAll,
+                      "aria-label": allOn ? "Clear selection" : "Select all rows"
+                    }
+                  ),
+                  /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("span", { className: "box" })
+                ] }) }) }),
+                columns.map((c, i) => {
+                  const dir = sort && sort.key === c.key ? sort.dir : null;
+                  return /* @__PURE__ */ (0, import_jsx_runtime38.jsxs)(
+                    "th",
+                    {
+                      scope: "col",
+                      className: cx38(c.num && "num"),
+                      "data-pin": c.pin ? "true" : void 0,
+                      "data-pin-last": c.pin && i === lastPin ? "true" : void 0,
+                      style: c.pin ? { insetInlineStart: pinLefts[i] } : void 0,
+                      "aria-sort": dir ? dir === "asc" ? "ascending" : "descending" : void 0,
+                      children: [
+                        c.sortable && onSort ? /* @__PURE__ */ (0, import_jsx_runtime38.jsxs)(
+                          "button",
+                          {
+                            type: "button",
+                            className: "lw-dgrid-sort",
+                            onClick: () => emitSort(onSort, legacyArgs, c.key, dir === "asc" ? "desc" : "asc"),
+                            children: [
+                              colHeader("DataGrid", c),
+                              /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(Icon, { name: dir === "asc" ? "sort-asc" : dir === "desc" ? "sort-desc" : "chevrons-up-down", size: 13 })
+                            ]
+                          }
+                        ) : colHeader("DataGrid", c),
+                        c.resizable !== false && /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(
+                          "button",
+                          {
+                            type: "button",
+                            className: "lw-dgrid-resize",
+                            "aria-label": "Resize " + (typeof colHeader("DataGrid", c) === "string" ? colHeader("DataGrid", c) : c.key),
+                            onPointerDown: (e) => onResizeDown(i, e),
+                            onKeyDown: (e) => onResizeKey(i, e)
+                          }
+                        )
+                      ]
+                    },
+                    c.key
+                  );
+                })
+              ] }) }),
+              /* @__PURE__ */ (0, import_jsx_runtime38.jsxs)("tbody", { children: [
+                padTop > 0 && /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("tr", { "aria-hidden": "true", className: "lw-dgrid-pad", style: { height: padTop }, children: /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("td", { colSpan: columns.length + (selectable ? 1 : 0) }) }),
+                slice.map((r, n) => {
+                  const i = start + n;
+                  const k = rowKey(r, i);
+                  const on = selSet.has(k);
+                  return /* @__PURE__ */ (0, import_jsx_runtime38.jsxs)(
+                    "tr",
+                    {
+                      "aria-selected": on || void 0,
+                      "aria-rowindex": i + 2,
+                      "data-clickable": onRowClick ? "true" : void 0,
+                      style: { height: rowHeight },
+                      onClick: onRowClick ? () => onRowClick(r, i) : void 0,
+                      children: [
+                        selectable && /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("td", { "data-pin": "true", style: { insetInlineStart: 0 }, onClick: (e) => e.stopPropagation(), children: /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("span", { className: "lw-dgrid-check", children: /* @__PURE__ */ (0, import_jsx_runtime38.jsxs)("label", { className: "lw-check", children: [
+                          /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(
+                            "input",
+                            {
+                              type: "checkbox",
+                              checked: on,
+                              onChange: () => toggleRow(k),
+                              "aria-label": "Select row " + (i + 1)
+                            }
+                          ),
+                          /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("span", { className: "box" })
+                        ] }) }) }),
+                        columns.map((c, ci) => /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(
+                          "td",
+                          {
+                            className: cx38(c.num && "num"),
+                            "data-pin": c.pin ? "true" : void 0,
+                            "data-pin-last": c.pin && ci === lastPin ? "true" : void 0,
+                            style: c.pin ? { insetInlineStart: pinLefts[ci] } : void 0,
+                            children: c.render ? c.render(r, i) : r[c.key]
+                          },
+                          c.key
+                        ))
+                      ]
+                    },
+                    k
+                  );
+                }),
+                padBottom > 0 && /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("tr", { "aria-hidden": "true", className: "lw-dgrid-pad", style: { height: padBottom }, children: /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("td", { colSpan: columns.length + (selectable ? 1 : 0) }) })
+              ] })
+            ] }),
+            !rows.length && /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("div", { className: "lw-dgrid-empty", children: empty })
+          ]
         }
-      ), /* @__PURE__ */ React18.createElement("span", { className: "box" })))), columns.map((c, i) => {
-        const dir = sort && sort.key === c.key ? sort.dir : null;
-        return /* @__PURE__ */ React18.createElement(
-          "th",
-          {
-            key: c.key,
-            scope: "col",
-            className: cx38(c.num && "num"),
-            "data-pin": c.pin ? "true" : void 0,
-            "data-pin-last": c.pin && i === lastPin ? "true" : void 0,
-            style: c.pin ? { insetInlineStart: pinLefts[i] } : void 0,
-            "aria-sort": dir ? dir === "asc" ? "ascending" : "descending" : void 0
-          },
-          c.sortable && onSort ? /* @__PURE__ */ React18.createElement(
-            "button",
-            {
-              type: "button",
-              className: "lw-dgrid-sort",
-              onClick: () => emitSort(onSort, legacyArgs, c.key, dir === "asc" ? "desc" : "asc")
-            },
-            colHeader("DataGrid", c),
-            /* @__PURE__ */ React18.createElement(Icon, { name: dir === "asc" ? "sort-asc" : dir === "desc" ? "sort-desc" : "chevrons-up-down", size: 13 })
-          ) : colHeader("DataGrid", c),
-          c.resizable !== false && /* @__PURE__ */ React18.createElement(
-            "button",
-            {
-              type: "button",
-              className: "lw-dgrid-resize",
-              "aria-label": "Resize " + (typeof colHeader("DataGrid", c) === "string" ? colHeader("DataGrid", c) : c.key),
-              onPointerDown: (e) => onResizeDown(i, e),
-              onKeyDown: (e) => onResizeKey(i, e)
-            }
-          )
-        );
-      }))), /* @__PURE__ */ React18.createElement("tbody", null, padTop > 0 && /* @__PURE__ */ React18.createElement("tr", { "aria-hidden": "true", className: "lw-dgrid-pad", style: { height: padTop } }, /* @__PURE__ */ React18.createElement("td", { colSpan: columns.length + (selectable ? 1 : 0) })), slice.map((r, n) => {
-        const i = start + n;
-        const k = rowKey(r, i);
-        const on = selSet.has(k);
-        return /* @__PURE__ */ React18.createElement(
-          "tr",
-          {
-            key: k,
-            "aria-selected": on || void 0,
-            "aria-rowindex": i + 2,
-            "data-clickable": onRowClick ? "true" : void 0,
-            style: { height: rowHeight },
-            onClick: onRowClick ? () => onRowClick(r, i) : void 0
-          },
-          selectable && /* @__PURE__ */ React18.createElement("td", { "data-pin": "true", style: { insetInlineStart: 0 }, onClick: (e) => e.stopPropagation() }, /* @__PURE__ */ React18.createElement("span", { className: "lw-dgrid-check" }, /* @__PURE__ */ React18.createElement("label", { className: "lw-check" }, /* @__PURE__ */ React18.createElement(
-            "input",
-            {
-              type: "checkbox",
-              checked: on,
-              onChange: () => toggleRow(k),
-              "aria-label": "Select row " + (i + 1)
-            }
-          ), /* @__PURE__ */ React18.createElement("span", { className: "box" })))),
-          columns.map((c, ci) => /* @__PURE__ */ React18.createElement(
-            "td",
-            {
-              key: c.key,
-              className: cx38(c.num && "num"),
-              "data-pin": c.pin ? "true" : void 0,
-              "data-pin-last": c.pin && ci === lastPin ? "true" : void 0,
-              style: c.pin ? { insetInlineStart: pinLefts[ci] } : void 0
-            },
-            c.render ? c.render(r, i) : r[c.key]
-          ))
-        );
-      }), padBottom > 0 && /* @__PURE__ */ React18.createElement("tr", { "aria-hidden": "true", className: "lw-dgrid-pad", style: { height: padBottom } }, /* @__PURE__ */ React18.createElement("td", { colSpan: columns.length + (selectable ? 1 : 0) })))),
-      !rows.length && /* @__PURE__ */ React18.createElement("div", { className: "lw-dgrid-empty" }, empty)
-    ));
+      )
+    ] });
   }
 
   // components/data/Progress.jsx
   init_ds_inject_react();
+  var import_jsx_runtime39 = __toESM(require_ds_jsx_runtime(), 1);
   var cx39 = (...a) => a.filter(Boolean).join(" ");
   function Progress({ value = 0, max = 100, label, tone, className, ...rest }) {
     const pct = Math.max(0, Math.min(100, Number(value) / Number(max || 100) * 100));
-    return /* @__PURE__ */ React.createElement(
+    return /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(
       "span",
       {
         className: cx39("lw-progress", className),
@@ -1773,29 +2016,38 @@
         "aria-valuemin": 0,
         "aria-valuemax": 100,
         "aria-label": label,
-        ...rest
-      },
-      /* @__PURE__ */ React.createElement("i", { style: { width: pct + "%" } })
+        ...rest,
+        children: /* @__PURE__ */ (0, import_jsx_runtime39.jsx)("i", { style: { width: pct + "%" } })
+      }
     );
   }
 
   // components/data/FilterBar.jsx
   init_ds_inject_react();
+  var import_jsx_runtime40 = __toESM(require_ds_jsx_runtime(), 1);
   var cx40 = (...a) => a.filter(Boolean).join(" ");
   function FilterBar({ filters = [], onRemove, onClear, className, children, ...rest }) {
     if (!filters.length && !children) return null;
-    return /* @__PURE__ */ React.createElement("div", { className: cx40("lw-filters", className), role: "group", "aria-label": "Applied filters", ...rest }, children, filters.map((f) => /* @__PURE__ */ React.createElement("span", { key: f.id ?? f.key + ":" + f.value, className: "lw-filter-chip" }, f.key && /* @__PURE__ */ React.createElement("span", { className: "k" }, f.key), /* @__PURE__ */ React.createElement("span", null, f.label ?? f.value), /* @__PURE__ */ React.createElement(
-      "button",
-      {
-        type: "button",
-        "aria-label": "Remove filter " + (f.key ? f.key + " " : "") + (f.label ?? f.value),
-        onClick: () => onRemove && onRemove(f)
-      },
-      /* @__PURE__ */ React.createElement(Icon, { name: "close", size: 11 })
-    ))), filters.length > 1 && onClear && /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-filter-clear", onClick: onClear }, "Clear all"));
+    return /* @__PURE__ */ (0, import_jsx_runtime40.jsxs)("div", { className: cx40("lw-filters", className), role: "group", "aria-label": "Applied filters", ...rest, children: [
+      children,
+      filters.map((f) => /* @__PURE__ */ (0, import_jsx_runtime40.jsxs)("span", { className: "lw-filter-chip", children: [
+        f.key && /* @__PURE__ */ (0, import_jsx_runtime40.jsx)("span", { className: "k", children: f.key }),
+        /* @__PURE__ */ (0, import_jsx_runtime40.jsx)("span", { children: f.label ?? f.value }),
+        /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(
+          "button",
+          {
+            type: "button",
+            "aria-label": "Remove filter " + (f.key ? f.key + " " : "") + (f.label ?? f.value),
+            onClick: () => onRemove && onRemove(f),
+            children: /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(Icon, { name: "close", size: 11 })
+          }
+        )
+      ] }, f.id ?? f.key + ":" + f.value)),
+      filters.length > 1 && onClear && /* @__PURE__ */ (0, import_jsx_runtime40.jsx)("button", { type: "button", className: "lw-filter-clear", onClick: onClear, children: "Clear all" })
+    ] });
   }
   function Toolbar({ className, children, ...rest }) {
-    return /* @__PURE__ */ React.createElement("div", { className: cx40("lw-toolbar", className), ...rest }, children);
+    return /* @__PURE__ */ (0, import_jsx_runtime40.jsx)("div", { className: cx40("lw-toolbar", className), ...rest, children });
   }
 
   // components/data/BarChart.jsx
@@ -1803,15 +2055,29 @@
 
   // components/data/chart-parts.jsx
   init_ds_inject_react();
+  var import_jsx_runtime41 = __toESM(require_ds_jsx_runtime(), 1);
   var cx41 = (...a) => a.filter(Boolean).join(" ");
   var SERIES = (i) => "var(--lw-chart-" + (i % 8 + 1) + ")";
   var nf = new Intl.NumberFormat();
   function DataTable({ labels, series, caption }) {
-    return /* @__PURE__ */ React.createElement("table", { className: "lw-sr-only" }, /* @__PURE__ */ React.createElement("caption", null, caption), /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", { scope: "col" }, "Category"), series.map((s, i) => /* @__PURE__ */ React.createElement("th", { key: i, scope: "col" }, s.name)))), /* @__PURE__ */ React.createElement("tbody", null, labels.map((l, i) => /* @__PURE__ */ React.createElement("tr", { key: i }, /* @__PURE__ */ React.createElement("th", { scope: "row" }, l), series.map((s, si) => /* @__PURE__ */ React.createElement("td", { key: si }, nf.format(s.data[i])))))));
+    return /* @__PURE__ */ (0, import_jsx_runtime41.jsxs)("table", { className: "lw-sr-only", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime41.jsx)("caption", { children: caption }),
+      /* @__PURE__ */ (0, import_jsx_runtime41.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime41.jsxs)("tr", { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime41.jsx)("th", { scope: "col", children: "Category" }),
+        series.map((s, i) => /* @__PURE__ */ (0, import_jsx_runtime41.jsx)("th", { scope: "col", children: s.name }, i))
+      ] }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime41.jsx)("tbody", { children: labels.map((l, i) => /* @__PURE__ */ (0, import_jsx_runtime41.jsxs)("tr", { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime41.jsx)("th", { scope: "row", children: l }),
+        series.map((s, si) => /* @__PURE__ */ (0, import_jsx_runtime41.jsx)("td", { children: nf.format(s.data[i]) }, si))
+      ] }, i)) })
+    ] });
   }
   function Legend({ series }) {
     if (series.length < 2) return null;
-    return /* @__PURE__ */ React.createElement("div", { className: "lw-chart-legend" }, series.map((s, i) => /* @__PURE__ */ React.createElement("span", { key: i }, /* @__PURE__ */ React.createElement("i", { style: { background: s.color || SERIES(i) } }), s.name)));
+    return /* @__PURE__ */ (0, import_jsx_runtime41.jsx)("div", { className: "lw-chart-legend", children: series.map((s, i) => /* @__PURE__ */ (0, import_jsx_runtime41.jsxs)("span", { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime41.jsx)("i", { style: { background: s.color || SERIES(i) } }),
+      s.name
+    ] }, i)) });
   }
   var ticks = (max, n = 4) => {
     const step = Math.pow(10, Math.floor(Math.log10(max / n || 1)));
@@ -1828,59 +2094,85 @@
     return { w, pad, ts, top, iw, ih, y: (v) => pad.t + ih - v / top * ih };
   }
   function Grid2({ f }) {
-    return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("g", { className: "grid" }, f.ts.map((v, i) => /* @__PURE__ */ React.createElement("line", { key: i, x1: f.pad.l, x2: f.w - f.pad.r, y1: f.y(v), y2: f.y(v) }))), /* @__PURE__ */ React.createElement("g", { className: "axis" }, f.ts.map((v, i) => /* @__PURE__ */ React.createElement("text", { key: i, x: f.pad.l - 6, y: f.y(v) + 3, textAnchor: "end" }, nf.format(v)))));
+    return /* @__PURE__ */ (0, import_jsx_runtime41.jsxs)(import_jsx_runtime41.Fragment, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime41.jsx)("g", { className: "grid", children: f.ts.map((v, i) => /* @__PURE__ */ (0, import_jsx_runtime41.jsx)("line", { x1: f.pad.l, x2: f.w - f.pad.r, y1: f.y(v), y2: f.y(v) }, i)) }),
+      /* @__PURE__ */ (0, import_jsx_runtime41.jsx)("g", { className: "axis", children: f.ts.map((v, i) => /* @__PURE__ */ (0, import_jsx_runtime41.jsx)("text", { x: f.pad.l - 6, y: f.y(v) + 3, textAnchor: "end", children: nf.format(v) }, i)) })
+    ] });
   }
 
   // components/data/BarChart.jsx
+  var import_jsx_runtime42 = __toESM(require_ds_jsx_runtime(), 1);
   function BarChart({ labels = [], series = [], height = 200, stacked, label, className, ...rest }) {
     const max = Math.max(1, ...series.flatMap((s) => stacked ? [] : s.data), ...stacked ? labels.map((_, i) => series.reduce((a, s) => a + s.data[i], 0)) : []);
     const f = frame(max, height);
     const { w, pad, top, iw, ih, y } = f;
     const bandW = iw / Math.max(labels.length, 1);
     const barW = stacked ? bandW * 0.56 : bandW * 0.72 / Math.max(series.length, 1);
-    return /* @__PURE__ */ React.createElement("div", { className: cx41("lw-chart-wrap", className), ...rest }, /* @__PURE__ */ React.createElement("svg", { className: "lw-chart", viewBox: "0 0 " + w + " " + height, role: "img", "aria-label": label }, /* @__PURE__ */ React.createElement(Grid2, { f }), /* @__PURE__ */ React.createElement("g", { className: "axis" }, labels.map((l, i) => /* @__PURE__ */ React.createElement("text", { key: i, x: pad.l + bandW * i + bandW / 2, y: height - 6, textAnchor: "middle" }, l))), labels.map((l, i) => {
-      let acc = 0;
-      return series.map((s, si) => {
-        const v = s.data[i] || 0;
-        const h = v / top * ih;
-        const x = stacked ? pad.l + bandW * i + (bandW - barW) / 2 : pad.l + bandW * i + (bandW - barW * series.length) / 2 + barW * si;
-        const yy = stacked ? pad.t + ih - acc - h : y(v);
-        acc += h;
-        return /* @__PURE__ */ React.createElement(
-          "rect",
-          {
-            key: si,
-            className: "bar",
-            x,
-            y: yy,
-            width: barW,
-            height: Math.max(0, h),
-            rx: "2",
-            fill: s.color || SERIES(si)
-          },
-          /* @__PURE__ */ React.createElement("title", null, s.name + " · " + l + " · " + nf.format(v))
-        );
-      });
-    })), /* @__PURE__ */ React.createElement(Legend, { series }), /* @__PURE__ */ React.createElement(DataTable, { labels, series, caption: label }));
+    return /* @__PURE__ */ (0, import_jsx_runtime42.jsxs)("div", { className: cx41("lw-chart-wrap", className), ...rest, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime42.jsxs)("svg", { className: "lw-chart", viewBox: "0 0 " + w + " " + height, role: "img", "aria-label": label, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(Grid2, { f }),
+        /* @__PURE__ */ (0, import_jsx_runtime42.jsx)("g", { className: "axis", children: labels.map((l, i) => /* @__PURE__ */ (0, import_jsx_runtime42.jsx)("text", { x: pad.l + bandW * i + bandW / 2, y: height - 6, textAnchor: "middle", children: l }, i)) }),
+        labels.map((l, i) => {
+          let acc = 0;
+          return series.map((s, si) => {
+            const v = s.data[i] || 0;
+            const h = v / top * ih;
+            const x = stacked ? pad.l + bandW * i + (bandW - barW) / 2 : pad.l + bandW * i + (bandW - barW * series.length) / 2 + barW * si;
+            const yy = stacked ? pad.t + ih - acc - h : y(v);
+            acc += h;
+            return /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(
+              "rect",
+              {
+                className: "bar",
+                x,
+                y: yy,
+                width: barW,
+                height: Math.max(0, h),
+                rx: "2",
+                fill: s.color || SERIES(si),
+                children: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)("title", { children: s.name + " · " + l + " · " + nf.format(v) })
+              },
+              si
+            );
+          });
+        })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(Legend, { series }),
+      /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(DataTable, { labels, series, caption: label })
+    ] });
   }
 
   // components/data/LineChart.jsx
   init_ds_inject_react();
+  var import_jsx_runtime43 = __toESM(require_ds_jsx_runtime(), 1);
   function LineChart({ labels = [], series = [], height = 200, area, label, className, ...rest }) {
     const max = Math.max(1, ...series.flatMap((s) => s.data));
     const f = frame(max, height);
     const { w, pad, top, iw, ih, y } = f;
     const x = (i) => pad.l + (labels.length < 2 ? iw / 2 : iw / (labels.length - 1) * i);
-    return /* @__PURE__ */ React.createElement("div", { className: cx41("lw-chart-wrap", className), ...rest }, /* @__PURE__ */ React.createElement("svg", { className: "lw-chart", viewBox: "0 0 " + w + " " + height, role: "img", "aria-label": label }, /* @__PURE__ */ React.createElement(Grid2, { f }), /* @__PURE__ */ React.createElement("g", { className: "axis" }, labels.map((l, i) => /* @__PURE__ */ React.createElement("text", { key: i, x: x(i), y: height - 6, textAnchor: "middle" }, l))), series.map((s, si) => {
-      const d = s.data.map((v, i) => (i ? "L" : "M") + x(i) + " " + y(v)).join(" ");
-      const c = s.color || SERIES(si);
-      return /* @__PURE__ */ React.createElement("g", { key: si }, area && /* @__PURE__ */ React.createElement("path", { d: d + " L" + x(s.data.length - 1) + " " + (pad.t + ih) + " L" + x(0) + " " + (pad.t + ih) + " Z", fill: c, opacity: "0.12" }), /* @__PURE__ */ React.createElement("path", { className: "line", d, stroke: c }), s.data.map((v, i) => /* @__PURE__ */ React.createElement("circle", { key: i, className: "dot", cx: x(i), cy: y(v), r: "3", fill: c }, /* @__PURE__ */ React.createElement("title", null, s.name + " · " + labels[i] + " · " + nf.format(v)))));
-    })), /* @__PURE__ */ React.createElement(Legend, { series }), /* @__PURE__ */ React.createElement(DataTable, { labels, series, caption: label }));
+    return /* @__PURE__ */ (0, import_jsx_runtime43.jsxs)("div", { className: cx41("lw-chart-wrap", className), ...rest, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime43.jsxs)("svg", { className: "lw-chart", viewBox: "0 0 " + w + " " + height, role: "img", "aria-label": label, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(Grid2, { f }),
+        /* @__PURE__ */ (0, import_jsx_runtime43.jsx)("g", { className: "axis", children: labels.map((l, i) => /* @__PURE__ */ (0, import_jsx_runtime43.jsx)("text", { x: x(i), y: height - 6, textAnchor: "middle", children: l }, i)) }),
+        series.map((s, si) => {
+          const d = s.data.map((v, i) => (i ? "L" : "M") + x(i) + " " + y(v)).join(" ");
+          const c = s.color || SERIES(si);
+          return /* @__PURE__ */ (0, import_jsx_runtime43.jsxs)("g", { children: [
+            area && /* @__PURE__ */ (0, import_jsx_runtime43.jsx)("path", { d: d + " L" + x(s.data.length - 1) + " " + (pad.t + ih) + " L" + x(0) + " " + (pad.t + ih) + " Z", fill: c, opacity: "0.12" }),
+            /* @__PURE__ */ (0, import_jsx_runtime43.jsx)("path", { className: "line", d, stroke: c }),
+            s.data.map((v, i) => /* @__PURE__ */ (0, import_jsx_runtime43.jsx)("circle", { className: "dot", cx: x(i), cy: y(v), r: "3", fill: c, children: /* @__PURE__ */ (0, import_jsx_runtime43.jsx)("title", { children: s.name + " · " + labels[i] + " · " + nf.format(v) }) }, i))
+          ] }, si);
+        })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(Legend, { series }),
+      /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(DataTable, { labels, series, caption: label })
+    ] });
   }
 
   // components/data/ActivityFeed.jsx
   init_ds_inject_react();
   var React19 = __toESM(require_ds_react(), 1);
+  var import_jsx_runtime44 = __toESM(require_ds_jsx_runtime(), 1);
   var cx42 = (...a) => a.filter(Boolean).join(" ");
   var ms = (when) => when instanceof Date ? when.getTime() : new Date(when).getTime();
   var stamp = (when) => new Intl.DateTimeFormat(void 0, { day: "numeric", month: "short" }).format(ms(when));
@@ -1911,37 +2203,58 @@
       if (last && last.name === g) last.items.push(it);
       else groups.push({ name: g, items: [it] });
     });
-    return /* @__PURE__ */ React19.createElement("div", { className: cx42("lw-feed", className), role: "group", "aria-label": label, ...rest }, groups.map((g, gi) => (
+    return /* @__PURE__ */ (0, import_jsx_runtime44.jsx)("div", { className: cx42("lw-feed", className), role: "group", "aria-label": label, ...rest, children: groups.map((g, gi) => (
       /* Keyed on the index: two runs can carry the same bucket name when the
          items are not in date order, and a duplicate key is a dropped child. */
-      /* @__PURE__ */ React19.createElement(React19.Fragment, { key: gi }, g.name && /* @__PURE__ */ React19.createElement("div", { className: "lw-feed-group" }, g.name), g.items.map((it, i) => {
-        const Tag = it.href ? "a" : onItemClick || it.onClick ? "button" : "div";
-        return /* @__PURE__ */ React19.createElement(
-          Tag,
-          {
-            key: it.id ?? gi + "-" + i,
-            className: "lw-feed-item",
-            href: it.href || void 0,
-            type: Tag === "button" ? "button" : void 0,
-            "data-unread": it.unread ? "true" : void 0,
-            "data-tone": it.tone,
-            onClick: Tag === "div" ? void 0 : () => it.onClick ? it.onClick(it) : onItemClick && onItemClick(it)
-          },
-          it.icon && /* @__PURE__ */ React19.createElement("span", { className: "lw-feed-ic" }, /* @__PURE__ */ React19.createElement(Icon, { name: it.icon, size: 15 })),
-          /* @__PURE__ */ React19.createElement("span", { className: "lw-feed-main" }, /* @__PURE__ */ React19.createElement("span", { className: "lw-feed-title" }, it.title), /* @__PURE__ */ React19.createElement("span", { className: "lw-feed-meta" }, it.when ? at != null ? timeAgo(it.when, at) : stamp(it.when) : null, it.meta ? (it.when ? " · " : "") + it.meta : "")),
-          it.unread && /* @__PURE__ */ React19.createElement("span", { className: "lw-sr-only" }, "Unread")
-        );
-      }))
-    )));
+      /* @__PURE__ */ (0, import_jsx_runtime44.jsxs)(React19.Fragment, { children: [
+        g.name && /* @__PURE__ */ (0, import_jsx_runtime44.jsx)("div", { className: "lw-feed-group", children: g.name }),
+        g.items.map((it, i) => {
+          const Tag = it.href ? "a" : onItemClick || it.onClick ? "button" : "div";
+          return /* @__PURE__ */ (0, import_jsx_runtime44.jsxs)(
+            Tag,
+            {
+              className: "lw-feed-item",
+              href: it.href || void 0,
+              type: Tag === "button" ? "button" : void 0,
+              "data-unread": it.unread ? "true" : void 0,
+              "data-tone": it.tone,
+              onClick: Tag === "div" ? void 0 : () => it.onClick ? it.onClick(it) : onItemClick && onItemClick(it),
+              children: [
+                it.icon && /* @__PURE__ */ (0, import_jsx_runtime44.jsx)("span", { className: "lw-feed-ic", children: /* @__PURE__ */ (0, import_jsx_runtime44.jsx)(Icon, { name: it.icon, size: 15 }) }),
+                /* @__PURE__ */ (0, import_jsx_runtime44.jsxs)("span", { className: "lw-feed-main", children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime44.jsx)("span", { className: "lw-feed-title", children: it.title }),
+                  /* @__PURE__ */ (0, import_jsx_runtime44.jsxs)("span", { className: "lw-feed-meta", children: [
+                    it.when ? at != null ? timeAgo(it.when, at) : stamp(it.when) : null,
+                    it.meta ? (it.when ? " · " : "") + it.meta : ""
+                  ] })
+                ] }),
+                it.unread && /* @__PURE__ */ (0, import_jsx_runtime44.jsx)("span", { className: "lw-sr-only", children: "Unread" })
+              ]
+            },
+            it.id ?? gi + "-" + i
+          );
+        })
+      ] }, gi)
+    )) });
   }
 
   // components/nav/TopBar.jsx
   init_ds_inject_react();
+  var import_jsx_runtime45 = __toESM(require_ds_jsx_runtime(), 1);
   var cx43 = (...a) => a.filter(Boolean).join(" ");
   function TopBar({ brand, brandHref, logo = false, links = [], actions, className, children, ...rest }) {
     const Brand = brandHref ? "a" : "span";
     const brandProps = brandHref ? { href: brandHref, "aria-label": typeof brand === "string" ? brand + " — home" : "Home" } : {};
-    return /* @__PURE__ */ React.createElement("header", { className: cx43("lw-topbar", className), ...rest }, logo ? /* @__PURE__ */ React.createElement(Brand, { className: "brand", ...brandProps }, /* @__PURE__ */ React.createElement("span", { className: "brand-mark", "aria-hidden": "true" }), brand) : brand && /* @__PURE__ */ React.createElement(Brand, { className: "brand", ...brandProps }, brand), links.length > 0 && /* @__PURE__ */ React.createElement("nav", { "aria-label": "Primary" }, links.map((l, i) => /* @__PURE__ */ React.createElement("a", { key: l.id ?? i, href: l.href, "aria-current": l.current ? "page" : void 0 }, l.label))), /* @__PURE__ */ React.createElement("span", { className: "spacer" }), actions, children);
+    return /* @__PURE__ */ (0, import_jsx_runtime45.jsxs)("header", { className: cx43("lw-topbar", className), ...rest, children: [
+      logo ? /* @__PURE__ */ (0, import_jsx_runtime45.jsxs)(Brand, { className: "brand", ...brandProps, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime45.jsx)("span", { className: "brand-mark", "aria-hidden": "true" }),
+        brand
+      ] }) : brand && /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(Brand, { className: "brand", ...brandProps, children: brand }),
+      links.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime45.jsx)("nav", { "aria-label": "Primary", children: links.map((l, i) => /* @__PURE__ */ (0, import_jsx_runtime45.jsx)("a", { href: l.href, "aria-current": l.current ? "page" : void 0, children: l.label }, l.id ?? i)) }),
+      /* @__PURE__ */ (0, import_jsx_runtime45.jsx)("span", { className: "spacer" }),
+      actions,
+      children
+    ] });
   }
 
   // components/nav/AppBar.jsx
@@ -1950,12 +2263,17 @@
   // components/nav/Breadcrumbs.jsx
   init_ds_inject_react();
   var React20 = __toESM(require_ds_react(), 1);
+  var import_jsx_runtime46 = __toESM(require_ds_jsx_runtime(), 1);
   var cx44 = (...a) => a.filter(Boolean).join(" ");
   function Breadcrumbs({ items = [], className, ...rest }) {
-    return /* @__PURE__ */ React20.createElement("nav", { className: cx44("lw-crumbs", className), "aria-label": "Breadcrumb", ...rest }, items.map((it, i) => /* @__PURE__ */ React20.createElement(React20.Fragment, { key: i }, i > 0 && /* @__PURE__ */ React20.createElement("span", { className: "sep", "aria-hidden": "true" }, "/"), it.href && i < items.length - 1 ? /* @__PURE__ */ React20.createElement("a", { href: it.href }, it.label) : /* @__PURE__ */ React20.createElement("span", { "aria-current": i === items.length - 1 ? "page" : void 0 }, it.label))));
+    return /* @__PURE__ */ (0, import_jsx_runtime46.jsx)("nav", { className: cx44("lw-crumbs", className), "aria-label": "Breadcrumb", ...rest, children: items.map((it, i) => /* @__PURE__ */ (0, import_jsx_runtime46.jsxs)(React20.Fragment, { children: [
+      i > 0 && /* @__PURE__ */ (0, import_jsx_runtime46.jsx)("span", { className: "sep", "aria-hidden": "true", children: "/" }),
+      it.href && i < items.length - 1 ? /* @__PURE__ */ (0, import_jsx_runtime46.jsx)("a", { href: it.href, children: it.label }) : /* @__PURE__ */ (0, import_jsx_runtime46.jsx)("span", { "aria-current": i === items.length - 1 ? "page" : void 0, children: it.label })
+    ] }, i)) });
   }
 
   // components/nav/AppBar.jsx
+  var import_jsx_runtime47 = __toESM(require_ds_jsx_runtime(), 1);
   function AppBar({
     brand = "LeanWise AI",
     brandHref = "#",
@@ -1969,40 +2287,55 @@
     ...rest
   }) {
     const Brand = brandHref ? "a" : "span";
-    return /* @__PURE__ */ React.createElement(TopBar, { className, ...rest }, /* @__PURE__ */ React.createElement("div", { className: "lw-appbar-lead" }, onMenuClick && /* @__PURE__ */ React.createElement(
-      "button",
-      {
-        type: "button",
-        className: "lw-icon-btn",
-        onClick: onMenuClick,
-        "aria-expanded": menuExpanded,
-        "aria-label": menuExpanded ? "Collapse navigation" : "Expand navigation"
-      },
-      /* @__PURE__ */ React.createElement(Icon, { name: "sidebar", size: 21 })
-    ), /* @__PURE__ */ React.createElement(
-      Brand,
-      {
-        className: "lw-appbar-brand",
-        href: brandHref || void 0,
-        "aria-label": brandHref ? typeof brand === "string" ? brand + " — home" : "Home" : void 0
-      },
-      mark && /* @__PURE__ */ React.createElement("span", { className: "brand-mark", "aria-hidden": "true" }),
-      brand
-    ), crumbs.length > 0 && /* @__PURE__ */ React.createElement(Breadcrumbs, { items: crumbs })), actions, children);
+    return /* @__PURE__ */ (0, import_jsx_runtime47.jsxs)(TopBar, { className, ...rest, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime47.jsxs)("div", { className: "lw-appbar-lead", children: [
+        onMenuClick && /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(
+          "button",
+          {
+            type: "button",
+            className: "lw-icon-btn",
+            onClick: onMenuClick,
+            "aria-expanded": menuExpanded,
+            "aria-label": menuExpanded ? "Collapse navigation" : "Expand navigation",
+            children: /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(Icon, { name: "sidebar", size: 21 })
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime47.jsxs)(
+          Brand,
+          {
+            className: "lw-appbar-brand",
+            href: brandHref || void 0,
+            "aria-label": brandHref ? typeof brand === "string" ? brand + " — home" : "Home" : void 0,
+            children: [
+              mark && /* @__PURE__ */ (0, import_jsx_runtime47.jsx)("span", { className: "brand-mark", "aria-hidden": "true" }),
+              brand
+            ]
+          }
+        ),
+        crumbs.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(Breadcrumbs, { items: crumbs })
+      ] }),
+      actions,
+      children
+    ] });
   }
 
   // components/nav/Sidebar.jsx
   init_ds_inject_react();
+  var import_jsx_runtime48 = __toESM(require_ds_jsx_runtime(), 1);
   var cx45 = (...a) => a.filter(Boolean).join(" ");
   function Sidebar({ items = [], collapsed = false, footer, className, children, ...rest }) {
-    return /* @__PURE__ */ React.createElement("nav", { className: cx45("lw-sidebar", className), "data-collapsed": collapsed ? "true" : void 0, "aria-label": "Sections", ...rest }, items.map(
-      (it, i) => it.group ? /* @__PURE__ */ React.createElement("span", { key: "g" + i, className: "lw-nav-group" }, it.group) : /* @__PURE__ */ React.createElement(NavItem, { key: it.id ?? i, ...it, collapsed })
-    ), children, footer && /* @__PURE__ */ React.createElement("div", { className: "lw-sidebar-foot" }, footer));
+    return /* @__PURE__ */ (0, import_jsx_runtime48.jsxs)("nav", { className: cx45("lw-sidebar", className), "data-collapsed": collapsed ? "true" : void 0, "aria-label": "Sections", ...rest, children: [
+      items.map(
+        (it, i) => it.group ? /* @__PURE__ */ (0, import_jsx_runtime48.jsx)("span", { className: "lw-nav-group", children: it.group }, "g" + i) : /* @__PURE__ */ (0, import_jsx_runtime48.jsx)(NavItem, { ...it, collapsed }, it.id ?? i)
+      ),
+      children,
+      footer && /* @__PURE__ */ (0, import_jsx_runtime48.jsx)("div", { className: "lw-sidebar-foot", children: footer })
+    ] });
   }
   function NavItem({ href, label, icon, badge, current, collapsed, className, ...rest }) {
     const Tag = href ? "a" : "button";
     const tip = collapsed && typeof label === "string" ? label : void 0;
-    return /* @__PURE__ */ React.createElement(
+    return /* @__PURE__ */ (0, import_jsx_runtime48.jsxs)(
       Tag,
       {
         className: cx45("lw-nav-item", className),
@@ -2010,17 +2343,20 @@
         type: href ? void 0 : "button",
         "aria-current": current ? "page" : void 0,
         title: tip,
-        ...rest
-      },
-      icon && /* @__PURE__ */ React.createElement("span", { className: "ic", "aria-hidden": "true" }, icon),
-      /* @__PURE__ */ React.createElement("span", { className: "lw-nav-text" }, label),
-      badge && /* @__PURE__ */ React.createElement("span", { className: "badge" }, badge)
+        ...rest,
+        children: [
+          icon && /* @__PURE__ */ (0, import_jsx_runtime48.jsx)("span", { className: "ic", "aria-hidden": "true", children: icon }),
+          /* @__PURE__ */ (0, import_jsx_runtime48.jsx)("span", { className: "lw-nav-text", children: label }),
+          badge && /* @__PURE__ */ (0, import_jsx_runtime48.jsx)("span", { className: "badge", children: badge })
+        ]
+      }
     );
   }
 
   // components/nav/Tabs.jsx
   init_ds_inject_react();
   var React21 = __toESM(require_ds_react(), 1);
+  var import_jsx_runtime49 = __toESM(require_ds_jsx_runtime(), 1);
   var cx46 = (...a) => a.filter(Boolean).join(" ");
   function Tabs({ tabs = [], value, onChange, label, className, ...rest }) {
     const ref = React21.useRef(null);
@@ -2046,21 +2382,23 @@
       e.preventDefault();
       move((i + d + tabs.length) % tabs.length);
     };
-    return /* @__PURE__ */ React21.createElement("div", { ref, className: cx46("lw-tabs", className), role: "tablist", "aria-label": label, onKeyDown, ...rest }, tabs.map((t) => /* @__PURE__ */ React21.createElement(
+    return /* @__PURE__ */ (0, import_jsx_runtime49.jsx)("div", { ref, className: cx46("lw-tabs", className), role: "tablist", "aria-label": label, onKeyDown, ...rest, children: tabs.map((t) => /* @__PURE__ */ (0, import_jsx_runtime49.jsxs)(
       "button",
       {
-        key: t.value,
         role: "tab",
         type: "button",
         "aria-selected": t.value === value,
         "aria-controls": t.controls,
         id: t.id,
         tabIndex: t.value === value ? 0 : -1,
-        onClick: () => onChange && onChange(t.value)
+        onClick: () => onChange && onChange(t.value),
+        children: [
+          t.label,
+          t.count != null && /* @__PURE__ */ (0, import_jsx_runtime49.jsx)("span", { className: "count", children: t.count })
+        ]
       },
-      t.label,
-      t.count != null && /* @__PURE__ */ React21.createElement("span", { className: "count" }, t.count)
-    )));
+      t.value
+    )) });
   }
 
   // components/nav/ThemeToggle.jsx
@@ -2092,6 +2430,7 @@
   }
 
   // components/nav/ThemeToggle.jsx
+  var import_jsx_runtime50 = __toESM(require_ds_jsx_runtime(), 1);
   var cx47 = (...a) => a.filter(Boolean).join(" ");
   var LABELS = { light: "Light", dark: "Dark", system: "Auto" };
   var GLYPHS = { light: "sun", dark: "moon", system: "monitor" };
@@ -2116,7 +2455,7 @@
       paint(m);
     };
     const { ref, onKeyDown, tabIndexFor } = useRadioGroup(modes, mode, apply);
-    return /* @__PURE__ */ React22.createElement(
+    return /* @__PURE__ */ (0, import_jsx_runtime50.jsx)(
       "div",
       {
         ref,
@@ -2124,28 +2463,29 @@
         role: "radiogroup",
         "aria-label": "Colour theme",
         onKeyDown,
-        ...rest
-      },
-      modes.map((m, i) => /* @__PURE__ */ React22.createElement(
-        "button",
-        {
-          key: m,
-          type: "button",
-          role: "radio",
-          "aria-checked": mode === m,
-          tabIndex: tabIndexFor(i),
-          onClick: () => apply(m),
-          "aria-label": LABELS[m] || m,
-          title: LABELS[m] || m
-        },
-        /* @__PURE__ */ React22.createElement(Icon, { name: GLYPHS[m] || "monitor", size: 16 })
-      ))
+        ...rest,
+        children: modes.map((m, i) => /* @__PURE__ */ (0, import_jsx_runtime50.jsx)(
+          "button",
+          {
+            type: "button",
+            role: "radio",
+            "aria-checked": mode === m,
+            tabIndex: tabIndexFor(i),
+            onClick: () => apply(m),
+            "aria-label": LABELS[m] || m,
+            title: LABELS[m] || m,
+            children: /* @__PURE__ */ (0, import_jsx_runtime50.jsx)(Icon, { name: GLYPHS[m] || "monitor", size: 16 })
+          },
+          m
+        ))
+      }
     );
   }
 
   // components/nav/CommandPalette.jsx
   init_ds_inject_react();
   var React23 = __toESM(require_ds_react(), 1);
+  var import_jsx_runtime51 = __toESM(require_ds_jsx_runtime(), 1);
   var cx48 = (...a) => a.filter(Boolean).join(" ");
   function score(query, text) {
     if (!query) return 0;
@@ -2212,7 +2552,7 @@
       }
     };
     let lastGroup = null;
-    return /* @__PURE__ */ React23.createElement(
+    return /* @__PURE__ */ (0, import_jsx_runtime51.jsxs)(
       "dialog",
       {
         ref,
@@ -2224,77 +2564,98 @@
           onClose && onClose(e);
         },
         onKeyDown,
-        ...rest
-      },
-      /* @__PURE__ */ React23.createElement("div", { className: "lw-cmdk-input" }, /* @__PURE__ */ React23.createElement(Icon, { name: "search", size: 17 }), /* @__PURE__ */ React23.createElement(
-        "input",
-        {
-          ref: inputRef,
-          type: "text",
-          role: "combobox",
-          "aria-expanded": "true",
-          "aria-controls": uid,
-          "aria-activedescendant": shown[active] ? uid + "-" + active : void 0,
-          "aria-label": label,
-          placeholder,
-          value: q,
-          onChange: (e) => setQ(e.target.value)
-        }
-      )),
-      /* @__PURE__ */ React23.createElement("ul", { className: "lw-cmdk-list lw-menu", id: uid, role: "listbox", "aria-label": label }, !shown.length && /* @__PURE__ */ React23.createElement("li", { className: "lw-listbox-empty" }, emptyText), shown.map((c, i) => {
-        const head = c.group && c.group !== lastGroup ? lastGroup = c.group : null;
-        return /* @__PURE__ */ React23.createElement(React23.Fragment, { key: c.id ?? i }, head && /* @__PURE__ */ React23.createElement("li", { className: "lw-menu-label", role: "presentation" }, head), /* @__PURE__ */ React23.createElement(
-          "li",
-          {
-            id: uid + "-" + i,
-            role: "option",
-            "aria-selected": i === active,
-            className: "lw-menu-item",
-            "data-active": i === active ? "true" : void 0,
-            style: i === active ? { background: "var(--lw-bg-subtle)" } : void 0,
-            onMouseEnter: () => setActive(i),
-            onClick: () => run(c)
-          },
-          /* @__PURE__ */ React23.createElement("span", { className: "lw-menu-lead" }, c.icon && /* @__PURE__ */ React23.createElement(Icon, { name: c.icon, size: 15 })),
-          /* @__PURE__ */ React23.createElement("span", { className: "lw-menu-text" }, c.label),
-          c.kbd && /* @__PURE__ */ React23.createElement("span", { className: "lw-menu-kbd" }, c.kbd)
-        ));
-      })),
-      /* @__PURE__ */ React23.createElement("div", { className: "lw-cmdk-foot" }, /* @__PURE__ */ React23.createElement("span", null, "↑↓ navigate"), /* @__PURE__ */ React23.createElement("span", null, "↵ run"), /* @__PURE__ */ React23.createElement("span", null, "esc close"))
+        ...rest,
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime51.jsxs)("div", { className: "lw-cmdk-input", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime51.jsx)(Icon, { name: "search", size: 17 }),
+            /* @__PURE__ */ (0, import_jsx_runtime51.jsx)(
+              "input",
+              {
+                ref: inputRef,
+                type: "text",
+                role: "combobox",
+                "aria-expanded": "true",
+                "aria-controls": uid,
+                "aria-activedescendant": shown[active] ? uid + "-" + active : void 0,
+                "aria-label": label,
+                placeholder,
+                value: q,
+                onChange: (e) => setQ(e.target.value)
+              }
+            )
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime51.jsxs)("ul", { className: "lw-cmdk-list lw-menu", id: uid, role: "listbox", "aria-label": label, children: [
+            !shown.length && /* @__PURE__ */ (0, import_jsx_runtime51.jsx)("li", { className: "lw-listbox-empty", children: emptyText }),
+            shown.map((c, i) => {
+              const head = c.group && c.group !== lastGroup ? lastGroup = c.group : null;
+              return /* @__PURE__ */ (0, import_jsx_runtime51.jsxs)(React23.Fragment, { children: [
+                head && /* @__PURE__ */ (0, import_jsx_runtime51.jsx)("li", { className: "lw-menu-label", role: "presentation", children: head }),
+                /* @__PURE__ */ (0, import_jsx_runtime51.jsxs)(
+                  "li",
+                  {
+                    id: uid + "-" + i,
+                    role: "option",
+                    "aria-selected": i === active,
+                    className: "lw-menu-item",
+                    "data-active": i === active ? "true" : void 0,
+                    style: i === active ? { background: "var(--lw-bg-subtle)" } : void 0,
+                    onMouseEnter: () => setActive(i),
+                    onClick: () => run(c),
+                    children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime51.jsx)("span", { className: "lw-menu-lead", children: c.icon && /* @__PURE__ */ (0, import_jsx_runtime51.jsx)(Icon, { name: c.icon, size: 15 }) }),
+                      /* @__PURE__ */ (0, import_jsx_runtime51.jsx)("span", { className: "lw-menu-text", children: c.label }),
+                      c.kbd && /* @__PURE__ */ (0, import_jsx_runtime51.jsx)("span", { className: "lw-menu-kbd", children: c.kbd })
+                    ]
+                  }
+                )
+              ] }, c.id ?? i);
+            })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime51.jsxs)("div", { className: "lw-cmdk-foot", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime51.jsx)("span", { children: "↑↓ navigate" }),
+            /* @__PURE__ */ (0, import_jsx_runtime51.jsx)("span", { children: "↵ run" }),
+            /* @__PURE__ */ (0, import_jsx_runtime51.jsx)("span", { children: "esc close" })
+          ] })
+        ]
+      }
     );
   }
 
   // components/nav/BottomNav.jsx
   init_ds_inject_react();
   var React24 = __toESM(require_ds_react(), 1);
+  var import_jsx_runtime52 = __toESM(require_ds_jsx_runtime(), 1);
   var cx49 = (...a) => a.filter(Boolean).join(" ");
   function BottomNav({ items = [], value, onChange, label = "Main", className, ...rest }) {
     React24.useEffect(() => {
       if (items.length <= 5 || typeof console === "undefined") return;
       console.warn("BottomNav: " + items.length + " items. Past five, labels truncate and the bar stops being scannable — use a sidebar or a More destination.");
     }, [items.length]);
-    return /* @__PURE__ */ React24.createElement("nav", { className: cx49("lw-bottom-nav", className), "aria-label": label, ...rest }, items.map((it) => {
+    return /* @__PURE__ */ (0, import_jsx_runtime52.jsx)("nav", { className: cx49("lw-bottom-nav", className), "aria-label": label, ...rest, children: items.map((it) => {
       const on = it.value === value;
       const Tag = it.href ? "a" : "button";
-      return /* @__PURE__ */ React24.createElement(
+      return /* @__PURE__ */ (0, import_jsx_runtime52.jsxs)(
         Tag,
         {
-          key: it.value,
           href: it.href || void 0,
           type: it.href ? void 0 : "button",
           "aria-current": on ? "page" : void 0,
-          onClick: it.href ? void 0 : () => onChange && onChange(it.value)
+          onClick: it.href ? void 0 : () => onChange && onChange(it.value),
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime52.jsx)(Icon, { name: it.icon, size: 21 }),
+            /* @__PURE__ */ (0, import_jsx_runtime52.jsx)("span", { className: "lw-bn-label", children: it.label }),
+            it.badge != null && /* @__PURE__ */ (0, import_jsx_runtime52.jsx)("span", { className: "lw-sr-only", children: it.badge + " unread" })
+          ]
         },
-        /* @__PURE__ */ React24.createElement(Icon, { name: it.icon, size: 21 }),
-        /* @__PURE__ */ React24.createElement("span", { className: "lw-bn-label" }, it.label),
-        it.badge != null && /* @__PURE__ */ React24.createElement("span", { className: "lw-sr-only" }, it.badge + " unread")
+        it.value
       );
-    }));
+    }) });
   }
 
   // components/overlays/Dialog.jsx
   init_ds_inject_react();
   var React25 = __toESM(require_ds_react(), 1);
+  var import_jsx_runtime53 = __toESM(require_ds_jsx_runtime(), 1);
   var cx50 = (...a) => a.filter(Boolean).join(" ");
   function Dialog({ open, onClose, title, description, footer, width, className, children, ...rest }) {
     const ref = React25.useRef(null);
@@ -2308,7 +2669,7 @@
       if (open && !el.open) el.showModal();
       if (!open && el.open) el.close();
     }, [open]);
-    return /* @__PURE__ */ React25.createElement(
+    return /* @__PURE__ */ (0, import_jsx_runtime53.jsxs)(
       "dialog",
       {
         ref,
@@ -2321,51 +2682,66 @@
         },
         "aria-labelledby": titleId,
         "aria-describedby": descId,
-        ...rest
-      },
-      title && /* @__PURE__ */ React25.createElement("div", { className: "lw-dialog-head" }, /* @__PURE__ */ React25.createElement("h2", { className: "lw-dialog-title", id: titleId }, title), /* @__PURE__ */ React25.createElement("button", { type: "button", className: "lw-dialog-close", "aria-label": "Close", title: "Close", onClick: onClose }, /* @__PURE__ */ React25.createElement(Icon, { name: "close", size: 17 }))),
-      /* @__PURE__ */ React25.createElement("div", { className: "lw-dialog-body" }, description && /* @__PURE__ */ React25.createElement("div", { id: descId }, description), children),
-      footer && /* @__PURE__ */ React25.createElement("div", { className: "lw-dialog-foot" }, footer)
+        ...rest,
+        children: [
+          title && /* @__PURE__ */ (0, import_jsx_runtime53.jsxs)("div", { className: "lw-dialog-head", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime53.jsx)("h2", { className: "lw-dialog-title", id: titleId, children: title }),
+            /* @__PURE__ */ (0, import_jsx_runtime53.jsx)("button", { type: "button", className: "lw-dialog-close", "aria-label": "Close", title: "Close", onClick: onClose, children: /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(Icon, { name: "close", size: 17 }) })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime53.jsxs)("div", { className: "lw-dialog-body", children: [
+            description && /* @__PURE__ */ (0, import_jsx_runtime53.jsx)("div", { id: descId, children: description }),
+            children
+          ] }),
+          footer && /* @__PURE__ */ (0, import_jsx_runtime53.jsx)("div", { className: "lw-dialog-foot", children: footer })
+        ]
+      }
     );
   }
 
   // components/overlays/Toast.jsx
   init_ds_inject_react();
+  var import_jsx_runtime54 = (
+    /* No role here. The enclosing ToastRegion is the live region; a role="status"
+       or role="alert" INSIDE it nests two, which is why an announcement could
+       come twice or not at all. An error toast raises the REGION's urgency
+       instead — one live region, one politeness setting. */
+    __toESM(require_ds_jsx_runtime(), 1)
+  );
   var cx51 = (...a) => a.filter(Boolean).join(" ");
   function Toast({ tone = "info", label, onClose, children, className, ...rest }) {
     const k = label || (tone === "ok" ? "done" : tone === "warn" ? "warn" : tone === "err" ? "error" : "info");
-    return (
-      /* No role here. The enclosing ToastRegion is the live region; a role="status"
-         or role="alert" INSIDE it nests two, which is why an announcement could
-         come twice or not at all. An error toast raises the REGION's urgency
-         instead — one live region, one politeness setting. */
-      /* @__PURE__ */ React.createElement("div", { className: cx51("lw-toast", tone !== "info" && tone, className), ...rest }, /* @__PURE__ */ React.createElement("span", { className: "k" }, k), /* @__PURE__ */ React.createElement("span", { className: "msg" }, children), onClose && /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": "Dismiss", title: "Dismiss", onClick: onClose }, /* @__PURE__ */ React.createElement(Icon, { name: "close", size: 15 })))
-    );
+    return /* @__PURE__ */ (0, import_jsx_runtime54.jsxs)("div", { className: cx51("lw-toast", tone !== "info" && tone, className), ...rest, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime54.jsx)("span", { className: "k", children: k }),
+      /* @__PURE__ */ (0, import_jsx_runtime54.jsx)("span", { className: "msg", children }),
+      onClose && /* @__PURE__ */ (0, import_jsx_runtime54.jsx)("button", { type: "button", className: "lw-icon-btn", "aria-label": "Dismiss", title: "Dismiss", onClick: onClose, children: /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(Icon, { name: "close", size: 15 }) })
+    ] });
   }
   function ToastRegion({ className, children, urgent, ...rest }) {
-    return /* @__PURE__ */ React.createElement(
+    return /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(
       "div",
       {
         className: cx51("lw-toast-region", className),
         role: "region",
         "aria-live": urgent ? "assertive" : "polite",
         "aria-label": "Notifications",
-        ...rest
-      },
-      children
+        ...rest,
+        children
+      }
     );
   }
 
   // components/overlays/Tooltip.jsx
   init_ds_inject_react();
+  var import_jsx_runtime55 = __toESM(require_ds_jsx_runtime(), 1);
   var cx52 = (...a) => a.filter(Boolean).join(" ");
   function Tooltip({ tip, className, children, ...rest }) {
-    return /* @__PURE__ */ React.createElement("span", { className: cx52("lw-tip", className), "data-tip": tip, ...rest }, children);
+    return /* @__PURE__ */ (0, import_jsx_runtime55.jsx)("span", { className: cx52("lw-tip", className), "data-tip": tip, ...rest, children });
   }
 
   // components/overlays/Menu.jsx
   init_ds_inject_react();
   var React26 = __toESM(require_ds_react(), 1);
+  var import_jsx_runtime56 = __toESM(require_ds_jsx_runtime(), 1);
   var cx53 = (...a) => a.filter(Boolean).join(" ");
   function Menu({ items = [], trigger, onSelect, label, placement = "bottom-start", matchWidth, className, ...rest }) {
     const [open, setOpen] = React26.useState(false);
@@ -2457,7 +2833,7 @@
         }
       }
     }) : trigger;
-    return /* @__PURE__ */ React26.createElement(
+    return /* @__PURE__ */ (0, import_jsx_runtime56.jsx)(
       Popover,
       {
         trigger: triggerEl,
@@ -2467,41 +2843,44 @@
         label,
         placement,
         matchWidth,
-        ...rest
-      },
-      /* @__PURE__ */ React26.createElement("div", { ref: listRef, role: "none", className: cx53("lw-menu", className), onKeyDown }, items.map((it, i) => {
-        if (it.type === "separator") return /* @__PURE__ */ React26.createElement("hr", { key: i, className: "lw-menu-sep" });
-        if (it.type === "label") return /* @__PURE__ */ React26.createElement("div", { key: i, className: "lw-menu-label" }, it.label);
-        const checkable = it.checked != null;
-        const Tag = it.href ? "a" : "button";
-        return /* @__PURE__ */ React26.createElement(
-          Tag,
-          {
-            key: it.value ?? i,
-            className: cx53("lw-menu-item", it.danger && "danger"),
-            type: it.href ? void 0 : "button",
-            href: it.href || void 0,
-            role: checkable ? "menuitemcheckbox" : "menuitem",
-            "aria-checked": checkable ? !!it.checked : void 0,
-            "aria-disabled": it.disabled ? "true" : void 0,
-            "data-checked": checkable && it.checked ? "true" : void 0,
-            tabIndex: -1,
-            onClick: (e) => {
-              if (!it.href) e.preventDefault();
-              choose(it);
-            }
-          },
-          (checkable || it.icon) && /* @__PURE__ */ React26.createElement("span", { className: "lw-menu-lead" }, checkable ? it.checked ? /* @__PURE__ */ React26.createElement(Icon, { name: "checkmark", size: 14 }) : null : /* @__PURE__ */ React26.createElement(Icon, { name: it.icon, size: 15 })),
-          /* @__PURE__ */ React26.createElement("span", { className: "lw-menu-text" }, it.label),
-          it.kbd && /* @__PURE__ */ React26.createElement("span", { className: "lw-menu-kbd" }, it.kbd)
-        );
-      }))
+        ...rest,
+        children: /* @__PURE__ */ (0, import_jsx_runtime56.jsx)("div", { ref: listRef, role: "none", className: cx53("lw-menu", className), onKeyDown, children: items.map((it, i) => {
+          if (it.type === "separator") return /* @__PURE__ */ (0, import_jsx_runtime56.jsx)("hr", { className: "lw-menu-sep" }, i);
+          if (it.type === "label") return /* @__PURE__ */ (0, import_jsx_runtime56.jsx)("div", { className: "lw-menu-label", children: it.label }, i);
+          const checkable = it.checked != null;
+          const Tag = it.href ? "a" : "button";
+          return /* @__PURE__ */ (0, import_jsx_runtime56.jsxs)(
+            Tag,
+            {
+              className: cx53("lw-menu-item", it.danger && "danger"),
+              type: it.href ? void 0 : "button",
+              href: it.href || void 0,
+              role: checkable ? "menuitemcheckbox" : "menuitem",
+              "aria-checked": checkable ? !!it.checked : void 0,
+              "aria-disabled": it.disabled ? "true" : void 0,
+              "data-checked": checkable && it.checked ? "true" : void 0,
+              tabIndex: -1,
+              onClick: (e) => {
+                if (!it.href) e.preventDefault();
+                choose(it);
+              },
+              children: [
+                (checkable || it.icon) && /* @__PURE__ */ (0, import_jsx_runtime56.jsx)("span", { className: "lw-menu-lead", children: checkable ? it.checked ? /* @__PURE__ */ (0, import_jsx_runtime56.jsx)(Icon, { name: "checkmark", size: 14 }) : null : /* @__PURE__ */ (0, import_jsx_runtime56.jsx)(Icon, { name: it.icon, size: 15 }) }),
+                /* @__PURE__ */ (0, import_jsx_runtime56.jsx)("span", { className: "lw-menu-text", children: it.label }),
+                it.kbd && /* @__PURE__ */ (0, import_jsx_runtime56.jsx)("span", { className: "lw-menu-kbd", children: it.kbd })
+              ]
+            },
+            it.value ?? i
+          );
+        }) })
+      }
     );
   }
 
   // components/overlays/Drawer.jsx
   init_ds_inject_react();
   var React27 = __toESM(require_ds_react(), 1);
+  var import_jsx_runtime57 = __toESM(require_ds_jsx_runtime(), 1);
   var cx54 = (...a) => a.filter(Boolean).join(" ");
   function Drawer({ open, onClose, title, description, footer, side = "end", width, className, children, ...rest }) {
     const ref = React27.useRef(null);
@@ -2515,7 +2894,7 @@
       if (open && !el.open) el.showModal();
       if (!open && el.open) el.close();
     }, [open]);
-    return /* @__PURE__ */ React27.createElement(
+    return /* @__PURE__ */ (0, import_jsx_runtime57.jsxs)(
       "dialog",
       {
         ref,
@@ -2529,16 +2908,25 @@
         },
         "aria-labelledby": titleId,
         "aria-describedby": descId,
-        ...rest
-      },
-      title && /* @__PURE__ */ React27.createElement("div", { className: "lw-drawer-head" }, /* @__PURE__ */ React27.createElement("h2", { className: "lw-drawer-title", id: titleId }, title), /* @__PURE__ */ React27.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": "Close", title: "Close", onClick: onClose }, /* @__PURE__ */ React27.createElement(Icon, { name: "close", size: 17 }))),
-      /* @__PURE__ */ React27.createElement("div", { className: "lw-drawer-body" }, description && /* @__PURE__ */ React27.createElement("div", { id: descId }, description), children),
-      footer && /* @__PURE__ */ React27.createElement("div", { className: "lw-drawer-foot" }, footer)
+        ...rest,
+        children: [
+          title && /* @__PURE__ */ (0, import_jsx_runtime57.jsxs)("div", { className: "lw-drawer-head", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime57.jsx)("h2", { className: "lw-drawer-title", id: titleId, children: title }),
+            /* @__PURE__ */ (0, import_jsx_runtime57.jsx)("button", { type: "button", className: "lw-icon-btn", "aria-label": "Close", title: "Close", onClick: onClose, children: /* @__PURE__ */ (0, import_jsx_runtime57.jsx)(Icon, { name: "close", size: 17 }) })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime57.jsxs)("div", { className: "lw-drawer-body", children: [
+            description && /* @__PURE__ */ (0, import_jsx_runtime57.jsx)("div", { id: descId, children: description }),
+            children
+          ] }),
+          footer && /* @__PURE__ */ (0, import_jsx_runtime57.jsx)("div", { className: "lw-drawer-foot", children: footer })
+        ]
+      }
     );
   }
 
   // components/ai/PromptInput.jsx
   init_ds_inject_react();
+  var import_jsx_runtime58 = __toESM(require_ds_jsx_runtime(), 1);
   var cx55 = (...a) => a.filter(Boolean).join(" ");
   function PromptInput({ value, onChange, onSubmit, placeholder = "Ask anything about your documents…", hint = "⏎ to send · ⇧⏎ newline", label = "Prompt", tools, action, disabled, className, children, ...rest }) {
     const onKeyDown = (e) => {
@@ -2548,73 +2936,99 @@
         onSubmit && onSubmit();
       }
     };
-    return /* @__PURE__ */ React.createElement("div", { className: cx55("lw-prompt", className), ...rest }, /* @__PURE__ */ React.createElement(
-      "textarea",
-      {
-        value,
-        onChange: (e) => onChange && onChange(e.target.value),
-        onKeyDown,
-        placeholder,
-        rows: 2,
-        disabled,
-        "aria-label": label
-      }
-    ), /* @__PURE__ */ React.createElement("div", { className: "lw-prompt-foot" }, children || /* @__PURE__ */ React.createElement(React.Fragment, null, tools, /* @__PURE__ */ React.createElement("span", { className: "spacer" }), /* @__PURE__ */ React.createElement("span", { className: "lw-prompt-hint" }, hint), action)));
+    return /* @__PURE__ */ (0, import_jsx_runtime58.jsxs)("div", { className: cx55("lw-prompt", className), ...rest, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(
+        "textarea",
+        {
+          value,
+          onChange: (e) => onChange && onChange(e.target.value),
+          onKeyDown,
+          placeholder,
+          rows: 2,
+          disabled,
+          "aria-label": label
+        }
+      ),
+      /* @__PURE__ */ (0, import_jsx_runtime58.jsx)("div", { className: "lw-prompt-foot", children: children || /* @__PURE__ */ (0, import_jsx_runtime58.jsxs)(import_jsx_runtime58.Fragment, { children: [
+        tools,
+        /* @__PURE__ */ (0, import_jsx_runtime58.jsx)("span", { className: "spacer" }),
+        /* @__PURE__ */ (0, import_jsx_runtime58.jsx)("span", { className: "lw-prompt-hint", children: hint }),
+        action
+      ] }) })
+    ] });
   }
 
   // components/ai/Message.jsx
   init_ds_inject_react();
+  var import_jsx_runtime59 = __toESM(require_ds_jsx_runtime(), 1);
   var cx56 = (...a) => a.filter(Boolean).join(" ");
   function Message({ role = "ai", who, avatar, streaming = false, footer, className, children, ...rest }) {
     const name = who || (role === "ai" ? "LeanWise" : "You");
-    const glyph = avatar || /* @__PURE__ */ React.createElement(Icon, { name: role === "ai" ? "spark" : "user", size: role === "ai" ? 19 : 16 });
-    return /* @__PURE__ */ React.createElement("div", { className: cx56("lw-msg", role, className), "data-streaming": streaming ? "true" : void 0, ...rest }, /* @__PURE__ */ React.createElement("span", { className: "lw-msg-avatar", "aria-hidden": "true" }, glyph), /* @__PURE__ */ React.createElement("div", { className: "lw-msg-main" }, /* @__PURE__ */ React.createElement("span", { className: "who" }, name), /* @__PURE__ */ React.createElement("div", { className: "body" }, children, footer)));
+    const glyph = avatar || /* @__PURE__ */ (0, import_jsx_runtime59.jsx)(Icon, { name: role === "ai" ? "spark" : "user", size: role === "ai" ? 19 : 16 });
+    return /* @__PURE__ */ (0, import_jsx_runtime59.jsxs)("div", { className: cx56("lw-msg", role, className), "data-streaming": streaming ? "true" : void 0, ...rest, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime59.jsx)("span", { className: "lw-msg-avatar", "aria-hidden": "true", children: glyph }),
+      /* @__PURE__ */ (0, import_jsx_runtime59.jsxs)("div", { className: "lw-msg-main", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime59.jsx)("span", { className: "who", children: name }),
+        /* @__PURE__ */ (0, import_jsx_runtime59.jsxs)("div", { className: "body", children: [
+          children,
+          footer
+        ] })
+      ] })
+    ] });
   }
 
   // components/ai/SourceChip.jsx
   init_ds_inject_react();
+  var import_jsx_runtime60 = __toESM(require_ds_jsx_runtime(), 1);
   var cx57 = (...a) => a.filter(Boolean).join(" ");
   function SourceChip({ n, title, as, className, ...rest }) {
     const Tag = as || (rest.href ? "a" : "button");
-    return /* @__PURE__ */ React.createElement(
+    return /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(
       Tag,
       {
         className: cx57("lw-source", className),
         type: Tag === "button" ? "button" : void 0,
         "aria-label": title ? `Source ${n}: ${title}` : `Source ${n}`,
-        ...rest
-      },
-      n
+        ...rest,
+        children: n
+      }
     );
   }
 
   // components/ai/SourceList.jsx
   init_ds_inject_react();
+  var import_jsx_runtime61 = __toESM(require_ds_jsx_runtime(), 1);
   var cx58 = (...a) => a.filter(Boolean).join(" ");
   function SourceList({ sources = [], className, ...rest }) {
-    return /* @__PURE__ */ React.createElement("div", { className: cx58("lw-source-list", className), ...rest }, sources.map((s, i) => {
+    return /* @__PURE__ */ (0, import_jsx_runtime61.jsx)("div", { className: cx58("lw-source-list", className), ...rest, children: sources.map((s, i) => {
       const Tag = s.href ? "a" : "button";
-      return /* @__PURE__ */ React.createElement(
+      return /* @__PURE__ */ (0, import_jsx_runtime61.jsxs)(
         Tag,
         {
-          key: s.id ?? i,
           className: "lw-source-item",
           href: s.href || void 0,
           type: s.href ? void 0 : "button",
-          onClick: s.onClick
+          onClick: s.onClick,
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime61.jsx)("span", { className: "n", children: s.n ?? i + 1 }),
+            /* @__PURE__ */ (0, import_jsx_runtime61.jsxs)("span", { className: "lw-source-main", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime61.jsx)("span", { className: "t", children: s.title }),
+              s.meta && /* @__PURE__ */ (0, import_jsx_runtime61.jsx)("span", { className: "m", children: s.meta })
+            ] })
+          ]
         },
-        /* @__PURE__ */ React.createElement("span", { className: "n" }, s.n ?? i + 1),
-        /* @__PURE__ */ React.createElement("span", { className: "lw-source-main" }, /* @__PURE__ */ React.createElement("span", { className: "t" }, s.title), s.meta && /* @__PURE__ */ React.createElement("span", { className: "m" }, s.meta))
+        s.id ?? i
       );
-    }));
+    }) });
   }
 
   // components/ai/ConfidenceMeter.jsx
   init_ds_inject_react();
+  var import_jsx_runtime62 = __toESM(require_ds_jsx_runtime(), 1);
   var cx59 = (...a) => a.filter(Boolean).join(" ");
   function ConfidenceMeter({ value = 0, label = "match", className, style, ...rest }) {
     const pct = Math.max(0, Math.min(100, Math.round(value)));
-    return /* @__PURE__ */ React.createElement(
+    return /* @__PURE__ */ (0, import_jsx_runtime62.jsxs)(
       "span",
       {
         className: cx59("lw-confidence", pct < 60 && "low", className),
@@ -2624,56 +3038,154 @@
         "aria-valuemin": 0,
         "aria-valuemax": 100,
         "aria-label": label,
-        ...rest
-      },
-      /* @__PURE__ */ React.createElement("span", { className: "rail", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("i", null)),
-      /* @__PURE__ */ React.createElement("span", null, pct, "%")
+        ...rest,
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime62.jsx)("span", { className: "rail", "aria-hidden": "true", children: /* @__PURE__ */ (0, import_jsx_runtime62.jsx)("i", {}) }),
+          /* @__PURE__ */ (0, import_jsx_runtime62.jsxs)("span", { children: [
+            pct,
+            "%"
+          ] })
+        ]
+      }
     );
   }
 
   // components/ai/AgentTrace.jsx
   init_ds_inject_react();
+  var import_jsx_runtime63 = __toESM(require_ds_jsx_runtime(), 1);
   var cx60 = (...a) => a.filter(Boolean).join(" ");
   function AgentTrace({ steps = [], className, ...rest }) {
-    return /* @__PURE__ */ React.createElement("ol", { className: cx60("lw-trace", className), ...rest }, steps.map((s, i) => /* @__PURE__ */ React.createElement("li", { key: i, "data-state": s.state || "pending" }, /* @__PURE__ */ React.createElement("span", { className: "step" }, s.label), s.meta && /* @__PURE__ */ React.createElement("span", { className: "meta" }, s.meta))));
+    return /* @__PURE__ */ (0, import_jsx_runtime63.jsx)("ol", { className: cx60("lw-trace", className), ...rest, children: steps.map((s, i) => /* @__PURE__ */ (0, import_jsx_runtime63.jsxs)("li", { "data-state": s.state || "pending", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime63.jsx)("span", { className: "step", children: s.label }),
+      s.meta && /* @__PURE__ */ (0, import_jsx_runtime63.jsx)("span", { className: "meta", children: s.meta })
+    ] }, i)) });
   }
 
   // components/ai/ToolCall.jsx
   init_ds_inject_react();
   var React28 = __toESM(require_ds_react(), 1);
+  var import_jsx_runtime64 = __toESM(require_ds_jsx_runtime(), 1);
   var cx61 = (...a) => a.filter(Boolean).join(" ");
   var fmt = (v) => typeof v === "string" ? v : JSON.stringify(v, null, 2);
   function ToolCall({ name, summary, args, result, error, state = "ok", duration, defaultOpen, className, ...rest }) {
     const [open, setOpen] = React28.useState(!!defaultOpen);
     const uid = React28.useId();
     const st = error ? "error" : state;
-    return /* @__PURE__ */ React28.createElement("div", { className: cx61("lw-tool", className), "data-state": st, ...rest }, /* @__PURE__ */ React28.createElement("button", { type: "button", className: "lw-tool-head", "aria-expanded": open, "aria-controls": uid, onClick: () => setOpen((o) => !o) }, /* @__PURE__ */ React28.createElement(Icon, { name: open ? "chevron-down" : "chevron-right", size: 14 }), /* @__PURE__ */ React28.createElement("span", { className: "lw-tool-dot", "aria-hidden": "true" }), /* @__PURE__ */ React28.createElement("span", { className: "lw-tool-name" }, name), /* @__PURE__ */ React28.createElement("span", { className: "lw-tool-sum" }, summary), duration != null && /* @__PURE__ */ React28.createElement("span", { className: "lw-tool-dur" }, duration, "ms"), /* @__PURE__ */ React28.createElement("span", { className: "lw-sr-only" }, st === "running" ? "running" : st === "error" ? "failed" : st === "pending" ? "pending" : "succeeded")), open && /* @__PURE__ */ React28.createElement("div", { className: "lw-tool-body", id: uid }, args != null && /* @__PURE__ */ React28.createElement(React28.Fragment, null, /* @__PURE__ */ React28.createElement("span", { className: "k" }, "arguments"), /* @__PURE__ */ React28.createElement("pre", null, fmt(args))), error ? /* @__PURE__ */ React28.createElement(React28.Fragment, null, /* @__PURE__ */ React28.createElement("span", { className: "k" }, "error"), /* @__PURE__ */ React28.createElement("pre", { className: "err" }, fmt(error))) : result != null && /* @__PURE__ */ React28.createElement(React28.Fragment, null, /* @__PURE__ */ React28.createElement("span", { className: "k" }, "result"), /* @__PURE__ */ React28.createElement("pre", null, fmt(result)))));
+    return /* @__PURE__ */ (0, import_jsx_runtime64.jsxs)("div", { className: cx61("lw-tool", className), "data-state": st, ...rest, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime64.jsxs)("button", { type: "button", className: "lw-tool-head", "aria-expanded": open, "aria-controls": uid, onClick: () => setOpen((o) => !o), children: [
+        /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(Icon, { name: open ? "chevron-down" : "chevron-right", size: 14 }),
+        /* @__PURE__ */ (0, import_jsx_runtime64.jsx)("span", { className: "lw-tool-dot", "aria-hidden": "true" }),
+        /* @__PURE__ */ (0, import_jsx_runtime64.jsx)("span", { className: "lw-tool-name", children: name }),
+        /* @__PURE__ */ (0, import_jsx_runtime64.jsx)("span", { className: "lw-tool-sum", children: summary }),
+        duration != null && /* @__PURE__ */ (0, import_jsx_runtime64.jsxs)("span", { className: "lw-tool-dur", children: [
+          duration,
+          "ms"
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime64.jsx)("span", { className: "lw-sr-only", children: st === "running" ? "running" : st === "error" ? "failed" : st === "pending" ? "pending" : "succeeded" })
+      ] }),
+      open && /* @__PURE__ */ (0, import_jsx_runtime64.jsxs)("div", { className: "lw-tool-body", id: uid, children: [
+        args != null && /* @__PURE__ */ (0, import_jsx_runtime64.jsxs)(import_jsx_runtime64.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime64.jsx)("span", { className: "k", children: "arguments" }),
+          /* @__PURE__ */ (0, import_jsx_runtime64.jsx)("pre", { children: fmt(args) })
+        ] }),
+        error ? /* @__PURE__ */ (0, import_jsx_runtime64.jsxs)(import_jsx_runtime64.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime64.jsx)("span", { className: "k", children: "error" }),
+          /* @__PURE__ */ (0, import_jsx_runtime64.jsx)("pre", { className: "err", children: fmt(error) })
+        ] }) : result != null && /* @__PURE__ */ (0, import_jsx_runtime64.jsxs)(import_jsx_runtime64.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime64.jsx)("span", { className: "k", children: "result" }),
+          /* @__PURE__ */ (0, import_jsx_runtime64.jsx)("pre", { children: fmt(result) })
+        ] })
+      ] })
+    ] });
   }
 
   // components/ai/DiffReview.jsx
   init_ds_inject_react();
+  var import_jsx_runtime65 = __toESM(require_ds_jsx_runtime(), 1);
   var cx62 = (...a) => a.filter(Boolean).join(" ");
   var SIGN = { add: "+", del: "−", mod: "~" };
   function DiffReview({ hunks = [], decisions = {}, onDecide, onAcceptAll, onRejectAll, label = "Proposed changes", className, ...rest }) {
     const pending = hunks.filter((h) => !decisions[h.id]).length;
-    return /* @__PURE__ */ React.createElement("div", { className: cx62("lw-diff", className), role: "group", "aria-label": label, ...rest }, hunks.map((h) => {
-      const d = decisions[h.id];
-      return /* @__PURE__ */ React.createElement("div", { key: h.id, className: "lw-diff-hunk", "data-decision": d }, /* @__PURE__ */ React.createElement("div", { className: "lw-diff-head" }, /* @__PURE__ */ React.createElement(Icon, { name: "file", size: 14, className: "lw-diff-ic" }), /* @__PURE__ */ React.createElement("span", { className: "lw-diff-file" }, h.file, h.range ? " · " + h.range : "")), /* @__PURE__ */ React.createElement("div", { className: "lw-diff-lines" }, h.lines.map((l, i) => /* @__PURE__ */ React.createElement("div", { key: i, className: "lw-diff-line", "data-kind": l.kind }, /* @__PURE__ */ React.createElement("span", { className: "n" }, l.n ?? ""), /* @__PURE__ */ React.createElement("span", { className: "s", "aria-hidden": "true" }, SIGN[l.kind] || ""), /* @__PURE__ */ React.createElement("span", { className: "t" }, l.kind && /* @__PURE__ */ React.createElement("span", { className: "lw-sr-only" }, l.kind === "add" ? "added: " : l.kind === "del" ? "removed: " : "changed: "), l.text)))), /* @__PURE__ */ React.createElement("div", { className: "lw-diff-foot" }, /* @__PURE__ */ React.createElement("span", { className: "lw-diff-state" }, d === "accepted" ? "Accepted" : d === "rejected" ? "Rejected" : h.note || ""), d ? /* @__PURE__ */ React.createElement(Button, { size: "sm", variant: "ghost", onClick: () => onDecide && onDecide(h.id, null) }, /* @__PURE__ */ React.createElement(Icon, { name: "undo", size: 14 }), "Undo") : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(Button, { size: "sm", variant: "ghost", onClick: () => onDecide && onDecide(h.id, "rejected") }, "Reject"), /* @__PURE__ */ React.createElement(Button, { size: "sm", onClick: () => onDecide && onDecide(h.id, "accepted") }, "Accept"))));
-    }), hunks.length > 1 && /* @__PURE__ */ React.createElement("div", { className: "lw-diff-foot" }, /* @__PURE__ */ React.createElement("span", { className: "lw-diff-state", "aria-live": "polite" }, pending ? pending + " of " + hunks.length + " still to review" : "All " + hunks.length + " reviewed"), /* @__PURE__ */ React.createElement(Button, { size: "sm", variant: "ghost", onClick: onRejectAll, disabled: !pending }, "Reject all"), /* @__PURE__ */ React.createElement(Button, { size: "sm", onClick: onAcceptAll, disabled: !pending }, "Accept all")));
+    return /* @__PURE__ */ (0, import_jsx_runtime65.jsxs)("div", { className: cx62("lw-diff", className), role: "group", "aria-label": label, ...rest, children: [
+      hunks.map((h) => {
+        const d = decisions[h.id];
+        return /* @__PURE__ */ (0, import_jsx_runtime65.jsxs)("div", { className: "lw-diff-hunk", "data-decision": d, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime65.jsxs)("div", { className: "lw-diff-head", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(Icon, { name: "file", size: 14, className: "lw-diff-ic" }),
+            /* @__PURE__ */ (0, import_jsx_runtime65.jsxs)("span", { className: "lw-diff-file", children: [
+              h.file,
+              h.range ? " · " + h.range : ""
+            ] })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime65.jsx)("div", { className: "lw-diff-lines", children: h.lines.map((l, i) => /* @__PURE__ */ (0, import_jsx_runtime65.jsxs)("div", { className: "lw-diff-line", "data-kind": l.kind, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime65.jsx)("span", { className: "n", children: l.n ?? "" }),
+            /* @__PURE__ */ (0, import_jsx_runtime65.jsx)("span", { className: "s", "aria-hidden": "true", children: SIGN[l.kind] || "" }),
+            /* @__PURE__ */ (0, import_jsx_runtime65.jsxs)("span", { className: "t", children: [
+              l.kind && /* @__PURE__ */ (0, import_jsx_runtime65.jsx)("span", { className: "lw-sr-only", children: l.kind === "add" ? "added: " : l.kind === "del" ? "removed: " : "changed: " }),
+              l.text
+            ] })
+          ] }, i)) }),
+          /* @__PURE__ */ (0, import_jsx_runtime65.jsxs)("div", { className: "lw-diff-foot", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime65.jsx)("span", { className: "lw-diff-state", children: d === "accepted" ? "Accepted" : d === "rejected" ? "Rejected" : h.note || "" }),
+            d ? /* @__PURE__ */ (0, import_jsx_runtime65.jsxs)(Button, { size: "sm", variant: "ghost", onClick: () => onDecide && onDecide(h.id, null), children: [
+              /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(Icon, { name: "undo", size: 14 }),
+              "Undo"
+            ] }) : /* @__PURE__ */ (0, import_jsx_runtime65.jsxs)(import_jsx_runtime65.Fragment, { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(Button, { size: "sm", variant: "ghost", onClick: () => onDecide && onDecide(h.id, "rejected"), children: "Reject" }),
+              /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(Button, { size: "sm", onClick: () => onDecide && onDecide(h.id, "accepted"), children: "Accept" })
+            ] })
+          ] })
+        ] }, h.id);
+      }),
+      hunks.length > 1 && /* @__PURE__ */ (0, import_jsx_runtime65.jsxs)("div", { className: "lw-diff-foot", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime65.jsx)("span", { className: "lw-diff-state", "aria-live": "polite", children: pending ? pending + " of " + hunks.length + " still to review" : "All " + hunks.length + " reviewed" }),
+        /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(Button, { size: "sm", variant: "ghost", onClick: onRejectAll, disabled: !pending, children: "Reject all" }),
+        /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(Button, { size: "sm", onClick: onAcceptAll, disabled: !pending, children: "Accept all" })
+      ] })
+    ] });
   }
 
   // components/ai/Artifact.jsx
   init_ds_inject_react();
+  var import_jsx_runtime66 = __toESM(require_ds_jsx_runtime(), 1);
   var cx63 = (...a) => a.filter(Boolean).join(" ");
   function Artifact({ title, version, versionCount, onPrevVersion, onNextVersion, onRevert, onEdit, actions, className, children, ...rest }) {
     const canPrev = version > 1;
     const canNext = versionCount != null && version < versionCount;
-    return /* @__PURE__ */ React.createElement("div", { className: cx63("lw-artifact", className), ...rest }, /* @__PURE__ */ React.createElement("div", { className: "lw-artifact-head" }, /* @__PURE__ */ React.createElement(Icon, { name: "file", size: 15, className: "lw-artifact-ic" }), /* @__PURE__ */ React.createElement("span", { className: "lw-artifact-title" }, title), version != null && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": "Previous version", disabled: !canPrev, onClick: onPrevVersion }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron-left", size: 15 })), /* @__PURE__ */ React.createElement("span", { className: "lw-artifact-ver" }, "v", version, versionCount ? " / " + versionCount : ""), /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": "Next version", disabled: !canNext, onClick: onNextVersion }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron-right", size: 15 })))), /* @__PURE__ */ React.createElement("div", { className: "lw-artifact-body" }, children), (onRevert || onEdit || actions) && /* @__PURE__ */ React.createElement("div", { className: "lw-artifact-foot" }, onEdit && /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-btn lw-btn-ghost lw-btn-sm", onClick: onEdit }, /* @__PURE__ */ React.createElement(Icon, { name: "edit", size: 14 }), "Edit manually"), onRevert && /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-btn lw-btn-ghost lw-btn-sm", onClick: onRevert }, /* @__PURE__ */ React.createElement(Icon, { name: "undo", size: 14 }), "Revert"), /* @__PURE__ */ React.createElement("span", { className: "lw-spacer" }), actions));
+    return /* @__PURE__ */ (0, import_jsx_runtime66.jsxs)("div", { className: cx63("lw-artifact", className), ...rest, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime66.jsxs)("div", { className: "lw-artifact-head", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(Icon, { name: "file", size: 15, className: "lw-artifact-ic" }),
+        /* @__PURE__ */ (0, import_jsx_runtime66.jsx)("span", { className: "lw-artifact-title", children: title }),
+        version != null && /* @__PURE__ */ (0, import_jsx_runtime66.jsxs)(import_jsx_runtime66.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime66.jsx)("button", { type: "button", className: "lw-icon-btn", "aria-label": "Previous version", disabled: !canPrev, onClick: onPrevVersion, children: /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(Icon, { name: "chevron-left", size: 15 }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime66.jsxs)("span", { className: "lw-artifact-ver", children: [
+            "v",
+            version,
+            versionCount ? " / " + versionCount : ""
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime66.jsx)("button", { type: "button", className: "lw-icon-btn", "aria-label": "Next version", disabled: !canNext, onClick: onNextVersion, children: /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(Icon, { name: "chevron-right", size: 15 }) })
+        ] })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime66.jsx)("div", { className: "lw-artifact-body", children }),
+      (onRevert || onEdit || actions) && /* @__PURE__ */ (0, import_jsx_runtime66.jsxs)("div", { className: "lw-artifact-foot", children: [
+        onEdit && /* @__PURE__ */ (0, import_jsx_runtime66.jsxs)("button", { type: "button", className: "lw-btn lw-btn-ghost lw-btn-sm", onClick: onEdit, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(Icon, { name: "edit", size: 14 }),
+          "Edit manually"
+        ] }),
+        onRevert && /* @__PURE__ */ (0, import_jsx_runtime66.jsxs)("button", { type: "button", className: "lw-btn lw-btn-ghost lw-btn-sm", onClick: onRevert, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(Icon, { name: "undo", size: 14 }),
+          "Revert"
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime66.jsx)("span", { className: "lw-spacer" }),
+        actions
+      ] })
+    ] });
   }
 
   // components/ai/Feedback.jsx
   init_ds_inject_react();
   var React29 = __toESM(require_ds_react(), 1);
+  var import_jsx_runtime67 = __toESM(require_ds_jsx_runtime(), 1);
   var cx64 = (...a) => a.filter(Boolean).join(" ");
   function Feedback({ value, onChange, onComment, commentPlaceholder = "What was wrong?", note, className, ...rest }) {
     const [open, setOpen] = React29.useState(false);
@@ -2683,68 +3195,117 @@
       onChange && onChange(next);
       if (next === "down" && onComment) setOpen(true);
     };
-    return /* @__PURE__ */ React29.createElement("div", { className: cx64(className), ...rest }, /* @__PURE__ */ React29.createElement("div", { className: "lw-feedback" }, /* @__PURE__ */ React29.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": "Helpful", "aria-pressed": value === "up", onClick: () => set("up") }, /* @__PURE__ */ React29.createElement(Icon, { name: "thumbs-up", size: 15 })), /* @__PURE__ */ React29.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": "Not helpful", "aria-pressed": value === "down", onClick: () => set("down") }, /* @__PURE__ */ React29.createElement(Icon, { name: "thumbs-down", size: 15 })), note && /* @__PURE__ */ React29.createElement("span", { className: "lw-feedback-note" }, note)), open && onComment && /* @__PURE__ */ React29.createElement(
-      "form",
-      {
-        className: "lw-feedback-form",
-        onSubmit: (e) => {
-          e.preventDefault();
-          onComment(text);
-          setOpen(false);
-          setText("");
-        }
-      },
-      /* @__PURE__ */ React29.createElement(
-        "textarea",
+    return /* @__PURE__ */ (0, import_jsx_runtime67.jsxs)("div", { className: cx64(className), ...rest, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime67.jsxs)("div", { className: "lw-feedback", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime67.jsx)("button", { type: "button", className: "lw-icon-btn", "aria-label": "Helpful", "aria-pressed": value === "up", onClick: () => set("up"), children: /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(Icon, { name: "thumbs-up", size: 15 }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime67.jsx)("button", { type: "button", className: "lw-icon-btn", "aria-label": "Not helpful", "aria-pressed": value === "down", onClick: () => set("down"), children: /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(Icon, { name: "thumbs-down", size: 15 }) }),
+        note && /* @__PURE__ */ (0, import_jsx_runtime67.jsx)("span", { className: "lw-feedback-note", children: note })
+      ] }),
+      open && onComment && /* @__PURE__ */ (0, import_jsx_runtime67.jsxs)(
+        "form",
         {
-          className: "lw-textarea",
-          rows: 2,
-          value: text,
-          autoFocus: true,
-          "aria-label": commentPlaceholder,
-          placeholder: commentPlaceholder,
-          onChange: (e) => setText(e.target.value)
+          className: "lw-feedback-form",
+          onSubmit: (e) => {
+            e.preventDefault();
+            onComment(text);
+            setOpen(false);
+            setText("");
+          },
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(
+              "textarea",
+              {
+                className: "lw-textarea",
+                rows: 2,
+                value: text,
+                autoFocus: true,
+                "aria-label": commentPlaceholder,
+                placeholder: commentPlaceholder,
+                onChange: (e) => setText(e.target.value)
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime67.jsxs)("div", { className: "lw-feedback-actions", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime67.jsx)("button", { type: "button", className: "lw-btn lw-btn-ghost lw-btn-sm", onClick: () => setOpen(false), children: "Cancel" }),
+              /* @__PURE__ */ (0, import_jsx_runtime67.jsx)("button", { type: "submit", className: "lw-btn lw-btn-sm", disabled: !text.trim(), children: "Send" })
+            ] })
+          ]
         }
-      ),
-      /* @__PURE__ */ React29.createElement("div", { className: "lw-feedback-actions" }, /* @__PURE__ */ React29.createElement("button", { type: "button", className: "lw-btn lw-btn-ghost lw-btn-sm", onClick: () => setOpen(false) }, "Cancel"), /* @__PURE__ */ React29.createElement("button", { type: "submit", className: "lw-btn lw-btn-sm", disabled: !text.trim() }, "Send"))
-    ));
+      )
+    ] });
   }
 
   // components/marketing/Hero.jsx
   init_ds_inject_react();
+  var import_jsx_runtime68 = __toESM(require_ds_jsx_runtime(), 1);
   var cx65 = (...a) => a.filter(Boolean).join(" ");
   function Hero({ eyebrow, title, lead, actions, aside, className, children, ...rest }) {
-    return /* @__PURE__ */ React.createElement("section", { className: cx65("lw-hero-dark", className), ...rest }, /* @__PURE__ */ React.createElement("div", { className: "lw-container" }, eyebrow && /* @__PURE__ */ React.createElement("p", { className: "lw-eyebrow" }, eyebrow), title && /* @__PURE__ */ React.createElement("h1", { className: "lw-h1" }, title), lead && /* @__PURE__ */ React.createElement("p", { className: "lw-lead" }, lead), actions && /* @__PURE__ */ React.createElement("div", { className: "lw-cluster lw-cluster-12 lw-hero-actions" }, actions), aside, children));
+    return /* @__PURE__ */ (0, import_jsx_runtime68.jsx)("section", { className: cx65("lw-hero-dark", className), ...rest, children: /* @__PURE__ */ (0, import_jsx_runtime68.jsxs)("div", { className: "lw-container", children: [
+      eyebrow && /* @__PURE__ */ (0, import_jsx_runtime68.jsx)("p", { className: "lw-eyebrow", children: eyebrow }),
+      title && /* @__PURE__ */ (0, import_jsx_runtime68.jsx)("h1", { className: "lw-h1", children: title }),
+      lead && /* @__PURE__ */ (0, import_jsx_runtime68.jsx)("p", { className: "lw-lead", children: lead }),
+      actions && /* @__PURE__ */ (0, import_jsx_runtime68.jsx)("div", { className: "lw-cluster lw-cluster-12 lw-hero-actions", children: actions }),
+      aside,
+      children
+    ] }) });
   }
 
   // components/marketing/FeatureGrid.jsx
   init_ds_inject_react();
+  var import_jsx_runtime69 = __toESM(require_ds_jsx_runtime(), 1);
   var cx66 = (...a) => a.filter(Boolean).join(" ");
   function FeatureGrid({ features = [], className, ...rest }) {
-    return /* @__PURE__ */ React.createElement("div", { className: cx66("lw-features", className), ...rest }, features.map((f, i) => {
+    return /* @__PURE__ */ (0, import_jsx_runtime69.jsx)("div", { className: cx66("lw-features", className), ...rest, children: features.map((f, i) => {
       const Tag = f.href ? "a" : "div";
-      return /* @__PURE__ */ React.createElement(Tag, { key: i, className: cx66("lw-feature", f.href && "lw-feature-interactive"), href: f.href }, /* @__PURE__ */ React.createElement("span", { className: "num" }, String(i + 1).padStart(2, "0")), /* @__PURE__ */ React.createElement("h3", null, f.title), /* @__PURE__ */ React.createElement("p", null, f.body), f.href && /* @__PURE__ */ React.createElement("span", { className: "lw-feature-more" }, f.more || "Learn more", /* @__PURE__ */ React.createElement(Icon, { name: "arrow-right", size: 14, className: "arrow" })));
-    }));
+      return /* @__PURE__ */ (0, import_jsx_runtime69.jsxs)(Tag, { className: cx66("lw-feature", f.href && "lw-feature-interactive"), href: f.href, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime69.jsx)("span", { className: "num", children: String(i + 1).padStart(2, "0") }),
+        /* @__PURE__ */ (0, import_jsx_runtime69.jsx)("h3", { children: f.title }),
+        /* @__PURE__ */ (0, import_jsx_runtime69.jsx)("p", { children: f.body }),
+        f.href && /* @__PURE__ */ (0, import_jsx_runtime69.jsxs)("span", { className: "lw-feature-more", children: [
+          f.more || "Learn more",
+          /* @__PURE__ */ (0, import_jsx_runtime69.jsx)(Icon, { name: "arrow-right", size: 14, className: "arrow" })
+        ] })
+      ] }, i);
+    }) });
   }
 
   // components/marketing/StoryCard.jsx
   init_ds_inject_react();
+  var import_jsx_runtime70 = __toESM(require_ds_jsx_runtime(), 1);
   var cx67 = (...a) => a.filter(Boolean).join(" ");
   function StoryCard({ logo, title, body, result, quote, person, role, href, className, ...rest }) {
     const Tag = href ? "a" : "div";
     const showQuote = Boolean(quote && person && role);
     const initials = String(title || "").trim().split(/\s+/).slice(0, 2).map((w) => w[0] || "").join("").toUpperCase();
-    return /* @__PURE__ */ React.createElement(Tag, { className: cx67("lw-story", href && "lw-story-interactive", className), href, ...rest }, logo ? /* @__PURE__ */ React.createElement("span", { className: "logo" }, logo) : /* @__PURE__ */ React.createElement("span", { className: "logo lw-monogram" }, initials), /* @__PURE__ */ React.createElement("div", null, title && /* @__PURE__ */ React.createElement("h3", null, title), body && /* @__PURE__ */ React.createElement("p", null, body), showQuote && /* @__PURE__ */ React.createElement("blockquote", { className: "lw-story-quote" }, quote, /* @__PURE__ */ React.createElement("cite", null, person, " · ", role)), result && /* @__PURE__ */ React.createElement("div", { className: "meta" }, /* @__PURE__ */ React.createElement("span", { className: "lw-story-result" }, /* @__PURE__ */ React.createElement("b", null, result)))));
+    return /* @__PURE__ */ (0, import_jsx_runtime70.jsxs)(Tag, { className: cx67("lw-story", href && "lw-story-interactive", className), href, ...rest, children: [
+      logo ? /* @__PURE__ */ (0, import_jsx_runtime70.jsx)("span", { className: "logo", children: logo }) : /* @__PURE__ */ (0, import_jsx_runtime70.jsx)("span", { className: "logo lw-monogram", children: initials }),
+      /* @__PURE__ */ (0, import_jsx_runtime70.jsxs)("div", { children: [
+        title && /* @__PURE__ */ (0, import_jsx_runtime70.jsx)("h3", { children: title }),
+        body && /* @__PURE__ */ (0, import_jsx_runtime70.jsx)("p", { children: body }),
+        showQuote && /* @__PURE__ */ (0, import_jsx_runtime70.jsxs)("blockquote", { className: "lw-story-quote", children: [
+          quote,
+          /* @__PURE__ */ (0, import_jsx_runtime70.jsxs)("cite", { children: [
+            person,
+            " · ",
+            role
+          ] })
+        ] }),
+        result && /* @__PURE__ */ (0, import_jsx_runtime70.jsx)("div", { className: "meta", children: /* @__PURE__ */ (0, import_jsx_runtime70.jsx)("span", { className: "lw-story-result", children: /* @__PURE__ */ (0, import_jsx_runtime70.jsx)("b", { children: result }) }) })
+      ] })
+    ] });
   }
 
   // components/marketing/LogoRail.jsx
   init_ds_inject_react();
+  var import_jsx_runtime71 = __toESM(require_ds_jsx_runtime(), 1);
   var cx68 = (...a) => a.filter(Boolean).join(" ");
   function LogoRail({ logos = [], marquee = false, className, ...rest }) {
     const cells = logos.map(
-      (l, i) => l.src ? /* @__PURE__ */ React.createElement("span", { key: i, className: "lw-logo-item", style: { "--lw-logo-src": `url("${l.src}")` }, role: "img", "aria-label": l.name }) : /* @__PURE__ */ React.createElement("span", { key: i, className: "lw-logo-item is-text" }, l.name)
+      (l, i) => l.src ? /* @__PURE__ */ (0, import_jsx_runtime71.jsx)("span", { className: "lw-logo-item", style: { "--lw-logo-src": `url("${l.src}")` }, role: "img", "aria-label": l.name }, i) : /* @__PURE__ */ (0, import_jsx_runtime71.jsx)("span", { className: "lw-logo-item is-text", children: l.name }, i)
     );
-    return /* @__PURE__ */ React.createElement("div", { className: cx68("lw-logo-rail", marquee && "marquee", className), ...rest }, marquee ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "lw-logo-track" }, cells), /* @__PURE__ */ React.createElement("div", { className: "lw-logo-track", "aria-hidden": "true" }, cells)) : cells);
+    return /* @__PURE__ */ (0, import_jsx_runtime71.jsx)("div", { className: cx68("lw-logo-rail", marquee && "marquee", className), ...rest, children: marquee ? /* @__PURE__ */ (0, import_jsx_runtime71.jsxs)(import_jsx_runtime71.Fragment, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime71.jsx)("div", { className: "lw-logo-track", children: cells }),
+      /* @__PURE__ */ (0, import_jsx_runtime71.jsx)("div", { className: "lw-logo-track", "aria-hidden": "true", children: cells })
+    ] }) : cells });
   }
 
   // ds-entry.js

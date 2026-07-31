@@ -21,4 +21,4 @@ export interface LineChartProps extends ChartProps { area?: boolean }
  * dark ground; every chart renders its numbers as a visually hidden table,
  * because a picture of data is not readable and a summary is not the data.
  */
-export declare function BarChart(props: BarChartProps): JSX.Element;
+export declare function BarChart(props: BarChartProps): React.JSX.Element;

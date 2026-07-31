@@ -16,4 +16,4 @@ export interface KpiTileProps extends React.HTMLAttributes<HTMLDivElement> {
   tone?: "pos" | "neg";
   note?: React.ReactNode;
 }
-export declare function KpiTile(props: KpiTileProps): JSX.Element;
+export declare function KpiTile(props: KpiTileProps): React.JSX.Element;

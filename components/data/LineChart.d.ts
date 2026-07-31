@@ -6,4 +6,4 @@ export interface LineChartProps extends ChartProps {
   area?: boolean;
 }
 /** The line and area chart. Same tokenised layer as `BarChart`. */
-export declare function LineChart(props: LineChartProps): JSX.Element;
+export declare function LineChart(props: LineChartProps): React.JSX.Element;

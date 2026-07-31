@@ -9,4 +9,4 @@ export interface CodeBlockProps extends React.HTMLAttributes<HTMLElement> {
   filename?: string;
   lang?: string;
 }
-export declare function CodeBlock(props: CodeBlockProps): JSX.Element;
+export declare function CodeBlock(props: CodeBlockProps): React.JSX.Element;

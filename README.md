@@ -614,11 +614,16 @@ PAIRS in isolation; axe proves the palette as actually composed, plus rendered A
 that is wrong in composition, a control with no accessible name, a heading order that only
 breaks inside a card.
 
-The scripts live in `templates/_tooling/` because every other directory is compiled into the
-browser bundle and a Node script cannot be. Through v1.0 they resolved the package root one
-level up from there — i.e. `templates/tokens.css`, a file that has never existed — so the gate
-this section calls load-bearing could not actually run. Fixed, and reached through
-`npm run check` so no consumer has to know the path.
+The scripts live in `tools/` — outside `templates/`, because every directory under it is
+compiled into the browser bundle and a Node script cannot be. They were under
+`templates/_tooling/` until v1.2, and that location cost the package its own lint in a
+consumer's CI: shipping them needed a `"!templates/_tooling"` exclusion plus a re-include in
+`files`, a pattern npm honours and **pnpm does not**, so the `lw-token-lint` bin was simply
+absent in a pnpm install. `tools/` needs no exclusion, and the bin is now packed
+unconditionally. (Through v1.0 the scripts also resolved the package root one level too far
+up — `templates/tokens.css`, a file that has never existed — so the gate this section calls
+load-bearing could not run at all. Fixed then; the same `..` count was re-checked on the v1.2
+move.)
 
 The lint fails on raw hex, on Tailwind palette escapes (`bg-emerald-500`), on arbitrary-value
 token access (`bg-[hsl(var(--primary))]` — use `bg-primary`), and on more than one

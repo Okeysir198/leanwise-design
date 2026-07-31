@@ -16,4 +16,4 @@ export interface TabsProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "o
   /** Accessible name for the tablist. */
   label?: string;
 }
-export declare function Tabs(props: TabsProps): JSX.Element;
+export declare function Tabs(props: TabsProps): React.JSX.Element;

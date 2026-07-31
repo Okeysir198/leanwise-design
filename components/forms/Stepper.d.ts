@@ -16,4 +16,4 @@ export interface StepperProps extends React.HTMLAttributes<HTMLDivElement> {
   label?: string;
 }
 /** Wizard progress. The marker carries the state, so it survives greyscale. */
-export declare function Stepper(props: StepperProps): JSX.Element;
+export declare function Stepper(props: StepperProps): React.JSX.Element;

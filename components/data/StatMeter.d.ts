@@ -15,4 +15,4 @@ export interface StatMeterProps extends React.HTMLAttributes<HTMLDivElement> {
   foot?: React.ReactNode;
   interactive?: boolean;
 }
-export declare function StatMeter(props: StatMeterProps): JSX.Element;
+export declare function StatMeter(props: StatMeterProps): React.JSX.Element;

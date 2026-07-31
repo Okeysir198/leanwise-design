@@ -9,4 +9,4 @@ export interface TooltipProps extends React.HTMLAttributes<HTMLSpanElement> {
  * key next to a button that is already labelled. `tip` is a string, not a node,
  * because a tooltip that can hold layout becomes a popover nobody can dismiss.
  */
-export declare function Tooltip(props: TooltipProps): JSX.Element;
+export declare function Tooltip(props: TooltipProps): React.JSX.Element;

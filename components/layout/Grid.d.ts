@@ -6,4 +6,4 @@ export interface GridProps extends React.HTMLAttributes<HTMLElement> {
   gap?: 16 | 24;
   as?: string;
 }
-export declare function Grid(props: GridProps): JSX.Element;
+export declare function Grid(props: GridProps): React.JSX.Element;

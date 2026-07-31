@@ -1,3 +1,4 @@
+"use client";
 import * as React from "react";
 import { Icon } from "../primitives/Icon.jsx";
 const cx = (...a) => a.filter(Boolean).join(" ");
@@ -20,13 +21,23 @@ export function formatBytes(n) {
  * onto a CHILD element, so a boolean flag flickers off every time the cursor
  * passes over the icon inside the zone.
  */
-export function FileUpload({
+/* forwardRef, for the same reason Input.jsx gives: without it react-hook-form's
+   register(), a Controller's field.ref, an imperative .focus() on a validation
+   error and every scroll-to-error silently do nothing. The five simple controls
+   have had this since v1.0; these five composites did not, which made them the
+   ones a real form could not use.
+
+   The ref is redirected to the FOCUSABLE element via useImperativeHandle rather
+   than to the wrapper — a form library calls .focus() on what it is given, and
+   focusing a <div> does nothing. Here that is the file <input>. */
+export const FileUpload = React.forwardRef(function FileUpload({
   files = [], onFiles, onRemove, accept, multiple, maxSize, disabled,
   title = "Drop files here", hint, className, ...rest
-}) {
+}, forwardedRef) {
   const [over, setOver] = React.useState(0);
   const [rejected, setRejected] = React.useState(null);
   const inputRef = React.useRef(null);
+  React.useImperativeHandle(forwardedRef, () => inputRef.current, []);
 
   const take = (list) => {
     const arr = Array.from(list || []);
@@ -77,4 +88,4 @@ export function FileUpload({
       )}
     </div>
   );
-}
+});

@@ -7,4 +7,4 @@ export interface TraceStep {
   state?: "pending" | "active" | "done" | "error";
 }
 export interface AgentTraceProps extends React.HTMLAttributes<HTMLOListElement> { steps?: TraceStep[] }
-export declare function AgentTrace(props: AgentTraceProps): JSX.Element;
+export declare function AgentTrace(props: AgentTraceProps): React.JSX.Element;

@@ -37,4 +37,4 @@ export interface PopoverProps extends Omit<React.HTMLAttributes<HTMLDivElement>,
  * ancestor's `overflow: hidden` without a portal; dismissal is explicit rather
  * than `popover="auto"`'s, which cannot tell the trigger from the outside world.
  */
-export declare function Popover(props: PopoverProps): JSX.Element;
+export declare function Popover(props: PopoverProps): React.JSX.Element;

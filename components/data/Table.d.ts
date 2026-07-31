@@ -53,4 +53,4 @@ export interface TableProps extends Omit<React.TableHTMLAttributes<HTMLTableElem
    */
   onSort?: ((sort: SortState) => void) | ((key: string, direction: SortDirection) => void);
 }
-export declare function Table(props: TableProps): JSX.Element;
+export declare function Table(props: TableProps): React.JSX.Element;

@@ -10,4 +10,4 @@ export interface TopBarProps extends React.HTMLAttributes<HTMLElement> {
   links?: TopBarLink[];
   actions?: React.ReactNode;
 }
-export declare function TopBar(props: TopBarProps): JSX.Element;
+export declare function TopBar(props: TopBarProps): React.JSX.Element;

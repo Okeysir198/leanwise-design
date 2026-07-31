@@ -11,4 +11,4 @@ export interface Source {
   onClick?: React.MouseEventHandler;
 }
 export interface SourceListProps extends React.HTMLAttributes<HTMLDivElement> { sources?: Source[] }
-export declare function SourceList(props: SourceListProps): JSX.Element;
+export declare function SourceList(props: SourceListProps): React.JSX.Element;

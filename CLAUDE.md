@@ -28,7 +28,7 @@ npm run check:visual   # every card x light/dark x comfortable/compact. --self-t
 npm run tokens         # regenerate tokens.json (DTCG). GENERATED and COMMITTED — see below.
 npm run dts            # regenerate react.d.ts from react.js. Also generated and committed.
 npm run bundle         # regenerate _ds_bundle.js from the .jsx sources. Ditto — run it after ANY .jsx edit.
-npm run build          # tsup, config at templates/_tooling/tsup.config.js
+npm run build          # esbuild, per file, tools/lw-build.mjs -> dist/ (COMMITTED)
 ```
 
 **CI runs them all** (`.github/workflows/ci.yml`, every push/PR). Local `npm run check` is
@@ -38,7 +38,7 @@ deliberately the six that need no browser.
 raw-z-index rules over `base.css` / `marketing.css` / `product.css`, plus the
 missing-React-import rule over `components/**/*.jsx`. The TSX rules (raw hex,
 palette escape, arbitrary `var()`, one-CTA-per-view) only fire against *consumer* source:
-point it at one by hand before any pin bump — `node templates/_tooling/lw-token-lint.mjs
+point it at one by hand before any pin bump — `node tools/lw-token-lint.mjs
 <consumer>/src`. A green CI here proves contrast, theme parity and CSS discipline, **not**
 token discipline downstream.
 
@@ -70,8 +70,11 @@ components/       ai data forms layout marketing nav overlays primitives —
 templates/        twelve page templates, each *.dc.html + ds-base.js + support.js + .thumbnail.
                     ds-base.js and support.js are GENERATED and byte-identical across all
                     twelve — never hand-edit one copy.
-templates/_tooling/  the gates + _css.mjs (the shared CSS reader) + tsup.config.js. Note the PATH assumption: ROOT is TWO
-                    levels up, because the folder sits under templates/.
+tools/            the gates + _css.mjs (the shared CSS reader). ROOT is ONE level up.
+                    MOVED here from templates/_tooling in v1.2: the old location needed a
+                    `"!templates/_tooling"` + re-include pair in `files`, which packs under npm
+                    and NOT under pnpm — so the `bin` was missing in a pnpm consumer and the
+                    token lint silently stopped running there.
 preview/          thirteen foundation cards + _card.css/_card.js + _vendor/.
                     _vendor/ holds React, ReactDOM and @babel/standalone as PINNED, hashed
                     UMD copies (see its README). The cards used to load them from unpkg, which
@@ -197,7 +200,7 @@ so `check:themes` fails when `tokens.json` does not match what `tokens.css` woul
     never round up "to be safe."** Known blind spot, documented rather than tuned away: small
     area + moderate delta on one card sits under both.
   - **CI records the BASE REF's baseline on its own runner** (`$RUNNER_TEMP`, since
-    `actions/checkout` runs `git clean -ffdx`), re-checking out HEAD's `templates/_tooling` so
+    `actions/checkout` runs `git clean -ffdx`), re-checking out HEAD's `tools/` so
     both sides are scored by the same comparator. Needs `fetch-depth: 0`. No usable base ref
     (force-push, shallow, first commit) → loud skip at exit 0, never a silent pass.
   - **`[visual-ok]` in the head commit message** downgrades a failure to a report. This exists
@@ -349,7 +352,8 @@ the *design project's* number for the wholesale replacement; the first version a
 actually pin past that break is `#v1.1.1`.
 
 **All three are many versions behind and none can be bumped in one jump.** The replacement
-restructured the CSS layers, moved the CLIs under `templates/_tooling`, dropped `dist/`, and pointed
+restructured the CSS layers, moved the CLIs under `templates/_tooling` (moved again to `tools/`
+in v1.2), dropped `dist/` (restored in v1.2 — see below), and pointed
 `main` at a flat `./react.js`. Diffing the tags says where the risk actually is: **zero `--lw-*`
 tokens were dropped** (the new `tokens.css` is a strict superset, legacy `--lw-duration-*` aliases
 included) and the Tailwind preset kept every utility family, so the CSS surface is close to safe.

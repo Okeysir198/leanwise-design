@@ -1,3 +1,4 @@
+"use client";
 import * as React from "react";
 import { Icon } from "../primitives/Icon.jsx";
 import { Popover } from "./Popover.jsx";

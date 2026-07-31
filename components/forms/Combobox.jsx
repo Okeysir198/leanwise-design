@@ -1,3 +1,4 @@
+"use client";
 import * as React from "react";
 import { Icon } from "../primitives/Icon.jsx";
 import { Popover } from "../overlays/Popover.jsx";
@@ -15,16 +16,26 @@ const norm = (o) => (typeof o === "string" || typeof o === "number" ? { value: o
  * focus into the list would take it out of the field the user is still typing in.
  * (Menu is the opposite — there is nothing to type into, so focus moves.)
  */
-export function Combobox({
+/* forwardRef, for the same reason Input.jsx gives: without it react-hook-form's
+   register(), a Controller's field.ref, an imperative .focus() on a validation
+   error and every scroll-to-error silently do nothing. The five simple controls
+   have had this since v1.0; these five composites did not, which made them the
+   ones a real form could not use.
+
+   The ref is redirected to the FOCUSABLE element via useImperativeHandle rather
+   than to the wrapper — a form library calls .focus() on what it is given, and
+   focusing a <div> does nothing. Here that is the combobox <input>. */
+export const Combobox = React.forwardRef(function Combobox({
   options = [], value, onChange, multiple, placeholder, size = "md",
   invalid, disabled, loading, emptyText = "No matches", onSearch, id,
   label, className, ...rest
-}) {
+}, forwardedRef) {
   const opts = React.useMemo(() => options.map(norm), [options]);
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
   const [active, setActive] = React.useState(0);
   const inputRef = React.useRef(null);
+  React.useImperativeHandle(forwardedRef, () => inputRef.current, []);
   const listRef = React.useRef(null);
   const uid = React.useId();
   const listId = uid + "-list";
@@ -148,4 +159,4 @@ export function Combobox({
       )}
     </Popover>
   );
-}
+});

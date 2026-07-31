@@ -15,8 +15,8 @@ export interface FilterBarProps extends React.HTMLAttributes<HTMLDivElement> {
   onClear?(): void;
 }
 /** Applied filters as removable chips. Renders nothing when there are none. */
-export declare function FilterBar(props: FilterBarProps): JSX.Element;
+export declare function FilterBar(props: FilterBarProps): React.JSX.Element;
 export interface ToolbarProps extends React.HTMLAttributes<HTMLDivElement> {}
 /** The row above a list: search, filters, actions. `.lw-toolbar-grow` on the
  *  child that should take the slack. */
-export declare function Toolbar(props: ToolbarProps): JSX.Element;
+export declare function Toolbar(props: ToolbarProps): React.JSX.Element;
