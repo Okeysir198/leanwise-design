@@ -361,6 +361,60 @@
   --lw-cell-pad-y: var(--lw-space-12);
   --lw-card-pad: var(--lw-space-24);
   --lw-stack-gap: var(--lw-space-16);
+
+  /* ---- component geometry (v1.2) -----------------------------------------
+     The literals a SECOND implementation has to reproduce exactly. The design
+     system's own `.lw-*` CSS is one implementation; the shadcn registry under
+     `registry/` is another, and a consumer who scaffolds `<Button>` gets a copy
+     they own. Two copies of `padding: 0 18px` in two repos is precisely the kind
+     of second home this package exists to argue against.
+
+     The rule for what belongs here, and it is deliberately narrow: a literal is
+     tokenised iff (a) the registry component must reproduce it exactly, or (b) it
+     varies by density or theme. Everything else stays a literal — a token is a
+     promise of stability AND a second home that can drift, so ~30 is the right
+     number and ~120 (every literal in the layer) is not.
+
+     Values are IDENTICAL to the literals they replace, so v1.2 is a pixel no-op
+     and check:visual needs no re-record. The ones that arguably SHOULD move are
+     noted where they sit and are a v1.3 decision with a recorded diff. */
+
+  /* Button. Horizontal padding is ~0.45x the height — the wide, engineered
+     stance rather than a cramped chip. Height comes from --lw-control-h-*. */
+  --lw-btn-pad-x-sm: 12px;
+  --lw-btn-pad-x: 18px;
+  --lw-btn-pad-x-lg: 24px;
+  --lw-btn-gap: 8px;
+  --lw-btn-tracking: -0.005em;
+  --lw-btn-icon-sm: 14px;
+  --lw-btn-icon: 16px;
+  --lw-btn-icon-lg: 18px;
+
+  /* Chip / badge. A badge is a PILL — that is the role, not a rounding choice. */
+  --lw-chip-pad-y: 5px;
+  --lw-chip-pad-x: 9px;
+  --lw-chip-gap: 5px;
+  --lw-chip-text: 11px;
+  --lw-chip-dot: 5px;
+
+  /* Table. The mono uppercase micro-header is this system's signature, and it is
+     the single thing a hand-written table most often gets wrong. */
+  --lw-th-text: 10.5px;
+  --lw-th-tracking: 0.12em;
+  --lw-cell-pad-x: var(--lw-space-16);
+
+  /* Switch. 38x22 with a 16px thumb and a 2px inset — the thumb travel is
+     (38 - 16 - 2*2) = 18px, so changing any one of these three alone breaks it. */
+  --lw-switch-w: 38px;
+  --lw-switch-h: 22px;
+  --lw-switch-thumb: 16px;
+  --lw-switch-inset: 2px;
+  --lw-switch-gap: 10px;
+
+  /* Checkbox. The registry renders a Lucide glyph where the CSS draws a pseudo-
+     element tick, so ONLY the box size has to agree — the tick geometry fails
+     rule (a) and is deliberately not tokenised. */
+  --lw-check-size: 16px;
 }
 
 /* Compact. Desktop-only by intent: it buys rows on a workbench, and the coarse-pointer

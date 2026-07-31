@@ -122,6 +122,55 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
   above, with the one-line command to verify a row against the consumer's own `package.json`.
   Real drift today is VSS (`#v0.2.3`) and rag-service (`#v0.2.2`).
 
+### Added — the registry, the geometry it renders against, and a drift signal
+
+- **A shadcn registry: `registry/` + a committed `r/`.** Both shadcn consumers use ZERO of
+  this package's 82 React components — they vendor shadcn's and hand-align them, which is how
+  tss-app came to re-type `padding: 0 18px`, the control heights, the focus rule and the table
+  header from scratch. Nine items, seeded from those already-aligned components with their
+  rationale intact, minus that app's product vocabulary (its badge carried twenty
+  `parsing`/`checking`/`queue` variants that mean nothing to a second app).
+
+  ```bash
+  npx shadcn@latest add ./node_modules/@leanwise/design/r/button.json
+  ```
+
+  No static host needed: `r/` is committed for the same reason `tokens.json` and `react.d.ts`
+  are — every consumer installs from a git tag, where a publish-time artifact does not exist.
+
+- **~30 component-geometry tokens**, and the `.lw-*` CSS now reads them. The rule is
+  deliberately narrow — tokenise a literal iff a second implementation must reproduce it
+  exactly, or it varies by density/theme. That is ~30, not the ~120 literals in the layer: a
+  token is a promise of stability *and* a second home that can drift. Values are identical to
+  the literals they replace, so this is a pixel no-op (`check:visual`: 136 shots, no change).
+
+- **`check:registry`** — compiles every design-system class the registry components use and
+  fails if one emits nothing. A registry that has drifted from the CSS is worse than none,
+  because it looks authoritative. It found four real gaps on its first run: `leading-control`,
+  `bg-scrim` and `px-field-pad-x` were never registered, and a spacing key had been named
+  `field-x` while the component said `field-pad-x`.
+
+  It also had three false positives of its own, all the same shape: Tailwind escapes a class
+  name into the selector with a literal backslash and appends the variant's pseudo *or
+  attribute*, so `hover:bg-cta/90` emits `.hover\:bg-cta\/90:hover` and
+  `aria-invalid:border-x` emits `.aria-invalid\:border-x[aria-invalid="true"]`. Matching the
+  raw class name called all of them dead — and the `aria-invalid` one produced a wrong
+  diagnosis ("v4 has no such variant") and a `@custom-variant` that a direct probe then showed
+  was unnecessary. The gate was wrong, not the compiler.
+
+- **The token lint's TSX rules now run over `registry/`** — the first time those rules have
+  ever run inside this repo.
+
+- **`advisories.json` + `npx lw-doctor`.** A consumer cannot see any of this from inside their
+  own repo: their installed tree is self-consistent and gives no signal that a later release
+  fixed something they are living with. `lw-doctor` reads the version installed **locally** and
+  fetches the advisories from the repo **tip** — the newest release is the only thing that
+  knows what is wrong with the older ones.
+
+  Every count is measured by a named gate, and `check:advisories` re-derives all seven from the
+  tree and fails if one drifts. That earned itself twice on its first run, catching two
+  different off-by-one bugs in its own rule counter.
+
 ### Added — the two missing roles
 
 - **`--lw-info`, the fifth status — and it is a VIOLET, not a blue.** `shadcn.css` declined to

@@ -96,6 +96,41 @@ export default { presets: [preset] };
 The v3 preset and `theme.css` are two spellings of one vocabulary, and `npm run
 check:presence` fails the build if they ever stop agreeing.
 
+### Components — the shadcn registry
+
+Both shadcn consumers use **zero** of this package's 82 React components: they vendor
+shadcn's and hand-align them to the `.lw-*` spec, which is how one app came to re-type
+`padding: 0 18px`, the control heights, the focus rule and the table-header treatment from
+scratch. The registry is how that stops being re-typed per app — and the consumer still
+**owns** the file, which is the point of shadcn.
+
+```bash
+npx shadcn@latest add ./node_modules/@leanwise/design/r/button.json
+```
+
+Nine items: `button`, `badge`, `input`, `card`, `table`, `switch`, `tabs`, `dialog`, `utils`.
+No static host is needed — `r/` is committed for the same reason `tokens.json` and
+`react.d.ts` are: every consumer installs from a git tag, where a publish-time artifact does
+not exist. If a docs site appears later it serves this same folder.
+
+They render against the v1.2 geometry tokens (`px-btn-x`, `h-control-md`, `text-th`,
+`tracking-th`, `size-switch-w`), so a registry `<Button>` and a `.lw-btn` cannot drift apart
+by hand. `npm run check:registry` compiles every design-system class they use and fails if one
+emits nothing — a registry that drifts from the CSS is worse than no registry, because it
+looks authoritative.
+
+### Am I missing anything?
+
+```bash
+npx lw-doctor      # from a consumer's root
+```
+
+Reads the version installed **locally** and fetches the advisory list from the repo **tip** —
+the newest release is the only thing that knows what is wrong with the older ones. Every count
+in `advisories.json` is measured by a named gate and re-verified against the tree by
+`npm run check:advisories`, because a hand-maintained list of what is wrong is exactly the
+thing that has already been wrong twice here.
+
 ```css
 /* vanilla CSS (leanwise-ai, rag-service) */
 @import "@leanwise/design/tokens.css";

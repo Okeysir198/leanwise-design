@@ -102,6 +102,10 @@ module.exports = {
         soft: "hsl(var(--info-soft) / <alpha-value>)",
         on: "hsl(var(--info-on) / <alpha-value>)",
       },
+      /* The modal/drawer backdrop — a ROLE that re-points on dark, not a
+         hand-rolled `bg-black/50`. Not an hsl() wrapper: --lw-scrim is already a
+         full colour with an alpha baked in. */
+      scrim: "var(--lw-scrim)",
       brand: "hsl(var(--brand) / <alpha-value>)",
         success: {
           DEFAULT: "hsl(var(--success) / <alpha-value>)",
@@ -149,6 +153,43 @@ module.exports = {
       // Tailwind falls back to its own stock value — so the utility renders
       // off-system and nothing lints. The token lint is a deny-list; it cannot
       // see a tier the preset never registered.
+      /* Component geometry (v1.2) — the vocabulary the shadcn registry renders
+         against, so a registry <Button> and a `.lw-btn` cannot drift.
+         theme.css carries the same keys; check:presence fails if they diverge. */
+      spacing: {
+        "btn-x": "var(--lw-btn-pad-x)",
+        "btn-x-sm": "var(--lw-btn-pad-x-sm)",
+        "btn-x-lg": "var(--lw-btn-pad-x-lg)",
+        "btn-gap": "var(--lw-btn-gap)",
+        "chip-y": "var(--lw-chip-pad-y)",
+        "chip-x": "var(--lw-chip-pad-x)",
+        "chip-gap": "var(--lw-chip-gap)",
+        "cell-x": "var(--lw-cell-pad-x)",
+        "cell-y": "var(--lw-cell-pad-y)",
+        "field-pad-x": "var(--lw-field-pad-x)",
+        "control-sm": "var(--lw-control-h-sm)",
+        "control-md": "var(--lw-control-h-md)",
+        "control-lg": "var(--lw-control-h-lg)",
+        "row": "var(--lw-row-h)",
+        "card-pad": "var(--lw-card-pad)",
+        "stack-gap": "var(--lw-stack-gap)",
+        "switch-w": "var(--lw-switch-w)",
+        "switch-h": "var(--lw-switch-h)",
+        "switch-thumb": "var(--lw-switch-thumb)",
+        "switch-gap": "var(--lw-switch-gap)",
+        "check": "var(--lw-check-size)",
+        "icon-sm": "var(--lw-btn-icon-sm)",
+        "icon": "var(--lw-btn-icon)",
+        "icon-lg": "var(--lw-btn-icon-lg)",
+      },
+      lineHeight: {
+        "control": "var(--lw-lh-snug)",
+      },
+      letterSpacing: {
+        "th": "var(--lw-th-tracking)",
+        "btn": "var(--lw-btn-tracking)",
+      },
+
       borderRadius: {
         none: "0",
         xs: "var(--lw-radius-xs)",
@@ -169,6 +210,12 @@ module.exports = {
       // The fluid role scale. `text-h1` is a real utility, so a heading never
       // hand-rolls a clamp().
       fontSize: {
+        /* Two micro-sizes the registry needs; the six semantic roles follow.
+           NOTE these must live in THIS block — an earlier second `fontSize:` key
+           in the same object literal is silently discarded, which is how the
+           first attempt at this shipped nothing. */
+        "th": ["var(--lw-th-text)", { letterSpacing: "var(--lw-th-tracking)" }],
+        "chip": "var(--lw-chip-text)",
         // Marketing/hero display — one notch above h1, weight 500 (lighter editorial
         // voice than the 600 headings). `text-display` on a landing/auth hero headline.
         display: ["var(--lw-text-display)", { lineHeight: "var(--lw-lh-tight)", letterSpacing: "var(--lw-tracking-tighter)", fontWeight: "500" }],

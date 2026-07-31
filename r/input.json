@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input",
+  "type": "registry:ui",
+  "title": "Input",
+  "description": "h-control-md, radius-sm, --lw-field-pad-x, a non-inset brand ring, and a danger ring on aria-invalid.",
+  "registryDependencies": [
+    "utils"
+  ],
+  "files": [
+    {
+      "path": "ui/input.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/input.tsx",
+      "content": "import * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\nfunction Input({ className, type, ...props }: React.ComponentProps<\"input\">) {\n  return (\n    <input\n      type={type}\n      data-slot=\"input\"\n      className={cn(\n        \"file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-control-md w-full min-w-0 rounded-sm border bg-transparent px-field-pad-x py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm\",\n        \"focus-visible:border-brand focus-visible:ring-brand focus-visible:ring-2\",\n        \"aria-invalid:border-destructive-on aria-invalid:focus-visible:ring-destructive-on\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport { Input }\n"
+    }
+  ]
+}

@@ -55,7 +55,10 @@
     "./tokens.json": "./tokens.json",
     "./assets/*": "./assets/*",
     "./fonts/*": "./fonts/*",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./r/*": "./r/*",
+    "./registry.json": "./registry/registry.json",
+    "./advisories.json": "./advisories.json"
   },
   "bin": {
     "lw-token-lint": "./tools/lw-token-lint.mjs",
@@ -88,12 +91,15 @@
     "fonts",
     "tools",
     "README.md",
-    "tsconfig.json"
+    "tsconfig.json",
+    "r",
+    "registry",
+    "advisories.json"
   ],
   "scripts": {
     "build": "node tools/lw-build.mjs",
     "check:contrast": "node tools/lw-contrast-check.mjs",
-    "check:tokens": "node tools/lw-token-lint.mjs --css",
+    "check:tokens": "node tools/lw-token-lint.mjs --css && node tools/lw-token-lint.mjs registry",
     "check:themes": "node tools/lw-tokens-dtcg.mjs --check",
     "check:dts": "node tools/lw-dts-barrel.mjs --check",
     "check:bundle": "node tools/lw-bundle.mjs --check",
@@ -102,17 +108,20 @@
     "check:visual": "node tools/lw-visual.mjs",
     "check:presence": "node tools/lw-presence.mjs",
     "check:presence:list": "node tools/lw-presence.mjs --list",
-    "check": "npm run check:presence && npm run check:rsc && npm run check:build && npm run check:types && npm run check:contrast && npm run check:tokens && npm run check:themes && npm run check:dts && npm run check:bundle && npm run check:templates",
+    "check": "npm run check:presence && npm run check:rsc && npm run check:build && npm run check:types && npm run check:registry && npm run check:advisories && npm run check:contrast && npm run check:tokens && npm run check:themes && npm run check:dts && npm run check:bundle && npm run check:templates",
     "check:ci": "npm run check && npm run check:pack && npm run check:a11y && npm run check:visual",
     "tokens": "node tools/lw-tokens-dtcg.mjs",
     "dts": "node tools/lw-dts-barrel.mjs",
     "bundle": "node tools/lw-bundle.mjs",
-    "prepublishOnly": "npm run check && npm run tokens && npm run dts && npm run bundle && npm run build",
+    "prepublishOnly": "npm run check && npm run tokens && npm run dts && npm run bundle && npm run registry && npm run build",
     "check:build": "node tools/lw-build.mjs --check",
     "rsc": "node tools/lw-rsc.mjs",
     "check:rsc": "node tools/lw-rsc.mjs --check",
     "check:types": "tsc --noEmit",
-    "check:pack": "node tools/lw-pack-check.mjs"
+    "check:pack": "node tools/lw-pack-check.mjs",
+    "registry": "node tools/lw-registry.mjs",
+    "check:registry": "node tools/lw-registry.mjs --check",
+    "check:advisories": "node tools/lw-doctor.mjs --self-check"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",

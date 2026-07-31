@@ -247,6 +247,10 @@
   --color-info-soft: hsl(var(--info-soft));
   --color-info-on: hsl(var(--info-on));
 
+  /* The modal/drawer backdrop. A ROLE — it re-points on dark — so it belongs
+     here rather than being hand-rolled as `bg-black/50` in every consumer. */
+  --color-scrim: var(--lw-scrim);
+
   --color-brand: hsl(var(--brand));
   --color-navy: hsl(var(--navy));
 
@@ -278,6 +282,43 @@
   --color-chart-10: var(--chart-10);
   --color-chart-11: var(--chart-11);
   --color-chart-12: var(--chart-12);
+
+
+  /* ---- component geometry (v1.2) ---------------------------------------
+     What the shadcn registry renders against, so a registry <Button> and a
+     `.lw-btn` cannot drift. INLINE, because --lw-control-h-*, --lw-field-pad-x,
+     --lw-cell-pad-y, --lw-card-pad and --lw-stack-gap are all re-pointed by
+     [data-density] — under a plain @theme they would resolve once on :root and a
+     compact panel would silently render at comfortable heights. */
+  --spacing-btn-x: var(--lw-btn-pad-x);
+  --spacing-btn-x-sm: var(--lw-btn-pad-x-sm);
+  --spacing-btn-x-lg: var(--lw-btn-pad-x-lg);
+  --spacing-btn-gap: var(--lw-btn-gap);
+  --spacing-chip-y: var(--lw-chip-pad-y);
+  --spacing-chip-x: var(--lw-chip-pad-x);
+  --spacing-chip-gap: var(--lw-chip-gap);
+  --spacing-cell-x: var(--lw-cell-pad-x);
+  --spacing-cell-y: var(--lw-cell-pad-y);
+  --leading-control: var(--lw-lh-snug);
+  --spacing-field-pad-x: var(--lw-field-pad-x);
+  --spacing-control-sm: var(--lw-control-h-sm);
+  --spacing-control-md: var(--lw-control-h-md);
+  --spacing-control-lg: var(--lw-control-h-lg);
+  --spacing-row: var(--lw-row-h);
+  --spacing-card-pad: var(--lw-card-pad);
+  --spacing-stack-gap: var(--lw-stack-gap);
+  --spacing-switch-w: var(--lw-switch-w);
+  --spacing-switch-h: var(--lw-switch-h);
+  --spacing-switch-thumb: var(--lw-switch-thumb);
+  --spacing-switch-gap: var(--lw-switch-gap);
+  --spacing-check: var(--lw-check-size);
+  --spacing-icon-sm: var(--lw-btn-icon-sm);
+  --spacing-icon: var(--lw-btn-icon);
+  --spacing-icon-lg: var(--lw-btn-icon-lg);
+  --text-th: var(--lw-th-text);
+  --text-chip: var(--lw-chip-text);
+  --tracking-th: var(--lw-th-tracking);
+  --tracking-btn: var(--lw-btn-tracking);
 
   /* ---- elevation --------------------------------------------------------- */
   /* Navy-tinted, and they re-point on dark — which is precisely why they are in

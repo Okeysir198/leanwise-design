@@ -176,11 +176,11 @@
      matches the inputs beside it. A marketing band sets no density attribute, so it
      resolves to the 40px default and a hero is untouched. */
   height: var(--lw-control-h-md);
-  padding: 0 18px;
+  padding: 0 var(--lw-btn-pad-x);
   font-family: var(--lw-font-sans);
   font-size: var(--lw-text-sm);
   font-weight: var(--lw-fw-medium);
-  letter-spacing: -0.005em;
+  letter-spacing: var(--lw-btn-tracking);
   border-radius: var(--lw-radius-md);
   transition: background var(--lw-duration), color var(--lw-duration),
               border-color var(--lw-duration), transform var(--lw-duration),
@@ -295,8 +295,8 @@
 
 /* Sizes. Every one clears a 44px target except -sm, which is for dense toolbars
    and table rows where the row itself carries the hit area. */
-.lw-btn-sm { height: var(--lw-control-h-sm); padding: 0 12px; font-size: var(--lw-text-xs, 12px); border-radius: var(--lw-radius-sm); gap: 6px; }
-.lw-btn-lg { height: var(--lw-control-h-lg); padding: 0 24px; font-size: var(--lw-text-base, 15px); border-radius: var(--lw-radius-lg); gap: 10px; }
+.lw-btn-sm { height: var(--lw-control-h-sm); padding: 0 var(--lw-btn-pad-x-sm); font-size: var(--lw-text-xs, 12px); border-radius: var(--lw-radius-sm); gap: 6px; }
+.lw-btn-lg { height: var(--lw-control-h-lg); padding: 0 var(--lw-btn-pad-x-lg); font-size: var(--lw-text-base, 15px); border-radius: var(--lw-radius-lg); gap: 10px; }
 /* Icon-only is a SQUARE of the same height — never a separate size scale, or icon and
    text buttons stop lining up in a toolbar. aria-label is required; there is no text. */
 .lw-btn-icon { width: var(--lw-control-h-md); padding: 0; }
@@ -465,16 +465,16 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
 /* Chip — the card's status atom. Reads a status family's soft tint + text tier, so
    it re-points on dark with no conditional. */
 .lw-chip {
-  display: inline-flex; align-items: center; gap: 5px;
-  font-size: 11px; font-weight: var(--lw-fw-medium); line-height: 1;
-  padding: 5px 9px; border-radius: var(--lw-radius-pill);
+  display: inline-flex; align-items: center; gap: var(--lw-chip-gap);
+  font-size: var(--lw-chip-text); font-weight: var(--lw-fw-medium); line-height: 1;
+  padding: var(--lw-chip-pad-y) var(--lw-chip-pad-x); border-radius: var(--lw-radius-pill);
   background: var(--lw-brand-soft); color: var(--lw-brand-on); white-space: nowrap;
 }
 .lw-chip-success { background: var(--lw-success-soft); color: var(--lw-success-on); }
 .lw-chip-warning { background: var(--lw-warning-soft); color: var(--lw-warning-on); }
 .lw-chip-danger  { background: var(--lw-danger-soft);  color: var(--lw-danger-on); }
 .lw-chip-neutral { background: var(--lw-neutral-soft); color: var(--lw-neutral-on); }
-.lw-chip::before { content: ""; width: 5px; height: 5px; border-radius: 999px; background: currentColor; flex: none; }
+.lw-chip::before { content: ""; width: var(--lw-chip-dot); height: var(--lw-chip-dot); border-radius: 999px; background: currentColor; flex: none; }
 
 /* ---- Console ("browser frame" motif) ------------------------------------- */
 

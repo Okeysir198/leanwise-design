@@ -72,6 +72,9 @@ const FAMILIES = {
   transitionTimingFunction: { ns: "ease" },
   backgroundImage: { ns: "background-image" },
   animation: { ns: "animate" },
+  spacing: { ns: "spacing" },
+  letterSpacing: { ns: "tracking" },
+  lineHeight: { ns: "leading" },
   keyframes: { keyframes: true },
   transitionDuration: { utility: true, rename: (k) => (k === "DEFAULT" ? "duration-base" : `duration-${k}`) },
 };
@@ -162,7 +165,7 @@ if (v3HasContainer && !utilities.has("container")) {
 // The other direction: a v4 name with no v3 counterpart.
 const expectedV4 = new Set(rows.filter((r) => r[2].startsWith("--")).map((r) => r[2]));
 for (const name of declared) {
-  const m = name.match(/^--(color|radius|font|text|shadow|ease|background-image|animate)(?:-(.*))?$/);
+  const m = name.match(/^--(color|radius|font|text|shadow|ease|background-image|animate|spacing|tracking|leading)(?:-(.*))?$/);
   if (!m) continue;
   // Skip the `--text-h1--line-height` modifier form. Test AFTER the leading
   // `--`, not on the whole name: `name.includes("--")` is true for every custom
@@ -366,9 +369,14 @@ function utilityFor(v4name) {
     font: (k) => (k ? `font-${k}` : null),
     text: (k) => (k ? `text-${k}` : null),
     ease: (k) => (k ? `ease-${k}` : null),
+    // A spacing key feeds many utilities (p-, h-, w-, gap-); `p-` is enough to
+    // prove the key resolves. Tracking is `tracking-`.
+    spacing: (k) => (k ? `p-${k}` : null),
+    tracking: (k) => (k ? `tracking-${k}` : null),
+    leading: (k) => (k ? `leading-${k}` : null),
     animate: (k) => (k ? `animate-${k}` : null),
   };
-  const m = v4name.match(/^--(color|background-image|radius|shadow|font|text|ease|animate)(?:-(.+))?$/);
+  const m = v4name.match(/^--(color|background-image|radius|shadow|font|text|ease|animate|spacing|tracking|leading)(?:-(.+))?$/);
   return m ? map[m[1]](m[2] ?? "") : null;
 }
 
