@@ -122,6 +122,34 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
   above, with the one-line command to verify a row against the consumer's own `package.json`.
   Real drift today is VSS (`#v0.2.3`) and rag-service (`#v0.2.2`).
 
+### Acceptance — measured against a real consumer, not a fixture
+
+`tss-app` (Next 16 App Router + Tailwind v4 + shadcn, 261 components) compiled with and
+without `theme.css`, scanning its whole source tree:
+
+| | classes emitted | stylesheet |
+|---|---|---|
+| today | 1383 | 271 KB |
+| `+ theme.css` | 1402 | 276 KB |
+
+**Nothing lost. Nineteen gained** — and the nineteen are precisely the families a hand-written
+bridge drops: the six `text-*` roles, all four brand `backgroundImage` surfaces, the three
+durations, the two extra eases, and four of the six animations. Adoption is additive.
+
+Of the 203 Tailwind-namespace names tss-app hand-registers, **70 are byte-identical to
+`theme.css` and can be deleted verbatim**, 130 are genuinely product vocabulary
+(`--status-*`, `--validation-*`, `--score-*`, `--tool-*`, `--syntax-*`), and exactly **three
+are deliberate overrides that must be KEPT**:
+
+- `--radius` — tss-app pins `lg`, the system defaults to `md`. Deleting it would re-tier every
+  `rounded` from 12px to 8px *and* the six recharts tooltips that read `var(--radius)`.
+- `--shadow` — tss-app pins `sm`, the system defaults to `md`. Deleting it makes every default
+  Button and six Badge variants heavier.
+- `--color-sidebar` — reads the older `--sidebar-background`; both spellings are emitted, so
+  this one is free either way.
+
+That is the whole migration risk, enumerated. It is three lines.
+
 ### Notes
 
 - `tailwindcss` + `@tailwindcss/postcss` are now devDependencies, pinned `^4` — deliberately
