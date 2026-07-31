@@ -274,19 +274,30 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 ### Acceptance — measured against a real consumer, not a fixture
 
 `tss-app` (Next 16 App Router + Tailwind v4 + shadcn, 261 components) compiled with and
-without `theme.css`, scanning its whole source tree:
+without `theme.css`, over its whole source tree:
 
-| | classes emitted | stylesheet |
-|---|---|---|
-| today | 1383 | 271 KB |
-| `+ theme.css` | 1402 | 276 KB |
+| | classes emitted |
+|---|---|
+| today | 1375 |
+| `+ theme.css` | 1375 |
 
-**Nothing lost. Nineteen gained** — and the nineteen are precisely the families a hand-written
-bridge drops: the six `text-*` roles, all four brand `backgroundImage` surfaces, the three
-durations, the two extra eases, and four of the six animations. Adoption is additive.
+**Nothing lost, nothing gained — and both halves matter.** Nothing lost is the safety result:
+adopting `theme.css` cannot break a page. Nothing *gained* is the honest one: Tailwind only
+emits a utility it finds in source, and tss-app does not yet write `text-h1`,
+`bg-gradient-brand`, `animate-rise` or `duration-fast` anywhere. What the file delivers is the
+vocabulary being *available* — and the deletion below — not new CSS appearing on its own.
+
+> **Correction.** An earlier run of this measurement reported "19 classes gained" and it was
+> wrong. That probe rewrote the import to an absolute path inside the design-system repo and
+> did not pass `source(none)`, so Tailwind's automatic source detection scanned
+> **`leanwise-design/preview/*.html`** and emitted the classes those files use. The number
+> described this repo's own preview cards, not the consumer. The corrected probe pins the
+> sources; the reproducible lesson is that a Tailwind A/B whose two sides read different
+> directories is measuring the directories.
 
 Of the 203 Tailwind-namespace names tss-app hand-registers, **70 are byte-identical to
-`theme.css` and can be deleted verbatim**, 130 are genuinely product vocabulary
+`theme.css` and can be deleted verbatim** (that measurement is over declarations, not
+compilation, and is unaffected by the above), 130 are genuinely product vocabulary
 (`--status-*`, `--validation-*`, `--score-*`, `--tool-*`, `--syntax-*`), and exactly **three
 are deliberate overrides that must be KEPT**:
 
