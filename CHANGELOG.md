@@ -56,6 +56,25 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
   entire reverse-parity check, and a `filter(Boolean)` that dropped v3's `DEFAULT` arms and
   made `--radius` and `--shadow` look like v4-only inventions.
 
+- **shadcn's `sidebar` block and the `chart` ramp**, in `shadcn.css` and both Tailwind
+  artifacts. Every shadcn consumer has had to hand-derive these; `tss-app` wrote all eight
+  sidebar names itself and its comment recorded the ask verbatim — *"No `--lw-sidebar-*` role
+  exists … requested upstream as a v1.2 role."*
+
+  It costs **zero new tokens**: a sidebar is a subtle surface with muted ink, the active item
+  is the muted surface, the rail is a line. All eight are existing roles, so they re-point on
+  dark and inside a band for free. Emitted as channel triples because shadcn's `sidebar.tsx`
+  composes them as `hsl(var(--sidebar-border))`.
+
+  `--sidebar-background` is also emitted — shadcn renamed it to `--sidebar`, and which one a
+  consumer's vendored component reads depends on when they scaffolded it. Same value, not a
+  second decision; deprecated for one MINOR and removed in v2.0.
+
+  All eight `--lw-chart-*` are aliased as `--chart-1..8` (shadcn reads 1-5). ⚠️ Unlike every
+  other alias here these are **full colours, not triples** — `--lw-chart-*` has no `-c`
+  sibling — so do not wrap them in `hsl()`. In v4 `bg-chart-1/40` still works via `color-mix`;
+  in v3 it cannot, which is the one place the two artifacts differ in capability.
+
 - `ease-emphasis` and `ease-spring` in the v3 preset and `theme.css`. Both tokens have existed
   in `tokens.css` since 1.0 with nothing exposing them. Purely additive — no stock Tailwind
   name to collide with. `ease-in` / `ease-in-out` are deliberately still absent: measured

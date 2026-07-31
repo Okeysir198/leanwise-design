@@ -189,11 +189,15 @@ for (const m of themeClean.matchAll(/(--[a-z0-9-]+)-\*\s*:\s*initial/g)) {
 /* ---- check 3: shadcn completeness ---------------------------------------- */
 
 /* Every custom property shadcn's own component set reads. Checked in on purpose:
-   the list is what the components require, not what we happen to ship, so it
-   only changes when shadcn does. `--sidebar-*`, `--chart-*` and `--info` are
-   knowingly absent and tracked in the gap report below rather than as failures —
-   they are a v1.2 addition, and turning them into a hard failure today would
-   just mean disabling the gate. */
+   the list is what the COMPONENTS require, not what we happen to ship, so it only
+   changes when shadcn does — which is what makes it a real assertion rather than
+   a restatement of shadcn.css.
+
+   The sidebar and chart names were the v1.2 gap and are now shipped, so they moved
+   from the "known absent" list into this one. `--info` is the only name shadcn
+   offers that this system still declines, and that is a deliberate palette
+   decision recorded in shadcn.css, not an oversight — it is listed as a known gap
+   below rather than a failure. */
 const SHADCN_REQUIRED = [
   "--background", "--foreground", "--card", "--card-foreground",
   "--popover", "--popover-foreground", "--primary", "--primary-foreground",
@@ -201,11 +205,13 @@ const SHADCN_REQUIRED = [
   "--accent", "--accent-foreground", "--destructive", "--destructive-foreground",
   "--border", "--input", "--ring", "--radius",
 ];
-const SHADCN_KNOWN_GAPS = [
+const SHADCN_REQUIRED_SIDEBAR = [
   "--sidebar", "--sidebar-foreground", "--sidebar-primary", "--sidebar-primary-foreground",
   "--sidebar-accent", "--sidebar-accent-foreground", "--sidebar-border", "--sidebar-ring",
-  "--chart-1", "--chart-2", "--chart-3", "--chart-4", "--chart-5",
 ];
+const SHADCN_REQUIRED_CHART = ["--chart-1", "--chart-2", "--chart-3", "--chart-4", "--chart-5"];
+SHADCN_REQUIRED.push(...SHADCN_REQUIRED_SIDEBAR, ...SHADCN_REQUIRED_CHART);
+const SHADCN_KNOWN_GAPS = ["--info"];
 const shadcnSrc = fs.readFileSync(path.join(ROOT, "shadcn.css"), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
 const shadcnDeclared = new Set([...shadcnSrc.matchAll(/(--[a-z0-9-]+)\s*:/g)].map((m) => m[1]));
 for (const name of SHADCN_REQUIRED) {

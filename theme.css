@@ -244,6 +244,31 @@
   --color-brand: hsl(var(--brand));
   --color-navy: hsl(var(--navy));
 
+  /* shadcn's sidebar block — eight derivations of existing roles, zero new
+     tokens. See shadcn.css. The older `--sidebar-background` spelling is emitted
+     there for compatibility but gets no utility here; `bg-sidebar` is the name. */
+  --color-sidebar: hsl(var(--sidebar));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+
+  /* The categorical ramp. NOT wrapped in hsl(): --lw-chart-* are full colours
+     with no channel-triple sibling. v4 still synthesises `bg-chart-1/40` via
+     color-mix, which the v3 preset cannot do — the one place the two artifacts
+     differ in capability rather than in spelling. */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-chart-6: var(--chart-6);
+  --color-chart-7: var(--chart-7);
+  --color-chart-8: var(--chart-8);
+
   /* ---- elevation --------------------------------------------------------- */
   /* Navy-tinted, and they re-point on dark — which is precisely why they are in
      this block and not in Block A. The reset stops Tailwind's stock BLACK

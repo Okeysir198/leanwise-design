@@ -114,6 +114,56 @@
   --brand: var(--lw-brand-text-c);
 
   --navy: var(--lw-navy-900-c);
+
+  /* ---- sidebar --------------------------------------------------------------
+     shadcn's own `sidebar` block, which every consumer of that component has had
+     to hand-derive. tss-app wrote all eight by hand and its comment recorded the
+     ask: "No --lw-sidebar-* role exists … requested upstream as a v1.2 role."
+
+     It needs ZERO new tokens. A sidebar is a SUBTLE surface carrying MUTED ink;
+     the active item is the muted surface; the rail is a line. Every one of the
+     eight is an existing role, so they re-point on dark and inside a band for
+     free, exactly like the rest of this file — which is the whole argument for
+     putting them here rather than leaving each consumer to invent them.
+
+     Kept as CHANNEL TRIPLES, not full colours: shadcn's `sidebar.tsx` composes
+     them as `hsl(var(--sidebar-border))`, so anything else breaks the component
+     as shipped. */
+  --sidebar: var(--lw-bg-subtle-c);
+  --sidebar-foreground: var(--lw-fg-muted-c);
+  --sidebar-primary: var(--lw-brand-500-c);
+  --sidebar-primary-foreground: var(--lw-on-brand-c);
+  --sidebar-accent: var(--lw-bg-muted-c);
+  --sidebar-accent-foreground: var(--lw-fg-c);
+  --sidebar-border: var(--lw-line-c);
+  --sidebar-ring: var(--lw-brand-500-c);
+
+  /* shadcn renamed `--sidebar-background` to `--sidebar` when the component moved
+     to the `--color-*` convention. Both spellings are emitted because a consumer's
+     vendored `sidebar.tsx` is whatever version they scaffolded — tss-app is on the
+     older one. Per the deprecation policy this alias is warned for one MINOR and
+     removed in v2.0; until then it is the same value, not a second decision. */
+  --sidebar-background: var(--lw-bg-subtle-c);
+
+  /* ---- categorical ramp ------------------------------------------------------
+     shadcn's charts read `--chart-1..5`; the system has eight. All eight are
+     aliased so a consumer can reach the full ramp under the name their scaffolded
+     chart component already uses.
+
+     ⚠️ NOTE THE SHAPE ASYMMETRY. Unlike every other alias in this file, these are
+     FULL COLOURS, not channel triples — `--lw-chart-*` has no `-c` sibling. So
+     they must NOT be wrapped in `hsl()` at the call site: `var(--chart-1)` is
+     already a colour. That is also why they cannot auto-re-point the way a triple
+     does, and why tokens.css restates all eight in every theme scope by hand;
+     the contrast gate's dark-scope divergence check is what guards that. */
+  --chart-1: var(--lw-chart-1);
+  --chart-2: var(--lw-chart-2);
+  --chart-3: var(--lw-chart-3);
+  --chart-4: var(--lw-chart-4);
+  --chart-5: var(--lw-chart-5);
+  --chart-6: var(--lw-chart-6);
+  --chart-7: var(--lw-chart-7);
+  --chart-8: var(--lw-chart-8);
 }
 
 /* The dark-specific CHOICES (cards lift, accent is navy not cyan) — not just a

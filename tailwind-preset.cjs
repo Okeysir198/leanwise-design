@@ -110,6 +110,31 @@ module.exports = {
           on: "hsl(var(--warning-on) / <alpha-value>)",
         },
         navy: "hsl(var(--navy) / <alpha-value>)",
+
+      /* shadcn's sidebar block. Eight derivations of existing roles, zero new
+         tokens — see shadcn.css. `DEFAULT` is the `--sidebar` spelling; the older
+         `--sidebar-background` name is emitted by shadcn.css for consumers whose
+         vendored sidebar.tsx predates the rename, but is not given a utility here
+         because `bg-sidebar` already covers it. */
+      sidebar: {
+        DEFAULT: "hsl(var(--sidebar) / <alpha-value>)",
+        foreground: "hsl(var(--sidebar-foreground) / <alpha-value>)",
+        primary: "hsl(var(--sidebar-primary) / <alpha-value>)",
+        "primary-foreground": "hsl(var(--sidebar-primary-foreground) / <alpha-value>)",
+        accent: "hsl(var(--sidebar-accent) / <alpha-value>)",
+        "accent-foreground": "hsl(var(--sidebar-accent-foreground) / <alpha-value>)",
+        border: "hsl(var(--sidebar-border) / <alpha-value>)",
+        ring: "hsl(var(--sidebar-ring) / <alpha-value>)",
+      },
+
+      /* The categorical ramp. NOT wrapped in hsl() and NOT carrying <alpha-value>:
+         --lw-chart-* are full colours with no channel-triple sibling, so there is
+         nothing to compose an alpha into. `bg-chart-1/40` therefore does not work
+         in v3; use a soft token or color-mix if you need a tint. */
+      chart: {
+        1: "var(--chart-1)", 2: "var(--chart-2)", 3: "var(--chart-3)", 4: "var(--chart-4)",
+        5: "var(--chart-5)", 6: "var(--chart-6)", 7: "var(--chart-7)", 8: "var(--chart-8)",
+      },
       },
 
       // Every tier in the token scale is registered. A MISSING tier is the quiet
