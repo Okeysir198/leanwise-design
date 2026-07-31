@@ -263,6 +263,15 @@
   --lw-warning-soft-c: 48.0  96.5% 88.8%; /* @kind color */  /* #FEF3C7  chip tint */
   --lw-danger-c: 0     72.2% 50.6%; /* @kind color */  /* #DC2626  fill — the one fill that takes WHITE ink */
   --lw-danger-soft-c: 0     93.3% 94.1%; /* @kind color */  /* #FEE2E2  chip tint */
+  /* The FIFTH status. shadcn's components read `--info`, and this system declined
+     it through v1.1.x on the grounds that "every blue here already means brand or
+     link" — an objection to the COLOUR, not to the role. So it ships as a VIOLET,
+     seeded from --lw-chart-4, which is what a consumer needing a fifth state
+     reached for anyway: tss-app derived its own --tss-phase2 from exactly that
+     token, for exactly that reason. A dark fill, so it takes white ink like
+     danger and neutral. */
+  --lw-info-c: 258.0 52.0% 46.0%; /* @kind color */  /* #5B37A8  fill — the one blue-adjacent role, and it is VIOLET on purpose */
+  --lw-info-soft-c: 258.0 84.0% 95.0%; /* @kind color */  /* #EDE6FE  chip tint */
   /* The fourth status. Not "info": info would want a blue, and every blue in this
      system already means brand or link. Neutral is the state a row is in before it
      is anything — idle, pending, draft, not-run — and it must NOT read as an alert. */
@@ -277,6 +286,7 @@
   --lw-warning-text-c: 25.0  92.0% 28.0%; /* @kind color */  /* #8A3F05 — 7.46 on white, 6.64 on tint */
   --lw-danger-text-c: 0     73.7% 41.8%; /* @kind color */  /* #B91C1C — 6.47 on white, 5.30 on tint */
   --lw-neutral-text-c: 215.0 30.0% 26.0%; /* @kind color */  /* #2E3B54 — 10.4 on white, 9.8 on tint */
+  --lw-info-text-c: 258.0 58.0% 38.0%; /* @kind color */  /* #4A2A99 */
   --lw-neutral: hsl(var(--lw-neutral-c));
   --lw-neutral-soft: hsl(var(--lw-neutral-soft-c));
   /* The *-text tiers deliberately have NO derived colour — channels only. They
@@ -291,6 +301,7 @@
   --lw-success: hsl(var(--lw-success-c));
   --lw-warning: hsl(var(--lw-warning-c));
   --lw-danger:  hsl(var(--lw-danger-c));
+  --lw-info:    hsl(var(--lw-info-c));
 
   /* ---- On-dark overlays (replaces raw rgba(255,255,255,·) sprawl) -------- */
   --lw-on-dark:      #FFFFFF;
@@ -547,6 +558,7 @@
   --lw-success-on-c: var(--lw-success-text-c); /* @kind color */
   --lw-warning-on-c: var(--lw-warning-text-c); /* @kind color */
   --lw-danger-on-c: var(--lw-danger-text-c); /* @kind color */
+  --lw-info-on-c: var(--lw-info-text-c); /* @kind color */
   --lw-neutral-on-c: var(--lw-neutral-text-c); /* @kind color */
 
   /* Ink that sits ON a fill. The brand fill is DARK since v0.8.0, so it takes
@@ -570,6 +582,7 @@
      families sharing one channel means a change to danger's ink silently moves
      neutral's. */
   --lw-on-neutral-c: 0 0% 100%; /* @kind color */           /* white — the neutral fill is dark */
+  --lw-on-info-c: 0 0% 100%; /* @kind color */              /* white — the info fill is dark */
 
   --lw-bg:        hsl(var(--lw-bg-c));
   --lw-bg-subtle: hsl(var(--lw-bg-subtle-c));
@@ -615,6 +628,8 @@
   --lw-warning-on:   hsl(var(--lw-warning-on-c));
   --lw-warning-soft: hsl(var(--lw-warning-soft-c));
   --lw-danger-on:    hsl(var(--lw-danger-on-c));
+  --lw-info-on:      hsl(var(--lw-info-on-c));
+  --lw-info-soft:    hsl(var(--lw-info-soft-c));
   --lw-danger-soft:  hsl(var(--lw-danger-soft-c));
 }
 
@@ -653,6 +668,7 @@
   --lw-success-on-c: 158.1 64.4% 51.6%; /* @kind color */    /* #34D399 */
   --lw-warning-on-c: var(--lw-cta-400-c); /* @kind color */    /* #FBC42D — the amber anchor */
   --lw-danger-on-c: 0     90.6% 70.8%; /* @kind color */    /* #F87171 — 6.77 on paper */
+  --lw-info-on-c: 258.0 88.0% 80.0%; /* @kind color */
   --lw-neutral-on-c: 214.0 22.0% 72.0%; /* @kind color */    /* #AAB6C8 — 8.1 on paper */
 
   /* The soft tints MUST be re-pointed for dark. Left at their light values, a
@@ -660,6 +676,7 @@
      (Shipped exactly that for one build; the contrast gate now covers these pairs.) */
   --lw-success-soft-c: 153.3 47.4% 11.2%; /* @kind color */  /* #0F2A1E — ink lands at 7.97 */
   --lw-warning-soft-c: 38.9  67.3% 10.8%; /* @kind color */  /* #2E2109 — 9.40 */
+  --lw-info-soft-c: 258.0 46.0% 16.0%; /* @kind color */
   --lw-danger-soft-c: 0     53.2% 15.1%; /* @kind color */  /* #3B1212 — 5.93 */
   --lw-neutral-soft-c: 215.0 30.0% 15.0%; /* @kind color */  /* #1A2331 — ink lands at 7.6 */
   --lw-cta-soft-c: 34.0  62.0% 13.0%; /* @kind color */  /* #36240D — cta-400 on it 9.22 */
@@ -696,6 +713,7 @@
     --lw-success-on-c: 158.1 64.4% 51.6%; /* @kind color */
     --lw-warning-on-c: var(--lw-cta-400-c); /* @kind color */
     --lw-danger-on-c: 0     90.6% 70.8%; /* @kind color */
+    --lw-info-on-c: 258.0 88.0% 80.0%; /* @kind color */
     --lw-neutral-on-c: 214.0 22.0% 72.0%; /* @kind color */
     /* Soft chip tints must re-point in EVERY dark form. A dark `-on` status text on the
        light soft tint is 1.75:1 — the exact v0.1.2 regression. The `.dark`,
@@ -704,6 +722,7 @@
        for any visitor whose OS preferred dark and who hadn't set an explicit theme. */
     --lw-success-soft-c: 153.3 47.4% 11.2%; /* @kind color */  /* #0F2A1E — ink lands at 7.97 */
     --lw-warning-soft-c: 38.9  67.3% 10.8%; /* @kind color */  /* #2E2109 — 9.40 */
+    --lw-info-soft-c: 258.0 46.0% 16.0%; /* @kind color */
     --lw-danger-soft-c: 0     53.2% 15.1%; /* @kind color */  /* #3B1212 — 5.93 */
   --lw-neutral-soft-c: 215.0 30.0% 15.0%; /* @kind color */  /* #1A2331 — ink lands at 7.6 */
     --lw-cta-soft-c: 34.0  62.0% 13.0%; /* @kind color */  /* #36240D — cta-400 on it 9.22 */
@@ -737,9 +756,11 @@
     --lw-success-on-c:var(--lw-success-text-c);
     --lw-warning-on-c:var(--lw-warning-text-c);
     --lw-danger-on-c:var(--lw-danger-text-c);
+    --lw-info-on-c: var(--lw-info-text-c); /* @kind color */
     --lw-neutral-on-c:var(--lw-neutral-text-c);
     --lw-success-soft-c:140.6 84.2% 92.5%; /* @kind color */
     --lw-warning-soft-c:48.0  96.5% 88.8%; /* @kind color */
+    --lw-info-soft-c:258.0 84.0% 95.0%; /* @kind color */
     --lw-danger-soft-c:0     93.3% 94.1%; /* @kind color */
     --lw-neutral-soft-c:213.0 30.0% 95.0%; /* @kind color */
     --lw-cta-soft-c:46.0 100%  90.0%; /* @kind color */
@@ -784,9 +805,11 @@
   --lw-success-on-c: 158.1 64.4% 51.6%; /* @kind color */
   --lw-warning-on-c: var(--lw-cta-400-c); /* @kind color */
   --lw-danger-on-c: 0     90.6% 70.8%; /* @kind color */
+  --lw-info-on-c: 258.0 88.0% 80.0%; /* @kind color */
     --lw-neutral-on-c: 214.0 22.0% 72.0%; /* @kind color */
   --lw-success-soft-c: 153.3 47.4% 11.2%; /* @kind color */
   --lw-warning-soft-c: 38.9  67.3% 10.8%; /* @kind color */
+  --lw-info-soft-c: 258.0 46.0% 16.0%; /* @kind color */
   --lw-danger-soft-c: 0     53.2% 15.1%; /* @kind color */
   --lw-neutral-soft-c: 215.0 30.0% 15.0%; /* @kind color */
   --lw-cta-soft-c: 34.0  62.0% 13.0%; /* @kind color */  /* #36240D — cta-400 on it 9.22 */
@@ -837,9 +860,11 @@
   --lw-success-on-c: 158.1 64.4% 51.6%; /* @kind color */
   --lw-warning-on-c: var(--lw-cta-400-c); /* @kind color */
   --lw-danger-on-c: 0     90.6% 70.8%; /* @kind color */
+  --lw-info-on-c: 258.0 88.0% 80.0%; /* @kind color */
     --lw-neutral-on-c: 214.0 22.0% 72.0%; /* @kind color */
   --lw-success-soft-c: 153.3 47.4% 11.2%; /* @kind color */
   --lw-warning-soft-c: 38.9  67.3% 10.8%; /* @kind color */
+  --lw-info-soft-c: 258.0 46.0% 16.0%; /* @kind color */
   --lw-danger-soft-c: 0     53.2% 15.1%; /* @kind color */
   --lw-neutral-soft-c: 215.0 30.0% 15.0%; /* @kind color */
   --lw-cta-soft-c: 34.0  62.0% 13.0%; /* @kind color */  /* #36240D — cta-400 on it 9.22 */
@@ -875,12 +900,16 @@
   --lw-success-on-c: var(--lw-success-text-c); /* @kind color */
   --lw-warning-on-c: var(--lw-warning-text-c); /* @kind color */
   --lw-danger-on-c: var(--lw-danger-text-c); /* @kind color */
+  --lw-info-on-c: var(--lw-info-text-c); /* @kind color */
   --lw-neutral-on-c: var(--lw-neutral-text-c); /* @kind color */
   /* Soft tints + shadows have no underlying palette token (they ARE the value),
      so the light triples are restated here to undo any dark-site-theme override. */
   --lw-success-soft-c: 140.6 84.2% 92.5%; /* @kind color */
   --lw-warning-soft-c: 48.0  96.5% 88.8%; /* @kind color */
+  --lw-info-soft-c:258.0 84.0% 95.0%; /* @kind color */
   --lw-danger-soft-c: 0     93.3% 94.1%; /* @kind color */
+  --lw-info-c: 258.0 52.0% 46.0%; /* @kind color */  /* #5B37A8  fill — the one blue-adjacent role, and it is VIOLET on purpose */
+  --lw-info-soft-c: 258.0 84.0% 95.0%; /* @kind color */  /* #EDE6FE  chip tint */
   --lw-neutral-soft-c: 213.0 30.0% 95.0%; /* @kind color */
   --lw-cta-soft-c: 46.0  100%  90.0%; /* @kind color */
   --lw-shadow-xs: 0 1px 0 rgba(11, 37, 69, 0.05);
@@ -940,6 +969,8 @@
   --lw-warning-on:   hsl(var(--lw-warning-on-c));
   --lw-warning-soft: hsl(var(--lw-warning-soft-c));
   --lw-danger-on:    hsl(var(--lw-danger-on-c));
+  --lw-info-on:      hsl(var(--lw-info-on-c));
+  --lw-info-soft:    hsl(var(--lw-info-soft-c));
   --lw-danger-soft:  hsl(var(--lw-danger-soft-c));
   /* Neutral is a status family too. It was the one of the four the re-derive
      block skipped, so a `draft` chip kept its light #EEF2F7 tint and dark ink on
@@ -990,6 +1021,25 @@
   --lw-chart-6: hsl(14.0 78.0% 55.0%);  /* @kind color */
   --lw-chart-7: hsl(196.0 55.0% 62.0%); /* @kind color */
   --lw-chart-8: hsl(300.0 28.0% 42.0%); /* @kind color */
+  /* 9-12 extend the ramp into its four widest hue gaps (~88 yellow-green, ~232
+     indigo, ~330 magenta, ~28 burnt orange) rather than tinting an existing
+     member — a tint of chart-1 is exactly what makes two series hard to tell
+     apart in a legend, which is the failure the dE gate in lw-contrast-check
+     exists to catch. tss-app derived its 9-12 as `color-mix(chart-N 62%, bg)`
+     for want of these; that is the shape to avoid.
+
+     chart-10 is a muted TAUPE rather than another saturated hue, and that is the
+     measurement talking. Eleven saturated hues leave no gap wide enough: indigo
+     232 measured dE 13.5 against chart-4's violet, green 120 measured 13.4
+     against chart-9's yellow-green, and the best candidate constrained to a
+     >=28deg hue gap only reached 23.5. Dropping the hue-distance constraint and
+     letting dE decide gives 39.7 — nearly double the floor — because chroma and
+     lightness separate a colour just as well as hue does. Hue distance is a proxy;
+     dE is the thing a reader actually experiences. */
+  --lw-chart-9: hsl(88.0 58.0% 30.0%); /* @kind color */
+  --lw-chart-10: hsl(24.0 30.0% 40.0%); /* @kind color */
+  --lw-chart-11: hsl(330.0 64.0% 44.0%); /* @kind color */
+  --lw-chart-12: hsl(28.0 82.0% 42.0%); /* @kind color */
   /* The plot furniture. A gridline that competes with the data is noise. */
   --lw-chart-grid: var(--lw-line);
   --lw-chart-axis: var(--lw-fg-subtle);
@@ -1050,6 +1100,10 @@
     --lw-chart-6: hsl(14.0 78.0% 55.0%);  /* @kind color */
     --lw-chart-7: hsl(196.0 55.0% 62.0%); /* @kind color */
     --lw-chart-8: hsl(300.0 28.0% 42.0%); /* @kind color */
+    --lw-chart-9: hsl(88.0 58.0% 30.0%); /* @kind color */
+    --lw-chart-10: hsl(24.0 30.0% 40.0%); /* @kind color */
+    --lw-chart-11: hsl(330.0 64.0% 44.0%); /* @kind color */
+    --lw-chart-12: hsl(28.0 82.0% 42.0%); /* @kind color */
     --lw-diff-add: hsl(140.0 60.0% 94.0%); /* @kind color */
     --lw-diff-add-line: hsl(140.0 44.0% 74.0%); /* @kind color */
     --lw-diff-del: hsl(0 84.0% 95.5%); /* @kind color */
@@ -1066,6 +1120,10 @@
     --lw-chart-6: hsl(14.0 82.0% 65.0%);  /* @kind color */
     --lw-chart-7: hsl(196.0 60.0% 72.0%); /* @kind color */
     --lw-chart-8: hsl(300.0 34.0% 62.0%); /* @kind color */
+    --lw-chart-9: hsl(88.0 52.0% 56.0%); /* @kind color */
+    --lw-chart-10: hsl(24.0 28.0% 66.0%); /* @kind color */
+    --lw-chart-11: hsl(330.0 66.0% 66.0%); /* @kind color */
+    --lw-chart-12: hsl(28.0 84.0% 60.0%); /* @kind color */
     --lw-diff-add: hsl(150.0 46.0% 12.0%); /* @kind color */
     --lw-diff-add-line: hsl(150.0 38.0% 28.0%); /* @kind color */
     --lw-diff-del: hsl(0 48.0% 15.0%); /* @kind color */
@@ -1086,6 +1144,10 @@
   --lw-chart-6: hsl(14.0 82.0% 65.0%);  /* @kind color */
   --lw-chart-7: hsl(196.0 60.0% 72.0%); /* @kind color */
   --lw-chart-8: hsl(300.0 34.0% 62.0%); /* @kind color */
+  --lw-chart-9: hsl(88.0 52.0% 56.0%); /* @kind color */
+  --lw-chart-10: hsl(24.0 28.0% 66.0%); /* @kind color */
+  --lw-chart-11: hsl(330.0 66.0% 66.0%); /* @kind color */
+  --lw-chart-12: hsl(28.0 84.0% 60.0%); /* @kind color */
 }
 .dark, [data-theme="dark"], .lw-band-dark, [data-band="dark"] {
   --lw-diff-add: hsl(150.0 46.0% 12.0%); /* @kind color */

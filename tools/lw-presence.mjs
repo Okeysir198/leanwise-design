@@ -211,7 +211,8 @@ const SHADCN_REQUIRED_SIDEBAR = [
 ];
 const SHADCN_REQUIRED_CHART = ["--chart-1", "--chart-2", "--chart-3", "--chart-4", "--chart-5"];
 SHADCN_REQUIRED.push(...SHADCN_REQUIRED_SIDEBAR, ...SHADCN_REQUIRED_CHART);
-const SHADCN_KNOWN_GAPS = ["--info"];
+SHADCN_REQUIRED.push("--info");
+const SHADCN_KNOWN_GAPS = [];  // v1.2 shipped --info; nothing shadcn reads is missing now.
 const shadcnSrc = fs.readFileSync(path.join(ROOT, "shadcn.css"), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
 const shadcnDeclared = new Set([...shadcnSrc.matchAll(/(--[a-z0-9-]+)\s*:/g)].map((m) => m[1]));
 for (const name of SHADCN_REQUIRED) {

@@ -90,6 +90,7 @@ const MANIFEST = [
 
   // ── B. Semantic status fills + their ink. Navy sits on green/amber fills.
   { group: "status fills", fg: "on-neutral", bg: "neutral", scope: "both", label: "neutral fill + WHITE ink" },
+  { group: "status fills", fg: "on-info",    bg: "info",    scope: "both", label: "info fill + WHITE ink" },
   { group: "status fills", fg: "on-status", bg: "success",  scope: "both", label: "success fill + navy ink" },
   { group: "status fills", fg: "on-status", bg: "warning",  scope: "both", label: "warning fill + navy ink" },
 
@@ -159,10 +160,12 @@ const MANIFEST = [
   //    shades; dark uses the theme-aware -on shades. CTA chip included on both.
   { group: "soft chips", fg: "success-text", bg: "success-soft", scope: "light", label: "success badge on light tint" },
   { group: "soft chips", fg: "warning-text", bg: "warning-soft", scope: "light", label: "warning badge on light tint" },
+  { group: "soft chips", fg: "info-text",    bg: "info-soft",    scope: "light", label: "info badge on light tint" },
   { group: "soft chips", fg: "danger-text",  bg: "danger-soft",  scope: "light", label: "danger badge on light tint" },
   { group: "soft chips", fg: "cta-text",     bg: "cta-soft",     scope: "light", label: "CTA badge on light tint" },
   { group: "soft chips", fg: "success-on",   bg: "success-soft", scope: "dark",  label: "success badge on dark tint" },
   { group: "soft chips", fg: "warning-on",   bg: "warning-soft", scope: "dark",  label: "warning badge on dark tint" },
+  { group: "soft chips", fg: "info-on",      bg: "info-soft",    scope: "dark",  label: "info badge on dark tint" },
   { group: "soft chips", fg: "danger-on",    bg: "danger-soft",  scope: "dark",  label: "danger badge on dark tint" },
   { group: "soft chips", fg: "cta-400",      bg: "cta-soft",     scope: "dark",  label: "CTA badge on dark tint" },
   { group: "soft chips", fg: "cta-text",     bg: "cta-soft",     scope: "dark",  label: "role: --lw-cta-text on the dark CTA tint" },
@@ -1001,6 +1004,87 @@ if (bindingFails.length) {
   failed += bindingFails.length;
 }
 
+/* ===========================================================================
+   CATEGORICAL SEPARATION — the chart ramp.
+
+   Contrast is the wrong measure for a series colour. Two chart colours can each
+   clear AA against the page and still be indistinguishable FROM EACH OTHER, and
+   that is the failure that matters in a legend: the reader cannot tell which
+   line is which. Contrast is a ratio against a ground; separation is a distance
+   between two colours.
+
+   So: CIE76 dE over every pair in the ramp, in every scope. CIE76 rather than
+   dE2000 because it is a plain Euclidean distance in Lab that anyone can verify
+   by hand, and because the floor here is a coarse "are these obviously
+   different" question, not a just-noticeable-difference one — the extra
+   machinery of dE2000 would buy precision this decision does not use.
+
+   The floor is derived, not invented: it is set just under the tightest pair in
+   the ramp as it shipped through v1.1.x, so the existing palette passes and any
+   NEW colour has to be at least as separable as the closest existing pair. That
+   is the honest bar — it says "no worse than what we already ship" rather than
+   asserting a number nobody measured.
+   =========================================================================== */
+
+const CHART_KEYS = Array.from({ length: 12 }, (_, i) => `chart-${i + 1}`);
+
+/** sRGB -> CIE L*a*b*, D65. Takes this file's resolved `{kind,r,g,b,a}`.
+    NOTE the channels here are 0-1, NOT 0-255 — `hslToRgb` above returns
+    normalised values and `luminance` consumes them that way. Dividing by 255
+    again collapses every colour to near-black, which showed up as dE 0.2 between
+    obviously different hues on the first run of this check. */
+function toLab({ r, g, b }) {
+  const lin = (v) => (v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+  const [R, G, B] = [lin(r), lin(g), lin(b)];
+  const X = (R * 0.4124 + G * 0.3576 + B * 0.1805) / 0.95047;
+  const Y = (R * 0.2126 + G * 0.7152 + B * 0.0722) / 1.0;
+  const Z = (R * 0.0193 + G * 0.1192 + B * 0.9505) / 1.08883;
+  const f = (t) => (t > 0.008856 ? Math.cbrt(t) : 7.787 * t + 16 / 116);
+  const [fx, fy, fz] = [f(X), f(Y), f(Z)];
+  return [116 * fy - 16, 500 * (fx - fy), 200 * (fy - fz)];
+}
+const deltaE76 = (a, b) => {
+  const [la, lb] = [toLab(a), toLab(b)];
+  return Math.hypot(la[0] - lb[0], la[1] - lb[1], la[2] - lb[2]);
+};
+
+/* MEASURED against the shipped v1.1.8 ramp, not guessed: its tightest pair is
+   chart-1 (brand cyan) vs chart-7 (light blue) at dE 20.0, in BOTH dark scopes.
+   The floor sits just under that, so the palette passes as it stands and any new
+   colour has to be at least as separable as the closest existing pair.
+
+   That chart-1/chart-7 pair is genuinely tight and is the first thing to fix in a
+   future palette pass — but widening it is a visible change to every chart in
+   every consumer, so it does not belong in a release whose whole claim is that no
+   pixel moved. Raising this number is a palette decision, not a tuning knob. */
+const CHART_DE_FLOOR = 19;
+
+const chartFails = [];
+let chartPairs = 0;
+let tightest = { d: Infinity, a: null, b: null, scope: null };
+for (const scopeName of ["light", ...DARK_SCOPES]) {
+  const present = CHART_KEYS.map((k) => [k, resolveColor(k, scopeName)]).filter(([, v]) => v);
+  // A ramp member that exists in one scope and not another is the dark-scope
+  // divergence bug in a new costume; the divergence check above owns that, so
+  // here we only measure what resolved.
+  for (let i = 0; i < present.length; i++) {
+    for (let j = i + 1; j < present.length; j++) {
+      chartPairs++;
+      const d = deltaE76(present[i][1], present[j][1]);
+      if (d < tightest.d) tightest = { d, a: present[i][0], b: present[j][0], scope: scopeName };
+      if (d < CHART_DE_FLOOR) {
+        chartFails.push(`${present[i][0]} vs ${present[j][0]} [${scopeName}] — dE ${d.toFixed(1)}, floor ${CHART_DE_FLOOR}`);
+      }
+    }
+  }
+}
+if (chartFails.length) {
+  console.log(`${C.bold}categorical separation (chart ramp — two series a reader cannot tell apart)${C.reset}`);
+  for (const m of chartFails) console.log(`  ${C.red}✗${C.reset} ${m}`);
+  console.log();
+  failed += chartFails.length;
+}
+
 const pairCount = rows.filter((r) => r.status !== "MISS").length;
 
 if (failed) {
@@ -1018,3 +1102,5 @@ console.log(`${C.dim}Across three canonical scopes — ${perScope} — plus ${di
 console.log(`${C.dim}between the two dark scopes. Coverage is derived from tokens.css via the${C.reset}`);
 console.log(`${C.dim}composition manifest — add a pair to MANIFEST and it is checked in the${C.reset}`);
 console.log(`${C.dim}scope(s) you declare; a "dark" pair is checked in the @media path too.${C.reset}\n`);
+console.log(`${C.dim}Categorical separation: ${chartPairs} chart pairs at dE >= ${CHART_DE_FLOOR}; tightest is${C.reset}`);
+console.log(`${C.dim}${tightest.a} vs ${tightest.b} [${tightest.scope}] at dE ${tightest.d.toFixed(1)}.${C.reset}\n`);

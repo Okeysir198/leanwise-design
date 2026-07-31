@@ -241,6 +241,12 @@
   --color-cta-soft: hsl(var(--cta-soft));
   --color-cta-on: hsl(var(--cta-on));
 
+  /* The fifth status role, new in v1.2 — a VIOLET, not a blue. See shadcn.css. */
+  --color-info: hsl(var(--info));
+  --color-info-foreground: hsl(var(--info-foreground));
+  --color-info-soft: hsl(var(--info-soft));
+  --color-info-on: hsl(var(--info-on));
+
   --color-brand: hsl(var(--brand));
   --color-navy: hsl(var(--navy));
 
@@ -268,6 +274,10 @@
   --color-chart-6: var(--chart-6);
   --color-chart-7: var(--chart-7);
   --color-chart-8: var(--chart-8);
+  --color-chart-9: var(--chart-9);
+  --color-chart-10: var(--chart-10);
+  --color-chart-11: var(--chart-11);
+  --color-chart-12: var(--chart-12);
 
   /* ---- elevation --------------------------------------------------------- */
   /* Navy-tinted, and they re-point on dark — which is precisely why they are in

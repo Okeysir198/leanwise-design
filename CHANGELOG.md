@@ -122,6 +122,46 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
   above, with the one-line command to verify a row against the consumer's own `package.json`.
   Real drift today is VSS (`#v0.2.3`) and rag-service (`#v0.2.2`).
 
+### Added — the two missing roles
+
+- **`--lw-info`, the fifth status — and it is a VIOLET, not a blue.** `shadcn.css` declined to
+  emit `--info` for four minors on the grounds that *"every blue here already means brand or
+  link"*. That is an objection to the COLOUR, not to the role: a real app needs a fifth state,
+  and tss-app proved it by deriving its own `--tss-phase2` from `--lw-chart-4` — this exact
+  violet — for this exact reason. A dark fill, so white ink like `neutral` and `danger`.
+  Measured: 7.83:1 as a fill, 8.48:1 (light) / 7.57:1 (dark) as a chip.
+
+  ⚠️ **Look before adopting.** tss-app's hand-rolled `--info` is byte-identical to its
+  `--primary`, so an info badge there is currently painted in the brand colour. That is a
+  coincidence, not a role, and taking this token changes it.
+
+- **`--lw-chart-9..12`**, extending the categorical ramp to twelve. Deliberately NOT tints of
+  existing members — a tint of `chart-1` is precisely what makes two series hard to tell apart
+  in a legend, and `color-mix(chart-N 62%, bg)` is the shape tss-app had to invent for want of
+  these.
+
+- **A categorical-separation gate**, in `lw-contrast-check`. Contrast is the wrong measure for
+  a series colour: two of them can each clear AA against the page and still be
+  indistinguishable *from each other*. CIE76 dE over all 198 pairs in all three scopes.
+
+  The floor is **measured, not invented** — 19, just under the tightest pair in the shipped
+  v1.1.8 ramp (`chart-1` vs `chart-7`, dE 20.0 in both dark scopes). So the existing palette
+  passes as-is and anything new must be at least as separable as the closest existing pair.
+  That chart-1/chart-7 pair is genuinely tight and is the first thing for a future palette
+  pass; widening it moves every chart in every consumer, so it does not belong in a release
+  whose claim is that no pixel moved.
+
+  The gate immediately earned itself: indigo at 232° measured dE 13.5 against `chart-4`'s
+  violet, and green at 120° measured 13.4 against the new `chart-9`. Eleven saturated hues
+  leave no gap wide enough, so `chart-10` is a muted **taupe** — the best candidate constrained
+  to a ≥28° hue gap only reached 23.5, while dropping that constraint and letting dE decide
+  gives **39.7**. Chroma and lightness separate a colour as well as hue does; hue distance is a
+  proxy, dE is what a reader experiences.
+
+  It also found a bug in itself on the first run: `toLab` divided by 255 when this file's
+  resolved channels are already 0–1, collapsing every colour to near-black and reporting dE 0.2
+  between obviously different hues.
+
 ### Added — packaging, and the four defects it had been hiding
 
 - **`"use client"` — 27 modules now declare it; the package had ZERO.** `<Combobox>`,

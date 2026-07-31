@@ -101,12 +101,26 @@
   --danger-soft: var(--lw-danger-soft-c);
   --danger-on: var(--lw-danger-on-c);
 
-  /* The fourth status: idle / pending / draft. Deliberately not "info" — every blue
-     here already means brand or link. Neutral is a dark fill, so it takes white ink. */
+  /* The fourth status: idle / pending / draft. Neutral is a dark fill, so it takes
+     white ink. (This comment used to end "deliberately not 'info' — every blue here
+     already means brand or link". That objection was to the COLOUR; the role now
+     ships below, as a violet.) */
   --neutral: var(--lw-neutral-c);
   --neutral-foreground: var(--lw-on-neutral-c);
   --neutral-soft: var(--lw-neutral-soft-c);
   --neutral-on: var(--lw-neutral-on-c);
+
+  /* The fifth status, new in v1.2. shadcn's components read `--info` and this file
+     declined to emit it for four minors — on the grounds that every blue here means
+     brand or link, which is an objection to the colour and not to the role. It is a
+     VIOLET, seeded from --lw-chart-4. A dark fill, so white ink like neutral.
+     ⚠️ A consumer upgrading from a hand-rolled `--info` should LOOK: tss-app's was
+     byte-identical to its --primary, so an info badge was painted in the brand
+     colour. That is a coincidence, not a role, and adopting this changes it. */
+  --info: var(--lw-info-c);
+  --info-foreground: var(--lw-on-info-c);
+  --info-soft: var(--lw-info-soft-c);
+  --info-on: var(--lw-info-on-c);
 
   /* Brand as TEXT (links, active nav). Since v0.8.0 brand-500 reads on white at
      5.68, so on light this IS the fill colour; on dark it re-points to brand-400.
@@ -146,7 +160,7 @@
   --sidebar-background: var(--lw-bg-subtle-c);
 
   /* ---- categorical ramp ------------------------------------------------------
-     shadcn's charts read `--chart-1..5`; the system has eight. All eight are
+     shadcn's charts read `--chart-1..5`; the system has twelve. All twelve are
      aliased so a consumer can reach the full ramp under the name their scaffolded
      chart component already uses.
 
@@ -164,6 +178,10 @@
   --chart-6: var(--lw-chart-6);
   --chart-7: var(--lw-chart-7);
   --chart-8: var(--lw-chart-8);
+  --chart-9: var(--lw-chart-9);
+  --chart-10: var(--lw-chart-10);
+  --chart-11: var(--lw-chart-11);
+  --chart-12: var(--lw-chart-12);
 }
 
 /* The dark-specific CHOICES (cards lift, accent is navy not cyan) — not just a

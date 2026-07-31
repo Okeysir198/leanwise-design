@@ -96,7 +96,13 @@ module.exports = {
         // Cyan as TEXT. `text-brand` for a link/active label — NOT `text-primary`,
         // which is the fill color. Since v0.8.0 the brand fill also reads on white (5.68),
         // but the role token stays because DARK re-points it to brand-400.
-        brand: "hsl(var(--brand) / <alpha-value>)",
+        info: {
+        DEFAULT: "hsl(var(--info) / <alpha-value>)",
+        foreground: "hsl(var(--info-foreground) / <alpha-value>)",
+        soft: "hsl(var(--info-soft) / <alpha-value>)",
+        on: "hsl(var(--info-on) / <alpha-value>)",
+      },
+      brand: "hsl(var(--brand) / <alpha-value>)",
         success: {
           DEFAULT: "hsl(var(--success) / <alpha-value>)",
           foreground: "hsl(var(--success-foreground) / <alpha-value>)",
@@ -134,6 +140,7 @@ module.exports = {
       chart: {
         1: "var(--chart-1)", 2: "var(--chart-2)", 3: "var(--chart-3)", 4: "var(--chart-4)",
         5: "var(--chart-5)", 6: "var(--chart-6)", 7: "var(--chart-7)", 8: "var(--chart-8)",
+        9: "var(--chart-9)", 10: "var(--chart-10)", 11: "var(--chart-11)", 12: "var(--chart-12)",
       },
       },
 
