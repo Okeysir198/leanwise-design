@@ -81,6 +81,39 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
   against Tailwind's stock curves they are byte-identical, so registering them would buy a
   second home for a value nobody is changing.
 
+### Changed — the one non-additive edit in 1.2
+
+- **The nine bare-element rules moved out of `base.css` into a new `reset.css`.** Un-layered
+  element rules beat every Tailwind utility regardless of specificity, so
+  `button { background: none; border: 0; padding: 0 }` stripped the padding and background off
+  every `<Button>` in a Tailwind app, and `body { font-size: … }` overrode the type scale.
+
+  That made `base.css` un-importable by exactly the consumers the README told to import it —
+  the recipe said *"shared controls — never dropped"* for "VSS, tss-app" — and it is why
+  tss-app refuses both `base.css` and `product.css` and therefore consumes zero `.lw-*`
+  components. The README recipe is corrected in the same release.
+
+  Same rules, same values: verified by normalising `reset.css + base.css` against the previous
+  `base.css` — 205 rules on both sides, none lost, none gained. The only ordering change is the
+  iOS 16px input rule moving earlier, which is inert because no bare-element rule follows it.
+
+  **Migration — one line, one consumer.** A vanilla consumer that imports `lw.css` needs
+  nothing; the shim now pulls `reset.css` first. A vanilla consumer that imports `base.css`
+  directly — that is `leanwise-ai`, in `src/routes/__root.tsx` — adds:
+
+  ```js
+  import '@leanwise/design/reset.css';   // before base.css
+  ```
+
+  A **Tailwind** consumer should NOT import `reset.css`: preflight already covers the useful
+  half, and the opinionated `button` and `body` rules are the half that does the damage.
+
+  Guarded by `check:presence`, which asserts the split in BOTH directions — the component
+  layers must contain no un-anchored selectors, and `reset.css` must contain nothing else.
+  Checking only one direction would let the split quietly un-split from the other side. The
+  four deliberate exceptions (a forced-colors tab rule, three `[data-collapsed]` opt-ins) are
+  in a checked-in exemption list, each with its reason.
+
 ### Fixed
 
 - **The consumers table said `leanwise-ai` was pinned at `#v0.8.1`. It is on `#v1.1.8`.**

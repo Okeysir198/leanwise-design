@@ -58,15 +58,33 @@ what is still open. `CONTRIBUTING.md` points back here — the checklist lives i
 ```
 
 ```css
-/* Tailwind + shadcn app (VSS, tss-app) */
+/* Tailwind v4 + shadcn app (tss-app) */
+@import "tailwindcss";
+@import "tw-animate-css";                            /* animate-in / animate-out */
 @import "@leanwise/design/fonts.css";
 @import "@leanwise/design/tokens.css";
 @import "@leanwise/design/shadcn.css";
-@import "@leanwise/design/base.css";      /* shared controls — never dropped */
-@import "@leanwise/design/product.css";   /* app surfaces */
+@import "@leanwise/design/theme.css";                /* AFTER shadcn.css */
+@import "@leanwise/design/base.css" layer(components);     /* shared controls */
+@import "@leanwise/design/product.css" layer(components);  /* app surfaces */
 ```
+
+`theme.css` is the v4 half of `tailwind-preset.cjs` — it registers the tokens as real
+utilities (`bg-cta`, `text-h1`, `shadow-focus`). Without it a v4 app has to hand-write the
+whole bridge, and the parts that are easiest to miss are the ones with no `@theme`
+namespace at all. See its header for the `@theme` vs `@theme inline` rule and the one cost
+of adopting it (`--color-*` are not on `:root`).
+
+`layer(components)` is what keeps the `.lw-*` rules beatable by a utility. Note this is the
+one thing that changed in **v1.2**: `base.css` used to also carry nine bare-element rules
+(`button { background: none; border: 0; padding: 0 }` among them), and un-layered element
+rules beat every Tailwind utility regardless of specificity — so this recipe was wrong for
+the apps it names, and tss-app refused both layers because of it. Those rules now live in
+`reset.css`, which a Tailwind app should **not** import: Tailwind's own preflight already
+covers the useful half, and the rest is the half that does the damage.
+
 ```js
-// tailwind.config.cjs — the preset is CJS, so `require` needs a CJS config file.
+// Tailwind v3 — tailwind.config.cjs. The preset is CJS, so `require` needs a CJS config.
 module.exports = { presets: [require("@leanwise/design/tailwind-preset")] };
 
 // tailwind.config.js in a "type": "module" package — import it instead.
@@ -75,9 +93,13 @@ import preset from "@leanwise/design/tailwind-preset";
 export default { presets: [preset] };
 ```
 
+The v3 preset and `theme.css` are two spellings of one vocabulary, and `npm run
+check:presence` fails the build if they ever stop agreeing.
+
 ```css
-/* vanilla CSS (marketing, rag-service) */
+/* vanilla CSS (leanwise-ai, rag-service) */
 @import "@leanwise/design/tokens.css";
+@import "@leanwise/design/reset.css";     /* v1.2: split out of base.css — see below */
 @import "@leanwise/design/base.css";
 @import "@leanwise/design/marketing.css";
 ```

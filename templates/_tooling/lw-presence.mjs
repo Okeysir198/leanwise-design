@@ -221,6 +221,122 @@ for (const name of SHADCN_REQUIRED) {
 }
 const gaps = SHADCN_KNOWN_GAPS.filter((n) => !shadcnDeclared.has(n));
 
+/* ---- check 5: layer purity, in BOTH directions ---------------------------
+ *
+ * Un-layered CSS beats every Tailwind utility regardless of specificity, so a
+ * bare `button { background: none; border: 0; padding: 0 }` in a component layer
+ * strips every <Button> in a Tailwind app. That is why base.css was
+ * un-importable by the consumers the README told to import it, and why the
+ * bare-element rules moved to reset.css in v1.2.
+ *
+ * Asserted BOTH ways on purpose. Checking only that base.css has no bare
+ * selectors would let the split quietly un-split from the other side — someone
+ * adds `.lw-card` to reset.css, a vanilla consumer gets it, a Tailwind consumer
+ * importing only base.css does not, and nothing says so.
+ * ------------------------------------------------------------------------- */
+
+/** Split a selector list on commas that are NOT inside ()/[] — `:where(a, button)`
+    and `[data-x="a,b"]` are one selector, not two. Splitting naively reported
+    phantom bare `button` and `input` rules on the first run of this check. */
+function splitSelectors(prelude) {
+  const out = [];
+  let depth = 0, buf = "";
+  for (const ch of prelude) {
+    if (ch === "(" || ch === "[") depth++;
+    else if (ch === ")" || ch === "]") depth--;
+    if (ch === "," && depth === 0) { out.push(buf); buf = ""; continue; }
+    buf += ch;
+  }
+  out.push(buf);
+  return out.map((s) => s.trim()).filter(Boolean);
+}
+
+/** Every selector in a stylesheet, minus at-rule preludes and @keyframes stops. */
+function selectorsOf(file) {
+  let css = fs.readFileSync(file, "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+  // Drop @keyframes bodies whole — `from`/`to`/`50%` are not selectors.
+  css = css.replace(/@keyframes[^{]*\{(?:[^{}]*\{[^{}]*\})*[^{}]*\}/g, "");
+  const out = [];
+  for (const m of css.matchAll(/([^{}]+)\{/g)) {
+    const prelude = m[1].trim();
+    if (!prelude || prelude.startsWith("@")) continue;   // @media / @supports / @layer
+    out.push(...splitSelectors(prelude));
+  }
+  return out;
+}
+
+/* Selectors that carry no class but still cannot collide with a consumer's
+   markup: document-level pseudo-elements, and the opt-in band/theme attributes a
+   consumer sets deliberately on a wrapper. */
+const NOT_A_HAZARD = [
+  /^::view-transition/,
+  /^:root\b/,
+  /^\[data-(band|theme|density)=/,
+  /^:is\(/,          // `:is(.dark, [data-band="dark"], …)` — the band scopes
+  /^:where\(/,
+];
+
+/**
+ * The hazard is a rule that can match an element a Tailwind consumer styles, and
+ * beat the utility on the un-layered cascade. That is precisely a selector with
+ * NO class or id anywhere in it: `button`, `img`, `::selection`, `*`.
+ *
+ * A class ANYWHERE anchors the rule — `.lw-btn svg` only matches inside a
+ * `.lw-btn`, which a Tailwind consumer does not have. An earlier draft required
+ * the class to be on the SUBJECT and flagged every `.lw-btn svg` in the file;
+ * the one before that required a `.lw-` prefix and flagged `[data-band] .brand-mark`.
+ * Both were wrong in the same direction — over-strict rules get switched off.
+ */
+function isBare(sel) {
+  if (NOT_A_HAZARD.some((re) => re.test(sel))) return false;
+  return !/[.#]/.test(sel);
+}
+
+/* Un-anchored selectors that are DELIBERATE API, each with its reason. An
+   exemption list is only honest if every row says why — an unexplained entry is
+   how a gate turns into a formality.
+
+   Keep this short. If it grows, the split has stopped being real. */
+const LAYER_PURITY_EXEMPT = new Map([
+  ['[role="tab"][aria-selected="true"]',
+   "inside @media (forced-colors: active) — it is SUPPOSED to reach a consumer's " +
+   "tabs, including a vendored shadcn Tabs, and only applies in Windows High Contrast"],
+  ['[data-collapsed="true"]',
+   "documented opt-in: an app frame that wraps its own chrome around the rail sets " +
+   "the same attribute and reads the same width var, so collapse has one source"],
+  ['[data-collapsed="true"] [data-collapse-hide]',
+   "same contract — a child opts into being dropped when the rail collapses"],
+  ['[data-collapsed="true"] [data-collapse-center]',
+   "same contract — a child opts into becoming a centred icon slot"],
+]);
+
+const COMPONENT_LAYERS = ["base.css", "marketing.css", "product.css"];
+for (const f of COMPONENT_LAYERS) {
+  const p = path.join(ROOT, f);
+  if (!fs.existsSync(p)) continue;
+  const bare = selectorsOf(p).filter((sel) => isBare(sel) && !LAYER_PURITY_EXEMPT.has(sel));
+  for (const sel of [...new Set(bare)].slice(0, 6)) {
+    problems.push([
+      `${f} has the un-scoped selector \`${sel}\` — un-layered element rules beat every ` +
+      `Tailwind utility, so this makes ${f} unsafe for a Tailwind consumer. Move it to reset.css`,
+    ]);
+  }
+}
+
+const resetPath = path.join(ROOT, "reset.css");
+if (!fs.existsSync(resetPath)) {
+  problems.push(["reset.css is missing — the bare-element rules have nowhere to live"]);
+} else {
+  const scoped = selectorsOf(resetPath).filter((s) => !isBare(s));
+  for (const sel of [...new Set(scoped)].slice(0, 6)) {
+    problems.push([
+      `reset.css has the component selector \`${sel}\` — reset.css is the bare-element file ` +
+      `and is NOT imported by a Tailwind consumer, so anything scoped here is invisible to them. ` +
+      `Move it to base.css`,
+    ]);
+  }
+}
+
 /* ---- check 4: does theme.css actually COMPILE? ---------------------------
  *
  * Checks 1-3 compare names in two text files. None of them would notice a
