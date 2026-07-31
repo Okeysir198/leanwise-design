@@ -12,7 +12,7 @@
  * froze to the light palette on dark), and a generator that walks every scope is
  * the cheapest place to catch it.
  *
- * Usage: node templates/_tooling/lw-tokens-dtcg.mjs [--out tokens.json] [--check]
+ * Usage: node tools/lw-tokens-dtcg.mjs [--out tokens.json] [--check]
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";

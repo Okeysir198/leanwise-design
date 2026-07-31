@@ -20,7 +20,7 @@
  *     <main> with no id and no skip link). A sweep with no gate behind it is a
  *     one-time event; the next template added starts the drift over.
  *
- * Usage: node templates/_tooling/lw-templates.mjs
+ * Usage: node tools/lw-templates.mjs
  */
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { createHash } from "node:crypto";

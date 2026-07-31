@@ -11,7 +11,7 @@
  * proves the palette as actually composed, and the two disagreeing is itself the
  * finding.
  *
- * Usage: node templates/_tooling/lw-a11y.mjs
+ * Usage: node tools/lw-a11y.mjs
  */
 import { readFileSync } from "node:fs";
 import { collectCards } from "./_cards.mjs";

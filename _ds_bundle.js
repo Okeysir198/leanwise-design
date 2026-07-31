@@ -1,4 +1,4 @@
-/* @ds-bundle: {"format":4,"namespace":"LeanWiseDesign_f2d907","generator":"templates/_tooling/lw-bundle.mjs","esbuild":"0.27.7","components":[{"name":"AgentTrace","sourcePath":"components/ai/AgentTrace.jsx"},{"name":"Artifact","sourcePath":"components/ai/Artifact.jsx"},{"name":"ConfidenceMeter","sourcePath":"components/ai/ConfidenceMeter.jsx"},{"name":"DiffReview","sourcePath":"components/ai/DiffReview.jsx"},{"name":"Feedback","sourcePath":"components/ai/Feedback.jsx"},{"name":"Message","sourcePath":"components/ai/Message.jsx"},{"name":"PromptInput","sourcePath":"components/ai/PromptInput.jsx"},{"name":"SourceChip","sourcePath":"components/ai/SourceChip.jsx"},{"name":"SourceList","sourcePath":"components/ai/SourceList.jsx"},{"name":"ToolCall","sourcePath":"components/ai/ToolCall.jsx"},{"name":"ActivityFeed","sourcePath":"components/data/ActivityFeed.jsx"},{"name":"timeAgo","sourcePath":"components/data/ActivityFeed.jsx"},{"name":"BarChart","sourcePath":"components/data/BarChart.jsx"},{"name":"CHART_PAD","sourcePath":"components/data/chart-parts.jsx"},{"name":"CHART_W","sourcePath":"components/data/chart-parts.jsx"},{"name":"DataTable","sourcePath":"components/data/chart-parts.jsx"},{"name":"Legend","sourcePath":"components/data/chart-parts.jsx"},{"name":"SERIES","sourcePath":"components/data/chart-parts.jsx"},{"name":"CodeBlock","sourcePath":"components/data/CodeBlock.jsx"},{"name":"Console","sourcePath":"components/data/Console.jsx"},{"name":"DataGrid","sourcePath":"components/data/DataGrid.jsx"},{"name":"EmptyState","sourcePath":"components/data/EmptyState.jsx"},{"name":"FilterBar","sourcePath":"components/data/FilterBar.jsx"},{"name":"Toolbar","sourcePath":"components/data/FilterBar.jsx"},{"name":"KpiTile","sourcePath":"components/data/KpiTile.jsx"},{"name":"LineChart","sourcePath":"components/data/LineChart.jsx"},{"name":"Pagination","sourcePath":"components/data/Pagination.jsx"},{"name":"Progress","sourcePath":"components/data/Progress.jsx"},{"name":"StateView","sourcePath":"components/data/StateView.jsx"},{"name":"StatMeter","sourcePath":"components/data/StatMeter.jsx"},{"name":"Table","sourcePath":"components/data/Table.jsx"},{"name":"Calendar","sourcePath":"components/forms/Calendar.jsx"},{"name":"Checkbox","sourcePath":"components/forms/Checkbox.jsx"},{"name":"Combobox","sourcePath":"components/forms/Combobox.jsx"},{"name":"DatePicker","sourcePath":"components/forms/DatePicker.jsx"},{"name":"RANGE_PRESETS","sourcePath":"components/forms/DatePicker.jsx"},{"name":"Field","sourcePath":"components/forms/Field.jsx"},{"name":"FileUpload","sourcePath":"components/forms/FileUpload.jsx"},{"name":"formatBytes","sourcePath":"components/forms/FileUpload.jsx"},{"name":"Input","sourcePath":"components/forms/Input.jsx"},{"name":"InputGroup","sourcePath":"components/forms/InputGroup.jsx"},{"name":"RichText","sourcePath":"components/forms/RichText.jsx"},{"name":"Segmented","sourcePath":"components/forms/Segmented.jsx"},{"name":"Select","sourcePath":"components/forms/Select.jsx"},{"name":"Stepper","sourcePath":"components/forms/Stepper.jsx"},{"name":"Switch","sourcePath":"components/forms/Switch.jsx"},{"name":"Textarea","sourcePath":"components/forms/Textarea.jsx"},{"name":"Cluster","sourcePath":"components/layout/Cluster.jsx"},{"name":"Container","sourcePath":"components/layout/Container.jsx"},{"name":"Grid","sourcePath":"components/layout/Grid.jsx"},{"name":"Page","sourcePath":"components/layout/Page.jsx"},{"name":"Section","sourcePath":"components/layout/Section.jsx"},{"name":"Split","sourcePath":"components/layout/Split.jsx"},{"name":"Stack","sourcePath":"components/layout/Stack.jsx"},{"name":"FeatureGrid","sourcePath":"components/marketing/FeatureGrid.jsx"},{"name":"Hero","sourcePath":"components/marketing/Hero.jsx"},{"name":"LogoRail","sourcePath":"components/marketing/LogoRail.jsx"},{"name":"StoryCard","sourcePath":"components/marketing/StoryCard.jsx"},{"name":"AppBar","sourcePath":"components/nav/AppBar.jsx"},{"name":"BottomNav","sourcePath":"components/nav/BottomNav.jsx"},{"name":"Breadcrumbs","sourcePath":"components/nav/Breadcrumbs.jsx"},{"name":"CommandPalette","sourcePath":"components/nav/CommandPalette.jsx"},{"name":"score","sourcePath":"components/nav/CommandPalette.jsx"},{"name":"NavItem","sourcePath":"components/nav/Sidebar.jsx"},{"name":"Sidebar","sourcePath":"components/nav/Sidebar.jsx"},{"name":"Tabs","sourcePath":"components/nav/Tabs.jsx"},{"name":"ThemeToggle","sourcePath":"components/nav/ThemeToggle.jsx"},{"name":"TopBar","sourcePath":"components/nav/TopBar.jsx"},{"name":"Dialog","sourcePath":"components/overlays/Dialog.jsx"},{"name":"Drawer","sourcePath":"components/overlays/Drawer.jsx"},{"name":"Menu","sourcePath":"components/overlays/Menu.jsx"},{"name":"Popover","sourcePath":"components/overlays/Popover.jsx"},{"name":"Toast","sourcePath":"components/overlays/Toast.jsx"},{"name":"ToastRegion","sourcePath":"components/overlays/Toast.jsx"},{"name":"Tooltip","sourcePath":"components/overlays/Tooltip.jsx"},{"name":"Avatar","sourcePath":"components/primitives/Avatar.jsx"},{"name":"Button","sourcePath":"components/primitives/Button.jsx"},{"name":"Card","sourcePath":"components/primitives/Card.jsx"},{"name":"CardBody","sourcePath":"components/primitives/Card.jsx"},{"name":"CardFoot","sourcePath":"components/primitives/Card.jsx"},{"name":"CardHead","sourcePath":"components/primitives/Card.jsx"},{"name":"CardTitle","sourcePath":"components/primitives/Card.jsx"},{"name":"Chip","sourcePath":"components/primitives/Chip.jsx"},{"name":"Eyebrow","sourcePath":"components/primitives/Eyebrow.jsx"},{"name":"Icon","sourcePath":"components/primitives/Icon.jsx"},{"name":"iconNames","sourcePath":"components/primitives/Icon.jsx"},{"name":"IconNames","sourcePath":"components/primitives/Icon.jsx"},{"name":"Skeleton","sourcePath":"components/primitives/Skeleton.jsx"},{"name":"THEME_KEY","sourcePath":"hooks.js"}],"sourceHashes":{"components/_deprecate.js":"1c84a2fda110","components/_radio-group.js":"26caa936f1de","components/ai/AgentTrace.jsx":"a89cdd6dbfea","components/ai/Artifact.jsx":"9be6c863b2c9","components/ai/ConfidenceMeter.jsx":"30190dcfb803","components/ai/DiffReview.jsx":"8a779a568c23","components/ai/Feedback.jsx":"71d0b9b5059a","components/ai/Message.jsx":"e507e32b90ca","components/ai/PromptInput.jsx":"93ca1175d24c","components/ai/SourceChip.jsx":"b8ec3e12c238","components/ai/SourceList.jsx":"092a0ded3834","components/ai/ToolCall.jsx":"57d638af173a","components/data/ActivityFeed.jsx":"fefc066b3fb2","components/data/BarChart.jsx":"96968a9ba35f","components/data/CodeBlock.jsx":"5b95cf570b51","components/data/Console.jsx":"6528c9c3ca1e","components/data/DataGrid.jsx":"4c4eeb26cff0","components/data/EmptyState.jsx":"7340a557f731","components/data/FilterBar.jsx":"48ecb22a8e7c","components/data/KpiTile.jsx":"4568571b1cff","components/data/LineChart.jsx":"6fa9e64d83f3","components/data/Pagination.jsx":"0c222c040f87","components/data/Progress.jsx":"eb02438a3b31","components/data/StatMeter.jsx":"55ec9c1db508","components/data/StateView.jsx":"1db574af4cf3","components/data/Table.jsx":"2a8a72b119f2","components/data/_columns.js":"d862780d1495","components/data/chart-parts.jsx":"424a7143968b","components/forms/Calendar.jsx":"a62cac7fac06","components/forms/Checkbox.jsx":"fa0052232568","components/forms/Combobox.jsx":"fb1e6c5fa5f5","components/forms/DatePicker.jsx":"692aed22fa29","components/forms/Field.jsx":"168c64395659","components/forms/FileUpload.jsx":"dfbd15736bd0","components/forms/Input.jsx":"a43b7b4b5564","components/forms/InputGroup.jsx":"71d8de495436","components/forms/RichText.jsx":"353ca85911ca","components/forms/Segmented.jsx":"aaa2f1b3bb65","components/forms/Select.jsx":"378e70b32827","components/forms/Stepper.jsx":"646dd2a208b6","components/forms/Switch.jsx":"cc99b023531b","components/forms/Textarea.jsx":"2d2aa2984da3","components/layout/Cluster.jsx":"2e15367fe28d","components/layout/Container.jsx":"6eda4bc56e54","components/layout/Grid.jsx":"8a093fe6ed4b","components/layout/Page.jsx":"51d1753d201a","components/layout/Section.jsx":"4507aff3c57c","components/layout/Split.jsx":"6786154d4ebd","components/layout/Stack.jsx":"005a591d8c24","components/marketing/FeatureGrid.jsx":"09e859da09fb","components/marketing/Hero.jsx":"ba4893068f68","components/marketing/LogoRail.jsx":"1bedd4cadb90","components/marketing/StoryCard.jsx":"9a4eccdac2e3","components/nav/AppBar.jsx":"b1f55c9de347","components/nav/BottomNav.jsx":"c1a544beec48","components/nav/Breadcrumbs.jsx":"f7b653d6c1cb","components/nav/CommandPalette.jsx":"a4b1b4576446","components/nav/Sidebar.jsx":"77e19c558ca7","components/nav/Tabs.jsx":"09d2bf40f0e0","components/nav/ThemeToggle.jsx":"e5a3292ee1e1","components/nav/TopBar.jsx":"6d5288e5af01","components/overlays/Dialog.jsx":"0c2932349cf9","components/overlays/Drawer.jsx":"815022e45cc7","components/overlays/Menu.jsx":"20db093c83a9","components/overlays/Popover.jsx":"717f23c3c127","components/overlays/Toast.jsx":"d6b810dcb7d3","components/overlays/Tooltip.jsx":"7b19e7dc9711","components/primitives/Avatar.jsx":"277ea4c7ca39","components/primitives/Button.jsx":"c29f216778a0","components/primitives/Card.jsx":"4a9c9f081c1b","components/primitives/Chip.jsx":"458e477fd284","components/primitives/Eyebrow.jsx":"ac1cc5e5856f","components/primitives/Icon.jsx":"4f15be56cb24","components/primitives/Skeleton.jsx":"76129a849b43","hooks.js":"8d667ef2c9e2","react.js":"96067cc59a1c"},"inlinedExternals":[],"unexposedExports":[{"name":"__resetDeprecations","sourcePath":"components/_deprecate.js"},{"name":"deprecate","sourcePath":"components/_deprecate.js"},{"name":"useRadioGroup","sourcePath":"components/_radio-group.js"},{"name":"colHeader","sourcePath":"components/data/_columns.js"},{"name":"emitSort","sourcePath":"components/data/_columns.js"},{"name":"legacySortArgs","sourcePath":"components/data/_columns.js"},{"name":"Grid","sourcePath":"components/data/chart-parts.jsx"},{"name":"cx","sourcePath":"components/data/chart-parts.jsx"},{"name":"frame","sourcePath":"components/data/chart-parts.jsx"},{"name":"nf","sourcePath":"components/data/chart-parts.jsx"},{"name":"ticks","sourcePath":"components/data/chart-parts.jsx"},{"name":"animateCounter","sourcePath":"hooks.js"},{"name":"paint","sourcePath":"hooks.js"},{"name":"persist","sourcePath":"hooks.js"},{"name":"useDeterministicCascade","sourcePath":"hooks.js"},{"name":"useReducedMotion","sourcePath":"hooks.js"},{"name":"useReveal","sourcePath":"hooks.js"},{"name":"useSpotlight","sourcePath":"hooks.js"},{"name":"useTheme","sourcePath":"hooks.js"}]} */
+/* @ds-bundle: {"format":4,"namespace":"LeanWiseDesign_f2d907","generator":"tools/lw-bundle.mjs","esbuild":"0.27.7","components":[{"name":"AgentTrace","sourcePath":"components/ai/AgentTrace.jsx"},{"name":"Artifact","sourcePath":"components/ai/Artifact.jsx"},{"name":"ConfidenceMeter","sourcePath":"components/ai/ConfidenceMeter.jsx"},{"name":"DiffReview","sourcePath":"components/ai/DiffReview.jsx"},{"name":"Feedback","sourcePath":"components/ai/Feedback.jsx"},{"name":"Message","sourcePath":"components/ai/Message.jsx"},{"name":"PromptInput","sourcePath":"components/ai/PromptInput.jsx"},{"name":"SourceChip","sourcePath":"components/ai/SourceChip.jsx"},{"name":"SourceList","sourcePath":"components/ai/SourceList.jsx"},{"name":"ToolCall","sourcePath":"components/ai/ToolCall.jsx"},{"name":"ActivityFeed","sourcePath":"components/data/ActivityFeed.jsx"},{"name":"timeAgo","sourcePath":"components/data/ActivityFeed.jsx"},{"name":"BarChart","sourcePath":"components/data/BarChart.jsx"},{"name":"CHART_PAD","sourcePath":"components/data/chart-parts.jsx"},{"name":"CHART_W","sourcePath":"components/data/chart-parts.jsx"},{"name":"DataTable","sourcePath":"components/data/chart-parts.jsx"},{"name":"Legend","sourcePath":"components/data/chart-parts.jsx"},{"name":"SERIES","sourcePath":"components/data/chart-parts.jsx"},{"name":"CodeBlock","sourcePath":"components/data/CodeBlock.jsx"},{"name":"Console","sourcePath":"components/data/Console.jsx"},{"name":"DataGrid","sourcePath":"components/data/DataGrid.jsx"},{"name":"EmptyState","sourcePath":"components/data/EmptyState.jsx"},{"name":"FilterBar","sourcePath":"components/data/FilterBar.jsx"},{"name":"Toolbar","sourcePath":"components/data/FilterBar.jsx"},{"name":"KpiTile","sourcePath":"components/data/KpiTile.jsx"},{"name":"LineChart","sourcePath":"components/data/LineChart.jsx"},{"name":"Pagination","sourcePath":"components/data/Pagination.jsx"},{"name":"Progress","sourcePath":"components/data/Progress.jsx"},{"name":"StateView","sourcePath":"components/data/StateView.jsx"},{"name":"StatMeter","sourcePath":"components/data/StatMeter.jsx"},{"name":"Table","sourcePath":"components/data/Table.jsx"},{"name":"Calendar","sourcePath":"components/forms/Calendar.jsx"},{"name":"Checkbox","sourcePath":"components/forms/Checkbox.jsx"},{"name":"Combobox","sourcePath":"components/forms/Combobox.jsx"},{"name":"DatePicker","sourcePath":"components/forms/DatePicker.jsx"},{"name":"RANGE_PRESETS","sourcePath":"components/forms/DatePicker.jsx"},{"name":"Field","sourcePath":"components/forms/Field.jsx"},{"name":"FileUpload","sourcePath":"components/forms/FileUpload.jsx"},{"name":"formatBytes","sourcePath":"components/forms/FileUpload.jsx"},{"name":"Input","sourcePath":"components/forms/Input.jsx"},{"name":"InputGroup","sourcePath":"components/forms/InputGroup.jsx"},{"name":"RichText","sourcePath":"components/forms/RichText.jsx"},{"name":"Segmented","sourcePath":"components/forms/Segmented.jsx"},{"name":"Select","sourcePath":"components/forms/Select.jsx"},{"name":"Stepper","sourcePath":"components/forms/Stepper.jsx"},{"name":"Switch","sourcePath":"components/forms/Switch.jsx"},{"name":"Textarea","sourcePath":"components/forms/Textarea.jsx"},{"name":"Cluster","sourcePath":"components/layout/Cluster.jsx"},{"name":"Container","sourcePath":"components/layout/Container.jsx"},{"name":"Grid","sourcePath":"components/layout/Grid.jsx"},{"name":"Page","sourcePath":"components/layout/Page.jsx"},{"name":"Section","sourcePath":"components/layout/Section.jsx"},{"name":"Split","sourcePath":"components/layout/Split.jsx"},{"name":"Stack","sourcePath":"components/layout/Stack.jsx"},{"name":"FeatureGrid","sourcePath":"components/marketing/FeatureGrid.jsx"},{"name":"Hero","sourcePath":"components/marketing/Hero.jsx"},{"name":"LogoRail","sourcePath":"components/marketing/LogoRail.jsx"},{"name":"StoryCard","sourcePath":"components/marketing/StoryCard.jsx"},{"name":"AppBar","sourcePath":"components/nav/AppBar.jsx"},{"name":"BottomNav","sourcePath":"components/nav/BottomNav.jsx"},{"name":"Breadcrumbs","sourcePath":"components/nav/Breadcrumbs.jsx"},{"name":"CommandPalette","sourcePath":"components/nav/CommandPalette.jsx"},{"name":"score","sourcePath":"components/nav/CommandPalette.jsx"},{"name":"NavItem","sourcePath":"components/nav/Sidebar.jsx"},{"name":"Sidebar","sourcePath":"components/nav/Sidebar.jsx"},{"name":"Tabs","sourcePath":"components/nav/Tabs.jsx"},{"name":"ThemeToggle","sourcePath":"components/nav/ThemeToggle.jsx"},{"name":"TopBar","sourcePath":"components/nav/TopBar.jsx"},{"name":"Dialog","sourcePath":"components/overlays/Dialog.jsx"},{"name":"Drawer","sourcePath":"components/overlays/Drawer.jsx"},{"name":"Menu","sourcePath":"components/overlays/Menu.jsx"},{"name":"Popover","sourcePath":"components/overlays/Popover.jsx"},{"name":"Toast","sourcePath":"components/overlays/Toast.jsx"},{"name":"ToastRegion","sourcePath":"components/overlays/Toast.jsx"},{"name":"Tooltip","sourcePath":"components/overlays/Tooltip.jsx"},{"name":"Avatar","sourcePath":"components/primitives/Avatar.jsx"},{"name":"Button","sourcePath":"components/primitives/Button.jsx"},{"name":"Card","sourcePath":"components/primitives/Card.jsx"},{"name":"CardBody","sourcePath":"components/primitives/Card.jsx"},{"name":"CardFoot","sourcePath":"components/primitives/Card.jsx"},{"name":"CardHead","sourcePath":"components/primitives/Card.jsx"},{"name":"CardTitle","sourcePath":"components/primitives/Card.jsx"},{"name":"Chip","sourcePath":"components/primitives/Chip.jsx"},{"name":"Eyebrow","sourcePath":"components/primitives/Eyebrow.jsx"},{"name":"Icon","sourcePath":"components/primitives/Icon.jsx"},{"name":"iconNames","sourcePath":"components/primitives/Icon.jsx"},{"name":"IconNames","sourcePath":"components/primitives/Icon.jsx"},{"name":"Skeleton","sourcePath":"components/primitives/Skeleton.jsx"},{"name":"THEME_KEY","sourcePath":"hooks.js"}],"sourceHashes":{"components/_deprecate.js":"1c84a2fda110","components/_merge-refs.js":"13fe3c69fe69","components/_radio-group.js":"26caa936f1de","components/ai/AgentTrace.jsx":"a89cdd6dbfea","components/ai/Artifact.jsx":"9be6c863b2c9","components/ai/ConfidenceMeter.jsx":"30190dcfb803","components/ai/DiffReview.jsx":"8a779a568c23","components/ai/Feedback.jsx":"71d0b9b5059a","components/ai/Message.jsx":"e507e32b90ca","components/ai/PromptInput.jsx":"93ca1175d24c","components/ai/SourceChip.jsx":"b8ec3e12c238","components/ai/SourceList.jsx":"092a0ded3834","components/ai/ToolCall.jsx":"57d638af173a","components/data/ActivityFeed.jsx":"fefc066b3fb2","components/data/BarChart.jsx":"96968a9ba35f","components/data/CodeBlock.jsx":"5b95cf570b51","components/data/Console.jsx":"6528c9c3ca1e","components/data/DataGrid.jsx":"4c4eeb26cff0","components/data/EmptyState.jsx":"7340a557f731","components/data/FilterBar.jsx":"48ecb22a8e7c","components/data/KpiTile.jsx":"4568571b1cff","components/data/LineChart.jsx":"6fa9e64d83f3","components/data/Pagination.jsx":"0c222c040f87","components/data/Progress.jsx":"eb02438a3b31","components/data/StatMeter.jsx":"55ec9c1db508","components/data/StateView.jsx":"1db574af4cf3","components/data/Table.jsx":"2a8a72b119f2","components/data/_columns.js":"d862780d1495","components/data/chart-parts.jsx":"424a7143968b","components/forms/Calendar.jsx":"a62cac7fac06","components/forms/Checkbox.jsx":"fa0052232568","components/forms/Combobox.jsx":"44e5412bdac7","components/forms/DatePicker.jsx":"692aed22fa29","components/forms/Field.jsx":"168c64395659","components/forms/FileUpload.jsx":"f192dc170840","components/forms/Input.jsx":"a43b7b4b5564","components/forms/InputGroup.jsx":"71d8de495436","components/forms/RichText.jsx":"7ffd4fd267cf","components/forms/Segmented.jsx":"5d3fa220ea03","components/forms/Select.jsx":"378e70b32827","components/forms/Stepper.jsx":"646dd2a208b6","components/forms/Switch.jsx":"cc99b023531b","components/forms/Textarea.jsx":"2d2aa2984da3","components/layout/Cluster.jsx":"2e15367fe28d","components/layout/Container.jsx":"6eda4bc56e54","components/layout/Grid.jsx":"8a093fe6ed4b","components/layout/Page.jsx":"51d1753d201a","components/layout/Section.jsx":"4507aff3c57c","components/layout/Split.jsx":"6786154d4ebd","components/layout/Stack.jsx":"005a591d8c24","components/marketing/FeatureGrid.jsx":"09e859da09fb","components/marketing/Hero.jsx":"ba4893068f68","components/marketing/LogoRail.jsx":"1bedd4cadb90","components/marketing/StoryCard.jsx":"9a4eccdac2e3","components/nav/AppBar.jsx":"b1f55c9de347","components/nav/BottomNav.jsx":"c1a544beec48","components/nav/Breadcrumbs.jsx":"f7b653d6c1cb","components/nav/CommandPalette.jsx":"a4b1b4576446","components/nav/Sidebar.jsx":"77e19c558ca7","components/nav/Tabs.jsx":"09d2bf40f0e0","components/nav/ThemeToggle.jsx":"e5a3292ee1e1","components/nav/TopBar.jsx":"6d5288e5af01","components/overlays/Dialog.jsx":"0c2932349cf9","components/overlays/Drawer.jsx":"815022e45cc7","components/overlays/Menu.jsx":"20db093c83a9","components/overlays/Popover.jsx":"717f23c3c127","components/overlays/Toast.jsx":"d6b810dcb7d3","components/overlays/Tooltip.jsx":"7b19e7dc9711","components/primitives/Avatar.jsx":"277ea4c7ca39","components/primitives/Button.jsx":"c29f216778a0","components/primitives/Card.jsx":"4a9c9f081c1b","components/primitives/Chip.jsx":"458e477fd284","components/primitives/Eyebrow.jsx":"ac1cc5e5856f","components/primitives/Icon.jsx":"4f15be56cb24","components/primitives/Skeleton.jsx":"76129a849b43","hooks.js":"8d667ef2c9e2","react.js":"96067cc59a1c"},"inlinedExternals":[],"unexposedExports":[{"name":"__resetDeprecations","sourcePath":"components/_deprecate.js"},{"name":"deprecate","sourcePath":"components/_deprecate.js"},{"name":"useMergedRef","sourcePath":"components/_merge-refs.js"},{"name":"useRadioGroup","sourcePath":"components/_radio-group.js"},{"name":"colHeader","sourcePath":"components/data/_columns.js"},{"name":"emitSort","sourcePath":"components/data/_columns.js"},{"name":"legacySortArgs","sourcePath":"components/data/_columns.js"},{"name":"Grid","sourcePath":"components/data/chart-parts.jsx"},{"name":"cx","sourcePath":"components/data/chart-parts.jsx"},{"name":"frame","sourcePath":"components/data/chart-parts.jsx"},{"name":"nf","sourcePath":"components/data/chart-parts.jsx"},{"name":"ticks","sourcePath":"components/data/chart-parts.jsx"},{"name":"animateCounter","sourcePath":"hooks.js"},{"name":"paint","sourcePath":"hooks.js"},{"name":"persist","sourcePath":"hooks.js"},{"name":"useDeterministicCascade","sourcePath":"hooks.js"},{"name":"useReducedMotion","sourcePath":"hooks.js"},{"name":"useReveal","sourcePath":"hooks.js"},{"name":"useSpotlight","sourcePath":"hooks.js"},{"name":"useTheme","sourcePath":"hooks.js"}]} */
 (() => {
   var __create = Object.create;
   var __defProp = Object.defineProperty;
@@ -492,13 +492,27 @@
 
   // components/forms/Segmented.jsx
   init_ds_inject_react();
-  var React10 = __toESM(require_ds_react(), 1);
+  var React11 = __toESM(require_ds_react(), 1);
+
+  // components/_merge-refs.js
+  init_ds_inject_react();
+  var React9 = __toESM(require_ds_react(), 1);
+  function useMergedRef(localRef, forwardedRef) {
+    return React9.useCallback(
+      (node) => {
+        localRef.current = node;
+        if (typeof forwardedRef === "function") forwardedRef(node);
+        else if (forwardedRef) forwardedRef.current = node;
+      },
+      [localRef, forwardedRef]
+    );
+  }
 
   // components/_radio-group.js
   init_ds_inject_react();
-  var React9 = __toESM(require_ds_react(), 1);
+  var React10 = __toESM(require_ds_react(), 1);
   function useRadioGroup(values, value, select) {
-    const ref = React9.useRef(null);
+    const ref = React10.useRef(null);
     const at = values.indexOf(value);
     const tabIndexFor = (i) => at === -1 ? i === 0 ? 0 : -1 : i === at ? 0 : -1;
     const onKeyDown = (e) => {
@@ -521,18 +535,18 @@
   // components/forms/Segmented.jsx
   var import_jsx_runtime22 = __toESM(require_ds_jsx_runtime(), 1);
   var cx22 = (...a) => a.filter(Boolean).join(" ");
-  var Segmented = React10.forwardRef(function Segmented2({ options = [], value, onChange, label, className, ...rest }, forwardedRef) {
+  var Segmented = React11.forwardRef(function Segmented2({ options = [], value, onChange, label, className, ...rest }, forwardedRef) {
     const opts = options.map((o) => typeof o === "string" ? { value: o, label: o } : o);
     const { ref, onKeyDown, tabIndexFor } = useRadioGroup(
       opts.map((o) => o.value),
       value,
       (v) => onChange && onChange(v)
     );
-    React10.useImperativeHandle(forwardedRef, () => ref.current, []);
+    const setGroupRef = useMergedRef(ref, forwardedRef);
     return /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
       "div",
       {
-        ref,
+        ref: setGroupRef,
         className: cx22("lw-segmented", className),
         role: "radiogroup",
         "aria-label": label,
@@ -556,11 +570,11 @@
 
   // components/forms/Combobox.jsx
   init_ds_inject_react();
-  var React12 = __toESM(require_ds_react(), 1);
+  var React13 = __toESM(require_ds_react(), 1);
 
   // components/overlays/Popover.jsx
   init_ds_inject_react();
-  var React11 = __toESM(require_ds_react(), 1);
+  var React12 = __toESM(require_ds_react(), 1);
   var import_jsx_runtime23 = __toESM(require_ds_jsx_runtime(), 1);
   var cx23 = (...a) => a.filter(Boolean).join(" ");
   function place(anchorRect, panelRect, placement, offset) {
@@ -599,28 +613,28 @@
     children,
     ...rest
   }) {
-    const [uncontrolled, setUncontrolled] = React11.useState(defaultOpen);
+    const [uncontrolled, setUncontrolled] = React12.useState(defaultOpen);
     const isControlled = openProp != null;
     const open = isControlled ? openProp : uncontrolled;
-    const anchorRef = React11.useRef(null);
-    const panelRef = React11.useRef(null);
-    const uid = React11.useId();
+    const anchorRef = React12.useRef(null);
+    const panelRef = React12.useRef(null);
+    const uid = React12.useId();
     const anchorEl = () => {
       const w = anchorRef.current;
       return w && w.firstElementChild || w;
     };
-    const setOpen = React11.useCallback((next) => {
+    const setOpen = React12.useCallback((next) => {
       if (!isControlled) setUncontrolled(next);
       onOpenChange && onOpenChange(next);
     }, [isControlled, onOpenChange]);
-    React11.useEffect(() => {
+    React12.useEffect(() => {
       const el = panelRef.current;
       if (!el || typeof el.showPopover !== "function") return;
       const isOpen = el.matches(":popover-open");
       if (open && !isOpen) el.showPopover();
       if (!open && isOpen) el.hidePopover();
     }, [open]);
-    React11.useEffect(() => {
+    React12.useEffect(() => {
       if (!open) return;
       const reposition = () => {
         const anchor = anchorEl(), panel = panelRef.current;
@@ -650,7 +664,7 @@
         window.removeEventListener("resize", onScrollOrResize);
       };
     }, [open, placement, offset, matchWidth]);
-    React11.useEffect(() => {
+    React12.useEffect(() => {
       if (!open) return;
       const onPointerDown = (e) => {
         const anchor = anchorRef.current, panel = panelRef.current;
@@ -672,8 +686,8 @@
         document.removeEventListener("keydown", onKeyDown, true);
       };
     }, [open, setOpen]);
-    const wasOpen = React11.useRef(false);
-    React11.useEffect(() => {
+    const wasOpen = React12.useRef(false);
+    React12.useEffect(() => {
       const closing = wasOpen.current && !open;
       wasOpen.current = open;
       if (!closing) return;
@@ -683,7 +697,7 @@
       if (t && t.focus) t.focus({ preventScroll: true });
     }, [open]);
     const HASPOPUP = { menu: "menu", listbox: "listbox", grid: "grid", dialog: "dialog" };
-    const triggerEl = React11.isValidElement(trigger) ? React11.cloneElement(trigger, {
+    const triggerEl = React12.isValidElement(trigger) ? React12.cloneElement(trigger, {
       // A combobox input carries role="combobox" and its own aria-expanded /
       // aria-controls / aria-activedescendant. Cloning a second set onto the
       // field wrapper would announce two controls where there is one.
@@ -719,7 +733,7 @@
   var import_jsx_runtime24 = __toESM(require_ds_jsx_runtime(), 1);
   var cx24 = (...a) => a.filter(Boolean).join(" ");
   var norm = (o) => typeof o === "string" || typeof o === "number" ? { value: o, label: String(o) } : o;
-  var Combobox = React12.forwardRef(function Combobox2({
+  var Combobox = React13.forwardRef(function Combobox2({
     options = [],
     value,
     onChange,
@@ -736,28 +750,28 @@
     className,
     ...rest
   }, forwardedRef) {
-    const opts = React12.useMemo(() => options.map(norm), [options]);
-    const [open, setOpen] = React12.useState(false);
-    const [query, setQuery] = React12.useState("");
-    const [active, setActive] = React12.useState(0);
-    const inputRef = React12.useRef(null);
-    React12.useImperativeHandle(forwardedRef, () => inputRef.current, []);
-    const listRef = React12.useRef(null);
-    const uid = React12.useId();
+    const opts = React13.useMemo(() => options.map(norm), [options]);
+    const [open, setOpen] = React13.useState(false);
+    const [query, setQuery] = React13.useState("");
+    const [active, setActive] = React13.useState(0);
+    const inputRef = React13.useRef(null);
+    const setInputRef = useMergedRef(inputRef, forwardedRef);
+    const listRef = React13.useRef(null);
+    const uid = React13.useId();
     const listId = uid + "-list";
     const inputId = id || uid + "-in";
     const selected = multiple ? Array.isArray(value) ? value : [] : value;
     const selectedOpts = multiple ? opts.filter((o) => selected.includes(o.value)) : [];
     const current = !multiple ? opts.find((o) => o.value === value) : null;
-    const shown = React12.useMemo(() => {
+    const shown = React13.useMemo(() => {
       if (onSearch || !query) return opts;
       const q = query.toLowerCase();
       return opts.filter((o) => String(o.label).toLowerCase().includes(q));
     }, [opts, query, onSearch]);
-    React12.useEffect(() => {
+    React13.useEffect(() => {
       if (active >= shown.length) setActive(0);
     }, [shown.length, active]);
-    React12.useEffect(() => {
+    React13.useEffect(() => {
       if (!open || !listRef.current) return;
       const el = listRef.current.querySelector('[data-active="true"]');
       if (el && el.offsetParent) {
@@ -826,7 +840,7 @@
           /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
             "input",
             {
-              ref: inputRef,
+              ref: setInputRef,
               id: inputId,
               role: "combobox",
               type: "text",
@@ -895,7 +909,7 @@
 
   // components/forms/Calendar.jsx
   init_ds_inject_react();
-  var React13 = __toESM(require_ds_react(), 1);
+  var React14 = __toESM(require_ds_react(), 1);
   var import_jsx_runtime25 = __toESM(require_ds_jsx_runtime(), 1);
   var cx25 = (...a) => a.filter(Boolean).join(" ");
   var day = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate());
@@ -915,15 +929,15 @@
   function Calendar({ value, onChange, range, month, onMonthChange, min, max, weekStart = 1, locale, className, ...rest }) {
     const sel = range ? value || {} : value;
     const anchor = (range ? sel.start : sel) || /* @__PURE__ */ new Date();
-    const [viewRaw, setView] = React13.useState(() => addMonths(anchor, 0));
+    const [viewRaw, setView] = React14.useState(() => addMonths(anchor, 0));
     const view = month || viewRaw;
     const setMonth = (m) => {
       onMonthChange ? onMonthChange(m) : setView(m);
     };
-    const [focused, setFocused] = React13.useState(() => day(anchor));
-    const [hover, setHover] = React13.useState(null);
-    const gridRef = React13.useRef(null);
-    const navving = React13.useRef(false);
+    const [focused, setFocused] = React14.useState(() => day(anchor));
+    const [hover, setHover] = React14.useState(null);
+    const gridRef = React14.useRef(null);
+    const navving = React14.useRef(false);
     const fmtMonth = new Intl.DateTimeFormat(locale, { month: "long", year: "numeric" });
     const fmtDow = new Intl.DateTimeFormat(locale, { weekday: "narrow" });
     const fmtFull = new Intl.DateTimeFormat(locale, { weekday: "long", day: "numeric", month: "long", year: "numeric" });
@@ -951,11 +965,11 @@
       setFocused(next);
       if (next.getMonth() !== view.getMonth()) setMonth(addMonths(next, 0));
     };
-    const [today, setToday] = React13.useState(null);
-    React13.useEffect(() => {
+    const [today, setToday] = React14.useState(null);
+    React14.useEffect(() => {
       setToday(day(/* @__PURE__ */ new Date()));
     }, []);
-    React13.useEffect(() => {
+    React14.useEffect(() => {
       if (!navving.current) return;
       navving.current = false;
       const el = gridRef.current && gridRef.current.querySelector('[tabindex="0"]');
@@ -1028,7 +1042,7 @@
 
   // components/forms/DatePicker.jsx
   init_ds_inject_react();
-  var React14 = __toESM(require_ds_react(), 1);
+  var React15 = __toESM(require_ds_react(), 1);
   var import_jsx_runtime26 = __toESM(require_ds_jsx_runtime(), 1);
   var cx26 = (...a) => a.filter(Boolean).join(" ");
   var day2 = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate());
@@ -1043,7 +1057,7 @@
     { label: "Last 30 days", get: () => ({ start: shift(-29), end: day2(/* @__PURE__ */ new Date()) }) },
     { label: "Last 90 days", get: () => ({ start: shift(-89), end: day2(/* @__PURE__ */ new Date()) }) }
   ];
-  var DatePicker = React14.forwardRef(function DatePicker2({
+  var DatePicker = React15.forwardRef(function DatePicker2({
     value,
     onChange,
     range,
@@ -1060,10 +1074,10 @@
     className,
     ...rest
   }, forwardedRef) {
-    const [open, setOpen] = React14.useState(false);
-    const uid = React14.useId();
+    const [open, setOpen] = React15.useState(false);
+    const uid = React15.useId();
     const fmt2 = new Intl.DateTimeFormat(locale, { day: "numeric", month: "short", year: "numeric" });
-    const text = React14.useMemo(() => {
+    const text = React15.useMemo(() => {
       if (range) {
         const v = value || {};
         if (!v.start) return "";
@@ -1138,7 +1152,7 @@
 
   // components/forms/FileUpload.jsx
   init_ds_inject_react();
-  var React15 = __toESM(require_ds_react(), 1);
+  var React16 = __toESM(require_ds_react(), 1);
   var import_jsx_runtime27 = __toESM(require_ds_jsx_runtime(), 1);
   var cx27 = (...a) => a.filter(Boolean).join(" ");
   var KB = 1024;
@@ -1152,7 +1166,7 @@
     }
     return (i === 0 ? v : v.toFixed(v < 10 ? 1 : 0)) + " " + u[i];
   }
-  var FileUpload = React15.forwardRef(function FileUpload2({
+  var FileUpload = React16.forwardRef(function FileUpload2({
     files = [],
     onFiles,
     onRemove,
@@ -1165,10 +1179,10 @@
     className,
     ...rest
   }, forwardedRef) {
-    const [over, setOver] = React15.useState(0);
-    const [rejected, setRejected] = React15.useState(null);
-    const inputRef = React15.useRef(null);
-    React15.useImperativeHandle(forwardedRef, () => inputRef.current, []);
+    const [over, setOver] = React16.useState(0);
+    const [rejected, setRejected] = React16.useState(null);
+    const inputRef = React16.useRef(null);
+    const setInputRef = useMergedRef(inputRef, forwardedRef);
     const take = (list) => {
       const arr = Array.from(list || []);
       if (!arr.length) return;
@@ -1199,7 +1213,7 @@
             /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
               "input",
               {
-                ref: inputRef,
+                ref: setInputRef,
                 type: "file",
                 accept,
                 multiple,
@@ -1279,7 +1293,7 @@
 
   // components/forms/RichText.jsx
   init_ds_inject_react();
-  var React16 = __toESM(require_ds_react(), 1);
+  var React17 = __toESM(require_ds_react(), 1);
   var import_jsx_runtime29 = __toESM(require_ds_jsx_runtime(), 1);
   var cx29 = (...a) => a.filter(Boolean).join(" ");
   var TOOLS = [
@@ -1295,7 +1309,7 @@
     { id: "link", icon: "link", label: "Link", cmd: "createLink", prompt: "Link URL" },
     { id: "clear", icon: "undo", label: "Clear formatting", cmd: "removeFormat" }
   ];
-  var RichText = React16.forwardRef(function RichText2({
+  var RichText = React17.forwardRef(function RichText2({
     value,
     onChange,
     placeholder = "Write something…",
@@ -1308,12 +1322,12 @@
     className,
     ...rest
   }, forwardedRef) {
-    const ref = React16.useRef(null);
-    React16.useImperativeHandle(forwardedRef, () => ref.current, []);
-    const bodyId = React16.useId();
-    const [active, setActive] = React16.useState({});
+    const ref = React17.useRef(null);
+    const setBodyRef = useMergedRef(ref, forwardedRef);
+    const bodyId = React17.useId();
+    const [active, setActive] = React17.useState({});
     const list = tools ? TOOLS.filter((t) => t.sep || tools.includes(t.id)) : TOOLS;
-    React16.useEffect(() => {
+    React17.useEffect(() => {
       const el = ref.current;
       if (el && value != null && el.innerHTML !== value) el.innerHTML = value;
     }, [value]);
@@ -1345,9 +1359,9 @@
       syncActive();
       onChange && onChange(el.innerHTML);
     };
-    const [len, setLen] = React16.useState(0);
+    const [len, setLen] = React17.useState(0);
     const syncLen = () => setLen((ref.current && ref.current.textContent || "").length);
-    React16.useEffect(syncLen, [value]);
+    React17.useEffect(syncLen, [value]);
     const over = maxLength != null && len > maxLength;
     return /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)("div", { className: cx29("lw-editor", className), ...rest, children: [
       /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("div", { className: "lw-editor-bar", role: "group", "aria-label": (label || "Editor") + " formatting", "aria-controls": children ? void 0 : bodyId, children: list.map((t, i) => t.sep ? /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("span", { className: "sep", "aria-hidden": "true" }, "s" + i) : /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
@@ -1368,7 +1382,7 @@
       children || /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
         "div",
         {
-          ref,
+          ref: setBodyRef,
           id: bodyId,
           className: "lw-editor-body",
           contentEditable: !readOnly,
@@ -1644,13 +1658,13 @@
 
   // components/data/CodeBlock.jsx
   init_ds_inject_react();
-  var React17 = __toESM(require_ds_react(), 1);
+  var React18 = __toESM(require_ds_react(), 1);
   var import_jsx_runtime36 = __toESM(require_ds_jsx_runtime(), 1);
   var cx36 = (...a) => a.filter(Boolean).join(" ");
   function CodeBlock({ code, html, filename, lang, copy = true, className, ...rest }) {
-    const [copied, setCopied] = React17.useState(false);
+    const [copied, setCopied] = React18.useState(false);
     const canCopy = copy && typeof code === "string" && code.length > 0;
-    React17.useEffect(() => {
+    React18.useEffect(() => {
       if (!copied) return;
       const t = setTimeout(() => setCopied(false), 1600);
       return () => clearTimeout(t);
@@ -1775,7 +1789,7 @@
 
   // components/data/DataGrid.jsx
   init_ds_inject_react();
-  var React18 = __toESM(require_ds_react(), 1);
+  var React19 = __toESM(require_ds_react(), 1);
   var import_jsx_runtime38 = __toESM(require_ds_jsx_runtime(), 1);
   var cx38 = (...a) => a.filter(Boolean).join(" ");
   function DataGrid({
@@ -1800,15 +1814,15 @@
   }) {
     const DEFAULT_W = 160, MIN_W = 72, SEL_W = 44;
     const legacyArgs = legacySortArgs("DataGrid", columns, onSort);
-    const [widths, setWidths] = React18.useState(() => columns.map((c) => c.width || DEFAULT_W));
-    const [scrollTop, setScrollTop] = React18.useState(0);
-    const scrollRef = React18.useRef(null);
-    const drag = React18.useRef(null);
+    const [widths, setWidths] = React19.useState(() => columns.map((c) => c.width || DEFAULT_W));
+    const [scrollTop, setScrollTop] = React19.useState(0);
+    const scrollRef = React19.useRef(null);
+    const drag = React19.useRef(null);
     const colKeys = columns.map((c) => c.key).join("\0");
-    React18.useEffect(() => {
+    React19.useEffect(() => {
       setWidths((prev) => columns.map((c, i) => prev[i] || c.width || DEFAULT_W));
     }, [colKeys]);
-    const selSet = React18.useMemo(() => new Set(selected), [selected]);
+    const selSet = React19.useMemo(() => new Set(selected), [selected]);
     const allOn = rows.length > 0 && rows.every((r, i) => selSet.has(rowKey(r, i)));
     const someOn = !allOn && rows.some((r, i) => selSet.has(rowKey(r, i)));
     const toggleAll = () => onSelectionChange && onSelectionChange(allOn ? [] : rows.map(rowKey));
@@ -1818,7 +1832,7 @@
       next.has(k) ? next.delete(k) : next.add(k);
       onSelectionChange(Array.from(next));
     };
-    const pinLefts = React18.useMemo(() => {
+    const pinLefts = React19.useMemo(() => {
       let acc = selectable ? SEL_W : 0;
       return columns.map((c, i) => {
         if (!c.pin) return null;
@@ -2171,7 +2185,7 @@
 
   // components/data/ActivityFeed.jsx
   init_ds_inject_react();
-  var React19 = __toESM(require_ds_react(), 1);
+  var React20 = __toESM(require_ds_react(), 1);
   var import_jsx_runtime44 = __toESM(require_ds_jsx_runtime(), 1);
   var cx42 = (...a) => a.filter(Boolean).join(" ");
   var ms = (when) => when instanceof Date ? when.getTime() : new Date(when).getTime();
@@ -2191,8 +2205,8 @@
     return days <= 0 ? "Today" : days === 1 ? "Yesterday" : days < 7 ? "This week" : "Earlier";
   };
   function ActivityFeed({ items = [], onItemClick, grouped = true, now, label = "Activity", className, ...rest }) {
-    const [mounted, setMounted] = React19.useState(null);
-    React19.useEffect(() => {
+    const [mounted, setMounted] = React20.useState(null);
+    React20.useEffect(() => {
       setMounted(Date.now());
     }, []);
     const at = now != null ? now : mounted;
@@ -2206,7 +2220,7 @@
     return /* @__PURE__ */ (0, import_jsx_runtime44.jsx)("div", { className: cx42("lw-feed", className), role: "group", "aria-label": label, ...rest, children: groups.map((g, gi) => (
       /* Keyed on the index: two runs can carry the same bucket name when the
          items are not in date order, and a duplicate key is a dropped child. */
-      /* @__PURE__ */ (0, import_jsx_runtime44.jsxs)(React19.Fragment, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime44.jsxs)(React20.Fragment, { children: [
         g.name && /* @__PURE__ */ (0, import_jsx_runtime44.jsx)("div", { className: "lw-feed-group", children: g.name }),
         g.items.map((it, i) => {
           const Tag = it.href ? "a" : onItemClick || it.onClick ? "button" : "div";
@@ -2262,11 +2276,11 @@
 
   // components/nav/Breadcrumbs.jsx
   init_ds_inject_react();
-  var React20 = __toESM(require_ds_react(), 1);
+  var React21 = __toESM(require_ds_react(), 1);
   var import_jsx_runtime46 = __toESM(require_ds_jsx_runtime(), 1);
   var cx44 = (...a) => a.filter(Boolean).join(" ");
   function Breadcrumbs({ items = [], className, ...rest }) {
-    return /* @__PURE__ */ (0, import_jsx_runtime46.jsx)("nav", { className: cx44("lw-crumbs", className), "aria-label": "Breadcrumb", ...rest, children: items.map((it, i) => /* @__PURE__ */ (0, import_jsx_runtime46.jsxs)(React20.Fragment, { children: [
+    return /* @__PURE__ */ (0, import_jsx_runtime46.jsx)("nav", { className: cx44("lw-crumbs", className), "aria-label": "Breadcrumb", ...rest, children: items.map((it, i) => /* @__PURE__ */ (0, import_jsx_runtime46.jsxs)(React21.Fragment, { children: [
       i > 0 && /* @__PURE__ */ (0, import_jsx_runtime46.jsx)("span", { className: "sep", "aria-hidden": "true", children: "/" }),
       it.href && i < items.length - 1 ? /* @__PURE__ */ (0, import_jsx_runtime46.jsx)("a", { href: it.href, children: it.label }) : /* @__PURE__ */ (0, import_jsx_runtime46.jsx)("span", { "aria-current": i === items.length - 1 ? "page" : void 0, children: it.label })
     ] }, i)) });
@@ -2355,11 +2369,11 @@
 
   // components/nav/Tabs.jsx
   init_ds_inject_react();
-  var React21 = __toESM(require_ds_react(), 1);
+  var React22 = __toESM(require_ds_react(), 1);
   var import_jsx_runtime49 = __toESM(require_ds_jsx_runtime(), 1);
   var cx46 = (...a) => a.filter(Boolean).join(" ");
   function Tabs({ tabs = [], value, onChange, label, className, ...rest }) {
-    const ref = React21.useRef(null);
+    const ref = React22.useRef(null);
     const move = (next) => {
       onChange && onChange(tabs[next].value);
       const el = ref.current && ref.current.querySelectorAll('[role="tab"]')[next];
@@ -2403,7 +2417,7 @@
 
   // components/nav/ThemeToggle.jsx
   init_ds_inject_react();
-  var React22 = __toESM(require_ds_react(), 1);
+  var React23 = __toESM(require_ds_react(), 1);
 
   // hooks.js
   init_ds_inject_react();
@@ -2435,8 +2449,8 @@
   var LABELS = { light: "Light", dark: "Dark", system: "Auto" };
   var GLYPHS = { light: "sun", dark: "moon", system: "monitor" };
   function ThemeToggle({ value, onChange, modes = ["light", "dark"], className, ...rest }) {
-    const [internal, setInternal] = React22.useState(modes.includes("system") ? "system" : modes[0]);
-    React22.useEffect(() => {
+    const [internal, setInternal] = React23.useState(modes.includes("system") ? "system" : modes[0]);
+    React23.useEffect(() => {
       if (value !== void 0) return;
       try {
         const saved = localStorage.getItem(THEME_KEY);
@@ -2484,7 +2498,7 @@
 
   // components/nav/CommandPalette.jsx
   init_ds_inject_react();
-  var React23 = __toESM(require_ds_react(), 1);
+  var React24 = __toESM(require_ds_react(), 1);
   var import_jsx_runtime51 = __toESM(require_ds_jsx_runtime(), 1);
   var cx48 = (...a) => a.filter(Boolean).join(" ");
   function score(query, text) {
@@ -2512,12 +2526,12 @@
     className,
     ...rest
   }) {
-    const ref = React23.useRef(null);
-    const inputRef = React23.useRef(null);
-    const [q, setQ] = React23.useState("");
-    const [active, setActive] = React23.useState(0);
-    const uid = React23.useId();
-    React23.useEffect(() => {
+    const ref = React24.useRef(null);
+    const inputRef = React24.useRef(null);
+    const [q, setQ] = React24.useState("");
+    const [active, setActive] = React24.useState(0);
+    const uid = React24.useId();
+    React24.useEffect(() => {
       const el = ref.current;
       if (!el) return;
       if (open && !el.open) {
@@ -2527,11 +2541,11 @@
       }
       if (!open && el.open) el.close();
     }, [open]);
-    React23.useEffect(() => {
+    React24.useEffect(() => {
       if (open && inputRef.current) inputRef.current.focus({ preventScroll: true });
     }, [open]);
-    const shown = React23.useMemo(() => commands.filter((c) => !c.hidden).map((c) => ({ c, s: Math.max(score(q, c.label), score(q, c.group || "") - 4, ...(c.keywords || []).map((k) => score(q, k) - 2)) })).filter((x) => x.s >= 0).sort((a, b) => b.s - a.s).map((x) => x.c), [q, commands]);
-    React23.useEffect(() => {
+    const shown = React24.useMemo(() => commands.filter((c) => !c.hidden).map((c) => ({ c, s: Math.max(score(q, c.label), score(q, c.group || "") - 4, ...(c.keywords || []).map((k) => score(q, k) - 2)) })).filter((x) => x.s >= 0).sort((a, b) => b.s - a.s).map((x) => x.c), [q, commands]);
+    React24.useEffect(() => {
       setActive(0);
     }, [q]);
     const run = (c) => {
@@ -2588,7 +2602,7 @@
             !shown.length && /* @__PURE__ */ (0, import_jsx_runtime51.jsx)("li", { className: "lw-listbox-empty", children: emptyText }),
             shown.map((c, i) => {
               const head = c.group && c.group !== lastGroup ? lastGroup = c.group : null;
-              return /* @__PURE__ */ (0, import_jsx_runtime51.jsxs)(React23.Fragment, { children: [
+              return /* @__PURE__ */ (0, import_jsx_runtime51.jsxs)(React24.Fragment, { children: [
                 head && /* @__PURE__ */ (0, import_jsx_runtime51.jsx)("li", { className: "lw-menu-label", role: "presentation", children: head }),
                 /* @__PURE__ */ (0, import_jsx_runtime51.jsxs)(
                   "li",
@@ -2623,11 +2637,11 @@
 
   // components/nav/BottomNav.jsx
   init_ds_inject_react();
-  var React24 = __toESM(require_ds_react(), 1);
+  var React25 = __toESM(require_ds_react(), 1);
   var import_jsx_runtime52 = __toESM(require_ds_jsx_runtime(), 1);
   var cx49 = (...a) => a.filter(Boolean).join(" ");
   function BottomNav({ items = [], value, onChange, label = "Main", className, ...rest }) {
-    React24.useEffect(() => {
+    React25.useEffect(() => {
       if (items.length <= 5 || typeof console === "undefined") return;
       console.warn("BottomNav: " + items.length + " items. Past five, labels truncate and the bar stops being scannable — use a sidebar or a More destination.");
     }, [items.length]);
@@ -2654,16 +2668,16 @@
 
   // components/overlays/Dialog.jsx
   init_ds_inject_react();
-  var React25 = __toESM(require_ds_react(), 1);
+  var React26 = __toESM(require_ds_react(), 1);
   var import_jsx_runtime53 = __toESM(require_ds_jsx_runtime(), 1);
   var cx50 = (...a) => a.filter(Boolean).join(" ");
   function Dialog({ open, onClose, title, description, footer, width, className, children, ...rest }) {
-    const ref = React25.useRef(null);
-    const uid = React25.useId();
+    const ref = React26.useRef(null);
+    const uid = React26.useId();
     const titleId = title ? uid + "-t" : void 0;
     const descId = description ? uid + "-d" : void 0;
     const w = width == null || width === "" ? null : /^\d+(\.\d+)?$/.test(String(width)) ? String(width) + "px" : String(width);
-    React25.useEffect(() => {
+    React26.useEffect(() => {
       const el = ref.current;
       if (!el) return;
       if (open && !el.open) el.showModal();
@@ -2740,14 +2754,14 @@
 
   // components/overlays/Menu.jsx
   init_ds_inject_react();
-  var React26 = __toESM(require_ds_react(), 1);
+  var React27 = __toESM(require_ds_react(), 1);
   var import_jsx_runtime56 = __toESM(require_ds_jsx_runtime(), 1);
   var cx53 = (...a) => a.filter(Boolean).join(" ");
   function Menu({ items = [], trigger, onSelect, label, placement = "bottom-start", matchWidth, className, ...rest }) {
-    const [open, setOpen] = React26.useState(false);
-    const listEl = React26.useRef(null);
-    const typed = React26.useRef({ s: "", t: 0 });
-    const intent = React26.useRef(0);
+    const [open, setOpen] = React27.useState(false);
+    const listEl = React27.useRef(null);
+    const typed = React27.useRef({ s: "", t: 0 });
+    const intent = React27.useRef(0);
     const ROWS = '[role^="menuitem"]:not([aria-disabled="true"])';
     const rows = () => Array.from(listEl.current ? listEl.current.querySelectorAll(ROWS) : []);
     const focusAt = (i) => {
@@ -2759,7 +2773,7 @@
       const el = r[(i + r.length) % r.length];
       el && el.focus({ preventScroll: true });
     };
-    const listRef = React26.useCallback((el) => {
+    const listRef = React27.useCallback((el) => {
       listEl.current = el;
       if (!el) return;
       const want = intent.current;
@@ -2771,7 +2785,7 @@
         if (target) target.focus({ preventScroll: true });
       });
     }, []);
-    React26.useEffect(() => {
+    React27.useEffect(() => {
       if (!open) intent.current = 0;
     }, [open]);
     const onKeyDown = (e) => {
@@ -2816,7 +2830,7 @@
       setOpen(false);
       it.onSelect ? it.onSelect(it) : onSelect && onSelect(it.value, it);
     };
-    const triggerEl = React26.isValidElement(trigger) ? React26.cloneElement(trigger, {
+    const triggerEl = React27.isValidElement(trigger) ? React27.cloneElement(trigger, {
       onKeyDown: (e) => {
         trigger.props.onKeyDown && trigger.props.onKeyDown(e);
         if (e.defaultPrevented) return;
@@ -2879,16 +2893,16 @@
 
   // components/overlays/Drawer.jsx
   init_ds_inject_react();
-  var React27 = __toESM(require_ds_react(), 1);
+  var React28 = __toESM(require_ds_react(), 1);
   var import_jsx_runtime57 = __toESM(require_ds_jsx_runtime(), 1);
   var cx54 = (...a) => a.filter(Boolean).join(" ");
   function Drawer({ open, onClose, title, description, footer, side = "end", width, className, children, ...rest }) {
-    const ref = React27.useRef(null);
-    const uid = React27.useId();
+    const ref = React28.useRef(null);
+    const uid = React28.useId();
     const titleId = title ? uid + "-t" : void 0;
     const descId = description ? uid + "-d" : void 0;
     const w = width == null || width === "" ? null : /^\d+(\.\d+)?$/.test(String(width)) ? String(width) + "px" : String(width);
-    React27.useEffect(() => {
+    React28.useEffect(() => {
       const el = ref.current;
       if (!el) return;
       if (open && !el.open) el.showModal();
@@ -3063,13 +3077,13 @@
 
   // components/ai/ToolCall.jsx
   init_ds_inject_react();
-  var React28 = __toESM(require_ds_react(), 1);
+  var React29 = __toESM(require_ds_react(), 1);
   var import_jsx_runtime64 = __toESM(require_ds_jsx_runtime(), 1);
   var cx61 = (...a) => a.filter(Boolean).join(" ");
   var fmt = (v) => typeof v === "string" ? v : JSON.stringify(v, null, 2);
   function ToolCall({ name, summary, args, result, error, state = "ok", duration, defaultOpen, className, ...rest }) {
-    const [open, setOpen] = React28.useState(!!defaultOpen);
-    const uid = React28.useId();
+    const [open, setOpen] = React29.useState(!!defaultOpen);
+    const uid = React29.useId();
     const st = error ? "error" : state;
     return /* @__PURE__ */ (0, import_jsx_runtime64.jsxs)("div", { className: cx61("lw-tool", className), "data-state": st, ...rest, children: [
       /* @__PURE__ */ (0, import_jsx_runtime64.jsxs)("button", { type: "button", className: "lw-tool-head", "aria-expanded": open, "aria-controls": uid, onClick: () => setOpen((o) => !o), children: [
@@ -3184,12 +3198,12 @@
 
   // components/ai/Feedback.jsx
   init_ds_inject_react();
-  var React29 = __toESM(require_ds_react(), 1);
+  var React30 = __toESM(require_ds_react(), 1);
   var import_jsx_runtime67 = __toESM(require_ds_jsx_runtime(), 1);
   var cx64 = (...a) => a.filter(Boolean).join(" ");
   function Feedback({ value, onChange, onComment, commentPlaceholder = "What was wrong?", note, className, ...rest }) {
-    const [open, setOpen] = React29.useState(false);
-    const [text, setText] = React29.useState("");
+    const [open, setOpen] = React30.useState(false);
+    const [text, setText] = React30.useState("");
     const set = (v) => {
       const next = value === v ? null : v;
       onChange && onChange(next);

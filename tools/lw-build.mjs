@@ -2,8 +2,8 @@
 /**
  * lw-build — compile the JSX to `dist/`, PER FILE.
  *
- *   node templates/_tooling/lw-build.mjs
- *   node templates/_tooling/lw-build.mjs --check    # fail if dist/ is stale
+ *   node tools/lw-build.mjs
+ *   node tools/lw-build.mjs --check    # fail if dist/ is stale
  *
  * WHY THIS REPLACED THE tsup CONFIG. tsup bundled the whole barrel into four
  * chunks, and a bundled chunk can carry only ONE `"use client"` directive — so

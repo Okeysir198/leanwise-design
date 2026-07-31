@@ -1,6 +1,7 @@
 "use client";
 import { jsx, jsxs } from "react/jsx-runtime";
 import * as React from "react";
+import { useMergedRef } from "../_merge-refs.js";
 import { Icon } from "../primitives/Icon.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
 const KB = 1024;
@@ -30,7 +31,7 @@ const FileUpload = React.forwardRef(function FileUpload2({
   const [over, setOver] = React.useState(0);
   const [rejected, setRejected] = React.useState(null);
   const inputRef = React.useRef(null);
-  React.useImperativeHandle(forwardedRef, () => inputRef.current, []);
+  const setInputRef = useMergedRef(inputRef, forwardedRef);
   const take = (list) => {
     const arr = Array.from(list || []);
     if (!arr.length) return;
@@ -61,7 +62,7 @@ const FileUpload = React.forwardRef(function FileUpload2({
           /* @__PURE__ */ jsx(
             "input",
             {
-              ref: inputRef,
+              ref: setInputRef,
               type: "file",
               accept,
               multiple,

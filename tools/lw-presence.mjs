@@ -2,8 +2,8 @@
 /**
  * lw-presence — the PRESENCE gate.
  *
- *   node templates/_tooling/lw-presence.mjs
- *   node templates/_tooling/lw-presence.mjs --list
+ *   node tools/lw-presence.mjs
+ *   node tools/lw-presence.mjs --list
  *
  * Every other gate in this package is a deny-list or a value check: the token
  * lint matches raw hex and palette escapes, the contrast check measures pairs

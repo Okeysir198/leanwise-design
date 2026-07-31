@@ -27,7 +27,7 @@
       "title": "No component declares \"use client\" — App Router server components throw",
       "detail": "The package shipped zero \"use client\" directives, so <Combobox>, <DataGrid>, <Dialog>, <Popover>, <Menu> and useTheme() all throw when an App Router page renders them from a server component — the default for every page in every Next app since 2023.",
       "measuredBy": "check:rsc",
-      "count": 27,
+      "count": 28,
       "countMeans": "modules that require the directive"
     },
     {
@@ -38,7 +38,7 @@
       "title": "dist/ was never built for any consumer",
       "detail": "prepublishOnly was the only build hook and a git install runs no lifecycle script, so every consumer got raw .jsx and had to put the package inside babel-loader's include. dist/ is committed from 1.2.0.",
       "measuredBy": "check:build",
-      "count": 77,
+      "count": 78,
       "countMeans": "files now shipped pre-compiled"
     },
     {

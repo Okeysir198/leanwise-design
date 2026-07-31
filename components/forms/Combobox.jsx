@@ -1,5 +1,6 @@
 "use client";
 import * as React from "react";
+import { useMergedRef } from "../_merge-refs.js";
 import { Icon } from "../primitives/Icon.jsx";
 import { Popover } from "../overlays/Popover.jsx";
 const cx = (...a) => a.filter(Boolean).join(" ");
@@ -22,7 +23,7 @@ const norm = (o) => (typeof o === "string" || typeof o === "number" ? { value: o
    have had this since v1.0; these five composites did not, which made them the
    ones a real form could not use.
 
-   The ref is redirected to the FOCUSABLE element via useImperativeHandle rather
+   The ref is redirected to the FOCUSABLE element via a merged callback ref rather
    than to the wrapper — a form library calls .focus() on what it is given, and
    focusing a <div> does nothing. Here that is the combobox <input>. */
 export const Combobox = React.forwardRef(function Combobox({
@@ -35,7 +36,7 @@ export const Combobox = React.forwardRef(function Combobox({
   const [query, setQuery] = React.useState("");
   const [active, setActive] = React.useState(0);
   const inputRef = React.useRef(null);
-  React.useImperativeHandle(forwardedRef, () => inputRef.current, []);
+  const setInputRef = useMergedRef(inputRef, forwardedRef);
   const listRef = React.useRef(null);
   const uid = React.useId();
   const listId = uid + "-list";
@@ -113,7 +114,7 @@ export const Combobox = React.forwardRef(function Combobox({
           </button>
         </span>
       ))}
-      <input ref={inputRef} id={inputId} role="combobox" type="text" autoComplete="off"
+      <input ref={setInputRef} id={inputId} role="combobox" type="text" autoComplete="off"
         aria-expanded={open}
         /* Only while the list is actually rendered. A dangling IDREF is worse
            than no attribute: it announces a relationship that does not exist. */

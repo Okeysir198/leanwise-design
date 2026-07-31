@@ -51,7 +51,7 @@
  * Requires playwright (a devDependency, deliberately not a peer): it is CI's
  * concern, and a consumer installing this package should not pull a browser.
  *
- * Usage: node templates/_tooling/lw-visual.mjs [--update|--record|--compare]
+ * Usage: node tools/lw-visual.mjs [--update|--record|--compare]
  *                                              [--dir <path>] [--self-test]
  */
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";

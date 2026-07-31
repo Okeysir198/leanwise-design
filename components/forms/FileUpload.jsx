@@ -1,5 +1,6 @@
 "use client";
 import * as React from "react";
+import { useMergedRef } from "../_merge-refs.js";
 import { Icon } from "../primitives/Icon.jsx";
 const cx = (...a) => a.filter(Boolean).join(" ");
 
@@ -27,7 +28,7 @@ export function formatBytes(n) {
    have had this since v1.0; these five composites did not, which made them the
    ones a real form could not use.
 
-   The ref is redirected to the FOCUSABLE element via useImperativeHandle rather
+   The ref is redirected to the FOCUSABLE element via a merged callback ref rather
    than to the wrapper — a form library calls .focus() on what it is given, and
    focusing a <div> does nothing. Here that is the file <input>. */
 export const FileUpload = React.forwardRef(function FileUpload({
@@ -37,7 +38,7 @@ export const FileUpload = React.forwardRef(function FileUpload({
   const [over, setOver] = React.useState(0);
   const [rejected, setRejected] = React.useState(null);
   const inputRef = React.useRef(null);
-  React.useImperativeHandle(forwardedRef, () => inputRef.current, []);
+  const setInputRef = useMergedRef(inputRef, forwardedRef);
 
   const take = (list) => {
     const arr = Array.from(list || []);
@@ -56,7 +57,7 @@ export const FileUpload = React.forwardRef(function FileUpload({
         onDragOver={(e) => e.preventDefault()}
         onDragLeave={() => setOver(o => Math.max(0, o - 1))}
         onDrop={(e) => { e.preventDefault(); setOver(0); if (!disabled) take(e.dataTransfer.files); }}>
-        <input ref={inputRef} type="file" accept={accept} multiple={multiple} disabled={disabled}
+        <input ref={setInputRef} type="file" accept={accept} multiple={multiple} disabled={disabled}
           onChange={(e) => { take(e.target.files); e.target.value = ""; }} />
         <Icon name="upload" size={20} />
         <span className="lw-dz-title">{title}</span>

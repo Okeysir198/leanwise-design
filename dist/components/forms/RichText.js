@@ -1,6 +1,7 @@
 "use client";
 import { jsx, jsxs } from "react/jsx-runtime";
 import * as React from "react";
+import { useMergedRef } from "../_merge-refs.js";
 import { Icon } from "../primitives/Icon.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
 const TOOLS = [
@@ -30,7 +31,7 @@ const RichText = React.forwardRef(function RichText2({
   ...rest
 }, forwardedRef) {
   const ref = React.useRef(null);
-  React.useImperativeHandle(forwardedRef, () => ref.current, []);
+  const setBodyRef = useMergedRef(ref, forwardedRef);
   const bodyId = React.useId();
   const [active, setActive] = React.useState({});
   const list = tools ? TOOLS.filter((t) => t.sep || tools.includes(t.id)) : TOOLS;
@@ -89,7 +90,7 @@ const RichText = React.forwardRef(function RichText2({
     children || /* @__PURE__ */ jsx(
       "div",
       {
-        ref,
+        ref: setBodyRef,
         id: bodyId,
         className: "lw-editor-body",
         contentEditable: !readOnly,

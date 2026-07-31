@@ -20,7 +20,7 @@ versions are breaking: **0.1.4** (dependency URL), **0.2.0** (removal), **0.7.0*
 and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additionally ships a
 `package.json` that reports the wrong version.
 
-## [Unreleased]
+## [1.2.0] — 2026-07-31
 
 ### Added
 

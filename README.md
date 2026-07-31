@@ -54,7 +54,7 @@ what is still open. `CONTRIBUTING.md` points back here — the checklist lives i
 ## Install
 
 ```jsonc
-"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v1.1.8" }
+"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v1.2.0" }
 ```
 
 ```css

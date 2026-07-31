@@ -1,6 +1,7 @@
 "use client";
 import { jsx, jsxs } from "react/jsx-runtime";
 import * as React from "react";
+import { useMergedRef } from "../_merge-refs.js";
 import { Icon } from "../primitives/Icon.js";
 import { Popover } from "../overlays/Popover.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
@@ -27,7 +28,7 @@ const Combobox = React.forwardRef(function Combobox2({
   const [query, setQuery] = React.useState("");
   const [active, setActive] = React.useState(0);
   const inputRef = React.useRef(null);
-  React.useImperativeHandle(forwardedRef, () => inputRef.current, []);
+  const setInputRef = useMergedRef(inputRef, forwardedRef);
   const listRef = React.useRef(null);
   const uid = React.useId();
   const listId = uid + "-list";
@@ -112,7 +113,7 @@ const Combobox = React.forwardRef(function Combobox2({
         /* @__PURE__ */ jsx(
           "input",
           {
-            ref: inputRef,
+            ref: setInputRef,
             id: inputId,
             role: "combobox",
             type: "text",

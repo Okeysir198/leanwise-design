@@ -2,9 +2,9 @@
 /**
  * lw-rsc — the React Server Component boundary.
  *
- *   node templates/_tooling/lw-rsc.mjs            # write the directives
- *   node templates/_tooling/lw-rsc.mjs --check    # fail if any file is wrong
- *   node templates/_tooling/lw-rsc.mjs --list     # show the classification
+ *   node tools/lw-rsc.mjs            # write the directives
+ *   node tools/lw-rsc.mjs --check    # fail if any file is wrong
+ *   node tools/lw-rsc.mjs --list     # show the classification
  *
  * WHY. Until v1.2 this package shipped ZERO `"use client"` directives, so
  * `<Combobox>`, `<DataGrid>`, `<Dialog>` and `useTheme()` all threw the moment an
