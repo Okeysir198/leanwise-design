@@ -1,8 +1,31 @@
-@import url("./fonts.css");
 /* =============================================================================
    LeanWise Design System v4 — the canonical token core.
    THE single source of truth for every LeanWiseAI product. Do not copy this
    file into an app; depend on the package.
+
+   ## Import fonts.css yourself — this file no longer does it for you
+
+   Until v1.2.1 line 1 of this file was `@import url("./fonts.css")`. That is
+   invalid the moment a bundler inlines this file after any rule, because CSS
+   requires every @import to precede all rules. A consumer whose stylesheet
+   reads
+
+       @import "tailwindcss";        <- emits rules
+       @import "@leanwise/design/tokens.css";
+
+   flattens to a nested @import sitting after those rules, and Turbopack
+   rejects the whole stylesheet: `@import rules must precede all rules aside
+   from @charset and @layer statements`. The dev server then 500s on every
+   page while `next build` still succeeds, because the two use different CSS
+   pipelines — so it looks like an app bug and survives every static gate.
+
+   No import ordering inside the consumer can fix it; the nested import always
+   lands after whatever preceded it. Hence the token core no longer pulls font
+   files at all, which is the right separation regardless: a token file should
+   declare tokens.
+
+       @import "@leanwise/design/fonts.css";   <- add this
+       @import "@leanwise/design/tokens.css";
 
    ## Why colors are authored as HSL channel triples
 
