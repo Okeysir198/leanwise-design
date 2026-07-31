@@ -42,10 +42,10 @@
  */
 
 import fs from "node:fs";
-import os from "node:os";
 import path from "node:path";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
+import { compileProbe } from "./_tw-probe.mjs";
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, "..");
@@ -390,22 +390,7 @@ for (const u of utilities) wanted.set(u, `@utility ${u}`);
 
 let compiled = null;
 try {
-  const postcss = (await import("postcss")).default;
-  const tw = (await import("@tailwindcss/postcss")).default;
-  const probeDir = fs.mkdtempSync(path.join(os.tmpdir(), "lw-presence-"));
-  const probeHtml = path.join(probeDir, "probe.html");
-  fs.writeFileSync(probeHtml, `<div class="${[...wanted.keys()].join(" ")}"></div>`);
-  // `source(none)` so ONLY the probe decides what is generated — otherwise a
-  // utility could appear because some template happens to use it.
-  const entry = [
-    `@import "tailwindcss" source(none);`,
-    `@source "${probeHtml}";`,
-    `@import "${path.join(ROOT, "tokens.css")}";`,
-    `@import "${path.join(ROOT, "shadcn.css")}";`,
-    `@import "${path.join(ROOT, "theme.css")}";`,
-  ].join("\n");
-  compiled = (await postcss([tw()]).process(entry, { from: path.join(ROOT, ".lw-presence-probe.css") })).css;
-  fs.rmSync(probeDir, { recursive: true, force: true });
+  compiled = await compileProbe(ROOT, wanted.keys(), "presence");
 } catch (e) {
   console.error(red("\nlw-presence: could not compile theme.css.\n"));
   console.error(`  ${e.message.split("\n").slice(0, 6).join("\n  ")}\n`);

@@ -33,10 +33,9 @@
  */
 
 import fs from "node:fs";
-import os from "node:os";
 import path from "node:path";
-import { createRequire } from "node:module";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
+import { compileProbe } from "./_tw-probe.mjs";
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, "..");
@@ -113,20 +112,7 @@ for (const item of manifest.items) {
 
 let compiled = "";
 try {
-  const req = createRequire(path.join(ROOT, "package.json"));
-  const postcss = (await import(pathToFileURL(req.resolve("postcss")))).default;
-  const tw = (await import(pathToFileURL(req.resolve("@tailwindcss/postcss")))).default;
-  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "lw-registry-"));
-  const probe = path.join(tmp, "probe.html");
-  fs.writeFileSync(probe, `<div class="${[...classes].join(" ")}"></div>`);
-  compiled = (await postcss([tw()]).process([
-    `@import "tailwindcss" source(none);`,
-    `@source "${probe}";`,
-    `@import "${path.join(ROOT, "tokens.css")}";`,
-    `@import "${path.join(ROOT, "shadcn.css")}";`,
-    `@import "${path.join(ROOT, "theme.css")}";`,
-  ].join("\n"), { from: path.join(ROOT, ".lw-registry-probe.css") })).css;
-  fs.rmSync(tmp, { recursive: true, force: true });
+  compiled = await compileProbe(ROOT, classes, "registry");
 } catch (e) {
   console.error(red(`lw-registry: could not compile the registry's classes — ${e.message.split("\n")[0]}`));
   process.exit(2);

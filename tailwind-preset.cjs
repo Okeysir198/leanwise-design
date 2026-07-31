@@ -93,20 +93,20 @@ module.exports = {
           // scores 2.80 on white. Mirrors success/warning/danger `-on`.
           on: "hsl(var(--cta-on) / <alpha-value>)",
         },
+        info: {
+          DEFAULT: "hsl(var(--info) / <alpha-value>)",
+          foreground: "hsl(var(--info-foreground) / <alpha-value>)",
+          soft: "hsl(var(--info-soft) / <alpha-value>)",
+          on: "hsl(var(--info-on) / <alpha-value>)",
+        },
+        /* The modal/drawer backdrop — a ROLE that re-points on dark, not a
+           hand-rolled `bg-black/50`. Not an hsl() wrapper: --lw-scrim is already a
+           full colour with an alpha baked in. */
+        scrim: "var(--lw-scrim)",
         // Cyan as TEXT. `text-brand` for a link/active label — NOT `text-primary`,
         // which is the fill color. Since v0.8.0 the brand fill also reads on white (5.68),
         // but the role token stays because DARK re-points it to brand-400.
-        info: {
-        DEFAULT: "hsl(var(--info) / <alpha-value>)",
-        foreground: "hsl(var(--info-foreground) / <alpha-value>)",
-        soft: "hsl(var(--info-soft) / <alpha-value>)",
-        on: "hsl(var(--info-on) / <alpha-value>)",
-      },
-      /* The modal/drawer backdrop — a ROLE that re-points on dark, not a
-         hand-rolled `bg-black/50`. Not an hsl() wrapper: --lw-scrim is already a
-         full colour with an alpha baked in. */
-      scrim: "var(--lw-scrim)",
-      brand: "hsl(var(--brand) / <alpha-value>)",
+        brand: "hsl(var(--brand) / <alpha-value>)",
         success: {
           DEFAULT: "hsl(var(--success) / <alpha-value>)",
           foreground: "hsl(var(--success-foreground) / <alpha-value>)",
@@ -121,31 +121,31 @@ module.exports = {
         },
         navy: "hsl(var(--navy) / <alpha-value>)",
 
-      /* shadcn's sidebar block. Eight derivations of existing roles, zero new
-         tokens — see shadcn.css. `DEFAULT` is the `--sidebar` spelling; the older
-         `--sidebar-background` name is emitted by shadcn.css for consumers whose
-         vendored sidebar.tsx predates the rename, but is not given a utility here
-         because `bg-sidebar` already covers it. */
-      sidebar: {
-        DEFAULT: "hsl(var(--sidebar) / <alpha-value>)",
-        foreground: "hsl(var(--sidebar-foreground) / <alpha-value>)",
-        primary: "hsl(var(--sidebar-primary) / <alpha-value>)",
-        "primary-foreground": "hsl(var(--sidebar-primary-foreground) / <alpha-value>)",
-        accent: "hsl(var(--sidebar-accent) / <alpha-value>)",
-        "accent-foreground": "hsl(var(--sidebar-accent-foreground) / <alpha-value>)",
-        border: "hsl(var(--sidebar-border) / <alpha-value>)",
-        ring: "hsl(var(--sidebar-ring) / <alpha-value>)",
-      },
+        /* shadcn's sidebar block. Eight derivations of existing roles, zero new
+           tokens — see shadcn.css. `DEFAULT` is the `--sidebar` spelling; the older
+           `--sidebar-background` name is emitted by shadcn.css for consumers whose
+           vendored sidebar.tsx predates the rename, but is not given a utility here
+           because `bg-sidebar` already covers it. */
+        sidebar: {
+          DEFAULT: "hsl(var(--sidebar) / <alpha-value>)",
+          foreground: "hsl(var(--sidebar-foreground) / <alpha-value>)",
+          primary: "hsl(var(--sidebar-primary) / <alpha-value>)",
+          "primary-foreground": "hsl(var(--sidebar-primary-foreground) / <alpha-value>)",
+          accent: "hsl(var(--sidebar-accent) / <alpha-value>)",
+          "accent-foreground": "hsl(var(--sidebar-accent-foreground) / <alpha-value>)",
+          border: "hsl(var(--sidebar-border) / <alpha-value>)",
+          ring: "hsl(var(--sidebar-ring) / <alpha-value>)",
+        },
 
-      /* The categorical ramp. NOT wrapped in hsl() and NOT carrying <alpha-value>:
-         --lw-chart-* are full colours with no channel-triple sibling, so there is
-         nothing to compose an alpha into. `bg-chart-1/40` therefore does not work
-         in v3; use a soft token or color-mix if you need a tint. */
-      chart: {
-        1: "var(--chart-1)", 2: "var(--chart-2)", 3: "var(--chart-3)", 4: "var(--chart-4)",
-        5: "var(--chart-5)", 6: "var(--chart-6)", 7: "var(--chart-7)", 8: "var(--chart-8)",
-        9: "var(--chart-9)", 10: "var(--chart-10)", 11: "var(--chart-11)", 12: "var(--chart-12)",
-      },
+        /* The categorical ramp. NOT wrapped in hsl() and NOT carrying <alpha-value>:
+           --lw-chart-* are full colours with no channel-triple sibling, so there is
+           nothing to compose an alpha into. `bg-chart-1/40` therefore does not work
+           in v3; use a soft token or color-mix if you need a tint. */
+        chart: {
+          1: "var(--chart-1)", 2: "var(--chart-2)", 3: "var(--chart-3)", 4: "var(--chart-4)",
+          5: "var(--chart-5)", 6: "var(--chart-6)", 7: "var(--chart-7)", 8: "var(--chart-8)",
+          9: "var(--chart-9)", 10: "var(--chart-10)", 11: "var(--chart-11)", 12: "var(--chart-12)",
+        },
       },
 
       // Every tier in the token scale is registered. A MISSING tier is the quiet
