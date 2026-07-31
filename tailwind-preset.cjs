@@ -165,7 +165,18 @@ module.exports = {
         "focus-danger": "var(--lw-focus-ring-danger)",
       },
 
-      transitionTimingFunction: { out: "var(--lw-ease-out)" },
+      /* `out` overrides Tailwind's stock name on purpose — the house curve should
+         be what every `ease-out` gets, not only the ones that remembered a custom
+         name. `emphasis` and `spring` are additive: no stock name to collide with,
+         and both tokens have existed in tokens.css since 1.0 with nothing exposing
+         them. `in` / `in-out` are deliberately absent — they are byte-identical to
+         Tailwind's stock curves, so a second home for them buys nothing.
+         theme.css carries the same three; check:presence fails if they diverge. */
+      transitionTimingFunction: {
+        out: "var(--lw-ease-out)",
+        emphasis: "var(--lw-ease-emphasis)",
+        spring: "var(--lw-ease-spring)",
+      },
       transitionDuration: { fast: "var(--lw-duration-fast)", DEFAULT: "var(--lw-duration)", slow: "var(--lw-duration-slow)" },
 
       backgroundImage: {

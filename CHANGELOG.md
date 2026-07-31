@@ -11,8 +11,8 @@ project's own numbering. No `v1.0.x` tag exists in this repository — the tag l
 `v0.9.0` → `v1.1.1` — so the deletion reached consumers in v1.1.0.)
 
 **Reading this file across the v1.1.0 break.** Every tag from `v0.1.0` to `v0.9.0` is
-documented below, and all three consumers are pinned inside that range — `leanwise-ai`
-`#v0.8.1`, `P20260707-vss` `#v0.2.3`, `P20260706-rag-service` `#v0.2.2`. The v0.x entries are
+documented below. Two of the three consumers are still pinned inside that range; `leanwise-ai` has since moved to 1.1.8 (this line said `#v0.8.1` until 2026-07-31, and was wrong) — `leanwise-ai`
+`#v1.1.8`, `P20260707-vss` `#v0.2.3`, `P20260706-rag-service` `#v0.2.2`. The v0.x entries are
 carried forward from the changelog that shipped in the pre-1.1.0 tree (`git show
 v0.9.0:CHANGELOG.md`), which v1.1.0's wholesale replacement overwrote; the per-version
 **Consumers** notes and the breaking markers were added afterwards by diffing the tags. Six
@@ -22,7 +22,59 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 ## [Unreleased]
 
-Nothing yet.
+### Added
+
+- **`theme.css` — the Tailwind v4 registration layer.** `tailwind-preset.cjs` has always been
+  the v3 artifact; there was no v4 equivalent, so a v4 consumer either hand-wrote the whole
+  bridge or did without. `tss-app` hand-wrote ~600 lines of it and still lost all six
+  `fontSize` roles, all four `backgroundImage` surfaces, both custom durations, the container
+  and every one of the six keyframes — so every Radix overlay in that app opened with no
+  animation and `animate-accordion-down` compiled to nothing.
+
+  Import it AFTER `shadcn.css`. It complements that file rather than replacing it: `shadcn.css`
+  declares the alias VALUES on its seven-selector list (which is what makes a `[data-band]`
+  subtree re-theme), `theme.css` only registers names with the compiler.
+
+  Two structural notes worth reading before adopting:
+  - Colours, shadows, focus rings and the brand surfaces are in `@theme inline`, because a
+    plain `@theme` resolves their `var()` **at `:root`** and freezes the palette for any
+    subtree theme. Measured: 30 of 35 `--lw-shadow-*` declarations and 11 of 13
+    `--lw-focus-ring*` sit inside a theme scope.
+  - The cost of `inline` is that `--color-*` are **not** on `:root`. Grep for `var(--color-`
+    before adopting.
+
+- **`check:presence` (`lw-presence.mjs`) — the presence gate.** Every other gate here is a
+  deny-list or a value check over names that already exist; none can see an ABSENCE, which in
+  Tailwind v4 is the dominant failure mode because an unresolvable utility emits no CSS and
+  errors nothing. Four checks: v3 <-> v4 parity in both directions, the bare-key rule (a
+  `--x-*: initial` reset removes the unsuffixed `x` utility along with the tiers), shadcn
+  property completeness, and — because the first three only compare text files — an actual
+  compile of the documented import chain asserting all 83 registered utilities emit.
+
+  Mutation-checked nine ways before being trusted, and it found two bugs in itself doing so:
+  a `name.includes("--")` guard that was true for every custom property and so skipped the
+  entire reverse-parity check, and a `filter(Boolean)` that dropped v3's `DEFAULT` arms and
+  made `--radius` and `--shadow` look like v4-only inventions.
+
+- `ease-emphasis` and `ease-spring` in the v3 preset and `theme.css`. Both tokens have existed
+  in `tokens.css` since 1.0 with nothing exposing them. Purely additive — no stock Tailwind
+  name to collide with. `ease-in` / `ease-in-out` are deliberately still absent: measured
+  against Tailwind's stock curves they are byte-identical, so registering them would buy a
+  second home for a value nobody is changing.
+
+### Fixed
+
+- **The consumers table said `leanwise-ai` was pinned at `#v0.8.1`. It is on `#v1.1.8`.**
+  Eighteen tags of drift that did not exist, on the flagship consumer, in the table anyone
+  reasons from when deciding whether a change is safe to ship. Corrected in `CLAUDE.md` and
+  above, with the one-line command to verify a row against the consumer's own `package.json`.
+  Real drift today is VSS (`#v0.2.3`) and rag-service (`#v0.2.2`).
+
+### Notes
+
+- `tailwindcss` + `@tailwindcss/postcss` are now devDependencies, pinned `^4` — deliberately
+  looser than any consumer's pin, so a namespace change in a newer Tailwind fails here before
+  it reaches an app.
 
 ## [1.1.8] — 2026-07-31
 

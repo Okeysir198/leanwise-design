@@ -1,7 +1,7 @@
 {
   "name": "@leanwise/design",
   "version": "1.1.8",
-  "description": "LeanWise Design System \u2014 token core, CSS layers, React components, twelve templates.",
+  "description": "LeanWise Design System — token core, CSS layers, React components, twelve templates.",
   "license": "UNLICENSED",
   "private": false,
   "type": "module",
@@ -39,6 +39,7 @@
     "./tokens.css": "./tokens.css",
     "./fonts.css": "./fonts.css",
     "./shadcn.css": "./shadcn.css",
+    "./theme.css": "./theme.css",
     "./base.css": "./base.css",
     "./marketing.css": "./marketing.css",
     "./product.css": "./product.css",
@@ -66,6 +67,7 @@
     "tokens.css",
     "fonts.css",
     "shadcn.css",
+    "theme.css",
     "base.css",
     "marketing.css",
     "product.css",
@@ -92,7 +94,9 @@
     "check:templates": "node templates/_tooling/lw-templates.mjs",
     "check:a11y": "node templates/_tooling/lw-a11y.mjs",
     "check:visual": "node templates/_tooling/lw-visual.mjs",
-    "check": "npm run check:contrast && npm run check:tokens && npm run check:themes && npm run check:dts && npm run check:bundle && npm run check:templates",
+    "check:presence": "node templates/_tooling/lw-presence.mjs",
+    "check:presence:list": "node templates/_tooling/lw-presence.mjs --list",
+    "check": "npm run check:presence && npm run check:contrast && npm run check:tokens && npm run check:themes && npm run check:dts && npm run check:bundle && npm run check:templates",
     "check:ci": "npm run check && npm run check:a11y && npm run check:visual",
     "tokens": "node templates/_tooling/lw-tokens-dtcg.mjs",
     "dts": "node templates/_tooling/lw-dts-barrel.mjs",
@@ -100,9 +104,12 @@
     "prepublishOnly": "npm run check && npm run tokens && npm run dts && npm run bundle && npm run build"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
     "axe-core": "^4.10.0",
     "esbuild": "^0.27.7",
     "playwright": "^1.48.0",
+    "postcss": "^8.5.25",
+    "tailwindcss": "^4.3.3",
     "tsup": "^8.3.0",
     "typescript": "^5.6.0"
   },

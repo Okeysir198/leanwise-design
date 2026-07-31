@@ -321,9 +321,21 @@ is not "on the new version."
 
 | Consumer | Pin | Consumes | Package manager |
 |---|---|---|---|
-| `leanwise-ai` | `#v0.8.1` | `tokens.css` + `lw.css` + `./assets` + `./react` | pnpm |
+| `leanwise-ai` | `#v1.1.8` | `tokens.css` + `lw.css` + `./assets` + `./react` | pnpm |
 | `P20260707-vss/frontend` | `#v0.2.3` | `tokens.css` + `shadcn.css` + preset + `./brand` | pnpm |
 | `P20260706-rag-service/frontend` | `#v0.2.2` (reports **0.2.1** — see below) | `tokens.css`, vanilla | npm |
+
+**This table is hand-maintained, and it has been wrong.** It read `#v0.8.1` for `leanwise-ai`
+until 2026-07-31, when the real pin was `#v1.1.8` — eighteen tags of drift that did not exist.
+The cost is not cosmetic: the entry is what anyone reasons from when deciding whether a change
+is safe to ship, and it pointed at the flagship consumer. Verify against the consumer's own
+`package.json` before trusting a row:
+
+```bash
+node -p "require('/srv/share/01_project-dev/leanwise-ai/package.json').dependencies['@leanwise/design']"
+```
+
+Real drift today is **VSS alone** (`#v0.2.3`) and **rag-service** (`#v0.2.2`).
 
 **rag-service is NOT install-drifted.** This was recorded as drift for several releases and it is
 wrong, which cost a diagnosis: `git show v0.2.2:package.json` says `"version": "0.2.1"` — the bump
