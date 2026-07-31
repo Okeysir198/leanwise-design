@@ -28,6 +28,6 @@ export interface CommandPaletteProps extends React.HTMLAttributes<HTMLDialogElem
  * component that installs a global key handler fights the host app for it and
  * cannot be turned off on the one screen where ⌘K means something else.
  */
-export declare function CommandPalette(props: CommandPaletteProps): JSX.Element;
+export declare function CommandPalette(props: CommandPaletteProps): React.JSX.Element;
 /** The subsequence scorer, exported so a caller can rank its own list the same way. */
 export declare function score(query: string, text: string): number;

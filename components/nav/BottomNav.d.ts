@@ -10,7 +10,11 @@ export interface BottomNavItem {
   /** Announced to a screen reader; show your own visual dot if you need one. */
   badge?: number;
 }
-export interface BottomNavProps extends React.HTMLAttributes<HTMLElement> {
+/** Note the `Omit`: this component gives `onChange` a richer meaning than the DOM
+ *  attribute of the same name, so the inherited one has to be removed or the
+ *  interface does not extend cleanly. Invisible until v1.2 — there was no
+ *  tsconfig, so `tsc` had never run over these declarations. */
+export interface BottomNavProps extends Omit<React.HTMLAttributes<HTMLElement>, "onChange"> {
   /** Three to five DESTINATIONS. Never actions — warns past five. */
   items: BottomNavItem[];
   value?: string;
@@ -18,4 +22,4 @@ export interface BottomNavProps extends React.HTMLAttributes<HTMLElement> {
   label?: string;
 }
 /** The mobile destination bar. Reserves the home indicator from `--lw-safe-bottom`. */
-export declare function BottomNav(props: BottomNavProps): JSX.Element;
+export declare function BottomNav(props: BottomNavProps): React.JSX.Element;

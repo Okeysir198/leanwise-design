@@ -10,4 +10,4 @@ export interface StackProps extends React.HTMLAttributes<HTMLElement> {
  * one that is wrong. Prefer a Stack over margins on the children: margin collapse and
  * last-child resets are where vertical spacing bugs live.
  */
-export declare function Stack(props: StackProps): JSX.Element;
+export declare function Stack(props: StackProps): React.JSX.Element;

@@ -59,7 +59,20 @@
   --destructive-foreground: var(--lw-on-danger-c);   /* white — the one exception */
 
   --border: var(--lw-line-c);
-  --input: var(--lw-line-strong-c);
+  /* --input is a CONTROL BOUNDARY, not a divider — WCAG 1.4.11 asks 3:1 of it.
+     This pointed at --lw-line-strong (#D1D5DB, 1.47:1 on the page), which is the
+     strong DIVIDER tier. The design system's own controls do not use it: .lw-input,
+     .lw-input-group, .lw-switch .track and .lw-check .box all take
+     --lw-line-control, whose token comment already records the measurement —
+     "#848F9F — 3.29 on surface-0, 3.14 on surface-1".
+
+     So a shadcn consumer's input, select, switch and checkbox were rendering a
+     1.47:1 boundary while the vanilla controls beside them rendered 3.29:1. Same
+     design system, same control, two different answers, and only the bridge was
+     wrong. The v1.1.5 non-text contrast group added the 3:1 rule for exactly this
+     class of defect; this alias is written in shadcn names, so no --lw-* manifest
+     pair covered it. */
+  --input: var(--lw-line-control-c);
   --ring: var(--lw-brand-500-c);
 
   --radius: var(--lw-radius-md);   /* 8px — the same as shadcn's default, on purpose */
@@ -88,12 +101,26 @@
   --danger-soft: var(--lw-danger-soft-c);
   --danger-on: var(--lw-danger-on-c);
 
-  /* The fourth status: idle / pending / draft. Deliberately not "info" — every blue
-     here already means brand or link. Neutral is a dark fill, so it takes white ink. */
+  /* The fourth status: idle / pending / draft. Neutral is a dark fill, so it takes
+     white ink. (This comment used to end "deliberately not 'info' — every blue here
+     already means brand or link". That objection was to the COLOUR; the role now
+     ships below, as a violet.) */
   --neutral: var(--lw-neutral-c);
   --neutral-foreground: var(--lw-on-neutral-c);
   --neutral-soft: var(--lw-neutral-soft-c);
   --neutral-on: var(--lw-neutral-on-c);
+
+  /* The fifth status, new in v1.2. shadcn's components read `--info` and this file
+     declined to emit it for four minors — on the grounds that every blue here means
+     brand or link, which is an objection to the colour and not to the role. It is a
+     VIOLET, seeded from --lw-chart-4. A dark fill, so white ink like neutral.
+     ⚠️ A consumer upgrading from a hand-rolled `--info` should LOOK: tss-app's was
+     byte-identical to its --primary, so an info badge was painted in the brand
+     colour. That is a coincidence, not a role, and adopting this changes it. */
+  --info: var(--lw-info-c);
+  --info-foreground: var(--lw-on-info-c);
+  --info-soft: var(--lw-info-soft-c);
+  --info-on: var(--lw-info-on-c);
 
   /* Brand as TEXT (links, active nav). Since v0.8.0 brand-500 reads on white at
      5.68, so on light this IS the fill colour; on dark it re-points to brand-400.
@@ -101,6 +128,60 @@
   --brand: var(--lw-brand-text-c);
 
   --navy: var(--lw-navy-900-c);
+
+  /* ---- sidebar --------------------------------------------------------------
+     shadcn's own `sidebar` block, which every consumer of that component has had
+     to hand-derive. tss-app wrote all eight by hand and its comment recorded the
+     ask: "No --lw-sidebar-* role exists … requested upstream as a v1.2 role."
+
+     It needs ZERO new tokens. A sidebar is a SUBTLE surface carrying MUTED ink;
+     the active item is the muted surface; the rail is a line. Every one of the
+     eight is an existing role, so they re-point on dark and inside a band for
+     free, exactly like the rest of this file — which is the whole argument for
+     putting them here rather than leaving each consumer to invent them.
+
+     Kept as CHANNEL TRIPLES, not full colours: shadcn's `sidebar.tsx` composes
+     them as `hsl(var(--sidebar-border))`, so anything else breaks the component
+     as shipped. */
+  --sidebar: var(--lw-bg-subtle-c);
+  --sidebar-foreground: var(--lw-fg-muted-c);
+  --sidebar-primary: var(--lw-brand-500-c);
+  --sidebar-primary-foreground: var(--lw-on-brand-c);
+  --sidebar-accent: var(--lw-bg-muted-c);
+  --sidebar-accent-foreground: var(--lw-fg-c);
+  --sidebar-border: var(--lw-line-c);
+  --sidebar-ring: var(--lw-brand-500-c);
+
+  /* shadcn renamed `--sidebar-background` to `--sidebar` when the component moved
+     to the `--color-*` convention. Both spellings are emitted because a consumer's
+     vendored `sidebar.tsx` is whatever version they scaffolded — tss-app is on the
+     older one. Per the deprecation policy this alias is warned for one MINOR and
+     removed in v2.0; until then it is the same value, not a second decision. */
+  --sidebar-background: var(--lw-bg-subtle-c);
+
+  /* ---- categorical ramp ------------------------------------------------------
+     shadcn's charts read `--chart-1..5`; the system has twelve. All twelve are
+     aliased so a consumer can reach the full ramp under the name their scaffolded
+     chart component already uses.
+
+     ⚠️ NOTE THE SHAPE ASYMMETRY. Unlike every other alias in this file, these are
+     FULL COLOURS, not channel triples — `--lw-chart-*` has no `-c` sibling. So
+     they must NOT be wrapped in `hsl()` at the call site: `var(--chart-1)` is
+     already a colour. That is also why they cannot auto-re-point the way a triple
+     does, and why tokens.css restates all eight in every theme scope by hand;
+     the contrast gate's dark-scope divergence check is what guards that. */
+  --chart-1: var(--lw-chart-1);
+  --chart-2: var(--lw-chart-2);
+  --chart-3: var(--lw-chart-3);
+  --chart-4: var(--lw-chart-4);
+  --chart-5: var(--lw-chart-5);
+  --chart-6: var(--lw-chart-6);
+  --chart-7: var(--lw-chart-7);
+  --chart-8: var(--lw-chart-8);
+  --chart-9: var(--lw-chart-9);
+  --chart-10: var(--lw-chart-10);
+  --chart-11: var(--lw-chart-11);
+  --chart-12: var(--lw-chart-12);
 }
 
 /* The dark-specific CHOICES (cards lift, accent is navy not cyan) — not just a

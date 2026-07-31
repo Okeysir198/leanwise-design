@@ -7,4 +7,4 @@ export interface SplitProps extends React.HTMLAttributes<HTMLElement> {
   as?: string;
 }
 /** A main column and a rail. Children in source order. */
-export declare function Split(props: SplitProps): JSX.Element;
+export declare function Split(props: SplitProps): React.JSX.Element;

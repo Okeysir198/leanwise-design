@@ -1,4 +1,6 @@
+"use client";
 import * as React from "react";
+import { useMergedRef } from "../_merge-refs.js";
 import { useRadioGroup } from "../_radio-group.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
 
@@ -10,13 +12,18 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  *  ONE choice, and `aria-pressed` describes N independent toggles — it told a
  *  screen-reader user the wrong thing about the widget and gave them no set size
  *  and no arrow-key path through it. See `_radio-group.js`. */
-export function Segmented({ options = [], value, onChange, label, className, ...rest }) {
+/* forwardRef, for the same reason Input.jsx gives — see Combobox.jsx.
+   A radiogroup's ref is the GROUP, not a button — that is what receives focus
+   management and what a Controller scrolls to. useRadioGroup already owns an
+   internal one, so the forwarded ref is merged onto the same node. */
+export const Segmented = React.forwardRef(function Segmented({ options = [], value, onChange, label, className, ...rest }, forwardedRef) {
   const opts = options.map(o => (typeof o === "string" ? { value: o, label: o } : o));
   const { ref, onKeyDown, tabIndexFor } = useRadioGroup(
     opts.map(o => o.value), value, (v) => onChange && onChange(v)
   );
+  const setGroupRef = useMergedRef(ref, forwardedRef);
   return (
-    <div ref={ref} className={cx("lw-segmented", className)} role="radiogroup" aria-label={label}
+    <div ref={setGroupRef} className={cx("lw-segmented", className)} role="radiogroup" aria-label={label}
       onKeyDown={onKeyDown} {...rest}>
       {opts.map((o, i) => (
         <button key={o.value} type="button" role="radio" aria-checked={value === o.value}
@@ -24,4 +31,4 @@ export function Segmented({ options = [], value, onChange, label, className, ...
       ))}
     </div>
   );
-}
+});

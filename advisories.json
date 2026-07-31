@@ -1,0 +1,100 @@
+{
+  "$comment": [
+    "Machine-readable 'what is wrong with the version you are pinned to'.",
+    "",
+    "WHY THIS FILE EXISTS. The consumers table in CLAUDE.md is hand-maintained and has",
+    "been wrong twice — most recently claiming leanwise-ai was on #v0.8.1 when it was on",
+    "#v1.1.8, eighteen tags of drift that did not exist, on the flagship consumer, in the",
+    "table anyone reasons from when judging whether a change is safe to ship.",
+    "",
+    "A consumer cannot see any of this from inside their own repo: their installed tree is",
+    "self-consistent and gives no signal that a later release fixed something they are",
+    "living with. `lw-doctor` reads the version they have LOCALLY and fetches this file",
+    "from the repo TIP — the newest release is the only thing that knows what is wrong",
+    "with the old ones.",
+    "",
+    "Every `count` here is MEASURED by a named gate, not estimated, and `verifiedAgainst`",
+    "records the commit it was measured at. lw-doctor re-derives the counts for the",
+    "current tree and fails if an advisory has gone stale — an advisory nobody re-checks",
+    "is the same hand-maintained fact this file replaces."
+  ],
+  "advisories": [
+    {
+      "id": "no-use-client",
+      "fixedIn": "1.2.0",
+      "affects": "<1.2.0",
+      "severity": "high",
+      "title": "No component declares \"use client\" — App Router server components throw",
+      "detail": "The package shipped zero \"use client\" directives, so <Combobox>, <DataGrid>, <Dialog>, <Popover>, <Menu> and useTheme() all throw when an App Router page renders them from a server component — the default for every page in every Next app since 2023.",
+      "measuredBy": "check:rsc",
+      "count": 28,
+      "countMeans": "modules that require the directive"
+    },
+    {
+      "id": "no-dist",
+      "fixedIn": "1.2.0",
+      "affects": "<1.2.0",
+      "severity": "medium",
+      "title": "dist/ was never built for any consumer",
+      "detail": "prepublishOnly was the only build hook and a git install runs no lifecycle script, so every consumer got raw .jsx and had to put the package inside babel-loader's include. dist/ is committed from 1.2.0.",
+      "measuredBy": "check:build",
+      "count": 78,
+      "countMeans": "files now shipped pre-compiled"
+    },
+    {
+      "id": "bin-missing-under-pnpm",
+      "fixedIn": "1.2.0",
+      "affects": "<1.2.0",
+      "severity": "high",
+      "title": "The lw-token-lint bin is absent in a pnpm install",
+      "detail": "`files` used a \"!templates/_tooling\" exclusion plus a re-include, a pattern npm honours and pnpm does not. A consumer's CI therefore ran no token lint at all, silently. The gates moved to tools/ in 1.2.0 and need no exclusion.",
+      "measuredBy": "check:pack",
+      "count": 1,
+      "countMeans": "bin entries affected"
+    },
+    {
+      "id": "iconname-incomplete",
+      "fixedIn": "1.2.0",
+      "affects": "<1.2.0",
+      "severity": "medium",
+      "title": "IconName lists 46 of the 78 real glyphs",
+      "detail": "The union was hand-maintained, so passing a name the component renders perfectly well — \"sidebar\", \"filter\", \"send\", \"copy\" and 28 others — was a type error. It is generated from Icon.jsx from 1.2.0.",
+      "measuredBy": "check:dts",
+      "count": 32,
+      "countMeans": "glyphs missing from the type"
+    },
+    {
+      "id": "jsx-namespace-react19",
+      "fixedIn": "1.2.0",
+      "affects": "<1.2.0",
+      "severity": "high",
+      "title": "Every .d.ts uses the bare JSX.Element namespace React 19 removed",
+      "detail": "72 declarations reference `JSX.Element`, which does not resolve under @types/react@19 — so a React 19 consumer with skipLibCheck:false cannot typecheck. There was no tsconfig in the package, so tsc had never run over its own declarations.",
+      "measuredBy": "check:types",
+      "count": 72,
+      "countMeans": "declarations affected"
+    },
+    {
+      "id": "base-css-unusable-in-tailwind",
+      "fixedIn": "1.2.0",
+      "affects": "<1.2.0",
+      "severity": "medium",
+      "title": "base.css carries bare-element rules that beat every Tailwind utility",
+      "detail": "Nine un-layered element rules — `button { background:none; border:0; padding:0 }` among them — made base.css unimportable by a Tailwind app, despite the README telling exactly those apps to import it. Split into reset.css in 1.2.0.",
+      "measuredBy": "check:presence",
+      "count": 9,
+      "countMeans": "bare-element rules moved"
+    },
+    {
+      "id": "no-tailwind-v4-artifact",
+      "fixedIn": "1.2.0",
+      "affects": "<1.2.0",
+      "severity": "medium",
+      "title": "No Tailwind v4 artifact — a v4 app has to hand-write the whole bridge",
+      "detail": "tailwind-preset.cjs is v3-only. A v4 consumer got no `bg-cta`, no `text-h1`, no `shadow-focus` and no keyframes unless it wrote them itself; tss-app wrote ~600 lines and still lost the fontSize roles, all four backgroundImage surfaces, both durations, the container and every animation. theme.css ships from 1.2.0.",
+      "measuredBy": "check:presence",
+      "count": 143,
+      "countMeans": "names now offered identically to v3 and v4"
+    }
+  ]
+}

@@ -9,8 +9,8 @@ export interface CardProps extends React.HTMLAttributes<HTMLElement> {
   href?: string;
   as?: string;
 }
-export declare function Card(props: CardProps): JSX.Element;
-export declare function CardHead(props: React.HTMLAttributes<HTMLDivElement>): JSX.Element;
-export declare function CardTitle(props: React.HTMLAttributes<HTMLElement> & { as?: string }): JSX.Element;
-export declare function CardBody(props: React.HTMLAttributes<HTMLParagraphElement>): JSX.Element;
-export declare function CardFoot(props: React.HTMLAttributes<HTMLDivElement>): JSX.Element;
+export declare function Card(props: CardProps): React.JSX.Element;
+export declare function CardHead(props: React.HTMLAttributes<HTMLDivElement>): React.JSX.Element;
+export declare function CardTitle(props: React.HTMLAttributes<HTMLElement> & { as?: string }): React.JSX.Element;
+export declare function CardBody(props: React.HTMLAttributes<HTMLParagraphElement>): React.JSX.Element;
+export declare function CardFoot(props: React.HTMLAttributes<HTMLDivElement>): React.JSX.Element;

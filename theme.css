@@ -1,0 +1,396 @@
+/* =============================================================================
+   @leanwise/design — Tailwind v4 registration layer.
+
+     @import "tailwindcss";
+     @import "@leanwise/design/fonts.css";
+     @import "@leanwise/design/tokens.css";
+     @import "@leanwise/design/shadcn.css";
+     @import "@leanwise/design/theme.css";     <-- AFTER shadcn.css
+
+   WHAT THIS IS. `tailwind-preset.cjs` is the Tailwind **v3** artifact: it turns
+   the design system's tokens into real utilities (`bg-cta`, `text-h1`,
+   `shadow-focus`) so that nobody has to reach for `bg-[hsl(var(--cta))]`, which
+   is an escape hatch that cannot be linted. Tailwind v4 replaced JS config with
+   CSS `@theme`, and until this file existed there was no v4 equivalent — so a v4
+   consumer either hand-wrote the whole bridge or did without.
+
+   tss-app hand-wrote it: ~600 lines in its own `globals.css`, and it still lost
+   the `fontSize` roles, all four `backgroundImage` surfaces, both custom
+   durations, the container, and every one of the six keyframes. Three of those
+   have no `@theme` namespace at all and are the reason Block C exists.
+
+   WHAT IT IS NOT. This does not replace `shadcn.css`. That file declares the
+   alias VALUES on a seven-selector list, which is what makes a `[data-band]`
+   subtree re-theme, and it is Tailwind-version-agnostic. This file only
+   REGISTERS names with the compiler. `@theme` emits nothing onto any selector of
+   its own; the two are complements and both are required.
+
+   THE ONE RULE FOR EDITING THIS FILE. Anything whose value is re-pointed by a
+   theme scope goes in Block B (`@theme inline`); anything constant goes in
+   Block A (`@theme`). Getting that backwards is silent — see the note on Block B.
+   `check:presence` fails the build if this file and the v3 preset ever disagree
+   about which names exist, so add to both or to neither.
+   ============================================================================= */
+
+
+/* =============================================================================
+   BLOCK A — @theme.  Constants: never re-pointed by a theme scope.
+
+   Verified against tokens.css: --lw-radius-*, --lw-text-*, --lw-lh-*,
+   --lw-tracking-*, --lw-ease-*, --lw-duration*, --lw-font-* and --lw-space-* are
+   each declared exactly once, in the base :root. Nothing below them moves with
+   the theme, so resolving them once on :root is correct and cheaper.
+   ============================================================================= */
+
+@theme {
+  /* ---- type ------------------------------------------------------------- */
+  --font-sans: var(--lw-font-sans);
+  --font-mono: var(--lw-font-mono);
+
+  /* The six semantic type roles, with their line-height/tracking/weight riding
+     along. v3 expressed these as `fontSize: { h1: [size, {lineHeight, ...}] }`;
+     v4 spells the same thing as modifier keys on the size. Without them a
+     consumer writes `text-[length:var(--lw-text-h1)]` and loses the other three
+     properties entirely — which is exactly what happened in tss-app. */
+  --text-display: var(--lw-text-display);
+  --text-display--line-height: var(--lw-lh-tight);
+  --text-display--letter-spacing: var(--lw-tracking-tighter);
+  --text-display--font-weight: 500;
+
+  --text-h1: var(--lw-text-h1);
+  --text-h1--line-height: var(--lw-lh-tight);
+  --text-h1--letter-spacing: var(--lw-tracking-tighter);
+  --text-h1--font-weight: 600;
+
+  --text-h2: var(--lw-text-h2);
+  --text-h2--line-height: var(--lw-lh-snug);
+  --text-h2--letter-spacing: var(--lw-tracking-tight);
+  --text-h2--font-weight: 600;
+
+  /* 1.18 is a literal in the v3 preset too — there is no --lw-lh-* at this
+     value. Kept identical rather than rounded to --lw-lh-tight (1.12), which
+     would be a silent type change on every h3. */
+  --text-h3: var(--lw-text-h3);
+  --text-h3--line-height: 1.18;
+  --text-h3--letter-spacing: var(--lw-tracking-tight);
+  --text-h3--font-weight: 600;
+
+  --text-lead: var(--lw-text-lead);
+  --text-lead--line-height: 1.6;
+
+  --text-eyebrow: var(--lw-text-eyebrow);
+  --text-eyebrow--letter-spacing: var(--lw-tracking-eyebrow);
+  --text-eyebrow--font-weight: 500;
+
+  /* ---- radii ------------------------------------------------------------- */
+  /* THE NAMESPACE RESET IS LOAD-BEARING, AND SO IS THE BARE KEY BELOW IT.
+     Without `--radius-*: initial`, Tailwind keeps its stock value for any tier
+     not declared here — so `rounded-3xl` silently renders an off-system radius
+     with nothing to lint. But the reset ALSO removes the unsuffixed `rounded`
+     utility, and in v4 an absent utility is not an error: it emits no CSS and the
+     element renders square. That cost tss-app 106 elements, invisibly, with the
+     build and the token lint both green.
+
+     Every `--x-*: initial` in this file therefore ships with its bare `--x`, and
+     `check:presence` fails if one ever appears without the other. */
+  --radius-*: initial;
+  --radius: var(--lw-radius-md);
+  --radius-none: 0px;
+  --radius-xs: var(--lw-radius-xs);
+  --radius-sm: var(--lw-radius-sm);
+  --radius-md: var(--lw-radius-md);
+  --radius-lg: var(--lw-radius-lg);
+  --radius-xl: var(--lw-radius-xl);
+  --radius-2xl: var(--lw-radius-2xl);
+  --radius-full: var(--lw-radius-pill);
+
+  /* ---- motion ------------------------------------------------------------ */
+  /* `--ease-out` deliberately overrides Tailwind's stock name one-for-one: the
+     system has an opinion about its easing and every `ease-out` in a consumer
+     should get it, not just the ones that remembered a custom name.
+
+     `--lw-ease-in` and `--lw-ease-in-out` are deliberately NOT registered:
+     measured against Tailwind's stock curves they are byte-identical
+     (cubic-bezier(0.4,0,1,1) and cubic-bezier(0.4,0,0.2,1)), so registering them
+     would add a second home for a value nobody is changing and an asymmetry with
+     the v3 preset, in exchange for nothing. `ease-in` already does the right
+     thing. */
+  --ease-out: var(--lw-ease-out);
+  --ease-emphasis: var(--lw-ease-emphasis);
+  --ease-spring: var(--lw-ease-spring);
+
+  /* The six keyframes. v3 shipped these in the preset, so a v3 consumer gets
+     them free and a v4 consumer got nothing — `animate-accordion-down` on every
+     shadcn Accordion compiled to no CSS. In v4 the @keyframes must live INSIDE
+     @theme to be emitted alongside the utility that references them. */
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-rise: fade-up var(--lw-duration-slow) var(--lw-ease-out) both;
+  --animate-fade-in: fade-in var(--lw-duration-slow) var(--lw-ease-out) both;
+  --animate-scale-in: scale-in var(--lw-duration-slow) var(--lw-ease-out) both;
+  --animate-marquee: marquee 40s linear infinite;
+
+  @keyframes accordion-down {
+    from { height: 0; }
+    to { height: var(--radix-accordion-content-height); }
+  }
+  @keyframes accordion-up {
+    from { height: var(--radix-accordion-content-height); }
+    to { height: 0; }
+  }
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(0.5rem); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes scale-in {
+    from { opacity: 0; transform: scale(0.98); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+}
+
+
+/* =============================================================================
+   BLOCK B — @theme inline.  Anything a theme scope re-points.
+
+   WHY THE SPLIT IS NOT COSMETIC. A plain `@theme` entry is emitted as a custom
+   property on `:root`, so `--color-primary: hsl(var(--primary))` has its
+   `var(--primary)` substituted AT :ROOT, at computed-value time, and the result
+   inherits downward as a fixed colour. A `[data-band="dark"]` section that
+   re-points `--primary` would then paint the light brand anyway — the utility is
+   no longer reading the token, it is reading a snapshot of it.
+
+   `@theme inline` emits no custom property at all; it inlines the value into the
+   utility, so `.bg-primary { background-color: hsl(var(--primary)) }` and the
+   `var()` resolves on the ELEMENT. Subtree theming works.
+
+   This is the same trap tokens.css:919 and shadcn.css:28 already document, in a
+   third costume. The families below are here because they are measurably
+   re-pointed: 30 of the 35 --lw-shadow-* declarations and 11 of the 13
+   --lw-focus-ring* declarations sit inside a theme scope, and every shadcn alias
+   does by construction.
+
+   THE COST, stated plainly: `--color-*` are NOT on :root under `inline`. Code
+   that reads `var(--color-primary)` from CSS or JS breaks. Read the shadcn alias
+   (`var(--primary)`) or the token (`var(--lw-brand-500)`) instead — those are on
+   :root and always were. Grep for `var(--color-` before adopting this file.
+   ============================================================================= */
+
+@theme inline {
+  /* ---- the shadcn surface ------------------------------------------------
+     Values live in shadcn.css, on its seven-selector list. This only names them
+     for the compiler. In v4 the `/ <alpha-value>` suffix the v3 preset needs is
+     gone — v4 synthesises `bg-primary/15` itself, so writing it here would
+     produce a literal `<alpha-value>` in the output. */
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  /* Status. Three-way ink split, and it is not symmetrical:
+       FILL  bg-success        + text-success-foreground   (navy — the fill is LIGHT)
+       TINT  bg-success-soft   + text-success-on
+     There is deliberately no `text-success`: #16A34A on white is 3.30:1 and
+     fails AA. `destructive` is the one fill that keeps white ink. */
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-destructive-soft: hsl(var(--danger-soft));
+  --color-destructive-on: hsl(var(--danger-on));
+
+  --color-success: hsl(var(--success));
+  --color-success-foreground: hsl(var(--success-foreground));
+  --color-success-soft: hsl(var(--success-soft));
+  --color-success-on: hsl(var(--success-on));
+
+  --color-warning: hsl(var(--warning));
+  --color-warning-foreground: hsl(var(--warning-foreground));
+  --color-warning-soft: hsl(var(--warning-soft));
+  --color-warning-on: hsl(var(--warning-on));
+
+  --color-neutral: hsl(var(--neutral));
+  --color-neutral-foreground: hsl(var(--neutral-foreground));
+  --color-neutral-soft: hsl(var(--neutral-soft));
+  --color-neutral-on: hsl(var(--neutral-on));
+
+  /* `cta` is the amber, and the house rule is at most ONE per view — the token
+     lint enforces that at the call site. `secondary` is grey; it used to be
+     yellow, which is why an earlier consumer had 38 shouting buttons. */
+  --color-cta: hsl(var(--cta));
+  --color-cta-foreground: hsl(var(--cta-foreground));
+  --color-cta-soft: hsl(var(--cta-soft));
+  --color-cta-on: hsl(var(--cta-on));
+
+  /* The fifth status role, new in v1.2 — a VIOLET, not a blue. See shadcn.css. */
+  --color-info: hsl(var(--info));
+  --color-info-foreground: hsl(var(--info-foreground));
+  --color-info-soft: hsl(var(--info-soft));
+  --color-info-on: hsl(var(--info-on));
+
+  /* The modal/drawer backdrop. A ROLE — it re-points on dark — so it belongs
+     here rather than being hand-rolled as `bg-black/50` in every consumer. */
+  --color-scrim: var(--lw-scrim);
+
+  --color-brand: hsl(var(--brand));
+  --color-navy: hsl(var(--navy));
+
+  /* shadcn's sidebar block — eight derivations of existing roles, zero new
+     tokens. See shadcn.css. The older `--sidebar-background` spelling is emitted
+     there for compatibility but gets no utility here; `bg-sidebar` is the name. */
+  --color-sidebar: hsl(var(--sidebar));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+
+  /* The categorical ramp. NOT wrapped in hsl(): --lw-chart-* are full colours
+     with no channel-triple sibling. v4 still synthesises `bg-chart-1/40` via
+     color-mix, which the v3 preset cannot do — the one place the two artifacts
+     differ in capability rather than in spelling. */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-chart-6: var(--chart-6);
+  --color-chart-7: var(--chart-7);
+  --color-chart-8: var(--chart-8);
+  --color-chart-9: var(--chart-9);
+  --color-chart-10: var(--chart-10);
+  --color-chart-11: var(--chart-11);
+  --color-chart-12: var(--chart-12);
+
+
+  /* ---- component geometry (v1.2) ---------------------------------------
+     What the shadcn registry renders against, so a registry <Button> and a
+     `.lw-btn` cannot drift. INLINE, because --lw-control-h-*, --lw-field-pad-x,
+     --lw-cell-pad-y, --lw-card-pad and --lw-stack-gap are all re-pointed by
+     [data-density] — under a plain @theme they would resolve once on :root and a
+     compact panel would silently render at comfortable heights. */
+  --spacing-btn-x: var(--lw-btn-pad-x);
+  --spacing-btn-x-sm: var(--lw-btn-pad-x-sm);
+  --spacing-btn-x-lg: var(--lw-btn-pad-x-lg);
+  --spacing-btn-gap: var(--lw-btn-gap);
+  --spacing-chip-y: var(--lw-chip-pad-y);
+  --spacing-chip-x: var(--lw-chip-pad-x);
+  --spacing-chip-gap: var(--lw-chip-gap);
+  --spacing-cell-x: var(--lw-cell-pad-x);
+  --spacing-cell-y: var(--lw-cell-pad-y);
+  --leading-control: var(--lw-lh-snug);
+  --spacing-field-pad-x: var(--lw-field-pad-x);
+  --spacing-control-sm: var(--lw-control-h-sm);
+  --spacing-control-md: var(--lw-control-h-md);
+  --spacing-control-lg: var(--lw-control-h-lg);
+  --spacing-row: var(--lw-row-h);
+  --spacing-card-pad: var(--lw-card-pad);
+  --spacing-stack-gap: var(--lw-stack-gap);
+  --spacing-switch-w: var(--lw-switch-w);
+  --spacing-switch-h: var(--lw-switch-h);
+  --spacing-switch-thumb: var(--lw-switch-thumb);
+  --spacing-switch-gap: var(--lw-switch-gap);
+  --spacing-check: var(--lw-check-size);
+  --spacing-icon-sm: var(--lw-btn-icon-sm);
+  --spacing-icon: var(--lw-btn-icon);
+  --spacing-icon-lg: var(--lw-btn-icon-lg);
+  --text-th: var(--lw-th-text);
+  --text-chip: var(--lw-chip-text);
+  --tracking-th: var(--lw-th-tracking);
+  --tracking-btn: var(--lw-btn-tracking);
+
+  /* ---- elevation --------------------------------------------------------- */
+  /* Navy-tinted, and they re-point on dark — which is precisely why they are in
+     this block and not in Block A. The reset stops Tailwind's stock BLACK
+     shadows leaking in for any tier left undeclared, and the bare `--shadow`
+     restores the unsuffixed `shadow` utility the reset removes. */
+  --shadow-*: initial;
+  --shadow: var(--lw-shadow-md);
+  --shadow-xs: var(--lw-shadow-xs);
+  --shadow-sm: var(--lw-shadow-sm);
+  --shadow-md: var(--lw-shadow-md);
+  --shadow-lg: var(--lw-shadow-lg);
+  --shadow-xl: var(--lw-shadow-xl);
+  /* No --lw-shadow-2xl exists; the v3 preset pins 2xl to xl, so this matches
+     rather than silently falling back to Tailwind's stock black one. */
+  --shadow-2xl: var(--lw-shadow-xl);
+  --shadow-inner: var(--lw-shadow-sm);
+  --shadow-focus: var(--lw-focus-ring);
+  --shadow-focus-danger: var(--lw-focus-ring-danger);
+
+  /* ---- brand surfaces ---------------------------------------------------- */
+  /* All four read --primary or --border, so they re-point with the theme and
+     belong in this block. tss-app lost every one of these in its hand-written
+     bridge — there is no v3-style `backgroundImage` key in v4, the namespace is
+     `--background-image-*`, and nothing says so if you guess wrong. */
+  --background-image-gradient-brand: var(--lw-gradient-brand);
+  --background-image-brand-wash:
+    radial-gradient(40rem at 50% -10%, hsl(var(--primary) / 0.18), transparent);
+  --background-image-hero-aside:
+    radial-gradient(60rem at 12% 8%, hsl(var(--primary) / 0.16), transparent 55%),
+    radial-gradient(48rem at 88% 96%, hsl(var(--primary) / 0.12), transparent 55%);
+  --background-image-hairline-grid:
+    repeating-linear-gradient(0deg, hsl(var(--border) / 0.55) 0 1px, transparent 1px 88px),
+    repeating-linear-gradient(90deg, hsl(var(--border) / 0.55) 0 1px, transparent 1px 88px);
+}
+
+
+/* =============================================================================
+   BLOCK C — @utility.  The families v4 has no theme namespace for.
+
+   Probed against the real compiler rather than assumed: `--background-image-*`,
+   `--text-*` (with its three modifier suffixes), `--animate-*`, `--ease-*`,
+   `--shadow-*` and the bare `--radius` all resolve. `--duration-*` does not
+   exist as a namespace, and `container` is a static utility, so both need a
+   hand-written rule. If a future Tailwind adds either namespace, move them up
+   into Block A and delete the rules — `check:presence` will keep the names
+   honest across the move.
+   ============================================================================= */
+
+/* v3 had `transitionDuration: { fast, DEFAULT, slow }`. v4 reads `duration-*` as
+   a bare number or an arbitrary value only, so these three are spelled out.
+   `duration` with no suffix is intentionally absent: v4 has no DEFAULT arm for a
+   utility that also takes numbers, and `duration-200` covers the common case. */
+@utility duration-fast {
+  transition-duration: var(--lw-duration-fast);
+}
+@utility duration-slow {
+  transition-duration: var(--lw-duration-slow);
+}
+@utility duration-base {
+  transition-duration: var(--lw-duration);
+}
+
+/* v3's `theme.container = { center, padding, screens: { 2xl: --lw-col-page } }`.
+   v4 keeps `container` as a plain max-width ladder with no config, so centering
+   and the page gutter are re-added here. NOTE this composes with Tailwind's own
+   `container` rather than replacing it — the stock breakpoint max-widths still
+   apply below 2xl, which is the same shape v3 produced. */
+@utility container {
+  margin-inline: auto;
+  padding-inline: var(--lw-space-16);
+  @media (width >= 96rem) {
+    max-width: var(--lw-col-page);
+  }
+}

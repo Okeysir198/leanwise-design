@@ -11,8 +11,8 @@ project's own numbering. No `v1.0.x` tag exists in this repository — the tag l
 `v0.9.0` → `v1.1.1` — so the deletion reached consumers in v1.1.0.)
 
 **Reading this file across the v1.1.0 break.** Every tag from `v0.1.0` to `v0.9.0` is
-documented below, and all three consumers are pinned inside that range — `leanwise-ai`
-`#v0.8.1`, `P20260707-vss` `#v0.2.3`, `P20260706-rag-service` `#v0.2.2`. The v0.x entries are
+documented below. Two of the three consumers are still pinned inside that range; `leanwise-ai` has since moved to 1.1.8 (this line said `#v0.8.1` until 2026-07-31, and was wrong) — `leanwise-ai`
+`#v1.1.8`, `P20260707-vss` `#v0.2.3`, `P20260706-rag-service` `#v0.2.2`. The v0.x entries are
 carried forward from the changelog that shipped in the pre-1.1.0 tree (`git show
 v0.9.0:CHANGELOG.md`), which v1.1.0's wholesale replacement overwrote; the per-version
 **Consumers** notes and the breaking markers were added afterwards by diffing the tags. Six
@@ -20,9 +20,301 @@ versions are breaking: **0.1.4** (dependency URL), **0.2.0** (removal), **0.7.0*
 and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additionally ships a
 `package.json` that reports the wrong version.
 
-## [Unreleased]
+## [1.2.0] — 2026-07-31
 
-Nothing yet.
+### Added
+
+- **`theme.css` — the Tailwind v4 registration layer.** `tailwind-preset.cjs` has always been
+  the v3 artifact; there was no v4 equivalent, so a v4 consumer either hand-wrote the whole
+  bridge or did without. `tss-app` hand-wrote ~600 lines of it and still lost all six
+  `fontSize` roles, all four `backgroundImage` surfaces, both custom durations, the container
+  and every one of the six keyframes — so every Radix overlay in that app opened with no
+  animation and `animate-accordion-down` compiled to nothing.
+
+  Import it AFTER `shadcn.css`. It complements that file rather than replacing it: `shadcn.css`
+  declares the alias VALUES on its seven-selector list (which is what makes a `[data-band]`
+  subtree re-theme), `theme.css` only registers names with the compiler.
+
+  Two structural notes worth reading before adopting:
+  - Colours, shadows, focus rings and the brand surfaces are in `@theme inline`, because a
+    plain `@theme` resolves their `var()` **at `:root`** and freezes the palette for any
+    subtree theme. Measured: 30 of 35 `--lw-shadow-*` declarations and 11 of 13
+    `--lw-focus-ring*` sit inside a theme scope.
+  - The cost of `inline` is that `--color-*` are **not** on `:root`. Grep for `var(--color-`
+    before adopting.
+
+- **`check:presence` (`lw-presence.mjs`) — the presence gate.** Every other gate here is a
+  deny-list or a value check over names that already exist; none can see an ABSENCE, which in
+  Tailwind v4 is the dominant failure mode because an unresolvable utility emits no CSS and
+  errors nothing. Four checks: v3 <-> v4 parity in both directions, the bare-key rule (a
+  `--x-*: initial` reset removes the unsuffixed `x` utility along with the tiers), shadcn
+  property completeness, and — because the first three only compare text files — an actual
+  compile of the documented import chain asserting all 83 registered utilities emit.
+
+  Mutation-checked nine ways before being trusted, and it found two bugs in itself doing so:
+  a `name.includes("--")` guard that was true for every custom property and so skipped the
+  entire reverse-parity check, and a `filter(Boolean)` that dropped v3's `DEFAULT` arms and
+  made `--radius` and `--shadow` look like v4-only inventions.
+
+- **shadcn's `sidebar` block and the `chart` ramp**, in `shadcn.css` and both Tailwind
+  artifacts. Every shadcn consumer has had to hand-derive these; `tss-app` wrote all eight
+  sidebar names itself and its comment recorded the ask verbatim — *"No `--lw-sidebar-*` role
+  exists … requested upstream as a v1.2 role."*
+
+  It costs **zero new tokens**: a sidebar is a subtle surface with muted ink, the active item
+  is the muted surface, the rail is a line. All eight are existing roles, so they re-point on
+  dark and inside a band for free. Emitted as channel triples because shadcn's `sidebar.tsx`
+  composes them as `hsl(var(--sidebar-border))`.
+
+  `--sidebar-background` is also emitted — shadcn renamed it to `--sidebar`, and which one a
+  consumer's vendored component reads depends on when they scaffolded it. Same value, not a
+  second decision; deprecated for one MINOR and removed in v2.0.
+
+  All eight `--lw-chart-*` are aliased as `--chart-1..8` (shadcn reads 1-5). ⚠️ Unlike every
+  other alias here these are **full colours, not triples** — `--lw-chart-*` has no `-c`
+  sibling — so do not wrap them in `hsl()`. In v4 `bg-chart-1/40` still works via `color-mix`;
+  in v3 it cannot, which is the one place the two artifacts differ in capability.
+
+- `ease-emphasis` and `ease-spring` in the v3 preset and `theme.css`. Both tokens have existed
+  in `tokens.css` since 1.0 with nothing exposing them. Purely additive — no stock Tailwind
+  name to collide with. `ease-in` / `ease-in-out` are deliberately still absent: measured
+  against Tailwind's stock curves they are byte-identical, so registering them would buy a
+  second home for a value nobody is changing.
+
+### Changed — the one non-additive edit in 1.2
+
+- **The nine bare-element rules moved out of `base.css` into a new `reset.css`.** Un-layered
+  element rules beat every Tailwind utility regardless of specificity, so
+  `button { background: none; border: 0; padding: 0 }` stripped the padding and background off
+  every `<Button>` in a Tailwind app, and `body { font-size: … }` overrode the type scale.
+
+  That made `base.css` un-importable by exactly the consumers the README told to import it —
+  the recipe said *"shared controls — never dropped"* for "VSS, tss-app" — and it is why
+  tss-app refuses both `base.css` and `product.css` and therefore consumes zero `.lw-*`
+  components. The README recipe is corrected in the same release.
+
+  Same rules, same values: verified by normalising `reset.css + base.css` against the previous
+  `base.css` — 205 rules on both sides, none lost, none gained. The only ordering change is the
+  iOS 16px input rule moving earlier, which is inert because no bare-element rule follows it.
+
+  **Migration — one line, one consumer.** A vanilla consumer that imports `lw.css` needs
+  nothing; the shim now pulls `reset.css` first. A vanilla consumer that imports `base.css`
+  directly — that is `leanwise-ai`, in `src/routes/__root.tsx` — adds:
+
+  ```js
+  import '@leanwise/design/reset.css';   // before base.css
+  ```
+
+  A **Tailwind** consumer should NOT import `reset.css`: preflight already covers the useful
+  half, and the opinionated `button` and `body` rules are the half that does the damage.
+
+  Guarded by `check:presence`, which asserts the split in BOTH directions — the component
+  layers must contain no un-anchored selectors, and `reset.css` must contain nothing else.
+  Checking only one direction would let the split quietly un-split from the other side. The
+  four deliberate exceptions (a forced-colors tab rule, three `[data-collapsed]` opt-ins) are
+  in a checked-in exemption list, each with its reason.
+
+### Fixed
+
+- **The consumers table said `leanwise-ai` was pinned at `#v0.8.1`. It is on `#v1.1.8`.**
+  Eighteen tags of drift that did not exist, on the flagship consumer, in the table anyone
+  reasons from when deciding whether a change is safe to ship. Corrected in `CLAUDE.md` and
+  above, with the one-line command to verify a row against the consumer's own `package.json`.
+  Real drift today is VSS (`#v0.2.3`) and rag-service (`#v0.2.2`).
+
+### Added — the registry, the geometry it renders against, and a drift signal
+
+- **A shadcn registry: `registry/` + a committed `r/`.** Both shadcn consumers use ZERO of
+  this package's 82 React components — they vendor shadcn's and hand-align them, which is how
+  tss-app came to re-type `padding: 0 18px`, the control heights, the focus rule and the table
+  header from scratch. Nine items, seeded from those already-aligned components with their
+  rationale intact, minus that app's product vocabulary (its badge carried twenty
+  `parsing`/`checking`/`queue` variants that mean nothing to a second app).
+
+  ```bash
+  npx shadcn@latest add ./node_modules/@leanwise/design/r/button.json
+  ```
+
+  No static host needed: `r/` is committed for the same reason `tokens.json` and `react.d.ts`
+  are — every consumer installs from a git tag, where a publish-time artifact does not exist.
+
+- **~30 component-geometry tokens**, and the `.lw-*` CSS now reads them. The rule is
+  deliberately narrow — tokenise a literal iff a second implementation must reproduce it
+  exactly, or it varies by density/theme. That is ~30, not the ~120 literals in the layer: a
+  token is a promise of stability *and* a second home that can drift. Values are identical to
+  the literals they replace, so this is a pixel no-op (`check:visual`: 136 shots, no change).
+
+- **`check:registry`** — compiles every design-system class the registry components use and
+  fails if one emits nothing. A registry that has drifted from the CSS is worse than none,
+  because it looks authoritative. It found four real gaps on its first run: `leading-control`,
+  `bg-scrim` and `px-field-pad-x` were never registered, and a spacing key had been named
+  `field-x` while the component said `field-pad-x`.
+
+  It also had three false positives of its own, all the same shape: Tailwind escapes a class
+  name into the selector with a literal backslash and appends the variant's pseudo *or
+  attribute*, so `hover:bg-cta/90` emits `.hover\:bg-cta\/90:hover` and
+  `aria-invalid:border-x` emits `.aria-invalid\:border-x[aria-invalid="true"]`. Matching the
+  raw class name called all of them dead — and the `aria-invalid` one produced a wrong
+  diagnosis ("v4 has no such variant") and a `@custom-variant` that a direct probe then showed
+  was unnecessary. The gate was wrong, not the compiler.
+
+- **The token lint's TSX rules now run over `registry/`** — the first time those rules have
+  ever run inside this repo.
+
+- **`advisories.json` + `npx lw-doctor`.** A consumer cannot see any of this from inside their
+  own repo: their installed tree is self-consistent and gives no signal that a later release
+  fixed something they are living with. `lw-doctor` reads the version installed **locally** and
+  fetches the advisories from the repo **tip** — the newest release is the only thing that
+  knows what is wrong with the older ones.
+
+  Every count is measured by a named gate, and `check:advisories` re-derives all seven from the
+  tree and fails if one drifts. That earned itself twice on its first run, catching two
+  different off-by-one bugs in its own rule counter.
+
+### Added — the two missing roles
+
+- **`--lw-info`, the fifth status — and it is a VIOLET, not a blue.** `shadcn.css` declined to
+  emit `--info` for four minors on the grounds that *"every blue here already means brand or
+  link"*. That is an objection to the COLOUR, not to the role: a real app needs a fifth state,
+  and tss-app proved it by deriving its own `--tss-phase2` from `--lw-chart-4` — this exact
+  violet — for this exact reason. A dark fill, so white ink like `neutral` and `danger`.
+  Measured: 7.83:1 as a fill, 8.48:1 (light) / 7.57:1 (dark) as a chip.
+
+  ⚠️ **Look before adopting.** tss-app's hand-rolled `--info` is byte-identical to its
+  `--primary`, so an info badge there is currently painted in the brand colour. That is a
+  coincidence, not a role, and taking this token changes it.
+
+- **`--lw-chart-9..12`**, extending the categorical ramp to twelve. Deliberately NOT tints of
+  existing members — a tint of `chart-1` is precisely what makes two series hard to tell apart
+  in a legend, and `color-mix(chart-N 62%, bg)` is the shape tss-app had to invent for want of
+  these.
+
+- **A categorical-separation gate**, in `lw-contrast-check`. Contrast is the wrong measure for
+  a series colour: two of them can each clear AA against the page and still be
+  indistinguishable *from each other*. CIE76 dE over all 198 pairs in all three scopes.
+
+  The floor is **measured, not invented** — 19, just under the tightest pair in the shipped
+  v1.1.8 ramp (`chart-1` vs `chart-7`, dE 20.0 in both dark scopes). So the existing palette
+  passes as-is and anything new must be at least as separable as the closest existing pair.
+  That chart-1/chart-7 pair is genuinely tight and is the first thing for a future palette
+  pass; widening it moves every chart in every consumer, so it does not belong in a release
+  whose claim is that no pixel moved.
+
+  The gate immediately earned itself: indigo at 232° measured dE 13.5 against `chart-4`'s
+  violet, and green at 120° measured 13.4 against the new `chart-9`. Eleven saturated hues
+  leave no gap wide enough, so `chart-10` is a muted **taupe** — the best candidate constrained
+  to a ≥28° hue gap only reached 23.5, while dropping that constraint and letting dE decide
+  gives **39.7**. Chroma and lightness separate a colour as well as hue does; hue distance is a
+  proxy, dE is what a reader experiences.
+
+  It also found a bug in itself on the first run: `toLab` divided by 255 when this file's
+  resolved channels are already 0–1, collapsing every colour to near-black and reporting dE 0.2
+  between obviously different hues.
+
+### Added — packaging, and the four defects it had been hiding
+
+- **`"use client"` — 27 modules now declare it; the package had ZERO.** `<Combobox>`,
+  `<DataGrid>`, `<Dialog>` and `useTheme()` all threw the moment an App Router page rendered
+  them from a server component — which is the default for every page in every Next app since
+  2023, and therefore for every app this system is meant to be the foundation of.
+
+  The directive is in the SOURCE, per file. A build-time banner cannot work: a bundled chunk
+  carries only one directive, so it would have to mark everything client and throw away the
+  **50 server-safe** components. `check:rsc` gates it **both** ways, so "put it on everything"
+  is not the cheap fix — a server component is the one that ships the consumer no JS.
+
+  `Icon` was one `React.useEffect` away from being client, and it is imported by a third of
+  the barrel — one dev-only `console.warn` would have dragged Avatar, Button, Chip, the nav
+  and half the data components across the boundary with it. It warns during render instead.
+
+- **`dist/` is built and COMMITTED.** It had never existed for any consumer: `prepublishOnly`
+  is the only hook and a git install runs no lifecycle script. Built per file with esbuild
+  (77 files, 400 KB, no sourcemaps — they were larger than the code and would churn every
+  diff). `exports` gains a `source` condition pointing at the `.jsx`, which still ships.
+
+- **`check:types` — and there was no `tsconfig.json` at all, so `tsc` had never run over the
+  72 hand-written `.d.ts` files that ARE this package's public API.** The first run found
+  **87 errors**:
+  - 72 × `Cannot find namespace 'JSX'` — React 19 removed the global namespace.
+  - 13 × interfaces that did not extend cleanly, because a prop shadows a DOM attribute of
+    the same name with a different type (`title`, `onChange`, `size`, `prefix`, `role`). A
+    consumer passing `title={<span/>}` to `<Artifact>` got a type error.
+  - `iconNames` declared twice.
+  - `IconName` listed **46 of the 78 real glyphs** — so `<Icon name="filter" />`, which the
+    component renders perfectly, was a type error. It is generated from `Icon.jsx` now.
+
+  `skipLibCheck: false` is set deliberately and must not be softened: TypeScript's default of
+  `true` skips `.d.ts` files, which is exactly why all of the above survived.
+
+- **`check:pack`** — `npm pack`, install the tarball into a scratch dir, and assert the
+  package works from *there*. Every distribution defect this package shipped was invisible to
+  every other gate, because every other gate runs against the working tree where the files
+  exist whether or not `files` would pack them.
+
+- **`forwardRef` on the five composite form controls** (`Combobox`, `DatePicker`,
+  `FileUpload`, `RichText`, `Segmented`). The five simple controls have had it since v1.0;
+  these five did not, which made them the ones a real form could not use. The ref is
+  redirected to the FOCUSABLE element via `useImperativeHandle` — a form library calls
+  `.focus()` on what it is given, and focusing a wrapper `<div>` does nothing.
+
+### Changed — packaging
+
+- **The gates moved from `templates/_tooling/` to `tools/`.** The old location needed a
+  `"!templates/_tooling"` exclusion plus a re-include in `files` — a pattern npm honours and
+  **pnpm does not** — so the `lw-token-lint` bin was simply absent in a pnpm install, and a
+  consumer wrote a 53-line workaround whose own header calls it *"a lint that silently stops
+  linting."* `tools/` needs no exclusion and the bin now packs unconditionally.
+
+- **`templates/` no longer ships. The tarball is 1.06 MB → 0.64 MB.** It was 1.4 MB, 816 KB of
+  it twelve BYTE-IDENTICAL copies of `support.js`, and it shipped **broken** regardless: every
+  `ds-base.js` in it loads `_ds_bundle.js`, which `files` has never carried, so a consumer who
+  opened a packed template got a blank page. Authoring artifacts — the same verdict `REVIEW.md`
+  §3 already reached for the preview cards. `check:pack` asserts they stay out.
+
+### Acceptance — measured against a real consumer, not a fixture
+
+`tss-app` (Next 16 App Router + Tailwind v4 + shadcn, 261 components) compiled with and
+without `theme.css`, over its whole source tree:
+
+| | classes emitted |
+|---|---|
+| today | 1375 |
+| `+ theme.css` | 1375 |
+
+**Nothing lost, nothing gained — and both halves matter.** Nothing lost is the safety result:
+adopting `theme.css` cannot break a page. Nothing *gained* is the honest one: Tailwind only
+emits a utility it finds in source, and tss-app does not yet write `text-h1`,
+`bg-gradient-brand`, `animate-rise` or `duration-fast` anywhere. What the file delivers is the
+vocabulary being *available* — and the deletion below — not new CSS appearing on its own.
+
+> **Correction.** An earlier run of this measurement reported "19 classes gained" and it was
+> wrong. That probe rewrote the import to an absolute path inside the design-system repo and
+> did not pass `source(none)`, so Tailwind's automatic source detection scanned
+> **`leanwise-design/preview/*.html`** and emitted the classes those files use. The number
+> described this repo's own preview cards, not the consumer. The corrected probe pins the
+> sources; the reproducible lesson is that a Tailwind A/B whose two sides read different
+> directories is measuring the directories.
+
+Of the 203 Tailwind-namespace names tss-app hand-registers, **70 are byte-identical to
+`theme.css` and can be deleted verbatim** (that measurement is over declarations, not
+compilation, and is unaffected by the above), 130 are genuinely product vocabulary
+(`--status-*`, `--validation-*`, `--score-*`, `--tool-*`, `--syntax-*`), and exactly **three
+are deliberate overrides that must be KEPT**:
+
+- `--radius` — tss-app pins `lg`, the system defaults to `md`. Deleting it would re-tier every
+  `rounded` from 12px to 8px *and* the six recharts tooltips that read `var(--radius)`.
+- `--shadow` — tss-app pins `sm`, the system defaults to `md`. Deleting it makes every default
+  Button and six Badge variants heavier.
+- `--color-sidebar` — reads the older `--sidebar-background`; both spellings are emitted, so
+  this one is free either way.
+
+That is the whole migration risk, enumerated. It is three lines.
+
+### Notes
+
+- `tailwindcss` + `@tailwindcss/postcss` are now devDependencies, pinned `^4` — deliberately
+  looser than any consumer's pin, so a namespace change in a newer Tailwind fails here before
+  it reaches an app.
 
 ## [1.1.8] — 2026-07-31
 

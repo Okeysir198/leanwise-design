@@ -28,6 +28,6 @@ export interface ActivityFeedProps extends React.HTMLAttributes<HTMLDivElement> 
   label?: string;
 }
 /** Notifications and activity — the same list with a different verb. */
-export declare function ActivityFeed(props: ActivityFeedProps): JSX.Element;
+export declare function ActivityFeed(props: ActivityFeedProps): React.JSX.Element;
 /** "3h ago", falling back to a date once relative stops being useful. */
 export declare function timeAgo(when: Date | number | string, now?: number): string;

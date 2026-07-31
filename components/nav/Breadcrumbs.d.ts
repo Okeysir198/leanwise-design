@@ -8,4 +8,4 @@ export interface BreadcrumbsProps extends React.HTMLAttributes<HTMLElement> { it
  * where you already are. Pass the full ancestry — a truncated trail is the one thing
  * breadcrumbs exist to prevent.
  */
-export declare function Breadcrumbs(props: BreadcrumbsProps): JSX.Element;
+export declare function Breadcrumbs(props: BreadcrumbsProps): React.JSX.Element;

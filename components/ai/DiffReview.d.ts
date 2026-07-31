@@ -27,4 +27,4 @@ export interface DiffReviewProps extends React.HTMLAttributes<HTMLDivElement> {
   label?: string;
 }
 /** Per-hunk accept/reject. The gutter carries the sign, not just the ground. */
-export declare function DiffReview(props: DiffReviewProps): JSX.Element;
+export declare function DiffReview(props: DiffReviewProps): React.JSX.Element;

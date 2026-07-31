@@ -1,3 +1,4 @@
+"use client";
 import { Icon } from "../primitives/Icon.jsx";
 import { Button } from "../primitives/Button.jsx";
 const cx = (...a) => a.filter(Boolean).join(" ");

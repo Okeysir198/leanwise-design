@@ -7,4 +7,4 @@ export interface SourceChipProps extends React.HTMLAttributes<HTMLElement> {
   href?: string;
   as?: string;
 }
-export declare function SourceChip(props: SourceChipProps): JSX.Element;
+export declare function SourceChip(props: SourceChipProps): React.JSX.Element;

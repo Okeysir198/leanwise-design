@@ -15,5 +15,5 @@ export interface SidebarProps extends React.HTMLAttributes<HTMLElement> {
   collapsed?: boolean;
   footer?: React.ReactNode;
 }
-export declare function Sidebar(props: SidebarProps): JSX.Element;
-export declare function NavItem(props: SidebarItem & { collapsed?: boolean } & React.HTMLAttributes<HTMLElement>): JSX.Element;
+export declare function Sidebar(props: SidebarProps): React.JSX.Element;
+export declare function NavItem(props: SidebarItem & { collapsed?: boolean } & React.HTMLAttributes<HTMLElement>): React.JSX.Element;

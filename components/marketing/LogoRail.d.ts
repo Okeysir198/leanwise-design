@@ -6,4 +6,4 @@ export interface LogoRailProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Slow 40s loop, paused on hover, static under reduced motion. */
   marquee?: boolean;
 }
-export declare function LogoRail(props: LogoRailProps): JSX.Element;
+export declare function LogoRail(props: LogoRailProps): React.JSX.Element;

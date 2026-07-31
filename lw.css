@@ -10,5 +10,9 @@
  * Kept for one full major so no consumer breaks. New consumers import the two real
  * layers; a product app wants base.css and NOT marketing.css.
  */
+/* reset.css first: base.css no longer carries the bare-element rules (v1.2).
+   A vanilla consumer expects them, so the shim keeps supplying them; a Tailwind
+   consumer imports base.css directly and correctly does not get them. */
+@import url("./reset.css");
 @import url("./base.css");
 @import url("./marketing.css");

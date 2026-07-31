@@ -7,4 +7,4 @@ export interface EyebrowProps extends React.HTMLAttributes<HTMLElement> { as?: s
  * defaults to a span. Reach for a real `h2`/`h3` when the text belongs in the document
  * outline — an eyebrow styled as a heading breaks screen-reader navigation.
  */
-export declare function Eyebrow(props: EyebrowProps): JSX.Element;
+export declare function Eyebrow(props: EyebrowProps): React.JSX.Element;

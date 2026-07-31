@@ -125,11 +125,21 @@ export function Icon({ name, size = 16, strokeWidth = 1.6, label, className, sty
   // it stays; but the slot now draws UNKNOWN rather than returning null, because
   // an empty-but-space-occupying slot breaks an icon column's rhythm in a way
   // that is easy to miss in review while the warning scrolls past.
-  React.useEffect(() => {
-    if (known || warned.has(name) || typeof console === "undefined") return;
+  //
+  // Warned DURING RENDER rather than from a useEffect, and that is deliberate:
+  // one `React.useEffect` here would make Icon a client component, and Icon is
+  // imported by a third of the barrel — so a single dev-only console.warn would
+  // have dragged Avatar, Button, Chip, EmptyState, the nav and half the data
+  // components across the server/client boundary with it. An App Router page
+  // could then not render any of them from a server component.
+  //
+  // A console.warn in render is safe here: it has no React state, the `warned`
+  // Set makes it idempotent under StrictMode's double-render, and on the server
+  // it simply logs once at build time.
+  if (!known && !warned.has(name) && typeof console !== "undefined") {
     warned.add(name);
     console.warn(`Icon: no glyph named "${name}". Known names: ${Object.keys(ICONS).join(", ")}`);
-  }, [known, name]);
+  }
   const paths = known || UNKNOWN;
   // The size goes inline, not just on the presentation attributes: any class rule
   // (`.lw-btn svg { width: 16px }`) outranks a presentation attribute, which

@@ -1,6 +1,10 @@
 import * as React from "react";
 
-export interface StateViewProps extends React.HTMLAttributes<HTMLDivElement> {
+/** Note the `Omit`: this component gives `title` a richer meaning than the DOM
+ *  attribute of the same name, so the inherited one has to be removed or the
+ *  interface does not extend cleanly. Invisible until v1.2 — there was no
+ *  tsconfig, so `tsc` had never run over these declarations. */
+export interface StateViewProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
   /**
    * `error` and `offline` announce with `role="alert"`; `loading` uses
    * `role="status"` + `aria-busy` — an interruption and a progress report are
@@ -19,4 +23,4 @@ export interface StateViewProps extends React.HTMLAttributes<HTMLDivElement> {
   lines?: number;
 }
 /** The five-state set: empty · loading · error · offline · denied. */
-export declare function StateView(props: StateViewProps): JSX.Element;
+export declare function StateView(props: StateViewProps): React.JSX.Element;

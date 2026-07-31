@@ -1,3 +1,4 @@
+"use client";
 import * as React from "react";
 const cx = (...a) => a.filter(Boolean).join(" ");
 

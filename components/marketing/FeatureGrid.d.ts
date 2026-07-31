@@ -8,4 +8,4 @@ export interface FeatureGridProps extends React.HTMLAttributes<HTMLDivElement> {
  * is 3-up above `--lw-bp-lg` and a row of two leaves a hole that reads as a missing
  * item. `more` is the link text and only renders with an `href`.
  */
-export declare function FeatureGrid(props: FeatureGridProps): JSX.Element;
+export declare function FeatureGrid(props: FeatureGridProps): React.JSX.Element;

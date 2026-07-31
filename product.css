@@ -162,8 +162,8 @@
    you submit; the two are not interchangeable and the shapes say which is which. */
 .lw-switch { display: inline-flex; align-items: center; gap: 10px; cursor: pointer; }
 .lw-switch input { position: absolute; opacity: 0; width: 0; height: 0; }
-.lw-switch .track { position: relative; width: 38px; height: 22px; flex: none; border-radius: var(--lw-radius-pill); background: var(--lw-bg-inset); border: 1px solid var(--lw-line-control); transition: background var(--lw-dur-sm) var(--lw-ease-out), border-color var(--lw-dur-sm) var(--lw-ease-out); }
-.lw-switch .track::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--lw-bg); box-shadow: var(--lw-shadow-sm); transition: transform var(--lw-dur-sm) var(--lw-ease-out); }
+.lw-switch .track { position: relative; width: var(--lw-switch-w); height: var(--lw-switch-h); flex: none; border-radius: var(--lw-radius-pill); background: var(--lw-bg-inset); border: 1px solid var(--lw-line-control); transition: background var(--lw-dur-sm) var(--lw-ease-out), border-color var(--lw-dur-sm) var(--lw-ease-out); }
+.lw-switch .track::after { content: ""; position: absolute; top: var(--lw-switch-inset); left: var(--lw-switch-inset); width: var(--lw-switch-thumb); height: var(--lw-switch-thumb); border-radius: 50%; background: var(--lw-bg); box-shadow: var(--lw-shadow-sm); transition: transform var(--lw-dur-sm) var(--lw-ease-out); }
 .lw-switch input:checked + .track { background: var(--lw-brand-500); border-color: var(--lw-brand-500); }
 .lw-switch input:checked + .track::after { transform: translateX(16px); }
 .lw-switch input:focus-visible + .track,
@@ -217,8 +217,8 @@
 .lw-table-wrap { width: 100%; overflow-x: auto; border: 1px solid var(--lw-line); border-radius: var(--lw-radius-lg); background: var(--lw-bg); }
 .lw-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: var(--lw-text-sm); }
 .lw-table th {
-  text-align: start; font-family: var(--lw-font-mono); font-size: 10.5px;
-  letter-spacing: 0.12em; word-spacing: var(--lw-word-spacing-caps); text-transform: uppercase; font-weight: var(--lw-fw-medium);
+  text-align: start; font-family: var(--lw-font-mono); font-size: var(--lw-th-text);
+  letter-spacing: var(--lw-th-tracking); word-spacing: var(--lw-word-spacing-caps); text-transform: uppercase; font-weight: var(--lw-fw-medium);
   color: var(--lw-fg-subtle); background: var(--lw-bg-subtle);
   padding: 10px var(--lw-space-16); white-space: nowrap;
   border-bottom: 1px solid var(--lw-line); position: sticky; top: 0; z-index: var(--lw-z-raised);

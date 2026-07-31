@@ -1,3 +1,4 @@
+"use client";
 import * as React from "react";
 import { Icon } from "../primitives/Icon.jsx";
 import { Popover } from "../overlays/Popover.jsx";
@@ -22,10 +23,12 @@ export const RANGE_PRESETS = [
  * left — on the same `Popover` as Menu and Combobox, so there is still one
  * floating surface in the system.
  */
-export function DatePicker({
+/* forwardRef, for the same reason Input.jsx gives — see Combobox.jsx.
+   The ref lands on the trigger button, which is what a form library focuses. */
+export const DatePicker = React.forwardRef(function DatePicker({
   value, onChange, range, presets = RANGE_PRESETS, min, max, size = "md",
   invalid, disabled, placeholder, locale, label, id, className, ...rest
-}) {
+}, forwardedRef) {
   const [open, setOpen] = React.useState(false);
   const uid = React.useId();
   const fmt = new Intl.DateTimeFormat(locale, { day: "numeric", month: "short", year: "numeric" });
@@ -47,7 +50,7 @@ export function DatePicker({
      the same element either way, so data-placeholder keeps the choice in the CSS
      layer where the ink already lives. */
   const field = (
-    <button type="button" id={id || uid} disabled={disabled}
+    <button ref={forwardedRef} type="button" id={id || uid} disabled={disabled}
       aria-invalid={invalid ? "true" : undefined} aria-label={label}
       className={cx("lw-input", "lw-datefield", size === "sm" && "lw-input-sm", size === "lg" && "lw-input-lg", className)}
       data-placeholder={text ? undefined : "true"}>
@@ -87,4 +90,4 @@ export function DatePicker({
       </div>
     </Popover>
   );
-}
+});

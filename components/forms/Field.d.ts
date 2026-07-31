@@ -12,4 +12,4 @@ export interface FieldProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "
   /** A node, or a render fn receiving the a11y props to spread on the control. */
   children?: React.ReactNode | ((a11y: Record<string, unknown>) => React.ReactNode);
 }
-export declare function Field(props: FieldProps): JSX.Element;
+export declare function Field(props: FieldProps): React.JSX.Element;

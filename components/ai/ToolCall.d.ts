@@ -15,4 +15,4 @@ export interface ToolCallProps extends React.HTMLAttributes<HTMLDivElement> {
   defaultOpen?: boolean;
 }
 /** One tool invocation — the evidence behind an `AgentTrace` step. */
-export declare function ToolCall(props: ToolCallProps): JSX.Element;
+export declare function ToolCall(props: ToolCallProps): React.JSX.Element;

@@ -27,31 +27,15 @@
    24px. No alias may resolve to a color other than the one it is named after.
    ============================================================================= */
 
-* { box-sizing: border-box; }
+/* The bare-element reset that used to open this file now lives in reset.css.
+   It was moved because un-layered element rules beat every Tailwind utility, so
+   `button { background: none; border: 0; padding: 0 }` stripped every <Button>
+   in a Tailwind app — which made this file un-importable by the very consumers
+   the README told to import it. This layer is now `.lw-*`-only and safe to load
+   as `@import "@leanwise/design/base.css" layer(components);`.
 
-html, body {
-  margin: 0;
-  padding: 0;
-  font-family: var(--lw-font-sans);
-  color: var(--lw-fg);
-  background: var(--lw-bg);
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
-
-body {
-  font-size: var(--lw-text-body);
-  line-height: var(--lw-lh-normal);
-}
-
-img { display: block; max-width: 100%; }
-button, input, textarea, select { font-family: inherit; }
-a { color: inherit; text-decoration: none; }
-button { cursor: pointer; background: none; border: 0; padding: 0; }
-/* A ROLE, not a tier: --lw-brand-100 is theme-invariant, so on dark it put the
-   near-white --lw-fg on a near-white #D5F3F6 ground — selected text vanished
-   at ~1.1:1. The tint follows the theme and the ink is stated explicitly. */
-::selection { background: var(--lw-brand-soft); color: var(--lw-fg); }
+   Vanilla consumers get the reset automatically through lw.css. Nothing else
+   changed: same rules, same order, same values. */
 
 /* One screen-reader-only utility, under two names. `.visually-hidden` lived here
    and `.lw-sr-only` lived in product.css with a different clip technique — the
@@ -192,11 +176,11 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
      matches the inputs beside it. A marketing band sets no density attribute, so it
      resolves to the 40px default and a hero is untouched. */
   height: var(--lw-control-h-md);
-  padding: 0 18px;
+  padding: 0 var(--lw-btn-pad-x);
   font-family: var(--lw-font-sans);
   font-size: var(--lw-text-sm);
   font-weight: var(--lw-fw-medium);
-  letter-spacing: -0.005em;
+  letter-spacing: var(--lw-btn-tracking);
   border-radius: var(--lw-radius-md);
   transition: background var(--lw-duration), color var(--lw-duration),
               border-color var(--lw-duration), transform var(--lw-duration),
@@ -311,8 +295,8 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 
 /* Sizes. Every one clears a 44px target except -sm, which is for dense toolbars
    and table rows where the row itself carries the hit area. */
-.lw-btn-sm { height: var(--lw-control-h-sm); padding: 0 12px; font-size: var(--lw-text-xs, 12px); border-radius: var(--lw-radius-sm); gap: 6px; }
-.lw-btn-lg { height: var(--lw-control-h-lg); padding: 0 24px; font-size: var(--lw-text-base, 15px); border-radius: var(--lw-radius-lg); gap: 10px; }
+.lw-btn-sm { height: var(--lw-control-h-sm); padding: 0 var(--lw-btn-pad-x-sm); font-size: var(--lw-text-xs, 12px); border-radius: var(--lw-radius-sm); gap: 6px; }
+.lw-btn-lg { height: var(--lw-control-h-lg); padding: 0 var(--lw-btn-pad-x-lg); font-size: var(--lw-text-base, 15px); border-radius: var(--lw-radius-lg); gap: 10px; }
 /* Icon-only is a SQUARE of the same height — never a separate size scale, or icon and
    text buttons stop lining up in a toolbar. aria-label is required; there is no text. */
 .lw-btn-icon { width: var(--lw-control-h-md); padding: 0; }
@@ -481,16 +465,16 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
 /* Chip — the card's status atom. Reads a status family's soft tint + text tier, so
    it re-points on dark with no conditional. */
 .lw-chip {
-  display: inline-flex; align-items: center; gap: 5px;
-  font-size: 11px; font-weight: var(--lw-fw-medium); line-height: 1;
-  padding: 5px 9px; border-radius: var(--lw-radius-pill);
+  display: inline-flex; align-items: center; gap: var(--lw-chip-gap);
+  font-size: var(--lw-chip-text); font-weight: var(--lw-fw-medium); line-height: 1;
+  padding: var(--lw-chip-pad-y) var(--lw-chip-pad-x); border-radius: var(--lw-radius-pill);
   background: var(--lw-brand-soft); color: var(--lw-brand-on); white-space: nowrap;
 }
 .lw-chip-success { background: var(--lw-success-soft); color: var(--lw-success-on); }
 .lw-chip-warning { background: var(--lw-warning-soft); color: var(--lw-warning-on); }
 .lw-chip-danger  { background: var(--lw-danger-soft);  color: var(--lw-danger-on); }
 .lw-chip-neutral { background: var(--lw-neutral-soft); color: var(--lw-neutral-on); }
-.lw-chip::before { content: ""; width: 5px; height: 5px; border-radius: 999px; background: currentColor; flex: none; }
+.lw-chip::before { content: ""; width: var(--lw-chip-dot); height: var(--lw-chip-dot); border-radius: 999px; background: currentColor; flex: none; }
 
 /* ---- Console ("browser frame" motif) ------------------------------------- */
 
@@ -750,14 +734,6 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
     width: 100%; height: 100%;
     min-width: 44px; min-height: 44px;
   }
-}
-
-/* iOS Safari zooms the page when focusing an input under 16px. Keep the tighter
-   desktop size, but never trip the zoom on a phone. --lw-bp-md (768px) covers
-   every phone and tablet portrait; a media query cannot read a var(), so the
-   number is written out and the token is named here. */
-@media (max-width: 768px) {
-  input, textarea, select { font-size: 16px; }
 }
 
 /* ---- Code block surface ---------------------------------------------------

@@ -1,6 +1,10 @@
 import * as React from "react";
 
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+/** Note the `Omit`: this component gives `size` a richer meaning than the DOM
+ *  attribute of the same name, so the inherited one has to be removed or the
+ *  interface does not extend cleanly. Invisible until v1.2 — there was no
+ *  tsconfig, so `tsc` had never run over these declarations. */
+export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> {
   size?: "sm" | "md" | "lg";
   invalid?: boolean;
 }

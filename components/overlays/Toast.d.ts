@@ -7,5 +7,5 @@ export interface ToastProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Overrides the mono status word. */
   label?: string;
 }
-export declare function Toast(props: ToastProps): JSX.Element;
-export declare function ToastRegion(props: React.HTMLAttributes<HTMLDivElement>): JSX.Element;
+export declare function Toast(props: ToastProps): React.JSX.Element;
+export declare function ToastRegion(props: React.HTMLAttributes<HTMLDivElement>): React.JSX.Element;

@@ -24,6 +24,10 @@ export interface FileUploadProps extends React.HTMLAttributes<HTMLDivElement> {
   hint?: string;
 }
 /** Dropzone + file list. The zone is a `<label>` around a real file input. */
-export declare function FileUpload(props: FileUploadProps): JSX.Element;
+/** forwardRef since v1.2 — the ref reaches the file <input>, so react-hook-form's
+ *  register(), a Controller's field.ref and .focus()-on-error all work. */
+export declare const FileUpload: React.ForwardRefExoticComponent<
+  FileUploadProps & React.RefAttributes<HTMLInputElement>
+>;
 /** "1.4 MB". Exported because a caller building its own row needs the same one. */
 export declare function formatBytes(n?: number): string;

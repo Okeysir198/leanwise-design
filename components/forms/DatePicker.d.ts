@@ -23,4 +23,8 @@ export interface DatePickerProps {
   className?: string;
 }
 /** The date field, on `Popover`. `range` adds the preset rail. */
-export declare function DatePicker(props: DatePickerProps): JSX.Element;
+/** forwardRef since v1.2 — the ref reaches the trigger button, so react-hook-form's
+ *  register(), a Controller's field.ref and .focus()-on-error all work. */
+export declare const DatePicker: React.ForwardRefExoticComponent<
+  DatePickerProps & React.RefAttributes<HTMLButtonElement>
+>;

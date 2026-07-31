@@ -19,4 +19,4 @@ export interface PaginationProps extends React.HTMLAttributes<HTMLElement> {
   label?: string;
 }
 /** Page navigation AND the result count — the count is the control's feedback. */
-export declare function Pagination(props: PaginationProps): JSX.Element;
+export declare function Pagination(props: PaginationProps): React.JSX.Element;

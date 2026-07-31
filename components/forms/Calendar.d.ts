@@ -20,4 +20,4 @@ export interface CalendarProps extends Omit<React.HTMLAttributes<HTMLDivElement>
  * The date grid — real buttons with a roving tabindex, so Tab enters and leaves
  * once instead of walking 42 days. Month and weekday names come from Intl.
  */
-export declare function Calendar(props: CalendarProps): JSX.Element;
+export declare function Calendar(props: CalendarProps): React.JSX.Element;

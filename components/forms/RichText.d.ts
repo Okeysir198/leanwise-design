@@ -1,6 +1,10 @@
 import * as React from "react";
 
-export interface RichTextProps extends React.HTMLAttributes<HTMLDivElement> {
+/** Note the `Omit`: this component gives `onChange` a richer meaning than the DOM
+ *  attribute of the same name, so the inherited one has to be removed or the
+ *  interface does not extend cleanly. Invisible until v1.2 — there was no
+ *  tsconfig, so `tsc` had never run over these declarations. */
+export interface RichTextProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
   /** HTML string. Written into the surface only when it differs, so the caret stays put. */
   value?: string;
   onChange?(html: string): void;
@@ -23,4 +27,8 @@ export interface RichTextProps extends React.HTMLAttributes<HTMLDivElement> {
  * engine is `contenteditable` + `execCommand`, which is a demonstrable shim,
  * not the plan: swap the surface and the toolbar does not change.
  */
-export declare function RichText(props: RichTextProps): JSX.Element;
+/** forwardRef since v1.2 — the ref reaches the contenteditable surface, so react-hook-form's
+ *  register(), a Controller's field.ref and .focus()-on-error all work. */
+export declare const RichText: React.ForwardRefExoticComponent<
+  RichTextProps & React.RefAttributes<HTMLDivElement>
+>;

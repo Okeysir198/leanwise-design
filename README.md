@@ -54,19 +54,37 @@ what is still open. `CONTRIBUTING.md` points back here — the checklist lives i
 ## Install
 
 ```jsonc
-"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v1.1.8" }
+"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v1.2.0" }
 ```
 
 ```css
-/* Tailwind + shadcn app (VSS, tss-app) */
+/* Tailwind v4 + shadcn app (tss-app) */
+@import "tailwindcss";
+@import "tw-animate-css";                            /* animate-in / animate-out */
 @import "@leanwise/design/fonts.css";
 @import "@leanwise/design/tokens.css";
 @import "@leanwise/design/shadcn.css";
-@import "@leanwise/design/base.css";      /* shared controls — never dropped */
-@import "@leanwise/design/product.css";   /* app surfaces */
+@import "@leanwise/design/theme.css";                /* AFTER shadcn.css */
+@import "@leanwise/design/base.css" layer(components);     /* shared controls */
+@import "@leanwise/design/product.css" layer(components);  /* app surfaces */
 ```
+
+`theme.css` is the v4 half of `tailwind-preset.cjs` — it registers the tokens as real
+utilities (`bg-cta`, `text-h1`, `shadow-focus`). Without it a v4 app has to hand-write the
+whole bridge, and the parts that are easiest to miss are the ones with no `@theme`
+namespace at all. See its header for the `@theme` vs `@theme inline` rule and the one cost
+of adopting it (`--color-*` are not on `:root`).
+
+`layer(components)` is what keeps the `.lw-*` rules beatable by a utility. Note this is the
+one thing that changed in **v1.2**: `base.css` used to also carry nine bare-element rules
+(`button { background: none; border: 0; padding: 0 }` among them), and un-layered element
+rules beat every Tailwind utility regardless of specificity — so this recipe was wrong for
+the apps it names, and tss-app refused both layers because of it. Those rules now live in
+`reset.css`, which a Tailwind app should **not** import: Tailwind's own preflight already
+covers the useful half, and the rest is the half that does the damage.
+
 ```js
-// tailwind.config.cjs — the preset is CJS, so `require` needs a CJS config file.
+// Tailwind v3 — tailwind.config.cjs. The preset is CJS, so `require` needs a CJS config.
 module.exports = { presets: [require("@leanwise/design/tailwind-preset")] };
 
 // tailwind.config.js in a "type": "module" package — import it instead.
@@ -75,9 +93,48 @@ import preset from "@leanwise/design/tailwind-preset";
 export default { presets: [preset] };
 ```
 
+The v3 preset and `theme.css` are two spellings of one vocabulary, and `npm run
+check:presence` fails the build if they ever stop agreeing.
+
+### Components — the shadcn registry
+
+Both shadcn consumers use **zero** of this package's 82 React components: they vendor
+shadcn's and hand-align them to the `.lw-*` spec, which is how one app came to re-type
+`padding: 0 18px`, the control heights, the focus rule and the table-header treatment from
+scratch. The registry is how that stops being re-typed per app — and the consumer still
+**owns** the file, which is the point of shadcn.
+
+```bash
+npx shadcn@latest add ./node_modules/@leanwise/design/r/button.json
+```
+
+Nine items: `button`, `badge`, `input`, `card`, `table`, `switch`, `tabs`, `dialog`, `utils`.
+No static host is needed — `r/` is committed for the same reason `tokens.json` and
+`react.d.ts` are: every consumer installs from a git tag, where a publish-time artifact does
+not exist. If a docs site appears later it serves this same folder.
+
+They render against the v1.2 geometry tokens (`px-btn-x`, `h-control-md`, `text-th`,
+`tracking-th`, `size-switch-w`), so a registry `<Button>` and a `.lw-btn` cannot drift apart
+by hand. `npm run check:registry` compiles every design-system class they use and fails if one
+emits nothing — a registry that drifts from the CSS is worse than no registry, because it
+looks authoritative.
+
+### Am I missing anything?
+
+```bash
+npx lw-doctor      # from a consumer's root
+```
+
+Reads the version installed **locally** and fetches the advisory list from the repo **tip** —
+the newest release is the only thing that knows what is wrong with the older ones. Every count
+in `advisories.json` is measured by a named gate and re-verified against the tree by
+`npm run check:advisories`, because a hand-maintained list of what is wrong is exactly the
+thing that has already been wrong twice here.
+
 ```css
-/* vanilla CSS (marketing, rag-service) */
+/* vanilla CSS (leanwise-ai, rag-service) */
 @import "@leanwise/design/tokens.css";
+@import "@leanwise/design/reset.css";     /* v1.2: split out of base.css — see below */
 @import "@leanwise/design/base.css";
 @import "@leanwise/design/marketing.css";
 ```
@@ -592,11 +649,16 @@ PAIRS in isolation; axe proves the palette as actually composed, plus rendered A
 that is wrong in composition, a control with no accessible name, a heading order that only
 breaks inside a card.
 
-The scripts live in `templates/_tooling/` because every other directory is compiled into the
-browser bundle and a Node script cannot be. Through v1.0 they resolved the package root one
-level up from there — i.e. `templates/tokens.css`, a file that has never existed — so the gate
-this section calls load-bearing could not actually run. Fixed, and reached through
-`npm run check` so no consumer has to know the path.
+The scripts live in `tools/` — outside `templates/`, because every directory under it is
+compiled into the browser bundle and a Node script cannot be. They were under
+`templates/_tooling/` until v1.2, and that location cost the package its own lint in a
+consumer's CI: shipping them needed a `"!templates/_tooling"` exclusion plus a re-include in
+`files`, a pattern npm honours and **pnpm does not**, so the `lw-token-lint` bin was simply
+absent in a pnpm install. `tools/` needs no exclusion, and the bin is now packed
+unconditionally. (Through v1.0 the scripts also resolved the package root one level too far
+up — `templates/tokens.css`, a file that has never existed — so the gate this section calls
+load-bearing could not run at all. Fixed then; the same `..` count was re-checked on the v1.2
+move.)
 
 The lint fails on raw hex, on Tailwind palette escapes (`bg-emerald-500`), on arbitrary-value
 token access (`bg-[hsl(var(--primary))]` — use `bg-primary`), and on more than one

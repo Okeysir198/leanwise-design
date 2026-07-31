@@ -1,0 +1,81 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "leanwise",
+  "homepage": "https://github.com/Okeysir198/leanwise-design",
+  "items": [
+    {
+      "name": "utils",
+      "type": "registry:lib",
+      "files": [{ "path": "lib/utils.ts", "type": "registry:lib", "target": "lib/utils.ts" }]
+    },
+    {
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Button",
+      "description": "Control heights from --lw-control-h-*, an 18px stance, and a 2px brand focus ring — except on filled variants, which take an offset outline because a brand ring on a brand fill is 1:1 against it.",
+      "dependencies": ["class-variance-authority", "@radix-ui/react-slot"],
+      "registryDependencies": ["utils"],
+      "files": [{ "path": "ui/button.tsx", "type": "registry:ui", "target": "components/ui/button.tsx" }]
+    },
+    {
+      "name": "badge",
+      "type": "registry:ui",
+      "title": "Badge",
+      "description": "A PILL, and that is the role rather than a rounding choice. Ships the five status roles plus outline; a product composes its own states from bg-*-soft / text-*-on.",
+      "dependencies": ["class-variance-authority"],
+      "registryDependencies": ["utils"],
+      "files": [{ "path": "ui/badge.tsx", "type": "registry:ui", "target": "components/ui/badge.tsx" }]
+    },
+    {
+      "name": "input",
+      "type": "registry:ui",
+      "title": "Input",
+      "description": "h-control-md, radius-sm, --lw-field-pad-x, a non-inset brand ring, and a danger ring on aria-invalid.",
+      "registryDependencies": ["utils"],
+      "files": [{ "path": "ui/input.tsx", "type": "registry:ui", "target": "components/ui/input.tsx" }]
+    },
+    {
+      "name": "card",
+      "type": "registry:ui",
+      "title": "Card",
+      "description": "radius-lg, and data-slot=\"card\" on the root — a test that selects a card by its border-radius breaks the moment the radius scale moves, which is exactly what happened once.",
+      "registryDependencies": ["utils"],
+      "files": [{ "path": "ui/card.tsx", "type": "registry:ui", "target": "components/ui/card.tsx" }]
+    },
+    {
+      "name": "table",
+      "type": "registry:ui",
+      "title": "Table",
+      "description": "The system's signature header: mono, uppercase, --lw-th-text at --lw-th-tracking on a subtle ground. The single thing a hand-written table most often gets wrong.",
+      "registryDependencies": ["utils"],
+      "files": [{ "path": "ui/table.tsx", "type": "registry:ui", "target": "components/ui/table.tsx" }]
+    },
+    {
+      "name": "switch",
+      "type": "registry:ui",
+      "title": "Switch",
+      "description": "38x22 with a 16px thumb at a 2px inset — the travel is (w - thumb - 2*inset), so the three values are one decision and all three are tokens.",
+      "dependencies": ["@radix-ui/react-switch"],
+      "registryDependencies": ["utils"],
+      "files": [{ "path": "ui/switch.tsx", "type": "registry:ui", "target": "components/ui/switch.tsx" }]
+    },
+    {
+      "name": "tabs",
+      "type": "registry:ui",
+      "title": "Tabs",
+      "description": "An underline strip, not a pill tray.",
+      "dependencies": ["@radix-ui/react-tabs"],
+      "registryDependencies": ["utils"],
+      "files": [{ "path": "ui/tabs.tsx", "type": "registry:ui", "target": "components/ui/tabs.tsx" }]
+    },
+    {
+      "name": "dialog",
+      "type": "registry:ui",
+      "title": "Dialog",
+      "description": "radius-xl on a --lw-scrim backdrop with a blur.",
+      "dependencies": ["@radix-ui/react-dialog"],
+      "registryDependencies": ["utils"],
+      "files": [{ "path": "ui/dialog.tsx", "type": "registry:ui", "target": "components/ui/dialog.tsx" }]
+    }
+  ]
+}

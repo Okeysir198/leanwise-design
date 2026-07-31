@@ -93,6 +93,16 @@ module.exports = {
           // scores 2.80 on white. Mirrors success/warning/danger `-on`.
           on: "hsl(var(--cta-on) / <alpha-value>)",
         },
+        info: {
+          DEFAULT: "hsl(var(--info) / <alpha-value>)",
+          foreground: "hsl(var(--info-foreground) / <alpha-value>)",
+          soft: "hsl(var(--info-soft) / <alpha-value>)",
+          on: "hsl(var(--info-on) / <alpha-value>)",
+        },
+        /* The modal/drawer backdrop — a ROLE that re-points on dark, not a
+           hand-rolled `bg-black/50`. Not an hsl() wrapper: --lw-scrim is already a
+           full colour with an alpha baked in. */
+        scrim: "var(--lw-scrim)",
         // Cyan as TEXT. `text-brand` for a link/active label — NOT `text-primary`,
         // which is the fill color. Since v0.8.0 the brand fill also reads on white (5.68),
         // but the role token stays because DARK re-points it to brand-400.
@@ -110,6 +120,32 @@ module.exports = {
           on: "hsl(var(--warning-on) / <alpha-value>)",
         },
         navy: "hsl(var(--navy) / <alpha-value>)",
+
+        /* shadcn's sidebar block. Eight derivations of existing roles, zero new
+           tokens — see shadcn.css. `DEFAULT` is the `--sidebar` spelling; the older
+           `--sidebar-background` name is emitted by shadcn.css for consumers whose
+           vendored sidebar.tsx predates the rename, but is not given a utility here
+           because `bg-sidebar` already covers it. */
+        sidebar: {
+          DEFAULT: "hsl(var(--sidebar) / <alpha-value>)",
+          foreground: "hsl(var(--sidebar-foreground) / <alpha-value>)",
+          primary: "hsl(var(--sidebar-primary) / <alpha-value>)",
+          "primary-foreground": "hsl(var(--sidebar-primary-foreground) / <alpha-value>)",
+          accent: "hsl(var(--sidebar-accent) / <alpha-value>)",
+          "accent-foreground": "hsl(var(--sidebar-accent-foreground) / <alpha-value>)",
+          border: "hsl(var(--sidebar-border) / <alpha-value>)",
+          ring: "hsl(var(--sidebar-ring) / <alpha-value>)",
+        },
+
+        /* The categorical ramp. NOT wrapped in hsl() and NOT carrying <alpha-value>:
+           --lw-chart-* are full colours with no channel-triple sibling, so there is
+           nothing to compose an alpha into. `bg-chart-1/40` therefore does not work
+           in v3; use a soft token or color-mix if you need a tint. */
+        chart: {
+          1: "var(--chart-1)", 2: "var(--chart-2)", 3: "var(--chart-3)", 4: "var(--chart-4)",
+          5: "var(--chart-5)", 6: "var(--chart-6)", 7: "var(--chart-7)", 8: "var(--chart-8)",
+          9: "var(--chart-9)", 10: "var(--chart-10)", 11: "var(--chart-11)", 12: "var(--chart-12)",
+        },
       },
 
       // Every tier in the token scale is registered. A MISSING tier is the quiet
@@ -117,6 +153,43 @@ module.exports = {
       // Tailwind falls back to its own stock value — so the utility renders
       // off-system and nothing lints. The token lint is a deny-list; it cannot
       // see a tier the preset never registered.
+      /* Component geometry (v1.2) — the vocabulary the shadcn registry renders
+         against, so a registry <Button> and a `.lw-btn` cannot drift.
+         theme.css carries the same keys; check:presence fails if they diverge. */
+      spacing: {
+        "btn-x": "var(--lw-btn-pad-x)",
+        "btn-x-sm": "var(--lw-btn-pad-x-sm)",
+        "btn-x-lg": "var(--lw-btn-pad-x-lg)",
+        "btn-gap": "var(--lw-btn-gap)",
+        "chip-y": "var(--lw-chip-pad-y)",
+        "chip-x": "var(--lw-chip-pad-x)",
+        "chip-gap": "var(--lw-chip-gap)",
+        "cell-x": "var(--lw-cell-pad-x)",
+        "cell-y": "var(--lw-cell-pad-y)",
+        "field-pad-x": "var(--lw-field-pad-x)",
+        "control-sm": "var(--lw-control-h-sm)",
+        "control-md": "var(--lw-control-h-md)",
+        "control-lg": "var(--lw-control-h-lg)",
+        "row": "var(--lw-row-h)",
+        "card-pad": "var(--lw-card-pad)",
+        "stack-gap": "var(--lw-stack-gap)",
+        "switch-w": "var(--lw-switch-w)",
+        "switch-h": "var(--lw-switch-h)",
+        "switch-thumb": "var(--lw-switch-thumb)",
+        "switch-gap": "var(--lw-switch-gap)",
+        "check": "var(--lw-check-size)",
+        "icon-sm": "var(--lw-btn-icon-sm)",
+        "icon": "var(--lw-btn-icon)",
+        "icon-lg": "var(--lw-btn-icon-lg)",
+      },
+      lineHeight: {
+        "control": "var(--lw-lh-snug)",
+      },
+      letterSpacing: {
+        "th": "var(--lw-th-tracking)",
+        "btn": "var(--lw-btn-tracking)",
+      },
+
       borderRadius: {
         none: "0",
         xs: "var(--lw-radius-xs)",
@@ -137,6 +210,12 @@ module.exports = {
       // The fluid role scale. `text-h1` is a real utility, so a heading never
       // hand-rolls a clamp().
       fontSize: {
+        /* Two micro-sizes the registry needs; the six semantic roles follow.
+           NOTE these must live in THIS block — an earlier second `fontSize:` key
+           in the same object literal is silently discarded, which is how the
+           first attempt at this shipped nothing. */
+        "th": ["var(--lw-th-text)", { letterSpacing: "var(--lw-th-tracking)" }],
+        "chip": "var(--lw-chip-text)",
         // Marketing/hero display — one notch above h1, weight 500 (lighter editorial
         // voice than the 600 headings). `text-display` on a landing/auth hero headline.
         display: ["var(--lw-text-display)", { lineHeight: "var(--lw-lh-tight)", letterSpacing: "var(--lw-tracking-tighter)", fontWeight: "500" }],
@@ -165,7 +244,18 @@ module.exports = {
         "focus-danger": "var(--lw-focus-ring-danger)",
       },
 
-      transitionTimingFunction: { out: "var(--lw-ease-out)" },
+      /* `out` overrides Tailwind's stock name on purpose — the house curve should
+         be what every `ease-out` gets, not only the ones that remembered a custom
+         name. `emphasis` and `spring` are additive: no stock name to collide with,
+         and both tokens have existed in tokens.css since 1.0 with nothing exposing
+         them. `in` / `in-out` are deliberately absent — they are byte-identical to
+         Tailwind's stock curves, so a second home for them buys nothing.
+         theme.css carries the same three; check:presence fails if they diverge. */
+      transitionTimingFunction: {
+        out: "var(--lw-ease-out)",
+        emphasis: "var(--lw-ease-emphasis)",
+        spring: "var(--lw-ease-spring)",
+      },
       transitionDuration: { fast: "var(--lw-duration-fast)", DEFAULT: "var(--lw-duration)", slow: "var(--lw-duration-slow)" },
 
       backgroundImage: {

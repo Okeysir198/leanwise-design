@@ -1,3 +1,4 @@
+"use client";
 import { Icon } from "../primitives/Icon.jsx";
 import { colHeader, legacySortArgs, emitSort } from "./_columns.js";
 

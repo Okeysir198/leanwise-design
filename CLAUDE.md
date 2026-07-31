@@ -4,7 +4,7 @@ Guidance for Claude Code when working in this repository.
 
 ## What this is
 
-**`@leanwise/design` v1.1.8** — the LeanWise design system. Tokens, five CSS layers, a Tailwind
+**`@leanwise/design` v1.2.0** — the LeanWise design system. Tokens, five CSS layers, a Tailwind
 preset, ~65 React components across eight categories, twelve page templates, and the **gates**
 that turn the style guide into build failures.
 
@@ -28,7 +28,7 @@ npm run check:visual   # every card x light/dark x comfortable/compact. --self-t
 npm run tokens         # regenerate tokens.json (DTCG). GENERATED and COMMITTED — see below.
 npm run dts            # regenerate react.d.ts from react.js. Also generated and committed.
 npm run bundle         # regenerate _ds_bundle.js from the .jsx sources. Ditto — run it after ANY .jsx edit.
-npm run build          # tsup, config at templates/_tooling/tsup.config.js
+npm run build          # esbuild, per file, tools/lw-build.mjs -> dist/ (COMMITTED)
 ```
 
 **CI runs them all** (`.github/workflows/ci.yml`, every push/PR). Local `npm run check` is
@@ -38,7 +38,7 @@ deliberately the six that need no browser.
 raw-z-index rules over `base.css` / `marketing.css` / `product.css`, plus the
 missing-React-import rule over `components/**/*.jsx`. The TSX rules (raw hex,
 palette escape, arbitrary `var()`, one-CTA-per-view) only fire against *consumer* source:
-point it at one by hand before any pin bump — `node templates/_tooling/lw-token-lint.mjs
+point it at one by hand before any pin bump — `node tools/lw-token-lint.mjs
 <consumer>/src`. A green CI here proves contrast, theme parity and CSS discipline, **not**
 token discipline downstream.
 
@@ -70,8 +70,11 @@ components/       ai data forms layout marketing nav overlays primitives —
 templates/        twelve page templates, each *.dc.html + ds-base.js + support.js + .thumbnail.
                     ds-base.js and support.js are GENERATED and byte-identical across all
                     twelve — never hand-edit one copy.
-templates/_tooling/  the gates + _css.mjs (the shared CSS reader) + tsup.config.js. Note the PATH assumption: ROOT is TWO
-                    levels up, because the folder sits under templates/.
+tools/            the gates + _css.mjs (the shared CSS reader). ROOT is ONE level up.
+                    MOVED here from templates/_tooling in v1.2: the old location needed a
+                    `"!templates/_tooling"` + re-include pair in `files`, which packs under npm
+                    and NOT under pnpm — so the `bin` was missing in a pnpm consumer and the
+                    token lint silently stopped running there.
 preview/          thirteen foundation cards + _card.css/_card.js + _vendor/.
                     _vendor/ holds React, ReactDOM and @babel/standalone as PINNED, hashed
                     UMD copies (see its README). The cards used to load them from unpkg, which
@@ -197,7 +200,7 @@ so `check:themes` fails when `tokens.json` does not match what `tokens.css` woul
     never round up "to be safe."** Known blind spot, documented rather than tuned away: small
     area + moderate delta on one card sits under both.
   - **CI records the BASE REF's baseline on its own runner** (`$RUNNER_TEMP`, since
-    `actions/checkout` runs `git clean -ffdx`), re-checking out HEAD's `templates/_tooling` so
+    `actions/checkout` runs `git clean -ffdx`), re-checking out HEAD's `tools/` so
     both sides are scored by the same comparator. Needs `fetch-depth: 0`. No usable base ref
     (force-push, shallow, first commit) → loud skip at exit 0, never a silent pass.
   - **`[visual-ok]` in the head commit message** downgrades a failure to a report. This exists
@@ -321,9 +324,21 @@ is not "on the new version."
 
 | Consumer | Pin | Consumes | Package manager |
 |---|---|---|---|
-| `leanwise-ai` | `#v0.8.1` | `tokens.css` + `lw.css` + `./assets` + `./react` | pnpm |
+| `leanwise-ai` | `#v1.1.8` | `tokens.css` + `lw.css` + `./assets` + `./react` | pnpm |
 | `P20260707-vss/frontend` | `#v0.2.3` | `tokens.css` + `shadcn.css` + preset + `./brand` | pnpm |
 | `P20260706-rag-service/frontend` | `#v0.2.2` (reports **0.2.1** — see below) | `tokens.css`, vanilla | npm |
+
+**This table is hand-maintained, and it has been wrong.** It read `#v0.8.1` for `leanwise-ai`
+until 2026-07-31, when the real pin was `#v1.1.8` — eighteen tags of drift that did not exist.
+The cost is not cosmetic: the entry is what anyone reasons from when deciding whether a change
+is safe to ship, and it pointed at the flagship consumer. Verify against the consumer's own
+`package.json` before trusting a row:
+
+```bash
+node -p "require('/srv/share/01_project-dev/leanwise-ai/package.json').dependencies['@leanwise/design']"
+```
+
+Real drift today is **VSS alone** (`#v0.2.3`) and **rag-service** (`#v0.2.2`).
 
 **rag-service is NOT install-drifted.** This was recorded as drift for several releases and it is
 wrong, which cost a diagnosis: `git show v0.2.2:package.json` says `"version": "0.2.1"` — the bump
@@ -337,7 +352,8 @@ the *design project's* number for the wholesale replacement; the first version a
 actually pin past that break is `#v1.1.1`.
 
 **All three are many versions behind and none can be bumped in one jump.** The replacement
-restructured the CSS layers, moved the CLIs under `templates/_tooling`, dropped `dist/`, and pointed
+restructured the CSS layers, moved the CLIs under `templates/_tooling` (moved again to `tools/`
+in v1.2), dropped `dist/` (restored in v1.2 — see below), and pointed
 `main` at a flat `./react.js`. Diffing the tags says where the risk actually is: **zero `--lw-*`
 tokens were dropped** (the new `tokens.css` is a strict superset, legacy `--lw-duration-*` aliases
 included) and the Tailwind preset kept every utility family, so the CSS surface is close to safe.

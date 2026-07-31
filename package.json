@@ -1,6 +1,6 @@
 {
   "name": "@leanwise/design",
-  "version": "1.1.8",
+  "version": "1.2.0",
   "description": "LeanWise Design System — token core, CSS layers, React components, twelve templates.",
   "license": "UNLICENSED",
   "private": false,
@@ -13,23 +13,28 @@
   "exports": {
     ".": {
       "types": "./react.d.ts",
-      "default": "./react.js"
+      "source": "./react.js",
+      "default": "./dist/react.js"
     },
     "./react": {
       "types": "./react.d.ts",
-      "default": "./react.js"
+      "source": "./react.js",
+      "default": "./dist/react.js"
     },
     "./brand": {
       "types": "./brand.d.ts",
-      "default": "./brand.js"
+      "source": "./brand.js",
+      "default": "./dist/brand.js"
     },
     "./hooks": {
       "types": "./hooks.d.ts",
-      "default": "./hooks.js"
+      "source": "./hooks.js",
+      "default": "./dist/hooks.js"
     },
     "./counter": {
       "types": "./hooks.d.ts",
-      "default": "./hooks.js"
+      "source": "./hooks.js",
+      "default": "./dist/hooks.js"
     },
     "./tailwind-preset": {
       "types": "./tailwind-preset.d.cts",
@@ -39,6 +44,8 @@
     "./tokens.css": "./tokens.css",
     "./fonts.css": "./fonts.css",
     "./shadcn.css": "./shadcn.css",
+    "./theme.css": "./theme.css",
+    "./reset.css": "./reset.css",
     "./base.css": "./base.css",
     "./marketing.css": "./marketing.css",
     "./product.css": "./product.css",
@@ -48,8 +55,14 @@
     "./tokens.json": "./tokens.json",
     "./assets/*": "./assets/*",
     "./fonts/*": "./fonts/*",
-    "./templates/*": "./templates/*",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./r/*": "./r/*",
+    "./registry.json": "./registry/registry.json",
+    "./advisories.json": "./advisories.json"
+  },
+  "bin": {
+    "lw-token-lint": "./tools/lw-token-lint.mjs",
+    "lw-doctor": "./tools/lw-doctor.mjs"
   },
   "files": [
     "react.js",
@@ -63,6 +76,8 @@
     "tokens.css",
     "fonts.css",
     "shadcn.css",
+    "theme.css",
+    "reset.css",
     "base.css",
     "marketing.css",
     "product.css",
@@ -70,35 +85,53 @@
     "app.css",
     "email.css",
     "tokens.json",
+    "dist",
     "components",
     "assets",
     "fonts",
-    "templates",
-    "!templates/_tooling",
-    "README.md"
+    "tools",
+    "README.md",
+    "tsconfig.json",
+    "r",
+    "registry",
+    "advisories.json"
   ],
   "scripts": {
-    "build": "tsup --config templates/_tooling/tsup.config.js",
-    "check:contrast": "node templates/_tooling/lw-contrast-check.mjs",
-    "check:tokens": "node templates/_tooling/lw-token-lint.mjs --css",
-    "check:themes": "node templates/_tooling/lw-tokens-dtcg.mjs --check",
-    "check:dts": "node templates/_tooling/lw-dts-barrel.mjs --check",
-    "check:bundle": "node templates/_tooling/lw-bundle.mjs --check",
-    "check:templates": "node templates/_tooling/lw-templates.mjs",
-    "check:a11y": "node templates/_tooling/lw-a11y.mjs",
-    "check:visual": "node templates/_tooling/lw-visual.mjs",
-    "check": "npm run check:contrast && npm run check:tokens && npm run check:themes && npm run check:dts && npm run check:bundle && npm run check:templates",
-    "check:ci": "npm run check && npm run check:a11y && npm run check:visual",
-    "tokens": "node templates/_tooling/lw-tokens-dtcg.mjs",
-    "dts": "node templates/_tooling/lw-dts-barrel.mjs",
-    "bundle": "node templates/_tooling/lw-bundle.mjs",
-    "prepublishOnly": "npm run check && npm run tokens && npm run dts && npm run bundle && npm run build"
+    "build": "node tools/lw-build.mjs",
+    "check:contrast": "node tools/lw-contrast-check.mjs",
+    "check:tokens": "node tools/lw-token-lint.mjs --css && node tools/lw-token-lint.mjs registry",
+    "check:themes": "node tools/lw-tokens-dtcg.mjs --check",
+    "check:dts": "node tools/lw-dts-barrel.mjs --check",
+    "check:bundle": "node tools/lw-bundle.mjs --check",
+    "check:templates": "node tools/lw-templates.mjs",
+    "check:a11y": "node tools/lw-a11y.mjs",
+    "check:visual": "node tools/lw-visual.mjs",
+    "check:presence": "node tools/lw-presence.mjs",
+    "check:presence:list": "node tools/lw-presence.mjs --list",
+    "check": "npm run check:presence && npm run check:rsc && npm run check:build && npm run check:types && npm run check:registry && npm run check:advisories && npm run check:contrast && npm run check:tokens && npm run check:themes && npm run check:dts && npm run check:bundle && npm run check:templates",
+    "check:ci": "npm run check && npm run check:pack && npm run check:a11y && npm run check:visual",
+    "tokens": "node tools/lw-tokens-dtcg.mjs",
+    "dts": "node tools/lw-dts-barrel.mjs",
+    "bundle": "node tools/lw-bundle.mjs",
+    "prepublishOnly": "npm run check && npm run tokens && npm run dts && npm run bundle && npm run registry && npm run build",
+    "check:build": "node tools/lw-build.mjs --check",
+    "rsc": "node tools/lw-rsc.mjs",
+    "check:rsc": "node tools/lw-rsc.mjs --check",
+    "check:types": "tsc --noEmit",
+    "check:pack": "node tools/lw-pack-check.mjs",
+    "registry": "node tools/lw-registry.mjs",
+    "check:registry": "node tools/lw-registry.mjs --check",
+    "check:advisories": "node tools/lw-doctor.mjs --self-check"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
     "axe-core": "^4.10.0",
     "esbuild": "^0.27.7",
     "playwright": "^1.48.0",
-    "tsup": "^8.3.0",
+    "postcss": "^8.5.25",
+    "tailwindcss": "^4.3.3",
     "typescript": "^5.6.0"
   },
   "peerDependencies": {
