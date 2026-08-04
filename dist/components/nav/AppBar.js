@@ -11,11 +11,12 @@ function AppBar({
   onMenuClick,
   menuExpanded,
   actions,
+  linkAs = "a",
   className,
   children,
   ...rest
 }) {
-  const Brand = brandHref ? "a" : "span";
+  const Brand = brandHref ? linkAs : "span";
   return /* @__PURE__ */ jsxs(TopBar, { className, ...rest, children: [
     /* @__PURE__ */ jsxs("div", { className: "lw-appbar-lead", children: [
       onMenuClick && /* @__PURE__ */ jsx(
@@ -41,7 +42,7 @@ function AppBar({
           ]
         }
       ),
-      crumbs.length > 0 && /* @__PURE__ */ jsx(Breadcrumbs, { items: crumbs })
+      crumbs.length > 0 && /* @__PURE__ */ jsx(Breadcrumbs, { items: crumbs, linkAs })
     ] }),
     actions,
     children

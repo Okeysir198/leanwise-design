@@ -20,6 +20,14 @@ export interface BottomNavProps extends Omit<React.HTMLAttributes<HTMLElement>, 
   value?: string;
   onChange?(value: string): void;
   label?: string;
+  /**
+   * Replaces the anchor ELEMENT for items that carry an `href`. Default `"a"`.
+   * Pass a router's Link so a destination navigates client-side rather than
+   * reloading, keeping any path prefix that Link applies. It receives what the
+   * raw `<a>` would: `href`, `aria-current` and `children`. An item without an
+   * href stays a `<button>`.
+   */
+  linkAs?: React.ElementType;
 }
 /** The mobile destination bar. Reserves the home indicator from `--lw-safe-bottom`. */
 export declare function BottomNav(props: BottomNavProps): React.JSX.Element;

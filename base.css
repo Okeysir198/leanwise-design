@@ -174,6 +174,16 @@
    tier, so re-declaring it here was a variant that changed nothing anyone could
    see. What separates the two is whether the label is worth a brand mark. */
 .lw-eyebrow.muted::before { background: var(--lw-fg-faint); }
+/* PROMOTED from product.css in v1.3.0, with `.lw-icon-btn` and for the same
+   reason. The node is the one part of the motif pinned to a TIER, so on a dark
+   band the label re-points to the dark subtle ink while its node stays
+   brand-500 — a cyan too dark for navy. marketing.css patches `.lw-section.dark`
+   and `.lw-hero-dark`; a plain `.lw-band-dark` was the hole, and it lived one
+   file over in a layer a marketing page has no reason to load. Position was not
+   load-bearing (`:is(.dark, …)` outranks the base rule wherever it sits);
+   PRESENCE was. */
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-eyebrow::before { background: var(--lw-brand-400); }
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-eyebrow.muted::before { background: var(--lw-fg-faint); }
 
 .lw-h1 {
   font-size: var(--lw-text-h1);
@@ -183,7 +193,13 @@
   margin: 0;
   text-wrap: balance;
 }
-.lw-h2 {
+/* `.lw-prose h2` / `h3` are GROUPED onto the scale rules rather than restated
+   under the prose section. An authored `<h2 class="lw-h2">` and a markdown `##`
+   inside `.lw-prose` are the same heading at the same level, and a second copy
+   of the size is a second copy that drifts — which is the whole argument of
+   README rule 1, applied to a declaration instead of a component. */
+.lw-h2,
+.lw-prose h2 {
   font-size: var(--lw-text-h2);
   line-height: var(--lw-lh-snug);
   letter-spacing: var(--lw-tracking-tight);
@@ -191,7 +207,8 @@
   margin: 0;
   text-wrap: balance;
 }
-.lw-h3 {
+.lw-h3,
+.lw-prose h3 {
   font-size: var(--lw-text-h3);
   line-height: 1.18;
   letter-spacing: var(--lw-tracking-tight);
@@ -230,6 +247,22 @@
      resolves to the 40px default and a hero is untouched. */
   height: var(--lw-control-h-md);
   padding: 0 var(--lw-btn-pad-x);
+  /* STATED, not inherited from the reset. `reset.css`'s `button { background: none;
+     border: 0 }` used to sit at the top of base.css; v1.2.0 split it into its own
+     file so a Tailwind app could import base.css at all. Correct — but the button
+     family had been leaning on it, and base.css alone therefore left the UA
+     `buttonface` and the `2px outset` bevel in place on every `.lw-btn` for any
+     consumer that does not load a reset. Only the LINK and no-variant buttons
+     declare no fill of their own, so they are the ones where it shows as a COLOUR:
+     `--lw-brand-400` on Chromium's dark-scheme buttonface #6B6B6B is **2.28:1**,
+     four serious axe failures in the rest and hover cells of the state matrix.
+     Nobody saw it because every React specimen card was blank from v1.2 to v1.3
+     (see tools/lw-bundle.mjs). The rule: a property that carries a COLOUR is
+     base.css's to state, because a colour base.css does not state is a colour the
+     contrast gate cannot see. Geometry (box-sizing) stays the reset's job — that
+     one fails visibly. `.lw-btn-ghost` re-declares its 1px border below. */
+  background: none;
+  border: 0;
   font-family: var(--lw-font-sans);
   font-size: var(--lw-text-sm);
   font-weight: var(--lw-fw-medium);
@@ -403,6 +436,28 @@
   .lw-btn:hover { transform: none; }
   .lw-btn[data-loading="true"]::after { animation-duration: var(--lw-dur-spin-slow); }
 }
+
+/* ---- Icon button --------------------------------------------------------- */
+
+/* PROMOTED from product.css in v1.3.0 — fb2d3ad's correction, one file further.
+   `.lw-icon-btn` is the shared borderless icon control: one place that owns the
+   hit area and the brand focus ring, so a bare glyph is never a focus stop with
+   no visible indicator. It is not an app-shell thing. `.lw-topbar-toggle`
+   composes it, the announce bar's dismiss is one, and the site footer's social
+   row is a line of them — three marketing surfaces on a page that has no reason
+   to load product.css. Until this move the toggle got its display, position and
+   ring from base.css and none of the shared face.
+
+   `.lw-dialog-close` did NOT come with it: a dialog is an app surface, and the
+   two were only ever one selector list because they share a face. `Dialog.jsx`
+   now emits `lw-icon-btn lw-dialog-close`, so product.css keeps the close
+   control's one real delta (its optical margin) and no copy of the face —
+   which is the point of the split, not a side effect of it. */
+.lw-icon-btn { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; padding: 0; border: 0; border-radius: var(--lw-radius-sm); background: none; color: var(--lw-fg-subtle); cursor: pointer; transition: color var(--lw-dur-xs) var(--lw-ease-out); }
+.lw-icon-btn:hover { color: var(--lw-fg); }
+.lw-icon-btn:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
+.lw-icon-btn[disabled] { color: var(--lw-fg-faint); cursor: not-allowed; }
+@media (prefers-reduced-motion: reduce) { .lw-icon-btn { transition: none; } }
 
 /* ---- Pills / tags -------------------------------------------------------- */
 
@@ -979,6 +1034,183 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
 .lw-code .tok-attr-name    { color: var(--lw-brand-400); }
 .lw-code .tok-attr-value   { color: var(--lw-cta-400); }
 
+/* ---- Disclosure (native <details>) -----------------------------------------
+   The FAQ / "show the detail" pattern, complete with ZERO JavaScript. That is
+   why it is <details>/<summary> and not a scripted accordion: the static state
+   is the complete state, so the page opens and closes every row before
+   hydration, with a failed bundle, or with JS off entirely. A scripted
+   accordion on any of those pages is a list of dead headings.
+
+   No height animation and no keyframe. <details> cannot animate its own height
+   portably (the closed box has no computed height to interpolate from), and the
+   motion policy here is a 100-200ms state change with no entrance
+   choreography anyway — so only the chevron moves.
+
+   The chevron is `<Icon name="chevron-down">` in the markup, never a CSS-drawn
+   triangle: README rule 8, one drawing with one owner. The rule below rotates
+   whatever glyph the summary carries; it does not draw one. */
+.lw-disclosure { border-block-end: 1px solid var(--lw-line); }
+.lw-disclosure > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lw-space-16);
+  padding-block: var(--lw-space-16);
+  color: var(--lw-fg);
+  font-weight: var(--lw-fw-medium);
+  /* Both spellings are needed: `list-style: none` is the standard suppression
+     and is what Firefox and Chromium read; WebKit still exposes the marker as a
+     pseudo-element, and left alone it paints a second triangle beside the one
+     the Icon draws. */
+  list-style: none;
+}
+.lw-disclosure > summary::-webkit-details-marker { display: none; }
+.lw-disclosure > summary:focus-visible {
+  outline: none;
+  box-shadow: var(--lw-focus-ring);
+  border-radius: var(--lw-radius-sm);
+}
+.lw-disclosure > summary > svg {
+  flex: none;
+  color: var(--lw-fg-subtle);
+  transition: transform var(--lw-dur-sm) var(--lw-ease-out);
+}
+.lw-disclosure[open] > summary > svg { transform: rotate(180deg); }
+@media (prefers-reduced-motion: reduce) {
+  .lw-disclosure > summary > svg { transition: none; }
+}
+.lw-disclosure-body {
+  color: var(--lw-fg-muted);
+  padding-block-end: var(--lw-space-16);
+  line-height: var(--lw-lh-normal);
+}
+
+/* ---- Prose — the read surface for sanitized markdown HTML ------------------
+   This is the one block in the package that styles DESCENDANTS of markup the
+   system did not author: a blog post, a docs page, a release note — whatever
+   the consumer's sanitizer let through. So it cannot assume which elements
+   appear, and every rule has to be correct when the element is absent.
+
+   It needs NO dark-ground rules, and that is the argument for role-over-tier
+   stated as a specimen rather than as prose: every value below is a ROLE
+   (--lw-fg, --lw-fg-muted, --lw-line, --lw-brand-text, --lw-bg-inset), so
+   `.lw-band-dark` re-points the entire surface with nothing written for it.
+   One --lw-text-2 in here and the article would freeze light-mode ink on navy
+   — which is exactly the failure README rule 11 names.
+
+   The measure lives on --lw-prose-max so a consumer can widen it for a docs
+   column without overriding a rule; `.lw-prose-narrow` is the shipped second
+   value, the same 46ch as `.lw-measure-sm`. */
+.lw-prose {
+  max-inline-size: var(--lw-prose-max, 68ch);
+  color: var(--lw-fg);
+  font-size: var(--lw-text-body);
+  line-height: var(--lw-lh-relaxed);
+}
+.lw-prose-narrow { --lw-prose-max: 46ch; }
+
+/* Clear the UA's own block margins on the direct children FIRST, so the owl
+   below is the only thing spacing this surface. Left in place they add to it,
+   and they are em-based — so the gap between two blocks would change with the
+   font size of whichever one happened to be larger. */
+.lw-prose > * { margin-block: 0; }
+/* The owl selector, deliberately: the spacing belongs to the boundary BETWEEN
+   two blocks, not to either block, and prose has no wrapper to hang a flex gap
+   on. It is also the only form that cannot put a leading margin on the first
+   child or a trailing one on the last. */
+.lw-prose > * + * { margin-block-start: var(--lw-space-20); }
+
+/* h4 is body size + semibold. There is deliberately no --lw-text-h4 token: one
+   rule does not justify a scale step, and a token nothing else reads is a
+   token that will be misused by the next person who finds it. */
+.lw-prose h4 { font-size: var(--lw-text-body); font-weight: var(--lw-fw-semibold); line-height: var(--lw-lh-snug); }
+/* The scroll-margin is load-bearing, not polish: `.lw-topbar` is position:
+   sticky, so a #fragment link lands the heading UNDER the bar without it, and
+   the reader arrives at a section whose title is invisible. 64px clears the
+   56px bar with a gap. */
+.lw-prose :is(h2, h3, h4) {
+  margin-block-start: var(--lw-space-40);
+  scroll-margin-block-start: var(--lw-space-64);
+}
+
+.lw-prose p { text-wrap: pretty; }
+.lw-prose a {
+  color: var(--lw-brand-text);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.lw-prose a:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); border-radius: var(--lw-radius-xs); }
+
+.lw-prose :is(ul, ol) { padding-inline-start: var(--lw-space-24); }
+.lw-prose li + li { margin-block-start: var(--lw-space-8); }
+.lw-prose ul > li::marker { color: var(--lw-brand-text); }
+
+.lw-prose blockquote {
+  border-inline-start: 2px solid var(--lw-brand-line);
+  padding-inline-start: var(--lw-space-16);
+  color: var(--lw-fg-muted);
+}
+
+/* Same header geometry as `.lw-table th` — the v1.2 --lw-th-* tokens exist so
+   the two cannot disagree — but the muted ink rather than the subtle tier,
+   because a prose table has no tinted header band to sit on. */
+.lw-prose table { width: 100%; border-collapse: collapse; }
+.lw-prose th {
+  text-align: start;
+  font-family: var(--lw-font-mono);
+  font-size: var(--lw-th-text);
+  letter-spacing: var(--lw-th-tracking);
+  word-spacing: var(--lw-word-spacing-caps);
+  text-transform: uppercase;
+  font-weight: var(--lw-fw-medium);
+  color: var(--lw-fg-muted);
+}
+.lw-prose :is(th, td) {
+  padding: var(--lw-space-8) var(--lw-space-12);
+  border-block-end: 1px solid var(--lw-line);
+}
+
+.lw-prose :is(img, video, iframe) {
+  display: block;
+  max-inline-size: 100%;
+  block-size: auto;
+  border-radius: var(--lw-radius-lg);
+  border: 1px solid var(--lw-line);
+}
+.lw-prose figcaption {
+  font-family: var(--lw-font-mono);
+  font-size: var(--lw-text-xs);
+  color: var(--lw-fg-subtle);
+}
+
+.lw-prose hr {
+  border: 0;
+  border-block-start: 1px solid var(--lw-line);
+  margin-block: var(--lw-space-40);
+}
+
+/* CODE — the highest-risk rule in this section, and it has already failed a
+   gate once. Block code is `.lw-code` above: an ALWAYS-dark navy surface whose
+   tok-* spans are tuned to it, and which the consumer emits itself. When this
+   package last promoted a BARE `code` rule, it painted a light chip behind that
+   dark surface and `check:a11y` failed the run (REVIEW.md, "the system caught
+   its own regressions, twice"). So the block form gets SPACING and nothing
+   else, and the chip is guarded to the inline case by `:not(pre) > code`. The
+   guard is the rule — without it this is the same regression again. */
+.lw-prose pre { margin-block: var(--lw-space-24); }
+.lw-prose :not(pre) > code {
+  font-family: var(--lw-font-mono);
+  font-size: 0.9em;
+  color: var(--lw-fg);
+  background: var(--lw-bg-inset);
+  padding: 1px 4px;
+  border-radius: var(--lw-radius-xs);
+}
+
+/* The one highlight pair the system already ships — `.lw-story-result` paints
+   the same two tokens, so a <mark> and a story result cannot drift. */
+.lw-prose mark { background: var(--lw-cta-soft); color: var(--lw-cta-text); }
+
 /* ---- Theme toggle ---------------------------------------------------------
    REMOVED in v1.0. It was a second segmented control with its own pill radius
    and its own selected-segment fill, which meant the same interaction looked
@@ -1131,6 +1363,161 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
   background-image: url("assets/hero-mark.svg");
 }
 
+/* ---- Mobile nav disclosure (v1.3.0) ----------------------------------------
+   Below --lw-bp-md the bar's `nav` is display:none (rule above), on the stated
+   grounds that "the app is expected to supply its own narrow-bar nav". Every
+   consumer then supplied one, and the marketing site's was broken. This is that
+   nav, shipped once.
+
+   It is deliberately NOT `Drawer`, and the distinction is a real one rather
+   than a naming preference. `Drawer` is a modal <dialog> promoted to the TOP
+   LAYER: it makes the rest of the page inert, so it owns a focus trap, a scrim,
+   a return-focus contract and an Escape handler it cannot delegate. A nav
+   disclosure hangs UNDER the bar, leaves the page visible and interactive, and
+   needs none of that. Two different interactions, so README rule 9 — one
+   interaction must not have two treatments — is not in play here.
+
+   This is also what removes the last reason a marketing site would ever import
+   product.css: after fb2d3ad the header was the only app-shaped thing left on a
+   marketing page, and the toggle was the missing half of it. */
+
+/* Scoped under `.lw-topbar`, and that is LOAD-BEARING rather than tidy: the
+   toggle composes `.lw-icon-btn`, whose `display: inline-flex` still lives in
+   product.css. Equal specificity, loading after this file — so an unscoped
+   `.lw-topbar-toggle { display: none }` would lose, and the toggle would show
+   on every desktop app page. The descendant selector outranks it both ways.
+   The ink and the ring are `.lw-icon-btn`'s own values, restated only because
+   that class has not been promoted yet (REVIEW.md, open item). */
+.lw-topbar .lw-topbar-toggle {
+  display: none;
+  /* `.lw-hit` grows the 44px coarse-pointer target with an absolutely
+     positioned ::after, which needs a positioned host to anchor to. */
+  position: relative;
+  flex: none;
+  color: var(--lw-fg-subtle);
+}
+.lw-topbar .lw-topbar-toggle:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
+/* --lw-bp-md (768px) — the same breakpoint at which `.lw-topbar nav` drops, and
+   it has to be the same one: the toggle must appear in the frame the links
+   disappear in, or the bar has no navigation at all at some width. */
+@media (max-width: 768px) {
+  .lw-topbar .lw-topbar-toggle { display: inline-flex; align-items: center; justify-content: center; }
+}
+
+/* The panel hangs off the bar itself. `.lw-topbar` is position: sticky, which
+   is already a positioned ancestor, so `inset-block-start: 100%` is the
+   underside of the bar and `inset-inline: 0` is its width — no fixed
+   positioning, and therefore no containing-block trap. That trap is worth
+   naming, because the consumer's hand-rolled version shipped broken on it: the
+   bar carries `backdrop-filter`, which makes it a containing block for
+   `position: fixed` DESCENDANTS, so a fixed overlay nested inside resolved
+   `inset: 0` against the 56px bar instead of the viewport and painted its
+   background in that strip only. An absolute panel under a sticky bar is the
+   arrangement that has no such failure — but if this is ever reworked to
+   `position: fixed`, the panel has to become a SIBLING of the <header>. */
+.lw-topbar-panel {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: 100%;
+  z-index: var(--lw-z-local-1);
+  display: flex;
+  flex-direction: column;
+  gap: var(--lw-space-4);
+  background: var(--lw-bg);
+  color: var(--lw-fg);
+  border-block-end: 1px solid var(--lw-line);
+  box-shadow: var(--lw-shadow-lg);
+  /* 56px is the bar's own height, declared as a literal on `.lw-topbar` above;
+     dvh rather than vh so the panel is not overlapped by a mobile URL bar. */
+  max-block-size: calc(100dvh - 56px);
+  overflow: auto;
+  padding: var(--lw-space-16);
+  padding-block-end: calc(var(--lw-space-16) + var(--lw-safe-bottom));
+}
+/* MANDATORY, and it fails SILENTLY without it: the `display: flex` above is an
+   author rule, so it outranks the UA's `[hidden] { display: none }` and the
+   panel stays painted while its own attribute says it is hidden. Every
+   `display:`-carrying element that is toggled with `hidden` needs this line. */
+.lw-topbar-panel[hidden] { display: none; }
+/* The bar's own <nav> is display:none below md, and the panel sits inside the
+   bar — so the panel's nav has to opt back in. Two selector levels rather than
+   one: at equal specificity this would depend on source order, which is not a
+   thing a consumer should have to know. */
+@media (max-width: 768px) {
+  .lw-topbar .lw-topbar-panel nav { display: flex; flex-direction: column; gap: var(--lw-space-4); }
+  /* A 12px block pad around a ~20px line is a 44px row — the coarse-pointer
+     minimum, reached with padding rather than a height so a wrapped label
+     grows the row instead of overflowing it. */
+  .lw-topbar .lw-topbar-panel nav a { padding-block: var(--lw-space-12); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .lw-topbar-panel { animation: lwNavPanelIn var(--lw-dur-sm) var(--lw-ease-out); }
+}
+/* Prefixed `lw`, and verified unused before it was added: a keyframe name is
+   GLOBAL and last-wins, and no gate can see a collision (CLAUDE.md — `lwPulse`
+   was defined twice and product.css quietly won for every consumer). */
+@keyframes lwNavPanelIn {
+  from { opacity: 0; transform: translateY(-4px); }
+}
+
+/* ---- The promoted controls on a dark ground (v1.3.0) -----------------------
+   fb2d3ad moved the form/control face into this file and LEFT these patches in
+   product.css, on the correct observation that they outrank the promoted rules
+   on specificity, so their POSITION is not load-bearing. What that reasoning
+   missed is the case the promotion exists for: a page loading base + marketing
+   never sees product.css at all, so it got the controls with no dark-band
+   treatment — and the consumer site puts its contact form on a dark ground.
+   Position is not load-bearing; PRESENCE is.
+
+   Three selectors, as everywhere: `.dark` (Tailwind), `[data-band="dark"]` (a
+   dark band inside a light page), `.lw-band-dark` (the explicit opt-in). Only
+   the PROMOTED controls moved. The patches for `.lw-prompt`, `[data-focus-demo]`
+   and the table/kpi/empty/eyebrow family are app surfaces or were never
+   promoted, and stay in product.css — see its tombstone. */
+
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-input,
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-textarea,
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-select,
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-input-group { background-color: var(--lw-bg-subtle); }
+/* background-COLOR, never the shorthand: the shorthand resets background-image
+   and would erase the two gradients that draw .lw-select's chevron, leaving the
+   select on dark indistinguishable from a text input. */
+
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-input:focus-visible,
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-textarea:focus-visible,
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-select:focus-visible,
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-input-group:focus-within { border-color: var(--lw-brand-400); box-shadow: var(--lw-focus-ring); }
+
+/* The switch knob is one of the two places a lifted ink is correct on both
+   grounds — it sits on the brand fill, whose ink never flips. */
+.dark .lw-switch .track::after, [data-band="dark"] .lw-switch .track::after, .lw-band-dark .lw-switch .track::after { background: var(--lw-on-dark-1); }
+
+/* Segmented is the only control whose shell is an inset TRACK rather than a
+   field, so the input patch above misses it — on a dark band it kept a light
+   grey track and a white active pill, the one control that stayed light on
+   navy. On light the selected segment is LIGHTER than its track (raised out of
+   a well); dark keeps that same figure/ground rather than inverting it, so the
+   control reads identically in both themes. Painted from the --lw-on-dark-*
+   family, not raw rgba — that family exists to stop exactly that sprawl. */
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-segmented { background: var(--lw-on-dark-fill); border-color: var(--lw-on-dark-line); }
+.dark .lw-segmented button, [data-band="dark"] .lw-segmented button, .lw-band-dark .lw-segmented button { color: var(--lw-on-dark-2); }
+.dark .lw-segmented button:hover, [data-band="dark"] .lw-segmented button:hover, .lw-band-dark .lw-segmented button:hover { color: var(--lw-on-dark-1); }
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-segmented button:is([aria-checked="true"], [aria-pressed="true"], [aria-selected="true"]) { background: var(--lw-on-dark-fill-strong); color: var(--lw-on-dark); box-shadow: inset 0 0 0 1px var(--lw-on-dark-line); }
+
+/* The two offset-ring controls take the tier swap the focus ring takes
+   everywhere on dark: the 500 ring disappears into the navy. */
+.dark .lw-switch input:focus-visible + .track, [data-band="dark"] .lw-switch input:focus-visible + .track, .lw-band-dark .lw-switch input:focus-visible + .track,
+.dark .lw-switch input[data-focus-demo] + .track, [data-band="dark"] .lw-switch input[data-focus-demo] + .track, .lw-band-dark .lw-switch input[data-focus-demo] + .track,
+.dark .lw-check input:focus-visible + .box, [data-band="dark"] .lw-check input:focus-visible + .box, .lw-band-dark .lw-check input:focus-visible + .box,
+.dark .lw-check input[data-focus-demo] + .box, [data-band="dark"] .lw-check input[data-focus-demo] + .box, .lw-band-dark .lw-check input[data-focus-demo] + .box { outline-color: var(--lw-brand-400); }
+
+/* The knob's travel is the promoted control's only motion, so its reduced-motion
+   stand-down comes with it. The rest of that rule (`.lw-sidebar`,
+   `.lw-confidence .rail > i`) is app surface and stayed behind. */
+@media (prefers-reduced-motion: reduce) {
+  .lw-switch .track::after { transition: none; }
+}
+
 /* ---- Pointer affordance ---------------------------------------------------
    Anything that responds to a click must say so. <button> and a[href] get the
    pointer from the UA; label-wrapped controls, <select> and sortable headers do
@@ -1153,7 +1540,13 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
    here is a link or a button that a pointer can activate; anything NOT clickable
    is deliberately absent, because a pointer over inert text promises a click that
    never happens. */
-.lw-source, .lw-source-item, .lw-toc a, .lw-crumbs a, .lw-icon-btn, .lw-dialog-close,
+/* `<summary>` is the one control the UA gives a TEXT cursor: it is not a button
+   and not a link, so nothing in the UA sheet makes it read as clickable. It
+   belongs on this list rather than carrying a local `cursor: pointer`, because
+   a later `cursor: default` on a base class silently cancels an earlier one and
+   this list is what stays last in the file. */
+.lw-disclosure > summary,
+.lw-source, .lw-source-item, .lw-toc a, .lw-crumbs a, .lw-pill-link, .lw-icon-btn, .lw-dialog-close,
 .lw-card-interactive, .lw-feature-interactive, .lw-story-interactive,
 .lw-stat-tile.lw-card-interactive, .lw-stat-tile[role="button"],
 .lw-kpi[role="button"], .lw-msg-actions button, .lw-table th[aria-sort]:not([aria-sort="none"]) button { cursor: pointer; }

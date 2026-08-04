@@ -20,9 +20,251 @@ versions are breaking: **0.1.4** (dependency URL), **0.2.0** (removal), **0.7.0*
 and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additionally ships a
 `package.json` that reports the wrong version.
 
-## [Unreleased]
+## [1.3.0] — 2026-08-04
+
+> **Read this before anything else in this entry.** **Every React specimen card in this
+> package rendered blank from v1.2.0 through v1.2.1**, and both browser gates reported green
+> for the whole of it. `check:a11y` scored the explanatory prose around 26 empty React roots;
+> `check:visual` compared two equally blank plates. So **the a11y and visual results this
+> package published for its React components across two minor releases measured nothing** —
+> not "measured less", *nothing*. The moment the bundle was repaired, axe found four real
+> serious `color-contrast` failures at **2.28:1** on a control that had been shipping that way
+> the whole time (see *Fixed*, first two entries).
+>
+> The guard that should have caught it was `document.body.innerText.trim().length > 0`. It
+> could not fail: every card wraps its roots in several paragraphs of prose. That is this
+> repository's own recurring shape — *the case everyone demos is the one that cannot fail* —
+> and it is the fourth time a gate here has been found to be a hypothesis rather than a gate.
+> The guard has been rebuilt to fail on an uncaught page error and on any empty React root,
+> and it was **watched failing** on the replanted defect before it was trusted.
+>
+> A machine-readable advisory ships with this release (`advisories.json`,
+> id `blank-specimen-cards`, severity **high**, affects `<1.3.0`), so `npx lw-doctor` tells a
+> pinned consumer directly.
 
 ### Added
+
+- **`.lw-prose` + `Prose`** (`base.css`, `components/primitives/`). The read surface for
+  sanitized markdown HTML — the one block in the package that styles descendants of markup it
+  did not author. Owl spacing (`> * + *`) over a UA-margin reset, so the gap is a token rather
+  than an em of whichever block was larger; `scroll-margin-block-start` on every heading,
+  which is load-bearing because `.lw-topbar` is sticky and a `#fragment` link otherwise lands
+  the heading under the bar. `h2`/`h3` are **grouped onto the existing scale rules**
+  (`.lw-h2, .lw-prose h2`) rather than restated, and `h4` takes body size + semibold with no
+  new `--lw-text-h4` token — one rule does not justify a scale step.
+  - **It carries no dark-ground rules at all**, and that is the point: every value is a role,
+    so `.lw-band-dark` re-points the whole article. The new card renders the same markup on
+    both grounds from one component to prove it.
+  - **The code rule is guarded, and the guard is the rule.** Block code is the always-dark
+    `.lw-code` surface the consumer emits, so `.lw-prose pre` gets `margin-block` and nothing
+    else; the chip is `.lw-prose :not(pre) > code`. Promoting a bare `code` rule here is what
+    put a light chip behind that dark surface and failed `check:a11y` earlier in this cycle.
+    The specimen's `tok-keyword`/`tok-string` spans exist to keep that gated: axe scores a
+    semi-transparent foreground as *incomplete*, so a `tok-comment` span alone cannot fail the
+    run — measured, with the guard removed.
+- **`.lw-disclosure` + `Disclosure`** (`base.css`, `components/primitives/`). A native
+  `<details>`/`<summary>` row: the FAQ pattern **complete with zero JavaScript**, so it works
+  before hydration, with a failed bundle, and with JS off. No height animation and no new
+  keyframe — `<details>` cannot animate its own height portably and the motion policy is a
+  100–200ms state change either way, so only the chevron moves. The chevron is
+  `<Icon name="chevron-down">`, never a CSS triangle. `summary` joins the consolidated
+  pointer-affordance list at the foot of `base.css`: it is the one control the UA gives a text
+  cursor, being neither a button nor a link.
+- **`.lw-topbar-toggle` / `.lw-topbar-panel` + `NavToggle`** (`base.css`,
+  `components/nav/`). The narrow-bar navigation. Below `--lw-bp-md` the bar's own `nav` is
+  hidden "because the app supplies its own" — every consumer then supplied one, and the
+  marketing site's was broken. This is that one, shipped once, and it removes the last reason a
+  marketing site would import `product.css`.
+  - **Deliberately not `Drawer`.** A drawer is a modal `<dialog>` in the top layer that makes
+    the page inert, so it owns a focus trap, a scrim and a return-focus contract; a nav
+    disclosure hangs under the bar and needs none of them. Two interactions, so README rule 9
+    is not in play.
+  - `position: absolute` under the sticky bar, which is already its containing block. The bar
+    carries `backdrop-filter`, so it is *also* a containing block for `position: fixed`
+    descendants — the consumer's hand-rolled overlay shipped broken on exactly that, resolving
+    `inset: 0` against the 56px bar. Absolute under sticky has no such failure; anything
+    reworked to `fixed` has to become a sibling of the `<header>`.
+  - **`.lw-topbar-panel[hidden] { display: none }` is mandatory and fails silently without
+    it** — the panel's own `display: flex` outranks the UA `[hidden]` default. The toggle's
+    display rule is scoped under `.lw-topbar` for the same class of reason: it composes
+    `.lw-icon-btn`, whose `display: inline-flex` is in `product.css` and loads afterwards at
+    equal specificity.
+  - One new keyframe, `lwNavPanelIn`, verified unused before it was added — a keyframe name is
+    global and last-wins, and no gate can see a collision.
+- **`menu` glyph** in `Icon.jsx` (79 glyphs). Three rules on the same 24-grid as `list`; its
+  partner is the existing `close`.
+- **Two `@dsCard` specimens**: `components/primitives/prose.card.html` (Prose + Disclosure on
+  both grounds) and `components/nav/TopBarMobile.card.html` (the toggle and panel, open and
+  closed, on both grounds — the frame forces the media-query state because both browser gates
+  render at a fixed 1280px viewport).
+- **`.lw-plan*` + `PlanCard`** (`marketing.css`, `components/marketing/`). The word "pricing"
+  appeared nowhere in this package, so every consumer wrote its own; the one that prompted this
+  had `.lw-price.featured` restating **five child colours** to make a plan dark. `.lw-plan`
+  composes `.lw-card` and adds four declarations — column, gap, full height, positioning
+  context. Border, radius, padding and the hover/focus faces are not restated.
+  - **`price` is optional, and a card without one is COMPLETE, not pending.** Nothing reserves
+    the slot: no `min-block-size`, no placeholder, no `content: "—"`. This is the reason the
+    component exists rather than living in the consumer — the primary consumer publishes no
+    price, no currency and no range, and a component that reserved the slot would force it to
+    invent one. An invented price is a fabrication, which is the failure mode that codebase
+    keeps relapsing into. The new card renders three no-price plans beside one priced plan to
+    prove the layout is finished either way.
+  - **`.lw-plan-featured` adds a brand border and `--lw-brand-glow` and nothing else.** A dark
+    featured plan is `data-band="dark"` on the card, with zero child overrides — the band
+    re-points every role token. That is the deleted override pile.
+  - An excluded feature carries a **different glyph** (`minus`, not a greyed `check`), a muted
+    ink and an `.lw-sr-only` word that *leads* the row, so the state survives greyscale, colour
+    blindness and a screen reader. The glyphs are `<Icon name>`; a typed `✓` would be the same
+    drawing a second time in the font and would be announced as punctuation.
+- **`.lw-compare*` + `CompareTable`** (`marketing.css`, `components/marketing/`). A feature
+  matrix, **distinct from `.lw-table` by meaning, not by looks**: `Table` is a data table (rows
+  are records, cells are values, it sorts and paginates); this never sorts and has one repeated
+  cell type. Sticky on both axes, with the three z-indexes as **tokens** — `--lw-z-local-2` for
+  the column header, `--lw-z-local-1` for the row header, `--lw-z-local-3` for the corner, in
+  that order because the corner overlaps both axes. Every sticky cell carries `--lw-bg`, or the
+  content it is meant to pin over scrolls straight under it. `border-collapse: separate` is
+  load-bearing, not a style: a sticky cell in a collapsed table loses its borders to the
+  collapse model.
+  - **The featured column is `--lw-bg-subtle`, deliberately NOT `--lw-brand-soft`.** `--lw-fg`
+    on `--lw-brand-soft` is a pair nothing in this system composes today, so a brand tint would
+    have entered the derived contrast manifest as a brand-new measurement in *three* scopes
+    (light, `.dark`, media-dark) for a decorative ground. `--lw-fg` on `--lw-bg-subtle` is
+    already asserted. The brand signal is carried by `--lw-brand-line` edges instead, which is
+    a non-text 1.4.11 boundary rather than a text ground.
+  - Cells are `--lw-success-on` (the theme-aware **text** variant), never `--lw-success`, which
+    is a fill and fails AA as text.
+- **`.lw-flow*` + `Flow`** (`marketing.css`, `components/marketing/`) — the largest item here.
+  A horizontal or vertical chain of labelled nodes joined by edges: a processing pipeline, an
+  onboarding sequence, a roadmap. The consumer being rebuilt against it hand-rolls **eight**
+  one-off diagram components behind eight private CSS namespaces; this is the one owned, gated,
+  contrast-tested pattern that replaces all eight.
+  - **The motion contract, which is why those eight kept regressing.** The SSR / no-JS /
+    `prefers-reduced-motion` state is the **COMPLETE** diagram — every node and every edge fully
+    drawn, every label at full ink. The component emits no motion and no "not yet revealed"
+    class; the draw-in lives entirely in the CSS, double-gated behind
+    `@supports (animation-timeline: view())` **and**
+    `@media (prefers-reduced-motion: no-preference)`, and scroll only *replays* it. Verified
+    three ways: under `reducedMotion: "reduce"` (`animation-name` computes to `none`, every
+    opacity `1`, every transform `none`), with **JavaScript disabled entirely** against plain
+    markup carrying the same classes, and below `--lw-bp-md`.
+  - **An inactive node is never dimmed with `opacity`.** Axe scores reduced-opacity text as a
+    contrast failure and the consumer shipped that bug once. The active node is marked
+    POSITIVELY — brand border, `--lw-brand-glow`, a weight step on the title (600 vs 500,
+    measured) and a brand lift on the index — and every other node stays at full ink. The state
+    is real `aria-current="step"`, not a class that only changes colour.
+  - **One new keyframe, `lwFlowPulse`, verified unused before it was named** — a keyframe name
+    is global and last-wins, and no gate can see a collision.
+  - **No `--lw-dur-*` and no `--lw-stagger`, and that is not an oversight.**
+    `animation-duration`, `animation-delay` and `animation-iteration-count` are *ignored* while
+    `animation-timeline` names a progress-based timeline — the progress of the view range is
+    the clock. A time token written there would document an intent the browser discards, which
+    is worse than none, because the next reader would trust it. The per-sibling offset is
+    therefore a **range** offset, a local knob with a fallback like every other knob in the
+    file, and the index comes from `:nth-child` rather than a style attribute so a
+    vanilla-HTML consumer gets the identical cascade (capped at 8, the ceiling
+    `useDeterministicCascade` already uses). A time-based pulse on the current node was drafted
+    and cut: it would have been a second `animation` on the same element as the draw-in, and
+    the shorthand resets `animation-timeline`, so the current node would have silently lost its
+    scroll binding.
+  - **`grid-auto-columns` repeats its track list**, so `minmax(0, 1fr) auto` sizes every node
+    at 1fr and every connector at its own width with no per-child class. The stacked geometry
+    is five local knobs, so it is written **once** and merely *set* twice — on
+    `.lw-flow-vertical` and inside the `--lw-bp-md` query. Restating the edge block inside the
+    media query is how one drawing quietly becomes two.
+  - **Server-safe: no state, no effects, no `"use client"`.** A node that expands to reveal
+    detail is the consumer composing `Disclosure` into `detail` — a native `<details>`, itself
+    complete with zero JavaScript — rather than `Flow` growing state.
+  - Not the `.lw-draw` / `.lw-flow-line` machinery: those are SVG stroke geometry and need a
+    path with a known length, and a DOM chain of arbitrary-height cards has none.
+- **Two more `@dsCard` specimens**: `components/marketing/pricing.card.html` (plans **including
+  the no-price variant**, a `data-band="dark"` plan, `.lw-plans-head`, and the matrix) and
+  `components/marketing/flow.card.html` (horizontal, vertical, a current node, a composed
+  `Disclosure`, a suppressed edge, and the reduced-motion note).
+- **Five pairs added to the contrast `MANIFEST`** — `success-on`/`bg-subtle`,
+  `fg-subtle`/`bg-subtle`, `fg-muted`/`bg-subtle`, `fg`/`bg-subtle` and `brand-text`/`bg`. All
+  five are the manifest's known blind spot in the shape the diff grounds and the footer heading
+  already document: `.lw-compare :is(th,td)[data-featured]` declares the **ground** and nothing
+  else, while the ink arrives from four other rules, so the composed-pair walk — which needs
+  both in one rule — sees none of them. 148 pairs → 153, all passing.
+
+#### Deliberately NOT added, in the pricing set
+
+Recorded because this is the pair most likely to be re-litigated, and because
+`.lw-theme-toggle` and `.lw-code-tabs` were both deleted for being exactly this kind of
+duplicate:
+
+- **No `.lw-plans` grid class and no `PlanGrid`.** A row of plans is `<Grid min={280}>`, which
+  already auto-fits and stretches; `.lw-plan` sets `block-size: 100%` so unequal feature counts
+  still share one CTA baseline. `PlanGrid` would be `Grid` with one number baked in, and the
+  first row wanting a different minimum would fork it.
+- **No billing-toggle class and no `BillingToggle`.** A billing period is a two-way *exclusive*
+  choice, which is `Segmented` — a real `radiogroup` with arrow-key navigation and a set size,
+  none of which a bespoke toggle would re-earn. What ships instead is the **composition**:
+  `.lw-plans-head` holding an eyebrow, a `<Segmented>` and an optional savings `.lw-pill`. The
+  period stays the consumer's state, which is the point — a `BillingToggle` would have owned it
+  and become a second treatment of one interaction.
+
+### Changed
+
+- **The dark-ground patches for the promoted form controls moved to `base.css`** — the gap
+  `fb2d3ad` left open. That commit promoted the form/control face out of `product.css` and
+  kept the `:is(.dark, [data-band="dark"], .lw-band-dark)` patches behind, correctly observing
+  that they outrank the promoted rules on specificity and so their *position* is not
+  load-bearing. What that missed is the case the promotion exists for: a page loading
+  base + marketing never sees `product.css` at all, so it had the controls with none of their
+  dark-band treatment — on a site that puts its contact form on a dark ground. **Position is
+  not load-bearing; presence is.** Moved for `.lw-input`, `.lw-textarea`, `.lw-select`,
+  `.lw-input-group`, `.lw-switch`, `.lw-check` and `.lw-segmented`, plus the
+  `prefers-reduced-motion` stand-down for the switch knob (the promoted controls' only
+  motion). The patches for `.lw-prompt`, the bare `[data-focus-demo]` hook and the
+  table/kpi/empty/eyebrow family were never promoted and stay in `product.css`; tombstones
+  mark each vacated site. Verbatim relocation — `check:visual` scored **zero** movement on
+  every form, control and topbar card against a HEAD baseline, which is the measurement that
+  matters here, since every card loads base + marketing + product and therefore renders the
+  exact cascade this reorders.
+
+- **Site chrome and editorial: `SiteFooter`, `Steps`, `Quote`, `Byline`, `ArticleCard`,
+  `AnnounceBar`** (`marketing.css` + `components/marketing/`). Six things every marketing
+  consumer had rebuilt locally, and each one is here for a reason a local copy cannot have:
+  - **`SiteFooter`.** A dark footer is `data-band="dark"`, never a hard-coded navy tier. The
+    consumer this replaces painted `--lw-navy-900` and then restated five child inks on top
+    of it — and its own code comment recorded that the one it got wrong, brand-500 as an 11px
+    mono heading on navy, **failed AA on every page in both locales**. The band re-points
+    `--lw-brand-text` to brand-400 for free, so no child carries a dark variant. Named
+    `SiteFooter`, not `Footer`: `CardFoot` exists, the bundle namespace is flat, and
+    `lw-bundle.mjs` makes that collision a hard error. The current-page marker is an ink lift
+    **plus** a weight step **plus** a brand rule — never colour alone, and never a typed `▸`.
+    An entry with no `href` renders as an inert `.lw-footer-note`, deliberately absent from
+    the pointer-affordance list. Replaces the hand-rolled footer (seven inline styles) in
+    `templates/marketing-landing`.
+  - **`Steps`.** One drawing for a company timeline, a roadmap and a numbered "how it works"
+    — three separate components in the consumer, which nothing rendered side by side.
+    **Deliberately no state axis**: `Stepper` owns wizard state and its ARIA; a timeline has
+    none, because every entry already happened. The marker text is real markup, never CSS
+    `counter()`.
+  - **`Quote`.** The spine is **one declaration block, two selectors**
+    (`.lw-quote, .lw-story .lw-story-quote`), replacing the standalone `.lw-story-quote`
+    rule. `StoryCard`'s quote only renders inside that composition, so a testimonial band
+    needed its own class — and the moment it had one, the drawing had two owners unless they
+    shared the declaration.
+  - **`Byline` / `.lw-article-head` / `.lw-pill-link`.** The three atoms article chrome was
+    actually missing. There is **no** `.lw-article` grid and **no** `.lw-post` card: the
+    article + contents layout is `.lw-split`, the index card is `Card` + `CardHead`/`Body`/
+    `Foot` + `Byline` inside a `Grid`, and `ArticleCard` is that composition written down.
+  - **`AnnounceBar`.** Exists upstream for exactly one rule:
+    `.lw-announce + .lw-topbar { inset-block-start: var(--lw-announce-h, 36px) }`. A sticky
+    header under a sticky announcement otherwise scrolls up underneath it, and a consumer
+    hand-rolling the strip cannot reach into the package's header to offset it — so it
+    re-declares the header and inherits none of its later fixes.
+
+  Every knob is a local custom property with a fallback (`--lw-steps-marker`,
+  `--lw-announce-h`), the `--lw-grid-min` / `--lw-split-rail` form: no new design token, no
+  DTCG kind, no obligation to re-point in twelve theme scopes.
+
+- **Contrast manifest: `brand-text` on `bg-subtle`** (`.lw-footer-head`). The composed-pair
+  walk cannot see it — the ink is on the heading and the ground is on `.lw-footer`, two
+  different rules, the same shape as the diff surface in group G2. Light 5.35, dark and
+  media-dark 7.48.
 
 - **`linkAs` — the router escape hatch, on every component that renders a navigation
   anchor.** `TopBar`, `Breadcrumbs`, `AppBar`, `Sidebar`/`NavItem`, `BottomNav`,
@@ -45,9 +287,37 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
     for the only use it has; it is now `React.ElementType`. Type-only, non-breaking —
     `string` is a subset.
 
-## [Unreleased]
 
-### Changed
+- **`.lw-icon-btn` promoted from `product.css` to `base.css`**, and split from
+  `.lw-dialog-close` on the way. `fb2d3ad` promoted layout, the form controls and
+  `.lw-topbar`; this release promoted their dark-ground patches and added the mobile nav —
+  and `.lw-icon-btn` was the last piece of the header still on the wrong side of the line.
+  `.lw-topbar-toggle` composes it, `AnnounceBar`'s dismiss control is one and `SiteFooter`'s
+  social row is a line of them: three marketing surfaces on a page with no reason to load
+  `product.css`. Until now the toggle got its `display`, position and focus ring from
+  `base.css` and none of the shared icon-button face. Closes **REVIEW open item 6**.
+  - `.lw-dialog-close` stayed — a dialog is an app surface — but it is now a **delta**, not a
+    second copy. `Dialog.jsx` emits `lw-icon-btn lw-dialog-close` and `product.css` keeps only
+    the optical margin. The two were never two treatments; they were one face written under
+    two names in one selector list, which is the shape `CONTRIBUTING.md` opens with.
+
+- **`.lw-eyebrow`'s dark-ground patch promoted to `base.css`**, with `.lw-icon-btn` and for
+  the same reason. The hexagon node is the one part of the motif pinned to a TIER, so on a
+  dark band the label re-points to the dark subtle ink while its node stays brand-500 — a cyan
+  too dark for navy. `marketing.css` patches `.lw-section.dark` and `.lw-hero-dark`; a plain
+  `.lw-band-dark` was the hole, and the patch for it lived in a layer a marketing page never
+  loads. REVIEW open item 6's "same class, one file over"; closed with it.
+
+- **`.lw-pill-link` joined the consolidated pointer-affordance list** at the foot of
+  `base.css`. It has to live there and not beside its own rules in `marketing.css`, because a
+  later `cursor: default` silently cancels an earlier pointer and that list is what stays last
+  in the file.
+
+- **`_ds_manifest.json`'s `components` array refreshed** — it was 12 entries behind the
+  filesystem (the whole v1.3.0 component set). The `cards` array, which is the load-bearing
+  half (both browser gates enumerate from it), was verified clean in both directions with all
+  four marker attributes matching byte-for-byte. See REVIEW open item 1 for why this array
+  should stop being hand-maintained at all.
 
 - **Layout, the form controls and `.lw-topbar` moved from `product.css` to `base.css`.**
   Verbatim relocation — not one declaration changed. This is the same correction that put
@@ -80,6 +350,81 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 - **`README.md`'s install pin corrected to `#v1.2.1`** — it still said `#v1.2.0` while
   `package.json` said `1.2.1`, which failed `lw-token-lint --css` with `stale-install-pin`.
+
+### Fixed
+
+- **Every React specimen card had been rendering BLANK since v1.2, and both browser gates
+  reported green through all of it.** `lw-bundle.mjs`'s header says it uses the classic JSX
+  transform "because the cards get React as a UMD global" — but esbuild's `jsx` API option is
+  only a DEFAULT, and a reachable `tsconfig.json` overrides it per file. v1.2 added one,
+  carrying `"jsx": "react-jsx"` (correct for `tsc --noEmit` over the `.d.ts` files, fatal
+  here). So every component switched to the automatic runtime, which resolves through the
+  jsx-runtime shim to `globalThis.React` — and React's main export has no `jsx`/`jsxs`.
+  Result: `TypeError: import_jsx_runtimeN.jsx is not a function` on **every** component.
+  `lw-a11y.mjs` refuses a card whose body is empty, but these cards carry explanatory prose
+  around their React roots, so `innerText.trim().length > 0` was satisfied by the copy while
+  the specimen itself was missing — axe scored the prose. `lw-visual.mjs` compared two
+  equally blank plates. The fix is `tsconfigRaw: { compilerOptions: {} }` in the shared `JSX`
+  options. **`_ds_bundle.js` must be regenerated** (`npm run bundle`) for the fix to reach
+  the gates. With the corrected bundle, axe immediately found four real `color-contrast`
+  violation groups on `.lw-btn-link` in `Button.card.html` and `primitives.card.html` that
+  the blank plates had been hiding. Both are fixed below, and the *guard* is fixed too:
+
+- **`lw-a11y.mjs`'s blank-card guard was decoration, and now is not.** Two rules replace
+  `innerText.length > 0`, and each catches a failure mode the other structurally cannot:
+  (1) an **uncaught page error** fails the card — the direct signal, which the v1.2 defect
+  emitted on every card and nobody was listening for; (2) **every container passed to
+  `createRoot`/`hydrateRoot`/`render` must end up with at least one element child** — the
+  structural signal, which survives a failure that throws nothing at all. The recorder is an
+  `addInitScript` that installs a setter for `window.ReactDOM` and stores a `Proxy` over the
+  object the UMD wrapper assigns, because `global.ReactDOM = {}` lands *before* the factory
+  fills it and a naive wrap would wrap nothing. The wait also short-circuits on the error flag,
+  so a dead card reports its own `TypeError` in about a second instead of burning a 15s
+  timeout and then guessing. **Watched failing**: the defect was replanted in
+  `lw-bundle.mjs`, the bundle rebuilt, and the gate named the exact
+  `TypeError: (0 , import_jsx_runtime12.jsx) is not a function` on the first card it reached.
+
+- **`.lw-btn` had no `background` and no `border` of its own — so a base-only page rendered
+  every button with the UA button face and a `2px outset` bevel, and `.lw-btn-link` at
+  2.28:1.** This is the four serious axe failures above, and the root cause is neither the
+  link variant's token pairing nor its disabled/loading treatment: it is **the v1.2.0 reset
+  split, one layer over**. `reset.css`'s `button { background: none; border: 0; padding: 0 }`
+  used to sit at the top of `base.css`; splitting it out (advisory
+  `base-css-unusable-in-tailwind`) made `base.css` importable by a Tailwind app and left the
+  button family leaning on a file that a vanilla consumer — and every specimen card, and the
+  README's own marketing recipe — does not load. Nine of the ten `.lw-btn` variants declare a
+  `background`, so on them the leak shows only as a bevel; **`.lw-btn-link` and a
+  variant-less `.lw-btn` declare none**, so they painted on Chromium's `buttonface`: `#EFEFEF`
+  on light, and under `color-scheme: dark` **`#6B6B6B`, against `--lw-brand-400` = 2.28:1**.
+  A sweep of every element on all 39 cards found the leak in exactly one place — 87 `.lw-btn`
+  instances, and no other `.lw-*` class — so the fix is two declarations on `.lw-btn`.
+  - **The failing cells were `rest` and `hover`, not `loading` or `disabled`.** The first
+    reports misread `.cell:nth-child(32)`/`(33)` as the right-hand columns; they are the link
+    row's first two. The state is fully reachable by a user, so **no `data-a11y-expect`
+    opt-out was added, and none would have been justified** — the exemption count in this
+    repository stays at one.
+  - The rule this establishes, written into the CSS: **a property that carries a COLOUR is
+    `base.css`'s to state, because a colour `base.css` does not state is a colour the contrast
+    gate cannot see.** Geometry (`box-sizing`) stays the reset's job — that one fails visibly.
+  - Measured consequence: every non-ghost button is **4px narrower** (the UA border was adding
+    2px a side to an `auto` width) and loses its bevel. Height is unchanged at 40px, and the
+    grid geometry of `Button.card`'s matrix is byte-identical at 417px. `check:visual`
+    attributes 48 of its 52 moved shots to exactly this; every card that moved has a
+    non-ghost button, and every card that did not either has no button or has only
+    `variant="ghost"`, which declared its own border all along.
+
+- **`lw-visual.mjs` had no image-decode wait**, so it flipped `data-theme` and screenshot in
+  the same task. Fine for colour, wrong for artwork: a per-theme `background-image`
+  (`.brand-mark`) is a fresh resource request at flip time, and the dark shot raced it —
+  measured at **0.0293%** drift on a card carrying the logo, against a noise floor of 0.0002%
+  and a soft threshold of 0.02%. The first workaround was to take the logo out of the card,
+  i.e. to edit the specimen to suit the gate; that is reverted. `decoded()` now awaits
+  `decode()` on every `<img>` **and** on every `url()` found in a computed `background-image`
+  (including `::before`/`::after` — a CSS background exposes no load event, and re-requesting
+  the same URL through a throwaway `Image()` hits the same memory cache), then lets two frames
+  pass. Verified over three independent full runs of all 156 shots: worst drift **0.0001%**,
+  and the logo card never moved.
+
 
 ## [1.2.0] — 2026-07-31
 

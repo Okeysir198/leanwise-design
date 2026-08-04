@@ -15,8 +15,16 @@
 /* ---- Sections ------------------------------------------------------------ */
 
 /* Compact rhythm (v0.4.0): the old 120px cap read as a brochure, not a lean
-   product site. One scale, two densities — nothing else sets section padding. */
-.lw-section { padding: clamp(48px, 5.5vw, 88px) 0; }
+   product site. One scale, two densities — nothing else sets section padding.
+
+   `.lw-footer` (v1.3.0) shares the declaration rather than restating the clamp.
+   The footer IS a section by another name, and this clamp is the page's vertical
+   signature — a second copy of it is a second home for the number that decides
+   how the whole site breathes, and the two would drift the first time either is
+   tuned. The footer's own colour/border rules live in the site-chrome block at
+   the foot of this file. */
+.lw-section,
+.lw-footer { padding: clamp(48px, 5.5vw, 88px) 0; }
 .lw-section.tight { padding: clamp(32px, 3.5vw, 56px) 0; }
 
 /* A dark BAND on a light page — not dark mode. */
@@ -965,9 +973,11 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
   padding-top: 12px; border-top: 1px solid var(--lw-line);
 }
 .lw-story .meta b { color: var(--lw-brand-text); font-weight: 500; }
-/* The quote needs a mark and a spine, or it reads as a paragraph that happens to have
-   quotation marks. A brand hairline down the left is the cheapest honest attribution. */
-.lw-story .lw-story-quote { position: relative; padding-inline-start: 16px; border-inline-start: 2px solid var(--lw-brand-line); }
+/* The spine that used to be declared here now lives in the shared `.lw-quote,
+   .lw-story .lw-story-quote` block in the editorial section at the foot of this
+   file — one drawing, one owner. It still lands after the `padding: 0; border: 0`
+   reset above (same specificity, later in source), so nothing about the story
+   card's quote changed. */
 .lw-story-result {
   display: inline-flex; align-items: baseline; gap: 8px;
   font-family: var(--lw-font-mono); font-size: 12.5px; letter-spacing: .04em;
@@ -984,3 +994,773 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 .dark .lw-story p, .dark .lw-story .meta, [data-band="dark"] .lw-story p, [data-band="dark"] .lw-story .meta, .lw-band-dark .lw-story p, .lw-band-dark .lw-story .meta { color: var(--lw-on-dark-2); }
 .dark .lw-story .meta, [data-band="dark"] .lw-story .meta, .lw-band-dark .lw-story .meta { border-top-color: var(--lw-on-dark-line); }
 @media (prefers-reduced-motion: reduce) { .lw-story-interactive:hover { transform: none; } }
+
+/* ===========================================================================
+   v1.3.0 — SITE CHROME + EDITORIAL
+   The five pieces every marketing site rebuilds locally: the footer, a steps /
+   timeline, a standalone pull quote, article chrome, and the announcement bar.
+
+   Every knob here is a LOCAL custom property with a fallback
+   (`var(--lw-steps-marker, 40px)`, `var(--lw-announce-h, 36px)`) — the same form
+   as `--lw-grid-min` and `--lw-split-rail`. They are not declared in tokens.css,
+   carry no DTCG kind, and so incur no obligation to re-point in every theme
+   scope. Nothing below needs a new design token.
+   =========================================================================== */
+
+/* ---- Site footer ----------------------------------------------------------
+   A DARK footer is `data-band="dark"` on the element, never a hard-coded navy
+   tier. The consumer that prompted this hard-coded `--lw-navy-900` and then had
+   to restate five child inks on top of it — and its own code comment recorded
+   that brand-500 as an 11px heading on that navy failed AA on every page, in
+   both locales. `[data-band="dark"]` re-points `--lw-brand-text` to brand-400
+   (and every other role with it) for free, so the heading below needs no dark
+   variant at all. That is the whole reason this component is worth shipping.
+
+   The vertical rhythm is the `.lw-section` clamp, declared once at the head of
+   this file. Only the ground and the hairline are set here. */
+.lw-footer {
+  background: var(--lw-bg-subtle);
+  color: var(--lw-fg);
+  border-block-start: 1px solid var(--lw-line);
+}
+
+/* The brand column is wide and soft-capped; the link columns are as many as fit.
+   `auto-fit` after one explicit track is deliberate — a site with three link
+   columns and a site with six both lay out without a variant class. */
+.lw-footer-grid {
+  display: grid;
+  grid-template-columns: minmax(220px, 1.6fr) repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--lw-space-32);
+}
+/* --lw-bp-md (768px). The brand column spans the full width and the link
+   columns flow under it — at this width 220px of brand beside 140px of links
+   leaves both too narrow to read. */
+@media (max-width: 768px) {
+  .lw-footer-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+  .lw-footer-brand { grid-column: 1 / -1; }
+}
+
+.lw-footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lw-space-12);
+  align-items: flex-start;
+}
+/* 34ch, not the 60ch `.lw-measure` — a footer blurb sits in a narrow column and
+   a measure wider than its track does nothing. The long legal disclaimer at the
+   bottom is the one that composes `.lw-measure`. */
+.lw-footer-desc {
+  color: var(--lw-fg-muted);
+  max-inline-size: 34ch;
+  margin: 0;
+}
+
+.lw-footer-head {
+  font-family: var(--lw-font-mono);
+  font-size: var(--lw-text-xs);
+  font-weight: var(--lw-fw-medium);
+  letter-spacing: var(--lw-tracking-eyebrow);
+  /* Tracking opens every gap by one step, and a word gap starts far wider than a
+     letter gap — so without this the caps read as loose letters, not as words.
+     Same pairing as `.lw-eyebrow` and `.lw-pill`. */
+  word-spacing: var(--lw-word-spacing-caps);
+  text-transform: uppercase;
+  color: var(--lw-brand-text);
+  margin: 0 0 var(--lw-space-8);
+}
+
+/* Every link reserves the current-page rule as a transparent border, so marking
+   the current page shifts nothing. */
+.lw-footer-link {
+  display: block;
+  padding-block: var(--lw-space-4);
+  padding-inline-start: var(--lw-space-8);
+  border-inline-start: 2px solid transparent;
+  margin-inline-start: calc(var(--lw-space-8) * -1);
+  color: var(--lw-fg-muted);
+  text-decoration: none;
+  transition: color var(--lw-dur-xs) var(--lw-ease-out);
+}
+.lw-footer-link:hover { color: var(--lw-fg); }
+.lw-footer-link:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
+/* Direction/state is never colour alone: the current page gets a WEIGHT step and
+   a brand rule as well as the ink lift. Not a `▸` glyph — a typed marker is an
+   icon drawn a second time in the font, and it would also be read aloud. */
+.lw-footer-link[aria-current] {
+  color: var(--lw-fg);
+  font-weight: var(--lw-fw-medium);
+  border-inline-start-color: var(--lw-brand-text);
+}
+
+/* An inert label in a link column — a shipping date, a "coming soon". It is
+   deliberately NOT in the pointer-affordance list: a pointer over text that does
+   nothing is a lie. */
+.lw-footer-note {
+  display: block;
+  padding-block: var(--lw-space-4);
+  padding-inline-start: var(--lw-space-8);
+  color: var(--lw-fg-subtle);
+}
+
+.lw-footer-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lw-space-16);
+  margin-block-start: var(--lw-space-32);
+  padding-block-start: var(--lw-space-24);
+  border-block-start: 1px solid var(--lw-line);
+  font-family: var(--lw-font-mono);
+  font-size: var(--lw-text-xs);
+  color: var(--lw-fg-subtle);
+}
+/* The legal disclaimer is a real <p>; without a reset it would carry the UA's
+   1em block margins into a flex row and push the row apart. */
+.lw-footer-bottom p { margin: 0; }
+
+/* ---- Steps / timeline -----------------------------------------------------
+   One component for three things a marketing site keeps rebuilding: a company
+   timeline, a product roadmap, and a numbered "how it works".
+
+   DELIBERATELY NO STATE AXIS. `.lw-stepper` in product.css owns wizard state —
+   done / current / upcoming, with the ARIA that goes with it. A company timeline
+   has no state: every entry already happened. Two treatments of one interaction
+   is the bug this package exists to prevent, so the split is by MEANING (a
+   sequence of facts vs. a position in a flow), not by looks.
+
+   The marker text lives in the MARKUP, never in CSS `counter()` — same rule as
+   `FeatureGrid`'s `String(i+1).padStart(2,"0")`. Generated content is not
+   selectable and is announced inconsistently; a step number is content. */
+.lw-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--lw-space-24);
+}
+.lw-step {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--lw-steps-marker, 40px) minmax(0, 1fr);
+  gap: var(--lw-space-16);
+  align-items: start;
+}
+/* The connecting spine, drawn from under the marker down to the next one. It is
+   a pseudo-element on the STEP rather than a border on the list, so the last
+   step can drop it without a modifier class. */
+.lw-step::before {
+  content: "";
+  position: absolute;
+  inset-block-start: var(--lw-steps-marker, 40px);
+  inset-inline-start: calc(var(--lw-steps-marker, 40px) / 2);
+  inline-size: 1px;
+  block-size: calc(100% + var(--lw-space-24) - var(--lw-steps-marker, 40px));
+  background: var(--lw-line);
+}
+.lw-step:last-child::before { content: none; }
+
+/* CLAUDE.md singles this pair out: every `background: var(--lw-brand-soft)` rule
+   pairs with `color: var(--lw-brand-on)`. `brand-text` is the LINK shade and
+   measures 3.98 on this tint. */
+.lw-step-marker {
+  display: grid;
+  place-items: center;
+  inline-size: var(--lw-steps-marker, 40px);
+  block-size: var(--lw-steps-marker, 40px);
+  border-radius: var(--lw-radius-pill);
+  background: var(--lw-brand-soft);
+  color: var(--lw-brand-on);
+  font-family: var(--lw-font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--lw-text-xs);
+  font-weight: var(--lw-fw-medium);
+}
+.lw-step-title {
+  font-size: var(--lw-text-lead);
+  line-height: var(--lw-lh-snug);
+  font-weight: var(--lw-fw-semibold);
+  margin: 0;
+}
+.lw-step-body {
+  color: var(--lw-fg-subtle);
+  margin: var(--lw-space-4) 0 0;
+  text-wrap: pretty;
+}
+.lw-step-meta {
+  display: block;
+  font-family: var(--lw-font-mono);
+  font-size: var(--lw-text-xs);
+  color: var(--lw-fg-subtle);
+}
+
+/* Horizontal: the same steps as a row, with the spine rotated. The marker keeps
+   its column position, so the spine leaves its inline-end edge instead of its
+   block-end one. */
+.lw-steps-horizontal {
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+}
+.lw-steps-horizontal .lw-step {
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--lw-space-12);
+}
+.lw-steps-horizontal .lw-step::before {
+  inset-block-start: calc(var(--lw-steps-marker, 40px) / 2);
+  inset-inline-start: var(--lw-steps-marker, 40px);
+  inline-size: calc(100% + var(--lw-space-24) - var(--lw-steps-marker, 40px));
+  block-size: 1px;
+}
+/* --lw-bp-md (768px) — four steps across a phone is four one-word columns, so
+   the row reverts to the stack. One media query, and it restores the vertical
+   geometry wholesale rather than unsetting it property by property. */
+@media (max-width: 768px) {
+  .lw-steps-horizontal { grid-auto-flow: row; }
+  .lw-steps-horizontal .lw-step {
+    grid-template-columns: var(--lw-steps-marker, 40px) minmax(0, 1fr);
+    gap: var(--lw-space-16);
+  }
+  .lw-steps-horizontal .lw-step::before {
+    inset-block-start: var(--lw-steps-marker, 40px);
+    inset-inline-start: calc(var(--lw-steps-marker, 40px) / 2);
+    inline-size: 1px;
+    block-size: calc(100% + var(--lw-space-24) - var(--lw-steps-marker, 40px));
+  }
+}
+
+/* ---- Quote ----------------------------------------------------------------
+   ONE declaration block, TWO selectors. `.lw-story-quote` (the quote inside a
+   case-study card) drew this spine itself; a standalone pull quote in a
+   testimonial band cannot be expressed by `StoryCard`, so it needs its own
+   class — and the moment it has one, the spine has two owners unless they share
+   the declaration. Sharing it is what stops a second treatment appearing.
+
+   A brand hairline down the start edge is the cheapest honest attribution: a
+   quote with no mark and no spine reads as a paragraph that happens to have
+   quotation marks. */
+.lw-quote,
+.lw-story .lw-story-quote {
+  position: relative;
+  padding-inline-start: var(--lw-space-16);
+  border-inline-start: 2px solid var(--lw-brand-line);
+}
+.lw-quote {
+  font-size: var(--lw-text-lead);
+  line-height: 1.5;
+  color: var(--lw-fg);
+  margin: 0;
+  font-style: normal;
+}
+.lw-quote-attrib {
+  display: block;
+  margin-block-start: var(--lw-space-8);
+  font-family: var(--lw-font-mono);
+  font-size: var(--lw-text-xs);
+  color: var(--lw-fg-subtle);
+  font-style: normal;
+}
+.lw-quote-attrib .name { color: var(--lw-fg); }
+
+/* ---- Article chrome -------------------------------------------------------
+   There is deliberately NO `.lw-article` grid and NO `.lw-post` card here.
+   The article + table-of-contents layout is `.lw-split`, which already collapses
+   at --lw-bp-lg; the index card is `.lw-card` + CardHead/CardBody/CardFoot +
+   `.lw-byline` inside a `Grid`. Both are compositions of classes this system
+   already ships, and CONTRIBUTING's first rule is to prove a thing is not
+   already here. What is genuinely missing is the three atoms below. */
+.lw-byline {
+  display: flex;
+  align-items: center;
+  gap: var(--lw-space-12);
+}
+.lw-byline .name {
+  font-weight: var(--lw-fw-medium);
+  color: var(--lw-fg);
+}
+.lw-byline .role,
+.lw-byline .date {
+  font-family: var(--lw-font-mono);
+  font-size: var(--lw-text-xs);
+  color: var(--lw-fg-subtle);
+}
+
+/* Category, h1, standfirst, tags — the parts stay `.lw-eyebrow` / `.lw-h1` /
+   `.lw-lead` / `.lw-pill`, so an article heading and a section heading are the
+   same type. This class is the rhythm between them and nothing else. */
+.lw-article-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lw-space-16);
+}
+
+/* A `.lw-pill` that is a real link. The pill already carries the whole face; the
+   only thing missing was the affordance — and that lives on the consolidated
+   pointer list at the foot of base.css, never here, because a later
+   `cursor: default` silently cancels an earlier pointer and that list is what
+   stays last in the file. `.lw-pill-link` is on it as of v1.3.0. */
+.lw-pill-link:hover { border-color: var(--lw-brand-line); color: var(--lw-fg); }
+.lw-pill-link:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
+
+/* ---- Announcement bar -----------------------------------------------------
+   The coupling rule below is the entire reason this component belongs upstream.
+   A sticky bar under a sticky announcement is what every consumer gets wrong:
+   both claim `inset-block-start: 0`, so the header scrolls up UNDER the
+   announcement and its first line is eaten. The contract can only be stated here
+   because `.lw-topbar` is ours — a consumer that hand-rolls an announcement bar
+   has no way to reach into the package's header and offset it, so it re-declares
+   the header instead and inherits none of its later fixes. */
+.lw-announce {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: var(--lw-z-nav);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--lw-space-8);
+  padding-block: var(--lw-space-8);
+  /* Room for the dismiss control at the inline-end, on BOTH sides, so the
+     message stays optically centred rather than centred-minus-a-button. */
+  padding-inline: var(--lw-space-32);
+  background: var(--lw-brand-soft);
+  color: var(--lw-brand-on);
+  font-family: var(--lw-font-mono);
+  font-size: var(--lw-text-xs);
+  text-align: center;
+}
+/* Inherit, not `--lw-brand-text`: the bar is a brand TINT, and the link must
+   read against that tint the same way the surrounding sentence does. Underline
+   carries the affordance instead of a colour change. */
+.lw-announce a { color: inherit; text-decoration: underline; }
+/* `position: sticky` already makes the bar a containing block for this. */
+.lw-announce .lw-icon-btn {
+  position: absolute;
+  inset-inline-end: var(--lw-space-8);
+  color: inherit;
+}
+.lw-announce + .lw-topbar { inset-block-start: var(--lw-announce-h, 36px); }
+
+/* ===========================================================================
+   v1.3.0 — PRICING, COMPARISON, FLOW
+   Three patterns a marketing site rebuilds locally every time, and the last of
+   them is the expensive one: the consumer that prompted this ships EIGHT
+   one-off diagram components behind eight private CSS namespaces, none of them
+   contrast-tested and none of them holding the motion contract. `.lw-flow` is
+   the one owned drawing that replaces all eight.
+
+   Same knob discipline as the section above: every knob is a LOCAL custom
+   property with a fallback (`var(--lw-flow-edge, 28px)`), never declared in
+   tokens.css, so it carries no DTCG kind and no obligation to re-point in
+   every theme scope. NOTHING BELOW NEEDS A NEW DESIGN TOKEN.
+   =========================================================================== */
+
+/* ---- Plan cards -----------------------------------------------------------
+   The word "pricing" appeared nowhere in this package, so every consumer wrote
+   its own. The one that prompted this had `.lw-price.featured` restating FIVE
+   child colours to make one plan dark — the exact override pile that
+   `data-band="dark"` exists to delete.
+
+   `.lw-plan` COMPOSES `.lw-card` (`class="lw-card lw-plan"`). Border, radius,
+   padding and the hover/focus faces all come from there; this adds the column
+   geometry and nothing else. Restating any of them is how a card and a plan
+   card become two treatments of one surface.
+
+   THE CENTRAL RULE: **nothing here reserves a price slot.** `.lw-plan` is a
+   flex column with a gap, so a card whose consumer publishes no price simply
+   has no `.lw-plan-price` child and closes up — complete, not pending. There is
+   no `min-block-size`, no empty-state placeholder, no `content: "—"`. The
+   primary consumer publishes no price, no currency and no range; a component
+   that reserved the slot would force it to invent one, and an invented price is
+   a fabrication, which is the failure mode that site keeps relapsing into. */
+.lw-plan {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lw-space-16);
+  /* Fills its grid track, so a row of plans with unequal feature counts still
+     has one baseline for the CTA. `<Grid min={280}>` already stretches. */
+  block-size: 100%;
+  /* Containing block for the ribbon. */
+  position: relative;
+}
+
+.lw-plan-name {
+  font-size: var(--lw-text-h3);
+  line-height: var(--lw-lh-snug);
+  font-weight: var(--lw-fw-semibold);
+  letter-spacing: var(--lw-tracking-tight);
+  margin: 0;
+}
+.lw-plan-tagline {
+  display: block;
+  font-family: var(--lw-font-mono);
+  font-size: var(--lw-text-xs);
+  color: var(--lw-fg-subtle);
+}
+
+/* Baseline-aligned so the unit and the period sit on the number's baseline
+   rather than its box. Wraps, because a long currency + period pair on a narrow
+   track otherwise pushes the card wider than its track. */
+.lw-plan-price {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--lw-space-8);
+}
+/* Tabular figures so two plans in a row have their digits on the same rhythm —
+   proportional figures make 9 narrower than 0 and the column reads ragged. */
+.lw-plan .price {
+  font-size: var(--lw-text-h2);
+  line-height: var(--lw-lh-tight);
+  font-weight: var(--lw-fw-semibold);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--lw-tracking-tighter);
+  color: var(--lw-fg);
+}
+.lw-plan .unit,
+.lw-plan .period {
+  font-size: var(--lw-text-sm);
+  color: var(--lw-fg-subtle);
+}
+.lw-plan-desc {
+  color: var(--lw-fg-muted);
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.lw-plan-features {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--lw-space-8);
+}
+/* An excluded row is NEVER colour alone. It carries a DIFFERENT GLYPH (minus,
+   not check), a muted ink, and an `.lw-sr-only` word — so it survives
+   greyscale, a colour-blind reader and a screen reader, in that order. The
+   glyphs are `<Icon name>`; a typed `✓`/`–` would be the same drawing a second
+   time, in the font, and would be read aloud as punctuation. */
+.lw-plan-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--lw-space-8);
+}
+.lw-plan-feature .lw-icon {
+  flex: none;
+  /* Optically centres the glyph on the first line of a wrapping label. */
+  margin-block-start: 2px;
+}
+.lw-plan-feature[data-included="true"] .lw-icon { color: var(--lw-brand-text); }
+.lw-plan-feature[data-included="false"] { color: var(--lw-fg-muted); }
+.lw-plan-feature[data-included="false"] .lw-icon { color: var(--lw-fg-subtle); }
+
+/* Pins the single CTA to the bottom of the tallest card in the row. */
+.lw-plan-foot { margin-block-start: auto; }
+
+/* The featured plan adds a brand edge and a lift — and NOTHING else. It does
+   not paint itself navy: a consumer that wants a dark featured plan writes
+   `data-band="dark"` on the card, and every child ink re-points with zero
+   overrides. That is the whole fix for the five restated child colours. */
+.lw-plan-featured {
+  border-color: var(--lw-brand-500);
+  box-shadow: var(--lw-shadow-md), var(--lw-brand-glow);
+}
+
+/* Positions an existing `.lw-pill` — it already carries the face, including the
+   opaque `--lw-bg` ground that keeps the card's own border from showing
+   through. This class is position and stacking only. */
+.lw-plan-ribbon {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: var(--lw-space-16);
+  transform: translateY(-50%);
+  z-index: var(--lw-z-local-1);
+}
+
+/* The head of a plans section: an eyebrow, a `Segmented` billing period and an
+   optional savings `.lw-pill`. It is a COMPOSITION, not a component — see the
+   two deliberate non-additions recorded in the README and CHANGELOG. */
+.lw-plans-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lw-space-16);
+}
+
+/* ---- Comparison matrix ----------------------------------------------------
+   Distinct from `.lw-table`, and the split is by MEANING: `.lw-table` is a DATA
+   table (rows are records, cells are values, it sorts and paginates). This is a
+   FEATURE MATRIX — rows are capabilities, columns are plans, and every cell is
+   the same yes/no. They look alike and behave nothing alike, which is why one
+   class cannot serve both without growing a modifier for every difference.
+
+   `border-collapse: separate` is load-bearing, not a style: a sticky cell in a
+   collapsed table loses its borders to the collapse model and the header's
+   hairline scrolls away from the header. */
+.lw-compare-scroll {
+  overflow-x: auto;
+  /* Stops an inline overscroll at the end of the matrix from chaining to the
+     page and swiping the browser back. */
+  overscroll-behavior-inline: contain;
+}
+.lw-compare {
+  inline-size: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: var(--lw-text-sm);
+}
+.lw-compare caption {
+  caption-side: top;
+  text-align: start;
+  color: var(--lw-fg-subtle);
+  font-size: var(--lw-text-xs);
+  padding-block-end: var(--lw-space-12);
+}
+.lw-compare :is(th, td) {
+  padding: var(--lw-space-12) var(--lw-space-16);
+  border-block-end: 1px solid var(--lw-line);
+  text-align: start;
+  vertical-align: top;
+}
+
+/* EVERY sticky cell needs an opaque ground, or the content it is meant to pin
+   over scrolls straight under it. The three z-indexes are TOKENS — the CSS
+   self-check fails a literal, and the ordering matters: the corner overlaps
+   both axes, so it must outrank the column header, which must outrank the row
+   header it slides across. */
+.lw-compare th[scope="col"] {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: var(--lw-z-local-2);
+  background: var(--lw-bg);
+  color: var(--lw-fg);
+  font-weight: var(--lw-fw-semibold);
+}
+.lw-compare th[scope="row"] {
+  position: sticky;
+  inset-inline-start: 0;
+  z-index: var(--lw-z-local-1);
+  background: var(--lw-bg);
+  color: var(--lw-fg-muted);
+  font-weight: var(--lw-fw-medium);
+  text-align: start;
+}
+.lw-compare-corner {
+  position: sticky;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  z-index: var(--lw-z-local-3);
+  background: var(--lw-bg);
+}
+
+/* A section-label row. It spans every column, so no column can occlude it and
+   it needs no inline sticky of its own — the ROW header is the one that has to
+   survive an inline scroll. */
+.lw-compare-group th {
+  font-family: var(--lw-font-mono);
+  font-size: var(--lw-text-xs);
+  font-weight: var(--lw-fw-medium);
+  letter-spacing: var(--lw-tracking-eyebrow);
+  word-spacing: var(--lw-word-spacing-caps);
+  text-transform: uppercase;
+  background: var(--lw-bg-subtle);
+  color: var(--lw-fg-muted);
+}
+
+/* The highlighted column. Deliberately `--lw-bg-subtle`, NOT `--lw-brand-soft`:
+   `--lw-fg` on `--lw-brand-soft` is a pair nothing in this system composes
+   today, so choosing it would enter the derived contrast manifest as a
+   brand-new measurement in three scopes (light, `.dark`, media-dark) for a
+   decorative tint. `--lw-fg` on `--lw-bg-subtle` is already asserted. The brand
+   signal is carried by the `--lw-brand-line` edges instead, which is a
+   non-text 1.4.11 boundary rather than a text ground.
+
+   Listed AFTER the sticky rules and at equal specificity so it wins on the
+   column header too — `.lw-compare th[scope="col"]` is also (0,2,1). */
+.lw-compare :is(th, td)[data-featured] {
+  background: var(--lw-bg-subtle);
+  border-inline: 1px solid var(--lw-brand-line);
+}
+
+/* Two glyphs, not one colour — same contract as `.lw-plan-feature`, and each
+   carries its own `.lw-sr-only` word. `--lw-success` is a FILL and fails AA as
+   text; `--lw-success-on` is the theme-aware text variant. */
+.lw-compare-yes,
+.lw-compare-no {
+  display: inline-flex;
+  align-items: center;
+}
+.lw-compare-yes { color: var(--lw-success-on); }
+.lw-compare-no  { color: var(--lw-fg-subtle); }
+
+/* ---- Flow -----------------------------------------------------------------
+   A chain of labelled nodes joined by edges: a processing pipeline, an
+   onboarding sequence, a roadmap. ONE drawing for all three, because the
+   consumer that prompted this had eight, and nothing rendered any two of them
+   side by side to show they were the same picture.
+
+   THE MOTION CONTRACT, which is why the eight kept regressing: the static
+   state — SSR, JS off, `prefers-reduced-motion` — is the COMPLETE diagram.
+   Every node and every edge fully drawn, every label at full ink. Scroll only
+   REPLAYS the draw-in. Everything animated is double-gated below.
+
+   AND: an inactive node is NEVER dimmed with `opacity`. Axe scores
+   reduced-opacity text as a contrast failure and the consumer shipped exactly
+   that bug once. The ACTIVE node is marked POSITIVELY — brand border, brand
+   glow, a weight step on its title and a brand lift on its label — and every
+   other node stays at full ink. Four signals, one of them non-colour, which is
+   the same answer `.lw-footer-link[aria-current]` reaches.
+
+   The grid alternates node / edge / node / edge because `grid-auto-columns`
+   REPEATS its track list — so one declaration sizes every node at 1fr and every
+   connector at its own width, with no per-child class and no `:nth-child`
+   sizing. */
+.lw-flow {
+  display: grid;
+  gap: var(--lw-space-16);
+  grid-auto-flow: var(--lw-flow-flow, column);
+  grid-auto-columns: minmax(0, 1fr) auto;
+  align-items: stretch;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* The stacked geometry is FIVE local knobs, so it is written once and set in
+   two places: `.lw-flow-vertical` (at every width) and the `--lw-bp-md` query
+   below. The alternative — restating the whole edge block inside the media
+   query — is how one drawing quietly becomes two. */
+.lw-flow-vertical {
+  --lw-flow-flow: row;
+  --lw-flow-edge-i: 1px;
+  --lw-flow-edge-b: var(--lw-flow-edge, 28px);
+  --lw-flow-seg-i: 100%;
+  --lw-flow-seg-b: 45%;
+}
+/* --lw-bp-md (768px). A four-node chain across a phone is four one-word
+   columns; below the breakpoint every flow is the stack. */
+@media (max-width: 768px) {
+  .lw-flow {
+    --lw-flow-flow: row;
+    --lw-flow-edge-i: 1px;
+    --lw-flow-edge-b: var(--lw-flow-edge, 28px);
+    --lw-flow-seg-i: 100%;
+    --lw-flow-seg-b: 45%;
+  }
+}
+
+/* Composes `.lw-card` (`class="lw-card lw-flow-node"`) — border, radius and
+   padding come from there and are not restated. */
+.lw-flow-node {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lw-space-8);
+  /* A long `sub` line must wrap inside its track, not widen it. */
+  min-inline-size: 0;
+}
+.lw-flow-head {
+  display: flex;
+  align-items: center;
+  gap: var(--lw-space-8);
+  color: var(--lw-fg-subtle);
+}
+.lw-flow-title {
+  font-size: var(--lw-text-lead);
+  line-height: var(--lw-lh-snug);
+  font-weight: var(--lw-fw-medium);
+  margin: 0;
+  text-wrap: pretty;
+}
+.lw-flow-sub {
+  color: var(--lw-fg-subtle);
+  margin: 0;
+  text-wrap: pretty;
+}
+/* The node index / eyebrow, and an edge caption. Marker text lives in the
+   MARKUP, never CSS `counter()` — generated content is not selectable and is
+   announced inconsistently. Same rule as `FeatureGrid` and `Steps`. */
+.lw-flow-label {
+  font-family: var(--lw-font-mono);
+  font-size: var(--lw-text-xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--lw-fg-subtle);
+}
+
+/* The current node. `[aria-current]` — a real ARIA state, not a class that only
+   changes colour, so the state exists for a screen reader whether or not the
+   CSS loads. */
+.lw-flow-node[aria-current] {
+  border-color: var(--lw-brand-500);
+  box-shadow: var(--lw-brand-glow);
+}
+.lw-flow-node[aria-current] .lw-flow-title { font-weight: var(--lw-fw-semibold); }
+.lw-flow-node[aria-current] .lw-flow-label { color: var(--lw-brand-text); }
+
+/* The connector. A 1px `--lw-line` rule with a brand-coloured leading segment —
+   NOT the `.lw-draw` / `.lw-flow-line` machinery, which is SVG stroke geometry
+   and needs a path with a known length; a DOM chain of arbitrary-height cards
+   has no such path. Fully drawn in the static state. */
+.lw-flow-edge {
+  position: relative;
+  align-self: center;
+  justify-self: center;
+  inline-size: var(--lw-flow-edge-i, var(--lw-flow-edge, 28px));
+  block-size: var(--lw-flow-edge-b, 1px);
+  background: var(--lw-line);
+}
+/* Logical insets, so an RTL chain leads from the correct end. */
+.lw-flow-edge::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  inline-size: var(--lw-flow-seg-i, 45%);
+  block-size: var(--lw-flow-seg-b, 100%);
+  background: var(--lw-brand-500);
+}
+
+/* THE DRAW-IN. Double-gated: a browser with no scroll timelines and a reader
+   who prefers reduced motion both get the complete diagram, because nothing
+   above this point is hidden or faded.
+
+   ONE keyframe, `lwFlowPulse` — verified unused before it was named, because a
+   keyframe name is GLOBAL and last-wins and no gate can see a collision.
+
+   NO `--lw-dur-*` AND NO `--lw-stagger` HERE, AND THAT IS NOT AN OVERSIGHT.
+   `animation-duration`, `animation-delay` and `animation-iteration-count` are
+   IGNORED while `animation-timeline` names a progress-based timeline — the
+   progress of the view range IS the clock (CSS Animations 2). A time token
+   written here would render as documentation of an intent the browser discards,
+   which is worse than none: the next reader would trust it. The per-sibling
+   offset therefore has to be a RANGE offset, and it is a local knob with a
+   fallback like every other knob in this file. The index comes from
+   `:nth-child`, not from a style attribute, so a vanilla-HTML consumer gets the
+   identical cascade — capped at 8, the same ceiling `useDeterministicCascade`
+   uses. A time-based pulse on the current node was drafted and cut: it is a
+   second `animation` on the same element as the draw-in, and the shorthand
+   resets `animation-timeline`, so the current node would have silently lost its
+   scroll binding — exactly the class of regression this section exists to
+   prevent. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .lw-flow > * {
+      animation: lwFlowPulse linear both;
+      animation-timeline: view();
+      animation-range:
+        entry calc(10% + var(--lw-flow-i, 0) * var(--lw-flow-step, 4%))
+        entry calc(70% + var(--lw-flow-i, 0) * var(--lw-flow-step, 4%));
+    }
+    .lw-flow > :nth-child(2)  { --lw-flow-i: 1; }
+    .lw-flow > :nth-child(3)  { --lw-flow-i: 2; }
+    .lw-flow > :nth-child(4)  { --lw-flow-i: 3; }
+    .lw-flow > :nth-child(5)  { --lw-flow-i: 4; }
+    .lw-flow > :nth-child(6)  { --lw-flow-i: 5; }
+    .lw-flow > :nth-child(7)  { --lw-flow-i: 6; }
+    .lw-flow > :nth-child(8)  { --lw-flow-i: 7; }
+    .lw-flow > :nth-child(n+9) { --lw-flow-i: 8; }
+  }
+}
+@keyframes lwFlowPulse {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}

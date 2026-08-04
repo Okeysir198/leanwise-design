@@ -1,0 +1,130 @@
+<!-- @dsCard group="Navigation" name="TopBar — mobile nav" subtitle="The narrow-bar disclosure: a toggle in the bar, a panel under it, no top layer and no focus trap" viewport="1060x900" -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>TopBar — mobile nav</title>
+<link rel="stylesheet" href="../../preview/_card.css">
+<link rel="stylesheet" href="../../base.css">
+<link rel="stylesheet" href="../../marketing.css">
+<link rel="stylesheet" href="../../product.css">
+<script src="../../preview/_vendor/react.development.js"></script>
+<script src="../../preview/_vendor/react-dom.development.js"></script>
+<script src="../../preview/_vendor/babel.min.js"></script>
+<script src="../../preview/_card.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>
+/* The mobile nav is a MEDIA-QUERY state, and both browser gates render every
+   card at a fixed 1280px viewport — so a specimen that waited for the real
+   query would be measured in its desktop state forever, which is the one state
+   this card is not about. The frame therefore forces the three rules the
+   `@media (max-width: 768px)` block carries, and nothing else: the toggle
+   appears, the bar's own nav drops, the panel's nav stacks. It restyles no
+   component. Same harness idea as `.appframe` in nav.card.html, which copies
+   the shell's geometry rather than inventing one.
+
+   --lw-bp-md is 768px; the frame is 380px wide, a phone. */
+.mobileframe { position: relative; width: 380px; max-width: 100%; border: 1px solid var(--lw-line); border-radius: 10px; background: var(--lw-bg); overflow: hidden; }
+.mobileframe .lw-topbar .lw-topbar-toggle { display: inline-flex; align-items: center; justify-content: center; }
+.mobileframe .lw-topbar nav { display: none; }
+.mobileframe .lw-topbar .lw-topbar-panel nav { display: flex; flex-direction: column; gap: var(--lw-space-4); }
+.mobileframe .lw-topbar .lw-topbar-panel nav a { padding-block: var(--lw-space-12); }
+/* The frame clips, so it has to reserve the height the open panel needs — an
+   absolutely positioned panel takes no space of its own. */
+.mobileframe.open { min-height: 300px; }
+.mobileframe .body { padding: 16px; font-size: 13px; color: var(--lw-fg-muted); }
+</style>
+</head><body><div class="card">
+<header><h1>TopBar — mobile nav</h1>
+<p class="sub"><b>This is deliberately not <span class="mono">Drawer</span>, and the difference is
+real rather than a naming preference.</b> <span class="mono">Drawer</span> is a modal
+<span class="mono">&lt;dialog&gt;</span> promoted to the top layer: it makes the page inert, so it
+owns a focus trap, a scrim and a return-focus contract. A nav disclosure hangs under the bar, leaves
+the page visible and interactive, and needs none of that. Two interactions, two components — README
+rule 9 is about one interaction wearing two treatments, which this is not.</p>
+<p class="sub"><b>The panel is <span class="mono">position: absolute</span> under a
+<span class="mono">position: sticky</span> bar</b>, so the bar is already its containing block and
+<span class="mono">inset-block-start: 100%</span> is the bar's underside. That matters because
+<span class="mono">.lw-topbar</span> carries <span class="mono">backdrop-filter</span>, which makes
+it a containing block for <span class="mono">position: fixed</span> descendants too — the
+consumer's hand-rolled version shipped broken on exactly that, resolving
+<span class="mono">inset: 0</span> against the 56px bar instead of the viewport and painting its
+background in that strip alone. Absolute under sticky has no such failure; anything reworked to
+<span class="mono">fixed</span> has to become a sibling of the <span class="mono">&lt;header&gt;</span>.</p>
+<p class="sub"><b><span class="mono">.lw-topbar-panel[hidden] { display: none }</span> is
+mandatory and fails silently without it.</b> The panel's own
+<span class="mono">display: flex</span> is an author rule, so it outranks the UA's
+<span class="mono">[hidden]</span> default and the panel would stay painted while its attribute said
+it was hidden. The panel is hidden rather than unmounted, because
+<span class="mono">aria-controls</span> has to point at an element that exists.</p></header>
+
+<div class="panes"><div class="pane" id="light"></div><div class="pane dark lw-band-dark" id="dark"></div></div>
+
+<div style="display:flex;flex-direction:column;gap:12px;padding-top:20px;margin-top:6px;border-top:1px solid var(--lw-line)">
+<span class="lbl-eyebrow">why it is built this way</span>
+<p class="sub"><b>The toggle's display rule is scoped under <span class="mono">.lw-topbar</span>,
+and that is load-bearing.</b> It composes <span class="mono">.lw-icon-btn</span>, whose
+<span class="mono">display: inline-flex</span> still lives in product.css — equal specificity,
+loading after base.css. An unscoped <span class="mono">.lw-topbar-toggle { display: none }</span>
+would lose to it, and the toggle would show on every desktop app page.</p>
+<p class="sub"><b>The toggle appears in the same frame the links disappear in.</b> Both rules sit at
+<span class="mono">--lw-bp-md</span> (768px) — not because 768 is a nice number, but because a bar
+whose links have dropped and whose toggle has not yet appeared has no navigation at all.</p>
+<p class="sub"><b>The accessible name is the ACTION, not the state.</b>
+<span class="mono">aria-expanded</span> already carries the state; a button permanently named
+&ldquo;Menu&rdquo; tells a screen-reader user nothing about what pressing it will now do, so the
+name flips to &ldquo;Close menu&rdquo; while the panel is open. Escape closes and returns focus to
+the toggle — bound to the two elements rather than to the document, because a non-modal disclosure
+has no claim on Escape while the reader is somewhere else on the page.</p>
+</div>
+</div>
+<script type="text/babel">
+const { TopBar, Icon } = window.LeanWiseDesign_f2d907;
+
+const LINKS = [
+  { href: "#product", label: "Product" },
+  { href: "#customers", label: "Customers" },
+  { href: "#pricing", label: "Pricing" },
+  { href: "#company", label: "Company", current: true },
+];
+
+/* Hand-composed rather than rendered from <NavToggle>, for the reason the
+   whole pattern exists: the markup has to be correct as plain HTML before any
+   component emits it. <NavToggle> emits exactly this, plus the state. Both
+   frames are pinned open/closed rather than interactive, so the pixel gate
+   scores a settled shot instead of whichever frame it caught. */
+function Frame({ open, id }) {
+  const panelId = id + "-panel";
+  return (
+    <div className={"mobileframe" + (open ? " open" : "")}>
+      <TopBar brand="LeanWise AI" logo brandHref="#home" links={LINKS}>
+        <button type="button" className="lw-topbar-toggle lw-icon-btn lw-hit"
+          aria-expanded={open} aria-controls={panelId}
+          aria-label={open ? "Close menu" : "Menu"}>
+          <Icon name={open ? "close" : "menu"} size={20} />
+        </button>
+        <div id={panelId} className="lw-topbar-panel" hidden={!open}>
+          <nav aria-label="Primary, narrow">
+            {LINKS.map((l) => (
+              <a key={l.href} href={l.href} aria-current={l.current ? "page" : undefined}>{l.label}</a>
+            ))}
+          </nav>
+        </div>
+      </TopBar>
+      <div className="body">Page content stays visible and interactive — the panel is a
+        disclosure, not a modal.</div>
+    </div>
+  );
+}
+
+function Pane({ side }) {
+  return (
+    <React.Fragment>
+      <span className="lbl-eyebrow lbl-above">closed</span>
+      <Frame open={false} id={side + "-closed"} />
+      <span className="lbl-eyebrow lbl-above" style={{marginTop:14}}>open</span>
+      <Frame open id={side + "-open"} />
+    </React.Fragment>
+  );
+}
+for (const id of ["light", "dark"]) {
+  ReactDOM.createRoot(document.getElementById(id)).render(<Pane side={id} />);
+}
+</script></body></html>

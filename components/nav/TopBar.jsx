@@ -13,9 +13,16 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  *
  *  `brandHref` makes the lockup a real <a> — the mark and the name are one link,
  *  not two, so there is a single tab stop and no dead gap between them.
+ *
+ *  `linkAs` replaces the anchor ELEMENT for the brand and every nav link — a
+ *  router's Link, so an in-app destination navigates client-side instead of
+ *  reloading the document (and, in a localised app, keeps its path prefix). It
+ *  receives exactly what the raw <a> would: `href`, `className`, `children` and
+ *  `aria-current`. Default `"a"`, which is the unchanged behaviour.
  */
-export function TopBar({ brand, brandHref, logo = false, links = [], actions, className, children, ...rest }) {
-  const Brand = brandHref ? "a" : "span";
+export function TopBar({ brand, brandHref, logo = false, links = [], actions, linkAs = "a", className, children, ...rest }) {
+  const Link = linkAs;
+  const Brand = brandHref ? linkAs : "span";
   const brandProps = brandHref ? { href: brandHref, "aria-label": typeof brand === "string" ? brand + " — home" : "Home" } : {};
   return (
     <header className={cx("lw-topbar", className)} {...rest}>
@@ -27,7 +34,7 @@ export function TopBar({ brand, brandHref, logo = false, links = [], actions, cl
           {/* Keyed by index, not href: nav links routinely share a placeholder
              destination, and React treats duplicate keys as unsupported. Same
              reasoning as Sidebar — an href is a destination, not an identity. */}
-          {links.map((l, i) => <a key={l.id ?? i} href={l.href} aria-current={l.current ? "page" : undefined}>{l.label}</a>)}
+          {links.map((l, i) => <Link key={l.id ?? i} href={l.href} aria-current={l.current ? "page" : undefined}>{l.label}</Link>)}
         </nav>
       )}
       <span className="spacer" />

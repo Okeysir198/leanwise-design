@@ -11,8 +11,13 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  * It reserves the home indicator with `--lw-safe-bottom` rather than a magic
  * 34px: the inset is 0 on a device without one, so the same rule is right
  * everywhere. The 44px target comes from the bar height, not from padding.
+ *
+ * `linkAs` replaces the anchor ELEMENT (default `"a"`) for items that carry an
+ * `href` — a router's Link, so a destination navigates client-side rather than
+ * reloading. It receives what the raw <a> would: `href`, `aria-current` and
+ * `children`. An item without an href stays a <button>.
  */
-export function BottomNav({ items = [], value, onChange, label = "Main", className, ...rest }) {
+export function BottomNav({ items = [], value, onChange, label = "Main", linkAs = "a", className, ...rest }) {
   // An effect, not the render body: a console.warn during render is a side
   // effect, and StrictMode double-invokes render.
   React.useEffect(() => {
@@ -23,7 +28,7 @@ export function BottomNav({ items = [], value, onChange, label = "Main", classNa
     <nav className={cx("lw-bottom-nav", className)} aria-label={label} {...rest}>
       {items.map((it) => {
         const on = it.value === value;
-        const Tag = it.href ? "a" : "button";
+        const Tag = it.href ? linkAs : "button";
         return (
           <Tag key={it.value} href={it.href || undefined} type={it.href ? undefined : "button"}
             aria-current={on ? "page" : undefined}

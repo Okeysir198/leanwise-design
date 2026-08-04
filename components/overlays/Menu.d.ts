@@ -26,6 +26,15 @@ export interface MenuProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "o
   placement?: PopoverPlacement;
   matchWidth?: boolean;
   className?: string;
+  /**
+   * Replaces the anchor ELEMENT for rows that carry an `href`. Default `"a"`.
+   * Pass a router's Link so a menu destination navigates client-side and keeps
+   * any path prefix that Link applies. It receives what the raw `<a>` would:
+   * `href`, `className`, the menuitem ARIA, `tabIndex` and `children` — so it
+   * must forward unknown props to the element, or the keyboard model breaks. A
+   * row without an href is a `<button>` and is never replaced.
+   */
+  linkAs?: React.ElementType;
 }
 /**
  * The action menu, built on `Popover`. Arrows move focus, Home/End jump,

@@ -92,16 +92,12 @@
 </div>
 </section>
 
-<footer style="border-top:1px solid var(--lw-line);padding:24px 0">
-<div class="lw-container" style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between">
-<span style="font-family:var(--lw-font-mono);font-size:11px;color:var(--lw-fg-muted)">© LeanWise AI</span>
-<nav style="display:flex;gap:20px;font-family:var(--lw-font-mono);font-size:11px">
-<a href="#" style="color:var(--lw-fg-muted);text-decoration:none" style-hover="color:var(--lw-brand-text)">Privacy</a>
-<a href="#" style="color:var(--lw-fg-muted);text-decoration:none" style-hover="color:var(--lw-brand-text)">Security</a>
-<a href="#" style="color:var(--lw-fg-muted);text-decoration:none" style-hover="color:var(--lw-brand-text)">Status</a>
-</nav>
-</div>
-</footer>
+<!-- Was a hand-rolled <footer> carrying seven inline styles — its own hairline, its
+     own padding, its own mono type scale and a colour restated on every link. All
+     seven are now the SiteFooter component and the .lw-footer* rules in
+     marketing.css, so this template and every consumer get the same footer, the
+     same current-page marker and the same dark-band behaviour. -->
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.SiteFooter" hint-size="100%,300px" brand="LeanWise AI" desc="Answers grounded in your own documents, with the passage they came from attached." columns="{{ footerColumns }}">© LeanWise AI</x-import>
 </div>
 
 </x-dc>
@@ -118,6 +114,25 @@ class Component extends DCLogic {
         { href: "#", label: "Resources" },
         { href: "#", label: "Pricing" },
         { href: "#", label: "About" }
+      ],
+      // A footer entry with no `href` is a NOTE, not a link — no pointer, no tab
+      // stop. "SOC 2 — in progress" is the case that keeps being written as a
+      // dead <a> because there was nowhere else to put it.
+      footerColumns: [
+        { heading: "Product", links: [
+          { href: "#", label: "Overview" },
+          { href: "#", label: "Retrieval" },
+          { href: "#", label: "Evaluation" }
+        ] },
+        { heading: "Trust", links: [
+          { href: "#", label: "Privacy" },
+          { href: "#", label: "Security" },
+          { label: "SOC 2 — in progress" }
+        ] },
+        { heading: "Company", links: [
+          { href: "#", label: "Status", external: true },
+          { href: "#", label: "Contact" }
+        ] }
       ],
       features: [
         { title: "Grounded by default", body: "Every claim carries the passage it came from. No citation, no answer.", href: "#" },

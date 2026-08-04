@@ -175,6 +175,38 @@ const MANIFEST = [
   //    why the brand one being missed went unnoticed.
   { group: "soft chips", fg: "brand-on",     bg: "brand-soft",   scope: "both",  label: "brand chip / avatar on the brand tint" },
 
+  //    v1.3.0: `.lw-footer-head` paints --lw-brand-text on a --lw-bg-subtle
+  //    ground, and the composed-pair walk below CANNOT see it — the ink is on
+  //    the heading and the ground is on `.lw-footer`, two different rules, which
+  //    is exactly the shape section G2 already documents for the diff surface.
+  //    So the manifest is the only place this pair can be stated. It is worth
+  //    stating: the consumer this footer replaces hard-coded a navy tier and put
+  //    brand-500 on it at 11px, which failed AA on every page in both locales.
+  { group: "soft chips", fg: "brand-text",   bg: "bg-subtle",    scope: "both",  label: "footer column heading (brand as text on the subtle ground)" },
+
+  //    v1.3.0, the comparison matrix and the plan card — five more pairs with
+  //    the SAME shape, and the same reason the manifest is the only place they
+  //    can be stated: `.lw-compare :is(th,td)[data-featured]` declares the
+  //    GROUND and nothing else, while the ink arrives from four other rules
+  //    (`.lw-compare-yes`, `.lw-compare-no`, `th[scope="row"]`, and inherited
+  //    `--lw-fg` on a plain cell). The composed-pair walk needs both in ONE
+  //    rule, so it sees none of them.
+  //
+  //    The featured column is deliberately --lw-bg-subtle rather than
+  //    --lw-brand-soft precisely to keep this list short: --lw-fg on
+  //    --lw-brand-soft is a pair nothing composes today, so a brand tint would
+  //    have added a brand-new measurement in all three scopes for a decorative
+  //    ground. These five are re-statements on a surface already asserted.
+  { group: "compare / plan", fg: "success-on", bg: "bg-subtle", scope: "both",  label: "matrix INCLUDED glyph in the featured column" },
+  { group: "compare / plan", fg: "fg-subtle",  bg: "bg-subtle", scope: "light", label: "matrix EXCLUDED glyph in the featured column (dark twin: 'muted text on a dark card')" },
+  { group: "compare / plan", fg: "fg-muted",   bg: "bg-subtle", scope: "light", label: "matrix row header / group label (dark twin: 'secondary text on a dark card')" },
+  { group: "compare / plan", fg: "fg",         bg: "bg-subtle", scope: "light", label: "matrix string cell in the featured column (dark twin: 'body text on a dark card')" },
+  //    The plan card's INCLUDED glyph. Section C measures brand-500 as text on
+  //    the light page and brand-400 on dark; this asserts the ROLE that
+  //    `.lw-plan-feature` actually paints, on the card ground it actually sits
+  //    on — the same guard the cta-text entry gives the amber.
+  { group: "compare / plan", fg: "brand-text", bg: "bg",        scope: "both",  label: "plan card INCLUDED glyph (role: --lw-brand-text on the card ground)" },
+
   // ── G. Always-dark navy-deep ground — the full-bleed dark hero AND the .lw-code
   //    mono surface (lw.css verifies .lw-code sits on this same navy-deep). Every
   //    row below is a .lw-code token span. The --lw-on-dark* family is rgba; the

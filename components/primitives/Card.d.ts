@@ -7,7 +7,15 @@ export interface CardProps extends React.HTMLAttributes<HTMLElement> {
   glow?: boolean;
   selected?: boolean;
   href?: string;
-  as?: string;
+  /**
+   * Override the element (with `interactive`, defaults to `<a>` when href is
+   * set, else `<button>`). This IS the router escape hatch — `as={Link}` with
+   * an `href` renders the consumer's Link, so there is deliberately no separate
+   * `linkAs` here (README rule 9: one control, one class). It is
+   * `React.ElementType`, not `string`: typed as `string` the mechanism existed
+   * at runtime and failed to compile.
+   */
+  as?: React.ElementType;
 }
 export declare function Card(props: CardProps): React.JSX.Element;
 export declare function CardHead(props: React.HTMLAttributes<HTMLDivElement>): React.JSX.Element;

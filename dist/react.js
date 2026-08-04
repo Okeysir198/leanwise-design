@@ -5,6 +5,8 @@ import { Chip } from "./components/primitives/Chip.js";
 import { Eyebrow } from "./components/primitives/Eyebrow.js";
 import { Skeleton } from "./components/primitives/Skeleton.js";
 import { Icon, iconNames } from "./components/primitives/Icon.js";
+import { Disclosure } from "./components/primitives/Disclosure.js";
+import { Prose } from "./components/primitives/Prose.js";
 import { Page } from "./components/layout/Page.js";
 import { Container } from "./components/layout/Container.js";
 import { Stack } from "./components/layout/Stack.js";
@@ -48,6 +50,7 @@ import { Breadcrumbs } from "./components/nav/Breadcrumbs.js";
 import { ThemeToggle } from "./components/nav/ThemeToggle.js";
 import { CommandPalette, score } from "./components/nav/CommandPalette.js";
 import { BottomNav } from "./components/nav/BottomNav.js";
+import { NavToggle } from "./components/nav/NavToggle.js";
 import { Dialog } from "./components/overlays/Dialog.js";
 import { Toast, ToastRegion } from "./components/overlays/Toast.js";
 import { Tooltip } from "./components/overlays/Tooltip.js";
@@ -68,16 +71,28 @@ import { Hero } from "./components/marketing/Hero.js";
 import { FeatureGrid } from "./components/marketing/FeatureGrid.js";
 import { StoryCard } from "./components/marketing/StoryCard.js";
 import { LogoRail } from "./components/marketing/LogoRail.js";
+import { SiteFooter } from "./components/marketing/SiteFooter.js";
+import { Steps } from "./components/marketing/Steps.js";
+import { Quote } from "./components/marketing/Quote.js";
+import { Byline } from "./components/marketing/Byline.js";
+import { ArticleCard } from "./components/marketing/ArticleCard.js";
+import { AnnounceBar } from "./components/marketing/AnnounceBar.js";
+import { PlanCard } from "./components/marketing/PlanCard.js";
+import { CompareTable } from "./components/marketing/CompareTable.js";
+import { Flow } from "./components/marketing/Flow.js";
 export {
   ActivityFeed,
   AgentTrace,
+  AnnounceBar,
   AppBar,
+  ArticleCard,
   Artifact,
   Avatar,
   BarChart,
   BottomNav,
   Breadcrumbs,
   Button,
+  Byline,
   Calendar,
   Card,
   CardBody,
@@ -90,6 +105,7 @@ export {
   CodeBlock,
   Combobox,
   CommandPalette,
+  CompareTable,
   ConfidenceMeter,
   Console,
   Container,
@@ -97,6 +113,7 @@ export {
   DatePicker,
   Dialog,
   DiffReview,
+  Disclosure,
   Drawer,
   EmptyState,
   Eyebrow,
@@ -105,6 +122,7 @@ export {
   Field,
   FileUpload,
   FilterBar,
+  Flow,
   Grid,
   Hero,
   Icon,
@@ -116,17 +134,22 @@ export {
   Menu,
   Message,
   NavItem,
+  NavToggle,
   Page,
   Pagination,
+  PlanCard,
   Popover,
   Progress,
   PromptInput,
+  Prose,
+  Quote,
   RANGE_PRESETS,
   RichText,
   Section,
   Segmented,
   Select,
   Sidebar,
+  SiteFooter,
   Skeleton,
   SourceChip,
   SourceList,
@@ -135,6 +158,7 @@ export {
   StatMeter,
   StateView,
   Stepper,
+  Steps,
   StoryCard,
   Switch,
   Table,

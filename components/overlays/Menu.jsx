@@ -15,8 +15,14 @@ const isRow = (it) => !it.type || it.type === "item";
  * returns focus to the trigger. Focus MOVES with the highlight — a menu that
  * paints a highlight while focus stays on the trigger tells a screen reader
  * nothing has changed.
+ *
+ * `linkAs` replaces the anchor ELEMENT (default `"a"`) for rows that carry an
+ * `href` — a router's Link, so a menu destination navigates client-side and
+ * keeps any prefix that Link applies. It receives what the raw <a> would:
+ * `href`, `className`, the menuitem ARIA, `tabIndex` and `children`. A row
+ * without an href is still a <button>, and `linkAs` never replaces that.
  */
-export function Menu({ items = [], trigger, onSelect, label, placement = "bottom-start", matchWidth, className, ...rest }) {
+export function Menu({ items = [], trigger, onSelect, label, placement = "bottom-start", matchWidth, linkAs = "a", className, ...rest }) {
   const [open, setOpen] = React.useState(false);
   const listEl = React.useRef(null);
   const typed = React.useRef({ s: "", t: 0 });
@@ -124,7 +130,7 @@ export function Menu({ items = [], trigger, onSelect, label, placement = "bottom
           if (it.type === "separator") return <hr key={i} className="lw-menu-sep" />;
           if (it.type === "label") return <div key={i} className="lw-menu-label">{it.label}</div>;
           const checkable = it.checked != null;
-          const Tag = it.href ? "a" : "button";
+          const Tag = it.href ? linkAs : "button";
           return (
             <Tag key={it.value ?? i} className={cx("lw-menu-item", it.danger && "danger")}
               type={it.href ? undefined : "button"} href={it.href || undefined}

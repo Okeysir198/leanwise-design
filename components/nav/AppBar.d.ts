@@ -14,6 +14,13 @@ export interface AppBarProps extends React.HTMLAttributes<HTMLElement> {
   menuExpanded?: boolean;
   /** Right-hand controls — theme toggle, primary action, avatar. */
   actions?: React.ReactNode;
+  /**
+   * Replaces the anchor ELEMENT for the brand, and is forwarded to
+   * `Breadcrumbs` — one prop covers every link this row renders. Default `"a"`.
+   * Pass a router's Link so the chrome navigates client-side and keeps any path
+   * prefix that Link applies.
+   */
+  linkAs?: React.ElementType;
 }
 /**
  * Brand + breadcrumbs + actions, on `TopBar`. Use this rather than hand-writing

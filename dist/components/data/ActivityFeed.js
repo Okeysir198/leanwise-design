@@ -19,7 +19,7 @@ const bucket = (when, now) => {
   const days = Math.floor((new Date(n.getFullYear(), n.getMonth(), n.getDate()) - new Date(d.getFullYear(), d.getMonth(), d.getDate())) / 864e5);
   return days <= 0 ? "Today" : days === 1 ? "Yesterday" : days < 7 ? "This week" : "Earlier";
 };
-function ActivityFeed({ items = [], onItemClick, grouped = true, now, label = "Activity", className, ...rest }) {
+function ActivityFeed({ items = [], onItemClick, grouped = true, now, label = "Activity", linkAs = "a", className, ...rest }) {
   const [mounted, setMounted] = React.useState(null);
   React.useEffect(() => {
     setMounted(Date.now());
@@ -38,7 +38,7 @@ function ActivityFeed({ items = [], onItemClick, grouped = true, now, label = "A
     /* @__PURE__ */ jsxs(React.Fragment, { children: [
       g.name && /* @__PURE__ */ jsx("div", { className: "lw-feed-group", children: g.name }),
       g.items.map((it, i) => {
-        const Tag = it.href ? "a" : onItemClick || it.onClick ? "button" : "div";
+        const Tag = it.href ? linkAs : onItemClick || it.onClick ? "button" : "div";
         return /* @__PURE__ */ jsxs(
           Tag,
           {

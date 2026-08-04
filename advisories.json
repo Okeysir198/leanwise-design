@@ -20,6 +20,18 @@
   ],
   "advisories": [
     {
+      "id": "blank-specimen-cards",
+      "fixedIn": "1.3.0",
+      "affects": "<1.3.0",
+      "severity": "high",
+      "title": "Every React specimen card rendered blank — so check:a11y and check:visual measured nothing",
+      "detail": "esbuild's `jsx` API option is only a DEFAULT: a reachable tsconfig.json overrides it per file, and v1.2.0 added one carrying \"jsx\": \"react-jsx\" (correct for tsc, fatal for the browser bundle). Every component in _ds_bundle.js therefore emitted react/jsx-runtime imports and threw `TypeError: import_jsx_runtime.jsx is not a function`, so all 26 React-mounting cards painted their prose and none of their components. check:a11y's guard was `document.body.innerText.length > 0`, which the prose satisfied, and check:visual compared two equally blank plates — so both browser gates reported green across v1.2.0 and v1.2.1 while inspecting nothing. Fixed with `tsconfigRaw: { compilerOptions: {} }` in tools/lw-bundle.mjs; the guard was rebuilt in the same release to fail on an uncaught page error and on any empty React root. The four .lw-btn-link contrast failures the repaired cards immediately exposed were real and are fixed in 1.3.0 too. If you are pinned below 1.3.0, treat any a11y or visual result this package published for its React components as unmeasured.",
+      "measuredBy": "check:a11y",
+      "count": 26,
+      "countMeans": "specimen cards that mount a React root, i.e. that rendered blank",
+      "verifiedAgainst": "v1.3.0"
+    },
+    {
       "id": "no-use-client",
       "fixedIn": "1.2.0",
       "affects": "<1.2.0",
@@ -27,7 +39,7 @@
       "title": "No component declares \"use client\" — App Router server components throw",
       "detail": "The package shipped zero \"use client\" directives, so <Combobox>, <DataGrid>, <Dialog>, <Popover>, <Menu> and useTheme() all throw when an App Router page renders them from a server component — the default for every page in every Next app since 2023.",
       "measuredBy": "check:rsc",
-      "count": 28,
+      "count": 30,
       "countMeans": "modules that require the directive"
     },
     {
@@ -38,7 +50,7 @@
       "title": "dist/ was never built for any consumer",
       "detail": "prepublishOnly was the only build hook and a git install runs no lifecycle script, so every consumer got raw .jsx and had to put the package inside babel-loader's include. dist/ is committed from 1.2.0.",
       "measuredBy": "check:build",
-      "count": 78,
+      "count": 90,
       "countMeans": "files now shipped pre-compiled"
     },
     {

@@ -1,8 +1,8 @@
 import { jsx, jsxs } from "react/jsx-runtime";
 const cx = (...a) => a.filter(Boolean).join(" ");
-function SourceList({ sources = [], className, ...rest }) {
+function SourceList({ sources = [], linkAs = "a", className, ...rest }) {
   return /* @__PURE__ */ jsx("div", { className: cx("lw-source-list", className), ...rest, children: sources.map((s, i) => {
-    const Tag = s.href ? "a" : "button";
+    const Tag = s.href ? linkAs : "button";
     return /* @__PURE__ */ jsxs(
       Tag,
       {

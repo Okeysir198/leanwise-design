@@ -9,5 +9,13 @@ export interface TopBarProps extends React.HTMLAttributes<HTMLElement> {
   logo?: boolean;
   links?: TopBarLink[];
   actions?: React.ReactNode;
+  /**
+   * Replaces the anchor ELEMENT for the brand and every nav link. Default `"a"`.
+   * Pass a router's Link so an in-app destination navigates client-side instead
+   * of reloading the document — and, in a localised app, keeps its path prefix.
+   * It receives exactly what the raw `<a>` would: `href`, `className`,
+   * `children` and `aria-current`.
+   */
+  linkAs?: React.ElementType;
 }
 export declare function TopBar(props: TopBarProps): React.JSX.Element;

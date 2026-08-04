@@ -1,0 +1,133 @@
+<!-- @dsCard group="Marketing" name="Site chrome" subtitle="AnnounceBar + TopBar + SiteFooter — the sticky-under-sticky contract, and a dark footer that is a band, not a navy tier" viewport="1100x1180" -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Site chrome</title>
+<link rel="stylesheet" href="../../preview/_card.css">
+<link rel="stylesheet" href="../../base.css">
+<link rel="stylesheet" href="../../marketing.css">
+<link rel="stylesheet" href="../../product.css">
+<script src="../../preview/_vendor/react.development.js"></script>
+<script src="../../preview/_vendor/react-dom.development.js"></script>
+<script src="../../preview/_vendor/babel.min.js"></script>
+<script src="../../preview/_card.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.full{margin:0 -30px}</style>
+</head><body><div class="card">
+<header><h1>Site chrome</h1>
+<p class="sub"><b>A sticky bar under a sticky announcement is what every consumer gets wrong.</b> Both claim
+<span class="mono">inset-block-start: 0</span>, so the header scrolls up underneath the strip and its first line
+is eaten. <span class="mono">.lw-announce + .lw-topbar</span> offsets the header by
+<span class="mono">var(--lw-announce-h, 36px)</span> — a contract that can only be written here, because
+<span class="mono">.lw-topbar</span> is ours. A consumer hand-rolling the strip cannot reach into the package's
+header to offset it, so it re-declares the header instead and inherits none of its later fixes.</p></header>
+
+<div class="full" id="chrome"></div>
+
+<div id="footer-light" style="padding-top:24px"></div>
+<div id="footer-dark" style="padding-top:24px"></div>
+
+<div style="display:flex;flex-direction:column;gap:12px;padding-top:20px;margin-top:6px;border-top:1px solid var(--lw-line)">
+<span class="lbl-eyebrow">why it is built this way</span>
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">A dark footer is a BAND, not a navy tier</h2>
+<p class="sub"><b>The second footer above sets one attribute:</b> <span class="mono">data-band="dark"</span>. It
+paints no navy, and not one child carries a dark variant. The band re-points every role token on the element —
+<span class="mono">--lw-brand-text</span> becomes <span class="mono">brand-400</span>, the inks become the dark
+tiers, the hairlines follow. The consumer this replaces hard-coded <span class="mono">--lw-navy-900</span> and
+then restated five child inks on top of it; the one it got wrong was the mono column heading —
+<span class="mono">brand-500</span> at 11px on navy — which failed AA on every page, in both locales.</p>
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">The current page is not a colour</h2>
+<p class="sub"><b>“Resources” is marked current in the light footer.</b> It takes an ink lift, a weight step
+<i>and</i> a brand rule down its start edge — three signals, so the state survives a monochrome print, a
+colour-blind reader and a low-contrast screen. It is deliberately not a <span class="mono">▸</span>: a typed
+glyph is an icon drawn a second time in the font, and screen readers announce it. Every link reserves the rule
+as a transparent border, so marking the current page shifts nothing.</p>
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">A note is not a link</h2>
+<p class="sub"><b>“SOC 2 — in progress” carries no href</b>, so it renders as
+<span class="mono">.lw-footer-note</span>: a span, no pointer, no tab stop. It is deliberately absent from the
+consolidated pointer-affordance list, because a pointer over text that does nothing is a lie. The external
+entries name an icon instead of typing <span class="mono">↗</span>.</p>
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">Nothing new to compose with</h2>
+<p class="sub"><b>The long disclaimer is <span class="mono">.lw-measure</span>; the social row is
+<span class="mono">.lw-cluster</span> + <span class="mono">.lw-icon-btn</span>.</b> Neither got a class of its
+own — both already exist, and a footer-specific copy of either is how one system grows two treatments of one
+drawing.</p>
+</div>
+</div>
+<script type="text/babel">
+const LW = window.LeanWiseDesign_f2d907;
+const { AnnounceBar, TopBar, SiteFooter, Button, Icon, Cluster } = LW;
+
+const navLinks = [
+  { href: "#", label: "Product" },
+  { href: "#", label: "Customers" },
+  { href: "#", label: "Resources", current: true },
+  { href: "#", label: "Pricing" }
+];
+
+const columns = [
+  { heading: "Product", links: [
+    { href: "#", label: "Overview" },
+    { href: "#", label: "Retrieval" },
+    { href: "#", label: "Evaluation" },
+    { label: "SOC 2 — in progress" }
+  ] },
+  { heading: "Resources", links: [
+    { href: "#", label: "Resources", current: true },
+    { href: "#", label: "Docs", external: true },
+    { href: "#", label: "Changelog" }
+  ] },
+  { heading: "Company", links: [
+    { href: "#", label: "About" },
+    { href: "#", label: "Careers" },
+    { href: "#", label: "Contact" }
+  ] }
+];
+
+const social = (
+  <Cluster>
+    <button type="button" className="lw-icon-btn" aria-label="Email us"><Icon name="mail" size={16} /></button>
+    <button type="button" className="lw-icon-btn" aria-label="Source repository"><Icon name="code" size={16} /></button>
+    <button type="button" className="lw-icon-btn" aria-label="Status page"><Icon name="link" size={16} /></button>
+  </Cluster>
+);
+
+const legal = "LeanWise AI is a retrieval and review tool. It does not provide legal advice, and an answer it grounds in your documents is a starting point for review rather than a determination.";
+
+ReactDOM.createRoot(document.getElementById("chrome")).render(
+  <div style={{border:"1px solid var(--lw-line)",borderRadius:"var(--lw-radius-lg)",overflow:"hidden"}}>
+    <AnnounceBar onDismiss={() => {}}>
+      Retrieval evaluation is now on by default. <a href="#">Read the note</a>
+    </AnnounceBar>
+    {/* `logo` is ON, and it is worth saying why it once was not. `.brand-mark` is
+        a per-theme background-image, and through v1.2 `lw-visual` flipped the
+        theme and screenshot in the same frame with no image-decode wait — so the
+        DARK shot caught the newly-referenced SVG undecoded and this card drifted
+        0.0293%, well over both thresholds. The first fix was to take the logo
+        out, i.e. to edit the specimen to suit the gate. v1.3.0 put a decode wait
+        in the gate instead (tools/lw-visual.mjs `decoded()`), so the mark is
+        back where it belongs: this card is the site chrome, and site chrome has
+        a logo in it. */}
+    <TopBar brand="LeanWise AI" brandHref="#" logo links={navLinks} className="nav-center">
+      <Button variant="brand" size="sm">Book a walkthrough</Button>
+    </TopBar>
+    <div style={{padding:"28px 20px",color:"var(--lw-fg-subtle)",fontSize:13}}>
+      The header sits 36px down, not at zero. Scroll a real page and the strip stays; the header stays under it.
+    </div>
+  </div>
+);
+
+ReactDOM.createRoot(document.getElementById("footer-light")).render(
+  <SiteFooter
+    brand={<b>LeanWise AI</b>}
+    desc="Answers grounded in your own documents, with the passage they came from attached."
+    columns={columns} legal={legal}
+    bottom={<><span>© LeanWise AI</span>{social}</>} />
+);
+
+ReactDOM.createRoot(document.getElementById("footer-dark")).render(
+  <SiteFooter dark
+    brand={<b>LeanWise AI</b>}
+    desc="The same markup, one attribute different. No child carries a dark variant."
+    columns={columns} legal={legal}
+    bottom={<><span>© LeanWise AI</span>{social}</>} />
+);
+</script></body></html>

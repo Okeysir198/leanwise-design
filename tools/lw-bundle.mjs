@@ -140,6 +140,25 @@ const JSX = {
   jsxFactory: "React.createElement",
   jsxFragment: "React.Fragment",
   inject: [SHIM_INJECT],
+  /* …and `tsconfigRaw` is what makes the three lines above TRUE. esbuild's `jsx`
+     API option is only the DEFAULT: a `tsconfig.json` reachable from an input
+     file overrides it per-file, and this package grew one in v1.2 carrying
+     `"jsx": "react-jsx"` (correct for `tsc --noEmit` over the .d.ts files, fatal
+     here). So every component silently switched to the automatic runtime, which
+     resolves through SHIM_JSX_RUNTIME to `globalThis.React` — and React's main
+     export has no `jsx`/`jsxs`. The result was `TypeError: import_jsx_runtimeN.jsx
+     is not a function` on EVERY component, i.e. every React specimen card
+     rendered blank, from v1.2 until this line.
+
+     Both browser gates reported green through all of it. `lw-a11y.mjs` refuses a
+     card whose body is empty — but these cards carry prose around the React
+     roots, so `innerText.trim().length > 0` was satisfied by the explanatory
+     copy while the specimen itself was missing, and axe scored the prose.
+     `lw-visual.mjs` compared two equally-blank shots. This is the repo's own
+     recurring shape one more time: the guard existed, and the case it could not
+     see was the real one. If you touch this object, re-run a card in a browser
+     and confirm a component actually paints — a green gate is not the check. */
+  tsconfigRaw: { compilerOptions: {} },
 };
 
 /* ---- step 1: what does the barrel pull in, and what does each of those export? ----------- */

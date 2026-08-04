@@ -1,0 +1,105 @@
+<!-- @dsCard group="Marketing" name="Flow" subtitle="One owned diagram replacing eight private ones — the static state IS the complete state, and the current node is marked positively, never by dimming the rest" viewport="1100x1250" -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Flow</title>
+<link rel="stylesheet" href="../../preview/_card.css">
+<link rel="stylesheet" href="../../base.css">
+<link rel="stylesheet" href="../../marketing.css">
+<script src="../../preview/_vendor/react.development.js"></script>
+<script src="../../preview/_vendor/react-dom.development.js"></script>
+<script src="../../preview/_vendor/babel.min.js"></script>
+<script src="../../preview/_card.js"></script>
+<script src="../../_ds_bundle.js"></script>
+</head><body><div class="card">
+<header><h1>Flow</h1>
+<p class="sub"><b>The consumer this replaces ships eight one-off diagram components behind eight private CSS
+namespaces</b> — a pipeline, an onboarding sequence and a roadmap, none contrast-tested, none holding the motion
+contract, and nothing rendering any two of them side by side to show they were the same picture. This is the one
+drawing.</p></header>
+
+<span class="lbl-eyebrow">horizontal — a processing pipeline, with the third node current</span>
+<div id="flow-h" style="padding:12px 0 4px"></div>
+
+<span class="lbl-eyebrow">vertical — an onboarding sequence, a node expanding via composed Disclosure</span>
+<div id="flow-v" style="padding:12px 0 4px;max-width:520px"></div>
+
+<span class="lbl-eyebrow">a suppressed edge — two phases that are not connected</span>
+<div id="flow-gap" style="padding:12px 0 4px"></div>
+
+<div style="display:flex;flex-direction:column;gap:12px;padding-top:24px;margin-top:8px;border-top:1px solid var(--lw-line)">
+<span class="lbl-eyebrow">why it is built this way</span>
+
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">What you are looking at IS the reduced-motion state</h2>
+<p class="sub"><b>Every diagram above is fully drawn right now, before any scroll.</b> That is not a screenshot of
+the finished animation — it is the only state the CSS declares. Nothing is hidden, nothing is faded, no node
+starts at zero opacity. The draw-in exists solely inside
+<span class="mono">@supports (animation-timeline: view())</span> <b>and</b>
+<span class="mono">@media (prefers-reduced-motion: no-preference)</span>, and it only ever <i>replays</i> what is
+already painted. So SSR, a failed bundle, an older browser and a reader who prefers reduced motion all get the
+same complete picture — which is exactly what the eight components it replaces kept getting wrong.</p>
+
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">The current node is marked POSITIVELY. Nothing is dimmed.</h2>
+<p class="sub"><b>“Validate” carries a brand border, <span class="mono">--lw-brand-glow</span>, a weight step on
+its title and a brand lift on its index.</b> Every other node stays at full ink. The obvious alternative — fade
+the inactive nodes — is a contrast cut the token system cannot see and axe reports as a
+<span class="mono">color-contrast</span> failure; the consumer shipped that bug once already. <b>Opacity is not
+hierarchy.</b> The state is real <span class="mono">aria-current="step"</span>, not a class that only changes
+colour, so a screen reader has it whether or not the CSS loads.</p>
+
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">One grid declaration sizes nodes and connectors</h2>
+<p class="sub"><b><span class="mono">grid-auto-columns</span> repeats its track list</b>, so
+<span class="mono">minmax(0, 1fr) auto</span> makes every node a 1fr track and every connector its own width —
+with no per-child class and no <span class="mono">:nth-child</span> sizing. The stacked geometry is five local
+knobs, so it is written once and merely <i>set</i> twice: on
+<span class="mono">.lw-flow-vertical</span> and inside the <span class="mono">--lw-bp-md</span> query. Restating
+the whole edge block in the media query is how one drawing quietly becomes two.</p>
+
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">Flow grows no state; the consumer composes Disclosure</h2>
+<p class="sub"><b>The expanding node in the vertical chain is a <span class="mono">&lt;Disclosure&gt;</span> passed
+as <span class="mono">detail</span></b> — a native <span class="mono">&lt;details&gt;</span>, complete with zero
+JavaScript. So <span class="mono">Flow</span> stays server-safe: no state, no effects, no
+<span class="mono">"use client"</span>, and the diagram opens and closes before hydration.</p>
+
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">The index is markup, and the chevron is named</h2>
+<p class="sub"><b><span class="mono">01 / 02 / 03</span> are real text nodes</b>, never CSS
+<span class="mono">counter()</span>: generated content is not selectable and is announced inconsistently. Same
+rule as <span class="mono">FeatureGrid</span> and <span class="mono">Steps</span>. Every glyph is
+<span class="mono">&lt;Icon name&gt;</span> — no typed <span class="mono">▸</span>, no
+<span class="mono">content: "→"</span>: one drawing, one owner.</p>
+</div>
+</div>
+<script type="text/babel">
+const LW = window.LeanWiseDesign_f2d907;
+const { Flow, Disclosure } = LW;
+
+ReactDOM.createRoot(document.getElementById("flow-h")).render(
+  <Flow nodes={[
+    { id: "parse", icon: "file", label: "Parse", sub: "PDF, DOCX and XLSX to a page-addressed text stream." },
+    { id: "extract", icon: "layers", label: "Extract", sub: "Fields lifted per document type, each with its source span." },
+    { id: "validate", icon: "shield", label: "Validate", sub: "Checkpoints run against the extracted fields.", current: true },
+    { id: "review", icon: "eye", label: "Review", sub: "A person confirms or corrects, with the passage attached." },
+  ]} />
+);
+
+ReactDOM.createRoot(document.getElementById("flow-v")).render(
+  <Flow orientation="vertical" nodes={[
+    { id: "corpus", icon: "database", label: "Point it at a corpus", sub: "A folder, a bucket or a share. Nothing is copied out." },
+    { id: "fixtures", icon: "check", label: "Write ten fixtures", sub: "Questions you already know the answer to.",
+      detail: <Disclosure summary="What a fixture looks like">
+        <p>A question, the document it should be answered from, and the passage that answers it. Ten is enough to
+        tell a working retrieval configuration from a plausible one.</p>
+      </Disclosure> },
+    { id: "measure", icon: "chart", label: "Measure, then decide", sub: "The score is on your documents, not a public benchmark." },
+  ]} />
+);
+
+ReactDOM.createRoot(document.getElementById("flow-gap")).render(
+  <Flow
+    nodes={[
+      { id: "now", label: "Shipping", sub: "Retrieval, evaluation, review." },
+      { id: "next", label: "In build", sub: "Checkpoint authoring." },
+      { id: "later", label: "Not scheduled", sub: "No date is claimed, so no edge is drawn to it." },
+    ]}
+    edges={[["now", "next"]]}
+  />
+);
+</script></body></html>

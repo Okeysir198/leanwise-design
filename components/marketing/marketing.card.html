@@ -1,4 +1,4 @@
-<!-- @dsCard group="Marketing" name="Marketing composites" subtitle="Hero, FeatureGrid, StoryCard, LogoRail — the no-fabrication rule enforced at runtime" viewport="1100x900" -->
+<!-- @dsCard group="Marketing" name="Marketing composites" subtitle="Hero, FeatureGrid, StoryCard, LogoRail, Steps, Quote, Byline, ArticleCard — the no-fabrication rule enforced at runtime" viewport="1100x1600" -->
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><title>Marketing</title>
 <link rel="stylesheet" href="../../preview/_card.css">
@@ -20,6 +20,7 @@ person is an invented one, and the component refuses to help.</p>
 That is the only rule that keeps a call to action meaning anything.</p></header>
 <div class="full" id="hero"></div>
 <div id="root"></div>
+<div id="editorial" style="padding-top:28px"></div>
 <div style="display:flex;flex-direction:column;gap:12px;padding-top:20px;margin-top:6px;border-top:1px solid var(--lw-line)">
 <span class="lbl-eyebrow">why it is built this way</span>
 <h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">Logo rail</h2>
@@ -51,12 +52,43 @@ That is the only rule that keeps a call to action meaning anything.</p></header>
   text tier left on a light tint measures 1.75 and disappears. In the React
   component the block renders <b>only</b> when quote, person and role are all present — the
   no-fabrication rule, enforced at runtime rather than in review.</p>
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">Steps — one drawing for three components</h2>
+<p class="sub"><b>A company timeline, a roadmap and a numbered “how it works” were three components</b> in the
+  consumer, and nothing rendered them side by side to show they were the same drawing. They are one now, and
+  it <i>deliberately has no state axis</i>: <span class="mono">Stepper</span> owns wizard state — done /
+  current / upcoming, with the ARIA that goes with it. A timeline has none, because every entry already
+  happened. The split is by meaning, not by looks.</p>
+<p class="sub"><b>The marker text is real markup</b>, never CSS <span class="mono">counter()</span> — so it is
+  selectable and announced, the same reason <span class="mono">FeatureGrid</span> writes
+  <span class="mono">String(i+1).padStart(2,"0")</span>. The tile is
+  <span class="mono">--lw-brand-soft</span> under <span class="mono">--lw-brand-on</span>, the pair CLAUDE.md
+  singles out: <span class="mono">--lw-brand-text</span> is the <i>link</i> shade and measures 3.98 on this
+  tint.</p>
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">Quote — one spine, two selectors</h2>
+<p class="sub"><b>The pull quote and the story card's quote share ONE declaration block.</b>
+  <span class="mono">.lw-quote, .lw-story .lw-story-quote</span> — the brand hairline is drawn once and owned
+  once. A standalone testimonial cannot be expressed by <span class="mono">StoryCard</span>, whose quote only
+  renders inside that composition; the moment it gets its own class, the spine has two owners unless they
+  share the declaration. Sharing it is what stops a second treatment appearing.</p>
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">Article chrome — composition, not new classes</h2>
+<p class="sub"><b>There is no <span class="mono">.lw-article</span> grid and no <span class="mono">.lw-post</span>
+  card.</b> The article + contents layout is <span class="mono">.lw-split</span>, which already collapses at
+  <span class="mono">--lw-bp-lg</span>; the index card below is <span class="mono">.lw-card</span> +
+  <span class="mono">CardHead/Body/Foot</span> + <span class="mono">.lw-byline</span> inside a
+  <span class="mono">Grid</span>. What was genuinely missing were the atoms:
+  <span class="mono">.lw-byline</span>, <span class="mono">.lw-article-head</span> and
+  <span class="mono">.lw-pill-link</span>.</p>
+<p class="sub"><b>The whole card is the link, so there is one tab stop</b> — which is also why its tags are
+  inert <span class="mono">.lw-pill</span>s: a link inside a link is invalid and unreachable by keyboard. Tags
+  become <span class="mono">.lw-pill-link</span> anchors on the article page itself, where they are the only
+  link in their row.</p>
 </div>
 </div>
 <script type="text/babel">
 const LW = window.LeanWiseDesign_f2d907;
 
 const { Hero, FeatureGrid, StoryCard, LogoRail, Button, Stack, Grid } = LW;
+const { Steps, Quote, Byline, ArticleCard } = LW;
 ReactDOM.createRoot(document.getElementById("hero")).render(
   <Hero eyebrow="Retrieval you can audit"
     title={<>Answers your legal team can <em>defend</em>.</>}
@@ -79,6 +111,57 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     </Grid>
     <div><span className="lbl-eyebrow">logo rail — a card, not a real customer list</span>
       <LogoRail logos={[{name:"Northwind"},{name:"Orbital"},{name:"Kestrel"},{name:"Vantage"},{name:"Meridian"}]} /></div>
+  </Stack>
+);
+
+const steps = [
+  { meta: "Phase 01", title: "Point it at a corpus", body: "One folder, one bucket or one connector. Nothing is copied out of your tenant." },
+  { meta: "Phase 02", title: "Index and evaluate", body: "Hybrid retrieval over one index, then a grounding pass that scores what came back." },
+  { meta: "Phase 03", title: "Answer with the passage attached", body: "No citation, no answer — the rule is enforced in the pipeline, not in review." }
+];
+
+ReactDOM.createRoot(document.getElementById("editorial")).render(
+  <Stack gap={32}>
+    <div>
+      <span className="lbl-eyebrow">steps — vertical (a company timeline / how it works)</span>
+      <Steps items={steps} />
+    </div>
+    <div>
+      <span className="lbl-eyebrow">steps — horizontal, same markup, reverts to the stack under --lw-bp-md</span>
+      <Steps items={steps} orientation="horizontal" />
+    </div>
+    <div>
+      <span className="lbl-eyebrow">quote — the standalone pull quote; the spine is shared with StoryCard</span>
+      <Quote name="A. Rossi" role="Head of Legal Ops">
+        We stopped arguing about whether the model was right and started checking the page it pointed at.
+      </Quote>
+    </div>
+    <div>
+      <span className="lbl-eyebrow">article head — .lw-eyebrow / .lw-h1 / .lw-lead / .lw-pill.lw-pill-link, plus .lw-byline</span>
+      <div className="lw-article-head">
+        <span className="lw-eyebrow">Engineering</span>
+        <h2 className="lw-h1">What a grounded answer actually costs.</h2>
+        <p className="lw-lead">Every citation is a retrieval, a rerank and a second pass over the passage. Here is the budget, measured on our own fixtures.</p>
+        <div className="lw-cluster">
+          <a className="lw-pill lw-pill-link" href="#">Retrieval</a>
+          <a className="lw-pill lw-pill-link" href="#">Evaluation</a>
+          <a className="lw-pill lw-pill-link" href="#">Benchmarks</a>
+        </div>
+        <Byline name="A. Rossi" role="Head of Legal Ops" date="4 August 2026" dateTime="2026-08-04" />
+      </div>
+    </div>
+    <div>
+      <span className="lbl-eyebrow">article index — Grid of ArticleCard; no .lw-post class exists or is needed</span>
+      <Grid min={280}>
+        <ArticleCard href="#" category="Engineering" title="What a grounded answer actually costs"
+          dek="The retrieval, the rerank and the second pass, measured on our own fixtures."
+          tags={["Retrieval", "Benchmarks"]} author="A. Rossi" role="Head of Legal Ops"
+          date="4 Aug 2026" dateTime="2026-08-04" readMinutes={7} />
+        <ArticleCard href="#" category="Product" title="Why every answer carries its passage"
+          dek="No citation, no answer — enforced in the pipeline rather than in review."
+          tags={["Grounding"]} author="M. Chen" role="Engineering" date="21 Jul 2026" dateTime="2026-07-21" readMinutes={4} />
+      </Grid>
+    </div>
   </Stack>
 );
 

@@ -1,0 +1,163 @@
+<!-- @dsCard group="Marketing" name="Pricing" subtitle="PlanCard + CompareTable — a plan with NO price is a finished card, and every yes/no is two glyphs and a word" viewport="1100x1500" -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Pricing</title>
+<link rel="stylesheet" href="../../preview/_card.css">
+<link rel="stylesheet" href="../../base.css">
+<link rel="stylesheet" href="../../marketing.css">
+<script src="../../preview/_vendor/react.development.js"></script>
+<script src="../../preview/_vendor/react-dom.development.js"></script>
+<script src="../../preview/_vendor/babel.min.js"></script>
+<script src="../../preview/_card.js"></script>
+<script src="../../_ds_bundle.js"></script>
+</head><body><div class="card">
+<header><h1>Pricing</h1>
+<p class="sub"><b>The word “pricing” appeared nowhere in this package,</b> so every consumer wrote its own. The one
+that prompted this had <span class="mono">.lw-price.featured</span> restating <b>five</b> child colours to make one
+plan dark. <span class="mono">.lw-plan</span> composes <span class="mono">.lw-card</span> and adds four
+declarations; a dark featured plan is <span class="mono">data-band="dark"</span> and nothing else.</p></header>
+
+<div id="plans"></div>
+<div id="plans-head" style="padding-top:28px"></div>
+<div id="compare" style="padding-top:28px"></div>
+
+<div style="display:flex;flex-direction:column;gap:12px;padding-top:24px;margin-top:8px;border-top:1px solid var(--lw-line)">
+<span class="lbl-eyebrow">why it is built this way</span>
+
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">A plan with no price is COMPLETE, not pending</h2>
+<p class="sub"><b>The third card above publishes no price, no currency and no range</b> — and it does not have a
+gap where one would go. Nothing in the CSS reserves the slot: no <span class="mono">min-block-size</span>, no
+placeholder, no <span class="mono">content: "—"</span>. <span class="mono">.lw-plan</span> is a flex column with
+a gap, so the card simply closes up. This is the reason the component exists rather than living in the consumer:
+the primary consumer publishes no price, and a component that reserved the slot would force it to invent one.
+<b>An invented price is a fabrication</b>, which is the failure mode that codebase keeps relapsing into.</p>
+
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">Featured adds an edge, never a ground</h2>
+<p class="sub"><b>The second card is <span class="mono">featured</span>:</b> a brand border and
+<span class="mono">--lw-brand-glow</span>, and that is the whole rule. It does not paint itself navy. The fourth
+card is the same component with <span class="mono">data-band="dark"</span> — <b>zero child overrides</b>, because
+the band re-points every role token on the element. That is the deleted override pile, shown.</p>
+
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">Two glyphs and a word, never one colour</h2>
+<p class="sub"><b>An excluded feature carries a <span class="mono">minus</span>, not a greyed <span class="mono">check</span></b>,
+plus an <span class="mono">.lw-sr-only</span> word that leads the row. Three signals, so the state survives a
+monochrome print, a colour-blind reader and a screen reader. The glyphs are <span class="mono">&lt;Icon name&gt;</span>;
+a typed <span class="mono">✓</span> would be the same drawing a second time in the font, and would be announced
+as punctuation. Same contract in the matrix below — and note the matrix uses
+<span class="mono">--lw-success-on</span>, not <span class="mono">--lw-success</span>, which is a fill and fails
+AA as text.</p>
+
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">Two things deliberately NOT shipped</h2>
+<p class="sub"><b>There is no <span class="mono">.lw-plans</span> grid and no <span class="mono">PlanGrid</span></b>
+— the row above is <span class="mono">&lt;Grid min={280}&gt;</span>, which already auto-fits and stretches. And
+there is <b>no billing toggle</b>: a billing period is a two-way exclusive choice, which is
+<span class="mono">Segmented</span>. What ships instead is the composition —
+<span class="mono">.lw-plans-head</span>, an eyebrow, a <span class="mono">Segmented</span> and an optional
+savings pill, shown on its own above the matrix. <span class="mono">.lw-theme-toggle</span> was deleted for being
+exactly this kind of duplicate.</p>
+
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">The featured column is bg-subtle, not brand-soft</h2>
+<p class="sub"><b>A brand tint would read better and cost more than it looks.</b>
+<span class="mono">--lw-fg</span> on <span class="mono">--lw-brand-soft</span> is a pair nothing in this system
+composes today, so it would enter the derived contrast manifest as a brand-new measurement in <i>three</i> scopes
+— light, <span class="mono">.dark</span> and media-dark — for a decorative tint.
+<span class="mono">--lw-fg</span> on <span class="mono">--lw-bg-subtle</span> is already asserted. The brand
+signal is carried by <span class="mono">--lw-brand-line</span> edges instead, which is a non-text 1.4.11
+boundary rather than a text ground.</p>
+</div>
+</div>
+<script type="text/babel">
+const LW = window.LeanWiseDesign_f2d907;
+const { PlanCard, CompareTable, Grid, Segmented, Eyebrow } = LW;
+
+const core = [
+  { label: "Grounded answers with the source passage attached" },
+  { label: "Document ingest — PDF, DOCX, XLSX" },
+  { label: "Retrieval evaluation on your own fixtures" },
+];
+
+ReactDOM.createRoot(document.getElementById("plans")).render(
+  <Grid min={260}>
+    <PlanCard
+      name="Pilot"
+      tagline="one team, one corpus"
+      desc="Everything needed to decide whether the answers hold up on your own documents."
+      features={[...core, { label: "SSO / SAML", included: false }, { label: "Dedicated tenancy", included: false }]}
+      cta={{ label: "Start a pilot", href: "#" }}
+    />
+    <PlanCard
+      featured
+      ribbon="Most chosen"
+      name="Team"
+      price="$390"
+      unit="USD"
+      period="/ month"
+      desc="For a department running review as part of its normal week."
+      features={[...core, { label: "SSO / SAML" }, { label: "Dedicated tenancy", included: false }]}
+      cta={{ label: "Book a walkthrough", href: "#" }}
+    />
+    <PlanCard
+      name="Enterprise"
+      tagline="scoped per deployment"
+      desc="Priced against the corpus, the residency requirement and the review volume — so there is no list price to print, and none is printed."
+      features={[...core, { label: "SSO / SAML" }, { label: "Dedicated tenancy" }]}
+      cta={{ label: "Talk to us", href: "#" }}
+    />
+    <PlanCard
+      data-band="dark"
+      name="Enterprise"
+      tagline="the same card, one attribute"
+      desc="data-band=&quot;dark&quot; — not one child carries a dark variant."
+      features={[...core, { label: "SSO / SAML" }, { label: "Dedicated tenancy" }]}
+      cta={{ label: "Talk to us", href: "#" }}
+    />
+  </Grid>
+);
+
+/* `.lw-plans-head` is a COMPOSITION, not a component: an eyebrow, the existing
+   Segmented and an optional pill. Segmented is controlled, so the billing
+   period is the consumer's state — which is the point. A `BillingToggle` would
+   have owned that state and been a second treatment of one interaction. */
+function PlansHead() {
+  const [period, setPeriod] = React.useState("annual");
+  return (
+    <div className="lw-plans-head">
+      <Eyebrow>Billing period</Eyebrow>
+      <Segmented
+        label="Billing period"
+        options={[{ value: "monthly", label: "Monthly" }, { value: "annual", label: "Annual" }]}
+        value={period}
+        onChange={setPeriod}
+      />
+      <span className="lw-pill">2 months free on annual</span>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById("plans-head")).render(<PlansHead />);
+
+ReactDOM.createRoot(document.getElementById("compare")).render(
+  <CompareTable
+    caption="What each plan includes. Sticky on both axes; the matrix scrolls, the page does not."
+    columns={[
+      { key: "pilot", label: "Pilot" },
+      { key: "team", label: "Team", featured: true },
+      { key: "ent", label: "Enterprise" },
+    ]}
+    groups={[
+      { label: "Retrieval", rows: [
+        { label: "Grounded answers with source passages", values: [true, true, true] },
+        { label: "Retrieval evaluation on your fixtures", values: [true, true, true] },
+        { label: "Corpus size", values: ["10k pages", "250k pages", "scoped"] },
+      ] },
+      { label: "Access", rows: [
+        { label: "SSO / SAML", values: [false, true, true] },
+        { label: "Dedicated tenancy", values: [false, false, true] },
+        { label: "Data residency", values: [false, false, "on request"] },
+      ] },
+      { label: "Support", rows: [
+        { label: "Named reviewer", values: [false, true, true] },
+        { label: "Response target", values: ["2 business days", "1 business day", "scoped"] },
+      ] },
+    ]}
+  />
+);
+</script></body></html>

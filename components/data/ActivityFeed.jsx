@@ -35,8 +35,13 @@ const bucket = (when, now) => {
  *
  * Items are grouped by day bucket, because 40 undifferentiated rows with a
  * relative timestamp each is a list nobody scans.
+ *
+ * `linkAs` replaces the anchor ELEMENT (default `"a"`) for items that carry an
+ * `href` — a router's Link, so a row navigates client-side and keeps any prefix
+ * that Link applies. It receives what the raw <a> would: `href`, `className`,
+ * the data attributes and `children`. An item without an href is unaffected.
  */
-export function ActivityFeed({ items = [], onItemClick, grouped = true, now, label = "Activity", className, ...rest }) {
+export function ActivityFeed({ items = [], onItemClick, grouped = true, now, label = "Activity", linkAs = "a", className, ...rest }) {
   /* `now` is resolved in an EFFECT, not defaulted during render — the same fix
      Calendar's `today` marker got in v1.1.5, and for the same reason: Date.now()
      in the render body differs between a server render and the client's
@@ -70,7 +75,7 @@ export function ActivityFeed({ items = [], onItemClick, grouped = true, now, lab
         <React.Fragment key={gi}>
           {g.name && <div className="lw-feed-group">{g.name}</div>}
           {g.items.map((it, i) => {
-            const Tag = it.href ? "a" : onItemClick || it.onClick ? "button" : "div";
+            const Tag = it.href ? linkAs : onItemClick || it.onClick ? "button" : "div";
             return (
               <Tag key={it.id ?? gi + "-" + i} className="lw-feed-item"
                 href={it.href || undefined} type={Tag === "button" ? "button" : undefined}

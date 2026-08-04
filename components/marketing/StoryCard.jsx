@@ -9,9 +9,14 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  * The quote renders ONLY when quote, person and role are all present — the
  * no-fabrication rule, enforced at runtime rather than in a doc nobody reads.
  * A half-filled testimonial is an invented one.
+ *
+ * `linkAs` replaces the anchor ELEMENT (default `"a"`) when `href` is set — a
+ * router's Link, so the card navigates client-side and keeps any prefix that
+ * Link applies. It receives what the raw <a> would: `href`, `className` and
+ * `children`. Without an `href` the card is a <div> and `linkAs` does nothing.
  */
-export function StoryCard({ logo, title, body, result, quote, person, role, href, className, ...rest }) {
-  const Tag = href ? "a" : "div";
+export function StoryCard({ logo, title, body, result, quote, person, role, href, linkAs = "a", className, ...rest }) {
+  const Tag = href ? linkAs : "div";
   const showQuote = Boolean(quote && person && role);
   const initials = String(title || "")
     .trim().split(/\s+/).slice(0, 2).map(w => w[0] || "").join("").toUpperCase();

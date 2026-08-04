@@ -8,8 +8,11 @@ tokens.css        the source of truth — HSL triples, light + dark, both re-poi
 fonts.css         Geist + Geist Mono, self-hosted, incl. Vietnamese subsets
 shadcn.css        maps --primary/--background/… onto the tokens
 tailwind-preset.cjs Tailwind v3 consumers (CommonJS — a tailwind.config.js requires it)
-base.css          the SHARED layer — layout, type, buttons, cards, chips, form
-                  controls, the top bar, pointer list
+reset.css         the nine bare-element rules. A vanilla consumer wants it; a
+                  Tailwind app does NOT (preflight covers the useful half)
+base.css          the SHARED layer — layout, type, buttons, the icon button, cards,
+                  chips, form controls, the top bar and its mobile nav, prose,
+                  disclosure, the pointer list
 marketing.css     the MARKETING layer (grounds, hero, features, stories, ambient motion)
 product.css       the PRODUCT layer (data, overlays, app shell/rails, AI, mobile bars)
 email.css         the EMAIL layer — literal values, tables, no var(). See Email below
@@ -38,16 +41,40 @@ control face (`.lw-field`, `.lw-input`/`.lw-textarea`/`.lw-select`, `.lw-input-g
 `product.css`, so a marketing site that correctly dropped that layer got correct buttons,
 cards and heroes — on an unstyled page, with an unstyled header. `.lw-topbar` was the proof:
 its `.brand-mark` rules were already in `base.css` while the rest of the component was not.
-All three are in `base.css` now, unchanged. `lw.css` and `app.css` remain as shims for one full major; **do not
-load a shim alongside the real files**, or the same rules apply twice and the cascade between
-the two layers reorders.
+All three are in `base.css` now, unchanged.
+
+v1.3.0 finished the job with three things the first pass left behind, all of them the same
+lesson: **position is not load-bearing; PRESENCE is.** A `:is(.dark, …)`-scoped patch outranks
+the rule it patches wherever it sits, so moving it changes nothing about the cascade — but a
+page that never loads `product.css` never sees it at all.
+
+| Moved in v1.3.0 | Why it could not stay in `product.css` |
+|---|---|
+| the `:is(.dark, …)` patches for `.lw-input` `.lw-textarea` `.lw-select` `.lw-input-group` `.lw-switch` `.lw-check` `.lw-segmented` | a marketing site puts its contact form on a dark band |
+| `.lw-icon-btn` (split from `.lw-dialog-close`, which stayed) | `.lw-topbar-toggle` composes it, `AnnounceBar`'s dismiss is one, `SiteFooter`'s social row is a line of them |
+| `.lw-eyebrow`'s dark hexagon patch | `marketing.css` patches `.lw-section.dark` and `.lw-hero-dark`; a plain `.lw-band-dark` was the hole |
+
+**A marketing page therefore needs `tokens.css` + `base.css` + `marketing.css` and nothing
+else** — see [Marketing recipes](#marketing-recipes). `lw.css` and `app.css` remain as shims
+for one full major; **do not load a shim alongside the real files**, or the same rules apply
+twice and the cascade between the two layers reorders.
+
+One rule that follows from the split, and that cost four serious axe failures to learn:
+**a property carrying a COLOUR is `base.css`'s to state.** `.lw-btn` declared neither
+`background` nor `border` through v1.2 — it leaned on `reset.css`'s `button { background:
+none; border: 0 }`, which v1.2.0 split out — so a page loading `base.css` without a reset
+painted every button with the UA bevel, and the two variants with no fill of their own
+(`link`, and a bare `.lw-btn`) sat on Chromium's `buttonface`: **2.28:1** under
+`color-scheme: dark`. Geometry may lean on a reset, because getting geometry wrong is
+visible. Colour may not, because a colour `base.css` does not state is a colour the contrast
+gate cannot see.
 
 ---
 
 ## Contents
 
 **Getting in:** [Install](#install) · [The brand](#the-brand-two-anchors-one-accent) ·
-[Components](#components) · [Templates](#templates)
+[Components](#components) · [Marketing recipes](#marketing-recipes) · [Templates](#templates)
 **The reasoning:** [The rules that are not obvious](#the-rules-that-are-not-obvious) ·
 [Adding a component](#adding-a-component) · [Enforcement](#enforcement)
 **The layers:** [Email](#email) · [Mobile](#mobile) · [Charts](#charts) · [Motion](#motion) ·
@@ -64,7 +91,7 @@ what is still open. `CONTRIBUTING.md` points back here — the checklist lives i
 ## Install
 
 ```jsonc
-"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v1.2.1" }
+"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v1.3.0" }
 ```
 
 ```css
@@ -212,6 +239,8 @@ rule; every transform stands down under `prefers-reduced-motion`.
 | `Avatar` | Initials by default; an image only when there is one |
 | `Skeleton` | `shape` or `lines={n}`. Shaped like the thing it replaces |
 | `Icon` | The icon set — `IconNames.length` glyphs, the count that cannot go stale. One 24-grid, one stroke weight, `currentColor` only. `name` `size` `label`. The ONLY place an icon path is drawn: components name a glyph, they never redraw one |
+| `Disclosure` | A native `<details>`/`<summary>` row — the FAQ pattern, complete with **zero JavaScript**, so it opens before hydration and with JS off. Uncontrolled: `defaultOpen` applies once and the browser owns the state; observe `onToggle`. No height animation, because `<details>` cannot animate its own height portably — only the chevron moves |
+| `Prose` | The read surface for sanitized markdown HTML. Puts one class on one wrapper and styles the DESCENDANTS, so it takes `dangerouslySetInnerHTML` without knowing which elements the author used. `measure`: prose (68ch) / narrow (46ch); a third width is `--lw-prose-max`. It needs **no dark-ground rules at all** — every value is a role, so `.lw-band-dark` re-points the whole article |
 | `.lw-icon-btn` | Class, not a component: the borderless icon control. Owns the 28px hit area, hover ink and brand focus ring — use it instead of hand-styling a bare `<button>` |
 
 ### Layout — `components/layout/`
@@ -297,6 +326,7 @@ a design system whose API moves under a consumer's feet is a reason to vendor it
 | `Breadcrumbs` | Mono, so it reads as a path |
 | `CommandPalette` | ⌘K, on the native `<dialog>` — modal, so the page behind it is inert. **It does not bind the shortcut**; a component that installs a global key handler cannot be turned off on the screen where ⌘K means something else. Scored subsequence match, so "opdb" finds "Open database" |
 | `BottomNav` | The touch answer to `Sidebar`. Three to five DESTINATIONS, never actions (warns past five). Reserves the home indicator from `--lw-safe-bottom`, and takes its 44px target from the bar height rather than padding |
+| `NavToggle` | The narrow-bar nav for `TopBar` — a toggle in the bar and a panel under it, rendered as `TopBar` children. **Not `Drawer`:** a drawer is a modal `<dialog>` in the top layer that makes the page inert, so it needs a focus trap and a scrim; this hangs under the bar, leaves the page interactive, and needs neither. Appears at `--lw-bp-md`, the same breakpoint at which the bar's own links drop. `aria-expanded` + `aria-controls`, Escape closes and returns focus |
 | `ThemeToggle` | Light / dark by default (`modes` adds `"system"` where a product honours it). Driven by `value`/`onChange` — never uncontrolled beside a themed wrapper, which paints half a theme |
 
 ### Overlays — `components/overlays/`
@@ -333,6 +363,105 @@ a design system whose API moves under a consumer's feet is a reason to vendor it
 | `FeatureGrid` | Numbered features; the brand edge draws in on hover |
 | `StoryCard` | The quote renders **only** with quote + person + role |
 | `LogoRail` | Marks are masked to one ink; a mark without `src` degrades to a mono wordmark. `marquee` for a slow loop; static under reduced motion |
+| `SiteFooter` | Not `Footer` — `CardFoot` exists and the bundle namespace is flat. A dark footer is `dark` → `data-band="dark"`, **never** a hard-coded navy tier: the band re-points every role token, so no child needs a dark variant. A column entry with no `href` is an inert note, not a dead link |
+| `Steps` | A numbered sequence — timeline, roadmap, "how it works". **No state axis on purpose**: `Stepper` owns wizard state; a timeline has none. `orientation="horizontal"` reverts to the stack under `--lw-bp-md` |
+| `Quote` | The standalone pull quote. Shares its brand spine with `StoryCard`'s quote through **one** declaration block, so the drawing has one owner |
+| `Byline` | Author, role, date on the existing `Avatar`. The date is a real `<time>` |
+| `ArticleCard` | The index entry — a composition of `Card` + `CardHead`/`CardBody`/`CardFoot` + `.lw-card-media` + `Byline` + `.lw-pill`. There is deliberately no `.lw-post` class, and no `.lw-article` grid: the article page is a `Split` |
+| `AnnounceBar` | The sticky strip above the header. It exists upstream for one rule — `.lw-announce + .lw-topbar` offsets the header by `var(--lw-announce-h, 36px)`, which only this package can state because `.lw-topbar` is its own |
+| `PlanCard` | A pricing plan. Composes `.lw-card` and adds four declarations. **`price` is optional and a card without one is a FINISHED card** — nothing reserves the slot, so it closes up. `featured` adds a brand edge and `--lw-brand-glow` and *nothing else*; a dark featured plan is `data-band="dark"`, never a hard-coded navy tier. An excluded feature is a `minus` glyph plus an `.lw-sr-only` word, never a greyed check |
+| `CompareTable` | The feature matrix. Distinct from `Table` **by meaning**: `Table` is a data table (records, values, sorting); this never sorts and has one repeated cell type. Sticky on both axes via `--lw-z-local-1/2/3`; every cell is two glyphs and a word, and `--lw-success-on` (the text variant), never `--lw-success` (a fill) |
+| `Flow` | The animated flow diagram — pipeline, onboarding sequence, roadmap. **The static state is the COMPLETE diagram**; all motion is double-gated behind `@supports (animation-timeline: view())` *and* `prefers-reduced-motion: no-preference`, and scroll only replays it. An inactive node is **never** dimmed with `opacity`; the active one is marked positively via real `aria-current`. Server-safe — no state, no effects, no `"use client"`; a node that expands is the consumer composing `Disclosure` into `detail` |
+
+#### Two deliberate non-additions in the pricing set
+
+Recorded here because this is the pair most likely to be re-litigated, and because
+`.lw-theme-toggle` and `.lw-code-tabs` were both deleted for being exactly this kind of
+duplicate. CONTRIBUTING's first rule is to prove a thing is not already here:
+
+- **There is no `.lw-plans` grid class and no `PlanGrid`.** A row of plans is
+  `<Grid min={280}>`, which already auto-fits and stretches — `.lw-plan` sets
+  `block-size: 100%` so unequal feature counts still share one CTA baseline. A `PlanGrid`
+  would be `Grid` with one number baked in, and the first plan row that wanted a different
+  minimum would fork it.
+- **There is no billing-toggle class and no `BillingToggle`.** A billing period is a two-way
+  *exclusive* choice, which is `Segmented` — a real `radiogroup` with arrow-key navigation and
+  a set size, none of which a bespoke toggle would have re-earned. What ships instead is the
+  **composition**: `.lw-plans-head` (flex, space-between, wrap) holding an eyebrow, a
+  `<Segmented>` and an optional savings `.lw-pill`. The period is the consumer's state, which
+  is the point — a `BillingToggle` would have owned it and become a second treatment of one
+  interaction.
+
+---
+
+## Marketing recipes
+
+**As of v1.3.0 a marketing site loads two layers and no more.** The header, its mobile nav,
+the icon button, the form controls with their dark-band treatment, prose, disclosure and the
+whole layout family are all in `base.css`; the grounds, hero, footer, plans, matrix, flow and
+editorial chrome are in `marketing.css`. `product.css` is app surfaces — data grids, dialogs,
+rails, the AI chat surface — and a marketing page importing it is importing ~60 KB of rules
+for components it does not render.
+
+```css
+@import "@leanwise/design/tokens.css";
+@import "@leanwise/design/fonts.css";
+@import "@leanwise/design/reset.css";      /* vanilla only — NOT in a Tailwind app */
+@import "@leanwise/design/base.css";
+@import "@leanwise/design/marketing.css";
+```
+
+```jsx
+import {
+  AnnounceBar, TopBar, NavToggle, Hero, FeatureGrid, Steps, Flow, PlanCard,
+  CompareTable, Quote, StoryCard, ArticleCard, Byline, Prose, Disclosure,
+  SiteFooter, Button, Card, Grid, Section, Segmented,
+} from "@leanwise/design/react";
+```
+
+A full page is `AnnounceBar` → `TopBar` (with `NavToggle` as a child) → `Section`s →
+`SiteFooter`. Nothing on that path reaches into `product.css`, which is the whole point of
+the v1.3.0 promotions.
+
+### The cookie banner, which is deliberately NOT a component
+
+This is the composition most often asked for and the one most clearly *not* ours. A consent
+banner is a legal artefact before it is a visual one: which categories exist, whether the
+page is blocked until a choice is made, whether "reject all" must be one click, where the
+decision is persisted and for how long, and whether any of that changes by jurisdiction. A
+design system that shipped `<CookieBanner>` would be shipping an answer to all of those, and
+the first consumer whose counsel disagreed would fork it. What the system owes you is that it
+already draws every piece:
+
+```jsx
+/* role="region" + a label, NOT role="dialog": a dialog implies the page behind it is
+   inert, and a banner that traps focus on arrival is a worse experience than the
+   thing it is disclosing. The consumer owns `open`, the persistence and the
+   categories — this is markup, not behaviour. */
+<div className="lw-card" role="region" aria-label="Cookie choices"
+     style={{ position: "fixed", insetInline: "var(--lw-space-16)",
+              insetBlockEnd: "var(--lw-space-16)", zIndex: "var(--lw-z-toast)",
+              maxInlineSize: "min(100% - 2rem, 68ch)" }}>
+  <div className="lw-card-body lw-stack" data-gap="12">
+    <p className="lw-text-sm">
+      We use cookies to measure how the site is used. Analytics stays off until you say yes.
+      {" "}<a className="lw-link" href="/cookies">What we store</a>
+    </p>
+    <div className="lw-cluster">
+      <Button variant="brand" size="sm" onClick={acceptAll}>Accept</Button>
+      <Button variant="ghost" size="sm" onClick={rejectAll}>Reject</Button>
+      <Button variant="link" size="sm" onClick={openSettings}>Choose categories</Button>
+    </div>
+  </div>
+</div>
+```
+
+Four things that composition gets right for free, and that a hand-rolled banner has to
+re-earn: the surface, radius and shadow are `.lw-card`; `--lw-z-toast` is a real tier rather
+than a `9999`; **reject is as reachable as accept** because both are the same `Button` at the
+same size, which is the accessibility half of the legal requirement; and the whole thing
+re-points on a dark ground with no child overrides. If the category list needs to expand in
+place, that is `Disclosure` — a native `<details>`, complete with zero JavaScript.
 
 ---
 

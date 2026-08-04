@@ -1,16 +1,16 @@
 import { jsx, jsxs } from "react/jsx-runtime";
 const cx = (...a) => a.filter(Boolean).join(" ");
-function Sidebar({ items = [], collapsed = false, footer, className, children, ...rest }) {
+function Sidebar({ items = [], collapsed = false, footer, linkAs, className, children, ...rest }) {
   return /* @__PURE__ */ jsxs("nav", { className: cx("lw-sidebar", className), "data-collapsed": collapsed ? "true" : void 0, "aria-label": "Sections", ...rest, children: [
     items.map(
-      (it, i) => it.group ? /* @__PURE__ */ jsx("span", { className: "lw-nav-group", children: it.group }, "g" + i) : /* @__PURE__ */ jsx(NavItem, { ...it, collapsed }, it.id ?? i)
+      (it, i) => it.group ? /* @__PURE__ */ jsx("span", { className: "lw-nav-group", children: it.group }, "g" + i) : /* @__PURE__ */ jsx(NavItem, { linkAs, ...it, collapsed }, it.id ?? i)
     ),
     children,
     footer && /* @__PURE__ */ jsx("div", { className: "lw-sidebar-foot", children: footer })
   ] });
 }
-function NavItem({ href, label, icon, badge, current, collapsed, className, ...rest }) {
-  const Tag = href ? "a" : "button";
+function NavItem({ href, label, icon, badge, current, collapsed, linkAs = "a", className, ...rest }) {
+  const Tag = href ? linkAs : "button";
   const tip = collapsed && typeof label === "string" ? label : void 0;
   return /* @__PURE__ */ jsxs(
     Tag,

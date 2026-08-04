@@ -62,6 +62,22 @@ if (SELF) {
 
   // Each count is re-derived from the tree, by the same logic its gate uses.
   const derive = {
+    /* The count is the BLAST RADIUS: how many specimen cards mount a React root,
+       and therefore how many rendered nothing while _ds_bundle.js was emitting
+       jsx-runtime imports. The authoritative measurement is check:a11y — its
+       rebuilt guard fails on an uncaught page error and on any empty root — but
+       that needs a browser, and this self-check must stay headless and fast. So
+       the derivation is the static half of the same question, read off the SAME
+       card list both browser gates enumerate: every card in _ds_manifest.json
+       whose script mounts a root. Add a React card and this goes stale, which is
+       correct — the advisory's number is a claim about the card set. */
+    "blank-specimen-cards": () => {
+      const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, "_ds_manifest.json"), "utf8"));
+      return (manifest.cards ?? []).filter((c) => {
+        const p = path.join(ROOT, c.path);
+        return fs.existsSync(p) && /ReactDOM\.(createRoot|hydrateRoot|render)\s*\(/.test(fs.readFileSync(p, "utf8"));
+      }).length;
+    },
     "no-use-client": () => {
       let n = 0;
       (function walk(d) {
@@ -136,7 +152,11 @@ if (SELF) {
   // gone) — except where the advisory's count describes the FIX rather than the
   // defect, which is the case for the four below.
   const COUNTS_THE_FIX = new Set(["no-use-client", "no-dist", "bin-missing-under-pnpm",
-                                  "base-css-unusable-in-tailwind", "no-tailwind-v4-artifact"]);
+                                  "base-css-unusable-in-tailwind", "no-tailwind-v4-artifact",
+                                  // The card set still exists in the fixed tree; what changed
+                                  // is that its cards now render. Zero would mean the cards
+                                  // were deleted, which is not the fix.
+                                  "blank-specimen-cards"]);
 
   for (const a of doc.advisories) {
     const fn = derive[a.id];

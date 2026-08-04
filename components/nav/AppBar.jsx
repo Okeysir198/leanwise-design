@@ -12,12 +12,15 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  * flex wrong — the holder claimed `flex: 1` against TopBar's own spacer, so it
  * settled narrower than its content and the breadcrumbs ellipsised with a third
  * of the row still empty. One component, one correct holder (README rule 9).
+ *
+ * `linkAs` replaces the anchor ELEMENT (default `"a"`) for the brand AND is
+ * forwarded to `Breadcrumbs`, so one prop covers every link this row renders.
  */
 export function AppBar({
   brand = "LeanWise AI", brandHref = "#", mark = true, crumbs = [],
-  onMenuClick, menuExpanded, actions, className, children, ...rest
+  onMenuClick, menuExpanded, actions, linkAs = "a", className, children, ...rest
 }) {
-  const Brand = brandHref ? "a" : "span";
+  const Brand = brandHref ? linkAs : "span";
   return (
     <TopBar className={className} {...rest}>
       <div className="lw-appbar-lead">
@@ -34,7 +37,7 @@ export function AppBar({
           {mark && <span className="brand-mark" aria-hidden="true" />}
           {brand}
         </Brand>
-        {crumbs.length > 0 && <Breadcrumbs items={crumbs} />}
+        {crumbs.length > 0 && <Breadcrumbs items={crumbs} linkAs={linkAs} />}
       </div>
       {actions}{children}
     </TopBar>

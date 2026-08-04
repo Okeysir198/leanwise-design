@@ -1,0 +1,149 @@
+<!-- @dsCard group="Primitives" name="Prose & Disclosure" subtitle="The read surface for sanitized markdown, and the FAQ row that needs no JavaScript" viewport="1060x1500" -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Prose &amp; Disclosure</title>
+<link rel="stylesheet" href="../../preview/_card.css">
+<link rel="stylesheet" href="../../base.css">
+<link rel="stylesheet" href="../../marketing.css">
+<link rel="stylesheet" href="../../product.css">
+<script src="../../preview/_vendor/react.development.js"></script>
+<script src="../../preview/_vendor/react-dom.development.js"></script>
+<script src="../../preview/_vendor/babel.min.js"></script>
+<script src="../../preview/_card.js"></script>
+<script src="../../_ds_bundle.js"></script>
+</head><body><div class="card">
+<header><h1>Prose &amp; Disclosure</h1>
+<p class="sub"><b>Both panes below render the same markup.</b> The dark one carries
+<span class="mono">.lw-band-dark</span> and <i>nothing else</i> — there is no
+<span class="mono">.lw-band-dark .lw-prose</span> rule anywhere in the package. Every value in the
+prose block is a ROLE (<span class="mono">--lw-fg</span>, <span class="mono">--lw-fg-muted</span>,
+<span class="mono">--lw-line</span>, <span class="mono">--lw-brand-text</span>,
+<span class="mono">--lw-bg-inset</span>), and a role re-points under the band on its own. That is
+the whole argument for role-over-tier, rendered rather than asserted: one
+<span class="mono">--lw-text-2</span> in here and the article would freeze light-mode ink on navy.</p>
+<p class="sub"><b>The code rule is the one that has already failed a gate.</b> Block code is the
+always-dark <span class="mono">.lw-code</span> surface with its <span class="mono">tok-*</span>
+spans, which the consumer emits itself — so <span class="mono">.lw-prose pre</span> gets spacing and
+nothing else, and the inline chip is guarded to <span class="mono">:not(pre) &gt; code</span>. A bare
+<span class="mono">code</span> rule here put a light chip behind that dark surface and
+<span class="mono">check:a11y</span> failed the run. The guard <i>is</i> the rule.</p>
+<p class="sub"><b>Disclosure is <span class="mono">&lt;details&gt;</span>, not a scripted
+accordion</b> — so the pattern is complete with zero JavaScript and every row opens before
+hydration, with a failed bundle, or with JS off. There is no height animation and no keyframe:
+<span class="mono">&lt;details&gt;</span> cannot animate its own height portably, and the motion
+policy is a 100&ndash;200ms state change either way. Only the chevron moves, and the chevron is
+<span class="mono">&lt;Icon name="chevron-down"&gt;</span> — never a CSS triangle.</p></header>
+
+<div class="panes"><div class="pane" id="light"></div><div class="pane dark lw-band-dark" id="dark"></div></div>
+
+<div style="display:flex;flex-direction:column;gap:12px;padding-top:20px;margin-top:6px;border-top:1px solid var(--lw-line)">
+<span class="lbl-eyebrow">why it is built this way</span>
+<p class="sub"><b>The owl selector, deliberately.</b> <span class="mono">.lw-prose &gt; * + *</span>
+puts the space on the boundary <i>between</i> two blocks rather than on either block. It is the only
+form that cannot leave a leading margin on the first child or a trailing one on the last — and
+because the UA's own block margins are cleared first, the gap is a token rather than an em of
+whichever element happened to be larger.</p>
+<p class="sub"><b><span class="mono">scroll-margin-block-start</span> on the headings is
+load-bearing.</b> <span class="mono">.lw-topbar</span> is <span class="mono">position: sticky</span>,
+so without it a <span class="mono">#fragment</span> link lands the heading <i>under</i> the bar and
+the reader arrives at a section whose title is invisible.</p>
+<p class="sub"><b>Headings are grouped onto the scale, not restated.</b>
+<span class="mono">.lw-h2, .lw-prose h2</span> is one rule. An authored heading and a markdown
+<span class="mono">##</span> are the same heading at the same level, and a second copy of the size is
+a second copy that drifts. <span class="mono">h4</span> takes body size plus semibold and there is
+deliberately no <span class="mono">--lw-text-h4</span> token — one rule does not justify a scale
+step, and a token nothing else reads is one the next person misuses.</p>
+</div>
+</div>
+<script type="text/babel">
+const { Icon } = window.LeanWiseDesign_f2d907;
+
+/* Both panes render THIS, once. A specimen that duplicates its own markup per
+   ground is a specimen that can drift from itself between the two. */
+function Article() {
+  return (
+    <article className="lw-prose">
+      <h2>Validating an Internal TSS</h2>
+      <p>The validator reads a supplier's test specification and reports each checkpoint as
+        <mark> pass, warn or fail</mark> — never as a score. A number would imply a
+        threshold nobody agreed on.</p>
+      <h3>What a checkpoint is</h3>
+      <p>A checkpoint is one rule with one source. It cites the clause it came from, so a
+        disagreement is settled by reading the clause rather than by trusting the tool. See the
+        <a href="#reference">reference table</a> below.</p>
+      <ul>
+        <li>Every rule names the document it came from.</li>
+        <li>A rule with no source is not shipped.</li>
+        <li>Warnings are ordered by the cost of being wrong.</li>
+      </ul>
+      <h4>Running it locally</h4>
+      <p>Set <code>TSS_STRICT=1</code> to promote every warning to a failure, then:</p>
+      {/* The tok-* spans are not decoration here: they are what makes this card a
+          GATE for the rule above. axe scores a semi-transparent foreground as
+          "incomplete" rather than a violation, so a comment span alone (white at
+          0.48) cannot fail the run — measured, with the guard removed. The
+          keyword and string tiers are SOLID, so a light chip appearing behind
+          this always-dark surface drops them to ~1.6:1 and check:a11y goes red,
+          which is the whole point of keeping the specimen. */}
+      <pre className="lw-code"><code><span className="tok-keyword">tss</span>{` validate `}<span className="tok-string">--strict</span>{` ./fixtures/`}<span className="tok-comment">{`   # 412 checkpoints`}</span></code></pre>
+      <blockquote>The point is not that the tool is right. The point is that it says where it
+        got the rule, so you can tell when it is wrong.</blockquote>
+      <h3 id="reference">Reference</h3>
+      <table>
+        <thead><tr><th>Phase</th><th>Input</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>parse</td><td>PDF</td><td>pages</td></tr>
+          <tr><td>extract</td><td>pages</td><td>fields</td></tr>
+          <tr><td>validate</td><td>fields</td><td>checkpoints</td></tr>
+        </tbody>
+      </table>
+      <figure>
+        {/* An empty 16:5 SVG. The specimen is the BORDER, the radius and the
+            `block-size: auto` — not the picture, which would be a second home
+            for a palette value the moment it had one. */}
+        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 5'/>"
+             alt="Placeholder for a pipeline diagram" />
+        <figcaption>Figure 1 — the four phases, end to end.</figcaption>
+      </figure>
+      <hr />
+      <p>Ordered lists take the same measure:</p>
+      <ol><li>Parse.</li><li>Extract.</li><li>Validate.</li></ol>
+    </article>
+  );
+}
+
+/* Hand-composed rather than rendered from <Disclosure>, because the specimen has
+   to prove the CSS contract holds for plain HTML with no component at all — that
+   is the claim the zero-JavaScript argument rests on. The component emits
+   exactly this. */
+function Faq() {
+  const rows = [
+    ["Does it need JavaScript?", "No. <details> owns the open state, so every row works before hydration, with a failed bundle, and with JS off."],
+    ["Why no height animation?", "<details> cannot animate its own height portably — the closed box has no height to interpolate from. Only the chevron moves."],
+    ["Where does the chevron come from?", "<Icon name=“chevron-down”>. One drawing, one owner; the CSS rotates it on [open] and never draws a triangle of its own."],
+  ];
+  return (
+    <div>
+      {rows.map(([q, a], i) => (
+        <details className="lw-disclosure" key={i} open={i === 0 || undefined}>
+          <summary><span>{q}</span><Icon name="chevron-down" size={18} /></summary>
+          <div className="lw-disclosure-body">{a}</div>
+        </details>
+      ))}
+    </div>
+  );
+}
+
+function Pane() {
+  return (
+    <React.Fragment>
+      <span className="lbl-eyebrow lbl-above">prose</span>
+      <Article />
+      <span className="lbl-eyebrow lbl-above" style={{marginTop:14}}>disclosure</span>
+      <Faq />
+    </React.Fragment>
+  );
+}
+for (const id of ["light", "dark"]) {
+  ReactDOM.createRoot(document.getElementById(id)).render(<Pane />);
+}
+</script></body></html>

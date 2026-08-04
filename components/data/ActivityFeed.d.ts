@@ -26,6 +26,14 @@ export interface ActivityFeedProps extends React.HTMLAttributes<HTMLDivElement> 
    */
   now?: number;
   label?: string;
+  /**
+   * Replaces the anchor ELEMENT for items that carry an `href`. Default `"a"`.
+   * Pass a router's Link so a row navigates client-side and keeps any path
+   * prefix that Link applies. It receives what the raw `<a>` would: `href`,
+   * `className`, the `data-*` state attributes and `children`. An item without
+   * an href is unaffected.
+   */
+  linkAs?: React.ElementType;
 }
 /** Notifications and activity — the same list with a different verb. */
 export declare function ActivityFeed(props: ActivityFeedProps): React.JSX.Element;

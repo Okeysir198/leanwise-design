@@ -17,6 +17,8 @@ export { Chip } from "./components/primitives/Chip.jsx";
 export { Eyebrow } from "./components/primitives/Eyebrow.jsx";
 export { Skeleton } from "./components/primitives/Skeleton.jsx";
 export { Icon, iconNames } from "./components/primitives/Icon.jsx";
+export { Disclosure } from "./components/primitives/Disclosure.jsx";
+export { Prose } from "./components/primitives/Prose.jsx";
 
 /* layout */
 export { Page } from "./components/layout/Page.jsx";
@@ -68,6 +70,7 @@ export { Breadcrumbs } from "./components/nav/Breadcrumbs.jsx";
 export { ThemeToggle } from "./components/nav/ThemeToggle.jsx";
 export { CommandPalette, score } from "./components/nav/CommandPalette.jsx";
 export { BottomNav } from "./components/nav/BottomNav.jsx";
+export { NavToggle } from "./components/nav/NavToggle.jsx";
 
 /* overlays */
 export { Dialog } from "./components/overlays/Dialog.jsx";
@@ -94,6 +97,25 @@ export { Hero } from "./components/marketing/Hero.jsx";
 export { FeatureGrid } from "./components/marketing/FeatureGrid.jsx";
 export { StoryCard } from "./components/marketing/StoryCard.jsx";
 export { LogoRail } from "./components/marketing/LogoRail.jsx";
+/* --- v1.3.0 site chrome + editorial. Added by the marketing.css task; if this
+   block conflicts with another in-flight change, these six lines are the whole
+   of it. `SiteFooter`, NOT `Footer`: `CardFoot` exists, the browser bundle's
+   namespace is flat, and lw-bundle.mjs makes a collision a hard error. --- */
+export { SiteFooter } from "./components/marketing/SiteFooter.jsx";
+export { Steps } from "./components/marketing/Steps.jsx";
+export { Quote } from "./components/marketing/Quote.jsx";
+export { Byline } from "./components/marketing/Byline.jsx";
+export { ArticleCard } from "./components/marketing/ArticleCard.jsx";
+export { AnnounceBar } from "./components/marketing/AnnounceBar.jsx";
+/* --- v1.3.0 pricing, comparison, flow. Added by the marketing.css task; these
+   three lines are the whole of it. There is deliberately NO `PlanGrid` (use
+   `<Grid min={280}>`) and NO `BillingToggle` (use `<Segmented>` inside
+   `.lw-plans-head`) — see the README and the CHANGELOG. `CompareTable`, NOT
+   `Compare`: the browser bundle's namespace is flat and lw-bundle.mjs makes a
+   collision with `Table`/`DataGrid` naming a hard error to reason about. --- */
+export { PlanCard } from "./components/marketing/PlanCard.jsx";
+export { CompareTable } from "./components/marketing/CompareTable.jsx";
+export { Flow } from "./components/marketing/Flow.jsx";
 
 /* Per-tenant theming and the runtime hooks live behind their own subpaths so an
    app that does not theme never pays for them: "@leanwise/design/brand" and

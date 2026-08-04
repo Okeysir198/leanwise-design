@@ -46,10 +46,13 @@
    ABOVE the consolidated pointer-affordance list at the foot of base.css, because a
    later `cursor: default` silently cancels an earlier pointer.
 
-   The on-dark patches for these controls stay below, under "Dark ground": they are
-   `:is(.dark, …)`-scoped, so they outrank the promoted rules on specificity and
-   their position is not load-bearing. A base-only page therefore has the controls
-   but not their dark-band treatment. */
+   The on-dark patches for these controls stayed below through fb2d3ad, on the
+   correct observation that they are `:is(.dark, …)`-scoped and so outrank the
+   promoted rules on specificity, making their position not load-bearing. That
+   left a base-only page with the controls and none of their dark-band treatment,
+   which is the whole failure the promotion existed to fix — position is not
+   load-bearing, PRESENCE is. They followed the controls into base.css in the same
+   v1.3.0; see the tombstone under "Dark ground". */
 
 /* ---- Data display ---------------------------------------------------------- */
 
@@ -296,15 +299,19 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 .lw-dialog-title { font-size: var(--lw-text-h3); font-weight: var(--lw-fw-semibold); letter-spacing: var(--lw-tracking-tight); line-height: 1.25; margin: 0; }
 /* Bare glyph, like every other dismiss in the system — a boxed close competes
    with the dialog's own actions for the eye.
-   `.lw-icon-btn` is the shared borderless icon control: one place that owns the
-   hit area and the brand focus ring, so a bare icon is never a focus trap with
-   no visible indicator. */
-.lw-icon-btn, .lw-dialog-close { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; padding: 0; border: 0; border-radius: var(--lw-radius-sm); background: none; color: var(--lw-fg-subtle); cursor: pointer; transition: color var(--lw-dur-xs) var(--lw-ease-out); }
-.lw-icon-btn:hover, .lw-dialog-close:hover { color: var(--lw-fg); }
-.lw-icon-btn:focus-visible, .lw-dialog-close:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
-.lw-icon-btn[disabled] { color: var(--lw-fg-faint); cursor: not-allowed; }
+
+   MOVED to base.css in v1.3.0: `.lw-icon-btn`, the shared borderless icon
+   control — its face, hover ink, focus ring, disabled ink and reduced-motion
+   stand-down. `.lw-topbar-toggle` composes it, `AnnounceBar`'s dismiss is one
+   and `SiteFooter`'s social row is a line of them, none of which load this
+   file. REVIEW.md open item 6; closed.
+
+   `.lw-dialog-close` STAYED, because a dialog is an app surface. It is now a
+   DELTA on `.lw-icon-btn` rather than a second copy of it — `Dialog.jsx` emits
+   both classes, and all that is left here is the optical margin that pulls the
+   glyph into the head's padding. The two were never two treatments; they were
+   one face written under two names, which is the shape CONTRIBUTING opens with. */
 .lw-dialog-close { margin: -2px -4px 0 0; }
-@media (prefers-reduced-motion: reduce) { .lw-icon-btn, .lw-dialog-close { transition: none; } }
 .lw-dialog-body { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; padding: 0 var(--lw-space-24) var(--lw-space-20); font-size: var(--lw-text-sm); line-height: 1.6; color: var(--lw-fg-muted); text-wrap: pretty; }
 /* Long words and paths inside a bounded dialog wrap rather than widening it. */
 .lw-dialog-body * { min-width: 0; overflow-wrap: anywhere; }
@@ -470,25 +477,23 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
    components need no rule here at all — they are built from role tokens, which
    already re-point. What is listed below is only what role tokens cannot fix. */
 
-:is(.dark, [data-band="dark"], .lw-band-dark) .lw-input,
-:is(.dark, [data-band="dark"], .lw-band-dark) .lw-textarea,
-:is(.dark, [data-band="dark"], .lw-band-dark) .lw-select,
-:is(.dark, [data-band="dark"], .lw-band-dark) .lw-input-group,
+/* MOVED to base.css in v1.3.0: the dark-ground patches for the controls that
+   fb2d3ad promoted — `.lw-input`, `.lw-textarea`, `.lw-select`,
+   `.lw-input-group`, `.lw-switch`, `.lw-check`, `.lw-segmented`. That commit
+   left them here because they outrank the promoted rules on specificity, so
+   their POSITION is not load-bearing; what it missed is that a page loading
+   base + marketing never sees this file at all, and so had the controls with no
+   dark-band treatment — on a site that puts its contact form on a dark ground.
+   Position is not load-bearing; presence is. What stays below is what was
+   never promoted: `.lw-prompt` (an AI surface), the bare `[data-focus-demo]`
+   review hook, and the table/kpi/empty/eyebrow family. */
 :is(.dark, [data-band="dark"], .lw-band-dark) .lw-prompt { background-color: var(--lw-bg-subtle); }
 /* background-COLOR, never the shorthand: the shorthand resets background-image
    and would erase the two gradients that draw .lw-select's chevron, leaving the
    select on dark indistinguishable from a text input. */
 
-:is(.dark, [data-band="dark"], .lw-band-dark) .lw-input:focus-visible,
-:is(.dark, [data-band="dark"], .lw-band-dark) .lw-textarea:focus-visible,
-:is(.dark, [data-band="dark"], .lw-band-dark) .lw-select:focus-visible,
-:is(.dark, [data-band="dark"], .lw-band-dark) .lw-input-group:focus-within,
 :is(.dark, [data-band="dark"], .lw-band-dark) .lw-prompt:focus-within,
 :is(.dark, [data-band="dark"], .lw-band-dark) [data-focus-demo] { border-color: var(--lw-brand-400); box-shadow: var(--lw-focus-ring); }
-
-/* The switch knob and the check glyph are the two places a literal white is
-   correct on both grounds — they sit on the brand fill, whose ink never flips. */
-.dark .lw-switch .track::after, [data-band="dark"] .lw-switch .track::after, .lw-band-dark .lw-switch .track::after { background: var(--lw-on-dark-1); }
 
 /* A dark band inside a light page has no --lw-bg of its own to lean on. */
 .lw-band-dark, [data-band="dark"] { color: var(--lw-on-dark-2); }
@@ -507,17 +512,9 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 .lw-band-dark .lw-empty .t, [data-band="dark"] .lw-empty .t { color: var(--lw-on-dark-1); }
 .lw-band-dark .lw-empty .s, [data-band="dark"] .lw-empty .s { color: var(--lw-on-dark-2); }
 
-/* Segmented is the only control whose shell is an inset TRACK rather than a
-   field, so the input patch above misses it — on a dark band it kept a light
-   grey track and a white active pill, the one control that stayed light on
-   navy. On light the selected segment is LIGHTER than its track (raised out of
-   a well); dark keeps that same figure/ground rather than inverting it, so the
-   control reads identically in both themes. Painted from the --lw-on-dark-*
-   family, not raw rgba — that family exists to stop exactly that sprawl. */
-:is(.dark, [data-band="dark"], .lw-band-dark) .lw-segmented { background: var(--lw-on-dark-fill); border-color: var(--lw-on-dark-line); }
-.dark .lw-segmented button, [data-band="dark"] .lw-segmented button, .lw-band-dark .lw-segmented button { color: var(--lw-on-dark-2); }
-.dark .lw-segmented button:hover, [data-band="dark"] .lw-segmented button:hover, .lw-band-dark .lw-segmented button:hover { color: var(--lw-on-dark-1); }
-:is(.dark, [data-band="dark"], .lw-band-dark) .lw-segmented button:is([aria-checked="true"], [aria-pressed="true"], [aria-selected="true"]) { background: var(--lw-on-dark-fill-strong); color: var(--lw-on-dark); box-shadow: inset 0 0 0 1px var(--lw-on-dark-line); }
+/* Segmented's dark patch MOVED to base.css in v1.3.0 with the control itself —
+   see the tombstone above. Its reasoning (the shell is an inset TRACK, not a
+   field, so the input patch misses it) moved with the rules. */
 
 /* The eyebrow's hexagon is the one part of the motif pinned to a TIER, so on a
    dark band the label re-pointed to the dark subtle ink while its node stayed
@@ -526,16 +523,14 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 :is(.dark, [data-band="dark"], .lw-band-dark) .lw-eyebrow::before { background: var(--lw-brand-400); }
 :is(.dark, [data-band="dark"], .lw-band-dark) .lw-eyebrow.muted::before { background: var(--lw-fg-faint); }
 
-/* The focus ring must switch to the 400 tier on dark — the 500 ring disappears
-   into the navy. Same rule base.css applies to buttons. */
-/* The offset-ring controls take the same tier swap. */
-.dark .lw-switch input:focus-visible + .track, [data-band="dark"] .lw-switch input:focus-visible + .track, .lw-band-dark .lw-switch input:focus-visible + .track,
-.dark .lw-switch input[data-focus-demo] + .track, [data-band="dark"] .lw-switch input[data-focus-demo] + .track, .lw-band-dark .lw-switch input[data-focus-demo] + .track,
-.dark .lw-check input:focus-visible + .box, [data-band="dark"] .lw-check input:focus-visible + .box, .lw-band-dark .lw-check input:focus-visible + .box,
-.dark .lw-check input[data-focus-demo] + .box, [data-band="dark"] .lw-check input[data-focus-demo] + .box, .lw-band-dark .lw-check input[data-focus-demo] + .box { outline-color: var(--lw-brand-400); }
+/* The offset-ring tier swap for `.lw-switch` and `.lw-check` MOVED to base.css
+   in v1.3.0 with those controls — see the tombstone above. */
 
 @media (prefers-reduced-motion: reduce) {
-  .lw-switch .track::after, .lw-sidebar, .lw-confidence .rail > i { transition: none; }
+  /* `.lw-switch .track::after` moved to base.css with the control: its knob
+     travel is the promoted control's only motion, so the stand-down had to go
+     with it or a base-only page animates under reduced motion. */
+  .lw-sidebar, .lw-confidence .rail > i { transition: none; }
 }
 
 

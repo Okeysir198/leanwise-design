@@ -32,7 +32,7 @@ function Dialog({ open, onClose, title, description, footer, width, className, c
       children: [
         title && /* @__PURE__ */ jsxs("div", { className: "lw-dialog-head", children: [
           /* @__PURE__ */ jsx("h2", { className: "lw-dialog-title", id: titleId, children: title }),
-          /* @__PURE__ */ jsx("button", { type: "button", className: "lw-dialog-close", "aria-label": "Close", title: "Close", onClick: onClose, children: /* @__PURE__ */ jsx(Icon, { name: "close", size: 17 }) })
+          /* @__PURE__ */ jsx("button", { type: "button", className: "lw-icon-btn lw-dialog-close", "aria-label": "Close", title: "Close", onClick: onClose, children: /* @__PURE__ */ jsx(Icon, { name: "close", size: 17 }) })
         ] }),
         /* @__PURE__ */ jsxs("div", { className: "lw-dialog-body", children: [
           description && /* @__PURE__ */ jsx("div", { id: descId, children: description }),

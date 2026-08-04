@@ -105,7 +105,13 @@ const ICONS = {
   maximize: ["M9 4.5H4.5V9", "M15 4.5h4.5V9", "M15 19.5h4.5V15", "M9 19.5H4.5V15"],
   minimize: ["M4.5 9H9V4.5", "M19.5 9H15V4.5", "M19.5 15H15v4.5", "M4.5 15H9v4.5"],
   undo: ["M4.5 12a7.5 7.5 0 1 0 2.2-5.3", "M4.5 4.5V9H9"],
-  help: ["M12 3.5a8.5 8.5 0 1 0 0 17 8.5 8.5 0 0 0 0-17", "M9.6 9.4a2.5 2.5 0 0 1 4.9.6c0 1.7-2.5 2.5-2.5 2.5", "M12 16.5h.01"]
+  help: ["M12 3.5a8.5 8.5 0 1 0 0 17 8.5 8.5 0 0 0 0-17", "M9.6 9.4a2.5 2.5 0 0 1 4.9.6c0 1.7-2.5 2.5-2.5 2.5", "M12 16.5h.01"],
+  /* The hamburger, for the mobile nav disclosure. Three rules on the same 24
+     grid as `list`, which is the same drawing with an indent — a nav toggle and
+     a bulleted-list glyph are different meanings and get different names, but
+     they share the geometry so the two never look like two icon sets. Its
+     partner is the existing `close`; there is no second X. */
+  menu: ["M4.5 7h15", "M4.5 12h15", "M4.5 17h15"]
 };
 
 /* Drawn when a name is not in the set. Deliberately generic — it must read as

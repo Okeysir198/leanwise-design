@@ -18,7 +18,8 @@ export type IconName =
   | "more-vertical" | "chevrons-up-down" | "sort-asc" | "sort-desc" | "eye" | "eye-off"
   | "lock" | "mail" | "link" | "image" | "folder" | "star"
   | "bell" | "inbox" | "play" | "pause" | "mic" | "mic-off"
-  | "thumbs-up" | "thumbs-down" | "maximize" | "minimize" | "undo" | "help";
+  | "thumbs-up" | "thumbs-down" | "maximize" | "minimize" | "undo" | "help"
+  | "menu";
 
 export interface IconProps extends Omit<React.SVGAttributes<SVGSVGElement>, "children"> {
   name: IconName;

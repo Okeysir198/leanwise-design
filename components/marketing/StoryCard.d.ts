@@ -15,5 +15,13 @@ export interface StoryCardProps extends Omit<React.HTMLAttributes<HTMLElement>, 
   person?: React.ReactNode;
   role?: React.ReactNode;
   href?: string;
+  /**
+   * Replaces the anchor ELEMENT when `href` is set. Default `"a"`. Pass a
+   * router's Link so the card navigates client-side and keeps any path prefix
+   * that Link applies. It receives what the raw `<a>` would: `href`,
+   * `className` and `children`. Without an `href` the card is a `<div>` and
+   * this does nothing.
+   */
+  linkAs?: React.ElementType;
 }
 export declare function StoryCard(props: StoryCardProps): React.JSX.Element;

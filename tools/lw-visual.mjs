@@ -325,6 +325,44 @@ async function settle(page, card) {
     null, { timeout: 15000 });
 }
 
+/* Wait for every image the CURRENT theme asks for to be decoded, then let two
+   frames pass.
+
+   The matrix flips `data-theme` and screenshots in the same task. That is fine
+   for colour — CSS custom properties resolve synchronously and the freeze sheet
+   kills the transitions — but NOT for artwork: a per-theme `background-image`
+   (`.brand-mark` has one) is a fresh resource request at flip time, and a
+   screenshot taken before it decodes captures the plate without it. The dark
+   shot then drifts run to run depending on whether the fetch won the race. It
+   was measured at 0.0293% on a card carrying the logo — over both thresholds,
+   against a noise floor of 0.0002% — and the workaround was to take the logo out
+   of the card, which is a gate editing the specimen to suit itself.
+
+   `<img>` alone is not enough: most of this system's artwork is a CSS
+   background, which exposes no load event. Re-requesting the same URL through a
+   throwaway `Image()` hits the same memory cache, so awaiting its `decode()`
+   is a proxy for the background layer being paintable. Failures are swallowed on
+   purpose — a card with a deliberately broken URL should still be shot and
+   compared, not hang the gate. */
+async function decoded(page) {
+  await page.evaluate(async () => {
+    const urls = new Set();
+    for (const el of document.querySelectorAll("*")) {
+      for (const pseudo of [null, "::before", "::after"]) {
+        const bg = getComputedStyle(el, pseudo).backgroundImage;
+        if (!bg || bg === "none") continue;
+        for (const m of bg.matchAll(/url\((['"]?)([^'")]+)\1\)/g)) urls.add(m[2]);
+      }
+    }
+    const wait = (i) => (i.decode ? i.decode().catch(() => {}) : Promise.resolve());
+    await Promise.all([
+      ...[...document.images].map(wait),
+      ...[...urls].map((u) => { const i = new Image(); i.src = u; return wait(i); }),
+    ]);
+    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+  });
+}
+
 async function shoot(page, card) {
   const id = relative(ROOT, card).replace(/[\/\\]/g, "__").replace(/\.html$/, "");
   const out = [];
@@ -336,6 +374,7 @@ async function shoot(page, card) {
       if (theme) r.setAttribute("data-theme", theme); else r.removeAttribute("data-theme");
       r.setAttribute("data-density", density);
     }, [m.theme, m.density]);
+    await decoded(page);
     out.push([id + "__" + m.name + ".png", await page.screenshot({ fullPage: true })]);
   }
   return out;

@@ -11,19 +11,30 @@ document is a second home that goes stale, and this line has proved it twice: it
 exports … 5 gates" when the barrel exported 82 and there were six, and then "442 tokens, eight
 theme scopes" against an actual 283 across twelve.
 
-**Last pass:** v1.1.7, which closed every item the v1.1.6 audit left open.
+**Last pass:** v1.3.0, which found that both browser gates had been measuring nothing since
+v1.2.0 and closed every promotion item the v1.1.7/fb2d3ad passes left open.
 
 ---
 
 ## Verdict
 
-The system audits itself to a degree it did not before, and the v1.1.7 pass is the evidence:
-of the nine items carried into it, the three that mattered were **live user-facing defects that
-every gate reported green on**. None was found by reading the code. Each was found by building
-the measurement that had been missing.
+The system audits itself to a degree it did not before — **and v1.3.0 is the pass that proves
+the qualifier still matters.** Two of the gates this file most trusted, `check:a11y` and
+`check:visual`, had been reporting green on **26 blank cards for two minor releases**, and the
+first thing the repaired bundle produced was four serious `color-contrast` failures at 2.28:1 on
+a control that had been shipping that way the whole time. The defect was not in the gates'
+*logic*; it was that the one thing a browser gate has to establish first — *did the specimen
+render?* — was asserted by a test that could not fail.
+
+That is now the fourth gate in this repository found to be a hypothesis rather than a gate
+(byte-exact PNG comparison, the missing templates gate, the un-generated bundle, and this). The
+pattern is stable enough to plan around: **when you add a gate, sabotage the thing it watches
+and confirm it goes red, in the same sitting.** Both v1.3.0 gate changes were watched failing
+before they were trusted.
 
 What is left is genuinely small and mostly judgement. There is no known correctness bug in what
-ships to a browser today.
+ships to a browser today — but that sentence was also true of the last two audits, and it was
+wrong both times for the same reason.
 
 ---
 
@@ -43,9 +54,54 @@ because it will recur again:
 - The `@media (prefers-color-scheme: dark)` path — the **most common deployment there is**, a
   page that sets no class — was asserted by nothing, and had a 1.08:1 diff surface in it.
 - The twelve generated template files stayed in step because everyone remembered to.
+- **`check:a11y`'s render guard was `innerText.length > 0`.** Every card wraps its React roots
+  in explanatory prose, so the guard passed on prose alone — the demo case (a card that renders)
+  and the failure case (a card that does not) are indistinguishable to it. It reported 39 cards
+  clean while inspecting the copy around 26 holes.
+- **`.lw-btn` had no `background` of its own**, and every variant that *does* declare one hid
+  it. Only the two with no fill — `link`, and a bare `.lw-btn` — showed the UA button face, so
+  nine of ten variants demoed perfectly.
 
-In every case the demo path (a class on `<html>`, a light-mode screenshot, a fresh checkout)
-worked perfectly. **Test the path nobody demos.**
+In every case the demo path (a class on `<html>`, a light-mode screenshot, a fresh checkout,
+a card with prose in it, a filled button) worked perfectly. **Test the path nobody demos.**
+
+---
+
+## Closed in v1.3.0
+
+Full detail in the CHANGELOG. What is worth carrying forward:
+
+### The two browser gates were measuring nothing, and one live defect fell out of fixing them
+
+- **Every React specimen card rendered blank from v1.2.0 to v1.2.1.** esbuild's `jsx` API
+  option is only a default; v1.2's new `tsconfig.json` (`"jsx": "react-jsx"`, correct for
+  `tsc`) overrode it per file, so every component emitted `react/jsx-runtime` imports and threw
+  `TypeError: import_jsx_runtime.jsx is not a function`. `check:a11y` scored the prose around 26
+  empty roots; `check:visual` compared two equally blank plates. Fixed with `tsconfigRaw` in
+  `lw-bundle.mjs`, and the guard rebuilt: an uncaught page error fails the card, and every
+  `createRoot` container must end up with an element child. Watched failing on the replanted
+  defect.
+- **`.lw-btn` declared neither `background` nor `border`**, so a page loading `base.css`
+  without a reset got the UA bevel on every button and the UA `buttonface` behind
+  `.lw-btn-link` — **2.28:1** under `color-scheme: dark`, four serious axe failures in the
+  rest and hover cells. This is a *consequence of the v1.2.0 reset split*, not of the link
+  variant's tokens, and it establishes a rule the layers now follow: **a property carrying a
+  colour is `base.css`'s to state; geometry may lean on the reset, because geometry fails
+  visibly.** No `data-a11y-expect` opt-out was added — the state is reachable — so the
+  exemption count stays at one.
+- **`lw-visual` had no image-decode wait**, so a per-theme `background-image` raced the dark
+  shot (0.0293% drift measured, floor 0.0002%). The first fix had been to delete the logo from
+  the card; that is the wrong direction and is reverted. Three full runs now agree to 0.0001%.
+
+### The layer promotion finished
+
+`fb2d3ad` moved layout, the form controls and `.lw-topbar` into `base.css` but left their
+`:is(.dark, …)` patches behind, on the correct observation that their *position* is not
+load-bearing. v1.3.0 moved them anyway, with `.lw-icon-btn` (split from `.lw-dialog-close`,
+which stayed as a delta) and `.lw-eyebrow`'s dark hexagon patch. **Position is not
+load-bearing; presence is** — a page that never loads the file never sees the rule at
+whatever specificity. A marketing page now needs `base.css` + `marketing.css` and nothing else,
+which was the whole objective.
 
 ---
 
@@ -127,8 +183,51 @@ local fix is lost silently. Leave it. *(An earlier revision of this file claimed
 twelve copies, and the `apps/web` repo it names is not on this box, so the pairing cannot be
 checked here at all.)*
 
-### 5. Smaller
+### 5. `.lw-editor-body` is still a second treatment of `.lw-prose` — de-dup SKIPPED, deliberately
 
+`product.css`'s `.lw-editor-body` (the `RichText` surface) and the new `.lw-prose` are two
+treatments of one thing: a block of authored rich text sized on the type scale. The v1.3.0 plan
+was to group the editor's selectors onto the `.lw-prose` blocks and reduce `.lw-editor-body` to
+its editor-only delta. It was **not done**, and the reason is worth recording rather than
+re-deciding:
+
+- The convergence is a real visual change to `RichText` — `h2` moves from `--lw-text-h3` to the
+  h2 step, block spacing from `0.7em` to `--lw-space-20`, line-height from 1.65 to
+  `--lw-lh-relaxed`, list indent from `1.4em` to `--lw-space-24`, and the surface gains a 68ch
+  measure it does not have today.
+- It also requires `RichText.jsx` to emit `className="lw-prose lw-editor-body"`, and a `.jsx`
+  edit is only visible to the two browser gates after `npm run bundle`. So the change would have
+  landed with its verification deferred — the one shape this repo has paid for repeatedly.
+
+Do it in one commit, with the bundle regenerated in the same commit, and read the `RichText`
+card's diff rather than the gate summary. Until then the duplication is known, bounded and
+recorded here, which is better than a half-verified merge.
+
+### 6. `_ds_manifest.json`'s `components` array had gone 12 entries stale
+
+Found while verifying the manifest against the filesystem for v1.3.0. The `cards` array — the
+load-bearing half, since both browser gates enumerate from it and `_cards.mjs` cross-checks it
+in both directions — was clean, with all four marker attributes matching byte-for-byte. The
+`components` array was not: it was missing the entire v1.3.0 component set. Refreshed by hand
+here, which is exactly the treatment open item 1 says it should stop needing. Two non-barrel
+names (`CHART_W`, `CHART_PAD`) and `chart-parts.jsx`'s losing `Grid` are still absent by
+design — the array describes the namespace surface, and `lw-bundle.mjs` already computes that
+list. **Fold it into the bundle generator and this item and item 1 both close.**
+
+### 7. Smaller
+
+- **Nothing gates the *geometric* half of the reset leak.** `check:a11y` now catches a UA
+  colour reaching a `.lw-*` control, because a colour is contrast. It cannot see the `2px
+  outset` bevel that the same gap put on every button — that was found by a one-off sweep of
+  every computed style on all 39 cards, not by a gate. The sweep is cheap and could become one
+  (fail on `border-style: outset|inset` or a `buttonface` background inside a `.lw-*` subtree);
+  it was not added here because `.lw-btn` was the only offender and a gate with one known
+  subject is hard to keep honest. If a second one appears, build it.
+- **This release legitimately moves 52 of 136 visual shots**, so its CI run needs `[visual-ok]`
+  in the head commit message. Every one is accounted for in the release notes: 48 are the
+  removed UA button bevel, 4 are `marketing.card`'s and `Icon.card`'s intended content growth.
+  An override is only honest when the accounting exists — do not carry the marker forward into
+  the next commit.
 - `Feedback` and `RichText` keep `aria-pressed` deliberately — thumbs can be cleared, and bold +
   italic are genuinely simultaneous. Documented, but the reasoning lives only in the source.
 - The `:dir(rtl)` fallback in the drawer uses `[dir="rtl"]`, which needs the attribute set. No
@@ -142,7 +241,7 @@ checked here at all.)*
   you open beats depending on an undocumented exit hook, but nobody should re-file this as a
   leak.
 
-### 6. The consumer bump, which is now a real plan rather than a warning
+### 8. The consumer bump, which is now a real plan rather than a warning
 
 All three consumers are pinned pre-1.1.0. Diffing the tags says the risk is not where it looked:
 **zero `--lw-*` tokens were dropped** and the preset kept every utility family, so the CSS
@@ -184,9 +283,12 @@ reinstall changes that. Bump it to `#v0.2.3`.
   institutional memory, and it is rarer than the code.
 - **Every gate added this pass was watched failing before it was trusted.** The contrast gate on
   a broken media token, the templates gate on a hand-edited `support.js`, the bundle gate on a
-  planted bad card reference, the visual gate on a real pixel change. A gate nobody has seen fail
-  is a hypothesis, not a gate — this repo has shipped four of those, and each one hid a defect
-  for months.
+  planted bad card reference, the visual gate on a real pixel change; in v1.3.0, the rebuilt
+  a11y render guard on the replanted jsx-runtime defect (it named the exact `TypeError` on the
+  first card it reached) and the new advisory's `derive` on a deliberately wrong count. A gate
+  nobody has seen fail is a hypothesis, not a gate — this repo has now shipped **four** of
+  those, and each one hid a defect for months. The a11y render guard is the newest and the
+  worst: it hid a defect that made *two other gates* meaningless at the same time.
 - **The system caught its own regressions, twice, mid-pass.** The v1.1.5 on-dark alpha collapse
   moved a dark table header to 4.33 and `check:a11y` failed the run; this pass, promoting a bare
   `code` rule put a light chip behind an always-dark code surface and `check:a11y` failed that
@@ -203,6 +305,6 @@ npm run check:ci     # the above plus axe and visual regression
 npm run build        # rollup-plugin-dts resolution — what check:dts only approximates
 ```
 
-No gate can see the *Carried forward* section, or Open 3, 4 and 6 — architecture, vendoring,
+No gate can see the *Carried forward* section, or Open 2, 3, 4, 5 and 8 — architecture, vendoring,
 API shape and release planning are judgement. That is why this file exists and why the audit is
 worth repeating by hand each release.

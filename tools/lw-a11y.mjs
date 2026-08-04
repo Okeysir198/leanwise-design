@@ -42,7 +42,61 @@ const findings = [];
    mounted root instead, which is what it was standing in for. */
 const WORKERS = 4;
 
+/* Recorded in the page, read back at settle. See RENDER GUARD below.
+   `global.ReactDOM = {}` is assigned by the UMD wrapper BEFORE the factory fills
+   it, so a plain wrap of `createRoot` at init time would wrap nothing. The
+   setter stores a Proxy over that same object instead, and the factory's later
+   writes land on the proxy's target — so the `createRoot` the card reaches for
+   is ours, whenever it was defined. */
+const ROOT_RECORDER = () => {
+  const roots = (window.__lwRoots = []);
+  let real;
+  Object.defineProperty(window, "ReactDOM", {
+    configurable: true,
+    get: () => real,
+    set: (v) => {
+      real = new Proxy(v, {
+        get(t, k) {
+          const val = Reflect.get(t, k);
+          if (typeof val !== "function") return val;
+          if (k === "createRoot" || k === "hydrateRoot") return (c, ...a) => (roots.push(c), val.call(t, c, ...a));
+          if (k === "render") return (el, c, ...a) => (roots.push(c), val.call(t, el, c, ...a));
+          return val;
+        },
+      });
+    },
+  });
+};
+
+/* -----------------------------------------------------------------------------
+   THE RENDER GUARD, and why it had to be rebuilt.
+
+   The old guard was `document.body.innerText.trim().length > 0`. It is the
+   textbook shape of a gate that cannot fail: every specimen card wraps its React
+   roots in several paragraphs of explanatory prose, so the body always has text
+   whether or not a single component mounted. From v1.2.0 to v1.3.0 esbuild
+   emitted `react/jsx-runtime` imports for every component (tools/lw-bundle.mjs
+   has the full story), so EVERY React card threw at module evaluation and EVERY
+   React specimen rendered blank — and this gate scored the prose around the hole
+   and reported 39 cards clean, twice, across two minor releases. `check:visual`
+   compared two equally blank plates and agreed.
+
+   Two rules replace it, and both are things the old one structurally could not
+   see:
+
+     1. An uncaught page error fails the card. That is the direct signal — the
+        v1.2 defect announced itself as `TypeError: import_jsx_runtime.jsx is not
+        a function` on the console of every card, and nothing was listening.
+     2. Every container passed to `createRoot`/`render` must end up with at least
+        one element child. That is the structural signal, and it survives a
+        failure mode that throws nothing at all (a component that returns null, a
+        namespace key that silently reads `undefined`).
+
+   Prose is no longer evidence of anything; keep it that way.
+   -------------------------------------------------------------------------- */
+
 async function scanCard(page, card) {
+  page.__lwErrors = [];
   await page.goto(pathToFileURL(card).href, { waitUntil: "load" });
   // Freeze motion, as the visual gate does. Flipping the theme in place starts
   // every colour transition at once, and axe reading a mid-transition frame
@@ -51,13 +105,34 @@ async function scanCard(page, card) {
   // ground and then slept 200ms, which outlasted the transition by accident
   // rather than by design.
   await page.addStyleTag({ content: "*,*::before,*::after{animation:none !important;transition:none !important}" });
-  // 21 of these cards pull React and Babel from unpkg. If that fails, the
-  // roots stay empty, axe finds nothing on an empty div, and the gate passes
-  // green on a card it never actually inspected. Refuse to score a blank card.
-  await page.waitForFunction(() => document.fonts.status === "loaded" && document.body.innerText.trim().length > 0,
+  // The cards are vendored, but a card can still fail to render — a bad bundle,
+  // a namespace key that moved, a component that throws. axe finds nothing on an
+  // empty div and reports it as clean, so refuse to score a card that did not
+  // paint. Wait for fonts plus every React root having mounted something.
+  // The wait ALSO resolves on an uncaught page error, so a card whose script
+  // threw reports the throw in a second rather than timing out for fifteen and
+  // then guessing. Babel transforms the card's script inline, so a throw inside
+  // it surfaces as a page error, never as a rejected navigation — that is the
+  // signal the blank-card era emitted on every single card, uncollected.
+  await page.waitForFunction(() => window.__lwFailed || (document.fonts.status === "loaded"
+      && document.body.innerText.trim().length > 0
+      && (window.__lwRoots || []).every((c) => c && c.childElementCount > 0)),
     null, { timeout: 15000 }).catch(() => {
-    throw new Error("lw-a11y: " + relative(ROOT, card) + " rendered nothing — _ds_bundle.js or the CDN scripts failed to load. Refusing to report it as clean.");
+    throw new Error("lw-a11y: " + relative(ROOT, card) + " rendered nothing — no React root mounted, or the bundle failed to load. Refusing to report it as clean.");
   });
+  if (page.__lwErrors.length) {
+    throw new Error("lw-a11y: " + relative(ROOT, card) + " threw while rendering — refusing to score it.\n"
+      + page.__lwErrors.map((e) => "      " + e).join("\n"));
+  }
+  // A root that mounted an EMPTY component still has to be named, because the
+  // waitForFunction above only reports a timeout.
+  const empty = await page.evaluate(() => (window.__lwRoots || [])
+    .filter((c) => !c || c.childElementCount === 0)
+    .map((c) => (c && (c.id ? "#" + c.id : c.tagName.toLowerCase())) || "(detached)"));
+  if (empty.length) {
+    throw new Error("lw-a11y: " + relative(ROOT, card) + " has " + empty.length
+      + " empty React root(s): " + empty.join(", ") + ". Refusing to score the prose around a hole.");
+  }
   for (const theme of [null, "dark"]) {
     await page.evaluate((t) => {
       document.documentElement.classList.toggle("dark", t === "dark");
@@ -115,6 +190,13 @@ try {
     const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
     try {
       await page.addInitScript(axeSource);
+      await page.addInitScript(ROOT_RECORDER);
+      page.on("pageerror", (e) => {
+        (page.__lwErrors ||= []).push(String(e).split("\n")[0]);
+        // Flip a flag the in-page wait can see, so the poll stops immediately
+        // instead of burning its whole timeout on a card that is already dead.
+        page.evaluate(() => { window.__lwFailed = true; }).catch(() => {});
+      });
       for (let card; (card = queue.shift()); ) await scanCard(page, card);
     } finally {
       await page.close();

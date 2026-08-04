@@ -34,7 +34,12 @@ export function Dialog({ open, onClose, title, description, footer, width, class
       {title && (
         <div className="lw-dialog-head">
           <h2 className="lw-dialog-title" id={titleId}>{title}</h2>
-          <button type="button" className="lw-dialog-close" aria-label="Close" title="Close" onClick={onClose}>
+          {/* Two classes since v1.3.0: `.lw-icon-btn` (base.css) is the face,
+              `.lw-dialog-close` (product.css) is the optical margin. They used
+              to be one selector list in product.css, i.e. one face written
+              twice; the icon button was promoted so a marketing page can have
+              one, and the close control kept only its delta. */}
+          <button type="button" className="lw-icon-btn lw-dialog-close" aria-label="Close" title="Close" onClick={onClose}>
             <Icon name="close" size={17} />
           </button>
         </div>

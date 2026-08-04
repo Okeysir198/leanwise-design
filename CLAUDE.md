@@ -4,8 +4,8 @@ Guidance for Claude Code when working in this repository.
 
 ## What this is
 
-**`@leanwise/design` v1.2.0** — the LeanWise design system. Tokens, five CSS layers, a Tailwind
-preset, ~65 React components across eight categories, twelve page templates, and the **gates**
+**`@leanwise/design` v1.3.0** — the LeanWise design system. Tokens, five CSS layers, a Tailwind
+preset, ~77 React components across eight categories, twelve page templates, and the **gates**
 that turn the style guide into build failures.
 
 The repo is the **working copy of a Claude Design project** (`f2d90781-f891-45e3-bc88-ddb55e6f9444`,
@@ -20,7 +20,9 @@ layers.** This file is the *maintainer* doc: the things none of those say.
 
 ```bash
 npm install
-npm run check          # contrast + self-check + themes + barrel types + bundle + templates.
+npm run check          # the twelve browserless gates, in order: presence, rsc, build,
+                       #   types, registry, advisories, contrast, tokens, themes, dts,
+                       #   bundle, templates.
 npm run check:ci       # the above plus a11y + visual (both need a browser)
 npm run check:a11y     # axe over every @dsCard — needs `npx playwright install chromium`
 npm run check:visual   # every card x light/dark x comfortable/compact. --self-test checks the
@@ -49,9 +51,12 @@ tokens.css        THE source of truth — HSL channel triples + derived colors, 
                     Authored once as a triple; the derived line is generated. Edit the triple;
                     NEVER the derived line; never a hex in a consumer.
 base.css          shared controls — the layer every surface needs. Layout primitives,
-                    type, buttons, pills/cards/chips, the FORM field + control face, the
-                    console + code surfaces, the TOP BAR, the pointer-affordance list.
-marketing.css     grounds + hero. product.css    app surfaces (data, overlays, the
+                    type, buttons, the ICON BUTTON, pills/cards/chips, the FORM field +
+                    control face and their dark patches, the console + code surfaces,
+                    the TOP BAR + its mobile nav, prose, disclosure, and the
+                    pointer-affordance list (which must stay LAST in the file).
+marketing.css     grounds + hero + site chrome (footer, announce, plans, matrix, flow,
+                    editorial). product.css    app surfaces (data, overlays, the
                     app shell and rails, AI, the mobile bars).
                     Load order: tokens -> base -> marketing and/or product.
                     **v1.3.0 promoted layout, the form controls and `.lw-topbar` out of
@@ -61,10 +66,24 @@ marketing.css     grounds + hero. product.css    app surfaces (data, overlays, t
                     unstyled page with an unstyled header. `.lw-topbar` was the proof:
                     `.lw-topbar .brand-mark` was already in base.css while the rest of
                     the component was not. Tombstones mark each vacated site.
-                    The `:is(.dark, …)`-scoped patches for those form controls stayed in
-                    product.css: they outrank the promoted rules on specificity, so their
-                    position is not load-bearing — but a base-only page has the controls
-                    without their dark-band treatment.
+                    **fb2d3ad left the `:is(.dark, …)` patches behind and that was the
+                    bug**: they outrank the promoted rules wherever they sit, so their
+                    POSITION is not load-bearing — but a base-only page never loads the
+                    file at all. Position is not load-bearing; PRESENCE is. v1.3.0 moved
+                    them, plus `.lw-icon-btn` (split from `.lw-dialog-close`, which
+                    stayed — Dialog.jsx now emits both classes) and `.lw-eyebrow`'s dark
+                    hexagon patch. A marketing page now needs base + marketing, nothing
+                    more.
+                    **A property carrying a COLOUR is base.css's to state.** `.lw-btn`
+                    declared no `background` and no `border`, leaning on reset.css's
+                    `button { background: none; border: 0 }` — which v1.2.0 split out.
+                    So a base-only page painted the UA bevel on every button and the UA
+                    buttonface behind `.lw-btn-link`: 2.28:1 on dark. Geometry may lean
+                    on the reset (it fails visibly); colour may not (the contrast gate
+                    cannot see a colour base.css does not state).
+reset.css         the nine bare-element rules. Vanilla consumers want it; Tailwind apps
+                    must NOT import it (preflight covers the useful half; the rest is the
+                    half that beats every utility).
 lw.css / app.css  @import SHIMS kept for one major. Do NOT load them alongside the real
                     layers — you get the rules twice.
 email.css         literal hex + table layout on purpose: mail clients have no custom properties.
@@ -157,6 +176,18 @@ so `check:themes` fails when `tokens.json` does not match what `tokens.css` woul
   exists to demonstrate a failure (the neutrals card prints text-4's sub-AA ratio as the
   point of the row). Never exempt a whole card or a whole rule; the attribute is greppable
   so the exemptions stay countable. There is exactly one today.
+
+  **Its render guard was decoration until v1.3.0, and that cost two releases.** The guard
+  was `document.body.innerText.trim().length > 0` — which every card satisfies from the
+  explanatory prose wrapped around its React roots, whether or not a single component
+  mounted. From v1.2.0 to v1.3.0 *every* React specimen rendered blank (see `lw-bundle.mjs`)
+  and this gate reported 39 cards clean. Two rules replace it, and neither can see what the
+  other sees: an **uncaught page error** fails the card, and **every container passed to
+  `createRoot`/`hydrateRoot`/`render` must have an element child**. The root recorder is an
+  `addInitScript` that defines a setter for `window.ReactDOM` and stores a `Proxy` over the
+  object the UMD wrapper assigns — `global.ReactDOM = {}` lands before the factory fills it,
+  so wrapping `createRoot` at init time would wrap nothing. **Prose is no longer evidence of
+  anything; keep it that way.**
 - **`lw-dts-barrel.mjs`** — generates `react.d.ts` from `react.js`; `--check` fails when the
   committed file is stale. The barrel's types were hand-written next to a barrel whose runtime
   exports are the real list, and drifted: four re-exports pointed at a sibling's file and **31
@@ -178,6 +209,16 @@ so `check:themes` fails when `tokens.json` does not match what `tokens.css` woul
   pick a winner. It also greps every card for names read off the namespace and fails on one
   that is missing, since a card that reads an absent key renders blank and axe scores blank as
   clean. Full rationale is in the file's own header.
+
+  **`tsconfigRaw: { compilerOptions: {} }` in the shared `JSX` options is load-bearing — do
+  not remove it.** esbuild's `jsx` API option is only a DEFAULT: a `tsconfig.json` reachable
+  from an input file overrides it per file, and v1.2 added one carrying `"jsx": "react-jsx"`
+  (correct for `tsc --noEmit` over the `.d.ts` files, fatal here). Every component therefore
+  emitted `react/jsx-runtime` imports, which resolve through the shim to `globalThis.React` —
+  and React's main export has no `jsx`/`jsxs`. Result: `TypeError: import_jsx_runtimeN.jsx is
+  not a function` on every component, i.e. **every React specimen card blank from v1.2.0 to
+  v1.3.0, with both browser gates green throughout.** If you touch that object, open a card
+  in a browser and confirm a component paints — a green gate is not the check.
 - **`_cards.mjs`** — not a gate, but the list BOTH browser gates enumerate. They used to walk
   for `.html` files whose first 200 bytes contain `@dsCard`, which had two silent-pass holes:
   an empty result is a pass (`Promise.all([])` resolves, and the a11y gate prints "0 cards —
@@ -217,6 +258,15 @@ so `check:themes` fails when `tokens.json` does not match what `tokens.css` woul
     `actions/checkout` runs `git clean -ffdx`), re-checking out HEAD's `tools/` so
     both sides are scored by the same comparator. Needs `fetch-depth: 0`. No usable base ref
     (force-push, shallow, first commit) → loud skip at exit 0, never a silent pass.
+  - **An image-decode wait, added v1.3.0.** The matrix flips `data-theme` and shoots in the
+    same task. Fine for colour; wrong for artwork — a per-theme `background-image`
+    (`.brand-mark`) is a fresh request at flip time, and the dark shot raced it: 0.0293%
+    drift measured on a card carrying the logo, against a 0.0002% noise floor. `decoded()`
+    awaits `decode()` on every `<img>` and on every `url()` in a computed `background-image`
+    (including `::before`/`::after` — a CSS background has no load event, so the URL is
+    re-requested through a throwaway `Image()`, hitting the same memory cache), then lets two
+    frames pass. The first fix was to delete the logo from the card, i.e. to edit the
+    specimen to suit the gate; **never do that** — it is how a gate quietly stops measuring.
   - **`[visual-ok]` in the head commit message** downgrades a failure to a report. This exists
     because `--update` is meaningless in CI — the baseline dies with the runner — so without it
     every intentional CSS change would be permanently red and unmergeable. Deliberately

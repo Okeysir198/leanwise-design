@@ -1,7 +1,7 @@
 import { jsx, jsxs } from "react/jsx-runtime";
 const cx = (...a) => a.filter(Boolean).join(" ");
-function StoryCard({ logo, title, body, result, quote, person, role, href, className, ...rest }) {
-  const Tag = href ? "a" : "div";
+function StoryCard({ logo, title, body, result, quote, person, role, href, linkAs = "a", className, ...rest }) {
+  const Tag = href ? linkAs : "div";
   const showQuote = Boolean(quote && person && role);
   const initials = String(title || "").trim().split(/\s+/).slice(0, 2).map((w) => w[0] || "").join("").toUpperCase();
   return /* @__PURE__ */ jsxs(Tag, { className: cx("lw-story", href && "lw-story-interactive", className), href, ...rest, children: [

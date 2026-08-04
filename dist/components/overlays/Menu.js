@@ -5,7 +5,7 @@ import { Icon } from "../primitives/Icon.js";
 import { Popover } from "./Popover.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
 const isRow = (it) => !it.type || it.type === "item";
-function Menu({ items = [], trigger, onSelect, label, placement = "bottom-start", matchWidth, className, ...rest }) {
+function Menu({ items = [], trigger, onSelect, label, placement = "bottom-start", matchWidth, linkAs = "a", className, ...rest }) {
   const [open, setOpen] = React.useState(false);
   const listEl = React.useRef(null);
   const typed = React.useRef({ s: "", t: 0 });
@@ -110,7 +110,7 @@ function Menu({ items = [], trigger, onSelect, label, placement = "bottom-start"
         if (it.type === "separator") return /* @__PURE__ */ jsx("hr", { className: "lw-menu-sep" }, i);
         if (it.type === "label") return /* @__PURE__ */ jsx("div", { className: "lw-menu-label", children: it.label }, i);
         const checkable = it.checked != null;
-        const Tag = it.href ? "a" : "button";
+        const Tag = it.href ? linkAs : "button";
         return /* @__PURE__ */ jsxs(
           Tag,
           {

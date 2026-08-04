@@ -1,9 +1,9 @@
 import { jsx, jsxs } from "react/jsx-runtime";
 import { Icon } from "../primitives/Icon.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
-function FeatureGrid({ features = [], className, ...rest }) {
+function FeatureGrid({ features = [], linkAs = "a", className, ...rest }) {
   return /* @__PURE__ */ jsx("div", { className: cx("lw-features", className), ...rest, children: features.map((f, i) => {
-    const Tag = f.href ? "a" : "div";
+    const Tag = f.href ? linkAs : "div";
     return /* @__PURE__ */ jsxs(Tag, { className: cx("lw-feature", f.href && "lw-feature-interactive"), href: f.href, children: [
       /* @__PURE__ */ jsx("span", { className: "num", children: String(i + 1).padStart(2, "0") }),
       /* @__PURE__ */ jsx("h3", { children: f.title }),
