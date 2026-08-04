@@ -20,7 +20,14 @@ export interface AppBarProps extends React.HTMLAttributes<HTMLElement> {
    * Pass a router's Link so the chrome navigates client-side and keeps any path
    * prefix that Link applies.
    */
+  /* --- Display text. Every user-visible string this component renders is a
+     prop, because a component library cannot hold display text (v1.3.1). --- */
   linkAs?: React.ElementType;
+  collapseNavLabel?: string;
+  expandNavLabel?: string;
+  /** Used when `brand` is not a string, so it cannot be interpolated. */
+  homeLabel?: string;
+  formatBrandLabel?(brand: string): string;
 }
 /**
  * Brand + breadcrumbs + actions, on `TopBar`. Use this rather than hand-writing

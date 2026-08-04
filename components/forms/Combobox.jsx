@@ -29,6 +29,7 @@ const norm = (o) => (typeof o === "string" || typeof o === "number" ? { value: o
 export const Combobox = React.forwardRef(function Combobox({
   options = [], value, onChange, multiple, placeholder, size = "md",
   invalid, disabled, loading, emptyText = "No matches", onSearch, id,
+  loadingText = "Searching\u2026", formatRemoveLabel = (l) => "Remove " + l,
   label, className, ...rest
 }, forwardedRef) {
   const opts = React.useMemo(() => options.map(norm), [options]);
@@ -108,7 +109,7 @@ export const Combobox = React.forwardRef(function Combobox({
       {selectedOpts.map(o => (
         <span key={o.value} className="lw-combo-token">
           <span>{o.label}</span>
-          <button type="button" aria-label={"Remove " + o.label}
+          <button type="button" aria-label={formatRemoveLabel(o.label)}
             onMouseDown={(e) => e.preventDefault()} onClick={() => remove(o.value)}>
             <Icon name="close" size={11} />
           </button>
@@ -137,7 +138,7 @@ export const Combobox = React.forwardRef(function Combobox({
   return (
     <Popover trigger={field} open={open && !disabled} onOpenChange={setOpen} role="listbox"
       triggerAria={false} matchWidth placement="bottom-start" label={label} {...rest}>
-      {loading ? <div id={listId} role="listbox" aria-busy="true" className="lw-listbox-empty">Searching…</div>
+      {loading ? <div id={listId} role="listbox" aria-busy="true" className="lw-listbox-empty">{loadingText}</div>
         : !shown.length ? <div id={listId} role="listbox" className="lw-listbox-empty">{emptyText}</div>
         : (
         <ul ref={listRef} className="lw-listbox" id={listId} role="listbox" aria-multiselectable={multiple || undefined}>

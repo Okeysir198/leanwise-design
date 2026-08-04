@@ -17,7 +17,13 @@ export interface ArtifactProps extends Omit<React.HTMLAttributes<HTMLDivElement>
    * only path to an outcome, and this is where that rule is enforced.
    */
   onEdit?(): void;
+  /* --- Display text. Every user-visible string this component renders is a
+     prop, because a component library cannot hold display text (v1.3.1). --- */
   actions?: React.ReactNode;
+  prevVersionLabel?: string;
+  nextVersionLabel?: string;
+  editLabel?: React.ReactNode;
+  revertLabel?: React.ReactNode;
 }
 /** The versioned side surface for generated output. */
 export declare function Artifact(props: ArtifactProps): React.JSX.Element;

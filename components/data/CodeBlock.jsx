@@ -11,7 +11,11 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  *  The copy control is on by default whenever raw `code` is present: a snippet
  *  a reader has to select by hand is a snippet they mis-copy. It confirms in
  *  place rather than raising a toast — the feedback belongs where the click was. */
-export function CodeBlock({ code, html, filename, lang, copy = true, className, ...rest }) {
+export function CodeBlock({
+  code, html, filename, lang, copy = true,
+  copyLabel = "Copy code", copiedLabel = "Copied",
+  className, ...rest
+}) {
   const [copied, setCopied] = React.useState(false);
   const canCopy = copy && typeof code === "string" && code.length > 0;
   React.useEffect(() => {
@@ -31,7 +35,7 @@ export function CodeBlock({ code, html, filename, lang, copy = true, className, 
             {lang && <span className="lang">{lang}</span>}
             {canCopy && (
               <button type="button" className="lw-icon-btn" onClick={onCopy}
-                aria-label={copied ? "Copied" : "Copy code"} title={copied ? "Copied" : "Copy code"}>
+                aria-label={copied ? copiedLabel : copyLabel} title={copied ? copiedLabel : copyLabel}>
                 <Icon name={copied ? "check" : "copy"} size={15} />
               </button>
             )}

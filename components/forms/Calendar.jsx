@@ -17,7 +17,11 @@ const between = (d, a, b) => a && b && day(d) > day(a) && day(d) < day(b);
  * Month names and weekday initials come from Intl, so the calendar is localised
  * by the browser rather than by a hardcoded English array.
  */
-export function Calendar({ value, onChange, range, month, onMonthChange, min, max, weekStart = 1, locale, className, ...rest }) {
+export function Calendar({
+  value, onChange, range, month, onMonthChange, min, max, weekStart = 1, locale,
+  prevMonthLabel = "Previous month", nextMonthLabel = "Next month",
+  className, ...rest
+}) {
   const sel = range ? (value || {}) : value;
   const anchor = (range ? sel.start : sel) || new Date();
   const [viewRaw, setView] = React.useState(() => addMonths(anchor, 0));
@@ -98,11 +102,11 @@ export function Calendar({ value, onChange, range, month, onMonthChange, min, ma
   return (
     <div className={cx("lw-cal", className)} {...rest}>
       <div className="lw-cal-head">
-        <button type="button" className="lw-icon-btn" aria-label="Previous month" onClick={() => setMonth(addMonths(view, -1))}>
+        <button type="button" className="lw-icon-btn" aria-label={prevMonthLabel} onClick={() => setMonth(addMonths(view, -1))}>
           <Icon name="chevron-left" size={16} />
         </button>
         <div className="lw-cal-month" aria-live="polite">{fmtMonth.format(view)}</div>
-        <button type="button" className="lw-icon-btn" aria-label="Next month" onClick={() => setMonth(addMonths(view, 1))}>
+        <button type="button" className="lw-icon-btn" aria-label={nextMonthLabel} onClick={() => setMonth(addMonths(view, 1))}>
           <Icon name="chevron-right" size={16} />
         </button>
       </div>

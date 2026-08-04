@@ -1,10 +1,15 @@
-<!-- @dsCard group="Marketing" name="Marketing composites" subtitle="Hero, FeatureGrid, StoryCard, LogoRail, Steps, Quote, Byline, ArticleCard — the no-fabrication rule enforced at runtime" viewport="1100x1600" -->
+<!-- @dsCard group="Marketing" name="Marketing composites" subtitle="Hero, FeatureGrid, StoryCard, LogoRail, Steps, Quote, Byline, ArticleCard, Tabs, Pagination, EmptyState — on base + marketing ONLY, which is what makes this card a presence gate" viewport="1100x1900" -->
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><title>Marketing</title>
 <link rel="stylesheet" href="../../preview/_card.css">
+<!-- base + marketing and NOTHING ELSE. This card loaded product.css through
+     v1.3.0, which is why it could not see that `Avatar` (rendered by `Byline`,
+     rendered by `ArticleCard`), `Tabs`, `Pagination` and `EmptyState` were all
+     stranded in the app-surface layer: the specimen was loading the file the
+     recipe tells a consumer to drop. Removing it in v1.3.1 is what turns this
+     card into the presence gate for the promotion. Do not add it back. -->
 <link rel="stylesheet" href="../../base.css">
 <link rel="stylesheet" href="../../marketing.css">
-<link rel="stylesheet" href="../../product.css">
 <script src="../../preview/_vendor/react.development.js"></script>
 <script src="../../preview/_vendor/react-dom.development.js"></script>
 <script src="../../preview/_vendor/babel.min.js"></script>
@@ -70,6 +75,27 @@ That is the only rule that keeps a call to action meaning anything.</p></header>
   once. A standalone testimonial cannot be expressed by <span class="mono">StoryCard</span>, whose quote only
   renders inside that composition; the moment it gets its own class, the spine has two owners unless they
   share the declaration. Sharing it is what stops a second treatment appearing.</p>
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">This card loads two stylesheets, and that is the test</h2>
+<p class="sub"><b>base.css + marketing.css, no <span class="mono">product.css</span>.</b> Through v1.3.0 this card
+  loaded all three, which is precisely why it could not see the defect v1.3.1 fixes:
+  <span class="mono">Avatar</span> — which <span class="mono">Byline</span> renders and
+  <span class="mono">ArticleCard</span> renders a <span class="mono">Byline</span> of — plus
+  <span class="mono">Tabs</span>, <span class="mono">Pagination</span> and <span class="mono">EmptyState</span>
+  were all in the app-surface layer. The specimen was loading the file the documented recipe tells a consumer
+  to <i>drop</i>, so four marketing components rendered correctly here and unstyled in the flagship consumer,
+  which had resorted to a <span class="mono">?url</span> import of <span class="mono">product.css</span> on two
+  public routes to get them back.</p>
+<p class="sub"><b>The hero is a dark BAND now, not just a navy background.</b>
+  <span class="mono">.lw-hero-dark</span> was never in <span class="mono">tokens.css</span>'s band-selector
+  list — <span class="mono">.lw-section.dark</span> escaped only because its class list literally contains
+  <span class="mono">dark</span>. So every role token inside a hero resolved against the <i>light</i> palette
+  on navy paper, and <span class="mono">marketing.css</span> hand-patched exactly the four elements anyone
+  demos (<span class="mono">.lw-h1</span>, <span class="mono">.lw-lead</span>,
+  <span class="mono">.lw-eyebrow</span>, <span class="mono">.lw-btn-ghost</span>). The
+  <span class="mono">Byline</span> in the hero above is the specimen that had been missing: its name is
+  <span class="mono">--lw-fg</span> (~1.5:1 on navy before the fix) and its role and date are
+  <span class="mono">--lw-fg-subtle</span> (3.36:1). Both are axe <i>serious</i>, and both were invisible
+  because no card had ever put a role-token consumer inside a hero.</p>
 <h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">Article chrome — composition, not new classes</h2>
 <p class="sub"><b>There is no <span class="mono">.lw-article</span> grid and no <span class="mono">.lw-post</span>
   card.</b> The article + contents layout is <span class="mono">.lw-split</span>, which already collapses at
@@ -89,11 +115,20 @@ const LW = window.LeanWiseDesign_f2d907;
 
 const { Hero, FeatureGrid, StoryCard, LogoRail, Button, Stack, Grid } = LW;
 const { Steps, Quote, Byline, ArticleCard } = LW;
+const { Tabs, Pagination, EmptyState } = LW;
 ReactDOM.createRoot(document.getElementById("hero")).render(
   <Hero eyebrow="Retrieval you can audit"
     title={<>Answers your legal team can <em>defend</em>.</>}
     lead="LeanWise grounds every response in your own documents, and shows the passage it came from — so an answer is a starting point for review, not a claim you have to trust."
-    actions={<><Button variant="cta" size="lg">Book a walkthrough</Button><Button variant="ghost" size="lg">Read the spec</Button></>} />
+    actions={<><Button variant="cta" size="lg">Book a walkthrough</Button><Button variant="ghost" size="lg">Read the spec</Button></>}
+    /* The band proof, and it has to be a REAL component painting from ROLE
+       tokens rather than a styled div, or it proves nothing about what ships.
+       `.lw-byline .name` is --lw-fg and `.role`/`.date` are --lw-fg-subtle.
+       Through v1.3.0 `.lw-hero-dark` was not in tokens.css's band list, so
+       inside a hero those resolved against the LIGHT palette on navy paper:
+       near-black at ~1.5:1 and #656B78 at 3.36:1. Two serious axe failures,
+       and no gate had ever had a role-token consumer inside a hero to see it. */
+    aside={<Byline name="A. Rossi" role="Head of Legal Ops" date="4 August 2026" dateTime="2026-08-04" />} />
 );
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Stack gap={32} style={{paddingTop:24}}>
@@ -151,15 +186,25 @@ ReactDOM.createRoot(document.getElementById("editorial")).render(
       </div>
     </div>
     <div>
+      <span className="lbl-eyebrow">article index chrome — Tabs, Pagination and EmptyState, all promoted to base.css in v1.3.1</span>
+      <Stack gap={20}>
+        <Tabs label="Article categories" tabs={[{value:"all",label:"All",count:24},{value:"eng",label:"Engineering",count:11},{value:"prod",label:"Product",count:9},{value:"none",label:"Archive",count:0}]} value="none" />
+        <EmptyState icon="inbox" title="No articles in Archive"
+          description="Nothing has been archived yet. Published posts stay in All until you move them."
+          action={<Button variant="ghost" size="sm">Back to all</Button>} />
+        <Pagination page={2} pageSize={10} total={24} onPageChange={() => {}} />
+      </Stack>
+    </div>
+    <div>
       <span className="lbl-eyebrow">article index — Grid of ArticleCard; no .lw-post class exists or is needed</span>
       <Grid min={280}>
         <ArticleCard href="#" category="Engineering" title="What a grounded answer actually costs"
           dek="The retrieval, the rerank and the second pass, measured on our own fixtures."
           tags={["Retrieval", "Benchmarks"]} author="A. Rossi" role="Head of Legal Ops"
-          date="4 Aug 2026" dateTime="2026-08-04" readMinutes={7} />
+          date="4 Aug 2026" dateTime="2026-08-04" readTime="7 min read" />
         <ArticleCard href="#" category="Product" title="Why every answer carries its passage"
           dek="No citation, no answer — enforced in the pipeline rather than in review."
-          tags={["Grounding"]} author="M. Chen" role="Engineering" date="21 Jul 2026" dateTime="2026-07-21" readMinutes={4} />
+          tags={["Grounding"]} author="M. Chen" role="Engineering" date="21 Jul 2026" dateTime="2026-07-21" readTime="4 min read" />
       </Grid>
     </div>
   </Stack>

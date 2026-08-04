@@ -1,7 +1,21 @@
 import { jsx, jsxs } from "react/jsx-runtime";
 import { Icon } from "../primitives/Icon.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
-function StatMeter({ label, value, unit, delta, direction, percent, target, tone, foot, interactive = false, className, ...rest }) {
+function StatMeter({
+  label,
+  value,
+  unit,
+  delta,
+  direction,
+  percent,
+  target,
+  tone,
+  foot,
+  interactive = false,
+  formatValueText = (p, t) => p + "% of a " + t + "% target",
+  className,
+  ...rest
+}) {
   const onKeyDown = (e) => {
     if (!interactive || e.key !== "Enter" && e.key !== " ") return;
     e.preventDefault();
@@ -38,7 +52,7 @@ function StatMeter({ label, value, unit, delta, direction, percent, target, tone
             "aria-valuemin": 0,
             "aria-valuemax": 100,
             "aria-label": typeof label === "string" ? label : void 0,
-            "aria-valuetext": target != null ? percent + "% of a " + target + "% target" : void 0,
+            "aria-valuetext": target != null ? formatValueText(percent, target) : void 0,
             children: [
               /* @__PURE__ */ jsx("i", { className: "fill" }),
               target != null && /* @__PURE__ */ jsx("span", { className: "target", style: { insetInlineStart: target + "%" } })

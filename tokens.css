@@ -917,8 +917,37 @@
                       re-point (so role-token consumers come along for free).
    `.lw-band-light` — forces the light surface + roles; useful for an embedded
                       light panel (e.g. a form card) inside a dark site theme.
+
+   `.lw-hero-dark` JOINED the dark list in v1.3.1, and the omission was a real
+   contrast trap rather than an oversight of taste. `.lw-section.dark` was never
+   affected because its class list literally contains `dark`, which this
+   selector already names — so the hero was the ONE always-dark surface in the
+   package that painted navy without establishing the scope to match. Every
+   role token inside it (`--lw-fg-subtle`, `--lw-bg`, `--lw-line`, the focus
+   ring) resolved against the LIGHT palette on navy paper, and marketing.css
+   papered over the four cases anyone demos — `.lw-h1`, `.lw-lead`,
+   `.lw-eyebrow`, `.lw-btn-ghost` — by hand, from the `--lw-on-dark-*` tiers.
+   Anything else a consumer put in a hero was on its own, so every consumer
+   hand-added `class="lw-band-dark" data-band="dark"` to its own hero. A default
+   that every consumer must correct is a defect in the default.
+
+   Fixed HERE and not in `Hero.jsx`, for two reasons. The band is a TOKEN SCOPE,
+   so tokens.css is where the gates can see it — `check:contrast` parses these
+   blocks per theme and `check:themes` walks them for re-point coverage; an
+   attribute emitted from a `.jsx` is invisible to both. And a vanilla consumer
+   writing `<section class="lw-hero-dark">` by hand is a supported consumer of
+   this package: a fix that only reaches the React wrapper would let the two
+   drift, which is the one thing the "no styling in a .jsx" rule exists to stop.
+
+   `.lw-page-light .lw-hero-dark` is then added to the LIGHT list below, and
+   that pairing is load-bearing, not belt-and-braces. Inside `.lw-page-light`
+   the hero goes transparent and the light page owns the ground (marketing.css
+   re-points its headings to `--lw-fg`), so an unconditional dark band there
+   would paint near-white ink on a white page — the same trap, mirrored. Both
+   blocks are `:where(…)` at specificity 0, so the light one wins on SOURCE
+   ORDER for the elements both match. Do not reorder them.
    ============================================================================= */
-:where(.lw-band-dark, [data-band="dark"]) {
+:where(.lw-band-dark, [data-band="dark"], .lw-hero-dark) {
   color-scheme: dark;
   --lw-bg-c: 220   48.8% 8.4%; /* @kind color */
   --lw-bg-subtle-c: 221.4 46.0% 12.4%; /* @kind color */
@@ -956,7 +985,7 @@
   color: var(--lw-fg);
 }
 
-:where(.lw-band-light, [data-band="light"]) {
+:where(.lw-band-light, [data-band="light"], .lw-page-light .lw-hero-dark) {
   color-scheme: light;
   /* Re-point onto the theme-invariant PALETTE tokens (never re-pointed by the
      dark block), so the band is light regardless of the surrounding site theme. */
@@ -1026,7 +1055,7 @@
    and resolve identically.
    -------------------------------------------------------------------------- */
 :where(.lw-band-dark, [data-band="dark"], .lw-band-light, [data-band="light"],
-       .dark, [data-theme="dark"]) {
+       .lw-hero-dark, .dark, [data-theme="dark"]) {
   --lw-bg:        hsl(var(--lw-bg-c));
   --lw-bg-subtle: hsl(var(--lw-bg-subtle-c));
   --lw-bg-muted:  hsl(var(--lw-bg-muted-c));

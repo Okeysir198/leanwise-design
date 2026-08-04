@@ -2,11 +2,11 @@ import { Fragment, jsx, jsxs } from "react/jsx-runtime";
 const cx = (...a) => a.filter(Boolean).join(" ");
 const SERIES = (i) => "var(--lw-chart-" + (i % 8 + 1) + ")";
 const nf = new Intl.NumberFormat();
-function DataTable({ labels, series, caption }) {
+function DataTable({ labels, series, caption, categoryHeader = "Category" }) {
   return /* @__PURE__ */ jsxs("table", { className: "lw-sr-only", children: [
     /* @__PURE__ */ jsx("caption", { children: caption }),
     /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { children: [
-      /* @__PURE__ */ jsx("th", { scope: "col", children: "Category" }),
+      /* @__PURE__ */ jsx("th", { scope: "col", children: categoryHeader }),
       series.map((s, i) => /* @__PURE__ */ jsx("th", { scope: "col", children: s.name }, i))
     ] }) }),
     /* @__PURE__ */ jsx("tbody", { children: labels.map((l, i) => /* @__PURE__ */ jsxs("tr", { children: [

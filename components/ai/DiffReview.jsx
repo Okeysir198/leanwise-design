@@ -15,7 +15,16 @@ const SIGN = { add: "+", del: "−", mod: "~" };
  * are GROUNDS: the text on top stays `--lw-fg`, because green-on-green is
  * unreadable at exactly the moment it matters.
  */
-export function DiffReview({ hunks = [], decisions = {}, onDecide, onAcceptAll, onRejectAll, label = "Proposed changes", className, ...rest }) {
+export function DiffReview({
+  hunks = [], decisions = {}, onDecide, onAcceptAll, onRejectAll,
+  label = "Proposed changes",
+  acceptLabel = "Accept", rejectLabel = "Reject", undoLabel = "Undo",
+  acceptAllLabel = "Accept all", rejectAllLabel = "Reject all",
+  acceptedLabel = "Accepted", rejectedLabel = "Rejected",
+  kindLabels = { add: "added: ", del: "removed: ", mod: "changed: " },
+  formatProgress = (p, t) => (p ? p + " of " + t + " still to review" : "All " + t + " reviewed"),
+  className, ...rest
+}) {
   const pending = hunks.filter(h => !decisions[h.id]).length;
   return (
     <div className={cx("lw-diff", className)} role="group" aria-label={label} {...rest}>
@@ -33,7 +42,7 @@ export function DiffReview({ hunks = [], decisions = {}, onDecide, onAcceptAll, 
                   <span className="n">{l.n ?? ""}</span>
                   <span className="s" aria-hidden="true">{SIGN[l.kind] || ""}</span>
                   <span className="t">
-                    {l.kind && <span className="lw-sr-only">{l.kind === "add" ? "added: " : l.kind === "del" ? "removed: " : "changed: "}</span>}
+                    {l.kind && <span className="lw-sr-only">{kindLabels[l.kind] ?? kindLabels.mod}</span>}
                     {l.text}
                   </span>
                 </div>
@@ -41,16 +50,16 @@ export function DiffReview({ hunks = [], decisions = {}, onDecide, onAcceptAll, 
             </div>
             <div className="lw-diff-foot">
               <span className="lw-diff-state">
-                {d === "accepted" ? "Accepted" : d === "rejected" ? "Rejected" : h.note || ""}
+                {d === "accepted" ? acceptedLabel : d === "rejected" ? rejectedLabel : h.note || ""}
               </span>
               {d ? (
                 <Button size="sm" variant="ghost" onClick={() => onDecide && onDecide(h.id, null)}>
-                  <Icon name="undo" size={14} />Undo
+                  <Icon name="undo" size={14} />{undoLabel}
                 </Button>
               ) : (
                 <>
-                  <Button size="sm" variant="ghost" onClick={() => onDecide && onDecide(h.id, "rejected")}>Reject</Button>
-                  <Button size="sm" onClick={() => onDecide && onDecide(h.id, "accepted")}>Accept</Button>
+                  <Button size="sm" variant="ghost" onClick={() => onDecide && onDecide(h.id, "rejected")}>{rejectLabel}</Button>
+                  <Button size="sm" onClick={() => onDecide && onDecide(h.id, "accepted")}>{acceptLabel}</Button>
                 </>
               )}
             </div>
@@ -60,10 +69,10 @@ export function DiffReview({ hunks = [], decisions = {}, onDecide, onAcceptAll, 
       {hunks.length > 1 && (
         <div className="lw-diff-foot">
           <span className="lw-diff-state" aria-live="polite">
-            {pending ? pending + " of " + hunks.length + " still to review" : "All " + hunks.length + " reviewed"}
+            {formatProgress(pending, hunks.length)}
           </span>
-          <Button size="sm" variant="ghost" onClick={onRejectAll} disabled={!pending}>Reject all</Button>
-          <Button size="sm" onClick={onAcceptAll} disabled={!pending}>Accept all</Button>
+          <Button size="sm" variant="ghost" onClick={onRejectAll} disabled={!pending}>{rejectAllLabel}</Button>
+          <Button size="sm" onClick={onAcceptAll} disabled={!pending}>{acceptAllLabel}</Button>
         </div>
       )}
     </div>

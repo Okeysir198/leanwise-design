@@ -23,4 +23,10 @@ export interface SidebarProps extends React.HTMLAttributes<HTMLElement> {
   linkAs?: React.ElementType;
 }
 export declare function Sidebar(props: SidebarProps): React.JSX.Element;
-export declare function NavItem(props: SidebarItem & { collapsed?: boolean; linkAs?: React.ElementType } & React.HTMLAttributes<HTMLElement>): React.JSX.Element;
+export declare function NavItem(props: SidebarItem & {
+  collapsed?: boolean;
+  linkAs?: React.ElementType;
+  /** The `<button>` type for a row with no `href`. Defaults to `"button"`;
+   *  `HTMLAttributes<HTMLElement>` omits it, so it did not compile before v1.3.1. */
+  type?: "button" | "submit" | "reset";
+} & React.HTMLAttributes<HTMLElement>): React.JSX.Element;

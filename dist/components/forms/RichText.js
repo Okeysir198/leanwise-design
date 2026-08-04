@@ -22,7 +22,10 @@ const RichText = React.forwardRef(function RichText2({
   onChange,
   placeholder = "Write something\u2026",
   tools,
+  toolLabels,
   maxLength,
+  formatBarLabel = (l) => l + " formatting",
+  barLabel = "Editor",
   label,
   readOnly,
   footer,
@@ -34,7 +37,8 @@ const RichText = React.forwardRef(function RichText2({
   const setBodyRef = useMergedRef(ref, forwardedRef);
   const bodyId = React.useId();
   const [active, setActive] = React.useState({});
-  const list = tools ? TOOLS.filter((t) => t.sep || tools.includes(t.id)) : TOOLS;
+  const picked = tools ? TOOLS.filter((t) => t.sep || tools.includes(t.id)) : TOOLS;
+  const list = toolLabels ? picked.map((t) => t.id && toolLabels[t.id] ? { ...t, ...toolLabels[t.id] } : t) : picked;
   React.useEffect(() => {
     const el = ref.current;
     if (el && value != null && el.innerHTML !== value) el.innerHTML = value;
@@ -72,7 +76,7 @@ const RichText = React.forwardRef(function RichText2({
   React.useEffect(syncLen, [value]);
   const over = maxLength != null && len > maxLength;
   return /* @__PURE__ */ jsxs("div", { className: cx("lw-editor", className), ...rest, children: [
-    /* @__PURE__ */ jsx("div", { className: "lw-editor-bar", role: "group", "aria-label": (label || "Editor") + " formatting", "aria-controls": children ? void 0 : bodyId, children: list.map((t, i) => t.sep ? /* @__PURE__ */ jsx("span", { className: "sep", "aria-hidden": "true" }, "s" + i) : /* @__PURE__ */ jsx(
+    /* @__PURE__ */ jsx("div", { className: "lw-editor-bar", role: "group", "aria-label": formatBarLabel(label || barLabel), "aria-controls": children ? void 0 : bodyId, children: list.map((t, i) => t.sep ? /* @__PURE__ */ jsx("span", { className: "sep", "aria-hidden": "true" }, "s" + i) : /* @__PURE__ */ jsx(
       "button",
       {
         type: "button",
@@ -119,5 +123,6 @@ const RichText = React.forwardRef(function RichText2({
   ] });
 });
 export {
-  RichText
+  RichText,
+  TOOLS
 };

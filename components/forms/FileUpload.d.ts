@@ -20,8 +20,15 @@ export interface FileUploadProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Bytes. Oversize files are rejected by name, with the limit stated. */
   maxSize?: number;
   disabled?: boolean;
+  /* --- Display text. Every user-visible string this component renders is a
+     prop, because a component library cannot hold display text (v1.3.1). --- */
   title?: string;
   hint?: string;
+  /** The `role="alert"` rejection message. `limit` is `maxSize` already formatted. */
+  formatRejected?(names: string, limit: string): React.ReactNode;
+  /** The default hint, when `hint` is not given. `limit` is pre-formatted or null. */
+  formatHint?(accept: string | undefined, limit: string | null): React.ReactNode;
+  formatRemoveLabel?(fileName: string): string;
 }
 /** Dropzone + file list. The zone is a `<label>` around a real file input. */
 /** forwardRef since v1.2 — the ref reaches the file <input>, so react-hook-form's

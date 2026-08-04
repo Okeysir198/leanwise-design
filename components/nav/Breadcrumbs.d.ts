@@ -9,7 +9,11 @@ export interface BreadcrumbsProps extends React.HTMLAttributes<HTMLElement> {
    * prefix that Link applies. It receives what the raw `<a>` would: `href` and
    * `children`. The last crumb is never a link, so `linkAs` does not reach it.
    */
+  /* --- Display text. Every user-visible string this component renders is a
+     prop, because a component library cannot hold display text (v1.3.1). --- */
   linkAs?: React.ElementType;
+  /** The `<nav>` landmark's accessible name. */
+  label?: string;
 }
 /**
  * Mono, so the trail reads as a PATH rather than as a sentence. The last crumb is the

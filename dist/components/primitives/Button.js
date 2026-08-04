@@ -8,6 +8,7 @@ function Button({
   loading = false,
   disabled = false,
   as,
+  type,
   className,
   onClick,
   children,
@@ -28,6 +29,7 @@ function Button({
       "data-loading": loading ? "true" : void 0,
       "aria-disabled": loading || disabled ? "true" : void 0,
       disabled: Tag === "button" ? disabled : void 0,
+      type: Tag === "button" ? type : void 0,
       onClick: (e) => {
         if (loading || disabled) {
           e.preventDefault();

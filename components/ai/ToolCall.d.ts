@@ -12,7 +12,15 @@ export interface ToolCallProps extends React.HTMLAttributes<HTMLDivElement> {
   error?: unknown;
   state?: "pending" | "running" | "ok" | "error";
   duration?: number;
+  /* --- Display text. Every user-visible string this component renders is a
+     prop, because a component library cannot hold display text (v1.3.1). --- */
   defaultOpen?: boolean;
+  /** The `.lw-sr-only` state word — the dot is the sighted signal. */
+  stateLabels?: Partial<Record<"pending" | "running" | "ok" | "error", string>>;
+  argsLabel?: React.ReactNode;
+  errorLabel?: React.ReactNode;
+  resultLabel?: React.ReactNode;
+  formatDuration?(ms: number): React.ReactNode;
 }
 /** One tool invocation — the evidence behind an `AgentTrace` step. */
 export declare function ToolCall(props: ToolCallProps): React.JSX.Element;

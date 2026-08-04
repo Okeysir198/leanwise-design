@@ -10,9 +10,9 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  *  href is a destination, not an identity.
  *
  *  `linkAs` is forwarded to every `NavItem` — see below. */
-export function Sidebar({ items = [], collapsed = false, footer, linkAs, className, children, ...rest }) {
+export function Sidebar({ items = [], collapsed = false, footer, linkAs, label = "Sections", className, children, ...rest }) {
   return (
-    <nav className={cx("lw-sidebar", className)} data-collapsed={collapsed ? "true" : undefined} aria-label="Sections" {...rest}>
+    <nav className={cx("lw-sidebar", className)} data-collapsed={collapsed ? "true" : undefined} aria-label={label} {...rest}>
       {items.map((it, i) =>
         it.group
           ? <span key={"g" + i} className="lw-nav-group">{it.group}</span>

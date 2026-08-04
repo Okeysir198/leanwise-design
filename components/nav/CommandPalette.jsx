@@ -30,7 +30,9 @@ export function score(query, text) {
  */
 export function CommandPalette({
   open, onClose, commands = [], onRun, placeholder = "Type a command or search…",
-  emptyText = "No matches", label = "Command palette", className, ...rest
+  emptyText = "No matches", label = "Command palette",
+  hints = ["\u2191\u2193 navigate", "\u21b5 run", "esc close"],
+  className, ...rest
 }) {
   const ref = React.useRef(null);
   const inputRef = React.useRef(null);
@@ -99,7 +101,7 @@ export function CommandPalette({
           );
         })}
       </ul>
-      <div className="lw-cmdk-foot"><span>↑↓ navigate</span><span>↵ run</span><span>esc close</span></div>
+      <div className="lw-cmdk-foot">{hints.map((h, i) => <span key={i}>{h}</span>)}</div>
     </dialog>
   );
 }

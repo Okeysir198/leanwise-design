@@ -1,7 +1,7 @@
 import { jsx, jsxs } from "react/jsx-runtime";
 const cx = (...a) => a.filter(Boolean).join(" ");
-function Sidebar({ items = [], collapsed = false, footer, linkAs, className, children, ...rest }) {
-  return /* @__PURE__ */ jsxs("nav", { className: cx("lw-sidebar", className), "data-collapsed": collapsed ? "true" : void 0, "aria-label": "Sections", ...rest, children: [
+function Sidebar({ items = [], collapsed = false, footer, linkAs, label = "Sections", className, children, ...rest }) {
+  return /* @__PURE__ */ jsxs("nav", { className: cx("lw-sidebar", className), "data-collapsed": collapsed ? "true" : void 0, "aria-label": label, ...rest, children: [
     items.map(
       (it, i) => it.group ? /* @__PURE__ */ jsx("span", { className: "lw-nav-group", children: it.group }, "g" + i) : /* @__PURE__ */ jsx(NavItem, { linkAs, ...it, collapsed }, it.id ?? i)
     ),

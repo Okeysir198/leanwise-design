@@ -13,6 +13,10 @@ export interface StatMeterProps extends React.HTMLAttributes<HTMLDivElement> {
   target?: number;
   tone?: "warning" | "danger";
   foot?: React.ReactNode;
+  /* --- Display text. Every user-visible string this component renders is a
+     prop, because a component library cannot hold display text (v1.3.1). --- */
   interactive?: boolean;
+  /** The bar's `aria-valuetext`. Only rendered when `target` is set. */
+  formatValueText?(percent: number, target: number): string;
 }
 export declare function StatMeter(props: StatMeterProps): React.JSX.Element;

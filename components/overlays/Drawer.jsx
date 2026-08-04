@@ -11,7 +11,7 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  *
  * `side="bottom"` is the touch answer to a centred dialog.
  */
-export function Drawer({ open, onClose, title, description, footer, side = "end", width, className, children, ...rest }) {
+export function Drawer({ open, onClose, title, description, footer, side = "end", width, closeLabel = "Close", className, children, ...rest }) {
   const ref = React.useRef(null);
   const uid = React.useId();
   const titleId = title ? uid + "-t" : undefined;
@@ -33,7 +33,7 @@ export function Drawer({ open, onClose, title, description, footer, side = "end"
       {title && (
         <div className="lw-drawer-head">
           <h2 className="lw-drawer-title" id={titleId}>{title}</h2>
-          <button type="button" className="lw-icon-btn" aria-label="Close" title="Close" onClick={onClose}>
+          <button type="button" className="lw-icon-btn" aria-label={closeLabel} title={closeLabel} onClick={onClose}>
             <Icon name="close" size={17} />
           </button>
         </div>

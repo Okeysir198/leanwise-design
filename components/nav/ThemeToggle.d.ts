@@ -7,7 +7,13 @@ export interface ThemeToggleProps extends Omit<React.HTMLAttributes<HTMLDivEleme
   onChange?: (mode: ThemeMode) => void;
   /** Which modes the control offers. Defaults to `["light","dark"]` — add
    *  "system" wherever the product honours the OS preference. */
+  /* --- Display text. Every user-visible string this component renders is a
+     prop, because a component library cannot hold display text (v1.3.1). --- */
   modes?: ThemeMode[];
+  /** The `role="radiogroup"` accessible name. */
+  label?: string;
+  /** Per-mode `aria-label` + tooltip. */
+  modeLabels?: Partial<Record<ThemeMode, string>>;
 }
 /**
  * Light / dark (add `"system"` via `modes`). Uncontrolled by default — reads and

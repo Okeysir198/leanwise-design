@@ -53,8 +53,17 @@ export interface DataGridProps<R = any> extends Omit<React.HTMLAttributes<HTMLDi
   empty?: React.ReactNode;
   /** Controls for the selection bar, which REPLACES the toolbar rather than
    *  stacking under it — two rows where one was jumps the table on every click. */
+  /* --- Display text. Every user-visible string this component renders is a
+     prop, because a component library cannot hold display text (v1.3.1). --- */
   selectionActions?: React.ReactNode;
   label?: string;
+  /** The word after the count in the selection bar. */
+  selectedLabel?: React.ReactNode;
+  clearSelectionLabel?: React.ReactNode;
+  selectAllLabel?: string;
+  clearAllSelectionLabel?: string;
+  formatResizeLabel?(header: string): string;
+  formatRowSelectLabel?(rowNumber: number): string;
 }
 /**
  * Sticky header, resizable and pinnable columns, bulk selection, optional

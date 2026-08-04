@@ -16,6 +16,13 @@ export interface TopBarProps extends React.HTMLAttributes<HTMLElement> {
    * It receives exactly what the raw `<a>` would: `href`, `className`,
    * `children` and `aria-current`.
    */
+  /* --- Display text. Every user-visible string this component renders is a
+     prop, because a component library cannot hold display text (v1.3.1). --- */
   linkAs?: React.ElementType;
+  /** The `<nav>` landmark's accessible name. */
+  navLabel?: string;
+  /** Used when `brand` is not a string, so it cannot be interpolated. */
+  homeLabel?: string;
+  formatBrandLabel?(brand: string): string;
 }
 export declare function TopBar(props: TopBarProps): React.JSX.Element;

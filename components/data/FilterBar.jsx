@@ -10,23 +10,28 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  *
  * `clear all` appears from two filters up: with one, removing it IS clear all.
  */
-export function FilterBar({ filters = [], onRemove, onClear, className, children, ...rest }) {
+export function FilterBar({
+  filters = [], onRemove, onClear,
+  label = "Applied filters", clearAllLabel = "Clear all",
+  formatRemoveLabel = (name) => "Remove filter " + name,
+  className, children, ...rest
+}) {
   if (!filters.length && !children) return null;
   return (
-    <div className={cx("lw-filters", className)} role="group" aria-label="Applied filters" {...rest}>
+    <div className={cx("lw-filters", className)} role="group" aria-label={label} {...rest}>
       {children}
       {filters.map((f) => (
         <span key={f.id ?? f.key + ":" + f.value} className="lw-filter-chip">
           {f.key && <span className="k">{f.key}</span>}
           <span>{f.label ?? f.value}</span>
-          <button type="button" aria-label={"Remove filter " + (f.key ? f.key + " " : "") + (f.label ?? f.value)}
+          <button type="button" aria-label={formatRemoveLabel((f.key ? f.key + " " : "") + (f.label ?? f.value))}
             onClick={() => onRemove && onRemove(f)}>
             <Icon name="close" size={11} />
           </button>
         </span>
       ))}
       {filters.length > 1 && onClear && (
-        <button type="button" className="lw-filter-clear" onClick={onClear}>Clear all</button>
+        <button type="button" className="lw-filter-clear" onClick={onClear}>{clearAllLabel}</button>
       )}
     </div>
   );

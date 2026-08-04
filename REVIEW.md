@@ -11,14 +11,34 @@ document is a second home that goes stale, and this line has proved it twice: it
 exports … 5 gates" when the barrel exported 82 and there were six, and then "442 tokens, eight
 theme scopes" against an actual 283 across twelve.
 
-**Last pass:** v1.3.0, which found that both browser gates had been measuring nothing since
-v1.2.0 and closed every promotion item the v1.1.7/fb2d3ad passes left open.
+**Last pass:** v1.3.1, which found that the promotion v1.3.0 called finished was not, that the
+specimens which should have said so were loading the file the documentation tells consumers to
+drop, and that the package's own hero had never established the token scope it paints.
 
 ---
 
 ## Verdict
 
-The system audits itself to a degree it did not before — **and v1.3.0 is the pass that proves
+**v1.3.1 is the pass where the recurring shape stopped being a story about gates and became a
+story about FIXTURES.** v1.3.0 declared the layer promotion finished and the README said a
+marketing page needed two stylesheets. Both browser gates agreed — because
+`marketing.card.html` and `site-chrome.card.html` were themselves loading `product.css`. A
+specimen that loads the file its documented recipe tells you to drop cannot see anything
+stranded in it, no matter how good the gate reading it is. Deleting one `<link>` from two cards
+found five more stranded components, one of which (`.lw-icon`, the entire layout contract for
+the icon set) nobody had reported and nobody found by reading.
+
+The second finding is worse, because it is a gate that cannot fail for a reason no amount of
+care would have surfaced. `.lw-hero-dark` painted navy without establishing the dark token
+scope, so a `Byline` in a hero rendered at **1.5:1**. `check:contrast` could not see it — both
+tokens in the pair are correct, it is the SCOPE that is wrong, which no pair can express. And
+`check:a11y` could not see it either: the hero carries two decorative pseudo-elements, so axe
+answers *"background color could not be determined due to a pseudo element"* and files it as
+`incomplete`, which `lw-a11y.mjs` does not read. **Four serious incompletes, zero violations.**
+Every hero in every consumer sits behind that hole. A new band-scope rule in `check:contrast`
+now states the invariant directly, and was watched failing.
+
+The system audits itself to a degree it did not before — **and v1.3.0 was the pass that proved
 the qualifier still matters.** Two of the gates this file most trusted, `check:a11y` and
 `check:visual`, had been reporting green on **26 blank cards for two minor releases**, and the
 first thing the repaired bundle produced was four serious `color-contrast` failures at 2.28:1 on
@@ -61,6 +81,12 @@ because it will recur again:
 - **`.lw-btn` had no `background` of its own**, and every variant that *does* declare one hid
   it. Only the two with no fill — `link`, and a bare `.lw-btn` — showed the UA button face, so
   nine of ten variants demoed perfectly.
+- **The marketing specimens loaded `product.css`.** The card that exists to prove a marketing
+  page needs two stylesheets was loading three. Every stranded rule rendered perfectly in the
+  demo and unstyled in the consumer.
+- **`.lw-hero-dark` patched the four elements anyone puts in a hero** — `.lw-h1`, `.lw-lead`,
+  `.lw-eyebrow`, `.lw-btn-ghost` — and left the whole role-token system resolving light on
+  navy for anything else. The demo hero is the one hero that cannot fail.
 
 In every case the demo path (a class on `<html>`, a light-mode screenshot, a fresh checkout,
 a card with prose in it, a filled button) worked perfectly. **Test the path nobody demos.**
@@ -102,6 +128,48 @@ which stayed as a delta) and `.lw-eyebrow`'s dark hexagon patch. **Position is n
 load-bearing; presence is** — a page that never loads the file never sees the rule at
 whatever specificity. A marketing page now needs `base.css` + `marketing.css` and nothing else,
 which was the whole objective.
+
+---
+
+## Closed in v1.3.1
+
+Full detail in the CHANGELOG. What is worth carrying forward:
+
+### A specimen must load exactly what its documented recipe loads
+
+Five components — `Avatar`, `EmptyState`, `Tabs`, `Pagination` and `Icon` — were still in
+`product.css`, so the package's own article-index recipe rendered unstyled anywhere it was
+followed. The flagship consumer had a `?url` import of `product.css` on two public routes as a
+workaround. The rule this establishes is not about layers, which v1.3.0 already covered; it is
+about fixtures: **a card that loads more than its recipe cannot measure the recipe.** The
+`.lw-icon` find is the proof — one rule, reachable from ten marketing components, invisible to
+every gate and every reading, found by `check:visual` within minutes of the `<link>` coming out.
+
+### A contrast trap two gates were structurally unable to see
+
+`.lw-hero-dark` was never in `tokens.css`'s band list. `check:contrast` measures token PAIRS
+and both tokens were right; `check:a11y` files any contrast finding inside the hero as
+`incomplete`, because the hero has decorative pseudo-elements and axe will not guess a
+background it cannot resolve. So the surface with the most decorative machinery in the package
+was also the one surface where the a11y gate was silent. The new band-scope rule in
+`check:contrast` closes it by stating the invariant instead of measuring the render, and was
+watched failing on the restored defect.
+
+### A component library must not hold display text
+
+~70 user-visible English literals across 25 components, none reachable by a prop. All are props
+now, defaulting to what they replaced. The API rule worth keeping: **anything that interpolates
+a number is a `format*` function, never a template with the number in a fixed position** — a
+translation reorders the parts, so a `prefix`/`suffix` pair is the same bug one layer down.
+
+### `HTMLAttributes<HTMLElement>` omits `type`
+
+Four components (`Button`, `Card`, `SourceChip`, `NavItem`) render a `<button>` on a props base
+that has no `type`. Three of them already emitted `type="button"` and already honoured an
+override at runtime; the prop simply did not compile. `Button` emitted nothing, so a Cancel
+button submitted the form. Worth remembering as a class: `React.HTMLAttributes<HTMLElement>` is
+the right base for a POLYMORPHIC component and the wrong base for anything that can be a form
+control, and TypeScript reports the gap at the call site rather than in the library.
 
 ---
 
@@ -214,6 +282,42 @@ names (`CHART_W`, `CHART_PAD`) and `chart-parts.jsx`'s losing `Grid` are still a
 design — the array describes the namespace surface, and `lw-bundle.mjs` already computes that
 list. **Fold it into the bundle generator and this item and item 1 both close.**
 
+### 9. `Button`'s `type` default is still HTML's `submit` — a v2.0.0 candidate
+
+`Card`, `SourceChip` and `NavItem` all default to `type="button"`; `Button` defaults to
+nothing, i.e. `submit`. That inconsistency is the house rule being applied everywhere except
+the one component it matters most for. It was NOT changed in 1.3.1 on purpose: flipping it
+would silently stop `<form onSubmit>` + `<Button>Save</Button>` from submitting, and a silent
+no-op is a worse patch-release failure than the wrong-op it replaces. Change it at the next
+major, together with the `readMinutes` removal.
+
+### 10. `product.css` overrides the token band's default ink, and the two disagree
+
+`product.css` carries `.lw-band-dark, [data-band="dark"] { color: var(--lw-on-dark-2) }`, which
+outranks `tokens.css`'s band block (`:where(…) { color: var(--lw-fg) }`, specificity 0). So the
+SAME dark band renders one default ink on a marketing page (base + marketing → `--lw-fg`,
+15.78:1 on the footer ground) and a dimmer one in an app (base + product → `--lw-on-dark-2` at
+70% white, 9.42:1). Both clear AA comfortably, so nothing is broken — but it is two treatments
+of one thing, decided by which layer you happen to load, which is the shape CONTRIBUTING's
+first rule exists to catch.
+
+Measured, not guessed: it is the entire remaining delta on `site-chrome.card` in the 1.3.1
+visual run — 733 pixels, 8 inherited nodes, all of them `color`. Resolving it moves pixels on
+every dark band in every consumer either way, so it is a minor, not a patch. The likely answer
+is to delete the `product.css` rule and let the role win, since a raw `--lw-on-dark-2` tier
+overriding a role is the thing rule 11 of the README already forbids.
+
+### 11. `lw-visual`'s `decoded()` is not airtight
+
+v1.3.0 added an image-decode wait and recorded three runs agreeing to 0.0001%. During the
+1.3.1 accounting, ONE scaffold recording of `site-chrome.card__light` showed an extra 726-pixel
+band on `.brand-mark` — the per-theme background image, the exact flake `decoded()` exists to
+close. It did not reproduce: re-recording gave the same 733 px as the other three shots, and
+three self-consistency runs of the working tree agree to 0.0001%. So the residual rate is
+roughly **one bad shot per 312 recordings** on this box, and it lands on the one element whose
+image is swapped by the theme flip. Not worth a fix on this evidence; worth recording, because
+the next unexplained 0.03% on a card carrying the mark is probably this and not a regression.
+
 ### 7. Smaller
 
 - **Nothing gates the *geometric* half of the reset leak.** `check:a11y` now catches a UA
@@ -223,6 +327,14 @@ list. **Fold it into the bundle generator and this item and item 1 both close.**
   (fail on `border-style: outset|inset` or a `buttonface` background inside a `.lw-*` subtree);
   it was not added here because `.lw-btn` was the only offender and a gate with one known
   subject is hard to keep honest. If a second one appears, build it.
+- **`check:a11y` reads `violations` and not `incomplete`, and that is a real blind spot with a
+  known shape.** axe files a contrast finding as `incomplete` whenever it cannot resolve the
+  background — most often *"could not be determined due to a pseudo element"*. Every decorative
+  surface in this package (the hero, the grounds, the aurora) is therefore a hole in the a11y
+  gate, not a gap in its rules. The 1.3.1 band-scope rule covers the hero case by asserting the
+  token scope instead of the render; nothing covers the general case. Promoting `incomplete` to
+  a failure is not the answer — it is mostly noise — but a report of incompletes *by card*,
+  reviewed per release, would have surfaced this years earlier.
 - **This release legitimately moves 52 of 136 visual shots**, so its CI run needs `[visual-ok]`
   in the head commit message. Every one is accounted for in the release notes: 48 are the
   removed UA button bevel, 4 are `marketing.card`'s and `Icon.card`'s intended content growth.

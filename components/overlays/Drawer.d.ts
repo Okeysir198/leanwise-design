@@ -13,7 +13,11 @@ export interface DrawerProps extends Omit<React.HTMLAttributes<HTMLDialogElement
   /** Which edge it enters from. `bottom` is the touch answer to a centred dialog. */
   side?: "start" | "end" | "bottom";
   /** Panel width for the side variants. A bare number means px. */
+  /* --- Display text. Every user-visible string this component renders is a
+     prop, because a component library cannot hold display text (v1.3.1). --- */
   width?: string | number;
+  /** The close control's `aria-label` and tooltip. */
+  closeLabel?: string;
 }
 /**
  * The side sheet — a modal that enters from an edge, on the native `<dialog>`

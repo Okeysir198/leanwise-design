@@ -9,7 +9,7 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  * the platform's job here rather than 200 lines of ours — and the platform's
  * version is the one screen readers already understand.
  */
-export function Dialog({ open, onClose, title, description, footer, width, className, children, ...rest }) {
+export function Dialog({ open, onClose, title, description, footer, width, closeLabel = "Close", className, children, ...rest }) {
   const ref = React.useRef(null);
   // Ids are generated, not literal. Two dialogs in one document with the same
   // hardcoded id give every one of them the FIRST dialog's title as its name.
@@ -39,7 +39,7 @@ export function Dialog({ open, onClose, title, description, footer, width, class
               to be one selector list in product.css, i.e. one face written
               twice; the icon button was promoted so a marketing page can have
               one, and the close control kept only its delta. */}
-          <button type="button" className="lw-icon-btn lw-dialog-close" aria-label="Close" title="Close" onClick={onClose}>
+          <button type="button" className="lw-icon-btn lw-dialog-close" aria-label={closeLabel} title={closeLabel} onClick={onClose}>
             <Icon name="close" size={17} />
           </button>
         </div>

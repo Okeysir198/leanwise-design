@@ -11,6 +11,10 @@ export interface DialogProps extends Omit<React.HTMLAttributes<HTMLElement>, "ti
   description?: React.ReactNode;
   /** Actions. Confirm last, on the right — the platform convention. */
   footer?: React.ReactNode;
+  /* --- Display text. Every user-visible string this component renders is a
+     prop, because a component library cannot hold display text (v1.3.1). --- */
   width?: string | number;
+  /** The close control's `aria-label` and tooltip. */
+  closeLabel?: string;
 }
 export declare function Dialog(props: DialogProps): React.JSX.Element;

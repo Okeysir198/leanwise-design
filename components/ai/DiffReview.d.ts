@@ -24,7 +24,20 @@ export interface DiffReviewProps extends React.HTMLAttributes<HTMLDivElement> {
   onDecide?(id: string | number, decision: DiffDecision): void;
   onAcceptAll?(): void;
   onRejectAll?(): void;
+  /* --- Display text. Every user-visible string this component renders is a
+     prop, because a component library cannot hold display text (v1.3.1). --- */
   label?: string;
+  acceptLabel?: React.ReactNode;
+  rejectLabel?: React.ReactNode;
+  undoLabel?: React.ReactNode;
+  acceptAllLabel?: React.ReactNode;
+  rejectAllLabel?: React.ReactNode;
+  acceptedLabel?: React.ReactNode;
+  rejectedLabel?: React.ReactNode;
+  /** The `.lw-sr-only` prefix per diff line — what the gutter sign says in words. */
+  kindLabels?: Record<"add" | "del" | "mod", string>;
+  /** The `aria-live` progress summary. */
+  formatProgress?(pending: number, total: number): React.ReactNode;
 }
 /** Per-hunk accept/reject. The gutter carries the sign, not just the ground. */
 export declare function DiffReview(props: DiffReviewProps): React.JSX.Element;

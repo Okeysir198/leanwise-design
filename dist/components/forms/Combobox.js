@@ -19,6 +19,8 @@ const Combobox = React.forwardRef(function Combobox2({
   emptyText = "No matches",
   onSearch,
   id,
+  loadingText = "Searching\u2026",
+  formatRemoveLabel = (l) => "Remove " + l,
   label,
   className,
   ...rest
@@ -103,7 +105,7 @@ const Combobox = React.forwardRef(function Combobox2({
             "button",
             {
               type: "button",
-              "aria-label": "Remove " + o.label,
+              "aria-label": formatRemoveLabel(o.label),
               onMouseDown: (e) => e.preventDefault(),
               onClick: () => remove(o.value),
               children: /* @__PURE__ */ jsx(Icon, { name: "close", size: 11 })
@@ -153,7 +155,7 @@ const Combobox = React.forwardRef(function Combobox2({
       placement: "bottom-start",
       label,
       ...rest,
-      children: loading ? /* @__PURE__ */ jsx("div", { id: listId, role: "listbox", "aria-busy": "true", className: "lw-listbox-empty", children: "Searching\u2026" }) : !shown.length ? /* @__PURE__ */ jsx("div", { id: listId, role: "listbox", className: "lw-listbox-empty", children: emptyText }) : /* @__PURE__ */ jsx("ul", { ref: listRef, className: "lw-listbox", id: listId, role: "listbox", "aria-multiselectable": multiple || void 0, children: shown.map((o, i) => {
+      children: loading ? /* @__PURE__ */ jsx("div", { id: listId, role: "listbox", "aria-busy": "true", className: "lw-listbox-empty", children: loadingText }) : !shown.length ? /* @__PURE__ */ jsx("div", { id: listId, role: "listbox", className: "lw-listbox-empty", children: emptyText }) : /* @__PURE__ */ jsx("ul", { ref: listRef, className: "lw-listbox", id: listId, role: "listbox", "aria-multiselectable": multiple || void 0, children: shown.map((o, i) => {
         const isSel = multiple ? selected.includes(o.value) : o.value === value;
         return /* @__PURE__ */ jsxs(
           "li",

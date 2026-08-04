@@ -17,7 +17,11 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  * reloading. It receives what the raw <a> would: `href`, `aria-current` and
  * `children`. An item without an href stays a <button>.
  */
-export function BottomNav({ items = [], value, onChange, label = "Main", linkAs = "a", className, ...rest }) {
+export function BottomNav({
+  items = [], value, onChange, label = "Main", linkAs = "a",
+  formatBadgeLabel = (n) => n + " unread",
+  className, ...rest
+}) {
   // An effect, not the render body: a console.warn during render is a side
   // effect, and StrictMode double-invokes render.
   React.useEffect(() => {
@@ -35,7 +39,7 @@ export function BottomNav({ items = [], value, onChange, label = "Main", linkAs 
             onClick={it.href ? undefined : () => onChange && onChange(it.value)}>
             <Icon name={it.icon} size={21} />
             <span className="lw-bn-label">{it.label}</span>
-            {it.badge != null && <span className="lw-sr-only">{it.badge + " unread"}</span>}
+            {it.badge != null && <span className="lw-sr-only">{formatBadgeLabel(it.badge)}</span>}
           </Tag>
         );
       })}

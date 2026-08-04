@@ -7,7 +7,11 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  * direction, a bar, and — where one exists — a target marker. Without the
  * target a reader cannot tell whether 94% is good news.
  */
-export function StatMeter({ label, value, unit, delta, direction, percent, target, tone, foot, interactive = false, className, ...rest }) {
+export function StatMeter({
+  label, value, unit, delta, direction, percent, target, tone, foot, interactive = false,
+  formatValueText = (p, t) => p + "% of a " + t + "% target",
+  className, ...rest
+}) {
   // A native <button> cannot hold the bar and the stat row — its content model
   // is phrasing content, and this tile is divs. So the interactive form takes
   // the full ARIA button contract instead of a bare tabindex: a role, and
@@ -38,7 +42,7 @@ export function StatMeter({ label, value, unit, delta, direction, percent, targe
         <div className="lw-bar" data-tone={tone} style={{ "--lw-bar-value": percent + "%" }}
           role="meter" aria-valuenow={percent} aria-valuemin={0} aria-valuemax={100}
           aria-label={typeof label === "string" ? label : undefined}
-          aria-valuetext={target != null ? percent + "% of a " + target + "% target" : undefined}>
+          aria-valuetext={target != null ? formatValueText(percent, target) : undefined}>
           <i className="fill" />
           {/* insetInlineStart, not left: the bar is a logical row and an RTL page fills
               it from the other edge, so a physical offset puts the target marker on

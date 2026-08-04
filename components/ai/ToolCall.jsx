@@ -13,7 +13,13 @@ const fmt = (v) => (typeof v === "string" ? v : JSON.stringify(v, null, 2));
  * Collapsed by default, because an argument blob is something a user opens when
  * the answer looks wrong, not something to read on every turn.
  */
-export function ToolCall({ name, summary, args, result, error, state = "ok", duration, defaultOpen, className, ...rest }) {
+export function ToolCall({
+  name, summary, args, result, error, state = "ok", duration, defaultOpen,
+  stateLabels = { running: "running", error: "failed", pending: "pending", ok: "succeeded" },
+  argsLabel = "arguments", errorLabel = "error", resultLabel = "result",
+  formatDuration = (ms) => ms + "ms",
+  className, ...rest
+}) {
   const [open, setOpen] = React.useState(!!defaultOpen);
   const uid = React.useId();
   const st = error ? "error" : state;
@@ -24,15 +30,15 @@ export function ToolCall({ name, summary, args, result, error, state = "ok", dur
         <span className="lw-tool-dot" aria-hidden="true" />
         <span className="lw-tool-name">{name}</span>
         <span className="lw-tool-sum">{summary}</span>
-        {duration != null && <span className="lw-tool-dur">{duration}ms</span>}
+        {duration != null && <span className="lw-tool-dur">{formatDuration(duration)}</span>}
         {/* The dot is the sighted signal; the word is the one a screen reader gets. */}
-        <span className="lw-sr-only">{st === "running" ? "running" : st === "error" ? "failed" : st === "pending" ? "pending" : "succeeded"}</span>
+        <span className="lw-sr-only">{stateLabels[st] ?? stateLabels.ok}</span>
       </button>
       {open && (
         <div className="lw-tool-body" id={uid}>
-          {args != null && <><span className="k">arguments</span><pre>{fmt(args)}</pre></>}
-          {error ? <><span className="k">error</span><pre className="err">{fmt(error)}</pre></>
-            : result != null && <><span className="k">result</span><pre>{fmt(result)}</pre></>}
+          {args != null && <><span className="k">{argsLabel}</span><pre>{fmt(args)}</pre></>}
+          {error ? <><span className="k">{errorLabel}</span><pre className="err">{fmt(error)}</pre></>
+            : result != null && <><span className="k">{resultLabel}</span><pre>{fmt(result)}</pre></>}
         </div>
       )}
     </div>

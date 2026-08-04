@@ -20,6 +20,30 @@
   ],
   "advisories": [
     {
+      "id": "stranded-marketing-css",
+      "fixedIn": "1.3.1",
+      "affects": "<1.3.1",
+      "severity": "high",
+      "title": "Avatar, EmptyState, Tabs, Pagination and Icon are drawn only by product.css — so a marketing page renders them unstyled",
+      "detail": "The README tells a marketing site to load tokens + base + marketing and to drop product.css, and from 1.3.0 that was supposed to be complete. It was not. `.lw-avatar` is rendered by `Byline`, which is rendered by `ArticleCard` — both MARKETING components — and `.lw-icon` is the entire layout contract for the icon set, which `SiteFooter`, `AnnounceBar`, `FeatureGrid`, `PlanCard`, `CompareTable`, `Steps`, `EmptyState`, `Disclosure`, `NavToggle` and `Button` all reach through. `Tabs`, `Pagination` and `EmptyState` are the package's own documented article-index recipe. All five were in the app-surface layer, so composing the recipe as written produced a 0x0 avatar, an unstyled tab strip and page buttons, a centred paragraph where the empty state should be, and every icon on the baseline growing its line box. The flagship consumer worked around it by importing product.css through a `?url` side-channel on two public routes: ~24 KB gzip of app-surface rules on pages that render none of it. If you are pinned below 1.3.1 and load base + marketing only, check any page carrying a byline, a footer icon, a category filter or a paginated index.",
+      "measuredBy": "check:tokens",
+      "count": 26,
+      "countMeans": "rules in product.css whose selector leads with one of the five components' own classes",
+      "verifiedAgainst": "v1.3.0"
+    },
+    {
+      "id": "hardcoded-display-text",
+      "fixedIn": "1.3.1",
+      "affects": "<1.3.1",
+      "severity": "medium",
+      "title": "User-visible English strings are baked into the components and cannot be replaced",
+      "detail": "A component library must not hold display text, and this one held a great deal of it. `ArticleCard` emitted the literal `\"N min read\"`; `Dialog`, `Drawer` and `Toast` hardcoded `Close`/`Dismiss` as both aria-label and tooltip; `ThemeToggle` hardcoded Light/Dark/Auto and its radiogroup name; `RichText`'s ten toolbar buttons carried English accessible names the `tools` prop could only filter, never rename; `DiffReview` held nine words in the accept/reject flow; `Pagination` built \"1-25 of 1,284\" and every button's accessible name in English; `ActivityFeed` produced Today/Yesterday/This week/Earlier and \"3h ago\"; `Stepper`, `ToolCall`, `Field`, `BottomNav` and `DiffReview` wrote English into `.lw-sr-only` spans. None of it was reachable by a prop, so a bilingual site rendered English inside its Vietnamese pages with no way to intervene short of forking the component. Every one is now a prop whose default is the previous English string, so the upgrade is additive: `readMinutes` is the single deprecation and it still works, warning once, until v2.0.0.",
+      "measuredBy": "check:tokens",
+      "count": 21,
+      "countMeans": "literal-string aria-label / title / placeholder / alt attributes in components/**/*.jsx — the mechanically countable half of the defect; the full audit found ~70 user-visible literals including rendered text and sr-only words",
+      "verifiedAgainst": "v1.3.0"
+    },
+    {
       "id": "blank-specimen-cards",
       "fixedIn": "1.3.0",
       "affects": "<1.3.0",

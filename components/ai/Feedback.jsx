@@ -11,7 +11,12 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  * A rating with no correction path collects a number nobody can act on, which
  * is why `onComment` exists and why the down state opens it by default.
  */
-export function Feedback({ value, onChange, onComment, commentPlaceholder = "What was wrong?", note, className, ...rest }) {
+export function Feedback({
+  value, onChange, onComment, commentPlaceholder = "What was wrong?", note,
+  upLabel = "Helpful", downLabel = "Not helpful",
+  cancelLabel = "Cancel", sendLabel = "Send",
+  className, ...rest
+}) {
   const [open, setOpen] = React.useState(false);
   const [text, setText] = React.useState("");
   const set = (v) => {
@@ -22,10 +27,10 @@ export function Feedback({ value, onChange, onComment, commentPlaceholder = "Wha
   return (
     <div className={cx(className)} {...rest}>
       <div className="lw-feedback">
-        <button type="button" className="lw-icon-btn" aria-label="Helpful" aria-pressed={value === "up"} onClick={() => set("up")}>
+        <button type="button" className="lw-icon-btn" aria-label={upLabel} aria-pressed={value === "up"} onClick={() => set("up")}>
           <Icon name="thumbs-up" size={15} />
         </button>
-        <button type="button" className="lw-icon-btn" aria-label="Not helpful" aria-pressed={value === "down"} onClick={() => set("down")}>
+        <button type="button" className="lw-icon-btn" aria-label={downLabel} aria-pressed={value === "down"} onClick={() => set("down")}>
           <Icon name="thumbs-down" size={15} />
         </button>
         {note && <span className="lw-feedback-note">{note}</span>}
@@ -37,8 +42,8 @@ export function Feedback({ value, onChange, onComment, commentPlaceholder = "Wha
             aria-label={commentPlaceholder} placeholder={commentPlaceholder}
             onChange={(e) => setText(e.target.value)} />
           <div className="lw-feedback-actions">
-            <button type="button" className="lw-btn lw-btn-ghost lw-btn-sm" onClick={() => setOpen(false)}>Cancel</button>
-            <button type="submit" className="lw-btn lw-btn-sm" disabled={!text.trim()}>Send</button>
+            <button type="button" className="lw-btn lw-btn-ghost lw-btn-sm" onClick={() => setOpen(false)}>{cancelLabel}</button>
+            <button type="submit" className="lw-btn lw-btn-sm" disabled={!text.trim()}>{sendLabel}</button>
           </div>
         </form>
       )}

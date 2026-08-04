@@ -893,11 +893,109 @@ for (const c of composedPairs()) {
   if (ratio < AA_TEXT) composedFails.push({ ...c, ratio: ratio.toFixed(2) });
 }
 
+/* -----------------------------------------------------------------------------
+   6b. BAND SCOPE (v1.3.1).
+
+   An ALWAYS-DARK surface must establish the dark TOKEN scope for its subtree,
+   not merely paint a navy background and re-ink the four children the author
+   happened to think of. If it does not, every role token inside it
+   (`--lw-fg-subtle`, `--lw-bg`, `--lw-line`, the focus ring) resolves against
+   the LIGHT palette on navy paper, and the failure is invisible to everything
+   else in this repo:
+
+     · the pair gate above measures TOKENS, and both tokens in the pair are
+       correct — it is the SCOPE that is wrong, which no pair can express;
+     · `check:a11y` cannot see it either, and that is structural rather than a
+       tuning problem. `.lw-hero-dark` carries two decorative pseudo-elements,
+       so axe answers "background color could not be determined due to a pseudo
+       element" and files the finding as INCOMPLETE. lw-a11y.mjs reads
+       `violations` only — correctly, since incompletes are mostly noise — so a
+       hero can hold 1.5:1 text and the gate prints "no violations". Measured on
+       the marketing card: four serious incompletes, zero violations.
+
+   `.lw-hero-dark` was exactly this for the whole life of the package.
+   `.lw-section.dark` escaped only by accident: its class list literally
+   contains `dark`, which tokens.css already names. So the invariant is worth
+   stating rather than remembering.
+
+   THE RULE. A selector used as an ANCESTOR SCOPE to re-ink descendants from the
+   `--lw-on-dark*` family is, by that act, declaring itself a dark ground. It
+   must appear in tokens.css's dark band selector list. Hand-patching a child's
+   ink because the ground is dark IS the band's job, done manually and
+   incompletely — the patches only ever cover the elements someone remembered.
+
+   The exemption list is greppable and countable, same discipline as
+   `data-a11y-expect` on the cards and `NO_SKIP_LINK` in lw-templates.mjs.
+   -------------------------------------------------------------------------- */
+
+/* `.lw-code` is a CLOSED surface: a fixed set of parts (head, tabs, the `tok-*`
+   spans, the copy control) that this package draws in full, not a band a
+   consumer composes into. Making it a token band would re-point `--lw-bg`
+   inside every code block in every consumer, which is a visible change and a
+   palette decision, not a patch. Recorded in REVIEW.md "Open" rather than
+   tuned away here. `.lw-code-head` is the same surface, one level in. */
+const BAND_SCOPE_EXEMPT = new Set([".lw-code", ".lw-code-head"]);
+
+/** Split a selector list on TOP-LEVEL commas only — `:is(a, b) .x` is one selector. */
+function splitSelectorList(list) {
+  const out = [];
+  let depth = 0, buf = "";
+  for (const ch of list) {
+    if (ch === "(") depth++;
+    else if (ch === ")") depth--;
+    else if (ch === "," && depth === 0) { out.push(buf); buf = ""; continue; }
+    buf += ch;
+  }
+  if (buf.trim()) out.push(buf);
+  return out.map((s) => s.trim()).filter(Boolean);
+}
+
+function bandScopes() {
+  // Every class named anywhere in tokens.css's two band selector lists, plus the
+  // page-theme selectors, which are bands by construction.
+  const declared = new Set(["dark", "lw-band-dark", "lw-band-light", "light"]);
+  for (const re of [BAND_DARK_RE, BAND_LIGHT_RE]) {
+    const rule = rules.find((r) => re.test(r.selector));
+    if (!rule) continue;
+    for (const m of rule.selector.matchAll(/\.([A-Za-z0-9_-]+)/g)) declared.add(m[1]);
+  }
+
+  const offenders = new Map();
+  let scanned = 0;
+  for (const layer of LAYERS) {
+    let src;
+    try { src = readFileSync(join(ROOT, layer), "utf8"); } catch { continue; }
+    for (const { selector, directBody } of splitRules(stripComments(src))) {
+      if (!selector || selector.startsWith("@")) continue;
+      const m = /(^|[;{])\s*color\s*:\s*([^;}]+)/.exec(directBody);
+      if (!m || !/--lw-on-dark\b|--lw-on-dark-[0-9]\b/.test(m[2])) continue;
+      for (const sel of splitSelectorList(selector)) {
+        // A DESCENDANT rule only: `.x { color: on-dark }` paints itself (an ink
+        // button), which is not a claim about a subtree.
+        const parts = sel.split(/\s+/).filter((p) => p && p !== ">" && p !== "+" && p !== "~");
+        if (parts.length < 2) continue;
+        const anc = parts[0];
+        if (!anc.startsWith(".")) continue;         // :is(…)/[attr] roots are the band list itself
+        scanned++;
+        if (BAND_SCOPE_EXEMPT.has(anc.split(".").slice(0, 2).join("."))) continue;
+        // Covered when ANY class in the leading compound is a declared band —
+        // that is what makes `.lw-section.dark` legal without naming it.
+        const classes = [...anc.matchAll(/\.([A-Za-z0-9_-]+)/g)].map((c) => c[1]);
+        if (classes.some((c) => declared.has(c))) continue;
+        if (!offenders.has(anc)) offenders.set(anc, []);
+        offenders.get(anc).push(layer + " — " + sel);
+      }
+    }
+  }
+  return { offenders, scanned };
+}
+
 /* =============================================================================
    7. REPORT
    ============================================================================= */
 
 const { failPairs: parityFails, warnings: parityWarnings } = parity();
+const { offenders: bandOffenders, scanned: bandScanned } = bandScopes();
 const logoFails = logoStops();
 const emailFails = emailLiterals();
 const { fails: divergenceFails, compared: divergenceCount } = darkScopeDivergence();
@@ -1117,6 +1215,17 @@ if (chartFails.length) {
   failed += chartFails.length;
 }
 
+if (bandOffenders.size) {
+  console.log(`${C.bold}band scope (an always-dark ground that does not establish the dark token scope)${C.reset}`);
+  for (const [anc, sites] of bandOffenders) {
+    console.log(`  ${C.red}✗${C.reset} ${anc} re-inks ${sites.length} descendant${sites.length > 1 ? "s" : ""} from the --lw-on-dark family`);
+    console.log(`    ${C.dim}${sites[0]}${C.reset}`);
+    console.log(`    ${C.dim}add it to tokens.css's :where(.lw-band-dark, …) list, or exempt it in BAND_SCOPE_EXEMPT with a reason${C.reset}`);
+    failed++;
+  }
+  console.log();
+}
+
 const pairCount = rows.filter((r) => r.status !== "MISS").length;
 
 if (failed) {
@@ -1134,5 +1243,7 @@ console.log(`${C.dim}Across three canonical scopes — ${perScope} — plus ${di
 console.log(`${C.dim}between the two dark scopes. Coverage is derived from tokens.css via the${C.reset}`);
 console.log(`${C.dim}composition manifest — add a pair to MANIFEST and it is checked in the${C.reset}`);
 console.log(`${C.dim}scope(s) you declare; a "dark" pair is checked in the @media path too.${C.reset}\n`);
+console.log(`${C.dim}Band scope: ${bandScanned} on-dark descendant rule(s) scanned, every ancestor a declared${C.reset}`);
+console.log(`${C.dim}band in tokens.css (${BAND_SCOPE_EXEMPT.size} exempted by name: ${[...BAND_SCOPE_EXEMPT].join(", ")}).${C.reset}\n`);
 console.log(`${C.dim}Categorical separation: ${chartPairs} chart pairs at dE >= ${CHART_DE_FLOOR}; tightest is${C.reset}`);
 console.log(`${C.dim}${tightest.a} vs ${tightest.b} [${tightest.scope}] at dE ${tightest.d.toFixed(1)}.${C.reset}\n`);

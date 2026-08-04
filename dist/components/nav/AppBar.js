@@ -12,6 +12,10 @@ function AppBar({
   menuExpanded,
   actions,
   linkAs = "a",
+  collapseNavLabel = "Collapse navigation",
+  expandNavLabel = "Expand navigation",
+  homeLabel = "Home",
+  formatBrandLabel = (b) => b + " \u2014 home",
   className,
   children,
   ...rest
@@ -26,7 +30,7 @@ function AppBar({
           className: "lw-icon-btn",
           onClick: onMenuClick,
           "aria-expanded": menuExpanded,
-          "aria-label": menuExpanded ? "Collapse navigation" : "Expand navigation",
+          "aria-label": menuExpanded ? collapseNavLabel : expandNavLabel,
           children: /* @__PURE__ */ jsx(Icon, { name: "sidebar", size: 21 })
         }
       ),
@@ -35,7 +39,7 @@ function AppBar({
         {
           className: "lw-appbar-brand",
           href: brandHref || void 0,
-          "aria-label": brandHref ? typeof brand === "string" ? brand + " \u2014 home" : "Home" : void 0,
+          "aria-label": brandHref ? typeof brand === "string" ? formatBrandLabel(brand) : homeLabel : void 0,
           children: [
             mark && /* @__PURE__ */ jsx("span", { className: "brand-mark", "aria-hidden": "true" }),
             brand

@@ -62,6 +62,47 @@ if (SELF) {
 
   // Each count is re-derived from the tree, by the same logic its gate uses.
   const derive = {
+    /* Both 1.3.1 advisories count the DEFECT, so both derive 0 in a fixed tree —
+       no COUNTS_THE_FIX entry, and that is the stronger shape: the number goes to
+       zero when the thing is gone, rather than describing the repair. */
+
+    /* Rules whose selector LEADS with one of the five promoted components' own
+       classes and are still in product.css. Leading compound, not "mentions the
+       class anywhere": `.lw-toast .lw-icon-btn` and `.lw-kpi .d .lw-icon` are
+       app-surface DELTAS on a shared control and belong exactly where they are.
+       Eight of those remain and must not be counted, or this reads 8 forever and
+       stops discriminating. */
+    "stranded-marketing-css": () => {
+      const OWN = /^\.lw-(avatar|empty|tabs|pagination|pag-[a-z]+|icon)\b/;
+      const src = fs.readFileSync(path.join(ROOT, "product.css"), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+      let n = 0;
+      for (const m of src.matchAll(/([^{}]+)\{[^{}]*\}/g)) {
+        const sel = m[1].trim();
+        if (!sel || sel.startsWith("@")) continue;
+        if (sel.split(",").some((s) => OWN.test(s.trim()))) n++;
+      }
+      return n;
+    },
+
+    /* The mechanically countable half: an accessible name or a tooltip written as
+       a STRING LITERAL rather than as `{prop}`. It is a proxy — the audit also
+       found rendered text and `.lw-sr-only` words, which no regex separates from
+       markup reliably — but it is the half that cannot be argued with, it is the
+       half that hurts a screen-reader user most, and it is zero. `countMeans`
+       says so, because a proxy presented as a total is the hand-maintained fact
+       this file exists to replace. */
+    "hardcoded-display-text": () => {
+      let n = 0;
+      (function walk(d) {
+        for (const e of fs.readdirSync(d)) {
+          const p = path.join(d, e);
+          if (fs.statSync(p).isDirectory()) { walk(p); continue; }
+          if (!p.endsWith(".jsx")) continue;
+          n += (fs.readFileSync(p, "utf8").match(/(?:aria-label|title|placeholder|alt)="[^"]*"/g) ?? []).length;
+        }
+      })(path.join(ROOT, "components"));
+      return n;
+    },
     /* The count is the BLAST RADIUS: how many specimen cards mount a React root,
        and therefore how many rendered nothing while _ds_bundle.js was emitting
        jsx-runtime imports. The authoritative measurement is check:a11y — its

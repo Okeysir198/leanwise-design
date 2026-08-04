@@ -5,21 +5,35 @@ import { Icon } from "../primitives/Icon.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
 const ms = (when) => when instanceof Date ? when.getTime() : new Date(when).getTime();
 const stamp = (when) => new Intl.DateTimeFormat(void 0, { day: "numeric", month: "short" }).format(ms(when));
-function timeAgo(when, now = Date.now()) {
+const RELATIVE_LABELS = { now: "just now", minutes: "m ago", hours: "h ago", days: "d ago" };
+const BUCKET_LABELS = { today: "Today", yesterday: "Yesterday", week: "This week", earlier: "Earlier" };
+function timeAgo(when, now = Date.now(), labels = RELATIVE_LABELS) {
   const t = ms(when);
   const s = Math.max(0, (now - t) / 1e3);
-  if (s < 60) return "just now";
-  if (s < 3600) return Math.floor(s / 60) + "m ago";
-  if (s < 86400) return Math.floor(s / 3600) + "h ago";
-  if (s < 86400 * 3) return Math.floor(s / 86400) + "d ago";
+  if (s < 60) return labels.now;
+  if (s < 3600) return Math.floor(s / 60) + labels.minutes;
+  if (s < 86400) return Math.floor(s / 3600) + labels.hours;
+  if (s < 86400 * 3) return Math.floor(s / 86400) + labels.days;
   return stamp(when);
 }
-const bucket = (when, now) => {
+const bucketKey = (when, now) => {
   const d = new Date(when), n = new Date(now);
   const days = Math.floor((new Date(n.getFullYear(), n.getMonth(), n.getDate()) - new Date(d.getFullYear(), d.getMonth(), d.getDate())) / 864e5);
-  return days <= 0 ? "Today" : days === 1 ? "Yesterday" : days < 7 ? "This week" : "Earlier";
+  return days <= 0 ? "today" : days === 1 ? "yesterday" : days < 7 ? "week" : "earlier";
 };
-function ActivityFeed({ items = [], onItemClick, grouped = true, now, label = "Activity", linkAs = "a", className, ...rest }) {
+function ActivityFeed({
+  items = [],
+  onItemClick,
+  grouped = true,
+  now,
+  label = "Activity",
+  linkAs = "a",
+  bucketLabels = BUCKET_LABELS,
+  formatTimeAgo = timeAgo,
+  unreadLabel = "Unread",
+  className,
+  ...rest
+}) {
   const [mounted, setMounted] = React.useState(null);
   React.useEffect(() => {
     setMounted(Date.now());
@@ -27,7 +41,7 @@ function ActivityFeed({ items = [], onItemClick, grouped = true, now, label = "A
   const at = now != null ? now : mounted;
   const groups = [];
   items.forEach((it) => {
-    const g = grouped && it.when && at != null ? bucket(it.when, at) : null;
+    const g = grouped && it.when && at != null ? bucketLabels[bucketKey(it.when, at)] : null;
     const last = groups[groups.length - 1];
     if (last && last.name === g) last.items.push(it);
     else groups.push({ name: g, items: [it] });
@@ -53,11 +67,11 @@ function ActivityFeed({ items = [], onItemClick, grouped = true, now, label = "A
               /* @__PURE__ */ jsxs("span", { className: "lw-feed-main", children: [
                 /* @__PURE__ */ jsx("span", { className: "lw-feed-title", children: it.title }),
                 /* @__PURE__ */ jsxs("span", { className: "lw-feed-meta", children: [
-                  it.when ? at != null ? timeAgo(it.when, at) : stamp(it.when) : null,
+                  it.when ? at != null ? formatTimeAgo(it.when, at) : stamp(it.when) : null,
                   it.meta ? (it.when ? " \xB7 " : "") + it.meta : ""
                 ] })
               ] }),
-              it.unread && /* @__PURE__ */ jsx("span", { className: "lw-sr-only", children: "Unread" })
+              it.unread && /* @__PURE__ */ jsx("span", { className: "lw-sr-only", children: unreadLabel })
             ]
           },
           it.id ?? gi + "-" + i
@@ -68,5 +82,7 @@ function ActivityFeed({ items = [], onItemClick, grouped = true, now, label = "A
 }
 export {
   ActivityFeed,
+  BUCKET_LABELS,
+  RELATIVE_LABELS,
   timeAgo
 };

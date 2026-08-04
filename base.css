@@ -437,6 +437,27 @@
   .lw-btn[data-loading="true"]::after { animation-duration: var(--lw-dur-spin-slow); }
 }
 
+/* ---- Icon ---------------------------------------------------------------- */
+
+/* PROMOTED from product.css in v1.3.1, verbatim — one rule, and the entire
+   layout contract for the icon set. `Icon` is a PRIMITIVE and half the
+   marketing layer names a glyph through it (`SiteFooter`, `AnnounceBar`,
+   `FeatureGrid`, `PlanCard`, `CompareTable`, `Steps`, `EmptyState`,
+   `Disclosure`, `NavToggle`, `Button`), so it has no business in the app layer.
+   Without it an `<svg>` takes the UA's `display: inline`, sits on the text
+   baseline and grows its own line box: a footer link carrying an `external`
+   marker measured 39px instead of 27px.
+
+   It sits BELOW the `.lw-btn .lw-icon` sizing rules deliberately, but nothing
+   rests on that — those are 0-2-0 against this 0-1-0, so they outrank it from
+   anywhere. Kept in reading order, not cascade order.
+
+   Nobody found this by reading. `check:visual` found it, the moment
+   `marketing.card.html` and `site-chrome.card.html` stopped loading
+   product.css — which is the whole argument for making a specimen load exactly
+   what its documented recipe loads. */
+.lw-icon { flex: none; display: inline-block; vertical-align: -0.14em; }
+
 /* ---- Icon button --------------------------------------------------------- */
 
 /* PROMOTED from product.css in v1.3.0 — fb2d3ad's correction, one file further.
@@ -584,6 +605,51 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
 .lw-chip-neutral { background: var(--lw-neutral-soft); color: var(--lw-neutral-on); }
 .lw-chip::before { content: ""; width: var(--lw-chip-dot); height: var(--lw-chip-dot); border-radius: 999px; background: currentColor; flex: none; }
 
+/* ---- Avatar -------------------------------------------------------------- */
+
+/* PROMOTED from product.css in v1.3.1, verbatim. `Avatar` is not an app-shell
+   thing and never was: `Byline` renders one, and `ArticleCard` renders a
+   `Byline`. Both are MARKETING components — so the package's own documented
+   article-index recipe (a `Grid` of `ArticleCard`s) drew an unstyled 0×0 circle
+   unless the page also loaded the whole app-surface layer. The flagship
+   consumer was doing exactly that: importing `product.css` through a `?url`
+   side-channel on two public routes for these four rules and the three blocks
+   below. Same defect as `.lw-btn` and as `fb2d3ad`'s topbar — a component's CSS
+   stranded in a layer its own consumers do not load.
+
+   No dark patch: every value here is a ROLE (`--lw-brand-soft` / `--lw-brand-on`),
+   so a dark band re-points the whole atom with nothing to move. */
+.lw-avatar { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; flex: none; border-radius: 50%; background: var(--lw-brand-soft); color: var(--lw-brand-on); font-size: 12px; font-weight: var(--lw-fw-medium); letter-spacing: 0.01em; overflow: hidden; user-select: none; }
+.lw-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.lw-avatar-sm { width: 24px; height: 24px; font-size: 10px; }
+.lw-avatar-lg { width: 44px; height: 44px; font-size: 15px; }
+
+/* ---- Empty state --------------------------------------------------------- */
+
+/* PROMOTED from product.css in v1.3.1, verbatim, WITH its `.lw-band-dark`
+   patches — position is not load-bearing, presence is (v1.3.0's lesson, applied
+   the first time rather than in a follow-up). A search or article index with no
+   results is the same screen on a marketing site as in an app; the documented
+   article-index recipe names `EmptyState` for exactly that, and it rendered as
+   unstyled centred text.
+
+   `button.lw-empty { text-align: start }` sits ABOVE, in the card-anatomy block,
+   and stays there: at 0-1-1 it outranks `.lw-empty`'s `text-align: center`
+   regardless of order, which is the same relationship it had across the two
+   files. Nothing about the composited result moves. */
+/* EMPTY STATE — the screen a product is judged by, and the one that gets left
+   as "No data". Title, one line of why, one action. */
+.lw-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-align: center; padding: var(--lw-space-48) var(--lw-space-24); border: 1px dashed var(--lw-line-strong); border-radius: var(--lw-radius-lg); background: var(--lw-bg-subtle); }
+.lw-empty .t { font-size: var(--lw-text-body); font-weight: var(--lw-fw-semibold); letter-spacing: -0.012em; color: var(--lw-fg); }
+.lw-empty .s { font-size: var(--lw-text-sm); color: var(--lw-fg-muted); max-width: 46ch; text-wrap: pretty; }
+.lw-empty .glyph { display: inline-flex; font-family: var(--lw-font-mono); font-size: 20px; color: var(--lw-fg-subtle); }
+/* The dashed frame and its ink on a dark band. The generic `.lw-band-dark`
+   ground rule these sat beside (`.lw-table-wrap`, `.lw-kpi`, `.lw-source-item`)
+   is app surface and stayed in product.css. */
+.lw-band-dark .lw-empty, [data-band="dark"] .lw-empty { background: var(--lw-on-dark-wash); border-color: var(--lw-on-dark-line-strong); }
+.lw-band-dark .lw-empty .t, [data-band="dark"] .lw-empty .t { color: var(--lw-on-dark-1); }
+.lw-band-dark .lw-empty .s, [data-band="dark"] .lw-empty .s { color: var(--lw-on-dark-2); }
+
 /* PROMOTED from product.css in v1.3.0, verbatim and in source order. A contact
    form is not an app surface, so the field, the shared control face and the two
    label-wrapped controls belong in the layer nobody drops.
@@ -593,8 +659,11 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
    That list names `.lw-switch`, `.lw-check`, `.lw-select` and `.lw-segmented
    button`, and a later `cursor: default` silently cancels an earlier pointer.
 
-   The `:is(.dark, …)`-scoped patches for these controls stay in product.css: they
-   outrank these rules on specificity, so their position is not load-bearing. */
+   Their `:is(.dark, …)`-scoped patches came too, at the FOOT of this file — see
+   "The promoted controls on a dark ground". (This paragraph used to say the
+   patches stayed behind, which was fb2d3ad's reasoning; v1.3.0 moved them and
+   the comment was not updated with them. Position is not load-bearing;
+   PRESENCE is.) */
 /* ---- Forms -----------------------------------------------------------------
    The layer the system was missing entirely. A FIELD is the unit: label, the
    control, and one slot that holds either help text or an error — never both,
@@ -1255,12 +1324,77 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
 }
 .lw-file-tree li:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
 
-/* ---- Code tabs ------------------------------------------------------------
-   REMOVED in v1.0. A tab strip above a code panel is a tab strip; it did not
-   need its own class, and having two meant the same interaction looked like two
-   different components depending on which file a dev copied from. product.css ships
-   the one .lw-tabs (roving tabindex in the React component) plus the six rules
-   it needs on the dark code surface. */
+/* ---- Tabs -----------------------------------------------------------------
+   `.lw-code-tabs` was REMOVED in v1.0. A tab strip above a code panel is a tab
+   strip; it did not need its own class, and having two meant the same
+   interaction looked like two different components depending on which file a
+   dev copied from. There is one `.lw-tabs` (roving tabindex in the React
+   component) plus the six rules it needs on the dark code surface.
+
+   PROMOTED from product.css in v1.3.1, verbatim. A category filter above an
+   article index is the documented marketing recipe, and a tab strip is not an
+   app surface — `Tabs` is in `components/nav/`, beside `TopBar`, which v1.3.0
+   already moved here for the same reason.
+
+   Placed HERE, not with the other promotions higher up, for two reasons that
+   are both cascade facts rather than tidiness: `.lw-code` is declared ~250
+   lines above, so the six dark-code-surface rules sit downstream of the surface
+   they patch exactly as they did in product.css; and the consolidated
+   pointer-affordance list at the FOOT of this file names `.lw-tabs [role="tab"]`,
+   so it still comes last. */
+.lw-tabs { display: flex; gap: var(--lw-space-24); border-bottom: 1px solid var(--lw-line); overflow-x: auto; scrollbar-width: none; }
+.lw-tabs::-webkit-scrollbar { display: none; }
+.lw-tabs [role="tab"] { appearance: none; border: 0; background: none; font: inherit; font-size: var(--lw-text-sm); font-weight: var(--lw-fw-medium); color: var(--lw-fg-subtle); padding: 10px 0; cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color var(--lw-dur-xs) var(--lw-ease-out), border-color var(--lw-dur-xs) var(--lw-ease-out); }
+.lw-tabs [role="tab"]:hover { color: var(--lw-fg); }
+.lw-tabs [role="tab"][aria-selected="true"] { color: var(--lw-brand-text); border-bottom-color: var(--lw-brand-500); }
+.lw-tabs [role="tab"]:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); border-radius: var(--lw-radius-xs); }
+.lw-tabs [role="tab"] .count { font-family: var(--lw-font-mono); font-size: 11px; color: var(--lw-fg-subtle); margin-inline-start: 6px; }
+
+/* .lw-tabs inside the dark code surface. This is why .lw-code-tabs existed as
+   a separate class; six rules is cheaper than a second component. */
+.lw-code .lw-tabs { padding: 0 var(--lw-space-16); border-bottom-color: var(--lw-on-dark-line); }
+.lw-code .lw-tabs [role="tab"] { color: var(--lw-on-dark-3); padding: 10px 0; }
+.lw-code .lw-tabs [role="tab"]:hover { color: var(--lw-on-dark-1); }
+.lw-code .lw-tabs [role="tab"][aria-selected="true"] { color: var(--lw-brand-300); border-bottom-color: var(--lw-brand-400); }
+.lw-code .lw-tabs [role="tab"]:focus-visible { box-shadow: 0 0 0 2px var(--lw-brand-400); }
+.lw-code:has(.lw-tabs) { padding: 0; }
+.lw-code:has(.lw-tabs) pre { margin: 0; padding: var(--lw-space-16); }
+
+/* ---- Pagination -------------------------------------------------------------
+   PROMOTED from product.css in v1.3.1, verbatim. The count is not decoration:
+   "1–25 of 1,284" is the only thing that tells a user whether their filter did
+   anything. Mono and tabular, so the numbers do not shuffle as the page changes.
+
+   A blog index paginates. `Pagination` is named in the marketing article-index
+   recipe alongside `Tabs` and `EmptyState`, and all three were in the layer that
+   recipe tells you to drop.
+
+   `.lw-pag-size` MUST stay downstream of the form controls, and that is the one
+   real ordering hazard in this promotion: it is `.lw-pag-size { width: auto }`
+   against `.lw-select { width: 100% }` — equal specificity, so source order
+   alone decides. It won across the file boundary (product after base) and it
+   still wins here, because the forms block is ~700 lines above. Move either one
+   and the rows-per-page select silently grows to fill its row. */
+.lw-pagination { display: flex; align-items: center; gap: var(--lw-space-8); flex-wrap: wrap; }
+.lw-pagination .lw-pag-info { font-family: var(--lw-font-mono); font-size: var(--lw-text-xs); color: var(--lw-fg-subtle); font-variant-numeric: tabular-nums; }
+.lw-pagination .lw-pag-spacer { flex: 1; } /* legacy alias of .lw-spacer */
+/* The rows-per-page select sizes to its options. Every other .lw-input fills its
+   column; this one sits in a control row where a full-width field would push the
+   page buttons off the end. */
+.lw-pag-size { width: auto; }
+.lw-pag-btn {
+  min-width: var(--lw-control-h-sm); height: var(--lw-control-h-sm); padding: 0 var(--lw-space-8);
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--lw-line); border-radius: var(--lw-radius-sm);
+  background: var(--lw-bg); color: var(--lw-fg);
+  font-family: var(--lw-font-mono); font-size: var(--lw-text-xs); font-variant-numeric: tabular-nums;
+  cursor: pointer; transition: background var(--lw-dur-xs) var(--lw-ease-out), border-color var(--lw-dur-xs) var(--lw-ease-out);
+}
+.lw-pag-btn:hover { background: var(--lw-bg-subtle); }
+.lw-pag-btn:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
+.lw-pag-btn[aria-current="page"] { background: var(--lw-brand-500); border-color: var(--lw-brand-500); color: var(--lw-on-brand); }
+.lw-pag-btn:disabled { color: var(--lw-fg-faint); cursor: not-allowed; background: var(--lw-bg-muted); }
+.lw-pag-gap { padding: 0 2px; color: var(--lw-fg-faint); font-family: var(--lw-font-mono); font-size: var(--lw-text-xs); }
 
 /* ---- Status chip (Live / Pilot) -------------------------------------------
    A small status pill. Default is neutral; variants via data-variant. Uses the

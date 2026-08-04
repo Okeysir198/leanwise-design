@@ -11,6 +11,18 @@ export interface RichTextProps extends Omit<React.HTMLAttributes<HTMLDivElement>
   placeholder?: string;
   /** Tool ids to keep: bold, italic, h2, ul, ol, quote, code, link, clear. */
   tools?: string[];
+  /* --- Display text (v1.3.1). --- */
+  /**
+   * Per-tool overrides, merged by ID onto the built-in set — so a partial map
+   * leaves the rest in English rather than blanking a button's accessible name.
+   * `label` is both the `aria-label` and the tooltip; `prompt` is the
+   * `window.prompt` text (link only); `glyph` is the B/I/H mark.
+   */
+  toolLabels?: Record<string, { label?: string; prompt?: string; glyph?: React.ReactNode }>;
+  /** The toolbar's accessible name, built from `label`. Default `"{label} formatting"`. */
+  formatBarLabel?(label: string): string;
+  /** The fallback used when `label` is not set. Default `"Editor"`. */
+  barLabel?: string;
   /** Character budget, counted from textContent. Over-budget turns the counter red. */
   maxLength?: number;
   label?: string;

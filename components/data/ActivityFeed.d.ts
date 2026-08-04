@@ -33,9 +33,21 @@ export interface ActivityFeedProps extends React.HTMLAttributes<HTMLDivElement> 
    * `className`, the `data-*` state attributes and `children`. An item without
    * an href is unaffected.
    */
+  /* --- Display text. Every user-visible string this component renders is a
+     prop, because a component library cannot hold display text (v1.3.1). --- */
   linkAs?: React.ElementType;
+  /** The day headings. Keyed, not positional, so a partial set is impossible. */
+  bucketLabels?: Record<"today" | "yesterday" | "week" | "earlier", React.ReactNode>;
+  /** Replaces the whole relative-time string. Receives the item's `when` and "now". */
+  formatTimeAgo?(when: Date | number | string, now: number): React.ReactNode;
+  unreadLabel?: React.ReactNode;
 }
 /** Notifications and activity — the same list with a different verb. */
 export declare function ActivityFeed(props: ActivityFeedProps): React.JSX.Element;
 /** "3h ago", falling back to a date once relative stops being useful. */
-export declare function timeAgo(when: Date | number | string, now?: number): string;
+export declare function timeAgo(when: Date | number | string, now?: number, labels?: typeof RELATIVE_LABELS): string;
+/** The English defaults for the relative-time and day-bucket strings. Module
+ *  exports rather than barrel exports — the same treatment `RANGE_PRESETS`
+ *  gets — so they are reachable for a wrapper without growing the public API. */
+export declare const RELATIVE_LABELS: { now: string; minutes: string; hours: string; days: string };
+export declare const BUCKET_LABELS: Record<"today" | "yesterday" | "week" | "earlier", string>;

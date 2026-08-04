@@ -16,6 +16,15 @@ export interface CardProps extends React.HTMLAttributes<HTMLElement> {
    * at runtime and failed to compile.
    */
   as?: React.ElementType;
+  /**
+   * The `<button>` type. `interactive` without an `href` renders a real
+   * `<button>`, which already defaults to `type="button"` here — but the prop
+   * did not COMPILE before v1.3.1, because `React.HTMLAttributes<HTMLElement>`
+   * omits `type` (it lives on `ButtonHTMLAttributes`). So an interactive card
+   * that genuinely wanted to submit could not say so. Runtime behaviour is
+   * unchanged: `{...rest}` has always overridden the default.
+   */
+  type?: "button" | "submit" | "reset";
 }
 export declare function Card(props: CardProps): React.JSX.Element;
 export declare function CardHead(props: React.HTMLAttributes<HTMLDivElement>): React.JSX.Element;

@@ -27,7 +27,11 @@ export interface BottomNavProps extends Omit<React.HTMLAttributes<HTMLElement>, 
    * raw `<a>` would: `href`, `aria-current` and `children`. An item without an
    * href stays a `<button>`.
    */
+  /* --- Display text. Every user-visible string this component renders is a
+     prop, because a component library cannot hold display text (v1.3.1). --- */
   linkAs?: React.ElementType;
+  /** The `.lw-sr-only` badge text. Default `"{n} unread"`. */
+  formatBadgeLabel?(badge: number): React.ReactNode;
 }
 /** The mobile destination bar. Reserves the home indicator from `--lw-safe-bottom`. */
 export declare function BottomNav(props: BottomNavProps): React.JSX.Element;

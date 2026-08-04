@@ -20,17 +20,21 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  *  receives exactly what the raw <a> would: `href`, `className`, `children` and
  *  `aria-current`. Default `"a"`, which is the unchanged behaviour.
  */
-export function TopBar({ brand, brandHref, logo = false, links = [], actions, linkAs = "a", className, children, ...rest }) {
+export function TopBar({
+  brand, brandHref, logo = false, links = [], actions, linkAs = "a",
+  navLabel = "Primary", homeLabel = "Home", formatBrandLabel = (b) => b + " \u2014 home",
+  className, children, ...rest
+}) {
   const Link = linkAs;
   const Brand = brandHref ? linkAs : "span";
-  const brandProps = brandHref ? { href: brandHref, "aria-label": typeof brand === "string" ? brand + " — home" : "Home" } : {};
+  const brandProps = brandHref ? { href: brandHref, "aria-label": typeof brand === "string" ? formatBrandLabel(brand) : homeLabel } : {};
   return (
     <header className={cx("lw-topbar", className)} {...rest}>
       {logo
         ? <Brand className="brand" {...brandProps}><span className="brand-mark" aria-hidden="true" />{brand}</Brand>
         : brand && <Brand className="brand" {...brandProps}>{brand}</Brand>}
       {links.length > 0 && (
-        <nav aria-label="Primary">
+        <nav aria-label={navLabel}>
           {/* Keyed by index, not href: nav links routinely share a placeholder
              destination, and React treats duplicate keys as unsupported. Same
              reasoning as Sidebar — an href is a destination, not an identity. */}

@@ -114,7 +114,7 @@ export type { NavToggleProps } from "./components/nav/NavToggle";
 export { Dialog } from "./components/overlays/Dialog";
 export type { DialogProps } from "./components/overlays/Dialog";
 export { Toast, ToastRegion } from "./components/overlays/Toast";
-export type { ToastProps } from "./components/overlays/Toast";
+export type { ToastProps, ToastRegionProps } from "./components/overlays/Toast";
 export { Tooltip } from "./components/overlays/Tooltip";
 export type { TooltipProps } from "./components/overlays/Tooltip";
 export { Popover } from "./components/overlays/Popover";

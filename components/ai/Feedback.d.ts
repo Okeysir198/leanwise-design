@@ -10,7 +10,13 @@ export interface FeedbackProps extends Omit<React.HTMLAttributes<HTMLDivElement>
   /** Omit and the down state collects a number nobody can act on. */
   onComment?(text: string): void;
   commentPlaceholder?: string;
+  /* --- Display text. Every user-visible string this component renders is a
+     prop, because a component library cannot hold display text (v1.3.1). --- */
   note?: React.ReactNode;
+  upLabel?: string;
+  downLabel?: string;
+  cancelLabel?: React.ReactNode;
+  sendLabel?: React.ReactNode;
 }
 /** Thumbs plus a correction path — what makes evals possible later. */
 export declare function Feedback(props: FeedbackProps): React.JSX.Element;

@@ -29,8 +29,14 @@ export interface ComboboxProps {
   onSearch?(query: string): void;
   id?: string;
   /** Accessible name. Omit when a `Field` labels it. */
+  /* --- Display text. Every user-visible string this component renders is a
+     prop, because a component library cannot hold display text (v1.3.1). --- */
   label?: string;
   className?: string;
+  /** Shown in the listbox while `loading`. */
+  loadingText?: React.ReactNode;
+  /** The accessible name of a multi-select token's remove button. */
+  formatRemoveLabel?(optionLabel: React.ReactNode): string;
 }
 /**
  * Single- and multi-select combobox on `Popover`. Focus stays in the input and

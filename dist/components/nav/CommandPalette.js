@@ -25,6 +25,7 @@ function CommandPalette({
   placeholder = "Type a command or search\u2026",
   emptyText = "No matches",
   label = "Command palette",
+  hints = ["\u2191\u2193 navigate", "\u21B5 run", "esc close"],
   className,
   ...rest
 }) {
@@ -127,11 +128,7 @@ function CommandPalette({
             ] }, c.id ?? i);
           })
         ] }),
-        /* @__PURE__ */ jsxs("div", { className: "lw-cmdk-foot", children: [
-          /* @__PURE__ */ jsx("span", { children: "\u2191\u2193 navigate" }),
-          /* @__PURE__ */ jsx("span", { children: "\u21B5 run" }),
-          /* @__PURE__ */ jsx("span", { children: "esc close" })
-        ] })
+        /* @__PURE__ */ jsx("div", { className: "lw-cmdk-foot", children: hints.map((h, i) => /* @__PURE__ */ jsx("span", { children: h }, i)) })
       ]
     }
   );

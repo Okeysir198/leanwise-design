@@ -6,7 +6,10 @@ import { useRadioGroup } from "../_radio-group.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
 
 
-const LABELS = { light: "Light", dark: "Dark", system: "Auto" };
+/* A module export, not a barrel one — the same treatment `RANGE_PRESETS` gets.
+   Reachable for a wrapper that wants to spread-and-override one mode without
+   growing the public API surface. */
+export const THEME_LABELS = { light: "Light", dark: "Dark", system: "Auto" };
 // Mode -> glyph name. The paths live in Icon, not here: a control that redraws
 // an icon it could name is the first place the set drifts out of step.
 const GLYPHS = { light: "sun", dark: "moon", system: "monitor" };
@@ -37,7 +40,11 @@ const GLYPHS = { light: "sun", dark: "moon", system: "monitor" };
  * choice, not three independent toggles. Same call as `Segmented`, and the same
  * roving tabindex and arrow keys: see `_radio-group.js`.
  */
-export function ThemeToggle({ value, onChange, modes = ["light", "dark"], className, ...rest }) {
+export function ThemeToggle({
+  value, onChange, modes = ["light", "dark"],
+  label = "Colour theme", modeLabels = THEME_LABELS,
+  className, ...rest
+}) {
   const [internal, setInternal] = React.useState(modes.includes("system") ? "system" : modes[0]);
   React.useEffect(() => {
     if (value !== undefined) return;
@@ -62,12 +69,12 @@ export function ThemeToggle({ value, onChange, modes = ["light", "dark"], classN
   };
   const { ref, onKeyDown, tabIndexFor } = useRadioGroup(modes, mode, apply);
   return (
-    <div ref={ref} className={cx("lw-segmented", className)} role="radiogroup" aria-label="Colour theme"
+    <div ref={ref} className={cx("lw-segmented", className)} role="radiogroup" aria-label={label}
       onKeyDown={onKeyDown} {...rest}>
       {modes.map((m, i) => (
         <button key={m} type="button" role="radio" aria-checked={mode === m}
           tabIndex={tabIndexFor(i)} onClick={() => apply(m)}
-          aria-label={LABELS[m] || m} title={LABELS[m] || m}>
+          aria-label={modeLabels[m] || m} title={modeLabels[m] || m}>
           <Icon name={GLYPHS[m] || "monitor"} size={16} />
         </button>
       ))}

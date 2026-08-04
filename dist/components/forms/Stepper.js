@@ -1,7 +1,16 @@
 import { jsx, jsxs } from "react/jsx-runtime";
 import { Icon } from "../primitives/Icon.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
-function Stepper({ steps = [], current = 0, onStepChange, vertical, label = "Progress", className, ...rest }) {
+function Stepper({
+  steps = [],
+  current = 0,
+  onStepChange,
+  vertical,
+  label = "Progress",
+  stateLabels = { done: "completed", current: "current step", error: "needs attention", upcoming: "not started" },
+  className,
+  ...rest
+}) {
   return /* @__PURE__ */ jsx(
     "div",
     {
@@ -25,7 +34,7 @@ function Stepper({ steps = [], current = 0, onStepChange, vertical, label = "Pro
               /* @__PURE__ */ jsx("span", { className: "lw-stepper-marker", "aria-hidden": "true", children: state === "done" ? /* @__PURE__ */ jsx(Icon, { name: "checkmark", size: 14 }) : state === "error" ? /* @__PURE__ */ jsx(Icon, { name: "close", size: 14 }) : i + 1 }),
               /* @__PURE__ */ jsxs("span", { className: "lw-stepper-label", children: [
                 s.label,
-                /* @__PURE__ */ jsx("span", { className: "lw-sr-only", children: " \u2014 " + (state === "done" ? "completed" : state === "current" ? "current step" : state === "error" ? "needs attention" : "not started") })
+                /* @__PURE__ */ jsx("span", { className: "lw-sr-only", children: " \u2014 " + (stateLabels[state] ?? stateLabels.upcoming) })
               ] }),
               s.hint && /* @__PURE__ */ jsx("span", { className: "lw-stepper-hint", children: s.hint })
             ]

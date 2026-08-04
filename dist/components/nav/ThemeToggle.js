@@ -5,9 +5,17 @@ import { Icon } from "../primitives/Icon.js";
 import { paint, persist, THEME_KEY } from "../../hooks.js";
 import { useRadioGroup } from "../_radio-group.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
-const LABELS = { light: "Light", dark: "Dark", system: "Auto" };
+const THEME_LABELS = { light: "Light", dark: "Dark", system: "Auto" };
 const GLYPHS = { light: "sun", dark: "moon", system: "monitor" };
-function ThemeToggle({ value, onChange, modes = ["light", "dark"], className, ...rest }) {
+function ThemeToggle({
+  value,
+  onChange,
+  modes = ["light", "dark"],
+  label = "Colour theme",
+  modeLabels = THEME_LABELS,
+  className,
+  ...rest
+}) {
   const [internal, setInternal] = React.useState(modes.includes("system") ? "system" : modes[0]);
   React.useEffect(() => {
     if (value !== void 0) return;
@@ -34,7 +42,7 @@ function ThemeToggle({ value, onChange, modes = ["light", "dark"], className, ..
       ref,
       className: cx("lw-segmented", className),
       role: "radiogroup",
-      "aria-label": "Colour theme",
+      "aria-label": label,
       onKeyDown,
       ...rest,
       children: modes.map((m, i) => /* @__PURE__ */ jsx(
@@ -45,8 +53,8 @@ function ThemeToggle({ value, onChange, modes = ["light", "dark"], className, ..
           "aria-checked": mode === m,
           tabIndex: tabIndexFor(i),
           onClick: () => apply(m),
-          "aria-label": LABELS[m] || m,
-          title: LABELS[m] || m,
+          "aria-label": modeLabels[m] || m,
+          title: modeLabels[m] || m,
           children: /* @__PURE__ */ jsx(Icon, { name: GLYPHS[m] || "monitor", size: 16 })
         },
         m
@@ -55,5 +63,6 @@ function ThemeToggle({ value, onChange, modes = ["light", "dark"], className, ..
   );
 }
 export {
+  THEME_LABELS,
   ThemeToggle
 };

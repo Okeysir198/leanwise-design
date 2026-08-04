@@ -25,6 +25,9 @@ const FileUpload = React.forwardRef(function FileUpload2({
   disabled,
   title = "Drop files here",
   hint,
+  formatRejected = (names, limit) => names + " \u2014 over " + limit,
+  formatHint = (a, limit) => a ? a + (limit ? " \xB7 up to " + limit : "") : limit ? "Up to " + limit : "or click to browse",
+  formatRemoveLabel = (name) => "Remove " + name,
   className,
   ...rest
 }, forwardedRef) {
@@ -36,7 +39,7 @@ const FileUpload = React.forwardRef(function FileUpload2({
     const arr = Array.from(list || []);
     if (!arr.length) return;
     const tooBig = maxSize ? arr.filter((f) => f.size > maxSize) : [];
-    setRejected(tooBig.length ? tooBig.map((f) => f.name).join(", ") + " \u2014 over " + formatBytes(maxSize) : null);
+    setRejected(tooBig.length ? formatRejected(tooBig.map((f) => f.name).join(", "), formatBytes(maxSize)) : null);
     const ok = maxSize ? arr.filter((f) => f.size <= maxSize) : arr;
     if (ok.length && onFiles) onFiles(multiple ? ok : ok.slice(0, 1));
   };
@@ -75,7 +78,7 @@ const FileUpload = React.forwardRef(function FileUpload2({
           ),
           /* @__PURE__ */ jsx(Icon, { name: "upload", size: 20 }),
           /* @__PURE__ */ jsx("span", { className: "lw-dz-title", children: title }),
-          /* @__PURE__ */ jsx("span", { className: "lw-dz-hint", children: hint || (accept ? accept + (maxSize ? " \xB7 up to " + formatBytes(maxSize) : "") : maxSize ? "Up to " + formatBytes(maxSize) : "or click to browse") })
+          /* @__PURE__ */ jsx("span", { className: "lw-dz-hint", children: hint || formatHint(accept, maxSize ? formatBytes(maxSize) : null) })
         ]
       }
     ),
@@ -92,7 +95,7 @@ const FileUpload = React.forwardRef(function FileUpload2({
             /* @__PURE__ */ jsx("span", { className: "lw-file-name", children: f.name }),
             f.state === "uploading" && f.progress != null ? /* @__PURE__ */ jsx("span", { className: "lw-file-bar", children: /* @__PURE__ */ jsx("i", {}) }) : /* @__PURE__ */ jsx("span", { className: "lw-file-meta", children: f.error || formatBytes(f.size) })
           ] }),
-          onRemove && /* @__PURE__ */ jsx("button", { type: "button", className: "lw-icon-btn", "aria-label": "Remove " + f.name, onClick: () => onRemove(f), children: /* @__PURE__ */ jsx(Icon, { name: "close", size: 15 }) })
+          onRemove && /* @__PURE__ */ jsx("button", { type: "button", className: "lw-icon-btn", "aria-label": formatRemoveLabel(f.name), onClick: () => onRemove(f), children: /* @__PURE__ */ jsx(Icon, { name: "close", size: 15 }) })
         ]
       },
       f.id ?? f.name + i

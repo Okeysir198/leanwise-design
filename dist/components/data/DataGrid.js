@@ -21,6 +21,12 @@ function DataGrid({
   empty = "No rows",
   selectionActions,
   label = "Data grid",
+  selectedLabel = "selected",
+  clearSelectionLabel = "Clear",
+  selectAllLabel = "Select all rows",
+  clearAllSelectionLabel = "Clear selection",
+  formatResizeLabel = (h) => "Resize " + h,
+  formatRowSelectLabel = (n) => "Select row " + n,
   className,
   ...rest
 }) {
@@ -99,10 +105,10 @@ function DataGrid({
   return /* @__PURE__ */ jsxs("div", { className: cx("lw-dgrid", className), ...rest, children: [
     selectable && selSet.size > 0 && /* @__PURE__ */ jsxs("div", { className: "lw-dgrid-selbar", children: [
       /* @__PURE__ */ jsx("span", { className: "count", children: selSet.size }),
-      /* @__PURE__ */ jsx("span", { children: "selected" }),
+      /* @__PURE__ */ jsx("span", { children: selectedLabel }),
       /* @__PURE__ */ jsx("span", { className: "lw-spacer" }),
       selectionActions,
-      /* @__PURE__ */ jsx("button", { type: "button", className: "lw-filter-clear", onClick: () => onSelectionChange && onSelectionChange([]), children: "Clear" })
+      /* @__PURE__ */ jsx("button", { type: "button", className: "lw-filter-clear", onClick: () => onSelectionChange && onSelectionChange([]), children: clearSelectionLabel })
     ] }),
     /* @__PURE__ */ jsxs(
       "div",
@@ -128,7 +134,7 @@ function DataGrid({
                       if (el) el.indeterminate = someOn;
                     },
                     onChange: toggleAll,
-                    "aria-label": allOn ? "Clear selection" : "Select all rows"
+                    "aria-label": allOn ? clearAllSelectionLabel : selectAllLabel
                   }
                 ),
                 /* @__PURE__ */ jsx("span", { className: "box" })
@@ -162,7 +168,7 @@ function DataGrid({
                         {
                           type: "button",
                           className: "lw-dgrid-resize",
-                          "aria-label": "Resize " + (typeof colHeader("DataGrid", c) === "string" ? colHeader("DataGrid", c) : c.key),
+                          "aria-label": formatResizeLabel(typeof colHeader("DataGrid", c) === "string" ? colHeader("DataGrid", c) : c.key),
                           onPointerDown: (e) => onResizeDown(i, e),
                           onKeyDown: (e) => onResizeKey(i, e)
                         }
@@ -195,7 +201,7 @@ function DataGrid({
                             type: "checkbox",
                             checked: on,
                             onChange: () => toggleRow(k),
-                            "aria-label": "Select row " + (i + 1)
+                            "aria-label": formatRowSelectLabel(i + 1)
                           }
                         ),
                         /* @__PURE__ */ jsx("span", { className: "box" })

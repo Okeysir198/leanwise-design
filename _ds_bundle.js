@@ -1,4 +1,4 @@
-/* @ds-bundle: {"format":4,"namespace":"LeanWiseDesign_f2d907","generator":"tools/lw-bundle.mjs","esbuild":"0.27.7","components":[{"name":"AgentTrace","sourcePath":"components/ai/AgentTrace.jsx"},{"name":"Artifact","sourcePath":"components/ai/Artifact.jsx"},{"name":"ConfidenceMeter","sourcePath":"components/ai/ConfidenceMeter.jsx"},{"name":"DiffReview","sourcePath":"components/ai/DiffReview.jsx"},{"name":"Feedback","sourcePath":"components/ai/Feedback.jsx"},{"name":"Message","sourcePath":"components/ai/Message.jsx"},{"name":"PromptInput","sourcePath":"components/ai/PromptInput.jsx"},{"name":"SourceChip","sourcePath":"components/ai/SourceChip.jsx"},{"name":"SourceList","sourcePath":"components/ai/SourceList.jsx"},{"name":"ToolCall","sourcePath":"components/ai/ToolCall.jsx"},{"name":"ActivityFeed","sourcePath":"components/data/ActivityFeed.jsx"},{"name":"timeAgo","sourcePath":"components/data/ActivityFeed.jsx"},{"name":"BarChart","sourcePath":"components/data/BarChart.jsx"},{"name":"CHART_PAD","sourcePath":"components/data/chart-parts.jsx"},{"name":"CHART_W","sourcePath":"components/data/chart-parts.jsx"},{"name":"DataTable","sourcePath":"components/data/chart-parts.jsx"},{"name":"Legend","sourcePath":"components/data/chart-parts.jsx"},{"name":"SERIES","sourcePath":"components/data/chart-parts.jsx"},{"name":"CodeBlock","sourcePath":"components/data/CodeBlock.jsx"},{"name":"Console","sourcePath":"components/data/Console.jsx"},{"name":"DataGrid","sourcePath":"components/data/DataGrid.jsx"},{"name":"EmptyState","sourcePath":"components/data/EmptyState.jsx"},{"name":"FilterBar","sourcePath":"components/data/FilterBar.jsx"},{"name":"Toolbar","sourcePath":"components/data/FilterBar.jsx"},{"name":"KpiTile","sourcePath":"components/data/KpiTile.jsx"},{"name":"LineChart","sourcePath":"components/data/LineChart.jsx"},{"name":"Pagination","sourcePath":"components/data/Pagination.jsx"},{"name":"Progress","sourcePath":"components/data/Progress.jsx"},{"name":"StateView","sourcePath":"components/data/StateView.jsx"},{"name":"StatMeter","sourcePath":"components/data/StatMeter.jsx"},{"name":"Table","sourcePath":"components/data/Table.jsx"},{"name":"Calendar","sourcePath":"components/forms/Calendar.jsx"},{"name":"Checkbox","sourcePath":"components/forms/Checkbox.jsx"},{"name":"Combobox","sourcePath":"components/forms/Combobox.jsx"},{"name":"DatePicker","sourcePath":"components/forms/DatePicker.jsx"},{"name":"RANGE_PRESETS","sourcePath":"components/forms/DatePicker.jsx"},{"name":"Field","sourcePath":"components/forms/Field.jsx"},{"name":"FileUpload","sourcePath":"components/forms/FileUpload.jsx"},{"name":"formatBytes","sourcePath":"components/forms/FileUpload.jsx"},{"name":"Input","sourcePath":"components/forms/Input.jsx"},{"name":"InputGroup","sourcePath":"components/forms/InputGroup.jsx"},{"name":"RichText","sourcePath":"components/forms/RichText.jsx"},{"name":"Segmented","sourcePath":"components/forms/Segmented.jsx"},{"name":"Select","sourcePath":"components/forms/Select.jsx"},{"name":"Stepper","sourcePath":"components/forms/Stepper.jsx"},{"name":"Switch","sourcePath":"components/forms/Switch.jsx"},{"name":"Textarea","sourcePath":"components/forms/Textarea.jsx"},{"name":"Cluster","sourcePath":"components/layout/Cluster.jsx"},{"name":"Container","sourcePath":"components/layout/Container.jsx"},{"name":"Grid","sourcePath":"components/layout/Grid.jsx"},{"name":"Page","sourcePath":"components/layout/Page.jsx"},{"name":"Section","sourcePath":"components/layout/Section.jsx"},{"name":"Split","sourcePath":"components/layout/Split.jsx"},{"name":"Stack","sourcePath":"components/layout/Stack.jsx"},{"name":"AnnounceBar","sourcePath":"components/marketing/AnnounceBar.jsx"},{"name":"ArticleCard","sourcePath":"components/marketing/ArticleCard.jsx"},{"name":"Byline","sourcePath":"components/marketing/Byline.jsx"},{"name":"CompareTable","sourcePath":"components/marketing/CompareTable.jsx"},{"name":"FeatureGrid","sourcePath":"components/marketing/FeatureGrid.jsx"},{"name":"Flow","sourcePath":"components/marketing/Flow.jsx"},{"name":"Hero","sourcePath":"components/marketing/Hero.jsx"},{"name":"LogoRail","sourcePath":"components/marketing/LogoRail.jsx"},{"name":"PlanCard","sourcePath":"components/marketing/PlanCard.jsx"},{"name":"Quote","sourcePath":"components/marketing/Quote.jsx"},{"name":"SiteFooter","sourcePath":"components/marketing/SiteFooter.jsx"},{"name":"Steps","sourcePath":"components/marketing/Steps.jsx"},{"name":"StoryCard","sourcePath":"components/marketing/StoryCard.jsx"},{"name":"AppBar","sourcePath":"components/nav/AppBar.jsx"},{"name":"BottomNav","sourcePath":"components/nav/BottomNav.jsx"},{"name":"Breadcrumbs","sourcePath":"components/nav/Breadcrumbs.jsx"},{"name":"CommandPalette","sourcePath":"components/nav/CommandPalette.jsx"},{"name":"score","sourcePath":"components/nav/CommandPalette.jsx"},{"name":"NavToggle","sourcePath":"components/nav/NavToggle.jsx"},{"name":"NavItem","sourcePath":"components/nav/Sidebar.jsx"},{"name":"Sidebar","sourcePath":"components/nav/Sidebar.jsx"},{"name":"Tabs","sourcePath":"components/nav/Tabs.jsx"},{"name":"ThemeToggle","sourcePath":"components/nav/ThemeToggle.jsx"},{"name":"TopBar","sourcePath":"components/nav/TopBar.jsx"},{"name":"Dialog","sourcePath":"components/overlays/Dialog.jsx"},{"name":"Drawer","sourcePath":"components/overlays/Drawer.jsx"},{"name":"Menu","sourcePath":"components/overlays/Menu.jsx"},{"name":"Popover","sourcePath":"components/overlays/Popover.jsx"},{"name":"Toast","sourcePath":"components/overlays/Toast.jsx"},{"name":"ToastRegion","sourcePath":"components/overlays/Toast.jsx"},{"name":"Tooltip","sourcePath":"components/overlays/Tooltip.jsx"},{"name":"Avatar","sourcePath":"components/primitives/Avatar.jsx"},{"name":"Button","sourcePath":"components/primitives/Button.jsx"},{"name":"Card","sourcePath":"components/primitives/Card.jsx"},{"name":"CardBody","sourcePath":"components/primitives/Card.jsx"},{"name":"CardFoot","sourcePath":"components/primitives/Card.jsx"},{"name":"CardHead","sourcePath":"components/primitives/Card.jsx"},{"name":"CardTitle","sourcePath":"components/primitives/Card.jsx"},{"name":"Chip","sourcePath":"components/primitives/Chip.jsx"},{"name":"Disclosure","sourcePath":"components/primitives/Disclosure.jsx"},{"name":"Eyebrow","sourcePath":"components/primitives/Eyebrow.jsx"},{"name":"Icon","sourcePath":"components/primitives/Icon.jsx"},{"name":"iconNames","sourcePath":"components/primitives/Icon.jsx"},{"name":"IconNames","sourcePath":"components/primitives/Icon.jsx"},{"name":"Prose","sourcePath":"components/primitives/Prose.jsx"},{"name":"Skeleton","sourcePath":"components/primitives/Skeleton.jsx"},{"name":"THEME_KEY","sourcePath":"hooks.js"}],"sourceHashes":{"components/_deprecate.js":"1c84a2fda110","components/_merge-refs.js":"13fe3c69fe69","components/_radio-group.js":"26caa936f1de","components/ai/AgentTrace.jsx":"a89cdd6dbfea","components/ai/Artifact.jsx":"9be6c863b2c9","components/ai/ConfidenceMeter.jsx":"30190dcfb803","components/ai/DiffReview.jsx":"8a779a568c23","components/ai/Feedback.jsx":"71d0b9b5059a","components/ai/Message.jsx":"e507e32b90ca","components/ai/PromptInput.jsx":"93ca1175d24c","components/ai/SourceChip.jsx":"b8ec3e12c238","components/ai/SourceList.jsx":"60e374a74c6a","components/ai/ToolCall.jsx":"57d638af173a","components/data/ActivityFeed.jsx":"6f65c97219c8","components/data/BarChart.jsx":"96968a9ba35f","components/data/CodeBlock.jsx":"5b95cf570b51","components/data/Console.jsx":"6528c9c3ca1e","components/data/DataGrid.jsx":"4c4eeb26cff0","components/data/EmptyState.jsx":"7340a557f731","components/data/FilterBar.jsx":"48ecb22a8e7c","components/data/KpiTile.jsx":"4568571b1cff","components/data/LineChart.jsx":"6fa9e64d83f3","components/data/Pagination.jsx":"0c222c040f87","components/data/Progress.jsx":"eb02438a3b31","components/data/StatMeter.jsx":"55ec9c1db508","components/data/StateView.jsx":"1db574af4cf3","components/data/Table.jsx":"2a8a72b119f2","components/data/_columns.js":"d862780d1495","components/data/chart-parts.jsx":"424a7143968b","components/forms/Calendar.jsx":"a62cac7fac06","components/forms/Checkbox.jsx":"fa0052232568","components/forms/Combobox.jsx":"44e5412bdac7","components/forms/DatePicker.jsx":"692aed22fa29","components/forms/Field.jsx":"168c64395659","components/forms/FileUpload.jsx":"f192dc170840","components/forms/Input.jsx":"a43b7b4b5564","components/forms/InputGroup.jsx":"71d8de495436","components/forms/RichText.jsx":"7ffd4fd267cf","components/forms/Segmented.jsx":"5d3fa220ea03","components/forms/Select.jsx":"378e70b32827","components/forms/Stepper.jsx":"646dd2a208b6","components/forms/Switch.jsx":"cc99b023531b","components/forms/Textarea.jsx":"2d2aa2984da3","components/layout/Cluster.jsx":"2e15367fe28d","components/layout/Container.jsx":"6eda4bc56e54","components/layout/Grid.jsx":"8a093fe6ed4b","components/layout/Page.jsx":"51d1753d201a","components/layout/Section.jsx":"4507aff3c57c","components/layout/Split.jsx":"6786154d4ebd","components/layout/Stack.jsx":"005a591d8c24","components/marketing/AnnounceBar.jsx":"dc1787b8fe7e","components/marketing/ArticleCard.jsx":"96f04f7f23e0","components/marketing/Byline.jsx":"529ce44347b1","components/marketing/CompareTable.jsx":"c5258b61bb7f","components/marketing/FeatureGrid.jsx":"ff6d9c74ae63","components/marketing/Flow.jsx":"47f084ffae8a","components/marketing/Hero.jsx":"ba4893068f68","components/marketing/LogoRail.jsx":"1bedd4cadb90","components/marketing/PlanCard.jsx":"39f27cba6a4d","components/marketing/Quote.jsx":"d7d463bc50d4","components/marketing/SiteFooter.jsx":"82207f2c85e5","components/marketing/Steps.jsx":"08dfc37d83e9","components/marketing/StoryCard.jsx":"e28322d02714","components/nav/AppBar.jsx":"509c3694abb6","components/nav/BottomNav.jsx":"57833e583805","components/nav/Breadcrumbs.jsx":"c56f892a896d","components/nav/CommandPalette.jsx":"a4b1b4576446","components/nav/NavToggle.jsx":"7c2def3f8014","components/nav/Sidebar.jsx":"fe51da5282fc","components/nav/Tabs.jsx":"09d2bf40f0e0","components/nav/ThemeToggle.jsx":"e5a3292ee1e1","components/nav/TopBar.jsx":"59b5d15506a1","components/overlays/Dialog.jsx":"f73a43b0f0aa","components/overlays/Drawer.jsx":"815022e45cc7","components/overlays/Menu.jsx":"4764582f0ae8","components/overlays/Popover.jsx":"717f23c3c127","components/overlays/Toast.jsx":"d6b810dcb7d3","components/overlays/Tooltip.jsx":"7b19e7dc9711","components/primitives/Avatar.jsx":"277ea4c7ca39","components/primitives/Button.jsx":"c29f216778a0","components/primitives/Card.jsx":"4a9c9f081c1b","components/primitives/Chip.jsx":"458e477fd284","components/primitives/Disclosure.jsx":"250d58f947f5","components/primitives/Eyebrow.jsx":"ac1cc5e5856f","components/primitives/Icon.jsx":"1dd0488adf2d","components/primitives/Prose.jsx":"7b629b089f2a","components/primitives/Skeleton.jsx":"76129a849b43","hooks.js":"8d667ef2c9e2","react.js":"f9e103bed9f6"},"inlinedExternals":[],"unexposedExports":[{"name":"__resetDeprecations","sourcePath":"components/_deprecate.js"},{"name":"deprecate","sourcePath":"components/_deprecate.js"},{"name":"useMergedRef","sourcePath":"components/_merge-refs.js"},{"name":"useRadioGroup","sourcePath":"components/_radio-group.js"},{"name":"colHeader","sourcePath":"components/data/_columns.js"},{"name":"emitSort","sourcePath":"components/data/_columns.js"},{"name":"legacySortArgs","sourcePath":"components/data/_columns.js"},{"name":"Grid","sourcePath":"components/data/chart-parts.jsx"},{"name":"cx","sourcePath":"components/data/chart-parts.jsx"},{"name":"frame","sourcePath":"components/data/chart-parts.jsx"},{"name":"nf","sourcePath":"components/data/chart-parts.jsx"},{"name":"ticks","sourcePath":"components/data/chart-parts.jsx"},{"name":"animateCounter","sourcePath":"hooks.js"},{"name":"paint","sourcePath":"hooks.js"},{"name":"persist","sourcePath":"hooks.js"},{"name":"useDeterministicCascade","sourcePath":"hooks.js"},{"name":"useReducedMotion","sourcePath":"hooks.js"},{"name":"useReveal","sourcePath":"hooks.js"},{"name":"useSpotlight","sourcePath":"hooks.js"},{"name":"useTheme","sourcePath":"hooks.js"}]} */
+/* @ds-bundle: {"format":4,"namespace":"LeanWiseDesign_f2d907","generator":"tools/lw-bundle.mjs","esbuild":"0.27.7","components":[{"name":"AgentTrace","sourcePath":"components/ai/AgentTrace.jsx"},{"name":"Artifact","sourcePath":"components/ai/Artifact.jsx"},{"name":"ConfidenceMeter","sourcePath":"components/ai/ConfidenceMeter.jsx"},{"name":"DiffReview","sourcePath":"components/ai/DiffReview.jsx"},{"name":"Feedback","sourcePath":"components/ai/Feedback.jsx"},{"name":"Message","sourcePath":"components/ai/Message.jsx"},{"name":"PromptInput","sourcePath":"components/ai/PromptInput.jsx"},{"name":"SourceChip","sourcePath":"components/ai/SourceChip.jsx"},{"name":"SourceList","sourcePath":"components/ai/SourceList.jsx"},{"name":"ToolCall","sourcePath":"components/ai/ToolCall.jsx"},{"name":"ActivityFeed","sourcePath":"components/data/ActivityFeed.jsx"},{"name":"BUCKET_LABELS","sourcePath":"components/data/ActivityFeed.jsx"},{"name":"RELATIVE_LABELS","sourcePath":"components/data/ActivityFeed.jsx"},{"name":"timeAgo","sourcePath":"components/data/ActivityFeed.jsx"},{"name":"BarChart","sourcePath":"components/data/BarChart.jsx"},{"name":"CHART_PAD","sourcePath":"components/data/chart-parts.jsx"},{"name":"CHART_W","sourcePath":"components/data/chart-parts.jsx"},{"name":"DataTable","sourcePath":"components/data/chart-parts.jsx"},{"name":"Legend","sourcePath":"components/data/chart-parts.jsx"},{"name":"SERIES","sourcePath":"components/data/chart-parts.jsx"},{"name":"CodeBlock","sourcePath":"components/data/CodeBlock.jsx"},{"name":"Console","sourcePath":"components/data/Console.jsx"},{"name":"DataGrid","sourcePath":"components/data/DataGrid.jsx"},{"name":"EmptyState","sourcePath":"components/data/EmptyState.jsx"},{"name":"FilterBar","sourcePath":"components/data/FilterBar.jsx"},{"name":"Toolbar","sourcePath":"components/data/FilterBar.jsx"},{"name":"KpiTile","sourcePath":"components/data/KpiTile.jsx"},{"name":"LineChart","sourcePath":"components/data/LineChart.jsx"},{"name":"Pagination","sourcePath":"components/data/Pagination.jsx"},{"name":"Progress","sourcePath":"components/data/Progress.jsx"},{"name":"StateView","sourcePath":"components/data/StateView.jsx"},{"name":"StatMeter","sourcePath":"components/data/StatMeter.jsx"},{"name":"Table","sourcePath":"components/data/Table.jsx"},{"name":"Calendar","sourcePath":"components/forms/Calendar.jsx"},{"name":"Checkbox","sourcePath":"components/forms/Checkbox.jsx"},{"name":"Combobox","sourcePath":"components/forms/Combobox.jsx"},{"name":"DatePicker","sourcePath":"components/forms/DatePicker.jsx"},{"name":"RANGE_PRESETS","sourcePath":"components/forms/DatePicker.jsx"},{"name":"Field","sourcePath":"components/forms/Field.jsx"},{"name":"FileUpload","sourcePath":"components/forms/FileUpload.jsx"},{"name":"formatBytes","sourcePath":"components/forms/FileUpload.jsx"},{"name":"Input","sourcePath":"components/forms/Input.jsx"},{"name":"InputGroup","sourcePath":"components/forms/InputGroup.jsx"},{"name":"RichText","sourcePath":"components/forms/RichText.jsx"},{"name":"TOOLS","sourcePath":"components/forms/RichText.jsx"},{"name":"Segmented","sourcePath":"components/forms/Segmented.jsx"},{"name":"Select","sourcePath":"components/forms/Select.jsx"},{"name":"Stepper","sourcePath":"components/forms/Stepper.jsx"},{"name":"Switch","sourcePath":"components/forms/Switch.jsx"},{"name":"Textarea","sourcePath":"components/forms/Textarea.jsx"},{"name":"Cluster","sourcePath":"components/layout/Cluster.jsx"},{"name":"Container","sourcePath":"components/layout/Container.jsx"},{"name":"Grid","sourcePath":"components/layout/Grid.jsx"},{"name":"Page","sourcePath":"components/layout/Page.jsx"},{"name":"Section","sourcePath":"components/layout/Section.jsx"},{"name":"Split","sourcePath":"components/layout/Split.jsx"},{"name":"Stack","sourcePath":"components/layout/Stack.jsx"},{"name":"AnnounceBar","sourcePath":"components/marketing/AnnounceBar.jsx"},{"name":"ArticleCard","sourcePath":"components/marketing/ArticleCard.jsx"},{"name":"Byline","sourcePath":"components/marketing/Byline.jsx"},{"name":"CompareTable","sourcePath":"components/marketing/CompareTable.jsx"},{"name":"FeatureGrid","sourcePath":"components/marketing/FeatureGrid.jsx"},{"name":"Flow","sourcePath":"components/marketing/Flow.jsx"},{"name":"Hero","sourcePath":"components/marketing/Hero.jsx"},{"name":"LogoRail","sourcePath":"components/marketing/LogoRail.jsx"},{"name":"PlanCard","sourcePath":"components/marketing/PlanCard.jsx"},{"name":"Quote","sourcePath":"components/marketing/Quote.jsx"},{"name":"SiteFooter","sourcePath":"components/marketing/SiteFooter.jsx"},{"name":"Steps","sourcePath":"components/marketing/Steps.jsx"},{"name":"StoryCard","sourcePath":"components/marketing/StoryCard.jsx"},{"name":"AppBar","sourcePath":"components/nav/AppBar.jsx"},{"name":"BottomNav","sourcePath":"components/nav/BottomNav.jsx"},{"name":"Breadcrumbs","sourcePath":"components/nav/Breadcrumbs.jsx"},{"name":"CommandPalette","sourcePath":"components/nav/CommandPalette.jsx"},{"name":"score","sourcePath":"components/nav/CommandPalette.jsx"},{"name":"NavToggle","sourcePath":"components/nav/NavToggle.jsx"},{"name":"NavItem","sourcePath":"components/nav/Sidebar.jsx"},{"name":"Sidebar","sourcePath":"components/nav/Sidebar.jsx"},{"name":"Tabs","sourcePath":"components/nav/Tabs.jsx"},{"name":"THEME_LABELS","sourcePath":"components/nav/ThemeToggle.jsx"},{"name":"ThemeToggle","sourcePath":"components/nav/ThemeToggle.jsx"},{"name":"TopBar","sourcePath":"components/nav/TopBar.jsx"},{"name":"Dialog","sourcePath":"components/overlays/Dialog.jsx"},{"name":"Drawer","sourcePath":"components/overlays/Drawer.jsx"},{"name":"Menu","sourcePath":"components/overlays/Menu.jsx"},{"name":"Popover","sourcePath":"components/overlays/Popover.jsx"},{"name":"Toast","sourcePath":"components/overlays/Toast.jsx"},{"name":"ToastRegion","sourcePath":"components/overlays/Toast.jsx"},{"name":"Tooltip","sourcePath":"components/overlays/Tooltip.jsx"},{"name":"Avatar","sourcePath":"components/primitives/Avatar.jsx"},{"name":"Button","sourcePath":"components/primitives/Button.jsx"},{"name":"Card","sourcePath":"components/primitives/Card.jsx"},{"name":"CardBody","sourcePath":"components/primitives/Card.jsx"},{"name":"CardFoot","sourcePath":"components/primitives/Card.jsx"},{"name":"CardHead","sourcePath":"components/primitives/Card.jsx"},{"name":"CardTitle","sourcePath":"components/primitives/Card.jsx"},{"name":"Chip","sourcePath":"components/primitives/Chip.jsx"},{"name":"Disclosure","sourcePath":"components/primitives/Disclosure.jsx"},{"name":"Eyebrow","sourcePath":"components/primitives/Eyebrow.jsx"},{"name":"Icon","sourcePath":"components/primitives/Icon.jsx"},{"name":"iconNames","sourcePath":"components/primitives/Icon.jsx"},{"name":"IconNames","sourcePath":"components/primitives/Icon.jsx"},{"name":"Prose","sourcePath":"components/primitives/Prose.jsx"},{"name":"Skeleton","sourcePath":"components/primitives/Skeleton.jsx"},{"name":"THEME_KEY","sourcePath":"hooks.js"}],"sourceHashes":{"components/_deprecate.js":"1c84a2fda110","components/_merge-refs.js":"13fe3c69fe69","components/_radio-group.js":"26caa936f1de","components/ai/AgentTrace.jsx":"a89cdd6dbfea","components/ai/Artifact.jsx":"2f6f74bc6102","components/ai/ConfidenceMeter.jsx":"30190dcfb803","components/ai/DiffReview.jsx":"3e794caa9ef1","components/ai/Feedback.jsx":"b39a358e07a0","components/ai/Message.jsx":"e507e32b90ca","components/ai/PromptInput.jsx":"93ca1175d24c","components/ai/SourceChip.jsx":"ea58d31896df","components/ai/SourceList.jsx":"60e374a74c6a","components/ai/ToolCall.jsx":"7847c91c8842","components/data/ActivityFeed.jsx":"22fd86442559","components/data/BarChart.jsx":"96968a9ba35f","components/data/CodeBlock.jsx":"d4f25b21c63d","components/data/Console.jsx":"6528c9c3ca1e","components/data/DataGrid.jsx":"d6fd83a51115","components/data/EmptyState.jsx":"7340a557f731","components/data/FilterBar.jsx":"dc73bc4398fe","components/data/KpiTile.jsx":"4568571b1cff","components/data/LineChart.jsx":"6fa9e64d83f3","components/data/Pagination.jsx":"cc28278acf7d","components/data/Progress.jsx":"eb02438a3b31","components/data/StatMeter.jsx":"657462f3e4aa","components/data/StateView.jsx":"1db574af4cf3","components/data/Table.jsx":"2a8a72b119f2","components/data/_columns.js":"d862780d1495","components/data/chart-parts.jsx":"74c42cdc8316","components/forms/Calendar.jsx":"343335c77c44","components/forms/Checkbox.jsx":"fa0052232568","components/forms/Combobox.jsx":"c38e8d668db1","components/forms/DatePicker.jsx":"692aed22fa29","components/forms/Field.jsx":"19afba76a395","components/forms/FileUpload.jsx":"1b9765bb958f","components/forms/Input.jsx":"a43b7b4b5564","components/forms/InputGroup.jsx":"71d8de495436","components/forms/RichText.jsx":"aac8293d49fd","components/forms/Segmented.jsx":"5d3fa220ea03","components/forms/Select.jsx":"378e70b32827","components/forms/Stepper.jsx":"7fe21c7619e6","components/forms/Switch.jsx":"cc99b023531b","components/forms/Textarea.jsx":"2d2aa2984da3","components/layout/Cluster.jsx":"2e15367fe28d","components/layout/Container.jsx":"6eda4bc56e54","components/layout/Grid.jsx":"8a093fe6ed4b","components/layout/Page.jsx":"51d1753d201a","components/layout/Section.jsx":"4507aff3c57c","components/layout/Split.jsx":"6786154d4ebd","components/layout/Stack.jsx":"005a591d8c24","components/marketing/AnnounceBar.jsx":"dc1787b8fe7e","components/marketing/ArticleCard.jsx":"81f2c4227ced","components/marketing/Byline.jsx":"529ce44347b1","components/marketing/CompareTable.jsx":"c5258b61bb7f","components/marketing/FeatureGrid.jsx":"ff6d9c74ae63","components/marketing/Flow.jsx":"47f084ffae8a","components/marketing/Hero.jsx":"ba4893068f68","components/marketing/LogoRail.jsx":"1bedd4cadb90","components/marketing/PlanCard.jsx":"39f27cba6a4d","components/marketing/Quote.jsx":"d7d463bc50d4","components/marketing/SiteFooter.jsx":"82207f2c85e5","components/marketing/Steps.jsx":"08dfc37d83e9","components/marketing/StoryCard.jsx":"e28322d02714","components/nav/AppBar.jsx":"d2da0aa4c6a0","components/nav/BottomNav.jsx":"570ba83df9c7","components/nav/Breadcrumbs.jsx":"1f2cb1328942","components/nav/CommandPalette.jsx":"48d4ea9554c7","components/nav/NavToggle.jsx":"7c2def3f8014","components/nav/Sidebar.jsx":"723b0aa11c93","components/nav/Tabs.jsx":"09d2bf40f0e0","components/nav/ThemeToggle.jsx":"119942383903","components/nav/TopBar.jsx":"f934bded894b","components/overlays/Dialog.jsx":"ff8e21cb381a","components/overlays/Drawer.jsx":"269d2920684c","components/overlays/Menu.jsx":"4764582f0ae8","components/overlays/Popover.jsx":"717f23c3c127","components/overlays/Toast.jsx":"a14d5bdddb79","components/overlays/Tooltip.jsx":"7b19e7dc9711","components/primitives/Avatar.jsx":"277ea4c7ca39","components/primitives/Button.jsx":"a613116ec327","components/primitives/Card.jsx":"4a9c9f081c1b","components/primitives/Chip.jsx":"458e477fd284","components/primitives/Disclosure.jsx":"250d58f947f5","components/primitives/Eyebrow.jsx":"ac1cc5e5856f","components/primitives/Icon.jsx":"1dd0488adf2d","components/primitives/Prose.jsx":"7b629b089f2a","components/primitives/Skeleton.jsx":"76129a849b43","hooks.js":"8d667ef2c9e2","react.js":"f9e103bed9f6"},"inlinedExternals":[],"unexposedExports":[{"name":"__resetDeprecations","sourcePath":"components/_deprecate.js"},{"name":"deprecate","sourcePath":"components/_deprecate.js"},{"name":"useMergedRef","sourcePath":"components/_merge-refs.js"},{"name":"useRadioGroup","sourcePath":"components/_radio-group.js"},{"name":"colHeader","sourcePath":"components/data/_columns.js"},{"name":"emitSort","sourcePath":"components/data/_columns.js"},{"name":"legacySortArgs","sourcePath":"components/data/_columns.js"},{"name":"Grid","sourcePath":"components/data/chart-parts.jsx"},{"name":"cx","sourcePath":"components/data/chart-parts.jsx"},{"name":"frame","sourcePath":"components/data/chart-parts.jsx"},{"name":"nf","sourcePath":"components/data/chart-parts.jsx"},{"name":"ticks","sourcePath":"components/data/chart-parts.jsx"},{"name":"animateCounter","sourcePath":"hooks.js"},{"name":"paint","sourcePath":"hooks.js"},{"name":"persist","sourcePath":"hooks.js"},{"name":"useDeterministicCascade","sourcePath":"hooks.js"},{"name":"useReducedMotion","sourcePath":"hooks.js"},{"name":"useReveal","sourcePath":"hooks.js"},{"name":"useSpotlight","sourcePath":"hooks.js"},{"name":"useTheme","sourcePath":"hooks.js"}]} */
 (() => {
   var __create = Object.create;
   var __defProp = Object.defineProperty;
@@ -69,6 +69,7 @@
     loading = false,
     disabled = false,
     as,
+    type,
     className,
     onClick,
     children,
@@ -89,6 +90,7 @@
         "data-loading": loading ? "true" : void 0,
         "aria-disabled": loading || disabled ? "true" : void 0,
         disabled: Tag === "button" ? disabled : void 0,
+        type: Tag === "button" ? type : void 0,
         onClick: (e) => {
           if (loading || disabled) {
             e.preventDefault();
@@ -394,11 +396,23 @@
   init_ds_inject_react();
   var React3 = __toESM(require_ds_react(), 1);
   var cx17 = (...a) => a.filter(Boolean).join(" ");
-  function Field({ label, help, error, required, optional, htmlFor, className, children, ...rest }) {
+  function Field({
+    label,
+    help,
+    error,
+    required,
+    optional,
+    htmlFor,
+    requiredLabel = "(required)",
+    optionalLabel = "optional",
+    className,
+    children,
+    ...rest
+  }) {
     const auto = React3.useId();
     const id = htmlFor || auto;
     const msgId = id + "-msg";
-    return /* @__PURE__ */ React3.createElement("div", { className: cx17("lw-field", className), ...rest }, label && /* @__PURE__ */ React3.createElement("label", { className: "lw-label", htmlFor: id }, label, required && /* @__PURE__ */ React3.createElement(React3.Fragment, null, /* @__PURE__ */ React3.createElement("span", { className: "req", "aria-hidden": "true" }, "*"), /* @__PURE__ */ React3.createElement("span", { className: "lw-sr-only" }, "(required)")), optional && /* @__PURE__ */ React3.createElement("span", { className: "opt" }, "optional")), typeof children === "function" ? children({ id, "aria-describedby": error || help ? msgId : void 0, "aria-invalid": error ? "true" : void 0, required }) : children, error ? /* @__PURE__ */ React3.createElement("span", { className: "lw-error", id: msgId, role: "alert" }, error) : help ? /* @__PURE__ */ React3.createElement("span", { className: "lw-help", id: msgId }, help) : null);
+    return /* @__PURE__ */ React3.createElement("div", { className: cx17("lw-field", className), ...rest }, label && /* @__PURE__ */ React3.createElement("label", { className: "lw-label", htmlFor: id }, label, required && /* @__PURE__ */ React3.createElement(React3.Fragment, null, /* @__PURE__ */ React3.createElement("span", { className: "req", "aria-hidden": "true" }, "*"), /* @__PURE__ */ React3.createElement("span", { className: "lw-sr-only" }, requiredLabel)), optional && /* @__PURE__ */ React3.createElement("span", { className: "opt" }, optionalLabel)), typeof children === "function" ? children({ id, "aria-describedby": error || help ? msgId : void 0, "aria-invalid": error ? "true" : void 0, required }) : children, error ? /* @__PURE__ */ React3.createElement("span", { className: "lw-error", id: msgId, role: "alert" }, error) : help ? /* @__PURE__ */ React3.createElement("span", { className: "lw-help", id: msgId }, help) : null);
   }
 
   // components/forms/Input.jsx
@@ -710,6 +724,8 @@
     emptyText = "No matches",
     onSearch,
     id,
+    loadingText = "Searching…",
+    formatRemoveLabel = (l) => "Remove " + l,
     label,
     className,
     ...rest
@@ -792,7 +808,7 @@
         "button",
         {
           type: "button",
-          "aria-label": "Remove " + o.label,
+          "aria-label": formatRemoveLabel(o.label),
           onMouseDown: (e) => e.preventDefault(),
           onClick: () => remove(o.value)
         },
@@ -840,7 +856,7 @@
         label,
         ...rest
       },
-      loading ? /* @__PURE__ */ React13.createElement("div", { id: listId, role: "listbox", "aria-busy": "true", className: "lw-listbox-empty" }, "Searching…") : !shown.length ? /* @__PURE__ */ React13.createElement("div", { id: listId, role: "listbox", className: "lw-listbox-empty" }, emptyText) : /* @__PURE__ */ React13.createElement("ul", { ref: listRef, className: "lw-listbox", id: listId, role: "listbox", "aria-multiselectable": multiple || void 0 }, shown.map((o, i) => {
+      loading ? /* @__PURE__ */ React13.createElement("div", { id: listId, role: "listbox", "aria-busy": "true", className: "lw-listbox-empty" }, loadingText) : !shown.length ? /* @__PURE__ */ React13.createElement("div", { id: listId, role: "listbox", className: "lw-listbox-empty" }, emptyText) : /* @__PURE__ */ React13.createElement("ul", { ref: listRef, className: "lw-listbox", id: listId, role: "listbox", "aria-multiselectable": multiple || void 0 }, shown.map((o, i) => {
         const isSel = multiple ? selected.includes(o.value) : o.value === value;
         return /* @__PURE__ */ React13.createElement(
           "li",
@@ -882,7 +898,21 @@
     return x;
   };
   var between = (d, a, b) => a && b && day(d) > day(a) && day(d) < day(b);
-  function Calendar({ value, onChange, range, month, onMonthChange, min, max, weekStart = 1, locale, className, ...rest }) {
+  function Calendar({
+    value,
+    onChange,
+    range,
+    month,
+    onMonthChange,
+    min,
+    max,
+    weekStart = 1,
+    locale,
+    prevMonthLabel = "Previous month",
+    nextMonthLabel = "Next month",
+    className,
+    ...rest
+  }) {
     const sel = range ? value || {} : value;
     const anchor = (range ? sel.start : sel) || /* @__PURE__ */ new Date();
     const [viewRaw, setView] = React14.useState(() => addMonths(anchor, 0));
@@ -955,7 +985,7 @@
         return moveFocus(addDays(focused, 6 - (focused.getDay() - weekStart + 7) % 7));
       }
     };
-    return /* @__PURE__ */ React14.createElement("div", { className: cx27("lw-cal", className), ...rest }, /* @__PURE__ */ React14.createElement("div", { className: "lw-cal-head" }, /* @__PURE__ */ React14.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": "Previous month", onClick: () => setMonth(addMonths(view, -1)) }, /* @__PURE__ */ React14.createElement(Icon, { name: "chevron-left", size: 16 })), /* @__PURE__ */ React14.createElement("div", { className: "lw-cal-month", "aria-live": "polite" }, fmtMonth.format(view)), /* @__PURE__ */ React14.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": "Next month", onClick: () => setMonth(addMonths(view, 1)) }, /* @__PURE__ */ React14.createElement(Icon, { name: "chevron-right", size: 16 }))), /* @__PURE__ */ React14.createElement("div", { ref: gridRef, className: "lw-cal-grid", role: "grid", onKeyDown, onMouseLeave: () => setHover(null) }, /* @__PURE__ */ React14.createElement("div", { role: "row", className: "lw-cal-dow-row" }, dows.map((d, i) => /* @__PURE__ */ React14.createElement("div", { key: i, role: "columnheader", className: "lw-cal-dow" }, d))), /* @__PURE__ */ React14.createElement("div", { role: "rowgroup", className: "lw-cal-weeks" }, weeks.map((week, w) => /* @__PURE__ */ React14.createElement("div", { key: w, role: "row", className: "lw-cal-week" }, week.map((d, i) => {
+    return /* @__PURE__ */ React14.createElement("div", { className: cx27("lw-cal", className), ...rest }, /* @__PURE__ */ React14.createElement("div", { className: "lw-cal-head" }, /* @__PURE__ */ React14.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": prevMonthLabel, onClick: () => setMonth(addMonths(view, -1)) }, /* @__PURE__ */ React14.createElement(Icon, { name: "chevron-left", size: 16 })), /* @__PURE__ */ React14.createElement("div", { className: "lw-cal-month", "aria-live": "polite" }, fmtMonth.format(view)), /* @__PURE__ */ React14.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": nextMonthLabel, onClick: () => setMonth(addMonths(view, 1)) }, /* @__PURE__ */ React14.createElement(Icon, { name: "chevron-right", size: 16 }))), /* @__PURE__ */ React14.createElement("div", { ref: gridRef, className: "lw-cal-grid", role: "grid", onKeyDown, onMouseLeave: () => setHover(null) }, /* @__PURE__ */ React14.createElement("div", { role: "row", className: "lw-cal-dow-row" }, dows.map((d, i) => /* @__PURE__ */ React14.createElement("div", { key: i, role: "columnheader", className: "lw-cal-dow" }, d))), /* @__PURE__ */ React14.createElement("div", { role: "rowgroup", className: "lw-cal-weeks" }, weeks.map((week, w) => /* @__PURE__ */ React14.createElement("div", { key: w, role: "row", className: "lw-cal-week" }, week.map((d, i) => {
       const outside = d.getMonth() !== view.getMonth();
       const selected = isSelected(d);
       const end = range ? sel.end || hover : null;
@@ -1115,6 +1145,9 @@
     disabled,
     title = "Drop files here",
     hint,
+    formatRejected = (names, limit) => names + " — over " + limit,
+    formatHint = (a, limit) => a ? a + (limit ? " · up to " + limit : "") : limit ? "Up to " + limit : "or click to browse",
+    formatRemoveLabel = (name) => "Remove " + name,
     className,
     ...rest
   }, forwardedRef) {
@@ -1126,7 +1159,7 @@
       const arr = Array.from(list || []);
       if (!arr.length) return;
       const tooBig = maxSize ? arr.filter((f) => f.size > maxSize) : [];
-      setRejected(tooBig.length ? tooBig.map((f) => f.name).join(", ") + " — over " + formatBytes(maxSize) : null);
+      setRejected(tooBig.length ? formatRejected(tooBig.map((f) => f.name).join(", "), formatBytes(maxSize)) : null);
       const ok = maxSize ? arr.filter((f) => f.size <= maxSize) : arr;
       if (ok.length && onFiles) onFiles(multiple ? ok : ok.slice(0, 1));
     };
@@ -1164,7 +1197,7 @@
       ),
       /* @__PURE__ */ React16.createElement(Icon, { name: "upload", size: 20 }),
       /* @__PURE__ */ React16.createElement("span", { className: "lw-dz-title" }, title),
-      /* @__PURE__ */ React16.createElement("span", { className: "lw-dz-hint" }, hint || (accept ? accept + (maxSize ? " · up to " + formatBytes(maxSize) : "") : maxSize ? "Up to " + formatBytes(maxSize) : "or click to browse"))
+      /* @__PURE__ */ React16.createElement("span", { className: "lw-dz-hint" }, hint || formatHint(accept, maxSize ? formatBytes(maxSize) : null))
     ), rejected && /* @__PURE__ */ React16.createElement("div", { className: "lw-error", role: "alert" }, rejected), files.length > 0 && /* @__PURE__ */ React16.createElement("div", { className: "lw-file-list" }, files.map((f, i) => /* @__PURE__ */ React16.createElement(
       "div",
       {
@@ -1175,14 +1208,23 @@
       },
       /* @__PURE__ */ React16.createElement("span", { className: "lw-file-ic" }, /* @__PURE__ */ React16.createElement(Icon, { name: f.state === "error" ? "x-circle" : f.state === "done" ? "check" : "file", size: 16 })),
       /* @__PURE__ */ React16.createElement("span", { className: "lw-file-main" }, /* @__PURE__ */ React16.createElement("span", { className: "lw-file-name" }, f.name), f.state === "uploading" && f.progress != null ? /* @__PURE__ */ React16.createElement("span", { className: "lw-file-bar" }, /* @__PURE__ */ React16.createElement("i", null)) : /* @__PURE__ */ React16.createElement("span", { className: "lw-file-meta" }, f.error || formatBytes(f.size))),
-      onRemove && /* @__PURE__ */ React16.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": "Remove " + f.name, onClick: () => onRemove(f) }, /* @__PURE__ */ React16.createElement(Icon, { name: "close", size: 15 }))
+      onRemove && /* @__PURE__ */ React16.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": formatRemoveLabel(f.name), onClick: () => onRemove(f) }, /* @__PURE__ */ React16.createElement(Icon, { name: "close", size: 15 }))
     ))));
   });
 
   // components/forms/Stepper.jsx
   init_ds_inject_react();
   var cx30 = (...a) => a.filter(Boolean).join(" ");
-  function Stepper({ steps = [], current = 0, onStepChange, vertical, label = "Progress", className, ...rest }) {
+  function Stepper({
+    steps = [],
+    current = 0,
+    onStepChange,
+    vertical,
+    label = "Progress",
+    stateLabels = { done: "completed", current: "current step", error: "needs attention", upcoming: "not started" },
+    className,
+    ...rest
+  }) {
     return /* @__PURE__ */ React.createElement(
       "div",
       {
@@ -1206,7 +1248,7 @@
             onClick: reachable ? () => onStepChange(i) : void 0
           },
           /* @__PURE__ */ React.createElement("span", { className: "lw-stepper-marker", "aria-hidden": "true" }, state === "done" ? /* @__PURE__ */ React.createElement(Icon, { name: "checkmark", size: 14 }) : state === "error" ? /* @__PURE__ */ React.createElement(Icon, { name: "close", size: 14 }) : i + 1),
-          /* @__PURE__ */ React.createElement("span", { className: "lw-stepper-label" }, s.label, /* @__PURE__ */ React.createElement("span", { className: "lw-sr-only" }, " — " + (state === "done" ? "completed" : state === "current" ? "current step" : state === "error" ? "needs attention" : "not started"))),
+          /* @__PURE__ */ React.createElement("span", { className: "lw-stepper-label" }, s.label, /* @__PURE__ */ React.createElement("span", { className: "lw-sr-only" }, " — " + (stateLabels[state] ?? stateLabels.upcoming))),
           s.hint && /* @__PURE__ */ React.createElement("span", { className: "lw-stepper-hint" }, s.hint)
         );
       })
@@ -1235,7 +1277,10 @@
     onChange,
     placeholder = "Write something…",
     tools,
+    toolLabels,
     maxLength,
+    formatBarLabel = (l) => l + " formatting",
+    barLabel = "Editor",
     label,
     readOnly,
     footer,
@@ -1247,7 +1292,8 @@
     const setBodyRef = useMergedRef(ref, forwardedRef);
     const bodyId = React17.useId();
     const [active, setActive] = React17.useState({});
-    const list = tools ? TOOLS.filter((t) => t.sep || tools.includes(t.id)) : TOOLS;
+    const picked = tools ? TOOLS.filter((t) => t.sep || tools.includes(t.id)) : TOOLS;
+    const list = toolLabels ? picked.map((t) => t.id && toolLabels[t.id] ? { ...t, ...toolLabels[t.id] } : t) : picked;
     React17.useEffect(() => {
       const el = ref.current;
       if (el && value != null && el.innerHTML !== value) el.innerHTML = value;
@@ -1284,7 +1330,7 @@
     const syncLen = () => setLen((ref.current && ref.current.textContent || "").length);
     React17.useEffect(syncLen, [value]);
     const over = maxLength != null && len > maxLength;
-    return /* @__PURE__ */ React17.createElement("div", { className: cx31("lw-editor", className), ...rest }, /* @__PURE__ */ React17.createElement("div", { className: "lw-editor-bar", role: "group", "aria-label": (label || "Editor") + " formatting", "aria-controls": children ? void 0 : bodyId }, list.map((t, i) => t.sep ? /* @__PURE__ */ React17.createElement("span", { key: "s" + i, className: "sep", "aria-hidden": "true" }) : /* @__PURE__ */ React17.createElement(
+    return /* @__PURE__ */ React17.createElement("div", { className: cx31("lw-editor", className), ...rest }, /* @__PURE__ */ React17.createElement("div", { className: "lw-editor-bar", role: "group", "aria-label": formatBarLabel(label || barLabel), "aria-controls": children ? void 0 : bodyId }, list.map((t, i) => t.sep ? /* @__PURE__ */ React17.createElement("span", { key: "s" + i, className: "sep", "aria-hidden": "true" }) : /* @__PURE__ */ React17.createElement(
       "button",
       {
         key: t.id,
@@ -1408,7 +1454,21 @@
   // components/data/StatMeter.jsx
   init_ds_inject_react();
   var cx34 = (...a) => a.filter(Boolean).join(" ");
-  function StatMeter({ label, value, unit, delta, direction, percent, target, tone, foot, interactive = false, className, ...rest }) {
+  function StatMeter({
+    label,
+    value,
+    unit,
+    delta,
+    direction,
+    percent,
+    target,
+    tone,
+    foot,
+    interactive = false,
+    formatValueText = (p, t) => p + "% of a " + t + "% target",
+    className,
+    ...rest
+  }) {
     const onKeyDown = (e) => {
       if (!interactive || e.key !== "Enter" && e.key !== " ") return;
       e.preventDefault();
@@ -1436,7 +1496,7 @@
           "aria-valuemin": 0,
           "aria-valuemax": 100,
           "aria-label": typeof label === "string" ? label : void 0,
-          "aria-valuetext": target != null ? percent + "% of a " + target + "% target" : void 0
+          "aria-valuetext": target != null ? formatValueText(percent, target) : void 0
         },
         /* @__PURE__ */ React.createElement("i", { className: "fill" }),
         target != null && /* @__PURE__ */ React.createElement("span", { className: "target", style: { insetInlineStart: target + "%" } })
@@ -1503,7 +1563,17 @@
   init_ds_inject_react();
   var React18 = __toESM(require_ds_react(), 1);
   var cx38 = (...a) => a.filter(Boolean).join(" ");
-  function CodeBlock({ code, html, filename, lang, copy = true, className, ...rest }) {
+  function CodeBlock({
+    code,
+    html,
+    filename,
+    lang,
+    copy = true,
+    copyLabel = "Copy code",
+    copiedLabel = "Copied",
+    className,
+    ...rest
+  }) {
     const [copied, setCopied] = React18.useState(false);
     const canCopy = copy && typeof code === "string" && code.length > 0;
     React18.useEffect(() => {
@@ -1524,8 +1594,8 @@
         type: "button",
         className: "lw-icon-btn",
         onClick: onCopy,
-        "aria-label": copied ? "Copied" : "Copy code",
-        title: copied ? "Copied" : "Copy code"
+        "aria-label": copied ? copiedLabel : copyLabel,
+        title: copied ? copiedLabel : copyLabel
       },
       /* @__PURE__ */ React18.createElement(Icon, { name: copied ? "check" : "copy", size: 15 })
     ))), /* @__PURE__ */ React18.createElement("pre", null, /* @__PURE__ */ React18.createElement("code", { dangerouslySetInnerHTML: html ? { __html: html } : void 0 }, html ? void 0 : code)));
@@ -1556,6 +1626,13 @@
     hasNext,
     hasPrev,
     label = "Pagination",
+    prevLabel = "Previous page",
+    nextLabel = "Next page",
+    pageSizeLabel = "Rows per page",
+    formatCount = (f, t, all, fmt2) => fmt2(f) + "–" + fmt2(t) + " of " + fmt2(all),
+    formatCursor = (p) => "Page " + p,
+    formatPageLabel = (p) => "Page " + p,
+    formatPageSize = (s) => s + " / page",
     className,
     ...rest
   }) {
@@ -1564,21 +1641,21 @@
     const to = total ? Math.min(page * pageSize, total) : 0;
     const nf2 = new Intl.NumberFormat();
     const go = (p) => onPageChange && onPageChange(Math.min(Math.max(1, p), count));
-    return /* @__PURE__ */ React.createElement("nav", { className: cx39("lw-pagination", className), "aria-label": label, ...rest }, /* @__PURE__ */ React.createElement("span", { className: "lw-pag-info" }, cursor ? "Page " + page : total ? nf2.format(from) + "–" + nf2.format(to) + " of " + nf2.format(total) : ""), /* @__PURE__ */ React.createElement("span", { className: "lw-spacer" }), onPageSizeChange && !cursor && /* @__PURE__ */ React.createElement(
+    return /* @__PURE__ */ React.createElement("nav", { className: cx39("lw-pagination", className), "aria-label": label, ...rest }, /* @__PURE__ */ React.createElement("span", { className: "lw-pag-info" }, cursor ? formatCursor(page) : total ? formatCount(from, to, total, (v) => nf2.format(v)) : ""), /* @__PURE__ */ React.createElement("span", { className: "lw-spacer" }), onPageSizeChange && !cursor && /* @__PURE__ */ React.createElement(
       "select",
       {
         className: "lw-input lw-input-sm lw-pag-size",
-        "aria-label": "Rows per page",
+        "aria-label": pageSizeLabel,
         value: pageSize,
         onChange: (e) => onPageSizeChange(Number(e.target.value))
       },
-      pageSizes.map((s) => /* @__PURE__ */ React.createElement("option", { key: s, value: s }, s, " / page"))
+      pageSizes.map((s) => /* @__PURE__ */ React.createElement("option", { key: s, value: s }, formatPageSize(s)))
     ), /* @__PURE__ */ React.createElement(
       "button",
       {
         type: "button",
         className: "lw-pag-btn",
-        "aria-label": "Previous page",
+        "aria-label": prevLabel,
         disabled: cursor ? !hasPrev : page <= 1,
         onClick: () => go(page - 1)
       },
@@ -1590,7 +1667,7 @@
           key: p,
           type: "button",
           className: "lw-pag-btn",
-          "aria-label": "Page " + p,
+          "aria-label": formatPageLabel(p),
           "aria-current": p === page ? "page" : void 0,
           onClick: () => go(p)
         },
@@ -1601,7 +1678,7 @@
       {
         type: "button",
         className: "lw-pag-btn",
-        "aria-label": "Next page",
+        "aria-label": nextLabel,
         disabled: cursor ? !hasNext : page >= count,
         onClick: () => go(page + 1)
       },
@@ -1630,6 +1707,12 @@
     empty = "No rows",
     selectionActions,
     label = "Data grid",
+    selectedLabel = "selected",
+    clearSelectionLabel = "Clear",
+    selectAllLabel = "Select all rows",
+    clearAllSelectionLabel = "Clear selection",
+    formatResizeLabel = (h) => "Resize " + h,
+    formatRowSelectLabel = (n) => "Select row " + n,
     className,
     ...rest
   }) {
@@ -1705,7 +1788,7 @@
     const padTop = win ? start * rowHeight : 0;
     const padBottom = win ? Math.max(0, (rows.length - start - slice.length) * rowHeight) : 0;
     const total = (selectable ? SEL_W : 0) + widths.reduce((s, w) => s + (w || DEFAULT_W), 0);
-    return /* @__PURE__ */ React19.createElement("div", { className: cx40("lw-dgrid", className), ...rest }, selectable && selSet.size > 0 && /* @__PURE__ */ React19.createElement("div", { className: "lw-dgrid-selbar" }, /* @__PURE__ */ React19.createElement("span", { className: "count" }, selSet.size), /* @__PURE__ */ React19.createElement("span", null, "selected"), /* @__PURE__ */ React19.createElement("span", { className: "lw-spacer" }), selectionActions, /* @__PURE__ */ React19.createElement("button", { type: "button", className: "lw-filter-clear", onClick: () => onSelectionChange && onSelectionChange([]) }, "Clear")), /* @__PURE__ */ React19.createElement(
+    return /* @__PURE__ */ React19.createElement("div", { className: cx40("lw-dgrid", className), ...rest }, selectable && selSet.size > 0 && /* @__PURE__ */ React19.createElement("div", { className: "lw-dgrid-selbar" }, /* @__PURE__ */ React19.createElement("span", { className: "count" }, selSet.size), /* @__PURE__ */ React19.createElement("span", null, selectedLabel), /* @__PURE__ */ React19.createElement("span", { className: "lw-spacer" }), selectionActions, /* @__PURE__ */ React19.createElement("button", { type: "button", className: "lw-filter-clear", onClick: () => onSelectionChange && onSelectionChange([]) }, clearSelectionLabel)), /* @__PURE__ */ React19.createElement(
       "div",
       {
         ref: scrollRef,
@@ -1722,7 +1805,7 @@
             if (el) el.indeterminate = someOn;
           },
           onChange: toggleAll,
-          "aria-label": allOn ? "Clear selection" : "Select all rows"
+          "aria-label": allOn ? clearAllSelectionLabel : selectAllLabel
         }
       ), /* @__PURE__ */ React19.createElement("span", { className: "box" })))), columns.map((c, i) => {
         const dir = sort && sort.key === c.key ? sort.dir : null;
@@ -1752,7 +1835,7 @@
             {
               type: "button",
               className: "lw-dgrid-resize",
-              "aria-label": "Resize " + (typeof colHeader("DataGrid", c) === "string" ? colHeader("DataGrid", c) : c.key),
+              "aria-label": formatResizeLabel(typeof colHeader("DataGrid", c) === "string" ? colHeader("DataGrid", c) : c.key),
               onPointerDown: (e) => onResizeDown(i, e),
               onKeyDown: (e) => onResizeKey(i, e)
             }
@@ -1778,7 +1861,7 @@
               type: "checkbox",
               checked: on,
               onChange: () => toggleRow(k),
-              "aria-label": "Select row " + (i + 1)
+              "aria-label": formatRowSelectLabel(i + 1)
             }
           ), /* @__PURE__ */ React19.createElement("span", { className: "box" })))),
           columns.map((c, ci) => /* @__PURE__ */ React19.createElement(
@@ -1822,17 +1905,27 @@
   // components/data/FilterBar.jsx
   init_ds_inject_react();
   var cx42 = (...a) => a.filter(Boolean).join(" ");
-  function FilterBar({ filters = [], onRemove, onClear, className, children, ...rest }) {
+  function FilterBar({
+    filters = [],
+    onRemove,
+    onClear,
+    label = "Applied filters",
+    clearAllLabel = "Clear all",
+    formatRemoveLabel = (name) => "Remove filter " + name,
+    className,
+    children,
+    ...rest
+  }) {
     if (!filters.length && !children) return null;
-    return /* @__PURE__ */ React.createElement("div", { className: cx42("lw-filters", className), role: "group", "aria-label": "Applied filters", ...rest }, children, filters.map((f) => /* @__PURE__ */ React.createElement("span", { key: f.id ?? f.key + ":" + f.value, className: "lw-filter-chip" }, f.key && /* @__PURE__ */ React.createElement("span", { className: "k" }, f.key), /* @__PURE__ */ React.createElement("span", null, f.label ?? f.value), /* @__PURE__ */ React.createElement(
+    return /* @__PURE__ */ React.createElement("div", { className: cx42("lw-filters", className), role: "group", "aria-label": label, ...rest }, children, filters.map((f) => /* @__PURE__ */ React.createElement("span", { key: f.id ?? f.key + ":" + f.value, className: "lw-filter-chip" }, f.key && /* @__PURE__ */ React.createElement("span", { className: "k" }, f.key), /* @__PURE__ */ React.createElement("span", null, f.label ?? f.value), /* @__PURE__ */ React.createElement(
       "button",
       {
         type: "button",
-        "aria-label": "Remove filter " + (f.key ? f.key + " " : "") + (f.label ?? f.value),
+        "aria-label": formatRemoveLabel((f.key ? f.key + " " : "") + (f.label ?? f.value)),
         onClick: () => onRemove && onRemove(f)
       },
       /* @__PURE__ */ React.createElement(Icon, { name: "close", size: 11 })
-    ))), filters.length > 1 && onClear && /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-filter-clear", onClick: onClear }, "Clear all"));
+    ))), filters.length > 1 && onClear && /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-filter-clear", onClick: onClear }, clearAllLabel));
   }
   function Toolbar({ className, children, ...rest }) {
     return /* @__PURE__ */ React.createElement("div", { className: cx42("lw-toolbar", className), ...rest }, children);
@@ -1846,8 +1939,8 @@
   var cx43 = (...a) => a.filter(Boolean).join(" ");
   var SERIES = (i) => "var(--lw-chart-" + (i % 8 + 1) + ")";
   var nf = new Intl.NumberFormat();
-  function DataTable({ labels, series, caption }) {
-    return /* @__PURE__ */ React.createElement("table", { className: "lw-sr-only" }, /* @__PURE__ */ React.createElement("caption", null, caption), /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", { scope: "col" }, "Category"), series.map((s, i) => /* @__PURE__ */ React.createElement("th", { key: i, scope: "col" }, s.name)))), /* @__PURE__ */ React.createElement("tbody", null, labels.map((l, i) => /* @__PURE__ */ React.createElement("tr", { key: i }, /* @__PURE__ */ React.createElement("th", { scope: "row" }, l), series.map((s, si) => /* @__PURE__ */ React.createElement("td", { key: si }, nf.format(s.data[i])))))));
+  function DataTable({ labels, series, caption, categoryHeader = "Category" }) {
+    return /* @__PURE__ */ React.createElement("table", { className: "lw-sr-only" }, /* @__PURE__ */ React.createElement("caption", null, caption), /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", { scope: "col" }, categoryHeader), series.map((s, i) => /* @__PURE__ */ React.createElement("th", { key: i, scope: "col" }, s.name)))), /* @__PURE__ */ React.createElement("tbody", null, labels.map((l, i) => /* @__PURE__ */ React.createElement("tr", { key: i }, /* @__PURE__ */ React.createElement("th", { scope: "row" }, l), series.map((s, si) => /* @__PURE__ */ React.createElement("td", { key: si }, nf.format(s.data[i])))))));
   }
   function Legend({ series }) {
     if (series.length < 2) return null;
@@ -1924,21 +2017,35 @@
   var cx44 = (...a) => a.filter(Boolean).join(" ");
   var ms = (when) => when instanceof Date ? when.getTime() : new Date(when).getTime();
   var stamp = (when) => new Intl.DateTimeFormat(void 0, { day: "numeric", month: "short" }).format(ms(when));
-  function timeAgo(when, now = Date.now()) {
+  var RELATIVE_LABELS = { now: "just now", minutes: "m ago", hours: "h ago", days: "d ago" };
+  var BUCKET_LABELS = { today: "Today", yesterday: "Yesterday", week: "This week", earlier: "Earlier" };
+  function timeAgo(when, now = Date.now(), labels = RELATIVE_LABELS) {
     const t = ms(when);
     const s = Math.max(0, (now - t) / 1e3);
-    if (s < 60) return "just now";
-    if (s < 3600) return Math.floor(s / 60) + "m ago";
-    if (s < 86400) return Math.floor(s / 3600) + "h ago";
-    if (s < 86400 * 3) return Math.floor(s / 86400) + "d ago";
+    if (s < 60) return labels.now;
+    if (s < 3600) return Math.floor(s / 60) + labels.minutes;
+    if (s < 86400) return Math.floor(s / 3600) + labels.hours;
+    if (s < 86400 * 3) return Math.floor(s / 86400) + labels.days;
     return stamp(when);
   }
-  var bucket = (when, now) => {
+  var bucketKey = (when, now) => {
     const d = new Date(when), n = new Date(now);
     const days = Math.floor((new Date(n.getFullYear(), n.getMonth(), n.getDate()) - new Date(d.getFullYear(), d.getMonth(), d.getDate())) / 864e5);
-    return days <= 0 ? "Today" : days === 1 ? "Yesterday" : days < 7 ? "This week" : "Earlier";
+    return days <= 0 ? "today" : days === 1 ? "yesterday" : days < 7 ? "week" : "earlier";
   };
-  function ActivityFeed({ items = [], onItemClick, grouped = true, now, label = "Activity", linkAs = "a", className, ...rest }) {
+  function ActivityFeed({
+    items = [],
+    onItemClick,
+    grouped = true,
+    now,
+    label = "Activity",
+    linkAs = "a",
+    bucketLabels = BUCKET_LABELS,
+    formatTimeAgo = timeAgo,
+    unreadLabel = "Unread",
+    className,
+    ...rest
+  }) {
     const [mounted, setMounted] = React20.useState(null);
     React20.useEffect(() => {
       setMounted(Date.now());
@@ -1946,7 +2053,7 @@
     const at = now != null ? now : mounted;
     const groups = [];
     items.forEach((it) => {
-      const g = grouped && it.when && at != null ? bucket(it.when, at) : null;
+      const g = grouped && it.when && at != null ? bucketLabels[bucketKey(it.when, at)] : null;
       const last = groups[groups.length - 1];
       if (last && last.name === g) last.items.push(it);
       else groups.push({ name: g, items: [it] });
@@ -1968,8 +2075,8 @@
             onClick: Tag === "div" ? void 0 : () => it.onClick ? it.onClick(it) : onItemClick && onItemClick(it)
           },
           it.icon && /* @__PURE__ */ React20.createElement("span", { className: "lw-feed-ic" }, /* @__PURE__ */ React20.createElement(Icon, { name: it.icon, size: 15 })),
-          /* @__PURE__ */ React20.createElement("span", { className: "lw-feed-main" }, /* @__PURE__ */ React20.createElement("span", { className: "lw-feed-title" }, it.title), /* @__PURE__ */ React20.createElement("span", { className: "lw-feed-meta" }, it.when ? at != null ? timeAgo(it.when, at) : stamp(it.when) : null, it.meta ? (it.when ? " · " : "") + it.meta : "")),
-          it.unread && /* @__PURE__ */ React20.createElement("span", { className: "lw-sr-only" }, "Unread")
+          /* @__PURE__ */ React20.createElement("span", { className: "lw-feed-main" }, /* @__PURE__ */ React20.createElement("span", { className: "lw-feed-title" }, it.title), /* @__PURE__ */ React20.createElement("span", { className: "lw-feed-meta" }, it.when ? at != null ? formatTimeAgo(it.when, at) : stamp(it.when) : null, it.meta ? (it.when ? " · " : "") + it.meta : "")),
+          it.unread && /* @__PURE__ */ React20.createElement("span", { className: "lw-sr-only" }, unreadLabel)
         );
       }))
     )));
@@ -1978,11 +2085,24 @@
   // components/nav/TopBar.jsx
   init_ds_inject_react();
   var cx45 = (...a) => a.filter(Boolean).join(" ");
-  function TopBar({ brand, brandHref, logo = false, links = [], actions, linkAs = "a", className, children, ...rest }) {
+  function TopBar({
+    brand,
+    brandHref,
+    logo = false,
+    links = [],
+    actions,
+    linkAs = "a",
+    navLabel = "Primary",
+    homeLabel = "Home",
+    formatBrandLabel = (b) => b + " — home",
+    className,
+    children,
+    ...rest
+  }) {
     const Link = linkAs;
     const Brand = brandHref ? linkAs : "span";
-    const brandProps = brandHref ? { href: brandHref, "aria-label": typeof brand === "string" ? brand + " — home" : "Home" } : {};
-    return /* @__PURE__ */ React.createElement("header", { className: cx45("lw-topbar", className), ...rest }, logo ? /* @__PURE__ */ React.createElement(Brand, { className: "brand", ...brandProps }, /* @__PURE__ */ React.createElement("span", { className: "brand-mark", "aria-hidden": "true" }), brand) : brand && /* @__PURE__ */ React.createElement(Brand, { className: "brand", ...brandProps }, brand), links.length > 0 && /* @__PURE__ */ React.createElement("nav", { "aria-label": "Primary" }, links.map((l, i) => /* @__PURE__ */ React.createElement(Link, { key: l.id ?? i, href: l.href, "aria-current": l.current ? "page" : void 0 }, l.label))), /* @__PURE__ */ React.createElement("span", { className: "spacer" }), actions, children);
+    const brandProps = brandHref ? { href: brandHref, "aria-label": typeof brand === "string" ? formatBrandLabel(brand) : homeLabel } : {};
+    return /* @__PURE__ */ React.createElement("header", { className: cx45("lw-topbar", className), ...rest }, logo ? /* @__PURE__ */ React.createElement(Brand, { className: "brand", ...brandProps }, /* @__PURE__ */ React.createElement("span", { className: "brand-mark", "aria-hidden": "true" }), brand) : brand && /* @__PURE__ */ React.createElement(Brand, { className: "brand", ...brandProps }, brand), links.length > 0 && /* @__PURE__ */ React.createElement("nav", { "aria-label": navLabel }, links.map((l, i) => /* @__PURE__ */ React.createElement(Link, { key: l.id ?? i, href: l.href, "aria-current": l.current ? "page" : void 0 }, l.label))), /* @__PURE__ */ React.createElement("span", { className: "spacer" }), actions, children);
   }
 
   // components/nav/AppBar.jsx
@@ -1992,9 +2112,9 @@
   init_ds_inject_react();
   var React21 = __toESM(require_ds_react(), 1);
   var cx46 = (...a) => a.filter(Boolean).join(" ");
-  function Breadcrumbs({ items = [], linkAs = "a", className, ...rest }) {
+  function Breadcrumbs({ items = [], linkAs = "a", label = "Breadcrumb", className, ...rest }) {
     const Link = linkAs;
-    return /* @__PURE__ */ React21.createElement("nav", { className: cx46("lw-crumbs", className), "aria-label": "Breadcrumb", ...rest }, items.map((it, i) => /* @__PURE__ */ React21.createElement(React21.Fragment, { key: i }, i > 0 && /* @__PURE__ */ React21.createElement("span", { className: "sep", "aria-hidden": "true" }, "/"), it.href && i < items.length - 1 ? /* @__PURE__ */ React21.createElement(Link, { href: it.href }, it.label) : /* @__PURE__ */ React21.createElement("span", { "aria-current": i === items.length - 1 ? "page" : void 0 }, it.label))));
+    return /* @__PURE__ */ React21.createElement("nav", { className: cx46("lw-crumbs", className), "aria-label": label, ...rest }, items.map((it, i) => /* @__PURE__ */ React21.createElement(React21.Fragment, { key: i }, i > 0 && /* @__PURE__ */ React21.createElement("span", { className: "sep", "aria-hidden": "true" }, "/"), it.href && i < items.length - 1 ? /* @__PURE__ */ React21.createElement(Link, { href: it.href }, it.label) : /* @__PURE__ */ React21.createElement("span", { "aria-current": i === items.length - 1 ? "page" : void 0 }, it.label))));
   }
 
   // components/nav/AppBar.jsx
@@ -2007,6 +2127,10 @@
     menuExpanded,
     actions,
     linkAs = "a",
+    collapseNavLabel = "Collapse navigation",
+    expandNavLabel = "Expand navigation",
+    homeLabel = "Home",
+    formatBrandLabel = (b) => b + " — home",
     className,
     children,
     ...rest
@@ -2019,7 +2143,7 @@
         className: "lw-icon-btn",
         onClick: onMenuClick,
         "aria-expanded": menuExpanded,
-        "aria-label": menuExpanded ? "Collapse navigation" : "Expand navigation"
+        "aria-label": menuExpanded ? collapseNavLabel : expandNavLabel
       },
       /* @__PURE__ */ React.createElement(Icon, { name: "sidebar", size: 21 })
     ), /* @__PURE__ */ React.createElement(
@@ -2027,7 +2151,7 @@
       {
         className: "lw-appbar-brand",
         href: brandHref || void 0,
-        "aria-label": brandHref ? typeof brand === "string" ? brand + " — home" : "Home" : void 0
+        "aria-label": brandHref ? typeof brand === "string" ? formatBrandLabel(brand) : homeLabel : void 0
       },
       mark && /* @__PURE__ */ React.createElement("span", { className: "brand-mark", "aria-hidden": "true" }),
       brand
@@ -2037,8 +2161,8 @@
   // components/nav/Sidebar.jsx
   init_ds_inject_react();
   var cx47 = (...a) => a.filter(Boolean).join(" ");
-  function Sidebar({ items = [], collapsed = false, footer, linkAs, className, children, ...rest }) {
-    return /* @__PURE__ */ React.createElement("nav", { className: cx47("lw-sidebar", className), "data-collapsed": collapsed ? "true" : void 0, "aria-label": "Sections", ...rest }, items.map(
+  function Sidebar({ items = [], collapsed = false, footer, linkAs, label = "Sections", className, children, ...rest }) {
+    return /* @__PURE__ */ React.createElement("nav", { className: cx47("lw-sidebar", className), "data-collapsed": collapsed ? "true" : void 0, "aria-label": label, ...rest }, items.map(
       (it, i) => it.group ? /* @__PURE__ */ React.createElement("span", { key: "g" + i, className: "lw-nav-group" }, it.group) : /* @__PURE__ */ React.createElement(NavItem, { key: it.id ?? i, linkAs, ...it, collapsed })
     ), children, footer && /* @__PURE__ */ React.createElement("div", { className: "lw-sidebar-foot" }, footer));
   }
@@ -2136,9 +2260,17 @@
 
   // components/nav/ThemeToggle.jsx
   var cx49 = (...a) => a.filter(Boolean).join(" ");
-  var LABELS = { light: "Light", dark: "Dark", system: "Auto" };
+  var THEME_LABELS = { light: "Light", dark: "Dark", system: "Auto" };
   var GLYPHS = { light: "sun", dark: "moon", system: "monitor" };
-  function ThemeToggle({ value, onChange, modes = ["light", "dark"], className, ...rest }) {
+  function ThemeToggle({
+    value,
+    onChange,
+    modes = ["light", "dark"],
+    label = "Colour theme",
+    modeLabels = THEME_LABELS,
+    className,
+    ...rest
+  }) {
     const [internal, setInternal] = React23.useState(modes.includes("system") ? "system" : modes[0]);
     React23.useEffect(() => {
       if (value !== void 0) return;
@@ -2165,7 +2297,7 @@
         ref,
         className: cx49("lw-segmented", className),
         role: "radiogroup",
-        "aria-label": "Colour theme",
+        "aria-label": label,
         onKeyDown,
         ...rest
       },
@@ -2178,8 +2310,8 @@
           "aria-checked": mode === m,
           tabIndex: tabIndexFor(i),
           onClick: () => apply(m),
-          "aria-label": LABELS[m] || m,
-          title: LABELS[m] || m
+          "aria-label": modeLabels[m] || m,
+          title: modeLabels[m] || m
         },
         /* @__PURE__ */ React23.createElement(Icon, { name: GLYPHS[m] || "monitor", size: 16 })
       ))
@@ -2212,6 +2344,7 @@
     placeholder = "Type a command or search…",
     emptyText = "No matches",
     label = "Command palette",
+    hints = ["↑↓ navigate", "↵ run", "esc close"],
     className,
     ...rest
   }) {
@@ -2303,7 +2436,7 @@
           c.kbd && /* @__PURE__ */ React24.createElement("span", { className: "lw-menu-kbd" }, c.kbd)
         ));
       })),
-      /* @__PURE__ */ React24.createElement("div", { className: "lw-cmdk-foot" }, /* @__PURE__ */ React24.createElement("span", null, "↑↓ navigate"), /* @__PURE__ */ React24.createElement("span", null, "↵ run"), /* @__PURE__ */ React24.createElement("span", null, "esc close"))
+      /* @__PURE__ */ React24.createElement("div", { className: "lw-cmdk-foot" }, hints.map((h, i) => /* @__PURE__ */ React24.createElement("span", { key: i }, h)))
     );
   }
 
@@ -2311,7 +2444,16 @@
   init_ds_inject_react();
   var React25 = __toESM(require_ds_react(), 1);
   var cx51 = (...a) => a.filter(Boolean).join(" ");
-  function BottomNav({ items = [], value, onChange, label = "Main", linkAs = "a", className, ...rest }) {
+  function BottomNav({
+    items = [],
+    value,
+    onChange,
+    label = "Main",
+    linkAs = "a",
+    formatBadgeLabel = (n) => n + " unread",
+    className,
+    ...rest
+  }) {
     React25.useEffect(() => {
       if (items.length <= 5 || typeof console === "undefined") return;
       console.warn("BottomNav: " + items.length + " items. Past five, labels truncate and the bar stops being scannable — use a sidebar or a More destination.");
@@ -2330,7 +2472,7 @@
         },
         /* @__PURE__ */ React25.createElement(Icon, { name: it.icon, size: 21 }),
         /* @__PURE__ */ React25.createElement("span", { className: "lw-bn-label" }, it.label),
-        it.badge != null && /* @__PURE__ */ React25.createElement("span", { className: "lw-sr-only" }, it.badge + " unread")
+        it.badge != null && /* @__PURE__ */ React25.createElement("span", { className: "lw-sr-only" }, formatBadgeLabel(it.badge))
       );
     }));
   }
@@ -2384,7 +2526,7 @@
   init_ds_inject_react();
   var React27 = __toESM(require_ds_react(), 1);
   var cx53 = (...a) => a.filter(Boolean).join(" ");
-  function Dialog({ open, onClose, title, description, footer, width, className, children, ...rest }) {
+  function Dialog({ open, onClose, title, description, footer, width, closeLabel = "Close", className, children, ...rest }) {
     const ref = React27.useRef(null);
     const uid = React27.useId();
     const titleId = title ? uid + "-t" : void 0;
@@ -2411,7 +2553,7 @@
         "aria-describedby": descId,
         ...rest
       },
-      title && /* @__PURE__ */ React27.createElement("div", { className: "lw-dialog-head" }, /* @__PURE__ */ React27.createElement("h2", { className: "lw-dialog-title", id: titleId }, title), /* @__PURE__ */ React27.createElement("button", { type: "button", className: "lw-icon-btn lw-dialog-close", "aria-label": "Close", title: "Close", onClick: onClose }, /* @__PURE__ */ React27.createElement(Icon, { name: "close", size: 17 }))),
+      title && /* @__PURE__ */ React27.createElement("div", { className: "lw-dialog-head" }, /* @__PURE__ */ React27.createElement("h2", { className: "lw-dialog-title", id: titleId }, title), /* @__PURE__ */ React27.createElement("button", { type: "button", className: "lw-icon-btn lw-dialog-close", "aria-label": closeLabel, title: closeLabel, onClick: onClose }, /* @__PURE__ */ React27.createElement(Icon, { name: "close", size: 17 }))),
       /* @__PURE__ */ React27.createElement("div", { className: "lw-dialog-body" }, description && /* @__PURE__ */ React27.createElement("div", { id: descId }, description), children),
       footer && /* @__PURE__ */ React27.createElement("div", { className: "lw-dialog-foot" }, footer)
     );
@@ -2420,24 +2562,33 @@
   // components/overlays/Toast.jsx
   init_ds_inject_react();
   var cx54 = (...a) => a.filter(Boolean).join(" ");
-  function Toast({ tone = "info", label, onClose, children, className, ...rest }) {
-    const k = label || (tone === "ok" ? "done" : tone === "warn" ? "warn" : tone === "err" ? "error" : "info");
+  function Toast({
+    tone = "info",
+    label,
+    onClose,
+    toneLabels = { ok: "done", warn: "warn", err: "error", info: "info" },
+    dismissLabel = "Dismiss",
+    children,
+    className,
+    ...rest
+  }) {
+    const k = label || toneLabels[tone] || toneLabels.info;
     return (
       /* No role here. The enclosing ToastRegion is the live region; a role="status"
          or role="alert" INSIDE it nests two, which is why an announcement could
          come twice or not at all. An error toast raises the REGION's urgency
          instead — one live region, one politeness setting. */
-      /* @__PURE__ */ React.createElement("div", { className: cx54("lw-toast", tone !== "info" && tone, className), ...rest }, /* @__PURE__ */ React.createElement("span", { className: "k" }, k), /* @__PURE__ */ React.createElement("span", { className: "msg" }, children), onClose && /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": "Dismiss", title: "Dismiss", onClick: onClose }, /* @__PURE__ */ React.createElement(Icon, { name: "close", size: 15 })))
+      /* @__PURE__ */ React.createElement("div", { className: cx54("lw-toast", tone !== "info" && tone, className), ...rest }, /* @__PURE__ */ React.createElement("span", { className: "k" }, k), /* @__PURE__ */ React.createElement("span", { className: "msg" }, children), onClose && /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": dismissLabel, title: dismissLabel, onClick: onClose }, /* @__PURE__ */ React.createElement(Icon, { name: "close", size: 15 })))
     );
   }
-  function ToastRegion({ className, children, urgent, ...rest }) {
+  function ToastRegion({ className, children, urgent, label = "Notifications", ...rest }) {
     return /* @__PURE__ */ React.createElement(
       "div",
       {
         className: cx54("lw-toast-region", className),
         role: "region",
         "aria-live": urgent ? "assertive" : "polite",
-        "aria-label": "Notifications",
+        "aria-label": label,
         ...rest
       },
       children
@@ -2591,7 +2742,7 @@
   init_ds_inject_react();
   var React29 = __toESM(require_ds_react(), 1);
   var cx57 = (...a) => a.filter(Boolean).join(" ");
-  function Drawer({ open, onClose, title, description, footer, side = "end", width, className, children, ...rest }) {
+  function Drawer({ open, onClose, title, description, footer, side = "end", width, closeLabel = "Close", className, children, ...rest }) {
     const ref = React29.useRef(null);
     const uid = React29.useId();
     const titleId = title ? uid + "-t" : void 0;
@@ -2619,7 +2770,7 @@
         "aria-describedby": descId,
         ...rest
       },
-      title && /* @__PURE__ */ React29.createElement("div", { className: "lw-drawer-head" }, /* @__PURE__ */ React29.createElement("h2", { className: "lw-drawer-title", id: titleId }, title), /* @__PURE__ */ React29.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": "Close", title: "Close", onClick: onClose }, /* @__PURE__ */ React29.createElement(Icon, { name: "close", size: 17 }))),
+      title && /* @__PURE__ */ React29.createElement("div", { className: "lw-drawer-head" }, /* @__PURE__ */ React29.createElement("h2", { className: "lw-drawer-title", id: titleId }, title), /* @__PURE__ */ React29.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": closeLabel, title: closeLabel, onClick: onClose }, /* @__PURE__ */ React29.createElement(Icon, { name: "close", size: 17 }))),
       /* @__PURE__ */ React29.createElement("div", { className: "lw-drawer-body" }, description && /* @__PURE__ */ React29.createElement("div", { id: descId }, description), children),
       footer && /* @__PURE__ */ React29.createElement("div", { className: "lw-drawer-foot" }, footer)
     );
@@ -2662,14 +2813,21 @@
   // components/ai/SourceChip.jsx
   init_ds_inject_react();
   var cx60 = (...a) => a.filter(Boolean).join(" ");
-  function SourceChip({ n, title, as, className, ...rest }) {
+  function SourceChip({
+    n,
+    title,
+    as,
+    formatLabel = (num, t) => t ? `Source ${num}: ${t}` : `Source ${num}`,
+    className,
+    ...rest
+  }) {
     const Tag = as || (rest.href ? "a" : "button");
     return /* @__PURE__ */ React.createElement(
       Tag,
       {
         className: cx60("lw-source", className),
         type: Tag === "button" ? "button" : void 0,
-        "aria-label": title ? `Source ${n}: ${title}` : `Source ${n}`,
+        "aria-label": formatLabel(n, title),
         ...rest
       },
       n
@@ -2731,39 +2889,101 @@
   var React30 = __toESM(require_ds_react(), 1);
   var cx64 = (...a) => a.filter(Boolean).join(" ");
   var fmt = (v) => typeof v === "string" ? v : JSON.stringify(v, null, 2);
-  function ToolCall({ name, summary, args, result, error, state = "ok", duration, defaultOpen, className, ...rest }) {
+  function ToolCall({
+    name,
+    summary,
+    args,
+    result,
+    error,
+    state = "ok",
+    duration,
+    defaultOpen,
+    stateLabels = { running: "running", error: "failed", pending: "pending", ok: "succeeded" },
+    argsLabel = "arguments",
+    errorLabel = "error",
+    resultLabel = "result",
+    formatDuration = (ms2) => ms2 + "ms",
+    className,
+    ...rest
+  }) {
     const [open, setOpen] = React30.useState(!!defaultOpen);
     const uid = React30.useId();
     const st = error ? "error" : state;
-    return /* @__PURE__ */ React30.createElement("div", { className: cx64("lw-tool", className), "data-state": st, ...rest }, /* @__PURE__ */ React30.createElement("button", { type: "button", className: "lw-tool-head", "aria-expanded": open, "aria-controls": uid, onClick: () => setOpen((o) => !o) }, /* @__PURE__ */ React30.createElement(Icon, { name: open ? "chevron-down" : "chevron-right", size: 14 }), /* @__PURE__ */ React30.createElement("span", { className: "lw-tool-dot", "aria-hidden": "true" }), /* @__PURE__ */ React30.createElement("span", { className: "lw-tool-name" }, name), /* @__PURE__ */ React30.createElement("span", { className: "lw-tool-sum" }, summary), duration != null && /* @__PURE__ */ React30.createElement("span", { className: "lw-tool-dur" }, duration, "ms"), /* @__PURE__ */ React30.createElement("span", { className: "lw-sr-only" }, st === "running" ? "running" : st === "error" ? "failed" : st === "pending" ? "pending" : "succeeded")), open && /* @__PURE__ */ React30.createElement("div", { className: "lw-tool-body", id: uid }, args != null && /* @__PURE__ */ React30.createElement(React30.Fragment, null, /* @__PURE__ */ React30.createElement("span", { className: "k" }, "arguments"), /* @__PURE__ */ React30.createElement("pre", null, fmt(args))), error ? /* @__PURE__ */ React30.createElement(React30.Fragment, null, /* @__PURE__ */ React30.createElement("span", { className: "k" }, "error"), /* @__PURE__ */ React30.createElement("pre", { className: "err" }, fmt(error))) : result != null && /* @__PURE__ */ React30.createElement(React30.Fragment, null, /* @__PURE__ */ React30.createElement("span", { className: "k" }, "result"), /* @__PURE__ */ React30.createElement("pre", null, fmt(result)))));
+    return /* @__PURE__ */ React30.createElement("div", { className: cx64("lw-tool", className), "data-state": st, ...rest }, /* @__PURE__ */ React30.createElement("button", { type: "button", className: "lw-tool-head", "aria-expanded": open, "aria-controls": uid, onClick: () => setOpen((o) => !o) }, /* @__PURE__ */ React30.createElement(Icon, { name: open ? "chevron-down" : "chevron-right", size: 14 }), /* @__PURE__ */ React30.createElement("span", { className: "lw-tool-dot", "aria-hidden": "true" }), /* @__PURE__ */ React30.createElement("span", { className: "lw-tool-name" }, name), /* @__PURE__ */ React30.createElement("span", { className: "lw-tool-sum" }, summary), duration != null && /* @__PURE__ */ React30.createElement("span", { className: "lw-tool-dur" }, formatDuration(duration)), /* @__PURE__ */ React30.createElement("span", { className: "lw-sr-only" }, stateLabels[st] ?? stateLabels.ok)), open && /* @__PURE__ */ React30.createElement("div", { className: "lw-tool-body", id: uid }, args != null && /* @__PURE__ */ React30.createElement(React30.Fragment, null, /* @__PURE__ */ React30.createElement("span", { className: "k" }, argsLabel), /* @__PURE__ */ React30.createElement("pre", null, fmt(args))), error ? /* @__PURE__ */ React30.createElement(React30.Fragment, null, /* @__PURE__ */ React30.createElement("span", { className: "k" }, errorLabel), /* @__PURE__ */ React30.createElement("pre", { className: "err" }, fmt(error))) : result != null && /* @__PURE__ */ React30.createElement(React30.Fragment, null, /* @__PURE__ */ React30.createElement("span", { className: "k" }, resultLabel), /* @__PURE__ */ React30.createElement("pre", null, fmt(result)))));
   }
 
   // components/ai/DiffReview.jsx
   init_ds_inject_react();
   var cx65 = (...a) => a.filter(Boolean).join(" ");
   var SIGN = { add: "+", del: "−", mod: "~" };
-  function DiffReview({ hunks = [], decisions = {}, onDecide, onAcceptAll, onRejectAll, label = "Proposed changes", className, ...rest }) {
+  function DiffReview({
+    hunks = [],
+    decisions = {},
+    onDecide,
+    onAcceptAll,
+    onRejectAll,
+    label = "Proposed changes",
+    acceptLabel = "Accept",
+    rejectLabel = "Reject",
+    undoLabel = "Undo",
+    acceptAllLabel = "Accept all",
+    rejectAllLabel = "Reject all",
+    acceptedLabel = "Accepted",
+    rejectedLabel = "Rejected",
+    kindLabels = { add: "added: ", del: "removed: ", mod: "changed: " },
+    formatProgress = (p, t) => p ? p + " of " + t + " still to review" : "All " + t + " reviewed",
+    className,
+    ...rest
+  }) {
     const pending = hunks.filter((h) => !decisions[h.id]).length;
     return /* @__PURE__ */ React.createElement("div", { className: cx65("lw-diff", className), role: "group", "aria-label": label, ...rest }, hunks.map((h) => {
       const d = decisions[h.id];
-      return /* @__PURE__ */ React.createElement("div", { key: h.id, className: "lw-diff-hunk", "data-decision": d }, /* @__PURE__ */ React.createElement("div", { className: "lw-diff-head" }, /* @__PURE__ */ React.createElement(Icon, { name: "file", size: 14, className: "lw-diff-ic" }), /* @__PURE__ */ React.createElement("span", { className: "lw-diff-file" }, h.file, h.range ? " · " + h.range : "")), /* @__PURE__ */ React.createElement("div", { className: "lw-diff-lines" }, h.lines.map((l, i) => /* @__PURE__ */ React.createElement("div", { key: i, className: "lw-diff-line", "data-kind": l.kind }, /* @__PURE__ */ React.createElement("span", { className: "n" }, l.n ?? ""), /* @__PURE__ */ React.createElement("span", { className: "s", "aria-hidden": "true" }, SIGN[l.kind] || ""), /* @__PURE__ */ React.createElement("span", { className: "t" }, l.kind && /* @__PURE__ */ React.createElement("span", { className: "lw-sr-only" }, l.kind === "add" ? "added: " : l.kind === "del" ? "removed: " : "changed: "), l.text)))), /* @__PURE__ */ React.createElement("div", { className: "lw-diff-foot" }, /* @__PURE__ */ React.createElement("span", { className: "lw-diff-state" }, d === "accepted" ? "Accepted" : d === "rejected" ? "Rejected" : h.note || ""), d ? /* @__PURE__ */ React.createElement(Button, { size: "sm", variant: "ghost", onClick: () => onDecide && onDecide(h.id, null) }, /* @__PURE__ */ React.createElement(Icon, { name: "undo", size: 14 }), "Undo") : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(Button, { size: "sm", variant: "ghost", onClick: () => onDecide && onDecide(h.id, "rejected") }, "Reject"), /* @__PURE__ */ React.createElement(Button, { size: "sm", onClick: () => onDecide && onDecide(h.id, "accepted") }, "Accept"))));
-    }), hunks.length > 1 && /* @__PURE__ */ React.createElement("div", { className: "lw-diff-foot" }, /* @__PURE__ */ React.createElement("span", { className: "lw-diff-state", "aria-live": "polite" }, pending ? pending + " of " + hunks.length + " still to review" : "All " + hunks.length + " reviewed"), /* @__PURE__ */ React.createElement(Button, { size: "sm", variant: "ghost", onClick: onRejectAll, disabled: !pending }, "Reject all"), /* @__PURE__ */ React.createElement(Button, { size: "sm", onClick: onAcceptAll, disabled: !pending }, "Accept all")));
+      return /* @__PURE__ */ React.createElement("div", { key: h.id, className: "lw-diff-hunk", "data-decision": d }, /* @__PURE__ */ React.createElement("div", { className: "lw-diff-head" }, /* @__PURE__ */ React.createElement(Icon, { name: "file", size: 14, className: "lw-diff-ic" }), /* @__PURE__ */ React.createElement("span", { className: "lw-diff-file" }, h.file, h.range ? " · " + h.range : "")), /* @__PURE__ */ React.createElement("div", { className: "lw-diff-lines" }, h.lines.map((l, i) => /* @__PURE__ */ React.createElement("div", { key: i, className: "lw-diff-line", "data-kind": l.kind }, /* @__PURE__ */ React.createElement("span", { className: "n" }, l.n ?? ""), /* @__PURE__ */ React.createElement("span", { className: "s", "aria-hidden": "true" }, SIGN[l.kind] || ""), /* @__PURE__ */ React.createElement("span", { className: "t" }, l.kind && /* @__PURE__ */ React.createElement("span", { className: "lw-sr-only" }, kindLabels[l.kind] ?? kindLabels.mod), l.text)))), /* @__PURE__ */ React.createElement("div", { className: "lw-diff-foot" }, /* @__PURE__ */ React.createElement("span", { className: "lw-diff-state" }, d === "accepted" ? acceptedLabel : d === "rejected" ? rejectedLabel : h.note || ""), d ? /* @__PURE__ */ React.createElement(Button, { size: "sm", variant: "ghost", onClick: () => onDecide && onDecide(h.id, null) }, /* @__PURE__ */ React.createElement(Icon, { name: "undo", size: 14 }), undoLabel) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(Button, { size: "sm", variant: "ghost", onClick: () => onDecide && onDecide(h.id, "rejected") }, rejectLabel), /* @__PURE__ */ React.createElement(Button, { size: "sm", onClick: () => onDecide && onDecide(h.id, "accepted") }, acceptLabel))));
+    }), hunks.length > 1 && /* @__PURE__ */ React.createElement("div", { className: "lw-diff-foot" }, /* @__PURE__ */ React.createElement("span", { className: "lw-diff-state", "aria-live": "polite" }, formatProgress(pending, hunks.length)), /* @__PURE__ */ React.createElement(Button, { size: "sm", variant: "ghost", onClick: onRejectAll, disabled: !pending }, rejectAllLabel), /* @__PURE__ */ React.createElement(Button, { size: "sm", onClick: onAcceptAll, disabled: !pending }, acceptAllLabel)));
   }
 
   // components/ai/Artifact.jsx
   init_ds_inject_react();
   var cx66 = (...a) => a.filter(Boolean).join(" ");
-  function Artifact({ title, version, versionCount, onPrevVersion, onNextVersion, onRevert, onEdit, actions, className, children, ...rest }) {
+  function Artifact({
+    title,
+    version,
+    versionCount,
+    onPrevVersion,
+    onNextVersion,
+    onRevert,
+    onEdit,
+    actions,
+    prevVersionLabel = "Previous version",
+    nextVersionLabel = "Next version",
+    editLabel = "Edit manually",
+    revertLabel = "Revert",
+    className,
+    children,
+    ...rest
+  }) {
     const canPrev = version > 1;
     const canNext = versionCount != null && version < versionCount;
-    return /* @__PURE__ */ React.createElement("div", { className: cx66("lw-artifact", className), ...rest }, /* @__PURE__ */ React.createElement("div", { className: "lw-artifact-head" }, /* @__PURE__ */ React.createElement(Icon, { name: "file", size: 15, className: "lw-artifact-ic" }), /* @__PURE__ */ React.createElement("span", { className: "lw-artifact-title" }, title), version != null && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": "Previous version", disabled: !canPrev, onClick: onPrevVersion }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron-left", size: 15 })), /* @__PURE__ */ React.createElement("span", { className: "lw-artifact-ver" }, "v", version, versionCount ? " / " + versionCount : ""), /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": "Next version", disabled: !canNext, onClick: onNextVersion }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron-right", size: 15 })))), /* @__PURE__ */ React.createElement("div", { className: "lw-artifact-body" }, children), (onRevert || onEdit || actions) && /* @__PURE__ */ React.createElement("div", { className: "lw-artifact-foot" }, onEdit && /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-btn lw-btn-ghost lw-btn-sm", onClick: onEdit }, /* @__PURE__ */ React.createElement(Icon, { name: "edit", size: 14 }), "Edit manually"), onRevert && /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-btn lw-btn-ghost lw-btn-sm", onClick: onRevert }, /* @__PURE__ */ React.createElement(Icon, { name: "undo", size: 14 }), "Revert"), /* @__PURE__ */ React.createElement("span", { className: "lw-spacer" }), actions));
+    return /* @__PURE__ */ React.createElement("div", { className: cx66("lw-artifact", className), ...rest }, /* @__PURE__ */ React.createElement("div", { className: "lw-artifact-head" }, /* @__PURE__ */ React.createElement(Icon, { name: "file", size: 15, className: "lw-artifact-ic" }), /* @__PURE__ */ React.createElement("span", { className: "lw-artifact-title" }, title), version != null && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": prevVersionLabel, disabled: !canPrev, onClick: onPrevVersion }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron-left", size: 15 })), /* @__PURE__ */ React.createElement("span", { className: "lw-artifact-ver" }, "v", version, versionCount ? " / " + versionCount : ""), /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": nextVersionLabel, disabled: !canNext, onClick: onNextVersion }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron-right", size: 15 })))), /* @__PURE__ */ React.createElement("div", { className: "lw-artifact-body" }, children), (onRevert || onEdit || actions) && /* @__PURE__ */ React.createElement("div", { className: "lw-artifact-foot" }, onEdit && /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-btn lw-btn-ghost lw-btn-sm", onClick: onEdit }, /* @__PURE__ */ React.createElement(Icon, { name: "edit", size: 14 }), editLabel), onRevert && /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-btn lw-btn-ghost lw-btn-sm", onClick: onRevert }, /* @__PURE__ */ React.createElement(Icon, { name: "undo", size: 14 }), revertLabel), /* @__PURE__ */ React.createElement("span", { className: "lw-spacer" }), actions));
   }
 
   // components/ai/Feedback.jsx
   init_ds_inject_react();
   var React31 = __toESM(require_ds_react(), 1);
   var cx67 = (...a) => a.filter(Boolean).join(" ");
-  function Feedback({ value, onChange, onComment, commentPlaceholder = "What was wrong?", note, className, ...rest }) {
+  function Feedback({
+    value,
+    onChange,
+    onComment,
+    commentPlaceholder = "What was wrong?",
+    note,
+    upLabel = "Helpful",
+    downLabel = "Not helpful",
+    cancelLabel = "Cancel",
+    sendLabel = "Send",
+    className,
+    ...rest
+  }) {
     const [open, setOpen] = React31.useState(false);
     const [text, setText] = React31.useState("");
     const set = (v) => {
@@ -2771,7 +2991,7 @@
       onChange && onChange(next);
       if (next === "down" && onComment) setOpen(true);
     };
-    return /* @__PURE__ */ React31.createElement("div", { className: cx67(className), ...rest }, /* @__PURE__ */ React31.createElement("div", { className: "lw-feedback" }, /* @__PURE__ */ React31.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": "Helpful", "aria-pressed": value === "up", onClick: () => set("up") }, /* @__PURE__ */ React31.createElement(Icon, { name: "thumbs-up", size: 15 })), /* @__PURE__ */ React31.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": "Not helpful", "aria-pressed": value === "down", onClick: () => set("down") }, /* @__PURE__ */ React31.createElement(Icon, { name: "thumbs-down", size: 15 })), note && /* @__PURE__ */ React31.createElement("span", { className: "lw-feedback-note" }, note)), open && onComment && /* @__PURE__ */ React31.createElement(
+    return /* @__PURE__ */ React31.createElement("div", { className: cx67(className), ...rest }, /* @__PURE__ */ React31.createElement("div", { className: "lw-feedback" }, /* @__PURE__ */ React31.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": upLabel, "aria-pressed": value === "up", onClick: () => set("up") }, /* @__PURE__ */ React31.createElement(Icon, { name: "thumbs-up", size: 15 })), /* @__PURE__ */ React31.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": downLabel, "aria-pressed": value === "down", onClick: () => set("down") }, /* @__PURE__ */ React31.createElement(Icon, { name: "thumbs-down", size: 15 })), note && /* @__PURE__ */ React31.createElement("span", { className: "lw-feedback-note" }, note)), open && onComment && /* @__PURE__ */ React31.createElement(
       "form",
       {
         className: "lw-feedback-form",
@@ -2794,7 +3014,7 @@
           onChange: (e) => setText(e.target.value)
         }
       ),
-      /* @__PURE__ */ React31.createElement("div", { className: "lw-feedback-actions" }, /* @__PURE__ */ React31.createElement("button", { type: "button", className: "lw-btn lw-btn-ghost lw-btn-sm", onClick: () => setOpen(false) }, "Cancel"), /* @__PURE__ */ React31.createElement("button", { type: "submit", className: "lw-btn lw-btn-sm", disabled: !text.trim() }, "Send"))
+      /* @__PURE__ */ React31.createElement("div", { className: "lw-feedback-actions" }, /* @__PURE__ */ React31.createElement("button", { type: "button", className: "lw-btn lw-btn-ghost lw-btn-sm", onClick: () => setOpen(false) }, cancelLabel), /* @__PURE__ */ React31.createElement("button", { type: "submit", className: "lw-btn lw-btn-sm", disabled: !text.trim() }, sendLabel))
     ));
   }
 
@@ -2898,12 +3118,19 @@
     date,
     dateTime,
     avatar,
+    readTime,
     readMinutes,
     cover,
     linkAs = "a",
     className,
     ...rest
   }) {
+    if (readMinutes != null) deprecate(
+      "ArticleCard",
+      "readMinutes",
+      "`readMinutes` is deprecated — pass `readTime` as a pre-formatted node (e.g. `${n} min read`, or its translation), because a component library cannot hold display text. `readMinutes` is removed in v2.0.0."
+    );
+    const read = readTime != null ? readTime : readMinutes != null ? readMinutes + " min read" : null;
     return /* @__PURE__ */ React.createElement(
       Card,
       {
@@ -2918,7 +3145,7 @@
       /* @__PURE__ */ React.createElement(CardTitle, null, title),
       dek && /* @__PURE__ */ React.createElement(CardBody, null, dek),
       tags.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "lw-cluster" }, tags.map((t, i) => /* @__PURE__ */ React.createElement("span", { className: "lw-pill", key: i }, t))),
-      (author || date || readMinutes != null) && /* @__PURE__ */ React.createElement(CardFoot, null, /* @__PURE__ */ React.createElement(Byline, { name: author, role, date, dateTime, src: avatar, size: "sm" }, readMinutes != null && /* @__PURE__ */ React.createElement("span", { className: "date" }, readMinutes, " min read")))
+      (author || date || read != null) && /* @__PURE__ */ React.createElement(CardFoot, null, /* @__PURE__ */ React.createElement(Byline, { name: author, role, date, dateTime, src: avatar, size: "sm" }, read != null && /* @__PURE__ */ React.createElement("span", { className: "date" }, read)))
     );
   }
 
@@ -3049,6 +3276,8 @@
     SourceList,
     ToolCall,
     ActivityFeed,
+    BUCKET_LABELS,
+    RELATIVE_LABELS,
     timeAgo,
     BarChart,
     CHART_PAD,
@@ -3080,6 +3309,7 @@
     Input,
     InputGroup,
     RichText,
+    TOOLS,
     Segmented,
     Select,
     Stepper,
@@ -3114,6 +3344,7 @@
     NavItem,
     Sidebar,
     Tabs,
+    THEME_LABELS,
     ThemeToggle,
     TopBar,
     Dialog,

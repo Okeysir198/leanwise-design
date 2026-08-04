@@ -24,6 +24,13 @@ function Pagination({
   hasNext,
   hasPrev,
   label = "Pagination",
+  prevLabel = "Previous page",
+  nextLabel = "Next page",
+  pageSizeLabel = "Rows per page",
+  formatCount = (f, t, all, fmt) => fmt(f) + "\u2013" + fmt(t) + " of " + fmt(all),
+  formatCursor = (p) => "Page " + p,
+  formatPageLabel = (p) => "Page " + p,
+  formatPageSize = (s) => s + " / page",
   className,
   ...rest
 }) {
@@ -33,19 +40,16 @@ function Pagination({
   const nf = new Intl.NumberFormat();
   const go = (p) => onPageChange && onPageChange(Math.min(Math.max(1, p), count));
   return /* @__PURE__ */ jsxs("nav", { className: cx("lw-pagination", className), "aria-label": label, ...rest, children: [
-    /* @__PURE__ */ jsx("span", { className: "lw-pag-info", children: cursor ? "Page " + page : total ? nf.format(from) + "\u2013" + nf.format(to) + " of " + nf.format(total) : "" }),
+    /* @__PURE__ */ jsx("span", { className: "lw-pag-info", children: cursor ? formatCursor(page) : total ? formatCount(from, to, total, (v) => nf.format(v)) : "" }),
     /* @__PURE__ */ jsx("span", { className: "lw-spacer" }),
     onPageSizeChange && !cursor && /* @__PURE__ */ jsx(
       "select",
       {
         className: "lw-input lw-input-sm lw-pag-size",
-        "aria-label": "Rows per page",
+        "aria-label": pageSizeLabel,
         value: pageSize,
         onChange: (e) => onPageSizeChange(Number(e.target.value)),
-        children: pageSizes.map((s) => /* @__PURE__ */ jsxs("option", { value: s, children: [
-          s,
-          " / page"
-        ] }, s))
+        children: pageSizes.map((s) => /* @__PURE__ */ jsx("option", { value: s, children: formatPageSize(s) }, s))
       }
     ),
     /* @__PURE__ */ jsx(
@@ -53,7 +57,7 @@ function Pagination({
       {
         type: "button",
         className: "lw-pag-btn",
-        "aria-label": "Previous page",
+        "aria-label": prevLabel,
         disabled: cursor ? !hasPrev : page <= 1,
         onClick: () => go(page - 1),
         children: /* @__PURE__ */ jsx(Icon, { name: "chevron-left", size: 15 })
@@ -65,7 +69,7 @@ function Pagination({
         {
           type: "button",
           className: "lw-pag-btn",
-          "aria-label": "Page " + p,
+          "aria-label": formatPageLabel(p),
           "aria-current": p === page ? "page" : void 0,
           onClick: () => go(p),
           children: p
@@ -78,7 +82,7 @@ function Pagination({
       {
         type: "button",
         className: "lw-pag-btn",
-        "aria-label": "Next page",
+        "aria-label": nextLabel,
         disabled: cursor ? !hasNext : page >= count,
         onClick: () => go(page + 1),
         children: /* @__PURE__ */ jsx(Icon, { name: "chevron-right", size: 15 })

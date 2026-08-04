@@ -3,7 +3,19 @@ import { jsx, jsxs } from "react/jsx-runtime";
 import * as React from "react";
 import { Icon } from "../primitives/Icon.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
-function Feedback({ value, onChange, onComment, commentPlaceholder = "What was wrong?", note, className, ...rest }) {
+function Feedback({
+  value,
+  onChange,
+  onComment,
+  commentPlaceholder = "What was wrong?",
+  note,
+  upLabel = "Helpful",
+  downLabel = "Not helpful",
+  cancelLabel = "Cancel",
+  sendLabel = "Send",
+  className,
+  ...rest
+}) {
   const [open, setOpen] = React.useState(false);
   const [text, setText] = React.useState("");
   const set = (v) => {
@@ -13,8 +25,8 @@ function Feedback({ value, onChange, onComment, commentPlaceholder = "What was w
   };
   return /* @__PURE__ */ jsxs("div", { className: cx(className), ...rest, children: [
     /* @__PURE__ */ jsxs("div", { className: "lw-feedback", children: [
-      /* @__PURE__ */ jsx("button", { type: "button", className: "lw-icon-btn", "aria-label": "Helpful", "aria-pressed": value === "up", onClick: () => set("up"), children: /* @__PURE__ */ jsx(Icon, { name: "thumbs-up", size: 15 }) }),
-      /* @__PURE__ */ jsx("button", { type: "button", className: "lw-icon-btn", "aria-label": "Not helpful", "aria-pressed": value === "down", onClick: () => set("down"), children: /* @__PURE__ */ jsx(Icon, { name: "thumbs-down", size: 15 }) }),
+      /* @__PURE__ */ jsx("button", { type: "button", className: "lw-icon-btn", "aria-label": upLabel, "aria-pressed": value === "up", onClick: () => set("up"), children: /* @__PURE__ */ jsx(Icon, { name: "thumbs-up", size: 15 }) }),
+      /* @__PURE__ */ jsx("button", { type: "button", className: "lw-icon-btn", "aria-label": downLabel, "aria-pressed": value === "down", onClick: () => set("down"), children: /* @__PURE__ */ jsx(Icon, { name: "thumbs-down", size: 15 }) }),
       note && /* @__PURE__ */ jsx("span", { className: "lw-feedback-note", children: note })
     ] }),
     open && onComment && /* @__PURE__ */ jsxs(
@@ -41,8 +53,8 @@ function Feedback({ value, onChange, onComment, commentPlaceholder = "What was w
             }
           ),
           /* @__PURE__ */ jsxs("div", { className: "lw-feedback-actions", children: [
-            /* @__PURE__ */ jsx("button", { type: "button", className: "lw-btn lw-btn-ghost lw-btn-sm", onClick: () => setOpen(false), children: "Cancel" }),
-            /* @__PURE__ */ jsx("button", { type: "submit", className: "lw-btn lw-btn-sm", disabled: !text.trim(), children: "Send" })
+            /* @__PURE__ */ jsx("button", { type: "button", className: "lw-btn lw-btn-ghost lw-btn-sm", onClick: () => setOpen(false), children: cancelLabel }),
+            /* @__PURE__ */ jsx("button", { type: "submit", className: "lw-btn lw-btn-sm", disabled: !text.trim(), children: sendLabel })
           ] })
         ]
       }

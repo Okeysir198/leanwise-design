@@ -20,8 +20,12 @@ export interface CommandPaletteProps extends React.HTMLAttributes<HTMLDialogElem
   commands: Command[];
   onRun?(command: Command): void;
   placeholder?: string;
+  /* --- Display text. Every user-visible string this component renders is a
+     prop, because a component library cannot hold display text (v1.3.1). --- */
   emptyText?: string;
   label?: string;
+  /** The footer hint row. Default `["↑↓ navigate", "↵ run", "esc close"]`. */
+  hints?: React.ReactNode[];
 }
 /**
  * The command palette, on the native `<dialog>`. It does NOT bind ⌘K — a

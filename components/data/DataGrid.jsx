@@ -21,7 +21,12 @@ export function DataGrid({
   columns = [], rows = [], rowKey = (r, i) => r.id ?? i,
   sort, onSort, selectable, selected = [], onSelectionChange,
   height = 420, rowHeight = 44, virtualize, overscan = 8,
-  onRowClick, empty = "No rows", selectionActions, label = "Data grid", className, ...rest
+  onRowClick, empty = "No rows", selectionActions, label = "Data grid",
+  selectedLabel = "selected", clearSelectionLabel = "Clear",
+  selectAllLabel = "Select all rows", clearAllSelectionLabel = "Clear selection",
+  formatResizeLabel = (h) => "Resize " + h,
+  formatRowSelectLabel = (n) => "Select row " + n,
+  className, ...rest
 }) {
   /* One home for the column-width fallbacks. Both defaults were written out at
      six and two call sites; a grid where one of them drifts is a grid whose
@@ -121,10 +126,10 @@ export function DataGrid({
       {selectable && selSet.size > 0 && (
         <div className="lw-dgrid-selbar">
           <span className="count">{selSet.size}</span>
-          <span>selected</span>
+          <span>{selectedLabel}</span>
           <span className="lw-spacer" />
           {selectionActions}
-          <button type="button" className="lw-filter-clear" onClick={() => onSelectionChange && onSelectionChange([])}>Clear</button>
+          <button type="button" className="lw-filter-clear" onClick={() => onSelectionChange && onSelectionChange([])}>{clearSelectionLabel}</button>
         </div>
       )}
       <div ref={scrollRef} className="lw-dgrid-scroll" style={{ maxHeight: height }}
@@ -142,7 +147,7 @@ export function DataGrid({
                     <label className="lw-check">
                       <input type="checkbox" checked={allOn}
                         ref={(el) => { if (el) el.indeterminate = someOn; }}
-                        onChange={toggleAll} aria-label={allOn ? "Clear selection" : "Select all rows"} />
+                        onChange={toggleAll} aria-label={allOn ? clearAllSelectionLabel : selectAllLabel} />
                       <span className="box" />
                     </label>
                   </span>
@@ -164,7 +169,7 @@ export function DataGrid({
                       </button>
                     ) : colHeader("DataGrid", c)}
                     {c.resizable !== false && (
-                      <button type="button" className="lw-dgrid-resize" aria-label={"Resize " + (typeof colHeader("DataGrid", c) === "string" ? colHeader("DataGrid", c) : c.key)}
+                      <button type="button" className="lw-dgrid-resize" aria-label={formatResizeLabel(typeof colHeader("DataGrid", c) === "string" ? colHeader("DataGrid", c) : c.key)}
                         onPointerDown={(e) => onResizeDown(i, e)} onKeyDown={(e) => onResizeKey(i, e)} />
                     )}
                   </th>
@@ -188,7 +193,7 @@ export function DataGrid({
                       <span className="lw-dgrid-check">
                         <label className="lw-check">
                           <input type="checkbox" checked={on} onChange={() => toggleRow(k)}
-                            aria-label={"Select row " + (i + 1)} />
+                            aria-label={formatRowSelectLabel(i + 1)} />
                           <span className="box" />
                         </label>
                       </span>

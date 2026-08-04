@@ -12,20 +12,27 @@ const stamp = (when) => new Intl.DateTimeFormat(undefined, { day: "numeric", mon
    moment the user needs to correlate it with anything else.
    `now` still defaults to Date.now() HERE because this is a plain function the
    caller invokes imperatively; the hazard was defaulting it during render. */
-export function timeAgo(when, now = Date.now()) {
+/* The English defaults, exported so a consumer can wrap rather than re-derive
+   the thresholds. Every user-visible word in this file reaches the DOM through
+   one of these two, and both are replaceable per instance — see `formatTimeAgo`
+   and `bucketLabels` on the component. */
+export const RELATIVE_LABELS = { now: "just now", minutes: "m ago", hours: "h ago", days: "d ago" };
+export const BUCKET_LABELS = { today: "Today", yesterday: "Yesterday", week: "This week", earlier: "Earlier" };
+
+export function timeAgo(when, now = Date.now(), labels = RELATIVE_LABELS) {
   const t = ms(when);
   const s = Math.max(0, (now - t) / 1000);
-  if (s < 60) return "just now";
-  if (s < 3600) return Math.floor(s / 60) + "m ago";
-  if (s < 86400) return Math.floor(s / 3600) + "h ago";
-  if (s < 86400 * 3) return Math.floor(s / 86400) + "d ago";
+  if (s < 60) return labels.now;
+  if (s < 3600) return Math.floor(s / 60) + labels.minutes;
+  if (s < 86400) return Math.floor(s / 3600) + labels.hours;
+  if (s < 86400 * 3) return Math.floor(s / 86400) + labels.days;
   return stamp(when);
 }
 
-const bucket = (when, now) => {
+const bucketKey = (when, now) => {
   const d = new Date(when), n = new Date(now);
   const days = Math.floor((new Date(n.getFullYear(), n.getMonth(), n.getDate()) - new Date(d.getFullYear(), d.getMonth(), d.getDate())) / 86400000);
-  return days <= 0 ? "Today" : days === 1 ? "Yesterday" : days < 7 ? "This week" : "Earlier";
+  return days <= 0 ? "today" : days === 1 ? "yesterday" : days < 7 ? "week" : "earlier";
 };
 
 /**
@@ -41,7 +48,13 @@ const bucket = (when, now) => {
  * that Link applies. It receives what the raw <a> would: `href`, `className`,
  * the data attributes and `children`. An item without an href is unaffected.
  */
-export function ActivityFeed({ items = [], onItemClick, grouped = true, now, label = "Activity", linkAs = "a", className, ...rest }) {
+export function ActivityFeed({
+  items = [], onItemClick, grouped = true, now, label = "Activity", linkAs = "a",
+  bucketLabels = BUCKET_LABELS,
+  formatTimeAgo = timeAgo,
+  unreadLabel = "Unread",
+  className, ...rest
+}) {
   /* `now` is resolved in an EFFECT, not defaulted during render — the same fix
      Calendar's `today` marker got in v1.1.5, and for the same reason: Date.now()
      in the render body differs between a server render and the client's
@@ -56,7 +69,7 @@ export function ActivityFeed({ items = [], onItemClick, grouped = true, now, lab
 
   const groups = [];
   items.forEach((it) => {
-    const g = grouped && it.when && at != null ? bucket(it.when, at) : null;
+    const g = grouped && it.when && at != null ? bucketLabels[bucketKey(it.when, at)] : null;
     const last = groups[groups.length - 1];
     if (last && last.name === g) last.items.push(it);
     else groups.push({ name: g, items: [it] });
@@ -85,10 +98,10 @@ export function ActivityFeed({ items = [], onItemClick, grouped = true, now, lab
                 <span className="lw-feed-main">
                   <span className="lw-feed-title">{it.title}</span>
                   <span className="lw-feed-meta">
-                    {it.when ? (at != null ? timeAgo(it.when, at) : stamp(it.when)) : null}{it.meta ? (it.when ? " · " : "") + it.meta : ""}
+                    {it.when ? (at != null ? formatTimeAgo(it.when, at) : stamp(it.when)) : null}{it.meta ? (it.when ? " · " : "") + it.meta : ""}
                   </span>
                 </span>
-                {it.unread && <span className="lw-sr-only">Unread</span>}
+                {it.unread && <span className="lw-sr-only">{unreadLabel}</span>}
               </Tag>
             );
           })}

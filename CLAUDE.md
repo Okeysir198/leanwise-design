@@ -4,7 +4,7 @@ Guidance for Claude Code when working in this repository.
 
 ## What this is
 
-**`@leanwise/design` v1.3.0** — the LeanWise design system. Tokens, five CSS layers, a Tailwind
+**`@leanwise/design` v1.3.1** — the LeanWise design system. Tokens, five CSS layers, a Tailwind
 preset, ~77 React components across eight categories, twelve page templates, and the **gates**
 that turn the style guide into build failures.
 
@@ -51,10 +51,11 @@ tokens.css        THE source of truth — HSL channel triples + derived colors, 
                     Authored once as a triple; the derived line is generated. Edit the triple;
                     NEVER the derived line; never a hex in a consumer.
 base.css          shared controls — the layer every surface needs. Layout primitives,
-                    type, buttons, the ICON BUTTON, pills/cards/chips, the FORM field +
-                    control face and their dark patches, the console + code surfaces,
-                    the TOP BAR + its mobile nav, prose, disclosure, and the
-                    pointer-affordance list (which must stay LAST in the file).
+                    type, buttons, the ICON and the ICON BUTTON, pills/cards/chips, the
+                    AVATAR, the EMPTY STATE, the FORM field + control face and their dark
+                    patches, the console + code surfaces, TABS, PAGINATION, the TOP BAR
+                    + its mobile nav, prose, disclosure, and the pointer-affordance list
+                    (which must stay LAST in the file).
 marketing.css     grounds + hero + site chrome (footer, announce, plans, matrix, flow,
                     editorial). product.css    app surfaces (data, overlays, the
                     app shell and rails, AI, the mobile bars).
@@ -74,6 +75,17 @@ marketing.css     grounds + hero + site chrome (footer, announce, plans, matrix,
                     stayed — Dialog.jsx now emits both classes) and `.lw-eyebrow`'s dark
                     hexagon patch. A marketing page now needs base + marketing, nothing
                     more.
+                    **v1.3.1 promoted five more** — `.lw-avatar`, `.lw-empty` (with its
+                    dark patches), `.lw-tabs` (with all six `.lw-code .lw-tabs` rules),
+                    `.lw-pagination`/`.lw-pag-*` and `.lw-icon`. `Byline` renders an
+                    `Avatar` and `ArticleCard` renders a `Byline`, so two MARKETING
+                    components depended on the app layer; `.lw-icon` is the whole layout
+                    contract for the icon set, reached by ten marketing components.
+                    **The reason none of it was visible is the lesson: `marketing.card.html`
+                    and `site-chrome.card.html` were loading `product.css`.** A specimen
+                    that loads more than its documented recipe cannot measure the recipe.
+                    They load base + marketing only now — do not add it back; that one
+                    `<link>` is what found `.lw-icon`.
                     **A property carrying a COLOUR is base.css's to state.** `.lw-btn`
                     declared no `background` and no `border`, leaning on reset.css's
                     `button { background: none; border: 0 }` — which v1.2.0 split out.
@@ -145,6 +157,15 @@ so `check:themes` fails when `tokens.json` does not match what `tokens.css` woul
   match `tokens.css` — the gradient stops must be literal hex because custom properties do not
   cascade into an SVG loaded through `<img>`, so this is the only guard on that second home for
   a brand value. It asserts **`email.css`'s literals** the same way and for the same reason.
+  **v1.3.1 added a BAND SCOPE rule**: a selector used as an ancestor scope to re-ink
+  descendants from the `--lw-on-dark*` family must appear in tokens.css's dark band list.
+  `.lw-hero-dark` was not, for the life of the package — it painted navy and hand-patched the
+  four elements anyone demos, leaving every other role token inside a hero resolving LIGHT on
+  navy (a `Byline` measured 1.5:1). No pair can express that, because both tokens in the pair
+  are correct and the SCOPE is wrong. Nor could `check:a11y`: the hero has decorative
+  pseudo-elements, so axe files the finding as `incomplete` — which that gate does not read.
+  Exemptions are named in `BAND_SCOPE_EXEMPT`, greppable and countable.
+
   It also carries a **non-text group (WCAG 1.4.11, 3:1)** for control boundaries and focus
   indicators — until v1.1.5 every pair was a TEXT pair, `AA_LARGE` was dead code, and control
   borders were shipping at 1.47:1. Run it on every token change.
@@ -172,6 +193,12 @@ so `check:themes` fails when `tokens.json` does not match what `tokens.css` woul
   re-pointed in *every* theme scope. This is what stops a token existing in light and silently
   inheriting in dark.
 - **`lw-a11y.mjs`** — axe over every `@dsCard`. serious/critical fail; moderate/minor report.
+  **It reads `violations`, not `incomplete`, and that is a known blind spot with a known
+  shape:** axe cannot resolve a background behind a pseudo-element, so every decorative surface
+  here (the hero, the grounds, the aurora) is invisible to the contrast rule. Four serious
+  incompletes and zero violations is what a 1.5:1 hero looked like. Do not "fix" this by
+  failing on incompletes — they are mostly noise — assert the token SCOPE instead, which is
+  what the contrast gate's band rule now does.
   A node may opt out of ONE rule with `data-a11y-expect="<rule-id>"` — for a specimen that
   exists to demonstrate a failure (the neutrals card prints text-4's sub-AA ratio as the
   point of the row). Never exempt a whole card or a whole rule; the attribute is greppable

@@ -15,10 +15,10 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  * a crumb navigates client-side, carrying whatever prefix that Link applies.
  * It receives what the raw <a> would: `href` and `children`.
  */
-export function Breadcrumbs({ items = [], linkAs = "a", className, ...rest }) {
+export function Breadcrumbs({ items = [], linkAs = "a", label = "Breadcrumb", className, ...rest }) {
   const Link = linkAs;
   return (
-    <nav className={cx("lw-crumbs", className)} aria-label="Breadcrumb" {...rest}>
+    <nav className={cx("lw-crumbs", className)} aria-label={label} {...rest}>
       {items.map((it, i) => (
         <React.Fragment key={i}>
           {i > 0 && <span className="sep" aria-hidden="true">/</span>}

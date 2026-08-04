@@ -33,7 +33,11 @@ export function formatBytes(n) {
    focusing a <div> does nothing. Here that is the file <input>. */
 export const FileUpload = React.forwardRef(function FileUpload({
   files = [], onFiles, onRemove, accept, multiple, maxSize, disabled,
-  title = "Drop files here", hint, className, ...rest
+  title = "Drop files here", hint,
+  formatRejected = (names, limit) => names + " \u2014 over " + limit,
+  formatHint = (a, limit) => (a ? a + (limit ? " \u00b7 up to " + limit : "") : limit ? "Up to " + limit : "or click to browse"),
+  formatRemoveLabel = (name) => "Remove " + name,
+  className, ...rest
 }, forwardedRef) {
   const [over, setOver] = React.useState(0);
   const [rejected, setRejected] = React.useState(null);
@@ -45,7 +49,7 @@ export const FileUpload = React.forwardRef(function FileUpload({
     if (!arr.length) return;
     const tooBig = maxSize ? arr.filter(f => f.size > maxSize) : [];
     // Say WHICH file and WHY, with the limit — "upload failed" is not a message.
-    setRejected(tooBig.length ? tooBig.map(f => f.name).join(", ") + " — over " + formatBytes(maxSize) : null);
+    setRejected(tooBig.length ? formatRejected(tooBig.map(f => f.name).join(", "), formatBytes(maxSize)) : null);
     const ok = maxSize ? arr.filter(f => f.size <= maxSize) : arr;
     if (ok.length && onFiles) onFiles(multiple ? ok : ok.slice(0, 1));
   };
@@ -61,7 +65,7 @@ export const FileUpload = React.forwardRef(function FileUpload({
           onChange={(e) => { take(e.target.files); e.target.value = ""; }} />
         <Icon name="upload" size={20} />
         <span className="lw-dz-title">{title}</span>
-        <span className="lw-dz-hint">{hint || (accept ? accept + (maxSize ? " · up to " + formatBytes(maxSize) : "") : maxSize ? "Up to " + formatBytes(maxSize) : "or click to browse")}</span>
+        <span className="lw-dz-hint">{hint || formatHint(accept, maxSize ? formatBytes(maxSize) : null)}</span>
       </label>
       {rejected && <div className="lw-error" role="alert">{rejected}</div>}
       {files.length > 0 && (
@@ -79,7 +83,7 @@ export const FileUpload = React.forwardRef(function FileUpload({
                   : <span className="lw-file-meta">{f.error || formatBytes(f.size)}</span>}
               </span>
               {onRemove && (
-                <button type="button" className="lw-icon-btn" aria-label={"Remove " + f.name} onClick={() => onRemove(f)}>
+                <button type="button" className="lw-icon-btn" aria-label={formatRemoveLabel(f.name)} onClick={() => onRemove(f)}>
                   <Icon name="close" size={15} />
                 </button>
               )}

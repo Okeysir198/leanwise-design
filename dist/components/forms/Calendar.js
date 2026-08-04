@@ -17,7 +17,21 @@ const addMonths = (d, n) => {
   return x;
 };
 const between = (d, a, b) => a && b && day(d) > day(a) && day(d) < day(b);
-function Calendar({ value, onChange, range, month, onMonthChange, min, max, weekStart = 1, locale, className, ...rest }) {
+function Calendar({
+  value,
+  onChange,
+  range,
+  month,
+  onMonthChange,
+  min,
+  max,
+  weekStart = 1,
+  locale,
+  prevMonthLabel = "Previous month",
+  nextMonthLabel = "Next month",
+  className,
+  ...rest
+}) {
   const sel = range ? value || {} : value;
   const anchor = (range ? sel.start : sel) || /* @__PURE__ */ new Date();
   const [viewRaw, setView] = React.useState(() => addMonths(anchor, 0));
@@ -92,9 +106,9 @@ function Calendar({ value, onChange, range, month, onMonthChange, min, max, week
   };
   return /* @__PURE__ */ jsxs("div", { className: cx("lw-cal", className), ...rest, children: [
     /* @__PURE__ */ jsxs("div", { className: "lw-cal-head", children: [
-      /* @__PURE__ */ jsx("button", { type: "button", className: "lw-icon-btn", "aria-label": "Previous month", onClick: () => setMonth(addMonths(view, -1)), children: /* @__PURE__ */ jsx(Icon, { name: "chevron-left", size: 16 }) }),
+      /* @__PURE__ */ jsx("button", { type: "button", className: "lw-icon-btn", "aria-label": prevMonthLabel, onClick: () => setMonth(addMonths(view, -1)), children: /* @__PURE__ */ jsx(Icon, { name: "chevron-left", size: 16 }) }),
       /* @__PURE__ */ jsx("div", { className: "lw-cal-month", "aria-live": "polite", children: fmtMonth.format(view) }),
-      /* @__PURE__ */ jsx("button", { type: "button", className: "lw-icon-btn", "aria-label": "Next month", onClick: () => setMonth(addMonths(view, 1)), children: /* @__PURE__ */ jsx(Icon, { name: "chevron-right", size: 16 }) })
+      /* @__PURE__ */ jsx("button", { type: "button", className: "lw-icon-btn", "aria-label": nextMonthLabel, onClick: () => setMonth(addMonths(view, 1)), children: /* @__PURE__ */ jsx(Icon, { name: "chevron-right", size: 16 }) })
     ] }),
     /* @__PURE__ */ jsxs("div", { ref: gridRef, className: "lw-cal-grid", role: "grid", onKeyDown, onMouseLeave: () => setHover(null), children: [
       /* @__PURE__ */ jsx("div", { role: "row", className: "lw-cal-dow-row", children: dows.map((d, i) => /* @__PURE__ */ jsx("div", { role: "columnheader", className: "lw-cal-dow", children: d }, i)) }),

@@ -18,7 +18,10 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  */
 export function AppBar({
   brand = "LeanWise AI", brandHref = "#", mark = true, crumbs = [],
-  onMenuClick, menuExpanded, actions, linkAs = "a", className, children, ...rest
+  onMenuClick, menuExpanded, actions, linkAs = "a",
+  collapseNavLabel = "Collapse navigation", expandNavLabel = "Expand navigation",
+  homeLabel = "Home", formatBrandLabel = (b) => b + " \u2014 home",
+  className, children, ...rest
 }) {
   const Brand = brandHref ? linkAs : "span";
   return (
@@ -26,12 +29,12 @@ export function AppBar({
       <div className="lw-appbar-lead">
         {onMenuClick && (
           <button type="button" className="lw-icon-btn" onClick={onMenuClick}
-            aria-expanded={menuExpanded} aria-label={menuExpanded ? "Collapse navigation" : "Expand navigation"}>
+            aria-expanded={menuExpanded} aria-label={menuExpanded ? collapseNavLabel : expandNavLabel}>
             <Icon name="sidebar" size={21} />
           </button>
         )}
         <Brand className="lw-appbar-brand" href={brandHref || undefined}
-          aria-label={brandHref ? (typeof brand === "string" ? brand + " — home" : "Home") : undefined}>
+          aria-label={brandHref ? (typeof brand === "string" ? formatBrandLabel(brand) : homeLabel) : undefined}>
           {/* The mark is artwork and the name is live text — the combined lockup
               is 2775:1000, so at bar height its wordmark caps land near 6px. */}
           {mark && <span className="brand-mark" aria-hidden="true" />}

@@ -3,7 +3,17 @@ import { jsx, jsxs } from "react/jsx-runtime";
 import * as React from "react";
 import { Icon } from "../primitives/Icon.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
-function CodeBlock({ code, html, filename, lang, copy = true, className, ...rest }) {
+function CodeBlock({
+  code,
+  html,
+  filename,
+  lang,
+  copy = true,
+  copyLabel = "Copy code",
+  copiedLabel = "Copied",
+  className,
+  ...rest
+}) {
   const [copied, setCopied] = React.useState(false);
   const canCopy = copy && typeof code === "string" && code.length > 0;
   React.useEffect(() => {
@@ -29,8 +39,8 @@ function CodeBlock({ code, html, filename, lang, copy = true, className, ...rest
             type: "button",
             className: "lw-icon-btn",
             onClick: onCopy,
-            "aria-label": copied ? "Copied" : "Copy code",
-            title: copied ? "Copied" : "Copy code",
+            "aria-label": copied ? copiedLabel : copyLabel,
+            title: copied ? copiedLabel : copyLabel,
             children: /* @__PURE__ */ jsx(Icon, { name: copied ? "check" : "copy", size: 15 })
           }
         )

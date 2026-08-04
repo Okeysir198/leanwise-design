@@ -159,18 +159,17 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 }
 @keyframes lwShimmer { to { transform: translateX(100%); } }
 
-/* AVATAR — initials by default; an image only if there is one. */
-.lw-avatar { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; flex: none; border-radius: 50%; background: var(--lw-brand-soft); color: var(--lw-brand-on); font-size: 12px; font-weight: var(--lw-fw-medium); letter-spacing: 0.01em; overflow: hidden; user-select: none; }
-.lw-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.lw-avatar-sm { width: 24px; height: 24px; font-size: 10px; }
-.lw-avatar-lg { width: 44px; height: 44px; font-size: 15px; }
+/* AVATAR — MOVED to base.css in v1.3.1, verbatim: `.lw-avatar`, its `img` and
+   the two size variants. `Byline` renders an `Avatar` and `ArticleCard` renders
+   a `Byline`, so the atom is load-bearing for two MARKETING components and was
+   sitting in the layer a marketing page is told to drop. It now sits with the
+   chip, immediately above the promoted form controls. */
 
-/* EMPTY STATE — the screen a product is judged by, and the one that gets left
-   as "No data". Title, one line of why, one action. */
-.lw-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-align: center; padding: var(--lw-space-48) var(--lw-space-24); border: 1px dashed var(--lw-line-strong); border-radius: var(--lw-radius-lg); background: var(--lw-bg-subtle); }
-.lw-empty .t { font-size: var(--lw-text-body); font-weight: var(--lw-fw-semibold); letter-spacing: -0.012em; color: var(--lw-fg); }
-.lw-empty .s { font-size: var(--lw-text-sm); color: var(--lw-fg-muted); max-width: 46ch; text-wrap: pretty; }
-.lw-empty .glyph { display: inline-flex; font-family: var(--lw-font-mono); font-size: 20px; color: var(--lw-fg-subtle); }
+/* EMPTY STATE — MOVED to base.css in v1.3.1, verbatim, together with its three
+   `.lw-band-dark` / `[data-band="dark"]` patches (which used to sit ~340 lines
+   below, in the generic dark-band block). "No results for this filter" is the
+   same screen on a blog index as in a data grid, and the package's own
+   article-index recipe names `EmptyState` for it. */
 
 /* ON THIS PAGE — the docs contents panel. A floating card rather than a bare
    column of links: the trail of sections is a peer of the content, not chrome
@@ -214,24 +213,13 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 
 /* ---- Navigation ------------------------------------------------------------ */
 
-/* TABS — the one tab strip (.lw-code-tabs was deleted in v1.0; see README rule 9). */
-.lw-tabs { display: flex; gap: var(--lw-space-24); border-bottom: 1px solid var(--lw-line); overflow-x: auto; scrollbar-width: none; }
-.lw-tabs::-webkit-scrollbar { display: none; }
-.lw-tabs [role="tab"] { appearance: none; border: 0; background: none; font: inherit; font-size: var(--lw-text-sm); font-weight: var(--lw-fw-medium); color: var(--lw-fg-subtle); padding: 10px 0; cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color var(--lw-dur-xs) var(--lw-ease-out), border-color var(--lw-dur-xs) var(--lw-ease-out); }
-.lw-tabs [role="tab"]:hover { color: var(--lw-fg); }
-.lw-tabs [role="tab"][aria-selected="true"] { color: var(--lw-brand-text); border-bottom-color: var(--lw-brand-500); }
-.lw-tabs [role="tab"]:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); border-radius: var(--lw-radius-xs); }
-.lw-tabs [role="tab"] .count { font-family: var(--lw-font-mono); font-size: 11px; color: var(--lw-fg-subtle); margin-inline-start: 6px; }
-
-/* .lw-tabs inside the dark code surface. This is why .lw-code-tabs existed as
-   a separate class; six rules is cheaper than a second component. */
-.lw-code .lw-tabs { padding: 0 var(--lw-space-16); border-bottom-color: var(--lw-on-dark-line); }
-.lw-code .lw-tabs [role="tab"] { color: var(--lw-on-dark-3); padding: 10px 0; }
-.lw-code .lw-tabs [role="tab"]:hover { color: var(--lw-on-dark-1); }
-.lw-code .lw-tabs [role="tab"][aria-selected="true"] { color: var(--lw-brand-300); border-bottom-color: var(--lw-brand-400); }
-.lw-code .lw-tabs [role="tab"]:focus-visible { box-shadow: 0 0 0 2px var(--lw-brand-400); }
-.lw-code:has(.lw-tabs) { padding: 0; }
-.lw-code:has(.lw-tabs) pre { margin: 0; padding: var(--lw-space-16); }
+/* TABS — MOVED to base.css in v1.3.1, verbatim: `.lw-tabs`, its scrollbar rule,
+   the five `[role="tab"]` rules and ALL SIX `.lw-code .lw-tabs` rules. A
+   category filter over an article index is the documented marketing recipe, and
+   `Tabs` lives in `components/nav/` beside `TopBar` — which v1.3.0 moved for
+   exactly this reason. The dark-code-surface rules went with it: `.lw-code` has
+   been in base.css since v1.1, so the patch and the surface are now one place
+   instead of split across the layer boundary. */
 
 /* TOP BAR — MOVED to base.css in v1.3.0, verbatim: `.lw-topbar`, every descendant
    and state rule, and BOTH `@media (max-width: 768px)` blocks. It now sits directly
@@ -278,9 +266,19 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 .lw-nav-item[aria-current="page"], .lw-nav-item.is-active { background: var(--lw-brand-soft); color: var(--lw-brand-on); font-weight: var(--lw-fw-medium); }
 .lw-nav-item[aria-current="page"] .ic, .lw-nav-item.is-active .ic { opacity: 1; }
 
-/* ICON — one 24-grid, currentColor only, so an icon cannot introduce ink the
-   tokens do not know about. */
-.lw-icon { flex: none; display: inline-block; vertical-align: -0.14em; }
+/* ICON — MOVED to base.css in v1.3.1, verbatim. `.lw-icon` is ONE rule, and it
+   was the whole layout contract for the icon set: `Icon` is a PRIMITIVE, and
+   `SiteFooter`, `AnnounceBar`, `FeatureGrid`, `PlanCard`, `CompareTable`,
+   `Steps`, `EmptyState`, `Disclosure`, `NavToggle` and `Button` all name a
+   glyph. Without it an `<svg>` falls back to the UA's `display: inline`, sits
+   on the text baseline and grows its line box — a footer link with an
+   `external` marker measured 39px instead of 27px.
+
+   Found by `check:visual`, and only because `marketing.card.html` and
+   `site-chrome.card.html` stopped loading this file in the same commit. Every
+   specimen that renders an icon had been loading product.css, so the four
+   promotions this release is named for were not the only ones stranded — they
+   were the ones somebody had noticed. */
 
 /* ---- Overlays -------------------------------------------------------------- */
 
@@ -508,9 +506,9 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 .lw-band-dark .lw-table td, [data-band="dark"] .lw-table td { color: var(--lw-on-dark-1); border-bottom-color: var(--lw-on-dark-line); }
 .lw-band-dark .lw-kpi .v, [data-band="dark"] .lw-kpi .v { color: var(--lw-on-dark-1); }
 .lw-band-dark .lw-kpi .k, [data-band="dark"] .lw-kpi .k { color: var(--lw-on-dark-3); }
-.lw-band-dark .lw-empty, [data-band="dark"] .lw-empty { background: var(--lw-on-dark-wash); border-color: var(--lw-on-dark-line-strong); }
-.lw-band-dark .lw-empty .t, [data-band="dark"] .lw-empty .t { color: var(--lw-on-dark-1); }
-.lw-band-dark .lw-empty .s, [data-band="dark"] .lw-empty .s { color: var(--lw-on-dark-2); }
+/* The three `.lw-empty` patches that stood here MOVED to base.css in v1.3.1,
+   with the component. Taken in the same commit rather than left for a follow-up
+   pass — that is the one thing fb2d3ad got wrong and v1.3.0 had to correct. */
 
 /* Segmented's dark patch MOVED to base.css in v1.3.0 with the control itself —
    see the tombstone above. Its reasoning (the shell is an inset TRACK, not a
@@ -807,29 +805,16 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 .lw-datefield[data-placeholder="true"] .lw-datefield-text { color: var(--lw-fg-subtle); }
 
 /* ---- Pagination -------------------------------------------------------------
-   The count is not decoration: "1–25 of 1,284" is the only thing that tells a
-   user whether their filter did anything. Mono and tabular, so the numbers do
-   not shuffle as the page changes. */
-.lw-pagination { display: flex; align-items: center; gap: var(--lw-space-8); flex-wrap: wrap; }
-.lw-pagination .lw-pag-info { font-family: var(--lw-font-mono); font-size: var(--lw-text-xs); color: var(--lw-fg-subtle); font-variant-numeric: tabular-nums; }
-.lw-pagination .lw-pag-spacer { flex: 1; } /* legacy alias of .lw-spacer */
-/* The rows-per-page select sizes to its options. Every other .lw-input fills its
-   column; this one sits in a control row where a full-width field would push the
-   page buttons off the end. */
-.lw-pag-size { width: auto; }
-.lw-pag-btn {
-  min-width: var(--lw-control-h-sm); height: var(--lw-control-h-sm); padding: 0 var(--lw-space-8);
-  display: inline-flex; align-items: center; justify-content: center;
-  border: 1px solid var(--lw-line); border-radius: var(--lw-radius-sm);
-  background: var(--lw-bg); color: var(--lw-fg);
-  font-family: var(--lw-font-mono); font-size: var(--lw-text-xs); font-variant-numeric: tabular-nums;
-  cursor: pointer; transition: background var(--lw-dur-xs) var(--lw-ease-out), border-color var(--lw-dur-xs) var(--lw-ease-out);
-}
-.lw-pag-btn:hover { background: var(--lw-bg-subtle); }
-.lw-pag-btn:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
-.lw-pag-btn[aria-current="page"] { background: var(--lw-brand-500); border-color: var(--lw-brand-500); color: var(--lw-on-brand); }
-.lw-pag-btn:disabled { color: var(--lw-fg-faint); cursor: not-allowed; background: var(--lw-bg-muted); }
-.lw-pag-gap { padding: 0 2px; color: var(--lw-fg-faint); font-family: var(--lw-font-mono); font-size: var(--lw-text-xs); }
+   MOVED to base.css in v1.3.1, verbatim: `.lw-pagination` and its two
+   descendants, `.lw-pag-size`, the whole `.lw-pag-btn` block with its four state
+   rules, and `.lw-pag-gap`. A blog index paginates; `Pagination` is named in the
+   marketing article-index recipe beside `Tabs` and `EmptyState`, and all three
+   were in the layer that recipe tells you to drop.
+
+   One ordering fact travelled with them and is restated at the new site:
+   `.lw-pag-size { width: auto }` beats `.lw-select { width: 100% }` on SOURCE
+   ORDER alone, not specificity. It won across the file boundary and it still
+   wins inside base.css only because the forms block is far above it. */
 
 /* ---- Toolbar + applied filters ----------------------------------------------
    Applied filters are shown as REMOVABLE chips, never only as state inside a

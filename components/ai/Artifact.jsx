@@ -9,7 +9,12 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  * outcome. `onEdit` is not optional decoration; it is the manual equivalent of
  * whatever produced this.
  */
-export function Artifact({ title, version, versionCount, onPrevVersion, onNextVersion, onRevert, onEdit, actions, className, children, ...rest }) {
+export function Artifact({
+  title, version, versionCount, onPrevVersion, onNextVersion, onRevert, onEdit, actions,
+  prevVersionLabel = "Previous version", nextVersionLabel = "Next version",
+  editLabel = "Edit manually", revertLabel = "Revert",
+  className, children, ...rest
+}) {
   const canPrev = version > 1;
   const canNext = versionCount != null && version < versionCount;
   return (
@@ -19,11 +24,11 @@ export function Artifact({ title, version, versionCount, onPrevVersion, onNextVe
         <span className="lw-artifact-title">{title}</span>
         {version != null && (
           <>
-            <button type="button" className="lw-icon-btn" aria-label="Previous version" disabled={!canPrev} onClick={onPrevVersion}>
+            <button type="button" className="lw-icon-btn" aria-label={prevVersionLabel} disabled={!canPrev} onClick={onPrevVersion}>
               <Icon name="chevron-left" size={15} />
             </button>
             <span className="lw-artifact-ver">v{version}{versionCount ? " / " + versionCount : ""}</span>
-            <button type="button" className="lw-icon-btn" aria-label="Next version" disabled={!canNext} onClick={onNextVersion}>
+            <button type="button" className="lw-icon-btn" aria-label={nextVersionLabel} disabled={!canNext} onClick={onNextVersion}>
               <Icon name="chevron-right" size={15} />
             </button>
           </>
@@ -34,12 +39,12 @@ export function Artifact({ title, version, versionCount, onPrevVersion, onNextVe
         <div className="lw-artifact-foot">
           {onEdit && (
             <button type="button" className="lw-btn lw-btn-ghost lw-btn-sm" onClick={onEdit}>
-              <Icon name="edit" size={14} />Edit manually
+              <Icon name="edit" size={14} />{editLabel}
             </button>
           )}
           {onRevert && (
             <button type="button" className="lw-btn lw-btn-ghost lw-btn-sm" onClick={onRevert}>
-              <Icon name="undo" size={14} />Revert
+              <Icon name="undo" size={14} />{revertLabel}
             </button>
           )}
           <span className="lw-spacer" />

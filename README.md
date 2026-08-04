@@ -10,9 +10,10 @@ shadcn.css        maps --primary/--background/… onto the tokens
 tailwind-preset.cjs Tailwind v3 consumers (CommonJS — a tailwind.config.js requires it)
 reset.css         the nine bare-element rules. A vanilla consumer wants it; a
                   Tailwind app does NOT (preflight covers the useful half)
-base.css          the SHARED layer — layout, type, buttons, the icon button, cards,
-                  chips, form controls, the top bar and its mobile nav, prose,
-                  disclosure, the pointer list
+base.css          the SHARED layer — layout, type, buttons, the ICON and the icon
+                  button, cards, chips, the avatar, form controls, tabs,
+                  pagination, the empty state, the top bar and its mobile nav,
+                  prose, disclosure, the pointer list
 marketing.css     the MARKETING layer (grounds, hero, features, stories, ambient motion)
 product.css       the PRODUCT layer (data, overlays, app shell/rails, AI, mobile bars)
 email.css         the EMAIL layer — literal values, tables, no var(). See Email below
@@ -54,6 +55,24 @@ page that never loads `product.css` never sees it at all.
 | `.lw-icon-btn` (split from `.lw-dialog-close`, which stayed) | `.lw-topbar-toggle` composes it, `AnnounceBar`'s dismiss is one, `SiteFooter`'s social row is a line of them |
 | `.lw-eyebrow`'s dark hexagon patch | `marketing.css` patches `.lw-section.dark` and `.lw-hero-dark`; a plain `.lw-band-dark` was the hole |
 
+**v1.3.1 finished it, and the way it was found is the point.** v1.3.0 said a marketing page
+needed two layers, and the specimen cards agreed — because `marketing.card.html` and
+`site-chrome.card.html` were themselves loading `product.css`. A specimen that loads the file
+its documented recipe tells you to drop cannot see anything stranded in it. Those two cards
+now load `base.css` + `marketing.css` only, and five more components came back with them:
+
+| Moved in v1.3.1 | Why it could not stay in `product.css` |
+|---|---|
+| `.lw-avatar` (+ `img`, `-sm`, `-lg`) | `Byline` renders an `Avatar`, and `ArticleCard` renders a `Byline`. Both are MARKETING components |
+| `.lw-empty` and its three `.lw-band-dark` patches | "No results for this filter" is the same screen on a blog index as in a data grid — and it is named in the article-index recipe |
+| `.lw-tabs` (+ all six `.lw-code .lw-tabs` rules) | a category filter over an article index; `Tabs` lives in `components/nav/`, beside the `TopBar` v1.3.0 already moved |
+| `.lw-pagination` / `.lw-pag-*` | a blog index paginates |
+| **`.lw-icon`** — one rule, and the whole layout contract for the icon set | `Icon` is a PRIMITIVE. `SiteFooter`, `AnnounceBar`, `FeatureGrid`, `PlanCard`, `CompareTable`, `Steps`, `EmptyState`, `Disclosure`, `NavToggle` and `Button` all name a glyph through it. Without it an `<svg>` takes the UA's `display: inline` and grows its line box: a footer link with an `external` marker measured 39px instead of 27px |
+
+**Nobody found `.lw-icon` by reading.** `check:visual` found it, in the same commit that
+stopped the cards loading `product.css`. That is the argument for making a specimen load
+exactly what its recipe loads, and it generalises past this release.
+
 **A marketing page therefore needs `tokens.css` + `base.css` + `marketing.css` and nothing
 else** — see [Marketing recipes](#marketing-recipes). `lw.css` and `app.css` remain as shims
 for one full major; **do not load a shim alongside the real files**, or the same rules apply
@@ -91,7 +110,7 @@ what is still open. `CONTRIBUTING.md` points back here — the checklist lives i
 ## Install
 
 ```jsonc
-"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v1.3.0" }
+"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v1.3.1" }
 ```
 
 ```css
@@ -359,7 +378,7 @@ a design system whose API moves under a consumer's feet is a reason to vendor it
 
 | Component | Purpose |
 |---|---|
-| `Hero` | The hero band. On its own: navy ground, honeycomb texture, the mark oversized at the upper right. Inside `.lw-page-dark` it goes transparent and the page owns the background (`assets/hero-mark.svg`, `assets/hero-mark-ink.svg`, `assets/hex-lattice.svg`, `assets/hex-lattice-ink.svg` — copy all four) |
+| `Hero` | The hero band, and **a real dark BAND since v1.3.1**: `.lw-hero-dark` is in `tokens.css`'s band-selector list, so every role token inside it re-points and no consumer has to hand-add `data-band="dark"` any more. On its own: navy ground, honeycomb texture, the mark oversized at the upper right. Inside `.lw-page-dark` it goes transparent and the page owns the background (`assets/hero-mark.svg`, `assets/hero-mark-ink.svg`, `assets/hex-lattice.svg`, `assets/hex-lattice-ink.svg` — copy all four) |
 | `FeatureGrid` | Numbered features; the brand edge draws in on hover |
 | `StoryCard` | The quote renders **only** with quote + person + role |
 | `LogoRail` | Marks are masked to one ink; a mark without `src` degrades to a mono wordmark. `marquee` for a slow loop; static under reduced motion |
@@ -396,9 +415,18 @@ duplicate. CONTRIBUTING's first rule is to prove a thing is not already here:
 
 ## Marketing recipes
 
-**As of v1.3.0 a marketing site loads two layers and no more.** The header, its mobile nav,
-the icon button, the form controls with their dark-band treatment, prose, disclosure and the
-whole layout family are all in `base.css`; the grounds, hero, footer, plans, matrix, flow and
+**As of v1.3.1 the article-index recipe below needs no `product.css`, and that is the
+headline of the release.** `Tabs`, `Pagination`, `EmptyState`, `Avatar` and `Icon` were still
+in the app-surface layer through v1.3.0, so a site composing this package's own documented
+index — `Tabs` for the category filter, `Pagination` under it, `EmptyState` for no results,
+`Byline` on each `ArticleCard` — rendered a 0×0 avatar, an unstyled tab strip, unstyled page
+buttons and a centred paragraph where the empty state should be. The flagship consumer was
+importing `product.css` through a `?url` side-channel on two public routes to get them back:
+~24 KB gzip of app-surface rules on pages that render none of it. Delete that import.
+
+The header, its mobile nav, the icon and the icon button, the avatar, tabs, pagination, the
+empty state, the form controls with their dark-band treatment, prose, disclosure and the whole
+layout family are all in `base.css`; the grounds, hero, footer, plans, matrix, flow and
 editorial chrome are in `marketing.css`. `product.css` is app surfaces — data grids, dialogs,
 rails, the AI chat surface — and a marketing page importing it is importing ~60 KB of rules
 for components it does not render.
@@ -416,12 +444,38 @@ import {
   AnnounceBar, TopBar, NavToggle, Hero, FeatureGrid, Steps, Flow, PlanCard,
   CompareTable, Quote, StoryCard, ArticleCard, Byline, Prose, Disclosure,
   SiteFooter, Button, Card, Grid, Section, Segmented,
+  Tabs, Pagination, EmptyState, Avatar, Icon,
 } from "@leanwise/design/react";
 ```
 
 A full page is `AnnounceBar` → `TopBar` (with `NavToggle` as a child) → `Section`s →
-`SiteFooter`. Nothing on that path reaches into `product.css`, which is the whole point of
-the v1.3.0 promotions.
+`SiteFooter`. An index page is `Tabs` → `Grid` of `ArticleCard` (or `EmptyState`) →
+`Pagination`. Nothing on either path reaches into `product.css`, which is the whole point of
+the v1.3.0 and v1.3.1 promotions.
+
+```jsx
+/* The article index, entire. Every class it lands on is in base.css or
+   marketing.css as of v1.3.1. `readTime` is a pre-formatted NODE — the
+   component holds no display text, so the string is yours to localise. */
+<Tabs label="Categories" tabs={cats} value={cat} onChange={setCat} />
+{posts.length === 0
+  ? <EmptyState icon="inbox" title={t.noneTitle} description={t.noneBody} />
+  : <Grid min={280}>
+      {posts.map(p => (
+        <ArticleCard key={p.slug} href={p.href} category={p.category} title={p.title}
+          dek={p.dek} author={p.author} role={p.role} date={p.date} dateTime={p.iso}
+          readTime={t.readTime(p.minutes)} />
+      ))}
+    </Grid>}
+<Pagination page={page} pageSize={12} total={total} onPageChange={setPage}
+  prevLabel={t.prev} nextLabel={t.next}
+  formatCount={(f, to, all, n) => t.count(n(f), n(to), n(all))} />
+```
+
+**Every user-visible string in this package is a prop as of v1.3.1**, defaulting to the
+English it replaced. Words are `*Label`; anything interpolating a number is a `format*`
+function, because a translation reorders the parts and a template with the number in a fixed
+position is the same bug one layer down.
 
 ### The cookie banner, which is deliberately NOT a component
 
@@ -724,7 +778,7 @@ announced as a control.
 npm run check        # the six fast gates — what a contributor runs
 npm run check:ci     # the above plus the two that need a browser
 
-npm run check:contrast   # every token pair ≥ WCAG AA, in three canonical scopes
+npm run check:contrast   # every token pair ≥ WCAG AA in three canonical scopes, plus band scope
 npm run check:tokens     # raw hex, palette escapes, arbitrary-value access, >1 CTA
 npm run check:themes     # every themable CHANNEL re-pointed in every theme scope
 npm run check:dts        # react.d.ts covers every runtime export of react.js
@@ -745,6 +799,22 @@ the diff grounds re-pointed only behind a class selector, so that visitor got li
 on a navy page and a review surface at **1.08:1**. The scope is merged in *source order* — a
 `:root` inside a media query and a top-level `:root` have identical specificity, so a naive
 merge reports a palette the browser never paints.
+
+**`check:contrast` also owns the BAND SCOPE rule, added in v1.3.1.** A selector used as an
+ancestor scope to re-ink descendants from the `--lw-on-dark*` family is declaring itself a
+dark ground, and must appear in `tokens.css`'s dark band list — hand-patching a child's ink
+because the ground is dark IS the band's job, done manually and incompletely. `.lw-hero-dark`
+was exactly that for the whole life of the package: it painted navy, patched the four elements
+anyone demos, and left every other role token inside a hero resolving against the **light**
+palette. A `Byline` in a hero measured **1.5:1**.
+
+Nothing else here could see it. The pair gate measures TOKENS, and both tokens in the pair were
+correct — it was the *scope* that was wrong. And `check:a11y` cannot see it **structurally**:
+the hero carries two decorative pseudo-elements, so axe answers *"background color could not be
+determined due to a pseudo element"* and files the finding as `incomplete`, which the gate does
+not read. Four serious incompletes, zero violations, measured. Exemptions live in
+`BAND_SCOPE_EXEMPT`, named with their reason and countable — same discipline as
+`data-a11y-expect`.
 
 **`check:bundle` exists because the cards were testing the wrong thing.** They render from
 `_ds_bundle.js`, which had no generator in this repo — it was cut in the design project. So a
@@ -974,7 +1044,7 @@ uniformly denser app.
 |---|---|
 | `.lw-input` `.lw-select` `.lw-textarea` `.lw-input-group` (base.css) `.lw-combo` | `.lw-topbar` (56px — base.css since v1.3.0) |
 | `.lw-btn` and every size | `.lw-nav-item`, `.lw-sidebar` |
-| `.lw-dgrid` rows and header, `.lw-menu-item`, `.lw-option` | `.lw-avatar`, `.lw-msg-avatar` |
+| `.lw-dgrid` rows and header, `.lw-menu-item`, `.lw-option` | `.lw-avatar` (base.css since v1.3.1), `.lw-msg-avatar` |
 | `.lw-card` padding, `Stack` gaps, `.lw-cal-preset` | `.lw-toast`, `.lw-kpi-badge` (34px), `.lw-source` (18px) |
 
 **The chrome staying put is the point, not an oversight.** A compact table inside a

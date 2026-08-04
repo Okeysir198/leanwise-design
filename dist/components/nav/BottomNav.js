@@ -3,7 +3,16 @@ import { jsx, jsxs } from "react/jsx-runtime";
 import * as React from "react";
 import { Icon } from "../primitives/Icon.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
-function BottomNav({ items = [], value, onChange, label = "Main", linkAs = "a", className, ...rest }) {
+function BottomNav({
+  items = [],
+  value,
+  onChange,
+  label = "Main",
+  linkAs = "a",
+  formatBadgeLabel = (n) => n + " unread",
+  className,
+  ...rest
+}) {
   React.useEffect(() => {
     if (items.length <= 5 || typeof console === "undefined") return;
     console.warn("BottomNav: " + items.length + " items. Past five, labels truncate and the bar stops being scannable \u2014 use a sidebar or a More destination.");
@@ -21,7 +30,7 @@ function BottomNav({ items = [], value, onChange, label = "Main", linkAs = "a", 
         children: [
           /* @__PURE__ */ jsx(Icon, { name: it.icon, size: 21 }),
           /* @__PURE__ */ jsx("span", { className: "lw-bn-label", children: it.label }),
-          it.badge != null && /* @__PURE__ */ jsx("span", { className: "lw-sr-only", children: it.badge + " unread" })
+          it.badge != null && /* @__PURE__ */ jsx("span", { className: "lw-sr-only", children: formatBadgeLabel(it.badge) })
         ]
       },
       it.value

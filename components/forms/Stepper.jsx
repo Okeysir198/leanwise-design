@@ -10,7 +10,11 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  * control and disabling the future ones invites a user to try; rendering them
  * as text says what is true, which is that you get there by finishing this one.
  */
-export function Stepper({ steps = [], current = 0, onStepChange, vertical, label = "Progress", className, ...rest }) {
+export function Stepper({
+  steps = [], current = 0, onStepChange, vertical, label = "Progress",
+  stateLabels = { done: "completed", current: "current step", error: "needs attention", upcoming: "not started" },
+  className, ...rest
+}) {
   return (
     <div className={cx("lw-stepper", vertical && "lw-stepper-vertical", className)}
       role="group" aria-label={label} {...rest}>
@@ -32,7 +36,7 @@ export function Stepper({ steps = [], current = 0, onStepChange, vertical, label
               {s.label}
               {/* The state is in the marker's shape for a sighted user; a screen
                   reader needs it in words. */}
-              <span className="lw-sr-only">{" — " + (state === "done" ? "completed" : state === "current" ? "current step" : state === "error" ? "needs attention" : "not started")}</span>
+              <span className="lw-sr-only">{" \u2014 " + (stateLabels[state] ?? stateLabels.upcoming)}</span>
             </span>
             {s.hint && <span className="lw-stepper-hint">{s.hint}</span>}
           </Tag>

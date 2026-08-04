@@ -13,11 +13,11 @@ export const nf = new Intl.NumberFormat();
 /* Every chart ships the numbers behind it. A picture of data is not readable by
    a screen reader, and a one-line summary is not the data — so the table is the
    real content and the SVG is the presentation of it. */
-export function DataTable({ labels, series, caption }) {
+export function DataTable({ labels, series, caption, categoryHeader = "Category" }) {
   return (
     <table className="lw-sr-only">
       <caption>{caption}</caption>
-      <thead><tr><th scope="col">Category</th>{series.map((s, i) => <th key={i} scope="col">{s.name}</th>)}</tr></thead>
+      <thead><tr><th scope="col">{categoryHeader}</th>{series.map((s, i) => <th key={i} scope="col">{s.name}</th>)}</tr></thead>
       <tbody>
         {labels.map((l, i) => (
           <tr key={i}><th scope="row">{l}</th>{series.map((s, si) => <td key={si}>{nf.format(s.data[i])}</td>)}</tr>

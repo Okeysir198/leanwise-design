@@ -6,7 +6,12 @@ const cx = (...a) => a.filter(Boolean).join(" ");
 
 /* The toolbar is DATA, so swapping the engine underneath does not touch it — and
    so a product can drop a control by filtering an array rather than editing JSX. */
-const TOOLS = [
+/* Localised by NAME rather than by position: `toolLabels={{ bold: { label: "…" } }}`
+   on the component is merged onto the matching entry, so a partial map leaves
+   the rest in English instead of blanking a button's accessible name. The
+   glyphs are overridable too — B/I/H is a typographic convention, and it is not
+   a universal one. A module export, like `RANGE_PRESETS`. */
+export const TOOLS = [
   { id: "bold", icon: "spark", label: "Bold", cmd: "bold", glyph: "B" },
   { id: "italic", icon: "spark", label: "Italic", cmd: "italic", glyph: "I" },
   { sep: true },
@@ -40,7 +45,8 @@ const TOOLS = [
    than to the wrapper — a form library calls .focus() on what it is given, and
    focusing a <div> does nothing. Here that is the contenteditable surface. */
 export const RichText = React.forwardRef(function RichText({
-  value, onChange, placeholder = "Write something…", tools, maxLength,
+  value, onChange, placeholder = "Write something\u2026", tools, toolLabels, maxLength,
+  formatBarLabel = (l) => l + " formatting", barLabel = "Editor",
   label, readOnly, footer, children, className, ...rest
 }, forwardedRef) {
   const ref = React.useRef(null);
@@ -50,7 +56,10 @@ export const RichText = React.forwardRef(function RichText({
   // attribute: a screen reader announces a relationship that does not exist.
   const bodyId = React.useId();
   const [active, setActive] = React.useState({});
-  const list = tools ? TOOLS.filter(t => t.sep || tools.includes(t.id)) : TOOLS;
+  const picked = tools ? TOOLS.filter(t => t.sep || tools.includes(t.id)) : TOOLS;
+  /* Merged by ID, so a partial override leaves the rest in English rather than
+     blanking a button's accessible name. */
+  const list = toolLabels ? picked.map(t => (t.id && toolLabels[t.id] ? { ...t, ...toolLabels[t.id] } : t)) : picked;
 
   // The DOM owns the text while the user types; writing value back on every
   // keystroke would move the caret to the end on each one.
@@ -99,7 +108,7 @@ export const RichText = React.forwardRef(function RichText({
       {/* role="group", not "toolbar": a toolbar obliges left/right arrow roving
           with a single tab stop, and these are ten independent tab stops. Claiming
           the role without the behaviour is worse than not claiming it. */}
-      <div className="lw-editor-bar" role="group" aria-label={(label || "Editor") + " formatting"} aria-controls={children ? undefined : bodyId}>
+      <div className="lw-editor-bar" role="group" aria-label={formatBarLabel(label || barLabel)} aria-controls={children ? undefined : bodyId}>
         {list.map((t, i) => t.sep ? <span key={"s" + i} className="sep" aria-hidden="true" />
           : (
             <button key={t.id} type="button" className="lw-icon-btn" aria-label={t.label} title={t.label}

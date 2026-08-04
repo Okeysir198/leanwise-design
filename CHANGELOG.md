@@ -20,6 +20,183 @@ versions are breaking: **0.1.4** (dependency URL), **0.2.0** (removal), **0.7.0*
 and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additionally ships a
 `package.json` that reports the wrong version.
 
+## [1.3.1] — 2026-08-04
+
+> **Four gaps, all found by the flagship consumer rebuilding against 1.3.0, and all of them
+> invisible from inside this repository.** Every one is the same shape: the package's own
+> documentation described a thing it did not actually ship, and no gate could tell the
+> difference — because every specimen that would have exposed it was loading the very file the
+> documentation tells a consumer to drop.
+>
+> `marketing.card.html` and `site-chrome.card.html` no longer load `product.css`. That single
+> line is what turned two cards into a presence gate, and it immediately found a **fifth**
+> stranded component nobody had reported: `.lw-icon`, the entire layout contract for the icon
+> set, sitting in the app layer while half the marketing components draw through it.
+>
+> Two machine-readable advisories ship with this release (`stranded-marketing-css`,
+> `hardcoded-display-text`, both `affects: <1.3.1`), so `npx lw-doctor` tells a pinned consumer
+> directly. Both derivations were **watched failing** before they were trusted.
+
+### Fixed
+
+- **`Tabs`, `Pagination`, `EmptyState`, `Avatar` and `Icon` promoted from `product.css` to
+  `base.css`** — 26 rules, verbatim, with a tombstone at each vacated site.
+
+  `ArticleCard` renders a `Byline`, `Byline` renders an `Avatar`, and both are **marketing**
+  components. So a site composing this package's own documented article-index recipe — `Tabs`
+  for the category filter, `Pagination` under the index, `EmptyState` for no results, `Byline`
+  on each card — rendered a 0×0 avatar, an unstyled tab strip, unstyled page buttons and a
+  centred paragraph in place of the empty state, unless it also loaded the whole 118 KB
+  app-surface layer. The flagship consumer had been doing exactly that: a `?url` import of
+  `product.css` on two public routes, ~24 KB gzip of rules for components those pages do not
+  render.
+
+  This is the third correction of the same defect (`fb2d3ad`, then v1.3.0's `.lw-btn`), and
+  the lesson is unchanged: **a component's CSS must live in a layer its own consumers load.**
+  The `:is(.dark, …)` / `.lw-band-dark` patches came in the SAME commit this time — three for
+  `.lw-empty`, six for `.lw-code .lw-tabs` — rather than being left for a follow-up, which is
+  the one thing `fb2d3ad` got wrong and v1.3.0 had to repair.
+
+  One ordering hazard, audited the way `fb2d3ad` audited its own: `.lw-pag-size { width: auto }`
+  beats `.lw-select { width: 100% }` on **source order alone**, not specificity. It won across
+  the file boundary and it still wins inside `base.css` only because the forms block is ~700
+  lines above it. Every other promoted selector was checked against `marketing.css` and the
+  remaining `product.css` for an equal-specificity rule that used to come after it; there are
+  none. 148 of 156 visual shots are byte-identical under the move, which is the proof that
+  "verbatim" is accurate.
+
+- **`.lw-icon` — the fifth, and nobody found it by reading.** `check:visual` did, the moment
+  the two marketing cards stopped loading `product.css`. `Icon` is a **primitive**;
+  `SiteFooter`, `AnnounceBar`, `FeatureGrid`, `PlanCard`, `CompareTable`, `Steps`,
+  `EmptyState`, `Disclosure`, `NavToggle` and `Button` all name a glyph through it. Without
+  its one rule an `<svg>` takes the UA's `display: inline`, sits on the text baseline and grows
+  its own line box — a footer link carrying an `external` marker measured **39px instead of
+  27px**. Promoted to `base.css`.
+
+- **`<Hero>` did not establish a dark band for its own subtree — a contrast trap that every
+  consumer had to correct by hand.** `.lw-hero-dark` paints navy but was **not** in
+  `tokens.css`'s band-selector list, so every role token inside a hero resolved against the
+  **light** palette on navy paper. `marketing.css` papered over exactly the four elements
+  anyone demos — `.lw-h1`, `.lw-lead`, `.lw-eyebrow`, `.lw-btn-ghost` — from the
+  `--lw-on-dark-*` tiers; anything else a consumer put in a hero was on its own. A `Byline` in
+  a hero measured **1.5:1** on its name (`--lw-fg`) and **3.36:1** on its role and date
+  (`--lw-fg-subtle`). `.lw-section.dark` escaped only by accident: its class list literally
+  contains `dark`, which the band list already names.
+
+  Fixed in **`tokens.css`, not in `Hero.jsx`**, for two reasons. The band is a token SCOPE, so
+  tokens.css is the only place the gates can see it; and a vanilla consumer writing
+  `<section class="lw-hero-dark">` by hand is a supported consumer, so a fix that only reached
+  the React wrapper would let the two drift — which is what the "no styling in a `.jsx`" rule
+  exists to prevent. `.lw-page-light .lw-hero-dark` joins the **light** band list in the same
+  change, and that pairing is load-bearing: inside `.lw-page-light` the hero goes transparent
+  and the light page owns the ground, so an unconditional dark band there would paint
+  near-white ink on white — the same trap, mirrored. Both blocks are `:where()` at specificity
+  0, so the light one wins on source order for the elements both match. **Do not reorder them.**
+
+- **`ButtonProps` had no `type`, so a Cancel button submitted the form.**
+  `React.HTMLAttributes<HTMLElement>` — the base every polymorphic component here extends —
+  omits `type`; it lives on `ButtonHTMLAttributes`. A `<button>` inside a `<form>` defaults to
+  `type="submit"`, so a Cancel or Delete `<Button>` submitted the form, and the prop that would
+  have fixed it did not compile. The flagship consumer's admin console fell back to a raw
+  `<button className="lw-btn">`, which defeats the component.
+
+  `type` is now declared and forwarded **only when a `<button>` is what renders** — destructured
+  out of `...rest`, so it can no longer ride onto an `<a>` or a router `Link`. The **default is
+  deliberately unchanged** (undefined, i.e. HTML's `submit`): flipping it would silently stop
+  `<form onSubmit>` + `<Button>Save</Button>` from submitting, and a silent no-op is a worse
+  patch-release failure than the one being fixed. Recorded as a v2.0.0 candidate in `REVIEW.md`.
+
+  The same audit covered every component on that base. `Card`, `SourceChip` and `NavItem`
+  already emit `type="button"` at runtime and already honour an override through `...rest` — but
+  none of the three DECLARED the prop, so the override was a type error. All three declare it
+  now; no runtime behaviour changed. `Chip` is not affected: it is always a `<span>`.
+
+- **Every user-visible English string is now a prop.** `ArticleCard.readMinutes` rendered the
+  literal `"N min read"`, which is wrong on every page of a bilingual site — and this package
+  is consumed by a site that serves English and Vietnamese from one component tree. Auditing
+  the rest of the tree found **~70 more**, across 25 components, none of them reachable by a
+  prop: `Dialog`/`Drawer`/`Toast` (`Close`, `Dismiss`, `Notifications`, the four tone words),
+  `ThemeToggle` (Light/Dark/Auto and its radiogroup name), `RichText` (ten toolbar accessible
+  names the `tools` prop could only filter, never rename, plus the link `window.prompt`),
+  `DiffReview` (nine words in the accept/reject flow), `Pagination` (the result count and every
+  button name), `ActivityFeed` (Today/Yesterday/This week/Earlier and the whole relative-time
+  string), `DataGrid`, `FilterBar`, `FileUpload`, `Combobox`, `Calendar`, `Field`, `Stepper`,
+  `ToolCall`, `Artifact`, `Feedback`, `SourceChip`, `StatMeter`, `CodeBlock`, `AppBar`,
+  `TopBar`, `Breadcrumbs`, `Sidebar`, `BottomNav`, `CommandPalette` and the charts'
+  screen-reader table header.
+
+  Every one is now a prop **whose default is the string it replaced**, so the upgrade is purely
+  additive. Words are `*Label` props; anything that interpolates a number is a `format*`
+  function, because a translation reorders the parts and a template with the number in a fixed
+  position is the same bug one layer down. Closed sets (`stateLabels`, `bucketLabels`,
+  `toneLabels`, `kindLabels`, `modeLabels`) are keyed maps; `RichText`'s `toolLabels` merges by
+  tool ID so a partial map leaves the rest in English rather than blanking a button's name.
+
+### Changed
+
+- **`ArticleCard.readTime` replaces `readMinutes`** — a pre-formatted `React.ReactNode`, not a
+  number, so the consumer supplies the localised string. `readMinutes` still works, warns once
+  per component (`_deprecate.js`, silent in production), and is removed in **v2.0.0**. It is
+  the only deprecation in this release.
+- **`marketing.card.html` and `site-chrome.card.html` load `base.css` + `marketing.css` and
+  nothing else.** They loaded `product.css` through v1.3.0, which is precisely why neither
+  browser gate could see any of the above: the specimen was loading the file the documented
+  recipe tells a consumer to drop. Do not add it back.
+- **`marketing.card.html` gained the specimens the fixes needed** — a `Byline` inside the dark
+  hero (role tokens on navy, the band proof), and a `Tabs` + `EmptyState` + `Pagination` block
+  rendered on a base+marketing page. Its declared viewport grows 1600 → 1900.
+
+### Gates
+
+- **`check:contrast` gained a BAND SCOPE rule**, because the hero trap was invisible to
+  everything this repository already had. The pair gate measures TOKENS, and both tokens in the
+  pair were correct — it was the *scope* that was wrong, which no pair can express. And
+  `check:a11y` could not see it either, **structurally**: `.lw-hero-dark` carries two decorative
+  pseudo-elements, so axe answers *"background color could not be determined due to a pseudo
+  element"* and files the finding as `incomplete`. `lw-a11y.mjs` reads `violations` only —
+  correctly, since incompletes are mostly noise — so a hero could hold 1.5:1 text and the gate
+  printed "no violations". Measured on the marketing card: **four serious incompletes, zero
+  violations.**
+
+  The new rule states the invariant instead: *a selector used as an ancestor scope to re-ink
+  descendants from the `--lw-on-dark*` family is declaring itself a dark ground, and must appear
+  in `tokens.css`'s dark band list.* Hand-patching a child's ink because the ground is dark IS
+  the band's job, done manually and incompletely. 43 descendant rules scanned; two exemptions
+  (`.lw-code`, `.lw-code-head`), named in `BAND_SCOPE_EXEMPT` with the reason, greppable and
+  countable, the same discipline as `data-a11y-expect` and `NO_SKIP_LINK`. **Watched failing**
+  on the restored defect: it names `.lw-hero-dark` and its five descendant rules, and exits 1.
+- **`advisories.json` gained `stranded-marketing-css` (high) and `hardcoded-display-text`
+  (medium)**, both `affects: <1.3.1`, both with a `derive` registered in `lw-doctor` and both
+  watched failing on a planted defect. Neither is in `COUNTS_THE_FIX`: both count the DEFECT, so
+  both derive **0** in a fixed tree, which is the stronger shape. The display-text count is an
+  explicit PROXY — literal-string `aria-label`/`title`/`placeholder`/`alt` attributes, 21 at
+  v1.3.0 — and `countMeans` says so, because a proxy presented as a total is exactly the
+  hand-maintained fact this file was written to replace.
+
+### Visual
+
+**8 of 156 shots move, and none of them is a regression.** Scored twice: once against v1.3.0
+as tagged, and once in isolation — the same cards and the same `_ds_bundle.js` on v1.3.0's CSS
+— so the content growth cannot hide a CSS change. The isolation run is the one that matters:
+
+| shots | delta | why |
+|---|---|---|
+| `marketing.card` × light, light-compact | 0.0246% (1466 px) | the `Byline` in the hero, one text line, at exactly `y 685–696` — role tokens resolving dark inside `.lw-hero-dark`. **The fix.** |
+| `marketing.card` × dark, dark-compact | 0.0010% — under tolerance | on the dark ground `<html class="dark">` had already re-pointed the roles, so the band fix changes almost nothing. Exactly what the diagnosis predicts, and the best confirmation of it. |
+| `site-chrome.card` × 4 | 0.0311% (733 px) each | the dark footer's inherited ink. `product.css`'s `.lw-band-dark, [data-band="dark"] { color: var(--lw-on-dark-2) }` is no longer loaded, so `tokens.css`'s band `color: var(--lw-fg)` applies: **9.42:1 → 15.78:1**, a brightening, and the rendering a real base+marketing consumer already gets. |
+| the other 148 | 0 | **verbatim relocation, proved.** |
+
+Against v1.3.0 as tagged, `marketing.card` × 4 additionally reports a **dimension** change
+(1280×3852 → 1280×4649 and siblings) from the added specimens and prose; that is why the
+isolation run exists, since a dimension change makes a pixel diff impossible.
+
+> **One observation worth recording rather than tuning away.** A single scaffold recording of
+> `site-chrome.card__light` showed an extra 726-px band on `.brand-mark` — the per-theme
+> background image losing its decode race, the flake v1.3.0's `decoded()` was written to close.
+> It did not reproduce: re-recording gave 733 px, matching the other three shots exactly, and
+> three self-consistency runs of the working tree agree to 0.0001%. So `decoded()` is not
+> airtight, at roughly one bad shot per 312 recordings on this box. Noted in `REVIEW.md`.
+
 ## [1.3.0] — 2026-08-04
 
 > **Read this before anything else in this entry.** **Every React specimen card in this
