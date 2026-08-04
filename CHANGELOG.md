@@ -20,6 +20,19 @@ versions are breaking: **0.1.4** (dependency URL), **0.2.0** (removal), **0.7.0*
 and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additionally ships a
 `package.json` that reports the wrong version.
 
+## [1.3.5] — 2026-08-05
+
+### Fixed
+
+- **`.lw-card-head` wraps.** Same defect v1.3.4 fixed in the top bar, in a second place: a row
+  that cannot wrap and whose children cannot shrink is as wide as the SUM of its parts. This
+  head routinely pairs a title with a status chip, and `.lw-chip` is `white-space: nowrap` by
+  design — so on a ~280px card at a 320px viewport, a long title beside "Passed with Warning"
+  needed 327px, the chip hung 27px past the card, and the document scrolled sideways. It
+  surfaced in the flagship consumer's `responsive.spec.ts`, in the JavaScript-disabled state
+  where every tab panel renders at once — the hydrated page hides all but one panel and looks
+  fine. **A layout gate that only measures the hydrated page measures the wrong page.**
+
 ## [1.3.4] — 2026-08-04
 
 Responsive. Everything below was found by measuring `documentElement.scrollWidth` against

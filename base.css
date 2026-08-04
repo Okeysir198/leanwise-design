@@ -576,7 +576,15 @@
 button.lw-card, button.lw-feature, button.lw-story, button.lw-stat-tile,
 button.lw-kpi, button.lw-nav-item, button.lw-source-item, button.lw-logo-item,
 button.lw-empty { text-align: start; font: inherit; color: inherit; }
-.lw-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+/* `flex-wrap: wrap`, and it is the same defect the top bar had in v1.3.4: a row
+   that cannot wrap and whose children cannot shrink is as wide as the SUM of its
+   parts. This head routinely holds a title on the left and a status chip on the
+   right, and `.lw-chip` is `white-space: nowrap` by design — so on a ~280px card
+   at a 320px viewport, "Delivery Specification" beside "Passed with Warning"
+   needed 327px and the chip hung 27px past the card, taking the document with
+   it. Wrapping drops the chip onto its own line instead, which is the right
+   answer at that width and changes nothing wherever the row already fits. */
+.lw-card-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 12px; }
 .lw-card-eyebrow {
   font-family: var(--lw-font-mono); font-size: 10px; line-height: 1.4;
   letter-spacing: 0.12em; word-spacing: var(--lw-word-spacing-caps); text-transform: uppercase; color: var(--lw-fg-subtle);
