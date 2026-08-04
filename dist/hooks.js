@@ -21,11 +21,16 @@ const persist = (mode) => {
   }
 };
 const systemDark = () => canDOM() && window.matchMedia("(prefers-color-scheme: dark)").matches;
+const THEME_EVENT = "lw:theme";
 function paint(mode) {
   const dark = mode === "dark" || mode === "system" && systemDark();
   const el = document.documentElement;
   el.classList.toggle("dark", dark);
   el.setAttribute("data-theme", dark ? "dark" : "light");
+  try {
+    window.dispatchEvent(new CustomEvent(THEME_EVENT, { detail: mode }));
+  } catch (e) {
+  }
   return dark;
 }
 function useTheme() {
@@ -144,6 +149,7 @@ function animateCounter(el, to, { from = 0, duration = 900, decimals = 0, format
   };
 }
 export {
+  THEME_EVENT,
   THEME_KEY,
   animateCounter,
   paint,

@@ -3,7 +3,18 @@ export type ThemeMode = "light" | "dark" | "system";
 export interface ThemeState { mode: ThemeMode; resolved: "light" | "dark"; setMode(m: ThemeMode): void; isDark: boolean; }
 /** The storage key the localStorage entry and the cookie both use. */
 export declare const THEME_KEY: string;
-/** Apply a mode to `<html>` (class + data-theme). Returns whether dark resolved. */
+/**
+ * The `window` event `paint()` fires, carrying the chosen mode in `detail`.
+ *
+ * The theme has one source of truth (the document) and any number of views onto
+ * it. Listen here to keep a second picker — or your own chrome — in step with a
+ * change made anywhere else.
+ */
+export declare const THEME_EVENT: string;
+/**
+ * Apply a mode to `<html>` (class + data-theme). Returns whether dark resolved.
+ * Also fires `THEME_EVENT` so every view onto the theme stays in step.
+ */
 export function paint(m: ThemeMode): boolean;
 /**
  * Write the choice to localStorage AND the `lw-theme` cookie. The cookie is not

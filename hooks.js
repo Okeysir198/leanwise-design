@@ -47,11 +47,31 @@ const systemDark = () => canDOM() && window.matchMedia("(prefers-color-scheme: d
    reads it back with. The comment on THEME_KEY used to say "the hook and the
    component must never disagree" — documenting a coupling instead of removing
    it. The component had its own copy, without the system-preference listener. */
+/* The name of the event `paint()` fires. Exported for the same reason THEME_KEY
+   is: a listener that hard-codes the string is a second copy of the contract. */
+export const THEME_EVENT = "lw:theme";
+
 export function paint(mode) {
   const dark = mode === "dark" || (mode === "system" && systemDark());
   const el = document.documentElement;
   el.classList.toggle("dark", dark);
   el.setAttribute("data-theme", dark ? "dark" : "light");
+  /* Announce the CHOICE, not the resolved scheme — a picker shows which of
+     light/dark/system the reader selected, and "system" is not recoverable from
+     the resolved value.
+
+     This exists because the theme has exactly one source of truth (the document)
+     and any number of views onto it. v1.3.4 gave `.lw-topbar` a collapse
+     contract, so a bar and its narrow-width panel now each render a
+     `ThemeToggle`; without this event the one that is off-screen keeps whatever
+     mode it mounted with and comes back showing the wrong segment highlighted
+     after a resize past the breakpoint. Nothing throws, the page is the right
+     colour, and the control simply lies about which mode produced it — which no
+     gate can see. The same applies to any consumer that renders a picker twice,
+     or that calls `paint()` from its own code. */
+  try {
+    window.dispatchEvent(new CustomEvent(THEME_EVENT, { detail: mode }));
+  } catch (e) { /* no CustomEvent (very old engines) — the paint above still applied */ }
   return dark;
 }
 

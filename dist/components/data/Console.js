@@ -3,7 +3,7 @@ const cx = (...a) => a.filter(Boolean).join(" ");
 function Console({ url = "leanwise.ai", title, lines, foot, className, children, ...rest }) {
   const cellCount = lines ? lines.reduce((n, l) => Math.max(n, l.cells ? l.cells.length : 0), 0) : 0;
   const logStyle = cellCount ? {
-    gridTemplateColumns: "max-content " + "max-content ".repeat(Math.max(0, cellCount - 1)) + "minmax(0, max-content) 1fr"
+    gridTemplateColumns: "minmax(0, max-content) " + "minmax(0, max-content) ".repeat(Math.max(0, cellCount - 1)) + "minmax(0, max-content) minmax(0, 1fr)"
   } : void 0;
   return /* @__PURE__ */ jsxs("div", { className: cx("lw-console", className), ...rest, children: [
     /* @__PURE__ */ jsxs("div", { className: "lw-console-h", children: [

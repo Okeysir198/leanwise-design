@@ -320,6 +320,26 @@
    flush against each other, because the roles all zero their margins and nothing
    here supplied the gap. */
 .lw-hero-dark > .lw-container { display: flex; flex-direction: column; align-items: flex-start; gap: var(--lw-space-20, 20px); }
+/* `align-items: flex-start` is right for the hero's own parts — an eyebrow pill
+   and an action row should hug their content, not stretch to the column — but it
+   makes EVERY child shrink-to-fit, and a shrink-to-fit box sizes against its
+   content rather than its parent. So a wide child (the console artifact) sized
+   itself to 314px inside a 280px column at a 320px viewport and the section's
+   `overflow: hidden` cut it off. The cap is the half `flex-start` leaves out:
+   hug what fits, never exceed the column.
+
+   ⚠ `:where()`, and it is LOAD-BEARING. `max-inline-size` is the same property a
+   component uses to set its own reading measure, so written at ordinary
+   specificity this rule silently WINS against every one of them: the first cut
+   was `.lw-hero-dark > .lw-container > *` (0,2,0), which beat `.lw-lead`'s
+   `max-width: 60ch` (0,1,0) and stretched the hero lead from a 611px measure to
+   the full 1098px column — three lines of readable text turned into two lines of
+   unreadable ones, on every hero in the system. Nothing failed; the package's own
+   visual gate caught it as a 26px height change and nothing else would have.
+   `:where()` zeroes the specificity, so a component's own measure wins and this
+   only ever applies to a child that declared none. A defensive cap must be the
+   weakest rule in the room, never the strongest. */
+:where(.lw-hero-dark > .lw-container) > * { max-inline-size: 100%; }
 /* The action row sits further from the lead than the stack gap gives it. A hero's
    CTA is the one thing on the section that is not prose, and running it at the
    same rhythm as the paragraphs above reads as another line of copy. */
@@ -925,9 +945,22 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
   border-radius: var(--lw-radius-md);
   padding: 32px;
   display: grid;
-  grid-template-columns: 64px 1fr;
+  /* minmax(0, 1fr), not 1fr. `1fr` is `minmax(auto, 1fr)`, and an `auto` minimum
+     is the item's MIN-CONTENT — so a long unbroken token in the quote or the
+     result line grows the column past its share and the card past its grid
+     track. The zero floor lets the text column shrink and wrap, which is what a
+     text column should do. */
+  grid-template-columns: 64px minmax(0, 1fr);
   gap: 20px;
   align-items: start;
+}
+/* --lw-bp-sm (479.98px). At 320px the container is ~280px, and 64px of padding
+   plus a 64px logo plus a 20px gap leaves 132px for a heading, a quote and a
+   result line — narrower than the card's own type wants, so its min-content
+   pushed the card ~40px past the viewport and took the document with it. The
+   logo moves above the text and the padding comes in; nothing is dropped. */
+@media (max-width: 479.98px) {
+  .lw-story { padding: 20px; grid-template-columns: minmax(0, 1fr); gap: 16px; }
 }
 /* In a row of cards the tallest sets the height, so the body column has to fill it
    and hang its result off the bottom — otherwise a short story leaves a block of
@@ -1083,6 +1116,15 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 }
 .lw-footer-link:hover { color: var(--lw-fg); }
 .lw-footer-link:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
+/* Touch. 33px rows, and a footer column is where a phone reader does most of
+   their tapping. REAL height rather than the `.lw-hit` ::after the bar's controls
+   use: these are stacked, so 44px hit boxes on 33px rows would overlap by 11px
+   and every link would steal a slice of its neighbour — a mis-tap that looks
+   like the site opening the wrong page at random. Padding, not a height, so a
+   wrapped label grows the row instead of overflowing it. */
+@media (pointer: coarse) {
+  .lw-footer-link { padding-block: var(--lw-space-12); }
+}
 /* Direction/state is never colour alone: the current page gets a WEIGHT step and
    a brand rule as well as the ink lift. Not a `▸` glyph — a typed marker is an
    icon drawn a second time in the font, and it would also be read aloud. */

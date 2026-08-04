@@ -18,15 +18,25 @@ export function Console({ url = "leanwise.ai", title, lines, foot, className, ch
   // Every content column hugs, so a right-aligned number lands just past the
   // longest detail rather than at the far edge of the frame — a figure flung to
   // the opposite side of a wide console reads as belonging to no row at all.
-  // The last cell column may shrink below max-content so long free text wraps
-  // instead of overflowing the frame.
+  //
+  // EVERY track carries a zero floor, and that is what makes "hug" safe. A bare
+  // `max-content` is a hard minimum: it hugs when there is room and REFUSES to
+  // give any back when there is not, so on a 320px phone the frame's columns
+  // summed to 296px inside a 280px box and the last field of every line was
+  // clipped away by the frame's own `overflow: hidden`. Nothing scrolled and
+  // nothing warned — the log simply lost a column, which only someone who knew
+  // what it said could notice. `minmax(0, max-content)` hugs identically at every
+  // width that fits and yields when the frame is narrower than the content;
+  // `.lw-console-cell` wraps below --lw-bp-sm so the yielded space is usable.
+  // (Only this file could fix it: an inline style outranks every stylesheet, so
+  // no consumer override and no media query in base.css could reach these.)
   const cellCount = lines ? lines.reduce((n, l) => Math.max(n, l.cells ? l.cells.length : 0), 0) : 0;
   const logStyle = cellCount
     ? {
         gridTemplateColumns:
-          "max-content " +
-          "max-content ".repeat(Math.max(0, cellCount - 1)) +
-          "minmax(0, max-content) 1fr"
+          "minmax(0, max-content) " +
+          "minmax(0, max-content) ".repeat(Math.max(0, cellCount - 1)) +
+          "minmax(0, max-content) minmax(0, 1fr)"
       }
     : undefined;
   return (

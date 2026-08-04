@@ -117,8 +117,18 @@
 .lw-cluster-baseline { align-items: baseline; }
 
 /* GRID — auto-fit columns. --lw-grid-min is the only knob; the grid reflows on
-   its own at every width, so no breakpoint is needed for the common case. */
-.lw-grid { display: grid; gap: var(--lw-space-16); grid-template-columns: repeat(auto-fit, minmax(var(--lw-grid-min, 240px), 1fr)); align-items: stretch; }
+   its own at every width, so no breakpoint is needed for the common case.
+
+   `min(…, 100%)` around the track minimum, and it is the whole reason the claim
+   above is true. A bare `minmax(320px, 1fr)` is a DEFINITE minimum: once the
+   container is narrower than it, the track keeps its 320px and the row overflows
+   — silently, because a grid does not clip and the page simply grows a
+   horizontal scrollbar. `.lw-grid-2` is 320px, so every consumer using it broke
+   at a 320px viewport (a ~280px column after the container's padding) — measured
+   on the flagship site's customer stories, which sat 40px past the fold. Wrapping
+   in `min()` caps the floor at the space that actually exists, so the last column
+   narrows instead of escaping. */
+.lw-grid { display: grid; gap: var(--lw-space-16); grid-template-columns: repeat(auto-fit, minmax(min(var(--lw-grid-min, 240px), 100%), 1fr)); align-items: stretch; }
 .lw-grid-2 { --lw-grid-min: 320px; } .lw-grid-3 { --lw-grid-min: 240px; } .lw-grid-4 { --lw-grid-min: 180px; }
 .lw-grid-24 { gap: var(--lw-space-24); }
 
@@ -587,8 +597,10 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
   border-color: transparent;
   box-shadow: inset 0 0 0 1.5px var(--lw-brand-500);
 }
-/* Equal-height cards on one row. auto-fit + stretch is what keeps footers aligned. */
-.lw-card-grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); align-items: stretch; }
+/* Equal-height cards on one row. auto-fit + stretch is what keeps footers aligned.
+   `min(240px, 100%)` for the same reason as `.lw-grid` above: a definite track
+   minimum wider than its container overflows the page rather than shrinking. */
+.lw-card-grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); align-items: stretch; }
 .lw-card-grid > .lw-card { height: 100%; }
 
 /* Chip — the card's status atom. Reads a status family's soft tint + text tier, so
@@ -812,6 +824,14 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
   .lw-segmented button { padding: 10px 14px; }
 }
 
+/* The one-button form of `ThemeToggle` (v1.3.4, `compact`). Shape and ink come
+   from `.lw-icon-btn`; only what that class cannot supply is stated here.
+   `position: relative` is REQUIRED and not decoration — `.lw-hit`'s 44px target
+   is an absolutely positioned ::after, which anchors to the nearest positioned
+   ancestor, so without this the touch target silently escapes to whatever box
+   above it happens to be positioned. */
+.lw-theme-compact { position: relative; }
+
 /* ---- Console ("browser frame" motif) ------------------------------------- */
 
 .lw-console {
@@ -820,6 +840,15 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
   border-radius: var(--lw-radius-lg);
   overflow: hidden;
   box-shadow: var(--lw-shadow-lg);
+  /* A flex or grid ITEM floors at its own min-content unless told otherwise, and
+     a console's min-content is the widest thing anyone ever logged into it. Put
+     one in a `.lw-cluster` — which is what the frame is for — and it stopped
+     shrinking at 314px, so on a 320px phone it pushed past its ~280px column and
+     the hero's `overflow: hidden` simply cut the last field off every line. That
+     is the worst shape of layout bug: the frame looks intact, so nothing reads as
+     broken, and the missing column is only visible to someone who knows what the
+     log said. The zero floor lets the frame shrink and the grid inside it wrap. */
+  min-inline-size: 0;
 }
 /* macOS window chrome: the traffic lights sit OUT of flow on the left so the
    address bar can centre on the frame, not on the space left over beside them. */
@@ -918,7 +947,16 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
    It used to be a 1ch absolute box, which timestamps overflowed into the text. */
 .lw-console-log {
   display: grid;
-  grid-template-columns: max-content 1fr;
+  /* Both tracks carry a ZERO floor, and neither is decoration.
+     `max-content` alone lets the gutter demand its longest prefix whatever the
+     console's width, and a bare `1fr` is `minmax(auto, 1fr)` — an `auto` minimum
+     is the stream's MIN-CONTENT. Together they made the log's intrinsic minimum
+     the sum of two unwrappable columns, so on a 320px phone the console sat
+     314px wide inside a 280px container and its right edge was simply cut off by
+     the hero's `overflow: hidden`. Nothing scrolled, nothing warned; the last
+     column of every log line was gone. The floors let both tracks wrap instead —
+     `.lw-console-line` already carries `word-break: break-word` for exactly that. */
+  grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
   column-gap: var(--lw-space-8);
   row-gap: 7px;
   align-content: start;
@@ -944,6 +982,15 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
 .lw-console-span,
 .lw-console-line > span:not(.lw-console-cell):not(.t) { grid-column: 2 / -1; white-space: pre-wrap; min-width: 0; }
 .lw-console-cell { white-space: nowrap; min-width: 0; }
+/* --lw-bp-sm (479.98px). The alignment the `nowrap` above protects is worth
+   less than the field itself: on a phone the columns cannot all hug, so a cell
+   that refuses to wrap is a cell whose tail is clipped by the frame. Wrapping
+   loses the tidy column edge; not wrapping loses the value. `anywhere` rather
+   than `break-word` because these are identifiers and paths, which have no
+   spaces to break at. */
+@media (max-width: 479.98px) {
+  .lw-console-cell { white-space: normal; overflow-wrap: anywhere; }
+}
 .lw-console-cell:last-child { white-space: pre-wrap; }
 .lw-console-cell.num { text-align: end; font-variant-numeric: tabular-nums; }
 /* A tone owns the whole line, so a muted cell must not out-rank it — muting is
@@ -1062,7 +1109,27 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
 /* Grow a ≥44×44px tap target on small controls WITHOUT resizing them visually.
    Touch only — a mouse does not need it and it would eat hover areas. */
 @media (pointer: coarse) {
-  .lw-hit::after {
+  .lw-hit::after,
+  /* v1.3.4. Everything below measured UNDER 44px on a real touch viewport and
+   * is a control the package draws itself, so opting each consumer in by hand
+   * would just be the same list written five times:
+   *
+   *   .lw-topbar .brand         111×24  — the home link, one target for mark+name
+   *   .lw-topbar nav a           70×34  — visible on a touch iPad from --lw-bp-lg up
+   *   .lw-segmented button       44×40  — 4px short after the coarse padding step
+   *   .lw-pill-link             101×29
+   *
+   * The ::after and not real padding, and the distinction matters: every one of
+   * these sits in a ROW, so the growth is vertical only and lands in space that
+   * is already empty. Real padding would grow the 56px bar that three of them
+   * live in. The opposite call is right for a stacked list — `.lw-footer-link`
+   * takes real height in marketing.css, because 44px hit boxes on 33px rows
+   * would overlap and each link would steal from its neighbour. Choose by
+   * whether the control has a neighbour in the direction it needs to grow. */
+  .lw-topbar .brand::after,
+  .lw-topbar nav a::after,
+  .lw-segmented button::after,
+  .lw-pill-link::after {
     content: "";
     position: absolute;
     top: 50%; left: 50%;
@@ -1070,6 +1137,20 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
     width: 100%; height: 100%;
     min-width: 44px; min-height: 44px;
   }
+  /* The anchor the ::after resolves against. Without it the box escapes to
+     whatever ancestor happens to be positioned and the target lands somewhere
+     else on the page — silently, since nothing is painted. */
+  .lw-topbar .brand, .lw-topbar nav a, .lw-segmented button, .lw-pill-link { position: relative; }
+  /* REAL width for a short nav label, because the ::after cannot supply it here.
+     A locale switch is two 39px links side by side: grown to 44px each, their
+     hit boxes OVERLAP, and the one on top takes the shared strip — measured at
+     40px of usable width apiece, so neither reaches the floor and a tap near the
+     seam opens the wrong language. Hit-tested, not assumed; a bounding box
+     cannot show it, because the boxes are still 39px either way. Growth in the
+     axis where a control has a neighbour has to be real, or it is a target two
+     controls both claim. Only short labels are affected — the bar's own links
+     are already wider than this. */
+  .lw-topbar nav a { min-inline-size: 44px; }
 }
 
 /* ---- Code block surface ---------------------------------------------------
@@ -1457,18 +1538,95 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
    and actions — absolute so its position never shifts when either side changes
    width. Reverts to flow on narrow bars, where a centred nav would collide. */
 .lw-topbar.nav-center nav { position: absolute; left: 50%; transform: translateX(-50%); }
-/* --lw-bp-md (768px). Measured, not guessed: at 905px the bar fits a 387px nav
-   centred with ~100px clear on both sides, so collapsing at lg de-centres a nav
-   that nothing was crowding. md is where the clearance actually runs out. */
-@media (max-width: 768px) { .lw-topbar.nav-center nav { position: static; left: auto; transform: none; } }
+/* --lw-bp-lg (1023.98px), RAISED from md in v1.3.4 — see the collapse note below
+   the nav rules. The old comment measured a bar carrying a nav and nothing else;
+   the bar every consumer actually ships also carries a control cluster and a CTA,
+   and those live on the same row. */
+@media (max-width: 1023.98px) { .lw-topbar.nav-center nav { position: static; left: auto; transform: none; } }
 .lw-topbar nav { display: flex; align-items: center; gap: var(--lw-space-4); }
 .lw-topbar nav a { font-size: var(--lw-text-sm); color: var(--lw-fg-muted); text-decoration: none; padding: 6px 10px; border-radius: var(--lw-radius-sm); transition: color var(--lw-dur-xs) var(--lw-ease-out), background var(--lw-dur-xs) var(--lw-ease-out); }
 .lw-topbar nav a:hover { color: var(--lw-fg); background: var(--lw-bg-subtle); }
 .lw-topbar nav a[aria-current="page"] { color: var(--lw-fg); font-weight: var(--lw-fw-medium); }
 .lw-topbar nav a:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
-/* --lw-bp-md (768px) — the links drop; the app is expected to supply its own
-   narrow-bar nav, because a horizontally scrolling topbar hides its own tail. */
-@media (max-width: 768px) { .lw-topbar nav { display: none; } }
+/* --lw-bp-lg (1023.98px) — the links drop; the app is expected to supply its own
+   narrow-bar nav, because a horizontally scrolling topbar hides its own tail.
+
+   ── Why this moved from md (768px) to lg in v1.3.4 ────────────────────────────
+   The md figure was measured against a bar that carried a nav and nothing else.
+   No consumer ships that bar. The real one carries brand + nav + a control
+   cluster + a CTA, all on one 56px row that does not wrap and whose children do
+   not shrink, so its width is the SUM of its parts — and the sum on the flagship
+   marketing site is 933px. Between 769px and 932px the bar therefore overflowed
+   the viewport and, because `.lw-topbar` is not a scroll container, dragged the
+   whole DOCUMENT sideways: every page on the site scrolled horizontally on an
+   iPad in portrait. Measured at 820px (iPad Air), not inferred.
+
+   The failure is silent in the one direction that matters. A too-wide bar does
+   not clip, wrap or warn — the tail simply sits past the fold, the page gains
+   ~113px of scroll width, and each page still screenshots correctly at whatever
+   fixed viewport a visual gate happens to shoot. Nothing here can see it.
+
+   1023.98 rather than 1023: `max-width: 1023px` and `min-width: 1024px` leave a
+   sub-pixel hole on a fractional-DPR viewport where NEITHER matches, and the bar
+   then has no navigation at all. The two halves must meet, not merely adjoin. */
+@media (max-width: 1023.98px) { .lw-topbar nav { display: none; } }
+
+/* The two halves of the bar's WIDTH contract, for anything that is not the nav.
+ *
+ * The bar's actions are the other half of the width problem the note above
+ * measures, and the package cannot rank them: on a marketing site the CTA is the
+ * conversion moment and must survive every width, while a theme picker is a
+ * setting that can afford to shrink. So the package supplies the mechanism and
+ * the app supplies the ranking.
+ *
+ *   .lw-topbar-collapse  — present only on a WIDE bar. The roomy affordance.
+ *   .lw-topbar-narrow    — present only on a NARROW bar. Its compact twin.
+ *
+ * Render both and let the breakpoint choose: a three-segment `ThemeToggle` in the
+ * bar beside a one-button `<ThemeToggle compact>`, or a full control beside a
+ * link into `NavToggle`'s panel. The pair is stated as two rules rather than one,
+ * so a consumer cannot get half of it.
+ *
+ * `display: none` and not `visibility: hidden`: a hidden-but-laid-out action
+ * still occupies its width, which is the entire defect this exists to remove.
+ * It is fully out of the accessibility tree at the width where it is not the
+ * live copy — which is the point. Two of the same control both reachable, one of
+ * them invisible, is a worse outcome than one.
+ *
+ * Not scoped to `.lw-topbar`, deliberately: the twin frequently lives in the
+ * PANEL, which is a sibling subtree, and a consumer should not have to know
+ * which of the two selectors applies where. */
+@media (max-width: 1023.98px) { .lw-topbar-collapse { display: none; } }
+@media (min-width: 1024px) { .lw-topbar-narrow { display: none; } }
+
+/* A phone bar is tight by nature, and every pixel here is one the CTA does not
+   have. Measured at 320px — the narrowest width worth supporting: brand (111) +
+   a compact theme button (28) + the CTA (94) + the nav toggle (28) is 261px of
+   content, which clears 320 only once the gaps and the inline padding come down.
+   At the shipped 16/20 it needs 349px and the bar drags the document sideways.
+   --lw-bp-sm (479.98px). */
+@media (max-width: 479.98px) {
+  .lw-topbar { gap: var(--lw-space-8); padding-inline: var(--lw-space-12); }
+}
+
+/* Below 360px the mark stands alone.
+ *
+ * The tightening above buys 30px and the narrowest real phone still needs more:
+ * at 320px a Vietnamese CTA (longer than its English twin — a translated bar is
+ * not the same width as the one it was designed on) put the row 7px past the
+ * viewport, which is a full-page sideways scroll for seven pixels nobody can
+ * see. The wordmark is the only remaining item big enough to matter and the only
+ * one that loses nothing when it goes: the mark is still the home link, the link
+ * still carries "<brand> — home" as its accessible name, and both survive.
+ *
+ * 359.98px rather than a token: --lw-bp-sm is 480px, and applying this there
+ * would strip the wordmark from every phone in ordinary use. 360 is the floor of
+ * the common Android viewport, so this reaches only the devices that genuinely
+ * cannot fit it. A literal with a measured reason beats a token with the wrong
+ * value. */
+@media (max-width: 359.98px) {
+  .lw-topbar .brand-name { display: none; }
+}
 
 /* ---- Brand mark in the top bar (v0.6.3) -----------------------------------
    The MARK only, beside the name as live text. The combined lockup
@@ -1531,10 +1689,12 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
   color: var(--lw-fg-subtle);
 }
 .lw-topbar .lw-topbar-toggle:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
-/* --lw-bp-md (768px) — the same breakpoint at which `.lw-topbar nav` drops, and
-   it has to be the same one: the toggle must appear in the frame the links
-   disappear in, or the bar has no navigation at all at some width. */
-@media (max-width: 768px) {
+/* --lw-bp-lg (1023.98px) — the same breakpoint at which `.lw-topbar nav` drops,
+   and it has to be the same one: the toggle must appear in the frame the links
+   disappear in, or the bar has no navigation at all at some width. Raised from
+   md with the nav in v1.3.4; changing one of these four queries without the
+   other three is how a bar ends up with neither nav nor toggle. */
+@media (max-width: 1023.98px) {
   .lw-topbar .lw-topbar-toggle { display: inline-flex; align-items: center; justify-content: center; }
 }
 
@@ -1577,12 +1737,27 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
    bar — so the panel's nav has to opt back in. Two selector levels rather than
    one: at equal specificity this would depend on source order, which is not a
    thing a consumer should have to know. */
-@media (max-width: 768px) {
+@media (max-width: 1023.98px) {
   .lw-topbar .lw-topbar-panel nav { display: flex; flex-direction: column; gap: var(--lw-space-4); }
   /* A 12px block pad around a ~20px line is a 44px row — the coarse-pointer
      minimum, reached with padding rather than a height so a wrapped label
      grows the row instead of overflowing it. */
   .lw-topbar .lw-topbar-panel nav a { padding-block: var(--lw-space-12); }
+}
+
+/* The panel's own actions row — where a `.lw-topbar-collapse` twin goes.
+ *
+ * Separated from the links by a hairline rather than by space alone: the rows
+ * above are destinations and the controls below are settings, and on a panel
+ * that is one flat column nothing else distinguishes them. */
+.lw-topbar-panel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--lw-space-12);
+  margin-block-start: var(--lw-space-12);
+  padding-block-start: var(--lw-space-12);
+  border-block-start: 1px solid var(--lw-line);
 }
 @media (prefers-reduced-motion: no-preference) {
   .lw-topbar-panel { animation: lwNavPanelIn var(--lw-dur-sm) var(--lw-ease-out); }

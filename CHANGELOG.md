@@ -20,6 +20,90 @@ versions are breaking: **0.1.4** (dependency URL), **0.2.0** (removal), **0.7.0*
 and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additionally ships a
 `package.json` that reports the wrong version.
 
+## [1.3.4] — 2026-08-04
+
+Responsive. Everything below was found by measuring `documentElement.scrollWidth` against
+the viewport at thirteen widths — not by looking at screenshots, which is the point: **a
+too-wide element does not clip, wrap, throw, or fail an axe rule.** The document simply
+grows a horizontal scrollbar. Neither this package's visual gate (one fixed viewport) nor
+its a11y gate (which does not measure document width) can see any of it, and neither could
+the flagship consumer's suite, whose two projects happened to sit at 1280 and 412.
+
+### Fixed
+
+- **`.lw-topbar` collapses at `--lw-bp-lg`, not `--lw-bp-md`.** The md figure was measured
+  against a bar carrying a nav and nothing else, and no consumer ships that bar: the real
+  one carries brand + nav + a control cluster + a CTA on one 56px row that does not wrap
+  and whose children do not shrink, so its width is the SUM of its parts — 933px on the
+  flagship marketing site. Between 769px and 932px the bar overflowed the viewport and,
+  because `.lw-topbar` is not a scroll container, dragged the whole document with it: every
+  page scrolled sideways on an iPad in portrait. Measured at 820px, not inferred.
+
+  All four queries moved together (`nav`, `nav-center nav`, `.lw-topbar-toggle`, the panel's
+  `nav`) and now read `1023.98px` / `1024px` rather than `1023` / `1024`, which left a
+  sub-pixel hole on a fractional-DPR viewport where neither matched and the bar had no
+  navigation at all.
+
+- **`Console` no longer forces its own minimum width.** Its inline
+  `grid-template-columns` used bare `max-content` for the gutter and every cell — a hard
+  minimum that hugs when there is room and refuses to give any back when there is not. On a
+  320px phone the columns summed to 296px inside a 280px frame and `overflow: hidden` cut
+  the last field off every line. Every track now carries a zero floor. Only the component
+  could fix this: an inline style outranks every stylesheet, so no consumer override and no
+  media query could reach it.
+
+- **`.lw-grid` and `.lw-card-grid` cap their track minimum at `100%`.** `minmax(320px, 1fr)`
+  is a DEFINITE minimum, so `.lw-grid-2` overflowed every container narrower than 320px
+  instead of narrowing its last column.
+
+- **`.lw-story` gives its text column a zero floor and stacks below `--lw-bp-sm`**;
+  `.lw-console-log`'s tracks likewise. `1fr` is `minmax(auto, 1fr)`, and an `auto` minimum
+  is the item's min-content — one long token then grows the column past its grid track.
+
+- **`.lw-hero-dark > .lw-container > *` is capped at `max-inline-size: 100%`.**
+  `align-items: flex-start` is right for the hero's own parts, but it makes every child
+  shrink-to-fit, and a shrink-to-fit box sizes against its content rather than its parent.
+
+- **Coarse-pointer targets reach 44px**: `.lw-topbar .brand`, `.lw-topbar nav a`,
+  `.lw-segmented button` and `.lw-pill-link` via the `.lw-hit` ::after (vertical growth into
+  space that is already empty); `.lw-footer-link` via real padding, because stacked 33px
+  rows with 44px hit boxes would overlap and each link would steal from its neighbour.
+  `.lw-topbar nav a` also takes a real `min-inline-size: 44px` — a locale switch is two 39px
+  links side by side, and grown targets there overlap horizontally for the same reason.
+  **Hit-tested with `elementFromPoint`, not measured with `getBoundingClientRect`** — the
+  whole point of `.lw-hit` is that the bounding box lies, and the overlap is invisible to it.
+
+### Added
+
+- **`ThemeToggle` gains `compact`** — one button showing the current mode and advancing on
+  press, instead of one segment per mode. For a bar too narrow to spend 144px on a setting:
+  the segmented form was the single item that pushed a 375px phone bar to 469px. The trade
+  is real and opt-in — a cycle hides its destination and costs up to N−1 presses — so a wide
+  bar should keep the segmented control. `formatCompactLabel` names the accessible label,
+  which must carry both the current mode and the next one: neither alone is usable without
+  sight. Renders a plain `<button>`, not a one-radio radiogroup.
+
+- **`.lw-topbar-collapse` / `.lw-topbar-narrow`** — the bar's width contract for anything
+  that is not the nav. The first is present only above `--lw-bp-lg`, the second only below,
+  so a consumer renders both affordances and the breakpoint picks one. The package supplies
+  the mechanism; only the app can rank its own actions (a marketing CTA survives every
+  width, a theme picker does not have to).
+
+- **`THEME_EVENT`**, fired by `paint()` with the chosen mode. The theme has one source of
+  truth and any number of views onto it, and the collapse contract means a bar and a panel
+  now each render a `ThemeToggle`. `ThemeToggle` listens, so the copy that is off-screen
+  cannot drift and come back highlighting a mode that is not the page's.
+
+- **`TopBar` wraps the brand name in `.brand-name`**, so a bar below 360px can drop the
+  wordmark and keep the mark. A bare text node cannot be targeted; the link's accessible
+  name is unchanged, so nothing is lost to assistive tech.
+
+### Consumers
+
+`leanwise-ai` moves to `#v1.3.4` and passes 443 e2e tests, including a new
+`responsive.spec.ts` that asserts no document scrolls sideways at 320/375/820/1280/1920 in
+both locales.
+
 ## [1.3.3] — 2026-08-04
 
 ### Fixed

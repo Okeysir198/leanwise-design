@@ -30,8 +30,17 @@ export function TopBar({
   const brandProps = brandHref ? { href: brandHref, "aria-label": typeof brand === "string" ? formatBrandLabel(brand) : homeLabel } : {};
   return (
     <header className={cx("lw-topbar", className)} {...rest}>
+      {/* The name is WRAPPED, and the span is not cosmetic. A bare text node
+          cannot be targeted, and the lockup is 111px of a bar whose width is the
+          sum of its parts — so on a 320px phone it was 87px that the CTA and the
+          nav toggle did not have, and the bar dragged the document sideways. The
+          span lets the stylesheet drop the name below --lw-bp-xs and keep the
+          mark, which is still a complete home affordance: `brandProps` already
+          carries the accessible name, so nothing is lost to assistive tech.
+          Only the `logo` form has a mark to fall back to; the text-only form
+          keeps its name at every width. */}
       {logo
-        ? <Brand className="brand" {...brandProps}><span className="brand-mark" aria-hidden="true" />{brand}</Brand>
+        ? <Brand className="brand" {...brandProps}><span className="brand-mark" aria-hidden="true" /><span className="brand-name">{brand}</span></Brand>
         : brand && <Brand className="brand" {...brandProps}>{brand}</Brand>}
       {links.length > 0 && (
         <nav aria-label={navLabel}>

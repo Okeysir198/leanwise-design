@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { Icon } from "../primitives/Icon.jsx";
-import { paint, persist, THEME_KEY } from "../../hooks.js";
+import { paint, persist, THEME_EVENT, THEME_KEY } from "../../hooks.js";
 import { useRadioGroup } from "../_radio-group.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
 
@@ -43,6 +43,7 @@ const GLYPHS = { light: "sun", dark: "moon", system: "monitor" };
 export function ThemeToggle({
   value, onChange, modes = ["light", "dark"],
   label = "Colour theme", modeLabels = THEME_LABELS,
+  compact = false, formatCompactLabel = (l, current, next) => l + ": " + current + ". " + next,
   className, ...rest
 }) {
   const [internal, setInternal] = React.useState(modes.includes("system") ? "system" : modes[0]);
@@ -55,6 +56,25 @@ export function ThemeToggle({
       if (saved && modes.includes(saved)) { setInternal(saved); paint(saved); }
     } catch (e) {}
   }, [value]);
+  /* Follow the DOCUMENT, not just this instance's own clicks.
+   *
+   * The theme has one source of truth and any number of views onto it, and since
+   * v1.3.4 the top bar routinely renders two of THIS control — a segmented one
+   * for a wide bar and a `compact` one for a phone. Without this the copy that
+   * is off-screen keeps whatever mode it mounted with, and a resize past the
+   * breakpoint reveals a control highlighting the wrong segment. Nothing throws
+   * and the page is the right colour; the control simply lies. `paint()` fires
+   * THEME_EVENT for exactly this, so any consumer that drives the theme from its
+   * own code gets the same consistency for free. */
+  React.useEffect(() => {
+    if (value !== undefined) return;
+    const on = (e) => { if (modes.includes(e.detail)) setInternal(e.detail); };
+    window.addEventListener(THEME_EVENT, on);
+    return () => window.removeEventListener(THEME_EVENT, on);
+    /* modes.join, not modes: an inline array literal is a new identity on every
+       render, and depending on it would tear the listener down and rebuild it in
+       a loop. */
+  }, [value, modes.join(",")]);
   const mode = value !== undefined ? value : internal;
   const apply = (m) => {
     if (value === undefined) setInternal(m);
@@ -67,6 +87,50 @@ export function ThemeToggle({
     if (value === undefined) persist(m);
     paint(m);
   };
+  /* ── compact: one button that CYCLES ──────────────────────────────────────
+   *
+   * A phone bar has room for the brand, one CTA and the nav toggle, and that is
+   * the whole budget: the three-segment control is 144px on a 375px bar whose
+   * contents do not shrink, so it is the single item that pushes the row past
+   * the viewport and drags the document sideways. Shrinking the segments is not
+   * an answer — they are already at the coarse-pointer floor.
+   *
+   * So the narrow form is a different CONTROL, not a smaller one: one button
+   * showing the current mode, advancing to the next on press. That is a real
+   * trade and worth naming — cycling hides the destination behind a press and
+   * costs up to N-1 presses to reach a given mode, which is why it is opt-in and
+   * why the wide bar keeps the segmented control that shows all N at once.
+   *
+   * The accessible name carries BOTH the current mode and what pressing will do,
+   * because neither alone is usable: "Dark" leaves a screen-reader user unable to
+   * predict the press, and "Switch to Auto" never tells them where they are. The
+   * name changes on press, which is the standard toggle-button contract — AT
+   * re-announces the newly focused name, so the state change is spoken.
+   *
+   * NOT `role="radiogroup"` with one radio, and not `aria-pressed`: one button is
+   * not a group, and `aria-pressed` describes a binary that a three-mode cycle
+   * is not. A plain button with a truthful name is the honest mapping. */
+  if (compact) {
+    const next = modes[(Math.max(0, modes.indexOf(mode)) + 1) % modes.length];
+    const name = formatCompactLabel(label, modeLabels[mode] || mode, modeLabels[next] || next);
+    return (
+      <button
+        type="button"
+        /* `.lw-hit` grows the target to the 44px coarse-pointer floor with an
+           absolutely positioned ::after, so the button stays 28px in the bar
+           without being a 28px TOUCH target. It needs a positioned host, which
+           `.lw-theme-compact` supplies. */
+        className={cx("lw-icon-btn", "lw-hit", "lw-theme-compact", className)}
+        aria-label={name}
+        title={name}
+        onClick={() => apply(next)}
+        {...rest}
+      >
+        <Icon name={GLYPHS[mode] || "monitor"} size={18} />
+      </button>
+    );
+  }
+
   const { ref, onKeyDown, tabIndexFor } = useRadioGroup(modes, mode, apply);
   return (
     <div ref={ref} className={cx("lw-segmented", className)} role="radiogroup" aria-label={label}
