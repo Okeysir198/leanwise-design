@@ -1,7 +1,14 @@
 /* @leanwise/design — PRODUCT layer
  *
- * App surfaces: layout, forms, data, overlays, the app shell, the AI surfaces,
- * the mobile bars. This was app.css.
+ * App surfaces: data, overlays, the app shell, the AI surfaces, the mobile bars.
+ * This was app.css.
+ *
+ * v1.3.0 moved three blocks OUT of here and into base.css — the layout
+ * primitives, the form field/control face, and `.lw-topbar`. None of the three is
+ * an app surface: a marketing site that correctly drops this layer was getting
+ * correct buttons, cards and heroes with unstyled layout and an unstyled header.
+ * Tombstones mark where each one was. This is the same correction that put
+ * `.lw-btn` in base.css.
  *
  * Requires the BASE layer (tokens → base → product). It deliberately does NOT
  * @import base itself: an @import here would apply those rules a second time in a
@@ -10,46 +17,11 @@
  */
 
 /* ---- Layout primitives -----------------------------------------------------
-   Four names cover almost every arrangement. They exist so "responsive" is a
-   token decision, not a fresh media query in every consumer. */
-
-/* PAGE — the app shell width (wider than the reading column, holds rails). */
-.lw-page { width: 100%; max-width: var(--lw-col-page); margin-inline: auto; padding-inline: var(--lw-pad-x); }
-
-/* STACK — vertical rhythm. The gap is the only thing it does. */
-.lw-stack { display: flex; flex-direction: column; gap: var(--lw-space-16); }
-.lw-stack-4 { gap: var(--lw-space-4); } .lw-stack-8 { gap: var(--lw-space-8); }
-.lw-stack-12 { gap: var(--lw-space-12); } .lw-stack-20 { gap: var(--lw-space-20); }
-.lw-stack-24 { gap: var(--lw-space-24); } .lw-stack-32 { gap: var(--lw-space-32); }
-.lw-stack-48 { gap: var(--lw-space-48); } .lw-stack-64 { gap: var(--lw-space-64); }
-
-/* CLUSTER — horizontal group that wraps. Toolbars, chip rows, action bars.
-   Wrapping is the default because a row that cannot wrap will overflow a phone. */
-.lw-cluster { display: flex; flex-wrap: wrap; align-items: center; gap: var(--lw-space-8); }
-.lw-cluster-12 { gap: var(--lw-space-12); } .lw-cluster-16 { gap: var(--lw-space-16); }
-.lw-cluster-24 { gap: var(--lw-space-24); }
-.lw-cluster-between { justify-content: space-between; }
-.lw-cluster-end { justify-content: flex-end; }
-.lw-cluster-baseline { align-items: baseline; }
-
-/* GRID — auto-fit columns. --lw-grid-min is the only knob; the grid reflows on
-   its own at every width, so no breakpoint is needed for the common case. */
-.lw-grid { display: grid; gap: var(--lw-space-16); grid-template-columns: repeat(auto-fit, minmax(var(--lw-grid-min, 240px), 1fr)); align-items: stretch; }
-.lw-grid-2 { --lw-grid-min: 320px; } .lw-grid-3 { --lw-grid-min: 240px; } .lw-grid-4 { --lw-grid-min: 180px; }
-.lw-grid-24 { gap: var(--lw-space-24); }
-
-/* SPLIT — a main column and a fixed-ish rail that collapses to one column.
-   1024px is --lw-bp-lg; a two-pane app cannot hold two panes below it. */
-.lw-split { display: grid; gap: var(--lw-space-24); grid-template-columns: minmax(0, 1fr) var(--lw-split-rail, 320px); align-items: start; }
-.lw-split-start { grid-template-columns: var(--lw-split-rail, 280px) minmax(0, 1fr); }
-/* --lw-bp-lg (1024px) — the rail has no room beside the main column below it. */
-@media (max-width: 1024px) { .lw-split, .lw-split-start { grid-template-columns: minmax(0, 1fr); } }
-
-/* Utility: a scroll area that does not leak its scroll to the page. */
-.lw-scroll { overflow: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: var(--lw-line-strong) transparent; }
-.lw-scroll::-webkit-scrollbar { width: 10px; height: 10px; }
-.lw-scroll::-webkit-scrollbar-thumb { background: var(--lw-line-strong); border-radius: var(--lw-radius-pill); border: 3px solid transparent; background-clip: content-box; }
-.lw-scroll::-webkit-scrollbar-track { background: transparent; }
+   MOVED to base.css in v1.3.0, verbatim and in this order. `.lw-page`,
+   `.lw-stack`, `.lw-cluster`, `.lw-grid`, `.lw-split`/`.lw-split-start` and
+   `.lw-scroll` are ARRANGEMENT, not app surface: a marketing page that correctly
+   drops this layer still has to lay itself out, and it was getting nothing. They
+   now live in the layer nobody drops. */
 
 /* WIDE-TRACKED CAPS: tracking opens every gap by one step, which is a huge
    proportional change to a near-zero letter gap and a small one to an already
@@ -63,152 +35,21 @@
    defined twice under two names. */
 
 /* ---- Forms -----------------------------------------------------------------
-   The layer the system was missing entirely. A FIELD is the unit: label, the
-   control, and one slot that holds either help text or an error — never both,
-   because a field with both is a field whose error is easy to miss. */
+   MOVED to base.css in v1.3.0, verbatim. `.lw-field`/`.lw-label`/`.lw-help`/
+   `.lw-error`, the shared `.lw-input`/`.lw-textarea`/`.lw-select` control face and
+   every one of its states, `.lw-input-sm`/`-lg`, `.lw-input-group`, `.lw-switch`,
+   `.lw-check`, `.lw-segmented` and the `@media (pointer: coarse)` block that closed
+   the section. A contact form is not an app surface; a marketing page that dropped
+   this layer got unstyled fields.
 
-.lw-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
-.lw-label { font-size: var(--lw-text-sm); font-weight: var(--lw-fw-medium); color: var(--lw-fg); line-height: 1.3; display: flex; align-items: center; gap: 6px; }
-/* Required is marked on the LABEL and echoed in `required` on the control — a
-   red asterisk alone is invisible to a screen reader. */
-.lw-label .req { color: var(--lw-danger-on); font-weight: var(--lw-fw-regular); }
-.lw-label .opt { color: var(--lw-fg-subtle); font-weight: var(--lw-fw-regular); font-size: var(--lw-text-xs); }
-.lw-help { font-size: var(--lw-text-xs); line-height: 1.5; color: var(--lw-fg-subtle); text-wrap: pretty; }
-.lw-error { font-size: var(--lw-text-xs); line-height: 1.5; color: var(--lw-danger-on); display: flex; align-items: flex-start; gap: 5px; }
-.lw-error::before { content: ""; width: 5px; height: 5px; margin-top: 6px; border-radius: 50%; background: currentColor; flex: none; }
+   They sit between base.css's pills section and its console section — deliberately
+   ABOVE the consolidated pointer-affordance list at the foot of base.css, because a
+   later `cursor: default` silently cancels an earlier pointer.
 
-/* The shared control face. Input, textarea and select are one surface with one
-   focus treatment, so a form never looks assembled from three libraries. */
-.lw-input, .lw-textarea, .lw-select {
-  width: 100%;
-  font-family: inherit;
-  font-size: var(--lw-text-sm);
-  line-height: 1.4;
-  color: var(--lw-fg);
-  background: var(--lw-bg);
-  border: 1px solid var(--lw-line-control);
-  border-radius: var(--lw-radius-sm);
-  transition: border-color var(--lw-dur-xs) var(--lw-ease-out), box-shadow var(--lw-dur-xs) var(--lw-ease-out), background var(--lw-dur-xs) var(--lw-ease-out);
-}
-.lw-input, .lw-select { height: var(--lw-control-h-md); padding: 0 var(--lw-field-pad-x); }
-.lw-textarea { padding: 10px var(--lw-field-pad-x); min-height: 96px; resize: vertical; }
-/* Placeholders and every other informational use take fg-SUBTLE (4.83 on white),
-   not fg-faint. fg-faint measures 2.54 on white — it is declared decorative in
-   tokens.css and 14 rules used it as text anyway, which is the one AA hole the
-   token pairs could not show, because the pair was never wrong: the usage was.
-   fg-faint stays below on the DISABLED states, which WCAG exempts and which are
-   supposed to read as unavailable. */
-.lw-input::placeholder, .lw-textarea::placeholder { color: var(--lw-fg-subtle); }
-.lw-input:hover:not(:disabled), .lw-textarea:hover:not(:disabled), .lw-select:hover:not(:disabled) { border-color: var(--lw-fg-faint); }
-/* ANY focus takes the brand border; the RING is reserved for :focus-visible.
-   Clicking a <select> (and a control focused programmatically) does not match
-   :focus-visible in Chromium, so a mouse-focused control fell through to the UA
-   outline — a ring in the browser's colour, not the brand's. Killing the outline
-   without replacing the border is how a control ends up with NO focus signal, so
-   the two always ship together. */
-.lw-input:focus, .lw-textarea:focus, .lw-select:focus { outline: none; border-color: var(--lw-brand-500); }
-/* [data-focus-demo] is a review hook: the states card cannot hold real focus in
-   four cells at once, so it borrows THIS declaration rather than restating the
-   values — a repainted focus ring in a specimen is a ring that drifts. */
-.lw-input:focus-visible, .lw-textarea:focus-visible, .lw-select:focus-visible,
-.lw-input[data-focus-demo], .lw-textarea[data-focus-demo], .lw-select[data-focus-demo],
-.lw-input-group[data-focus-demo] { outline: none; border-color: var(--lw-brand-500); box-shadow: var(--lw-focus-ring); }
-
-.lw-input:disabled, .lw-textarea:disabled, .lw-select:disabled { background: var(--lw-bg-muted); color: var(--lw-fg-faint); cursor: not-allowed; border-color: var(--lw-line); }
-/* Invalid is driven by aria-invalid, not a class: the attribute is what the
-   screen reader reads, so binding the colour to it makes the two impossible to
-   desync. The ring goes red too — a red border with a cyan focus ring reads as
-   "fixed" the moment it is focused. */
-.lw-input[aria-invalid="true"], .lw-textarea[aria-invalid="true"], .lw-select[aria-invalid="true"] { border-color: var(--lw-danger-on); }
-.lw-input[aria-invalid="true"]:focus-visible, .lw-textarea[aria-invalid="true"]:focus-visible, .lw-select[aria-invalid="true"]:focus-visible { border-color: var(--lw-danger-on); box-shadow: var(--lw-focus-ring-danger); }
-.lw-input-sm { height: var(--lw-control-h-sm); padding: 0 var(--lw-field-pad-x); font-size: var(--lw-text-xs); }
-.lw-input-lg { height: var(--lw-control-h-lg); padding: 0 calc(var(--lw-field-pad-x) + 2px); font-size: var(--lw-text-body); }
-
-/* Select needs its own chevron: the native arrow cannot be tokenised, and it is
-   the one control whose default styling gives the platform away. */
-.lw-select {
-  appearance: none;
-  /* PHYSICAL, and coupled: this padding reserves room for the chevron, which is
-     painted by background-position below — and background-position has no
-     logical form. Convert one without the other and RTL gets the gap on the
-     start edge with the chevron still on the right. They move together or not at
-     all; today they are a self-consistent physical pair. */
-  padding-right: 34px;
-  background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%);
-  background-position: calc(100% - 17px) center, calc(100% - 12px) center;
-  background-size: 5px 5px, 5px 5px;
-  background-repeat: no-repeat;
-  cursor: pointer;
-}
-
-/* An input with an affix — a search glyph, a unit, a paste button. The BOX owns
-   the border and the focus ring; the input inside is bare, so the ring wraps
-   the whole control rather than a rectangle inside it. */
-.lw-input-group { display: flex; align-items: center; gap: 8px; height: var(--lw-control-h-md); padding: 0 var(--lw-field-pad-x); background: var(--lw-bg); border: 1px solid var(--lw-line-control); border-radius: var(--lw-radius-sm); transition: border-color var(--lw-dur-xs) var(--lw-ease-out), box-shadow var(--lw-dur-xs) var(--lw-ease-out); }
-.lw-input-group:focus-within { border-color: var(--lw-brand-500); box-shadow: var(--lw-focus-ring); }
-/* The group owns the border, so it has to own the INVALID border too. Without this
-   rule aria-invalid on the inner input announced an error that nothing showed —
-   the one control whose "invalid is an attribute" contract silently did not hold,
-   because the attribute sits on a child of the element that draws the frame.
-   :has() keeps the attribute as the single source of truth: still no .error class. */
-.lw-input-group:has(> input[aria-invalid="true"]) { border-color: var(--lw-danger-on); }
-.lw-input-group:has(> input[aria-invalid="true"]):focus-within { border-color: var(--lw-danger-on); box-shadow: var(--lw-focus-ring-danger); }
-.lw-input-group > input { flex: 1; min-width: 0; border: 0; background: none; font: inherit; font-size: var(--lw-text-sm); color: var(--lw-fg); }
-.lw-input-group > input:focus { outline: none; }
-.lw-input-group .affix { color: var(--lw-fg-subtle); font-size: 14px; display: inline-flex; align-items: center; flex: none; }
-.lw-input-group .affix.mono { font-family: var(--lw-font-mono); font-size: var(--lw-text-xs); }
-
-/* SWITCH — for a setting that applies immediately. A checkbox is for a value
-   you submit; the two are not interchangeable and the shapes say which is which. */
-.lw-switch { display: inline-flex; align-items: center; gap: 10px; cursor: pointer; }
-.lw-switch input { position: absolute; opacity: 0; width: 0; height: 0; }
-.lw-switch .track { position: relative; width: var(--lw-switch-w); height: var(--lw-switch-h); flex: none; border-radius: var(--lw-radius-pill); background: var(--lw-bg-inset); border: 1px solid var(--lw-line-control); transition: background var(--lw-dur-sm) var(--lw-ease-out), border-color var(--lw-dur-sm) var(--lw-ease-out); }
-.lw-switch .track::after { content: ""; position: absolute; top: var(--lw-switch-inset); left: var(--lw-switch-inset); width: var(--lw-switch-thumb); height: var(--lw-switch-thumb); border-radius: 50%; background: var(--lw-bg); box-shadow: var(--lw-shadow-sm); transition: transform var(--lw-dur-sm) var(--lw-ease-out); }
-.lw-switch input:checked + .track { background: var(--lw-brand-500); border-color: var(--lw-brand-500); }
-.lw-switch input:checked + .track::after { transform: translateX(16px); }
-.lw-switch input:focus-visible + .track,
-.lw-switch input[data-focus-demo] + .track {
-  outline: 2px solid var(--lw-brand-500); outline-offset: 2px; box-shadow: none;
-}
-.lw-switch input:disabled + .track { opacity: 0.5; cursor: not-allowed; }
-.lw-switch .lw-switch-text { font-size: var(--lw-text-sm); color: var(--lw-fg); }
-
-/* CHECKBOX / RADIO — same 18px box, different radius. The check is a border
-   trick rather than an SVG so it inherits ink and needs no asset.
-   Note the class names: a design system cannot own a name as generic as
-   `.lbl` — a consumer page will have one, and whichever loads last wins. */
-.lw-check { display: inline-flex; align-items: flex-start; gap: 9px; cursor: pointer; font-size: var(--lw-text-sm); color: var(--lw-fg); line-height: 1.45; }
-.lw-check input { position: absolute; opacity: 0; width: 0; height: 0; }
-.lw-check .box { position: relative; width: 18px; height: 18px; margin-top: 1px; flex: none; border: 1px solid var(--lw-line-control); border-radius: var(--lw-radius-xs); background: var(--lw-bg); transition: background var(--lw-dur-xs) var(--lw-ease-out), border-color var(--lw-dur-xs) var(--lw-ease-out); }
-.lw-check.radio .box { border-radius: 50%; }
-.lw-check input:checked + .box { background: var(--lw-brand-500); border-color: var(--lw-brand-500); }
-.lw-check input:checked + .box::after { content: ""; position: absolute; left: 5px; top: 1px; width: 5px; height: 10px; border: solid var(--lw-on-brand); border-width: 0 2px 2px 0; transform: rotate(43deg); }
-.lw-check.radio input:checked + .box::after { left: 4px; top: 4px; width: 8px; height: 8px; border: 0; border-radius: 50%; background: var(--lw-on-brand); transform: none; }
-.lw-check input:focus-visible + .box,
-.lw-check input[data-focus-demo] + .box {
-  outline: 2px solid var(--lw-brand-500); outline-offset: 2px; box-shadow: none;
-}
-.lw-check input:disabled + .box { opacity: 0.5; }
-.lw-check input:disabled ~ .lw-check-text { color: var(--lw-fg-faint); }
-
-/* SEGMENTED — 2-4 mutually exclusive views. Same shell as .lw-theme-toggle. */
-.lw-segmented { display: inline-flex; gap: 2px; padding: 3px; background: var(--lw-bg-inset); border: 1px solid var(--lw-line); border-radius: var(--lw-radius-md); }
-.lw-segmented button { appearance: none; border: 0; background: none; font: inherit; font-size: var(--lw-text-xs); font-weight: var(--lw-fw-medium); color: var(--lw-fg-subtle); padding: 5px 12px; border-radius: var(--lw-radius-sm); cursor: pointer; white-space: nowrap; transition: background var(--lw-dur-xs) var(--lw-ease-out), color var(--lw-dur-xs) var(--lw-ease-out); }
-.lw-segmented button:hover { color: var(--lw-fg); }
-/* aria-CHECKED is the live one: v1.1.7 moved Segmented and ThemeToggle to a
-   radiogroup, because aria-pressed describes N INDEPENDENT toggles and these are
-   a single exclusive choice. aria-pressed and aria-selected stay in the selector
-   for the vanilla consumers still authoring the old markup — the CSS layer is
-   the contract both consumers render against, so it has to span the migration. */
-.lw-segmented button[aria-checked="true"], .lw-segmented button[aria-pressed="true"], .lw-segmented button[aria-selected="true"] { background: var(--lw-bg); color: var(--lw-fg); box-shadow: var(--lw-shadow-xs); }
-.lw-segmented button:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
-
-@media (pointer: coarse) {
-  /* Control HEIGHTS are raised on the density tokens in tokens.css, not here: a
-     height written on the control would outrank the token the touch block already
-     lifted. Only what has no token left stays. */
-  .lw-segmented button { padding: 10px 14px; }
-}
+   The on-dark patches for these controls stay below, under "Dark ground": they are
+   `:is(.dark, …)`-scoped, so they outrank the promoted rules on specificity and
+   their position is not load-bearing. A base-only page therefore has the controls
+   but not their dark-band treatment. */
 
 /* ---- Data display ---------------------------------------------------------- */
 
@@ -389,37 +230,11 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 .lw-code:has(.lw-tabs) { padding: 0; }
 .lw-code:has(.lw-tabs) pre { margin: 0; padding: var(--lw-space-16); }
 
-/* TOP BAR — the app chrome. Sticky, hairline, never a shadow: a shadow under a
-   1px bar reads as a rendering bug on a light ground. */
-.lw-topbar { position: sticky; top: 0; z-index: var(--lw-z-nav); display: flex; align-items: center; gap: var(--lw-space-16); height: 56px; padding: 0 var(--lw-space-20); background: hsl(var(--lw-bg-c) / 0.86); backdrop-filter: blur(12px) saturate(1.4); -webkit-backdrop-filter: blur(12px) saturate(1.4); border-bottom: 1px solid var(--lw-line); }
-.lw-topbar .brand { display: flex; align-items: center; gap: 9px; font-weight: var(--lw-fw-semibold); font-size: var(--lw-text-sm); letter-spacing: -0.012em; color: var(--lw-fg); text-decoration: none; flex: none; }
-.lw-topbar .spacer { flex: 1; }
-/* As a link the brand is one target covering mark and name. Opacity, not a
-   colour change: the name is already the brand colour, so darkening it on hover
-   would read as a different brand rather than a hover state. */
-a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity var(--lw-duration) var(--lw-ease-out); }
-.lw-topbar a.brand:hover { opacity: 0.72; }
-.lw-topbar a.brand:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); border-radius: var(--lw-radius-sm); }
-@media (prefers-reduced-motion: reduce) { .lw-topbar a.brand { transition: none; } }
-/* The name beside the mark is brand-coloured; the plain text brand stays fg so
-   app chrome does not shout. Scoped with :has so it needs no extra element. */
-.lw-topbar .brand:has(.brand-mark) { color: var(--lw-brand-text); }
-/* `nav-center` centres the nav on the BAR, not in the space left between brand
-   and actions — absolute so its position never shifts when either side changes
-   width. Reverts to flow on narrow bars, where a centred nav would collide. */
-.lw-topbar.nav-center nav { position: absolute; left: 50%; transform: translateX(-50%); }
-/* --lw-bp-md (768px). Measured, not guessed: at 905px the bar fits a 387px nav
-   centred with ~100px clear on both sides, so collapsing at lg de-centres a nav
-   that nothing was crowding. md is where the clearance actually runs out. */
-@media (max-width: 768px) { .lw-topbar.nav-center nav { position: static; left: auto; transform: none; } }
-.lw-topbar nav { display: flex; align-items: center; gap: var(--lw-space-4); }
-.lw-topbar nav a { font-size: var(--lw-text-sm); color: var(--lw-fg-muted); text-decoration: none; padding: 6px 10px; border-radius: var(--lw-radius-sm); transition: color var(--lw-dur-xs) var(--lw-ease-out), background var(--lw-dur-xs) var(--lw-ease-out); }
-.lw-topbar nav a:hover { color: var(--lw-fg); background: var(--lw-bg-subtle); }
-.lw-topbar nav a[aria-current="page"] { color: var(--lw-fg); font-weight: var(--lw-fw-medium); }
-.lw-topbar nav a:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
-/* --lw-bp-md (768px) — the links drop; the app is expected to supply its own
-   narrow-bar nav, because a horizontally scrolling topbar hides its own tail. */
-@media (max-width: 768px) { .lw-topbar nav { display: none; } }
+/* TOP BAR — MOVED to base.css in v1.3.0, verbatim: `.lw-topbar`, every descendant
+   and state rule, and BOTH `@media (max-width: 768px)` blocks. It now sits directly
+   above the `.lw-topbar .brand-mark` rules that were already in base.css — the
+   component had been split across two layers, so a marketing site that dropped this
+   one got a correct brand mark inside an unstyled site header. */
 
 /* SIDEBAR — the product rail. Collapses to icons via [data-collapsed], which is
    a state on the element rather than a second class, so it is one source. */

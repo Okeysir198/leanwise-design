@@ -48,9 +48,23 @@ token discipline downstream.
 tokens.css        THE source of truth — HSL channel triples + derived colors, all theme scopes.
                     Authored once as a triple; the derived line is generated. Edit the triple;
                     NEVER the derived line; never a hex in a consumer.
-base.css          shared controls — the layer every surface needs.
-marketing.css     grounds + hero. product.css    app surfaces.
+base.css          shared controls — the layer every surface needs. Layout primitives,
+                    type, buttons, pills/cards/chips, the FORM field + control face, the
+                    console + code surfaces, the TOP BAR, the pointer-affordance list.
+marketing.css     grounds + hero. product.css    app surfaces (data, overlays, the
+                    app shell and rails, AI, the mobile bars).
                     Load order: tokens -> base -> marketing and/or product.
+                    **v1.3.0 promoted layout, the form controls and `.lw-topbar` out of
+                    product.css into base.css** — the same correction that put `.lw-btn`
+                    in base.css, in the other direction. A marketing site that correctly
+                    dropped product.css had correct buttons, cards and heroes and an
+                    unstyled page with an unstyled header. `.lw-topbar` was the proof:
+                    `.lw-topbar .brand-mark` was already in base.css while the rest of
+                    the component was not. Tombstones mark each vacated site.
+                    The `:is(.dark, …)`-scoped patches for those form controls stayed in
+                    product.css: they outrank the promoted rules on specificity, so their
+                    position is not load-bearing — but a base-only page has the controls
+                    without their dark-band treatment.
 lw.css / app.css  @import SHIMS kept for one major. Do NOT load them alongside the real
                     layers — you get the rules twice.
 email.css         literal hex + table layout on purpose: mail clients have no custom properties.

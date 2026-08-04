@@ -8,9 +8,10 @@ tokens.css        the source of truth — HSL triples, light + dark, both re-poi
 fonts.css         Geist + Geist Mono, self-hosted, incl. Vietnamese subsets
 shadcn.css        maps --primary/--background/… onto the tokens
 tailwind-preset.cjs Tailwind v3 consumers (CommonJS — a tailwind.config.js requires it)
-base.css          the SHARED layer — reset, type, buttons, cards, chips, pointer list
+base.css          the SHARED layer — layout, type, buttons, cards, chips, form
+                  controls, the top bar, pointer list
 marketing.css     the MARKETING layer (grounds, hero, features, stories, ambient motion)
-product.css       the PRODUCT layer (layout, forms, data, overlays, app shell, AI)
+product.css       the PRODUCT layer (data, overlays, app shell/rails, AI, mobile bars)
 email.css         the EMAIL layer — literal values, tables, no var(). See Email below
 lw.css app.css    SHIMS for the old two-layer names. Kept one major; do not mix
                   them with the files above, or the same rules apply twice
@@ -28,7 +29,16 @@ order. Nothing can drop `tokens.css` or `base.css`.
 The names are load-bearing, because the previous two-layer split got this wrong: `.lw-btn`
 lived in `lw.css`, "the marketing layer", so an app that dropped it got correct layout, forms,
 tables and overlays — and unstyled buttons. The shared controls now live in `base.css`, which
-is the layer nobody drops. `lw.css` and `app.css` remain as shims for one full major; **do not
+is the layer nobody drops.
+
+**v1.3.0 made the same correction in the other direction.** The layout primitives
+(`.lw-page`/`.lw-stack`/`.lw-cluster`/`.lw-grid`/`.lw-split`/`.lw-scroll`), the form field and
+control face (`.lw-field`, `.lw-input`/`.lw-textarea`/`.lw-select`, `.lw-input-group`,
+`.lw-switch`, `.lw-check`, `.lw-segmented`) and the site header (`.lw-topbar`) were all in
+`product.css`, so a marketing site that correctly dropped that layer got correct buttons,
+cards and heroes — on an unstyled page, with an unstyled header. `.lw-topbar` was the proof:
+its `.brand-mark` rules were already in `base.css` while the rest of the component was not.
+All three are in `base.css` now, unchanged. `lw.css` and `app.css` remain as shims for one full major; **do not
 load a shim alongside the real files**, or the same rules apply twice and the cascade between
 the two layers reorders.
 
@@ -54,7 +64,7 @@ what is still open. `CONTRIBUTING.md` points back here — the checklist lives i
 ## Install
 
 ```jsonc
-"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v1.2.0" }
+"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v1.2.1" }
 ```
 
 ```css
@@ -833,7 +843,7 @@ uniformly denser app.
 
 | Responds to `data-density` | Does not |
 |---|---|
-| `.lw-input` `.lw-select` `.lw-textarea` `.lw-input-group` `.lw-combo` | `.lw-topbar` (56px) |
+| `.lw-input` `.lw-select` `.lw-textarea` `.lw-input-group` (base.css) `.lw-combo` | `.lw-topbar` (56px — base.css since v1.3.0) |
 | `.lw-btn` and every size | `.lw-nav-item`, `.lw-sidebar` |
 | `.lw-dgrid` rows and header, `.lw-menu-item`, `.lw-option` | `.lw-avatar`, `.lw-msg-avatar` |
 | `.lw-card` padding, `Stack` gaps, `.lw-cal-preset` | `.lw-toast`, `.lw-kpi-badge` (34px), `.lw-source` (18px) |

@@ -20,6 +20,67 @@ versions are breaking: **0.1.4** (dependency URL), **0.2.0** (removal), **0.7.0*
 and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additionally ships a
 `package.json` that reports the wrong version.
 
+## [Unreleased]
+
+### Added
+
+- **`linkAs` — the router escape hatch, on every component that renders a navigation
+  anchor.** `TopBar`, `Breadcrumbs`, `AppBar`, `Sidebar`/`NavItem`, `BottomNav`,
+  `StoryCard`, `FeatureGrid`, `Menu`, `ActivityFeed` and `SourceList` hard-coded `<a
+  href>`, so a client-routed consumer got a **full document reload** on every in-chrome
+  link — and in a path-prefixed bilingual app (`/vi/...`), the raw anchor drops the
+  prefix and lands a Vietnamese reader back on the English site. There was no way to
+  reach the element short of forking the component. `linkAs?: React.ElementType`
+  defaults to `"a"` and receives exactly what the raw anchor received — `href`,
+  `children`, `className`, and `aria-current` where applicable — so it is inert unless
+  passed. A prop, not a context provider: the package has no runtime context surface and
+  one link element is not the thing to open it with.
+  - It replaces the **anchor only**. Every one of these components already degrades an
+    item with no `href` to a `<button>` (focusable, announced as a control); `linkAs`
+    never reaches that branch, so the degradation still holds.
+  - **`Button`, `Card` and `SourceChip` deliberately do NOT get one** — their existing
+    `as` prop already renders a consumer element with `href` forwarded, and a second
+    mechanism for one behaviour is what README rule 9 forbids. Their `as` was typed
+    `as?: string`, though, so the mechanism existed at runtime and **failed to compile**
+    for the only use it has; it is now `React.ElementType`. Type-only, non-breaking —
+    `string` is a subset.
+
+## [Unreleased]
+
+### Changed
+
+- **Layout, the form controls and `.lw-topbar` moved from `product.css` to `base.css`.**
+  Verbatim relocation — not one declaration changed. This is the same correction that put
+  `.lw-btn` in `base.css`, applied in the other direction: `base.css` is the layer nobody
+  drops, `marketing.css` is what a marketing site adds, `product.css` is app surfaces — and
+  the layout primitives (`.lw-page`, `.lw-stack`, `.lw-cluster`, `.lw-grid`, `.lw-split`,
+  `.lw-scroll`), the field and control face (`.lw-field`/`.lw-label`/`.lw-help`/`.lw-error`,
+  `.lw-input`/`.lw-textarea`/`.lw-select` and every state, `.lw-input-group`, `.lw-switch`,
+  `.lw-check`, `.lw-segmented`) and the site header (`.lw-topbar`) were all on the app side of
+  that line. A marketing site that correctly dropped `product.css` got correct buttons, cards
+  and heroes — with unstyled layout and an unstyled header.
+
+  `.lw-topbar` was the proof: `.lw-topbar .brand-mark` was **already** in `base.css` while
+  every other rule of the same component sat in the other layer.
+
+  Three notes for anyone reading the diff:
+  - The forms block is placed after `base.css`'s pills section and before its console section,
+    which keeps the consolidated pointer-affordance list at the **foot** of `base.css` last. A
+    later `cursor: default` silently cancels an earlier pointer, and that list names
+    `.lw-switch`, `.lw-check`, `.lw-select` and `.lw-segmented button`.
+  - The `:is(.dark, …)`-scoped patches for those controls stay in `product.css`. They outrank
+    the promoted rules on specificity, so their position is not load-bearing — but a page
+    loading only `base.css` now has the controls without their dark-band treatment.
+  - Two `@media (forced-colors: active)` rules in `base.css` — `.lw-select { background-image:
+    none }` and the `.lw-segmented button:is([aria-checked],[aria-pressed])` Highlight border —
+    were being beaten on source order by the equal-specificity `product.css` rules that loaded
+    after them. With those rules now **above** the forced-colors block in the same file, the
+    forced-colors overrides take effect for the first time. Latent bug, fixed by the reorder.
+  - Tombstone comments mark each vacated site in `product.css`.
+
+- **`README.md`'s install pin corrected to `#v1.2.1`** — it still said `#v1.2.0` while
+  `package.json` said `1.2.1`, which failed `lw-token-lint --css` with `stale-install-pin`.
+
 ## [1.2.0] — 2026-07-31
 
 ### Added
