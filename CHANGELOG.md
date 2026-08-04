@@ -20,7 +20,22 @@ versions are breaking: **0.1.4** (dependency URL), **0.2.0** (removal), **0.7.0*
 and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additionally ships a
 `package.json` that reports the wrong version.
 
-## [1.3.2] — 2026-08-04
+## [1.3.3] — 2026-08-04
+
+### Fixed
+
+- **`CompareTable`'s scroll container is now keyboard-reachable** (`tabIndex={0}` plus a
+  named `role="region"`). A box that scrolls must be focusable, or a keyboard-only reader
+  cannot reach the columns past the fold — and on a phone this matrix always scrolls, so
+  those columns were simply unreachable. axe reports it as `scrollable-region-focusable`
+  (serious).
+
+  Worth noting how it was found: the violation only exists at a viewport narrow enough for
+  the overflow to be real, so every desktop scan — including this package's own, which
+  shoots a fixed wide viewport — reported clean. It surfaced in the flagship consumer's
+  mobile project. **A11y gates that only run at one width test one width.**
+
+
 
 ### Fixed
 

@@ -50,8 +50,22 @@ export function CompareTable({
     return v;
   };
 
+  /* `tabIndex={0}` + a named region is REQUIRED, not decorative. A box that scrolls
+     must be reachable from the keyboard, or a keyboard-only reader cannot see the
+     columns past the fold — and on a phone this matrix always scrolls, so those
+     columns are simply unreachable. axe reports it as `scrollable-region-focusable`
+     (serious), and it only surfaces at a viewport narrow enough for the overflow to
+     be real, which is why a desktop-only scan misses it entirely.
+
+     The region takes the caption as its accessible name, so the focus stop announces
+     what it is rather than an anonymous "group". */
   return (
-    <div className="lw-compare-scroll">
+    <div
+      className="lw-compare-scroll"
+      tabIndex={0}
+      role="region"
+      aria-label={typeof caption === "string" ? caption : undefined}
+    >
       <table className={cx("lw-compare", className)} {...rest}>
         {caption && <caption>{caption}</caption>}
         <thead>
