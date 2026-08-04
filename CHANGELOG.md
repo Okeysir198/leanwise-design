@@ -20,7 +20,30 @@ versions are breaking: **0.1.4** (dependency URL), **0.2.0** (removal), **0.7.0*
 and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additionally ships a
 `package.json` that reports the wrong version.
 
-## [1.3.1] — 2026-08-04
+## [1.3.2] — 2026-08-04
+
+### Fixed
+
+- **`.lw-compare-scroll` now establishes a containing block (`position: relative`), which
+  stops the comparison matrix scrolling the whole PAGE sideways on a phone.**
+
+  `overflow` does not clip an absolutely-positioned descendant whose containing block lies
+  outside the scroller. Every truthy/falsy cell in the matrix carries a `.lw-sr-only` span
+  so state is never colour alone (README rule 6), and `.lw-sr-only` is
+  `position: absolute !important`. With the scroller `position: static` those spans
+  resolved against an ancestor further up, escaped the clip, and extended the document's
+  scrollable width — **measured at 478px against a 375px viewport** on a five-column
+  matrix, on the flagship consumer's `/pricing`.
+
+  The failure shape is worth remembering: the *accessibility affordance* was breaking the
+  mobile layout, and because the escaping boxes are 1px each, nothing looked wrong — the
+  page simply scrolled. Neither a width cap, nor `overflow: hidden`, nor removing the
+  sticky headers changed it; only a containing block did. No gate caught it, because
+  `check:visual` shoots a fixed viewport and axe does not measure document width.
+
+  Sticky row and column headers were verified to still pin with the fix in place.
+
+
 
 > **Four gaps, all found by the flagship consumer rebuilding against 1.3.0, and all of them
 > invisible from inside this repository.** Every one is the same shape: the package's own

@@ -1502,6 +1502,22 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
   /* Stops an inline overscroll at the end of the matrix from chaining to the
      page and swiping the browser back. */
   overscroll-behavior-inline: contain;
+  /* REQUIRED, and it is not a nicety — without it the whole PAGE scrolls sideways
+     on a phone.
+
+     `overflow` does NOT clip an absolutely-positioned descendant whose containing
+     block lies outside the scroller. Every truthy/falsy cell in this matrix carries a
+     `.lw-sr-only` span so the state is never colour alone (README rule 6), and
+     `.lw-sr-only` is `position: absolute`. With the scroller `position: static` those
+     spans resolve against an ancestor further up, escape the clip, and extend the
+     document's scrollable width — measured at 478px against a 375px viewport on a
+     five-column matrix. So the accessibility affordance was silently breaking the
+     mobile layout, which is why neither a width cap nor `overflow: hidden` fixed it
+     and only a containing block did.
+
+     `position: relative` is the minimal fix. Verified: the sticky row and column
+     headers still pin correctly with it. */
+  position: relative;
 }
 .lw-compare {
   inline-size: 100%;
