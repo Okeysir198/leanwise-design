@@ -7,7 +7,7 @@ function Cluster({ gap = 8, justify, align, wrap = true, as: Tag = "div", classN
     justify === "between" && "lw-cluster-between",
     justify === "end" && "lw-cluster-end",
     align === "baseline" && "lw-cluster-baseline",
-    wrap === false && "lw-cluster-nowrap",
+    !wrap && "lw-cluster-nowrap",
     className
   ), ...rest, children });
 }

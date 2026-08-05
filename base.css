@@ -133,9 +133,21 @@
    trading a visible bug for the invisible one this system has already fixed four
    times (`.lw-grid-2`, `.lw-story`, `.lw-console-log`, `Console`'s inline tracks).
    `.lw-icon` is `flex: none`, so a zero floor cannot shrink the glyph itself.
-   `:where()` keeps the floor at zero specificity so a consumer's own rule wins. */
+
+   ⚠ That floor is why this is NOT the modifier for a toolbar. "A row that does not
+   wrap" also describes `.lw-topbar`, whose children must keep their intrinsic width
+   — it is a row whose width is the SUM of its parts, and the 144px `ThemeToggle`
+   that pushed a 375px bar to 469px is what that costs when it is got wrong. Reach
+   for this one only when a child is PROSE that should wrap inside its own box.
+
+   ⚠ The shape itself is already spelled twice in this package, bolted to one
+   component each: `.lw-plan-feature` (flex, marketing.css) and `.lw-step`'s
+   `40px minmax(0, 1fr)` grid. The real fix is to promote ONE media object into this
+   file and re-point all three; until that happens a fourth spelling is a bug. */
 .lw-cluster-nowrap { flex-wrap: nowrap; }
-.lw-cluster-nowrap > :where(*) { min-inline-size: 0; }
+/* `*`, not `:where(*)` — the universal selector already carries zero specificity,
+   so the wrapper bought nothing but the suggestion that it did. */
+.lw-cluster-nowrap > * { min-inline-size: 0; }
 
 /* GRID — auto-fit columns. --lw-grid-min is the only knob; the grid reflows on
    its own at every width, so no breakpoint is needed for the common case.

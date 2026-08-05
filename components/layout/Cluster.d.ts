@@ -12,6 +12,10 @@ export interface ClusterProps extends React.HTMLAttributes<HTMLElement> {
    * `<Icon/> + <span>a sentence</span>` pair drops the sentence under the glyph the
    * moment it runs past one line. Short labels look correct, which is why this
    * survives review; set `wrap={false}` for any row whose text is a sentence.
+   *
+   * ⚠ It also gives every child a zero `min-inline-size`, so this is NOT the way to
+   * build a toolbar that must not wrap — those children have to keep their
+   * intrinsic width. Use it only when a child is prose that should wrap in place.
    */
   wrap?: boolean;
   as?: string;

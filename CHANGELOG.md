@@ -20,6 +20,34 @@ versions are breaking: **0.1.4** (dependency URL), **0.2.0** (removal), **0.7.0*
 and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additionally ships a
 `package.json` that reports the wrong version.
 
+## [1.5.6] — 2026-08-05
+
+### Changed — no rendering change; v1.5.5's nowrap row, said more precisely
+
+A cleanup pass over v1.5.5. Nothing here alters a pixel or a class name; the
+version exists only so the published tag matches the tree.
+
+- **`.lw-cluster-nowrap > :where(*)` → `> *`.** The universal selector already
+  carries zero specificity, so the `:where()` wrapper bought nothing — and the
+  comment claiming it "keeps the floor at zero specificity so a consumer's own
+  rule wins" implied it was doing work it was not. Identical cascade, one less
+  thing to explain.
+- **`wrap === false` → `!wrap`** in `Cluster`. The `=== value` form beside it is
+  there because `justify`/`align` are string unions; for a boolean it was noise.
+- **The `.lw-cluster-nowrap` comment now names its two prior spellings and its
+  one trap.** `.lw-plan-feature` (flex) and `.lw-step` (`40px minmax(0, 1fr)`
+  grid) already encode this exact media object, each bolted to one component and
+  reachable by no consumer — which is why the shape was re-derived a third time.
+  **Promoting one media object into `base.css` and re-pointing all three is the
+  real fix; this release only records that, it does not do it.**
+  And the trap: the zero `min-inline-size` floor makes this the wrong modifier
+  for a toolbar, where "does not wrap" also means "children keep their intrinsic
+  width" — `.lw-topbar` is the standing example, and the 144px `ThemeToggle` that
+  pushed a 375px bar to 469px is what getting it wrong costs. Stated in the CSS
+  and in `Cluster.d.ts`.
+
+**Consumers:** `leanwise-ai` → `#v1.5.6`. No call-site change.
+
 ## [1.5.5] — 2026-08-05
 
 ### Fixed — `Cluster` could not make an icon-and-prose row, and 52 of them were broken

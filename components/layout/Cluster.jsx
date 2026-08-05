@@ -7,7 +7,7 @@ export function Cluster({ gap = 8, justify, align, wrap = true, as: Tag = "div",
   return (
     <Tag className={cx("lw-cluster", gap !== 8 && `lw-cluster-${gap}`,
       justify === "between" && "lw-cluster-between", justify === "end" && "lw-cluster-end",
-      align === "baseline" && "lw-cluster-baseline", wrap === false && "lw-cluster-nowrap",
+      align === "baseline" && "lw-cluster-baseline", !wrap && "lw-cluster-nowrap",
       className)} {...rest}>{children}</Tag>
   );
 }
