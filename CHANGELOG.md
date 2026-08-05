@@ -20,6 +20,21 @@ versions are breaking: **0.1.4** (dependency URL), **0.2.0** (removal), **0.7.0*
 and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additionally ships a
 `package.json` that reports the wrong version.
 
+## [1.5.1] — 2026-08-05
+
+### Fixed — the themed ground's hero mark never breathed
+
+`.lw-page-ground` was missing from the `lwMarkBreathe` selector list while being present in
+the `prefers-reduced-motion` block that turns that animation off — so the new ground had a
+rule disabling an animation it never had.
+
+Worth recording as a mechanism, not a typo: `.lw-page-ground` is implemented as ~30
+hand-written twins of the adjacent `.lw-page-light` selectors, and this is the one site the
+twinning missed. Nine twinning sites, one already wrong on the first attempt. The durable fix
+is to parameterise the three grounds — which SVG, which alpha, which glow stops are the only
+things that differ — so a fourth ground is five custom properties rather than thirty more
+selectors. Not done here; recorded so the next miss is not a surprise.
+
 ## [1.5.0] — 2026-08-05
 
 ### Added — `NavMenu`, a nav dropdown that teaches a taxonomy

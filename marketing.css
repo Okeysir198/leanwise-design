@@ -217,7 +217,7 @@ html:is(.dark, [data-theme="dark"]) .lw-page-ground .lw-hero-dark::before {
 }
 .lw-page-dark::after { animation: lwCombPulseDark var(--lw-dur-comb) var(--lw-ease-in-out) infinite alternate; }
 .lw-page-light::after, .lw-page-ground::after { animation: lwCombPulseLight var(--lw-dur-comb) var(--lw-ease-in-out) infinite alternate; }
-.lw-page-dark .lw-hero-dark::after, .lw-page-light .lw-hero-dark::after {
+.lw-page-dark .lw-hero-dark::after, .lw-page-light .lw-hero-dark::after, .lw-page-ground .lw-hero-dark::after {
   animation: lwMarkBreathe var(--lw-dur-breathe) var(--lw-ease-in-out) infinite alternate;
 }
 /* The sheen: the hero's ::before, which the full-page ground otherwise has no
