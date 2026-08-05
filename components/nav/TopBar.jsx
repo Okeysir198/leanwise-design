@@ -1,3 +1,5 @@
+import { NavMenu } from "./NavMenu.jsx";
+
 const cx = (...a) => a.filter(Boolean).join(" ");
 
 
@@ -47,7 +49,12 @@ export function TopBar({
           {/* Keyed by index, not href: nav links routinely share a placeholder
              destination, and React treats duplicate keys as unsupported. Same
              reasoning as Sidebar — an href is a destination, not an identity. */}
-          {links.map((l, i) => <Link key={l.id ?? i} href={l.href} aria-current={l.current ? "page" : undefined}>{l.label}</Link>)}
+          {/* A link with `menu` becomes a dropdown IN PLACE, so the bar's nav
+             stays one list and the taxonomy sits where the reader looks for it.
+             Put it first: the panel is start-anchored to its trigger. */}
+          {links.map((l, i) => l.menu
+            ? <NavMenu key={l.id ?? i} label={l.label} groups={l.menu} linkAs={linkAs} name="lw-topbar-menu" />
+            : <Link key={l.id ?? i} href={l.href} aria-current={l.current ? "page" : undefined}>{l.label}</Link>)}
         </nav>
       )}
       <span className="spacer" />

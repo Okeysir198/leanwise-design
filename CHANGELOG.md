@@ -20,6 +20,34 @@ versions are breaking: **0.1.4** (dependency URL), **0.2.0** (removal), **0.7.0*
 and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additionally ships a
 `package.json` that reports the wrong version.
 
+## [1.5.0] — 2026-08-05
+
+### Added — `NavMenu`, a nav dropdown that teaches a taxonomy
+
+Named groups with a line of prose per destination, because that is what a taxonomy is — a
+flat list of links teaches nothing. `TopBar` renders it from `links[].menu`, in place, so
+the bar's nav stays one list.
+
+A native `<details>`: it opens with JavaScript disabled, which matters more for site
+navigation than almost anywhere else, and it keeps the component **server-safe** (no hooks,
+no state, no inline handler). `Menu`/`Popover` were the obvious base and are disqualified —
+`.lw-menu` and `.lw-popover` live in `product.css`, so a site header built on them would
+strand its own dropdown CSS in the layer a marketing page is told to drop, which is the
+defect v1.4.0 closed for `.lw-toc`. `role="menu"` is also wrong: APG reserves it for command
+menus, and site navigation is a disclosure containing links.
+
+Escape-to-close and closing on a client-side route change are the **consumer's**, and the
+`.d.ts` says so rather than hiding it — a hook here would force every consumer's
+server-rendered header to become a client component to call it.
+
+### Changed — `.lw-topbar nav a` is now `.lw-topbar nav > a`
+
+Exactly equivalent today, because `TopBar` renders its links as direct children. It stops
+being equivalent the moment a `NavMenu` panel lives inside that `<nav>`: the bar's `padding`,
+its 44px coarse-pointer minimum and its `.lw-hit` growth would all apply to every item in the
+dropdown. A vanilla consumer who nested links inside `.lw-topbar nav` will see those links
+lose the bar's treatment.
+
 ## [1.4.0] — 2026-08-05
 
 **One ground, one contents panel, one separator.** For a marketing site that reads as a

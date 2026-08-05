@@ -63,6 +63,7 @@ export { ActivityFeed, timeAgo } from "./components/data/ActivityFeed.jsx";
 
 /* nav */
 export { TopBar } from "./components/nav/TopBar.jsx";
+export { NavMenu } from "./components/nav/NavMenu.jsx";
 export { AppBar } from "./components/nav/AppBar.jsx";
 export { Sidebar, NavItem } from "./components/nav/Sidebar.jsx";
 export { Tabs } from "./components/nav/Tabs.jsx";

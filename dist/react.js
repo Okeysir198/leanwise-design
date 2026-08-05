@@ -43,6 +43,7 @@ import { BarChart } from "./components/data/BarChart.js";
 import { LineChart } from "./components/data/LineChart.js";
 import { ActivityFeed, timeAgo } from "./components/data/ActivityFeed.js";
 import { TopBar } from "./components/nav/TopBar.js";
+import { NavMenu } from "./components/nav/NavMenu.js";
 import { AppBar } from "./components/nav/AppBar.js";
 import { Sidebar, NavItem } from "./components/nav/Sidebar.js";
 import { Tabs } from "./components/nav/Tabs.js";
@@ -134,6 +135,7 @@ export {
   Menu,
   Message,
   NavItem,
+  NavMenu,
   NavToggle,
   Page,
   Pagination,

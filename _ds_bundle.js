@@ -1,4 +1,4 @@
-/* @ds-bundle: {"format":4,"namespace":"LeanWiseDesign_f2d907","generator":"tools/lw-bundle.mjs","esbuild":"0.27.7","components":[{"name":"AgentTrace","sourcePath":"components/ai/AgentTrace.jsx"},{"name":"Artifact","sourcePath":"components/ai/Artifact.jsx"},{"name":"ConfidenceMeter","sourcePath":"components/ai/ConfidenceMeter.jsx"},{"name":"DiffReview","sourcePath":"components/ai/DiffReview.jsx"},{"name":"Feedback","sourcePath":"components/ai/Feedback.jsx"},{"name":"Message","sourcePath":"components/ai/Message.jsx"},{"name":"PromptInput","sourcePath":"components/ai/PromptInput.jsx"},{"name":"SourceChip","sourcePath":"components/ai/SourceChip.jsx"},{"name":"SourceList","sourcePath":"components/ai/SourceList.jsx"},{"name":"ToolCall","sourcePath":"components/ai/ToolCall.jsx"},{"name":"ActivityFeed","sourcePath":"components/data/ActivityFeed.jsx"},{"name":"BUCKET_LABELS","sourcePath":"components/data/ActivityFeed.jsx"},{"name":"RELATIVE_LABELS","sourcePath":"components/data/ActivityFeed.jsx"},{"name":"timeAgo","sourcePath":"components/data/ActivityFeed.jsx"},{"name":"BarChart","sourcePath":"components/data/BarChart.jsx"},{"name":"CHART_PAD","sourcePath":"components/data/chart-parts.jsx"},{"name":"CHART_W","sourcePath":"components/data/chart-parts.jsx"},{"name":"DataTable","sourcePath":"components/data/chart-parts.jsx"},{"name":"Legend","sourcePath":"components/data/chart-parts.jsx"},{"name":"SERIES","sourcePath":"components/data/chart-parts.jsx"},{"name":"CodeBlock","sourcePath":"components/data/CodeBlock.jsx"},{"name":"Console","sourcePath":"components/data/Console.jsx"},{"name":"DataGrid","sourcePath":"components/data/DataGrid.jsx"},{"name":"EmptyState","sourcePath":"components/data/EmptyState.jsx"},{"name":"FilterBar","sourcePath":"components/data/FilterBar.jsx"},{"name":"Toolbar","sourcePath":"components/data/FilterBar.jsx"},{"name":"KpiTile","sourcePath":"components/data/KpiTile.jsx"},{"name":"LineChart","sourcePath":"components/data/LineChart.jsx"},{"name":"Pagination","sourcePath":"components/data/Pagination.jsx"},{"name":"Progress","sourcePath":"components/data/Progress.jsx"},{"name":"StateView","sourcePath":"components/data/StateView.jsx"},{"name":"StatMeter","sourcePath":"components/data/StatMeter.jsx"},{"name":"Table","sourcePath":"components/data/Table.jsx"},{"name":"Calendar","sourcePath":"components/forms/Calendar.jsx"},{"name":"Checkbox","sourcePath":"components/forms/Checkbox.jsx"},{"name":"Combobox","sourcePath":"components/forms/Combobox.jsx"},{"name":"DatePicker","sourcePath":"components/forms/DatePicker.jsx"},{"name":"RANGE_PRESETS","sourcePath":"components/forms/DatePicker.jsx"},{"name":"Field","sourcePath":"components/forms/Field.jsx"},{"name":"FileUpload","sourcePath":"components/forms/FileUpload.jsx"},{"name":"formatBytes","sourcePath":"components/forms/FileUpload.jsx"},{"name":"Input","sourcePath":"components/forms/Input.jsx"},{"name":"InputGroup","sourcePath":"components/forms/InputGroup.jsx"},{"name":"RichText","sourcePath":"components/forms/RichText.jsx"},{"name":"TOOLS","sourcePath":"components/forms/RichText.jsx"},{"name":"Segmented","sourcePath":"components/forms/Segmented.jsx"},{"name":"Select","sourcePath":"components/forms/Select.jsx"},{"name":"Stepper","sourcePath":"components/forms/Stepper.jsx"},{"name":"Switch","sourcePath":"components/forms/Switch.jsx"},{"name":"Textarea","sourcePath":"components/forms/Textarea.jsx"},{"name":"Cluster","sourcePath":"components/layout/Cluster.jsx"},{"name":"Container","sourcePath":"components/layout/Container.jsx"},{"name":"Grid","sourcePath":"components/layout/Grid.jsx"},{"name":"Page","sourcePath":"components/layout/Page.jsx"},{"name":"Section","sourcePath":"components/layout/Section.jsx"},{"name":"Split","sourcePath":"components/layout/Split.jsx"},{"name":"Stack","sourcePath":"components/layout/Stack.jsx"},{"name":"AnnounceBar","sourcePath":"components/marketing/AnnounceBar.jsx"},{"name":"ArticleCard","sourcePath":"components/marketing/ArticleCard.jsx"},{"name":"Byline","sourcePath":"components/marketing/Byline.jsx"},{"name":"CompareTable","sourcePath":"components/marketing/CompareTable.jsx"},{"name":"FeatureGrid","sourcePath":"components/marketing/FeatureGrid.jsx"},{"name":"Flow","sourcePath":"components/marketing/Flow.jsx"},{"name":"Hero","sourcePath":"components/marketing/Hero.jsx"},{"name":"LogoRail","sourcePath":"components/marketing/LogoRail.jsx"},{"name":"PlanCard","sourcePath":"components/marketing/PlanCard.jsx"},{"name":"Quote","sourcePath":"components/marketing/Quote.jsx"},{"name":"SiteFooter","sourcePath":"components/marketing/SiteFooter.jsx"},{"name":"Steps","sourcePath":"components/marketing/Steps.jsx"},{"name":"StoryCard","sourcePath":"components/marketing/StoryCard.jsx"},{"name":"AppBar","sourcePath":"components/nav/AppBar.jsx"},{"name":"BottomNav","sourcePath":"components/nav/BottomNav.jsx"},{"name":"Breadcrumbs","sourcePath":"components/nav/Breadcrumbs.jsx"},{"name":"CommandPalette","sourcePath":"components/nav/CommandPalette.jsx"},{"name":"score","sourcePath":"components/nav/CommandPalette.jsx"},{"name":"NavToggle","sourcePath":"components/nav/NavToggle.jsx"},{"name":"NavItem","sourcePath":"components/nav/Sidebar.jsx"},{"name":"Sidebar","sourcePath":"components/nav/Sidebar.jsx"},{"name":"Tabs","sourcePath":"components/nav/Tabs.jsx"},{"name":"THEME_LABELS","sourcePath":"components/nav/ThemeToggle.jsx"},{"name":"ThemeToggle","sourcePath":"components/nav/ThemeToggle.jsx"},{"name":"TopBar","sourcePath":"components/nav/TopBar.jsx"},{"name":"Dialog","sourcePath":"components/overlays/Dialog.jsx"},{"name":"Drawer","sourcePath":"components/overlays/Drawer.jsx"},{"name":"Menu","sourcePath":"components/overlays/Menu.jsx"},{"name":"Popover","sourcePath":"components/overlays/Popover.jsx"},{"name":"Toast","sourcePath":"components/overlays/Toast.jsx"},{"name":"ToastRegion","sourcePath":"components/overlays/Toast.jsx"},{"name":"Tooltip","sourcePath":"components/overlays/Tooltip.jsx"},{"name":"Avatar","sourcePath":"components/primitives/Avatar.jsx"},{"name":"Button","sourcePath":"components/primitives/Button.jsx"},{"name":"Card","sourcePath":"components/primitives/Card.jsx"},{"name":"CardBody","sourcePath":"components/primitives/Card.jsx"},{"name":"CardFoot","sourcePath":"components/primitives/Card.jsx"},{"name":"CardHead","sourcePath":"components/primitives/Card.jsx"},{"name":"CardTitle","sourcePath":"components/primitives/Card.jsx"},{"name":"Chip","sourcePath":"components/primitives/Chip.jsx"},{"name":"Disclosure","sourcePath":"components/primitives/Disclosure.jsx"},{"name":"Eyebrow","sourcePath":"components/primitives/Eyebrow.jsx"},{"name":"Icon","sourcePath":"components/primitives/Icon.jsx"},{"name":"iconNames","sourcePath":"components/primitives/Icon.jsx"},{"name":"IconNames","sourcePath":"components/primitives/Icon.jsx"},{"name":"Prose","sourcePath":"components/primitives/Prose.jsx"},{"name":"Skeleton","sourcePath":"components/primitives/Skeleton.jsx"},{"name":"THEME_EVENT","sourcePath":"hooks.js"},{"name":"THEME_KEY","sourcePath":"hooks.js"}],"sourceHashes":{"components/_deprecate.js":"1c84a2fda110","components/_merge-refs.js":"13fe3c69fe69","components/_radio-group.js":"26caa936f1de","components/ai/AgentTrace.jsx":"a89cdd6dbfea","components/ai/Artifact.jsx":"2f6f74bc6102","components/ai/ConfidenceMeter.jsx":"30190dcfb803","components/ai/DiffReview.jsx":"3e794caa9ef1","components/ai/Feedback.jsx":"b39a358e07a0","components/ai/Message.jsx":"e507e32b90ca","components/ai/PromptInput.jsx":"93ca1175d24c","components/ai/SourceChip.jsx":"ea58d31896df","components/ai/SourceList.jsx":"60e374a74c6a","components/ai/ToolCall.jsx":"7847c91c8842","components/data/ActivityFeed.jsx":"22fd86442559","components/data/BarChart.jsx":"96968a9ba35f","components/data/CodeBlock.jsx":"d4f25b21c63d","components/data/Console.jsx":"6ae78360738d","components/data/DataGrid.jsx":"d6fd83a51115","components/data/EmptyState.jsx":"7340a557f731","components/data/FilterBar.jsx":"dc73bc4398fe","components/data/KpiTile.jsx":"4568571b1cff","components/data/LineChart.jsx":"6fa9e64d83f3","components/data/Pagination.jsx":"cc28278acf7d","components/data/Progress.jsx":"eb02438a3b31","components/data/StatMeter.jsx":"657462f3e4aa","components/data/StateView.jsx":"1db574af4cf3","components/data/Table.jsx":"2a8a72b119f2","components/data/_columns.js":"d862780d1495","components/data/chart-parts.jsx":"74c42cdc8316","components/forms/Calendar.jsx":"343335c77c44","components/forms/Checkbox.jsx":"fa0052232568","components/forms/Combobox.jsx":"c38e8d668db1","components/forms/DatePicker.jsx":"692aed22fa29","components/forms/Field.jsx":"19afba76a395","components/forms/FileUpload.jsx":"1b9765bb958f","components/forms/Input.jsx":"a43b7b4b5564","components/forms/InputGroup.jsx":"71d8de495436","components/forms/RichText.jsx":"aac8293d49fd","components/forms/Segmented.jsx":"5d3fa220ea03","components/forms/Select.jsx":"378e70b32827","components/forms/Stepper.jsx":"7fe21c7619e6","components/forms/Switch.jsx":"cc99b023531b","components/forms/Textarea.jsx":"2d2aa2984da3","components/layout/Cluster.jsx":"2e15367fe28d","components/layout/Container.jsx":"6eda4bc56e54","components/layout/Grid.jsx":"8a093fe6ed4b","components/layout/Page.jsx":"51d1753d201a","components/layout/Section.jsx":"0fee1ca51dc5","components/layout/Split.jsx":"6786154d4ebd","components/layout/Stack.jsx":"005a591d8c24","components/marketing/AnnounceBar.jsx":"dc1787b8fe7e","components/marketing/ArticleCard.jsx":"81f2c4227ced","components/marketing/Byline.jsx":"529ce44347b1","components/marketing/CompareTable.jsx":"1ffe4c6713f5","components/marketing/FeatureGrid.jsx":"ff6d9c74ae63","components/marketing/Flow.jsx":"47f084ffae8a","components/marketing/Hero.jsx":"ba4893068f68","components/marketing/LogoRail.jsx":"1bedd4cadb90","components/marketing/PlanCard.jsx":"39f27cba6a4d","components/marketing/Quote.jsx":"d7d463bc50d4","components/marketing/SiteFooter.jsx":"82207f2c85e5","components/marketing/Steps.jsx":"08dfc37d83e9","components/marketing/StoryCard.jsx":"e28322d02714","components/nav/AppBar.jsx":"d2da0aa4c6a0","components/nav/BottomNav.jsx":"570ba83df9c7","components/nav/Breadcrumbs.jsx":"1f2cb1328942","components/nav/CommandPalette.jsx":"48d4ea9554c7","components/nav/NavToggle.jsx":"7c2def3f8014","components/nav/Sidebar.jsx":"723b0aa11c93","components/nav/Tabs.jsx":"09d2bf40f0e0","components/nav/ThemeToggle.jsx":"1bf447a338cb","components/nav/TopBar.jsx":"6b8c0ccd5933","components/overlays/Dialog.jsx":"ff8e21cb381a","components/overlays/Drawer.jsx":"269d2920684c","components/overlays/Menu.jsx":"4764582f0ae8","components/overlays/Popover.jsx":"717f23c3c127","components/overlays/Toast.jsx":"a14d5bdddb79","components/overlays/Tooltip.jsx":"7b19e7dc9711","components/primitives/Avatar.jsx":"277ea4c7ca39","components/primitives/Button.jsx":"a613116ec327","components/primitives/Card.jsx":"4a9c9f081c1b","components/primitives/Chip.jsx":"458e477fd284","components/primitives/Disclosure.jsx":"250d58f947f5","components/primitives/Eyebrow.jsx":"ac1cc5e5856f","components/primitives/Icon.jsx":"1dd0488adf2d","components/primitives/Prose.jsx":"7b629b089f2a","components/primitives/Skeleton.jsx":"76129a849b43","hooks.js":"0e3b40fcfa4e","react.js":"f9e103bed9f6"},"inlinedExternals":[],"unexposedExports":[{"name":"__resetDeprecations","sourcePath":"components/_deprecate.js"},{"name":"deprecate","sourcePath":"components/_deprecate.js"},{"name":"useMergedRef","sourcePath":"components/_merge-refs.js"},{"name":"useRadioGroup","sourcePath":"components/_radio-group.js"},{"name":"colHeader","sourcePath":"components/data/_columns.js"},{"name":"emitSort","sourcePath":"components/data/_columns.js"},{"name":"legacySortArgs","sourcePath":"components/data/_columns.js"},{"name":"Grid","sourcePath":"components/data/chart-parts.jsx"},{"name":"cx","sourcePath":"components/data/chart-parts.jsx"},{"name":"frame","sourcePath":"components/data/chart-parts.jsx"},{"name":"nf","sourcePath":"components/data/chart-parts.jsx"},{"name":"ticks","sourcePath":"components/data/chart-parts.jsx"},{"name":"animateCounter","sourcePath":"hooks.js"},{"name":"paint","sourcePath":"hooks.js"},{"name":"persist","sourcePath":"hooks.js"},{"name":"useDeterministicCascade","sourcePath":"hooks.js"},{"name":"useReducedMotion","sourcePath":"hooks.js"},{"name":"useReveal","sourcePath":"hooks.js"},{"name":"useSpotlight","sourcePath":"hooks.js"},{"name":"useTheme","sourcePath":"hooks.js"}]} */
+/* @ds-bundle: {"format":4,"namespace":"LeanWiseDesign_f2d907","generator":"tools/lw-bundle.mjs","esbuild":"0.27.7","components":[{"name":"AgentTrace","sourcePath":"components/ai/AgentTrace.jsx"},{"name":"Artifact","sourcePath":"components/ai/Artifact.jsx"},{"name":"ConfidenceMeter","sourcePath":"components/ai/ConfidenceMeter.jsx"},{"name":"DiffReview","sourcePath":"components/ai/DiffReview.jsx"},{"name":"Feedback","sourcePath":"components/ai/Feedback.jsx"},{"name":"Message","sourcePath":"components/ai/Message.jsx"},{"name":"PromptInput","sourcePath":"components/ai/PromptInput.jsx"},{"name":"SourceChip","sourcePath":"components/ai/SourceChip.jsx"},{"name":"SourceList","sourcePath":"components/ai/SourceList.jsx"},{"name":"ToolCall","sourcePath":"components/ai/ToolCall.jsx"},{"name":"ActivityFeed","sourcePath":"components/data/ActivityFeed.jsx"},{"name":"BUCKET_LABELS","sourcePath":"components/data/ActivityFeed.jsx"},{"name":"RELATIVE_LABELS","sourcePath":"components/data/ActivityFeed.jsx"},{"name":"timeAgo","sourcePath":"components/data/ActivityFeed.jsx"},{"name":"BarChart","sourcePath":"components/data/BarChart.jsx"},{"name":"CHART_PAD","sourcePath":"components/data/chart-parts.jsx"},{"name":"CHART_W","sourcePath":"components/data/chart-parts.jsx"},{"name":"DataTable","sourcePath":"components/data/chart-parts.jsx"},{"name":"Legend","sourcePath":"components/data/chart-parts.jsx"},{"name":"SERIES","sourcePath":"components/data/chart-parts.jsx"},{"name":"CodeBlock","sourcePath":"components/data/CodeBlock.jsx"},{"name":"Console","sourcePath":"components/data/Console.jsx"},{"name":"DataGrid","sourcePath":"components/data/DataGrid.jsx"},{"name":"EmptyState","sourcePath":"components/data/EmptyState.jsx"},{"name":"FilterBar","sourcePath":"components/data/FilterBar.jsx"},{"name":"Toolbar","sourcePath":"components/data/FilterBar.jsx"},{"name":"KpiTile","sourcePath":"components/data/KpiTile.jsx"},{"name":"LineChart","sourcePath":"components/data/LineChart.jsx"},{"name":"Pagination","sourcePath":"components/data/Pagination.jsx"},{"name":"Progress","sourcePath":"components/data/Progress.jsx"},{"name":"StateView","sourcePath":"components/data/StateView.jsx"},{"name":"StatMeter","sourcePath":"components/data/StatMeter.jsx"},{"name":"Table","sourcePath":"components/data/Table.jsx"},{"name":"Calendar","sourcePath":"components/forms/Calendar.jsx"},{"name":"Checkbox","sourcePath":"components/forms/Checkbox.jsx"},{"name":"Combobox","sourcePath":"components/forms/Combobox.jsx"},{"name":"DatePicker","sourcePath":"components/forms/DatePicker.jsx"},{"name":"RANGE_PRESETS","sourcePath":"components/forms/DatePicker.jsx"},{"name":"Field","sourcePath":"components/forms/Field.jsx"},{"name":"FileUpload","sourcePath":"components/forms/FileUpload.jsx"},{"name":"formatBytes","sourcePath":"components/forms/FileUpload.jsx"},{"name":"Input","sourcePath":"components/forms/Input.jsx"},{"name":"InputGroup","sourcePath":"components/forms/InputGroup.jsx"},{"name":"RichText","sourcePath":"components/forms/RichText.jsx"},{"name":"TOOLS","sourcePath":"components/forms/RichText.jsx"},{"name":"Segmented","sourcePath":"components/forms/Segmented.jsx"},{"name":"Select","sourcePath":"components/forms/Select.jsx"},{"name":"Stepper","sourcePath":"components/forms/Stepper.jsx"},{"name":"Switch","sourcePath":"components/forms/Switch.jsx"},{"name":"Textarea","sourcePath":"components/forms/Textarea.jsx"},{"name":"Cluster","sourcePath":"components/layout/Cluster.jsx"},{"name":"Container","sourcePath":"components/layout/Container.jsx"},{"name":"Grid","sourcePath":"components/layout/Grid.jsx"},{"name":"Page","sourcePath":"components/layout/Page.jsx"},{"name":"Section","sourcePath":"components/layout/Section.jsx"},{"name":"Split","sourcePath":"components/layout/Split.jsx"},{"name":"Stack","sourcePath":"components/layout/Stack.jsx"},{"name":"AnnounceBar","sourcePath":"components/marketing/AnnounceBar.jsx"},{"name":"ArticleCard","sourcePath":"components/marketing/ArticleCard.jsx"},{"name":"Byline","sourcePath":"components/marketing/Byline.jsx"},{"name":"CompareTable","sourcePath":"components/marketing/CompareTable.jsx"},{"name":"FeatureGrid","sourcePath":"components/marketing/FeatureGrid.jsx"},{"name":"Flow","sourcePath":"components/marketing/Flow.jsx"},{"name":"Hero","sourcePath":"components/marketing/Hero.jsx"},{"name":"LogoRail","sourcePath":"components/marketing/LogoRail.jsx"},{"name":"PlanCard","sourcePath":"components/marketing/PlanCard.jsx"},{"name":"Quote","sourcePath":"components/marketing/Quote.jsx"},{"name":"SiteFooter","sourcePath":"components/marketing/SiteFooter.jsx"},{"name":"Steps","sourcePath":"components/marketing/Steps.jsx"},{"name":"StoryCard","sourcePath":"components/marketing/StoryCard.jsx"},{"name":"AppBar","sourcePath":"components/nav/AppBar.jsx"},{"name":"BottomNav","sourcePath":"components/nav/BottomNav.jsx"},{"name":"Breadcrumbs","sourcePath":"components/nav/Breadcrumbs.jsx"},{"name":"CommandPalette","sourcePath":"components/nav/CommandPalette.jsx"},{"name":"score","sourcePath":"components/nav/CommandPalette.jsx"},{"name":"NavMenu","sourcePath":"components/nav/NavMenu.jsx"},{"name":"NavToggle","sourcePath":"components/nav/NavToggle.jsx"},{"name":"NavItem","sourcePath":"components/nav/Sidebar.jsx"},{"name":"Sidebar","sourcePath":"components/nav/Sidebar.jsx"},{"name":"Tabs","sourcePath":"components/nav/Tabs.jsx"},{"name":"THEME_LABELS","sourcePath":"components/nav/ThemeToggle.jsx"},{"name":"ThemeToggle","sourcePath":"components/nav/ThemeToggle.jsx"},{"name":"TopBar","sourcePath":"components/nav/TopBar.jsx"},{"name":"Dialog","sourcePath":"components/overlays/Dialog.jsx"},{"name":"Drawer","sourcePath":"components/overlays/Drawer.jsx"},{"name":"Menu","sourcePath":"components/overlays/Menu.jsx"},{"name":"Popover","sourcePath":"components/overlays/Popover.jsx"},{"name":"Toast","sourcePath":"components/overlays/Toast.jsx"},{"name":"ToastRegion","sourcePath":"components/overlays/Toast.jsx"},{"name":"Tooltip","sourcePath":"components/overlays/Tooltip.jsx"},{"name":"Avatar","sourcePath":"components/primitives/Avatar.jsx"},{"name":"Button","sourcePath":"components/primitives/Button.jsx"},{"name":"Card","sourcePath":"components/primitives/Card.jsx"},{"name":"CardBody","sourcePath":"components/primitives/Card.jsx"},{"name":"CardFoot","sourcePath":"components/primitives/Card.jsx"},{"name":"CardHead","sourcePath":"components/primitives/Card.jsx"},{"name":"CardTitle","sourcePath":"components/primitives/Card.jsx"},{"name":"Chip","sourcePath":"components/primitives/Chip.jsx"},{"name":"Disclosure","sourcePath":"components/primitives/Disclosure.jsx"},{"name":"Eyebrow","sourcePath":"components/primitives/Eyebrow.jsx"},{"name":"Icon","sourcePath":"components/primitives/Icon.jsx"},{"name":"iconNames","sourcePath":"components/primitives/Icon.jsx"},{"name":"IconNames","sourcePath":"components/primitives/Icon.jsx"},{"name":"Prose","sourcePath":"components/primitives/Prose.jsx"},{"name":"Skeleton","sourcePath":"components/primitives/Skeleton.jsx"},{"name":"THEME_EVENT","sourcePath":"hooks.js"},{"name":"THEME_KEY","sourcePath":"hooks.js"}],"sourceHashes":{"components/_deprecate.js":"1c84a2fda110","components/_merge-refs.js":"13fe3c69fe69","components/_radio-group.js":"26caa936f1de","components/ai/AgentTrace.jsx":"a89cdd6dbfea","components/ai/Artifact.jsx":"2f6f74bc6102","components/ai/ConfidenceMeter.jsx":"30190dcfb803","components/ai/DiffReview.jsx":"3e794caa9ef1","components/ai/Feedback.jsx":"b39a358e07a0","components/ai/Message.jsx":"e507e32b90ca","components/ai/PromptInput.jsx":"93ca1175d24c","components/ai/SourceChip.jsx":"ea58d31896df","components/ai/SourceList.jsx":"60e374a74c6a","components/ai/ToolCall.jsx":"7847c91c8842","components/data/ActivityFeed.jsx":"22fd86442559","components/data/BarChart.jsx":"96968a9ba35f","components/data/CodeBlock.jsx":"d4f25b21c63d","components/data/Console.jsx":"6ae78360738d","components/data/DataGrid.jsx":"d6fd83a51115","components/data/EmptyState.jsx":"7340a557f731","components/data/FilterBar.jsx":"dc73bc4398fe","components/data/KpiTile.jsx":"4568571b1cff","components/data/LineChart.jsx":"6fa9e64d83f3","components/data/Pagination.jsx":"cc28278acf7d","components/data/Progress.jsx":"eb02438a3b31","components/data/StatMeter.jsx":"657462f3e4aa","components/data/StateView.jsx":"1db574af4cf3","components/data/Table.jsx":"2a8a72b119f2","components/data/_columns.js":"d862780d1495","components/data/chart-parts.jsx":"74c42cdc8316","components/forms/Calendar.jsx":"343335c77c44","components/forms/Checkbox.jsx":"fa0052232568","components/forms/Combobox.jsx":"c38e8d668db1","components/forms/DatePicker.jsx":"692aed22fa29","components/forms/Field.jsx":"19afba76a395","components/forms/FileUpload.jsx":"1b9765bb958f","components/forms/Input.jsx":"a43b7b4b5564","components/forms/InputGroup.jsx":"71d8de495436","components/forms/RichText.jsx":"aac8293d49fd","components/forms/Segmented.jsx":"5d3fa220ea03","components/forms/Select.jsx":"378e70b32827","components/forms/Stepper.jsx":"7fe21c7619e6","components/forms/Switch.jsx":"cc99b023531b","components/forms/Textarea.jsx":"2d2aa2984da3","components/layout/Cluster.jsx":"2e15367fe28d","components/layout/Container.jsx":"6eda4bc56e54","components/layout/Grid.jsx":"8a093fe6ed4b","components/layout/Page.jsx":"51d1753d201a","components/layout/Section.jsx":"0fee1ca51dc5","components/layout/Split.jsx":"6786154d4ebd","components/layout/Stack.jsx":"005a591d8c24","components/marketing/AnnounceBar.jsx":"dc1787b8fe7e","components/marketing/ArticleCard.jsx":"81f2c4227ced","components/marketing/Byline.jsx":"529ce44347b1","components/marketing/CompareTable.jsx":"1ffe4c6713f5","components/marketing/FeatureGrid.jsx":"ff6d9c74ae63","components/marketing/Flow.jsx":"47f084ffae8a","components/marketing/Hero.jsx":"ba4893068f68","components/marketing/LogoRail.jsx":"1bedd4cadb90","components/marketing/PlanCard.jsx":"39f27cba6a4d","components/marketing/Quote.jsx":"d7d463bc50d4","components/marketing/SiteFooter.jsx":"82207f2c85e5","components/marketing/Steps.jsx":"08dfc37d83e9","components/marketing/StoryCard.jsx":"e28322d02714","components/nav/AppBar.jsx":"d2da0aa4c6a0","components/nav/BottomNav.jsx":"570ba83df9c7","components/nav/Breadcrumbs.jsx":"1f2cb1328942","components/nav/CommandPalette.jsx":"48d4ea9554c7","components/nav/NavMenu.jsx":"63f181f5ba8d","components/nav/NavToggle.jsx":"7c2def3f8014","components/nav/Sidebar.jsx":"723b0aa11c93","components/nav/Tabs.jsx":"09d2bf40f0e0","components/nav/ThemeToggle.jsx":"1bf447a338cb","components/nav/TopBar.jsx":"fd03a8ebf2de","components/overlays/Dialog.jsx":"ff8e21cb381a","components/overlays/Drawer.jsx":"269d2920684c","components/overlays/Menu.jsx":"4764582f0ae8","components/overlays/Popover.jsx":"717f23c3c127","components/overlays/Toast.jsx":"a14d5bdddb79","components/overlays/Tooltip.jsx":"7b19e7dc9711","components/primitives/Avatar.jsx":"277ea4c7ca39","components/primitives/Button.jsx":"a613116ec327","components/primitives/Card.jsx":"4a9c9f081c1b","components/primitives/Chip.jsx":"458e477fd284","components/primitives/Disclosure.jsx":"250d58f947f5","components/primitives/Eyebrow.jsx":"ac1cc5e5856f","components/primitives/Icon.jsx":"1dd0488adf2d","components/primitives/Prose.jsx":"7b629b089f2a","components/primitives/Skeleton.jsx":"76129a849b43","hooks.js":"0e3b40fcfa4e","react.js":"4536ba32085d"},"inlinedExternals":[],"unexposedExports":[{"name":"__resetDeprecations","sourcePath":"components/_deprecate.js"},{"name":"deprecate","sourcePath":"components/_deprecate.js"},{"name":"useMergedRef","sourcePath":"components/_merge-refs.js"},{"name":"useRadioGroup","sourcePath":"components/_radio-group.js"},{"name":"colHeader","sourcePath":"components/data/_columns.js"},{"name":"emitSort","sourcePath":"components/data/_columns.js"},{"name":"legacySortArgs","sourcePath":"components/data/_columns.js"},{"name":"Grid","sourcePath":"components/data/chart-parts.jsx"},{"name":"cx","sourcePath":"components/data/chart-parts.jsx"},{"name":"frame","sourcePath":"components/data/chart-parts.jsx"},{"name":"nf","sourcePath":"components/data/chart-parts.jsx"},{"name":"ticks","sourcePath":"components/data/chart-parts.jsx"},{"name":"animateCounter","sourcePath":"hooks.js"},{"name":"paint","sourcePath":"hooks.js"},{"name":"persist","sourcePath":"hooks.js"},{"name":"useDeterministicCascade","sourcePath":"hooks.js"},{"name":"useReducedMotion","sourcePath":"hooks.js"},{"name":"useReveal","sourcePath":"hooks.js"},{"name":"useSpotlight","sourcePath":"hooks.js"},{"name":"useTheme","sourcePath":"hooks.js"}]} */
 (() => {
   var __create = Object.create;
   var __defProp = Object.defineProperty;
@@ -2090,7 +2090,27 @@
 
   // components/nav/TopBar.jsx
   init_ds_inject_react();
+
+  // components/nav/NavMenu.jsx
+  init_ds_inject_react();
   var cx45 = (...a) => a.filter(Boolean).join(" ");
+  function NavMenu({ label, groups = [], linkAs = "a", name, className, ...rest }) {
+    const Link = linkAs;
+    return /* @__PURE__ */ React.createElement("details", { className: cx45("lw-navmenu", className), name, ...rest }, /* @__PURE__ */ React.createElement("summary", null, /* @__PURE__ */ React.createElement("span", null, label), /* @__PURE__ */ React.createElement("span", { className: "lw-navmenu-chevron", "aria-hidden": "true" })), /* @__PURE__ */ React.createElement("div", { className: "lw-navmenu-panel" }, groups.map((group, gi) => /* @__PURE__ */ React.createElement("div", { className: "lw-navmenu-group", key: group.id ?? gi }, group.label && /* @__PURE__ */ React.createElement("span", { className: "lw-navmenu-group-h" }, group.label), group.items?.map((item, ii) => /* @__PURE__ */ React.createElement(
+      Link,
+      {
+        key: item.id ?? ii,
+        href: item.href,
+        className: "lw-navmenu-item",
+        "aria-current": item.current ? "page" : void 0
+      },
+      /* @__PURE__ */ React.createElement("span", { className: "t" }, item.label, item.status && /* @__PURE__ */ React.createElement("span", { className: "lw-navmenu-status" }, item.status)),
+      item.description && /* @__PURE__ */ React.createElement("span", { className: "d" }, item.description)
+    ))))));
+  }
+
+  // components/nav/TopBar.jsx
+  var cx46 = (...a) => a.filter(Boolean).join(" ");
   function TopBar({
     brand,
     brandHref,
@@ -2108,7 +2128,7 @@
     const Link = linkAs;
     const Brand = brandHref ? linkAs : "span";
     const brandProps = brandHref ? { href: brandHref, "aria-label": typeof brand === "string" ? formatBrandLabel(brand) : homeLabel } : {};
-    return /* @__PURE__ */ React.createElement("header", { className: cx45("lw-topbar", className), ...rest }, logo ? /* @__PURE__ */ React.createElement(Brand, { className: "brand", ...brandProps }, /* @__PURE__ */ React.createElement("span", { className: "brand-mark", "aria-hidden": "true" }), /* @__PURE__ */ React.createElement("span", { className: "brand-name" }, brand)) : brand && /* @__PURE__ */ React.createElement(Brand, { className: "brand", ...brandProps }, brand), links.length > 0 && /* @__PURE__ */ React.createElement("nav", { "aria-label": navLabel }, links.map((l, i) => /* @__PURE__ */ React.createElement(Link, { key: l.id ?? i, href: l.href, "aria-current": l.current ? "page" : void 0 }, l.label))), /* @__PURE__ */ React.createElement("span", { className: "spacer" }), actions, children);
+    return /* @__PURE__ */ React.createElement("header", { className: cx46("lw-topbar", className), ...rest }, logo ? /* @__PURE__ */ React.createElement(Brand, { className: "brand", ...brandProps }, /* @__PURE__ */ React.createElement("span", { className: "brand-mark", "aria-hidden": "true" }), /* @__PURE__ */ React.createElement("span", { className: "brand-name" }, brand)) : brand && /* @__PURE__ */ React.createElement(Brand, { className: "brand", ...brandProps }, brand), links.length > 0 && /* @__PURE__ */ React.createElement("nav", { "aria-label": navLabel }, links.map((l, i) => l.menu ? /* @__PURE__ */ React.createElement(NavMenu, { key: l.id ?? i, label: l.label, groups: l.menu, linkAs, name: "lw-topbar-menu" }) : /* @__PURE__ */ React.createElement(Link, { key: l.id ?? i, href: l.href, "aria-current": l.current ? "page" : void 0 }, l.label))), /* @__PURE__ */ React.createElement("span", { className: "spacer" }), actions, children);
   }
 
   // components/nav/AppBar.jsx
@@ -2117,10 +2137,10 @@
   // components/nav/Breadcrumbs.jsx
   init_ds_inject_react();
   var React21 = __toESM(require_ds_react(), 1);
-  var cx46 = (...a) => a.filter(Boolean).join(" ");
+  var cx47 = (...a) => a.filter(Boolean).join(" ");
   function Breadcrumbs({ items = [], linkAs = "a", label = "Breadcrumb", className, ...rest }) {
     const Link = linkAs;
-    return /* @__PURE__ */ React21.createElement("nav", { className: cx46("lw-crumbs", className), "aria-label": label, ...rest }, items.map((it, i) => /* @__PURE__ */ React21.createElement(React21.Fragment, { key: i }, i > 0 && /* @__PURE__ */ React21.createElement("span", { className: "sep", "aria-hidden": "true" }, "/"), it.href && i < items.length - 1 ? /* @__PURE__ */ React21.createElement(Link, { href: it.href }, it.label) : /* @__PURE__ */ React21.createElement("span", { "aria-current": i === items.length - 1 ? "page" : void 0 }, it.label))));
+    return /* @__PURE__ */ React21.createElement("nav", { className: cx47("lw-crumbs", className), "aria-label": label, ...rest }, items.map((it, i) => /* @__PURE__ */ React21.createElement(React21.Fragment, { key: i }, i > 0 && /* @__PURE__ */ React21.createElement("span", { className: "sep", "aria-hidden": "true" }, "/"), it.href && i < items.length - 1 ? /* @__PURE__ */ React21.createElement(Link, { href: it.href }, it.label) : /* @__PURE__ */ React21.createElement("span", { "aria-current": i === items.length - 1 ? "page" : void 0 }, it.label))));
   }
 
   // components/nav/AppBar.jsx
@@ -2166,9 +2186,9 @@
 
   // components/nav/Sidebar.jsx
   init_ds_inject_react();
-  var cx47 = (...a) => a.filter(Boolean).join(" ");
+  var cx48 = (...a) => a.filter(Boolean).join(" ");
   function Sidebar({ items = [], collapsed = false, footer, linkAs, label = "Sections", className, children, ...rest }) {
-    return /* @__PURE__ */ React.createElement("nav", { className: cx47("lw-sidebar", className), "data-collapsed": collapsed ? "true" : void 0, "aria-label": label, ...rest }, items.map(
+    return /* @__PURE__ */ React.createElement("nav", { className: cx48("lw-sidebar", className), "data-collapsed": collapsed ? "true" : void 0, "aria-label": label, ...rest }, items.map(
       (it, i) => it.group ? /* @__PURE__ */ React.createElement("span", { key: "g" + i, className: "lw-nav-group" }, it.group) : /* @__PURE__ */ React.createElement(NavItem, { key: it.id ?? i, linkAs, ...it, collapsed })
     ), children, footer && /* @__PURE__ */ React.createElement("div", { className: "lw-sidebar-foot" }, footer));
   }
@@ -2178,7 +2198,7 @@
     return /* @__PURE__ */ React.createElement(
       Tag,
       {
-        className: cx47("lw-nav-item", className),
+        className: cx48("lw-nav-item", className),
         href,
         type: href ? void 0 : "button",
         "aria-current": current ? "page" : void 0,
@@ -2194,7 +2214,7 @@
   // components/nav/Tabs.jsx
   init_ds_inject_react();
   var React22 = __toESM(require_ds_react(), 1);
-  var cx48 = (...a) => a.filter(Boolean).join(" ");
+  var cx49 = (...a) => a.filter(Boolean).join(" ");
   function Tabs({ tabs = [], value, onChange, label, className, ...rest }) {
     const ref = React22.useRef(null);
     const move = (next) => {
@@ -2219,7 +2239,7 @@
       e.preventDefault();
       move((i + d + tabs.length) % tabs.length);
     };
-    return /* @__PURE__ */ React22.createElement("div", { ref, className: cx48("lw-tabs", className), role: "tablist", "aria-label": label, onKeyDown, ...rest }, tabs.map((t) => /* @__PURE__ */ React22.createElement(
+    return /* @__PURE__ */ React22.createElement("div", { ref, className: cx49("lw-tabs", className), role: "tablist", "aria-label": label, onKeyDown, ...rest }, tabs.map((t) => /* @__PURE__ */ React22.createElement(
       "button",
       {
         key: t.value,
@@ -2270,7 +2290,7 @@
   }
 
   // components/nav/ThemeToggle.jsx
-  var cx49 = (...a) => a.filter(Boolean).join(" ");
+  var cx50 = (...a) => a.filter(Boolean).join(" ");
   var THEME_LABELS = { light: "Light", dark: "Dark", system: "Auto" };
   var GLYPHS = { light: "sun", dark: "moon", system: "monitor" };
   function ThemeToggle({
@@ -2318,7 +2338,7 @@
         "button",
         {
           type: "button",
-          className: cx49("lw-icon-btn", "lw-hit", "lw-theme-compact", className),
+          className: cx50("lw-icon-btn", "lw-hit", "lw-theme-compact", className),
           "aria-label": name,
           title: name,
           onClick: () => apply(next),
@@ -2332,7 +2352,7 @@
       "div",
       {
         ref,
-        className: cx49("lw-segmented", className),
+        className: cx50("lw-segmented", className),
         role: "radiogroup",
         "aria-label": label,
         onKeyDown,
@@ -2358,7 +2378,7 @@
   // components/nav/CommandPalette.jsx
   init_ds_inject_react();
   var React24 = __toESM(require_ds_react(), 1);
-  var cx50 = (...a) => a.filter(Boolean).join(" ");
+  var cx51 = (...a) => a.filter(Boolean).join(" ");
   function score(query, text) {
     if (!query) return 0;
     const q = query.toLowerCase(), s = String(text).toLowerCase();
@@ -2429,7 +2449,7 @@
       "dialog",
       {
         ref,
-        className: cx50("lw-cmdk", className),
+        className: cx51("lw-cmdk", className),
         "aria-label": label,
         onClose,
         onCancel: (e) => {
@@ -2480,7 +2500,7 @@
   // components/nav/BottomNav.jsx
   init_ds_inject_react();
   var React25 = __toESM(require_ds_react(), 1);
-  var cx51 = (...a) => a.filter(Boolean).join(" ");
+  var cx52 = (...a) => a.filter(Boolean).join(" ");
   function BottomNav({
     items = [],
     value,
@@ -2495,7 +2515,7 @@
       if (items.length <= 5 || typeof console === "undefined") return;
       console.warn("BottomNav: " + items.length + " items. Past five, labels truncate and the bar stops being scannable — use a sidebar or a More destination.");
     }, [items.length]);
-    return /* @__PURE__ */ React25.createElement("nav", { className: cx51("lw-bottom-nav", className), "aria-label": label, ...rest }, items.map((it) => {
+    return /* @__PURE__ */ React25.createElement("nav", { className: cx52("lw-bottom-nav", className), "aria-label": label, ...rest }, items.map((it) => {
       const on = it.value === value;
       const Tag = it.href ? linkAs : "button";
       return /* @__PURE__ */ React25.createElement(
@@ -2517,7 +2537,7 @@
   // components/nav/NavToggle.jsx
   init_ds_inject_react();
   var React26 = __toESM(require_ds_react(), 1);
-  var cx52 = (...a) => a.filter(Boolean).join(" ");
+  var cx53 = (...a) => a.filter(Boolean).join(" ");
   function NavToggle({
     label = "Menu",
     closeLabel = "Close menu",
@@ -2547,7 +2567,7 @@
       {
         type: "button",
         ref: btnRef,
-        className: cx52("lw-topbar-toggle", "lw-icon-btn", "lw-hit", className),
+        className: cx53("lw-topbar-toggle", "lw-icon-btn", "lw-hit", className),
         "aria-expanded": open,
         "aria-controls": panelId,
         "aria-label": open ? closeLabel : label,
@@ -2562,7 +2582,7 @@
   // components/overlays/Dialog.jsx
   init_ds_inject_react();
   var React27 = __toESM(require_ds_react(), 1);
-  var cx53 = (...a) => a.filter(Boolean).join(" ");
+  var cx54 = (...a) => a.filter(Boolean).join(" ");
   function Dialog({ open, onClose, title, description, footer, width, closeLabel = "Close", className, children, ...rest }) {
     const ref = React27.useRef(null);
     const uid = React27.useId();
@@ -2579,7 +2599,7 @@
       "dialog",
       {
         ref,
-        className: cx53("lw-dialog", className),
+        className: cx54("lw-dialog", className),
         style: w ? { "--lw-dialog-w": w } : void 0,
         onClose,
         onCancel: (e) => {
@@ -2598,7 +2618,7 @@
 
   // components/overlays/Toast.jsx
   init_ds_inject_react();
-  var cx54 = (...a) => a.filter(Boolean).join(" ");
+  var cx55 = (...a) => a.filter(Boolean).join(" ");
   function Toast({
     tone = "info",
     label,
@@ -2615,14 +2635,14 @@
          or role="alert" INSIDE it nests two, which is why an announcement could
          come twice or not at all. An error toast raises the REGION's urgency
          instead — one live region, one politeness setting. */
-      /* @__PURE__ */ React.createElement("div", { className: cx54("lw-toast", tone !== "info" && tone, className), ...rest }, /* @__PURE__ */ React.createElement("span", { className: "k" }, k), /* @__PURE__ */ React.createElement("span", { className: "msg" }, children), onClose && /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": dismissLabel, title: dismissLabel, onClick: onClose }, /* @__PURE__ */ React.createElement(Icon, { name: "close", size: 15 })))
+      /* @__PURE__ */ React.createElement("div", { className: cx55("lw-toast", tone !== "info" && tone, className), ...rest }, /* @__PURE__ */ React.createElement("span", { className: "k" }, k), /* @__PURE__ */ React.createElement("span", { className: "msg" }, children), onClose && /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": dismissLabel, title: dismissLabel, onClick: onClose }, /* @__PURE__ */ React.createElement(Icon, { name: "close", size: 15 })))
     );
   }
   function ToastRegion({ className, children, urgent, label = "Notifications", ...rest }) {
     return /* @__PURE__ */ React.createElement(
       "div",
       {
-        className: cx54("lw-toast-region", className),
+        className: cx55("lw-toast-region", className),
         role: "region",
         "aria-live": urgent ? "assertive" : "polite",
         "aria-label": label,
@@ -2634,15 +2654,15 @@
 
   // components/overlays/Tooltip.jsx
   init_ds_inject_react();
-  var cx55 = (...a) => a.filter(Boolean).join(" ");
+  var cx56 = (...a) => a.filter(Boolean).join(" ");
   function Tooltip({ tip, className, children, ...rest }) {
-    return /* @__PURE__ */ React.createElement("span", { className: cx55("lw-tip", className), "data-tip": tip, ...rest }, children);
+    return /* @__PURE__ */ React.createElement("span", { className: cx56("lw-tip", className), "data-tip": tip, ...rest }, children);
   }
 
   // components/overlays/Menu.jsx
   init_ds_inject_react();
   var React28 = __toESM(require_ds_react(), 1);
-  var cx56 = (...a) => a.filter(Boolean).join(" ");
+  var cx57 = (...a) => a.filter(Boolean).join(" ");
   function Menu({ items = [], trigger, onSelect, label, placement = "bottom-start", matchWidth, linkAs = "a", className, ...rest }) {
     const [open, setOpen] = React28.useState(false);
     const listEl = React28.useRef(null);
@@ -2745,7 +2765,7 @@
         matchWidth,
         ...rest
       },
-      /* @__PURE__ */ React28.createElement("div", { ref: listRef, role: "none", className: cx56("lw-menu", className), onKeyDown }, items.map((it, i) => {
+      /* @__PURE__ */ React28.createElement("div", { ref: listRef, role: "none", className: cx57("lw-menu", className), onKeyDown }, items.map((it, i) => {
         if (it.type === "separator") return /* @__PURE__ */ React28.createElement("hr", { key: i, className: "lw-menu-sep" });
         if (it.type === "label") return /* @__PURE__ */ React28.createElement("div", { key: i, className: "lw-menu-label" }, it.label);
         const checkable = it.checked != null;
@@ -2754,7 +2774,7 @@
           Tag,
           {
             key: it.value ?? i,
-            className: cx56("lw-menu-item", it.danger && "danger"),
+            className: cx57("lw-menu-item", it.danger && "danger"),
             type: it.href ? void 0 : "button",
             href: it.href || void 0,
             role: checkable ? "menuitemcheckbox" : "menuitem",
@@ -2778,7 +2798,7 @@
   // components/overlays/Drawer.jsx
   init_ds_inject_react();
   var React29 = __toESM(require_ds_react(), 1);
-  var cx57 = (...a) => a.filter(Boolean).join(" ");
+  var cx58 = (...a) => a.filter(Boolean).join(" ");
   function Drawer({ open, onClose, title, description, footer, side = "end", width, closeLabel = "Close", className, children, ...rest }) {
     const ref = React29.useRef(null);
     const uid = React29.useId();
@@ -2795,7 +2815,7 @@
       "dialog",
       {
         ref,
-        className: cx57("lw-drawer", className),
+        className: cx58("lw-drawer", className),
         "data-side": side,
         style: w ? { "--lw-drawer-w": w } : void 0,
         onClose,
@@ -2815,7 +2835,7 @@
 
   // components/ai/PromptInput.jsx
   init_ds_inject_react();
-  var cx58 = (...a) => a.filter(Boolean).join(" ");
+  var cx59 = (...a) => a.filter(Boolean).join(" ");
   function PromptInput({ value, onChange, onSubmit, placeholder = "Ask anything about your documents…", hint = "⏎ to send · ⇧⏎ newline", label = "Prompt", tools, action, disabled, className, children, ...rest }) {
     const onKeyDown = (e) => {
       if (disabled) return;
@@ -2824,7 +2844,7 @@
         onSubmit && onSubmit();
       }
     };
-    return /* @__PURE__ */ React.createElement("div", { className: cx58("lw-prompt", className), ...rest }, /* @__PURE__ */ React.createElement(
+    return /* @__PURE__ */ React.createElement("div", { className: cx59("lw-prompt", className), ...rest }, /* @__PURE__ */ React.createElement(
       "textarea",
       {
         value,
@@ -2840,16 +2860,16 @@
 
   // components/ai/Message.jsx
   init_ds_inject_react();
-  var cx59 = (...a) => a.filter(Boolean).join(" ");
+  var cx60 = (...a) => a.filter(Boolean).join(" ");
   function Message({ role = "ai", who, avatar, streaming = false, footer, className, children, ...rest }) {
     const name = who || (role === "ai" ? "LeanWise" : "You");
     const glyph = avatar || /* @__PURE__ */ React.createElement(Icon, { name: role === "ai" ? "spark" : "user", size: role === "ai" ? 19 : 16 });
-    return /* @__PURE__ */ React.createElement("div", { className: cx59("lw-msg", role, className), "data-streaming": streaming ? "true" : void 0, ...rest }, /* @__PURE__ */ React.createElement("span", { className: "lw-msg-avatar", "aria-hidden": "true" }, glyph), /* @__PURE__ */ React.createElement("div", { className: "lw-msg-main" }, /* @__PURE__ */ React.createElement("span", { className: "who" }, name), /* @__PURE__ */ React.createElement("div", { className: "body" }, children, footer)));
+    return /* @__PURE__ */ React.createElement("div", { className: cx60("lw-msg", role, className), "data-streaming": streaming ? "true" : void 0, ...rest }, /* @__PURE__ */ React.createElement("span", { className: "lw-msg-avatar", "aria-hidden": "true" }, glyph), /* @__PURE__ */ React.createElement("div", { className: "lw-msg-main" }, /* @__PURE__ */ React.createElement("span", { className: "who" }, name), /* @__PURE__ */ React.createElement("div", { className: "body" }, children, footer)));
   }
 
   // components/ai/SourceChip.jsx
   init_ds_inject_react();
-  var cx60 = (...a) => a.filter(Boolean).join(" ");
+  var cx61 = (...a) => a.filter(Boolean).join(" ");
   function SourceChip({
     n,
     title,
@@ -2862,7 +2882,7 @@
     return /* @__PURE__ */ React.createElement(
       Tag,
       {
-        className: cx60("lw-source", className),
+        className: cx61("lw-source", className),
         type: Tag === "button" ? "button" : void 0,
         "aria-label": formatLabel(n, title),
         ...rest
@@ -2873,9 +2893,9 @@
 
   // components/ai/SourceList.jsx
   init_ds_inject_react();
-  var cx61 = (...a) => a.filter(Boolean).join(" ");
+  var cx62 = (...a) => a.filter(Boolean).join(" ");
   function SourceList({ sources = [], linkAs = "a", className, ...rest }) {
-    return /* @__PURE__ */ React.createElement("div", { className: cx61("lw-source-list", className), ...rest }, sources.map((s, i) => {
+    return /* @__PURE__ */ React.createElement("div", { className: cx62("lw-source-list", className), ...rest }, sources.map((s, i) => {
       const Tag = s.href ? linkAs : "button";
       return /* @__PURE__ */ React.createElement(
         Tag,
@@ -2894,13 +2914,13 @@
 
   // components/ai/ConfidenceMeter.jsx
   init_ds_inject_react();
-  var cx62 = (...a) => a.filter(Boolean).join(" ");
+  var cx63 = (...a) => a.filter(Boolean).join(" ");
   function ConfidenceMeter({ value = 0, label = "match", className, style, ...rest }) {
     const pct = Math.max(0, Math.min(100, Math.round(value)));
     return /* @__PURE__ */ React.createElement(
       "span",
       {
-        className: cx62("lw-confidence", pct < 60 && "low", className),
+        className: cx63("lw-confidence", pct < 60 && "low", className),
         style: { "--lw-confidence": pct + "%", ...style },
         role: "meter",
         "aria-valuenow": pct,
@@ -2916,15 +2936,15 @@
 
   // components/ai/AgentTrace.jsx
   init_ds_inject_react();
-  var cx63 = (...a) => a.filter(Boolean).join(" ");
+  var cx64 = (...a) => a.filter(Boolean).join(" ");
   function AgentTrace({ steps = [], className, ...rest }) {
-    return /* @__PURE__ */ React.createElement("ol", { className: cx63("lw-trace", className), ...rest }, steps.map((s, i) => /* @__PURE__ */ React.createElement("li", { key: i, "data-state": s.state || "pending" }, /* @__PURE__ */ React.createElement("span", { className: "step" }, s.label), s.meta && /* @__PURE__ */ React.createElement("span", { className: "meta" }, s.meta))));
+    return /* @__PURE__ */ React.createElement("ol", { className: cx64("lw-trace", className), ...rest }, steps.map((s, i) => /* @__PURE__ */ React.createElement("li", { key: i, "data-state": s.state || "pending" }, /* @__PURE__ */ React.createElement("span", { className: "step" }, s.label), s.meta && /* @__PURE__ */ React.createElement("span", { className: "meta" }, s.meta))));
   }
 
   // components/ai/ToolCall.jsx
   init_ds_inject_react();
   var React30 = __toESM(require_ds_react(), 1);
-  var cx64 = (...a) => a.filter(Boolean).join(" ");
+  var cx65 = (...a) => a.filter(Boolean).join(" ");
   var fmt = (v) => typeof v === "string" ? v : JSON.stringify(v, null, 2);
   function ToolCall({
     name,
@@ -2946,12 +2966,12 @@
     const [open, setOpen] = React30.useState(!!defaultOpen);
     const uid = React30.useId();
     const st = error ? "error" : state;
-    return /* @__PURE__ */ React30.createElement("div", { className: cx64("lw-tool", className), "data-state": st, ...rest }, /* @__PURE__ */ React30.createElement("button", { type: "button", className: "lw-tool-head", "aria-expanded": open, "aria-controls": uid, onClick: () => setOpen((o) => !o) }, /* @__PURE__ */ React30.createElement(Icon, { name: open ? "chevron-down" : "chevron-right", size: 14 }), /* @__PURE__ */ React30.createElement("span", { className: "lw-tool-dot", "aria-hidden": "true" }), /* @__PURE__ */ React30.createElement("span", { className: "lw-tool-name" }, name), /* @__PURE__ */ React30.createElement("span", { className: "lw-tool-sum" }, summary), duration != null && /* @__PURE__ */ React30.createElement("span", { className: "lw-tool-dur" }, formatDuration(duration)), /* @__PURE__ */ React30.createElement("span", { className: "lw-sr-only" }, stateLabels[st] ?? stateLabels.ok)), open && /* @__PURE__ */ React30.createElement("div", { className: "lw-tool-body", id: uid }, args != null && /* @__PURE__ */ React30.createElement(React30.Fragment, null, /* @__PURE__ */ React30.createElement("span", { className: "k" }, argsLabel), /* @__PURE__ */ React30.createElement("pre", null, fmt(args))), error ? /* @__PURE__ */ React30.createElement(React30.Fragment, null, /* @__PURE__ */ React30.createElement("span", { className: "k" }, errorLabel), /* @__PURE__ */ React30.createElement("pre", { className: "err" }, fmt(error))) : result != null && /* @__PURE__ */ React30.createElement(React30.Fragment, null, /* @__PURE__ */ React30.createElement("span", { className: "k" }, resultLabel), /* @__PURE__ */ React30.createElement("pre", null, fmt(result)))));
+    return /* @__PURE__ */ React30.createElement("div", { className: cx65("lw-tool", className), "data-state": st, ...rest }, /* @__PURE__ */ React30.createElement("button", { type: "button", className: "lw-tool-head", "aria-expanded": open, "aria-controls": uid, onClick: () => setOpen((o) => !o) }, /* @__PURE__ */ React30.createElement(Icon, { name: open ? "chevron-down" : "chevron-right", size: 14 }), /* @__PURE__ */ React30.createElement("span", { className: "lw-tool-dot", "aria-hidden": "true" }), /* @__PURE__ */ React30.createElement("span", { className: "lw-tool-name" }, name), /* @__PURE__ */ React30.createElement("span", { className: "lw-tool-sum" }, summary), duration != null && /* @__PURE__ */ React30.createElement("span", { className: "lw-tool-dur" }, formatDuration(duration)), /* @__PURE__ */ React30.createElement("span", { className: "lw-sr-only" }, stateLabels[st] ?? stateLabels.ok)), open && /* @__PURE__ */ React30.createElement("div", { className: "lw-tool-body", id: uid }, args != null && /* @__PURE__ */ React30.createElement(React30.Fragment, null, /* @__PURE__ */ React30.createElement("span", { className: "k" }, argsLabel), /* @__PURE__ */ React30.createElement("pre", null, fmt(args))), error ? /* @__PURE__ */ React30.createElement(React30.Fragment, null, /* @__PURE__ */ React30.createElement("span", { className: "k" }, errorLabel), /* @__PURE__ */ React30.createElement("pre", { className: "err" }, fmt(error))) : result != null && /* @__PURE__ */ React30.createElement(React30.Fragment, null, /* @__PURE__ */ React30.createElement("span", { className: "k" }, resultLabel), /* @__PURE__ */ React30.createElement("pre", null, fmt(result)))));
   }
 
   // components/ai/DiffReview.jsx
   init_ds_inject_react();
-  var cx65 = (...a) => a.filter(Boolean).join(" ");
+  var cx66 = (...a) => a.filter(Boolean).join(" ");
   var SIGN = { add: "+", del: "−", mod: "~" };
   function DiffReview({
     hunks = [],
@@ -2973,7 +2993,7 @@
     ...rest
   }) {
     const pending = hunks.filter((h) => !decisions[h.id]).length;
-    return /* @__PURE__ */ React.createElement("div", { className: cx65("lw-diff", className), role: "group", "aria-label": label, ...rest }, hunks.map((h) => {
+    return /* @__PURE__ */ React.createElement("div", { className: cx66("lw-diff", className), role: "group", "aria-label": label, ...rest }, hunks.map((h) => {
       const d = decisions[h.id];
       return /* @__PURE__ */ React.createElement("div", { key: h.id, className: "lw-diff-hunk", "data-decision": d }, /* @__PURE__ */ React.createElement("div", { className: "lw-diff-head" }, /* @__PURE__ */ React.createElement(Icon, { name: "file", size: 14, className: "lw-diff-ic" }), /* @__PURE__ */ React.createElement("span", { className: "lw-diff-file" }, h.file, h.range ? " · " + h.range : "")), /* @__PURE__ */ React.createElement("div", { className: "lw-diff-lines" }, h.lines.map((l, i) => /* @__PURE__ */ React.createElement("div", { key: i, className: "lw-diff-line", "data-kind": l.kind }, /* @__PURE__ */ React.createElement("span", { className: "n" }, l.n ?? ""), /* @__PURE__ */ React.createElement("span", { className: "s", "aria-hidden": "true" }, SIGN[l.kind] || ""), /* @__PURE__ */ React.createElement("span", { className: "t" }, l.kind && /* @__PURE__ */ React.createElement("span", { className: "lw-sr-only" }, kindLabels[l.kind] ?? kindLabels.mod), l.text)))), /* @__PURE__ */ React.createElement("div", { className: "lw-diff-foot" }, /* @__PURE__ */ React.createElement("span", { className: "lw-diff-state" }, d === "accepted" ? acceptedLabel : d === "rejected" ? rejectedLabel : h.note || ""), d ? /* @__PURE__ */ React.createElement(Button, { size: "sm", variant: "ghost", onClick: () => onDecide && onDecide(h.id, null) }, /* @__PURE__ */ React.createElement(Icon, { name: "undo", size: 14 }), undoLabel) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(Button, { size: "sm", variant: "ghost", onClick: () => onDecide && onDecide(h.id, "rejected") }, rejectLabel), /* @__PURE__ */ React.createElement(Button, { size: "sm", onClick: () => onDecide && onDecide(h.id, "accepted") }, acceptLabel))));
     }), hunks.length > 1 && /* @__PURE__ */ React.createElement("div", { className: "lw-diff-foot" }, /* @__PURE__ */ React.createElement("span", { className: "lw-diff-state", "aria-live": "polite" }, formatProgress(pending, hunks.length)), /* @__PURE__ */ React.createElement(Button, { size: "sm", variant: "ghost", onClick: onRejectAll, disabled: !pending }, rejectAllLabel), /* @__PURE__ */ React.createElement(Button, { size: "sm", onClick: onAcceptAll, disabled: !pending }, acceptAllLabel)));
@@ -2981,7 +3001,7 @@
 
   // components/ai/Artifact.jsx
   init_ds_inject_react();
-  var cx66 = (...a) => a.filter(Boolean).join(" ");
+  var cx67 = (...a) => a.filter(Boolean).join(" ");
   function Artifact({
     title,
     version,
@@ -3001,13 +3021,13 @@
   }) {
     const canPrev = version > 1;
     const canNext = versionCount != null && version < versionCount;
-    return /* @__PURE__ */ React.createElement("div", { className: cx66("lw-artifact", className), ...rest }, /* @__PURE__ */ React.createElement("div", { className: "lw-artifact-head" }, /* @__PURE__ */ React.createElement(Icon, { name: "file", size: 15, className: "lw-artifact-ic" }), /* @__PURE__ */ React.createElement("span", { className: "lw-artifact-title" }, title), version != null && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": prevVersionLabel, disabled: !canPrev, onClick: onPrevVersion }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron-left", size: 15 })), /* @__PURE__ */ React.createElement("span", { className: "lw-artifact-ver" }, "v", version, versionCount ? " / " + versionCount : ""), /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": nextVersionLabel, disabled: !canNext, onClick: onNextVersion }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron-right", size: 15 })))), /* @__PURE__ */ React.createElement("div", { className: "lw-artifact-body" }, children), (onRevert || onEdit || actions) && /* @__PURE__ */ React.createElement("div", { className: "lw-artifact-foot" }, onEdit && /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-btn lw-btn-ghost lw-btn-sm", onClick: onEdit }, /* @__PURE__ */ React.createElement(Icon, { name: "edit", size: 14 }), editLabel), onRevert && /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-btn lw-btn-ghost lw-btn-sm", onClick: onRevert }, /* @__PURE__ */ React.createElement(Icon, { name: "undo", size: 14 }), revertLabel), /* @__PURE__ */ React.createElement("span", { className: "lw-spacer" }), actions));
+    return /* @__PURE__ */ React.createElement("div", { className: cx67("lw-artifact", className), ...rest }, /* @__PURE__ */ React.createElement("div", { className: "lw-artifact-head" }, /* @__PURE__ */ React.createElement(Icon, { name: "file", size: 15, className: "lw-artifact-ic" }), /* @__PURE__ */ React.createElement("span", { className: "lw-artifact-title" }, title), version != null && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": prevVersionLabel, disabled: !canPrev, onClick: onPrevVersion }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron-left", size: 15 })), /* @__PURE__ */ React.createElement("span", { className: "lw-artifact-ver" }, "v", version, versionCount ? " / " + versionCount : ""), /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": nextVersionLabel, disabled: !canNext, onClick: onNextVersion }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron-right", size: 15 })))), /* @__PURE__ */ React.createElement("div", { className: "lw-artifact-body" }, children), (onRevert || onEdit || actions) && /* @__PURE__ */ React.createElement("div", { className: "lw-artifact-foot" }, onEdit && /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-btn lw-btn-ghost lw-btn-sm", onClick: onEdit }, /* @__PURE__ */ React.createElement(Icon, { name: "edit", size: 14 }), editLabel), onRevert && /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-btn lw-btn-ghost lw-btn-sm", onClick: onRevert }, /* @__PURE__ */ React.createElement(Icon, { name: "undo", size: 14 }), revertLabel), /* @__PURE__ */ React.createElement("span", { className: "lw-spacer" }), actions));
   }
 
   // components/ai/Feedback.jsx
   init_ds_inject_react();
   var React31 = __toESM(require_ds_react(), 1);
-  var cx67 = (...a) => a.filter(Boolean).join(" ");
+  var cx68 = (...a) => a.filter(Boolean).join(" ");
   function Feedback({
     value,
     onChange,
@@ -3028,7 +3048,7 @@
       onChange && onChange(next);
       if (next === "down" && onComment) setOpen(true);
     };
-    return /* @__PURE__ */ React31.createElement("div", { className: cx67(className), ...rest }, /* @__PURE__ */ React31.createElement("div", { className: "lw-feedback" }, /* @__PURE__ */ React31.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": upLabel, "aria-pressed": value === "up", onClick: () => set("up") }, /* @__PURE__ */ React31.createElement(Icon, { name: "thumbs-up", size: 15 })), /* @__PURE__ */ React31.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": downLabel, "aria-pressed": value === "down", onClick: () => set("down") }, /* @__PURE__ */ React31.createElement(Icon, { name: "thumbs-down", size: 15 })), note && /* @__PURE__ */ React31.createElement("span", { className: "lw-feedback-note" }, note)), open && onComment && /* @__PURE__ */ React31.createElement(
+    return /* @__PURE__ */ React31.createElement("div", { className: cx68(className), ...rest }, /* @__PURE__ */ React31.createElement("div", { className: "lw-feedback" }, /* @__PURE__ */ React31.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": upLabel, "aria-pressed": value === "up", onClick: () => set("up") }, /* @__PURE__ */ React31.createElement(Icon, { name: "thumbs-up", size: 15 })), /* @__PURE__ */ React31.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": downLabel, "aria-pressed": value === "down", onClick: () => set("down") }, /* @__PURE__ */ React31.createElement(Icon, { name: "thumbs-down", size: 15 })), note && /* @__PURE__ */ React31.createElement("span", { className: "lw-feedback-note" }, note)), open && onComment && /* @__PURE__ */ React31.createElement(
       "form",
       {
         className: "lw-feedback-form",
@@ -3057,47 +3077,47 @@
 
   // components/marketing/Hero.jsx
   init_ds_inject_react();
-  var cx68 = (...a) => a.filter(Boolean).join(" ");
+  var cx69 = (...a) => a.filter(Boolean).join(" ");
   function Hero({ eyebrow, title, lead, actions, aside, className, children, ...rest }) {
-    return /* @__PURE__ */ React.createElement("section", { className: cx68("lw-hero-dark", className), ...rest }, /* @__PURE__ */ React.createElement("div", { className: "lw-container" }, eyebrow && /* @__PURE__ */ React.createElement("p", { className: "lw-eyebrow" }, eyebrow), title && /* @__PURE__ */ React.createElement("h1", { className: "lw-h1" }, title), lead && /* @__PURE__ */ React.createElement("p", { className: "lw-lead" }, lead), actions && /* @__PURE__ */ React.createElement("div", { className: "lw-cluster lw-cluster-12 lw-hero-actions" }, actions), aside, children));
+    return /* @__PURE__ */ React.createElement("section", { className: cx69("lw-hero-dark", className), ...rest }, /* @__PURE__ */ React.createElement("div", { className: "lw-container" }, eyebrow && /* @__PURE__ */ React.createElement("p", { className: "lw-eyebrow" }, eyebrow), title && /* @__PURE__ */ React.createElement("h1", { className: "lw-h1" }, title), lead && /* @__PURE__ */ React.createElement("p", { className: "lw-lead" }, lead), actions && /* @__PURE__ */ React.createElement("div", { className: "lw-cluster lw-cluster-12 lw-hero-actions" }, actions), aside, children));
   }
 
   // components/marketing/FeatureGrid.jsx
   init_ds_inject_react();
-  var cx69 = (...a) => a.filter(Boolean).join(" ");
+  var cx70 = (...a) => a.filter(Boolean).join(" ");
   function FeatureGrid({ features = [], linkAs = "a", className, ...rest }) {
-    return /* @__PURE__ */ React.createElement("div", { className: cx69("lw-features", className), ...rest }, features.map((f, i) => {
+    return /* @__PURE__ */ React.createElement("div", { className: cx70("lw-features", className), ...rest }, features.map((f, i) => {
       const Tag = f.href ? linkAs : "div";
-      return /* @__PURE__ */ React.createElement(Tag, { key: i, className: cx69("lw-feature", f.href && "lw-feature-interactive"), href: f.href }, /* @__PURE__ */ React.createElement("span", { className: "num" }, String(i + 1).padStart(2, "0")), /* @__PURE__ */ React.createElement("h3", null, f.title), /* @__PURE__ */ React.createElement("p", null, f.body), f.href && /* @__PURE__ */ React.createElement("span", { className: "lw-feature-more" }, f.more || "Learn more", /* @__PURE__ */ React.createElement(Icon, { name: "arrow-right", size: 14, className: "arrow" })));
+      return /* @__PURE__ */ React.createElement(Tag, { key: i, className: cx70("lw-feature", f.href && "lw-feature-interactive"), href: f.href }, /* @__PURE__ */ React.createElement("span", { className: "num" }, String(i + 1).padStart(2, "0")), /* @__PURE__ */ React.createElement("h3", null, f.title), /* @__PURE__ */ React.createElement("p", null, f.body), f.href && /* @__PURE__ */ React.createElement("span", { className: "lw-feature-more" }, f.more || "Learn more", /* @__PURE__ */ React.createElement(Icon, { name: "arrow-right", size: 14, className: "arrow" })));
     }));
   }
 
   // components/marketing/StoryCard.jsx
   init_ds_inject_react();
-  var cx70 = (...a) => a.filter(Boolean).join(" ");
+  var cx71 = (...a) => a.filter(Boolean).join(" ");
   function StoryCard({ logo, title, body, result, quote, person, role, href, linkAs = "a", className, ...rest }) {
     const Tag = href ? linkAs : "div";
     const showQuote = Boolean(quote && person && role);
     const initials = String(title || "").trim().split(/\s+/).slice(0, 2).map((w) => w[0] || "").join("").toUpperCase();
-    return /* @__PURE__ */ React.createElement(Tag, { className: cx70("lw-story", href && "lw-story-interactive", className), href, ...rest }, logo ? /* @__PURE__ */ React.createElement("span", { className: "logo" }, logo) : /* @__PURE__ */ React.createElement("span", { className: "logo lw-monogram" }, initials), /* @__PURE__ */ React.createElement("div", null, title && /* @__PURE__ */ React.createElement("h3", null, title), body && /* @__PURE__ */ React.createElement("p", null, body), showQuote && /* @__PURE__ */ React.createElement("blockquote", { className: "lw-story-quote" }, quote, /* @__PURE__ */ React.createElement("cite", null, person, " · ", role)), result && /* @__PURE__ */ React.createElement("div", { className: "meta" }, /* @__PURE__ */ React.createElement("span", { className: "lw-story-result" }, /* @__PURE__ */ React.createElement("b", null, result)))));
+    return /* @__PURE__ */ React.createElement(Tag, { className: cx71("lw-story", href && "lw-story-interactive", className), href, ...rest }, logo ? /* @__PURE__ */ React.createElement("span", { className: "logo" }, logo) : /* @__PURE__ */ React.createElement("span", { className: "logo lw-monogram" }, initials), /* @__PURE__ */ React.createElement("div", null, title && /* @__PURE__ */ React.createElement("h3", null, title), body && /* @__PURE__ */ React.createElement("p", null, body), showQuote && /* @__PURE__ */ React.createElement("blockquote", { className: "lw-story-quote" }, quote, /* @__PURE__ */ React.createElement("cite", null, person, " · ", role)), result && /* @__PURE__ */ React.createElement("div", { className: "meta" }, /* @__PURE__ */ React.createElement("span", { className: "lw-story-result" }, /* @__PURE__ */ React.createElement("b", null, result)))));
   }
 
   // components/marketing/LogoRail.jsx
   init_ds_inject_react();
-  var cx71 = (...a) => a.filter(Boolean).join(" ");
+  var cx72 = (...a) => a.filter(Boolean).join(" ");
   function LogoRail({ logos = [], marquee = false, className, ...rest }) {
     const cells = logos.map(
       (l, i) => l.src ? /* @__PURE__ */ React.createElement("span", { key: i, className: "lw-logo-item", style: { "--lw-logo-src": `url("${l.src}")` }, role: "img", "aria-label": l.name }) : /* @__PURE__ */ React.createElement("span", { key: i, className: "lw-logo-item is-text" }, l.name)
     );
-    return /* @__PURE__ */ React.createElement("div", { className: cx71("lw-logo-rail", marquee && "marquee", className), ...rest }, marquee ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "lw-logo-track" }, cells), /* @__PURE__ */ React.createElement("div", { className: "lw-logo-track", "aria-hidden": "true" }, cells)) : cells);
+    return /* @__PURE__ */ React.createElement("div", { className: cx72("lw-logo-rail", marquee && "marquee", className), ...rest }, marquee ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "lw-logo-track" }, cells), /* @__PURE__ */ React.createElement("div", { className: "lw-logo-track", "aria-hidden": "true" }, cells)) : cells);
   }
 
   // components/marketing/SiteFooter.jsx
   init_ds_inject_react();
-  var cx72 = (...a) => a.filter(Boolean).join(" ");
+  var cx73 = (...a) => a.filter(Boolean).join(" ");
   function SiteFooter({ brand, desc, columns = [], legal, bottom, dark = false, linkAs = "a", className, children, ...rest }) {
     const Link = linkAs;
-    return /* @__PURE__ */ React.createElement("footer", { className: cx72("lw-footer", className), "data-band": dark ? "dark" : void 0, ...rest }, /* @__PURE__ */ React.createElement("div", { className: "lw-container" }, /* @__PURE__ */ React.createElement("div", { className: "lw-footer-grid" }, /* @__PURE__ */ React.createElement("div", { className: "lw-footer-brand" }, brand, desc && /* @__PURE__ */ React.createElement("p", { className: "lw-footer-desc" }, desc)), columns.map((col, i) => (
+    return /* @__PURE__ */ React.createElement("footer", { className: cx73("lw-footer", className), "data-band": dark ? "dark" : void 0, ...rest }, /* @__PURE__ */ React.createElement("div", { className: "lw-container" }, /* @__PURE__ */ React.createElement("div", { className: "lw-footer-grid" }, /* @__PURE__ */ React.createElement("div", { className: "lw-footer-brand" }, brand, desc && /* @__PURE__ */ React.createElement("p", { className: "lw-footer-desc" }, desc)), columns.map((col, i) => (
       /* Keyed by index, not heading: two columns may legitimately share a
          heading (or have none), and React treats duplicate keys as
          unsupported. Same reasoning as TopBar and Sidebar. */
@@ -3121,29 +3141,29 @@
 
   // components/marketing/Steps.jsx
   init_ds_inject_react();
-  var cx73 = (...a) => a.filter(Boolean).join(" ");
+  var cx74 = (...a) => a.filter(Boolean).join(" ");
   function Steps({ items = [], orientation = "vertical", linkAs = "a", className, ...rest }) {
     const Link = linkAs;
-    return /* @__PURE__ */ React.createElement("ol", { className: cx73("lw-steps", orientation === "horizontal" && "lw-steps-horizontal", className), ...rest }, items.map((it, i) => /* @__PURE__ */ React.createElement("li", { className: "lw-step", key: i }, /* @__PURE__ */ React.createElement("span", { className: "lw-step-marker" }, it.label ?? String(i + 1).padStart(2, "0")), /* @__PURE__ */ React.createElement("div", null, it.meta && /* @__PURE__ */ React.createElement("span", { className: "lw-step-meta" }, it.meta), /* @__PURE__ */ React.createElement("h3", { className: "lw-step-title" }, it.title), it.body && /* @__PURE__ */ React.createElement("p", { className: "lw-step-body" }, it.body), it.href && /* @__PURE__ */ React.createElement("p", { className: "lw-step-body" }, /* @__PURE__ */ React.createElement(Link, { href: it.href }, it.more || "Learn more"))))));
+    return /* @__PURE__ */ React.createElement("ol", { className: cx74("lw-steps", orientation === "horizontal" && "lw-steps-horizontal", className), ...rest }, items.map((it, i) => /* @__PURE__ */ React.createElement("li", { className: "lw-step", key: i }, /* @__PURE__ */ React.createElement("span", { className: "lw-step-marker" }, it.label ?? String(i + 1).padStart(2, "0")), /* @__PURE__ */ React.createElement("div", null, it.meta && /* @__PURE__ */ React.createElement("span", { className: "lw-step-meta" }, it.meta), /* @__PURE__ */ React.createElement("h3", { className: "lw-step-title" }, it.title), it.body && /* @__PURE__ */ React.createElement("p", { className: "lw-step-body" }, it.body), it.href && /* @__PURE__ */ React.createElement("p", { className: "lw-step-body" }, /* @__PURE__ */ React.createElement(Link, { href: it.href }, it.more || "Learn more"))))));
   }
 
   // components/marketing/Quote.jsx
   init_ds_inject_react();
-  var cx74 = (...a) => a.filter(Boolean).join(" ");
+  var cx75 = (...a) => a.filter(Boolean).join(" ");
   function Quote({ children, name, role, className, ...rest }) {
-    return /* @__PURE__ */ React.createElement("blockquote", { className: cx74("lw-quote", className), ...rest }, children, name && /* @__PURE__ */ React.createElement("cite", { className: "lw-quote-attrib" }, /* @__PURE__ */ React.createElement("span", { className: "name" }, name), role ? " · " + role : ""));
+    return /* @__PURE__ */ React.createElement("blockquote", { className: cx75("lw-quote", className), ...rest }, children, name && /* @__PURE__ */ React.createElement("cite", { className: "lw-quote-attrib" }, /* @__PURE__ */ React.createElement("span", { className: "name" }, name), role ? " · " + role : ""));
   }
 
   // components/marketing/Byline.jsx
   init_ds_inject_react();
-  var cx75 = (...a) => a.filter(Boolean).join(" ");
+  var cx76 = (...a) => a.filter(Boolean).join(" ");
   function Byline({ name, role, date, dateTime, src, size = "md", className, children, ...rest }) {
-    return /* @__PURE__ */ React.createElement("div", { className: cx75("lw-byline", className), ...rest }, name && /* @__PURE__ */ React.createElement(Avatar, { name, src, size }), name && /* @__PURE__ */ React.createElement("span", { className: "name" }, name), role && /* @__PURE__ */ React.createElement("span", { className: "role" }, role), date && /* @__PURE__ */ React.createElement("time", { className: "date", dateTime }, date), children);
+    return /* @__PURE__ */ React.createElement("div", { className: cx76("lw-byline", className), ...rest }, name && /* @__PURE__ */ React.createElement(Avatar, { name, src, size }), name && /* @__PURE__ */ React.createElement("span", { className: "name" }, name), role && /* @__PURE__ */ React.createElement("span", { className: "role" }, role), date && /* @__PURE__ */ React.createElement("time", { className: "date", dateTime }, date), children);
   }
 
   // components/marketing/ArticleCard.jsx
   init_ds_inject_react();
-  var cx76 = (...a) => a.filter(Boolean).join(" ");
+  var cx77 = (...a) => a.filter(Boolean).join(" ");
   function ArticleCard({
     title,
     dek,
@@ -3174,7 +3194,7 @@
         as: href ? linkAs : "div",
         interactive: Boolean(href),
         href,
-        className: cx76(className),
+        className: cx77(className),
         ...rest
       },
       cover && /* @__PURE__ */ React.createElement("span", { className: "lw-card-media" }, cover),
@@ -3189,11 +3209,11 @@
   // components/marketing/AnnounceBar.jsx
   init_ds_inject_react();
   var React32 = __toESM(require_ds_react(), 1);
-  var cx77 = (...a) => a.filter(Boolean).join(" ");
+  var cx78 = (...a) => a.filter(Boolean).join(" ");
   function AnnounceBar({ children, onDismiss, dismissLabel = "Dismiss announcement", className, ...rest }) {
     const [gone, setGone] = React32.useState(false);
     if (gone) return null;
-    return /* @__PURE__ */ React32.createElement("div", { className: cx77("lw-announce", className), role: "status", ...rest }, children, onDismiss && /* @__PURE__ */ React32.createElement(
+    return /* @__PURE__ */ React32.createElement("div", { className: cx78("lw-announce", className), role: "status", ...rest }, children, onDismiss && /* @__PURE__ */ React32.createElement(
       "button",
       {
         type: "button",
@@ -3210,7 +3230,7 @@
 
   // components/marketing/PlanCard.jsx
   init_ds_inject_react();
-  var cx78 = (...a) => a.filter(Boolean).join(" ");
+  var cx79 = (...a) => a.filter(Boolean).join(" ");
   function PlanCard({
     name,
     tagline,
@@ -3230,7 +3250,7 @@
   }) {
     const Link = linkAs;
     const ctaObject = cta && typeof cta === "object" && !cta.$$typeof && cta.label;
-    return /* @__PURE__ */ React.createElement("div", { className: cx78("lw-card", "lw-plan", featured && "lw-plan-featured", className), ...rest }, ribbon && /* @__PURE__ */ React.createElement("span", { className: "lw-pill lw-plan-ribbon" }, ribbon), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h3", { className: "lw-plan-name" }, name), tagline && /* @__PURE__ */ React.createElement("span", { className: "lw-plan-tagline" }, tagline)), price != null && /* @__PURE__ */ React.createElement("p", { className: "lw-plan-price" }, /* @__PURE__ */ React.createElement("span", { className: "price" }, price), unit && /* @__PURE__ */ React.createElement("span", { className: "unit" }, unit), period && /* @__PURE__ */ React.createElement("span", { className: "period" }, period)), desc && /* @__PURE__ */ React.createElement("p", { className: "lw-plan-desc" }, desc), features.length > 0 && /* @__PURE__ */ React.createElement("ul", { className: "lw-plan-features" }, features.map((f, i) => {
+    return /* @__PURE__ */ React.createElement("div", { className: cx79("lw-card", "lw-plan", featured && "lw-plan-featured", className), ...rest }, ribbon && /* @__PURE__ */ React.createElement("span", { className: "lw-pill lw-plan-ribbon" }, ribbon), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h3", { className: "lw-plan-name" }, name), tagline && /* @__PURE__ */ React.createElement("span", { className: "lw-plan-tagline" }, tagline)), price != null && /* @__PURE__ */ React.createElement("p", { className: "lw-plan-price" }, /* @__PURE__ */ React.createElement("span", { className: "price" }, price), unit && /* @__PURE__ */ React.createElement("span", { className: "unit" }, unit), period && /* @__PURE__ */ React.createElement("span", { className: "period" }, period)), desc && /* @__PURE__ */ React.createElement("p", { className: "lw-plan-desc" }, desc), features.length > 0 && /* @__PURE__ */ React.createElement("ul", { className: "lw-plan-features" }, features.map((f, i) => {
       const included = f.included !== false;
       return (
         // The glyph is aria-hidden, so WITHOUT this word an included and
@@ -3240,12 +3260,12 @@
         // is not a flex item and takes no gap.
         /* @__PURE__ */ React.createElement("li", { className: "lw-plan-feature", key: i, "data-included": included ? "true" : "false" }, /* @__PURE__ */ React.createElement("span", { className: "lw-sr-only" }, included ? includedLabel : excludedLabel, ": "), /* @__PURE__ */ React.createElement(Icon, { name: included ? "check" : "minus", size: 16 }), /* @__PURE__ */ React.createElement("span", null, f.label))
       );
-    })), cta && /* @__PURE__ */ React.createElement("div", { className: "lw-plan-foot" }, ctaObject ? /* @__PURE__ */ React.createElement(Link, { className: cx78("lw-btn", featured ? "lw-btn-brand" : "lw-btn-ghost"), href: cta.href }, cta.label) : cta));
+    })), cta && /* @__PURE__ */ React.createElement("div", { className: "lw-plan-foot" }, ctaObject ? /* @__PURE__ */ React.createElement(Link, { className: cx79("lw-btn", featured ? "lw-btn-brand" : "lw-btn-ghost"), href: cta.href }, cta.label) : cta));
   }
 
   // components/marketing/CompareTable.jsx
   init_ds_inject_react();
-  var cx79 = (...a) => a.filter(Boolean).join(" ");
+  var cx80 = (...a) => a.filter(Boolean).join(" ");
   function CompareTable({
     columns = [],
     groups = [],
@@ -3272,13 +3292,13 @@
         role: "region",
         "aria-label": typeof caption === "string" ? caption : void 0
       },
-      /* @__PURE__ */ React.createElement("table", { className: cx79("lw-compare", className), ...rest }, caption && /* @__PURE__ */ React.createElement("caption", null, caption), /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("td", { className: "lw-compare-corner" }), columns.map((c) => /* @__PURE__ */ React.createElement("th", { key: c.key, scope: "col", "data-featured": c.featured || void 0 }, c.label)))), groups.map((g, gi) => /* @__PURE__ */ React.createElement("tbody", { key: gi }, g.label && /* @__PURE__ */ React.createElement("tr", { className: "lw-compare-group" }, /* @__PURE__ */ React.createElement("th", { scope: "colgroup", colSpan: columns.length + 1 }, g.label)), g.rows.map((r, ri) => /* @__PURE__ */ React.createElement("tr", { key: ri }, /* @__PURE__ */ React.createElement("th", { scope: "row" }, r.label), columns.map((c, ci) => /* @__PURE__ */ React.createElement("td", { key: c.key, "data-featured": c.featured || void 0 }, cell(r.values[ci]))))))))
+      /* @__PURE__ */ React.createElement("table", { className: cx80("lw-compare", className), ...rest }, caption && /* @__PURE__ */ React.createElement("caption", null, caption), /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("td", { className: "lw-compare-corner" }), columns.map((c) => /* @__PURE__ */ React.createElement("th", { key: c.key, scope: "col", "data-featured": c.featured || void 0 }, c.label)))), groups.map((g, gi) => /* @__PURE__ */ React.createElement("tbody", { key: gi }, g.label && /* @__PURE__ */ React.createElement("tr", { className: "lw-compare-group" }, /* @__PURE__ */ React.createElement("th", { scope: "colgroup", colSpan: columns.length + 1 }, g.label)), g.rows.map((r, ri) => /* @__PURE__ */ React.createElement("tr", { key: ri }, /* @__PURE__ */ React.createElement("th", { scope: "row" }, r.label), columns.map((c, ci) => /* @__PURE__ */ React.createElement("td", { key: c.key, "data-featured": c.featured || void 0 }, cell(r.values[ci]))))))))
     );
   }
 
   // components/marketing/Flow.jsx
   init_ds_inject_react();
-  var cx80 = (...a) => a.filter(Boolean).join(" ");
+  var cx81 = (...a) => a.filter(Boolean).join(" ");
   function Flow({ nodes = [], edges, orientation = "horizontal", as, className, ...rest }) {
     const Tag = as || "ol";
     const Item = Tag === "ol" || Tag === "ul" ? "li" : "div";
@@ -3304,7 +3324,7 @@
         )
       );
     });
-    return /* @__PURE__ */ React.createElement(Tag, { className: cx80("lw-flow", orientation === "vertical" && "lw-flow-vertical", className), ...rest }, children);
+    return /* @__PURE__ */ React.createElement(Tag, { className: cx81("lw-flow", orientation === "vertical" && "lw-flow-vertical", className), ...rest }, children);
   }
 
   // ds-entry.js
@@ -3386,6 +3406,7 @@
     Breadcrumbs,
     CommandPalette,
     score,
+    NavMenu,
     NavToggle,
     NavItem,
     Sidebar,

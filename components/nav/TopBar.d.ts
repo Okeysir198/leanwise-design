@@ -1,6 +1,15 @@
 import * as React from "react";
+import type { NavMenuGroup } from "./NavMenu";
 
-export interface TopBarLink { href: string; label: React.ReactNode; current?: boolean }
+export interface TopBarLink {
+  /** Required unless `menu` is set. */
+  href?: string;
+  label: React.ReactNode;
+  current?: boolean;
+  id?: string;
+  /** Renders a taxonomy DROPDOWN in place of a link. Put it first in `links`. */
+  menu?: NavMenuGroup[];
+}
 export interface TopBarProps extends React.HTMLAttributes<HTMLElement> {
   brand?: React.ReactNode;
   /** Makes the brand a link (mark + name as one target). */

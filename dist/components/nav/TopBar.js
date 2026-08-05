@@ -1,4 +1,5 @@
 import { jsx, jsxs } from "react/jsx-runtime";
+import { NavMenu } from "./NavMenu.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
 function TopBar({
   brand,
@@ -22,7 +23,7 @@ function TopBar({
       /* @__PURE__ */ jsx("span", { className: "brand-mark", "aria-hidden": "true" }),
       /* @__PURE__ */ jsx("span", { className: "brand-name", children: brand })
     ] }) : brand && /* @__PURE__ */ jsx(Brand, { className: "brand", ...brandProps, children: brand }),
-    links.length > 0 && /* @__PURE__ */ jsx("nav", { "aria-label": navLabel, children: links.map((l, i) => /* @__PURE__ */ jsx(Link, { href: l.href, "aria-current": l.current ? "page" : void 0, children: l.label }, l.id ?? i)) }),
+    links.length > 0 && /* @__PURE__ */ jsx("nav", { "aria-label": navLabel, children: links.map((l, i) => l.menu ? /* @__PURE__ */ jsx(NavMenu, { label: l.label, groups: l.menu, linkAs, name: "lw-topbar-menu" }, l.id ?? i) : /* @__PURE__ */ jsx(Link, { href: l.href, "aria-current": l.current ? "page" : void 0, children: l.label }, l.id ?? i)) }),
     /* @__PURE__ */ jsx("span", { className: "spacer" }),
     actions,
     children

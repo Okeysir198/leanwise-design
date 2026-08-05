@@ -95,6 +95,8 @@ export { ActivityFeed, timeAgo } from "./components/data/ActivityFeed";
 export type { ActivityFeedProps } from "./components/data/ActivityFeed";
 export { TopBar } from "./components/nav/TopBar";
 export type { TopBarProps } from "./components/nav/TopBar";
+export { NavMenu } from "./components/nav/NavMenu";
+export type { NavMenuProps } from "./components/nav/NavMenu";
 export { AppBar } from "./components/nav/AppBar";
 export type { AppBarProps } from "./components/nav/AppBar";
 export { Sidebar, NavItem } from "./components/nav/Sidebar";
