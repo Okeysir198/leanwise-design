@@ -9,3 +9,11 @@ node_modules/
 .visual/
 *.log
 .DS_Store
+# This repo's lockfile is `package-lock.json` — every script here is npm, and CI
+# runs `npm install`. A `pnpm-lock.yaml` shows up whenever someone runs pnpm in
+# this directory (the consumers are pnpm projects, and this tree sits beside
+# them), and a second lockfile is worse than none: neither one is obviously the
+# authority, and the two resolve the same range to different trees. Ignore it
+# rather than commit it — if this repo ever moves to pnpm, that is a deliberate
+# change that deletes the npm lockfile in the same commit.
+pnpm-lock.yaml
