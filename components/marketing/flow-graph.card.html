@@ -1,0 +1,122 @@
+<!-- @dsCard group="Marketing" name="Flow (branching)" subtitle="A fan-in, a fan-out and a loop — laid on a routing lattice, drawn with CSS borders, and carrying an sr-only successors table because the connectivity is the content" viewport="1100x1500" -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Flow (branching)</title>
+<link rel="stylesheet" href="../../preview/_card.css">
+<link rel="stylesheet" href="../../base.css">
+<link rel="stylesheet" href="../../marketing.css">
+<script src="../../preview/_vendor/react.development.js"></script>
+<script src="../../preview/_vendor/react-dom.development.js"></script>
+<script src="../../preview/_vendor/babel.min.js"></script>
+<script src="../../preview/_card.js"></script>
+<script src="../../_ds_bundle.js"></script>
+</head><body><div class="card">
+<header><h1>Flow (branching)</h1>
+<p class="sub"><b>A chain could not draw any of these.</b> Until v1.6.0 <span class="mono">edges</span> could only
+<i>delete</i> links from the sequential chain — a pair that was not adjacent in <span class="mono">nodes</span> was
+silently ignored. That pair now selects this renderer: nodes are laid on a lattice and the connectors are
+box-drawing tiles, so two inputs can meet, one step can split, and a step can loop back.</p></header>
+
+<span class="lbl-eyebrow">a fan-in — two kinds of input meeting, then splitting to two outcomes</span>
+<div id="fg-merge" style="padding:12px 0 4px"></div>
+
+<span class="lbl-eyebrow">a fan-out from the first node — one source, three independent destinations</span>
+<div id="fg-fan" style="padding:12px 0 4px"></div>
+
+<span class="lbl-eyebrow">a loop — routed below every lane and drawn dashed, and named in words in the table</span>
+<div id="fg-back" style="padding:12px 0 4px"></div>
+
+<div style="display:flex;flex-direction:column;gap:12px;padding-top:24px;margin-top:8px;border-top:1px solid var(--lw-line)">
+<span class="lbl-eyebrow">why it is built this way</span>
+
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">The drawing is not the content</h2>
+<p class="sub">A branching diagram's whole payload is <b>&ldquo;01 leads to 02 <i>and</i> 03&rdquo;</b>, and a
+lattice of bordered cells says that in pixels alone. So every graph also emits an
+<span class="mono">.lw-sr-only</span> successors table — the same device, for the same reason, as the data table
+under every chart. The connector cells are <span class="mono">aria-hidden</span>; the table is the answer. Turn
+CSS off and the graph is still readable; the chain form never needed that because a chain <i>is</i> its DOM order.</p>
+
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">No SVG, and that was the decision</h2>
+<p class="sub">An overlay <span class="mono">&lt;svg&gt;</span> sized to a content-driven grid needs either
+<span class="mono">getBoundingClientRect()</span> — JavaScript, on a component that must stay server-safe and must
+survive with JS disabled — or <span class="mono">preserveAspectRatio="none"</span>, which shears every stroke and
+radius. Nodes therefore stay real HTML cards with real text, and the connectors are CSS borders on grid cells:
+<span class="mono">::before</span> for the horizontal arms, <span class="mono">::after</span> for the vertical
+ones, sized by which arms the cell has. Eight rules, not eleven named corner classes.</p>
+
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">Layered by longest path, not shortest</h2>
+<p class="sub">A node sits one column after its <b>last</b> dependency, which is what makes a merge look like a
+merge. Shortest path would put the second input of a fan-in in column 0 and drag its connector across the whole
+diagram. Cycles are detected and routed as loops whether or not they are declared — otherwise the layering never
+settles.</p>
+
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">Under 768px the lattice is abandoned, not shrunk</h2>
+<p class="sub">Eight node columns on a phone is eight one-word cards — the same judgement the chain form already
+makes. The nodes are emitted in <b>column-major order</b>, so the stack reads in dependency order with no
+reordering, and branch depth survives as a <b>capped</b> indent. Capped, because an uncapped
+<span class="mono">depth &times; step</span> is precisely the shrink-to-fit shape that has escaped this system's
+viewport four times.</p>
+</div>
+</div>
+<script type="text/babel">
+const LW = window.LeanWiseDesign_f2d907;
+const { Flow } = LW;
+
+/* The headers are the CONSUMER's words in the CONSUMER's locale — the component
+   ships no English for them. A bilingual consumer supplies both. */
+const T = { step: "Step", leadsTo: "Leads to", none: "End of the flow" };
+
+ReactDOM.createRoot(document.getElementById("fg-merge")).render(
+  <Flow
+    label="How a submission is checked"
+    tableLabels={T}
+    nodes={[
+      { id: "docs", icon: "file", label: "The evidence", sub: "The documents as they are.", kind: "input" },
+      { id: "std", icon: "grid", label: "The standard", sub: "The workbook they are measured against.", kind: "input" },
+      { id: "check", icon: "shield", label: "Checked together", sub: "Every declared value, against the standard and against the rest of the pack.", current: true },
+      { id: "result", icon: "check", label: "A status per value", sub: "Not a score to interpret.", kind: "output" },
+      { id: "batch", icon: "chart", label: "What failed, across the batch", sub: "The same answer, aggregated.", kind: "output" },
+    ]}
+    edges={[
+      { from: "docs", to: "check" },
+      { from: "std", to: "check" },
+      { from: "check", to: "result" },
+      { from: "check", to: "batch" },
+    ]}
+  />
+);
+
+ReactDOM.createRoot(document.getElementById("fg-fan")).render(
+  <Flow
+    label="One source, three destinations"
+    tableLabels={T}
+    nodes={[
+      { id: "src", icon: "database", label: "One source", sub: "Read once." },
+      { id: "a", label: "First destination" },
+      { id: "b", label: "Second destination" },
+      { id: "c", label: "Third destination" },
+    ]}
+    edges={[
+      { from: "src", to: "a" },
+      { from: "src", to: "b" },
+      { from: "src", to: "c" },
+    ]}
+  />
+);
+
+ReactDOM.createRoot(document.getElementById("fg-back")).render(
+  <Flow
+    label="A review that can send work back"
+    tableLabels={T}
+    nodes={[
+      { id: "draft", icon: "file", label: "Draft" },
+      { id: "review", icon: "eye", label: "Review" },
+      { id: "publish", icon: "check", label: "Publish", kind: "terminal" },
+    ]}
+    edges={[
+      { from: "draft", to: "review" },
+      { from: "review", to: "publish" },
+      { from: "review", to: "draft", kind: "back", label: "changes requested" },
+    ]}
+  />
+);
+</script></body></html>

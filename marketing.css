@@ -1946,3 +1946,115 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: none; }
 }
+
+/* ── THE BRANCHING FLOW (v1.6.0) ─────────────────────────────────────────────
+   Everything below is NEW selectors only; not one rule above it is touched, so
+   `flow.card.html` and every consumer of the chain form is pixel-identical.
+
+   A graph is laid on a LATTICE: node columns at the odd tracks, the gutters the
+   connectors route through at the even ones. `Flow` emits the two track lists as
+   custom properties because `repeat()` will not accept a `var()` count, and the
+   flagship consumer's spacing contract permits a `--lw-*` property on a marketing
+   page and nothing else.
+
+   Placement is `--lw-flow-c` / `--lw-flow-r` for the same reason it is not a
+   `grid-area`: the narrow-width collapse below is then a single rule that stops
+   READING them, rather than a second drawing of the same graph. */
+.lw-flow-graph {
+  grid-auto-flow: unset;
+  grid-template-columns: var(--lw-flow-tracks);
+  grid-template-rows: var(--lw-flow-row-tracks);
+  align-items: stretch;
+  /* `gap: 0`, and it is load-bearing. `.lw-flow`'s 16px gap is right for a chain,
+     where the connector is ONE centred element and the gaps fall outside it. On a
+     lattice the connector is a run of adjacent cells, and a gap between them cuts
+     every line into visibly detached segments — measured on the first render of
+     this card. The gutter TRACK is the spacing here, so there is nothing for a
+     gap to do but break the drawing. */
+  gap: 0;
+  --lw-flow-edge: var(--lw-flow-gutter, 40px);
+}
+.lw-flow-graph > * {
+  grid-column-start: var(--lw-flow-c);
+  grid-row-start: var(--lw-flow-r);
+}
+
+/* The connector tile. Two pseudo-elements, one per axis, sized by which arms the
+   cell has — which is the whole box-drawing vocabulary in eight rules rather
+   than eleven named corner classes. `~=` reads the space-separated token list
+   `Flow` emits from the direction mask. */
+.lw-flow-cell {
+  position: relative;
+  min-inline-size: 0;
+}
+.lw-flow-cell[data-edge~="l"]::before,
+.lw-flow-cell[data-edge~="r"]::before {
+  content: "";
+  position: absolute;
+  inset-block-start: calc(50% - 0.5px);
+  block-size: 1px;
+  inline-size: 50%;
+  background: var(--lw-line);
+}
+.lw-flow-cell[data-edge~="l"]::before { inset-inline-start: 0; }
+.lw-flow-cell[data-edge~="r"]::before { inset-inline-start: 50%; }
+/* Both arms is one rule, not two overlapping halves: a seam at the midpoint is
+   visible at fractional device pixel ratios. Higher specificity, so it wins. */
+.lw-flow-cell[data-edge~="l"][data-edge~="r"]::before { inset-inline-start: 0; inline-size: 100%; }
+
+.lw-flow-cell[data-edge~="u"]::after,
+.lw-flow-cell[data-edge~="d"]::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: calc(50% - 0.5px);
+  inline-size: 1px;
+  block-size: 50%;
+  background: var(--lw-line);
+}
+.lw-flow-cell[data-edge~="u"]::after { inset-block-start: 0; }
+.lw-flow-cell[data-edge~="d"]::after { inset-block-start: 50%; }
+.lw-flow-cell[data-edge~="u"][data-edge~="d"]::after { inset-block-start: 0; block-size: 100%; }
+
+/* A loop back through the trunk. Dashed AND routed below every lane — two
+   signals, because line style alone is not a distinction a reader is obliged to
+   notice, and the successors table names it in words regardless. */
+.lw-flow-cell[data-edge-kind="back"]::before,
+.lw-flow-cell[data-edge-kind="back"]::after {
+  background: repeating-linear-gradient(
+    var(--lw-flow-back-angle, 90deg),
+    var(--lw-line) 0 4px,
+    transparent 4px 8px
+  );
+}
+.lw-flow-cell[data-edge-kind="back"]::after { --lw-flow-back-angle: 180deg; }
+
+/* Node shape vocabulary. Radius and border weight, NEVER colour alone — the same
+   rule the status glyphs follow, for the same reason. */
+.lw-flow-node[data-kind="input"],
+.lw-flow-node[data-kind="output"] { border-radius: var(--lw-radius-pill); }
+.lw-flow-node[data-kind="terminal"] { border-style: dashed; }
+
+/* --lw-bp-md (768px). The lattice is abandoned rather than shrunk: eight node
+   columns on a phone is eight one-word cards, which is the same judgement the
+   chain form already makes one screen up.
+
+   The nodes are emitted in column-major order, so the stack reads in dependency
+   order with no reordering. Branch DEPTH survives as a capped indent — capped,
+   because an uncapped `depth * step` is exactly the shrink-to-fit shape that has
+   escaped this system's viewport four times. Connectivity beyond depth is
+   carried by the successors table, which is in the DOM at every width. */
+@media (max-width: 768px) {
+  .lw-flow-graph {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    grid-auto-flow: row;
+  }
+  .lw-flow-graph > * {
+    grid-column-start: auto;
+    grid-row-start: auto;
+  }
+  .lw-flow-graph > .lw-flow-cell { display: none; }
+  .lw-flow-graph > .lw-flow-node {
+    margin-inline-start: min(var(--lw-flow-depth, 0) * 12px, 36px);
+  }
+}

@@ -110,7 +110,7 @@ what is still open. `CONTRIBUTING.md` points back here — the checklist lives i
 ## Install
 
 ```jsonc
-"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v1.5.6" }
+"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v1.6.0" }
 ```
 
 ```css
@@ -390,7 +390,7 @@ a design system whose API moves under a consumer's feet is a reason to vendor it
 | `AnnounceBar` | The sticky strip above the header. It exists upstream for one rule — `.lw-announce + .lw-topbar` offsets the header by `var(--lw-announce-h, 36px)`, which only this package can state because `.lw-topbar` is its own |
 | `PlanCard` | A pricing plan. Composes `.lw-card` and adds four declarations. **`price` is optional and a card without one is a FINISHED card** — nothing reserves the slot, so it closes up. `featured` adds a brand edge and `--lw-brand-glow` and *nothing else*; a dark featured plan is `data-band="dark"`, never a hard-coded navy tier. An excluded feature is a `minus` glyph plus an `.lw-sr-only` word, never a greyed check |
 | `CompareTable` | The feature matrix. Distinct from `Table` **by meaning**: `Table` is a data table (records, values, sorting); this never sorts and has one repeated cell type. Sticky on both axes via `--lw-z-local-1/2/3`; every cell is two glyphs and a word, and `--lw-success-on` (the text variant), never `--lw-success` (a fill) |
-| `Flow` | The animated flow diagram — pipeline, onboarding sequence, roadmap. **The static state is the COMPLETE diagram**; all motion is double-gated behind `@supports (animation-timeline: view())` *and* `prefers-reduced-motion: no-preference`, and scroll only replays it. An inactive node is **never** dimmed with `opacity`; the active one is marked positively via real `aria-current`. Server-safe — no state, no effects, no `"use client"`; a node that expands is the consumer composing `Disclosure` into `detail` |
+| `Flow` | The animated flow diagram — pipeline, onboarding sequence, roadmap. **The static state is the COMPLETE diagram**; all motion is double-gated behind `@supports (animation-timeline: view())` *and* `prefers-reduced-motion: no-preference`, and scroll only replays it. An inactive node is **never** dimmed with `opacity`; the active one is marked positively via real `aria-current`. Server-safe — no state, no effects, no `"use client"`; a node that expands is the consumer composing `Disclosure` into `detail`. **Two forms since v1.6.0**: a chain, and a *graph* — selected automatically by any edge joining non-consecutive nodes — which lays the nodes on a routing lattice so a fan-in, a fan-out and a loop all draw, in CSS borders rather than SVG. The graph form also emits an `.lw-sr-only` successors table, because a lattice of bordered cells states "01 leads to 02 *and* 03" in pixels alone; that is why `label` and `tableLabels` are required there |
 
 #### Two deliberate non-additions in the pricing set
 

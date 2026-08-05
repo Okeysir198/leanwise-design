@@ -20,6 +20,84 @@ versions are breaking: **0.1.4** (dependency URL), **0.2.0** (removal), **0.7.0*
 and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additionally ships a
 `package.json` that reports the wrong version.
 
+## [1.6.0] — 2026-08-05
+
+### Added — `Flow` can draw a graph, not only a chain
+
+`Flow` was a strictly linear chain: its `edges` prop could only *delete* links
+between consecutive nodes, never add a fan-out or a merge, and a pair that was not
+adjacent in `nodes` was **silently ignored**. That pair now selects a second
+renderer. `layout="auto"` (the default) picks the chain whenever every edge is
+consecutive, so every consumer written before this release renders byte-identically
+— the chain path was moved wholesale into `FlowChain` and not otherwise touched.
+
+- **`components/marketing/_flow-graph.js`** — new, and pure. Layers by **longest
+  path** (a node sits one column after its *last* dependency, which is what makes a
+  merge look like a merge; shortest path would drag a fan-in's second input across
+  the whole diagram), assigns lanes, detects cycles, and routes each edge
+  orthogonally into a per-cell 4-bit direction mask. No hooks, no DOM, no browser
+  globals — `check:rsc` requires that, or `Flow` would need `"use client"` for
+  every consumer.
+- **No SVG, and that was the decision.** An overlay `<svg>` sized to a
+  content-driven grid needs either `getBoundingClientRect()` — JavaScript, on a
+  component that must stay server-safe and must survive with JS disabled — or
+  `preserveAspectRatio="none"`, which shears every stroke and radius. Nodes stay
+  real HTML cards with real text; connectors are CSS borders on lattice cells,
+  `::before` for the horizontal arms and `::after` for the vertical ones. Eight
+  rules, not eleven named corner classes.
+- **The drawing is not the content.** A branching diagram's whole payload is "01
+  leads to 02 *and* 03", and a lattice of bordered cells says that in pixels alone.
+  So the graph form also emits an `.lw-sr-only` successors table — the same device,
+  for the same reason, as the data table under every chart. Connector cells are
+  `aria-hidden`; the table is the answer. `label` and `tableLabels` are therefore
+  required in this form (warned once, never thrown — `check:a11y` fails a card on
+  an uncaught page error, so a throw would turn a missing prop into a broken
+  specimen). `tableLabels` is a **prop, not a literal**: v1.3.1 moved ~70 hardcoded
+  English strings out of this package and a bilingual consumer supplies its own.
+- **Under `--lw-bp-md` the lattice is abandoned, not shrunk.** Eight node columns
+  on a phone is eight one-word cards. Nodes are emitted in **column-major** order,
+  so the stack reads in dependency order with no reordering, and branch depth
+  survives as a **capped** indent — `min(depth * 12px, 36px)`, capped because an
+  uncapped `depth × step` is precisely the shrink-to-fit shape that has escaped
+  this system's viewport four times.
+- New card `flow-graph.card.html` (a new card, not an edit to `flow.card.html`,
+  which would have moved a recorded baseline). The 39 existing cards are
+  pixel-identical.
+
+### Fixed — an `.lw-sr-only` **table** laid out at full width, and always had
+
+`.lw-sr-only` clips with `width: 1px` + `overflow` + `clip-path`. **None of those
+bind on a table.** `width` is a *minimum* to a table box and `overflow` does not
+clip one the way it clips a block, so the class left a table absolutely positioned
+at its full content width — **702px inside a 375px viewport, measured**.
+
+This has shipped in `DataTable` since the sr-only table was introduced, which means
+every `BarChart` and `LineChart` carries it, and no gate could see it: the specimen
+cards render at 1280px where a 702px table fits, the text is invisible by
+definition, and axe has no opinion about geometry. It is the second time an
+accessibility affordance has broken the layout it was added to protect —
+`CompareTable`'s state words were the first, and they widened the flagship
+consumer's document on every phone.
+
+- `table-layout: fixed` on `.lw-sr-only` / `.visually-hidden` tables (and on the
+  wrapped `> table` form, which is what a caller reaches for after being bitten by
+  the unwrapped one). 702px → 183px.
+- **The caption is the other half.** A caption box lives in the table's anonymous
+  wrapper and sets a floor under it — with the class's `white-space: nowrap`, that
+  floor is the caption's whole sentence on one line. Taking it out of flow is what
+  actually reaches 1px; `max-width` does not, because a table box treats it the way
+  it treats `width`. The accessible name survives, verified against Chrome's own
+  a11y tree rather than assumed. 183px → 1px.
+- **`Flow`'s successors cell emits one string, never a `<span>` per successor** —
+  a layout rule, not a style preference. Clipping changes nothing about the
+  geometry a test measures, and a nowrap span reports its full width wherever the
+  cell sits. A text node has no element box, so it is measured by nobody.
+  `DataTable` has always emitted plain text for the same reason, by luck rather
+  than by decision. Two escaping boxes at 375px became zero.
+
+**Consumers:** additive. Update the pin to pick up the sr-only table fix — a
+consumer rendering any chart on a narrow viewport is affected today.
+
 ## [1.5.6] — 2026-08-05
 
 ### Changed — no rendering change; v1.5.5's nowrap row, said more precisely
