@@ -116,6 +116,27 @@
 .lw-cluster-end { justify-content: flex-end; }
 .lw-cluster-baseline { align-items: baseline; }
 
+/* NOWRAP — the icon-and-prose row, and the one shape `.lw-cluster` could not make.
+   A flex item's base size is `auto` → max-content, and a WRAP container moves an
+   item that does not fit onto the next line rather than shrinking it. So every
+   "icon + a sentence" row dropped its sentence underneath the icon the moment the
+   sentence ran past one line, leaving a column of orphaned glyphs: 52 rows across
+   the flagship site's five marketing pages, both locales, at 375px AND at 1280px.
+
+   Nothing caught it, and that is the part worth keeping. The row stays inside the
+   viewport, so an overflow gate measures nothing; axe has no opinion about which
+   line a glyph sits on; and the icon is still beside the text whenever the text is
+   short, so every specimen card and every screenshot of a SHORT label looks right.
+
+   `min-inline-size: 0` is the half that makes `nowrap` safe. Without it each child
+   keeps its min-content floor and the row OVERFLOWS instead of wrapping its text —
+   trading a visible bug for the invisible one this system has already fixed four
+   times (`.lw-grid-2`, `.lw-story`, `.lw-console-log`, `Console`'s inline tracks).
+   `.lw-icon` is `flex: none`, so a zero floor cannot shrink the glyph itself.
+   `:where()` keeps the floor at zero specificity so a consumer's own rule wins. */
+.lw-cluster-nowrap { flex-wrap: nowrap; }
+.lw-cluster-nowrap > :where(*) { min-inline-size: 0; }
+
 /* GRID — auto-fit columns. --lw-grid-min is the only knob; the grid reflows on
    its own at every width, so no breakpoint is needed for the common case.
 

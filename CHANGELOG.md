@@ -20,6 +20,40 @@ versions are breaking: **0.1.4** (dependency URL), **0.2.0** (removal), **0.7.0*
 and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additionally ships a
 `package.json` that reports the wrong version.
 
+## [1.5.5] — 2026-08-05
+
+### Fixed — `Cluster` could not make an icon-and-prose row, and 52 of them were broken
+
+`.lw-cluster` wraps by default, which is right for a chip row and exactly wrong for one
+fixed glyph beside a sentence. A flex item's base size is `auto` → max-content, and a wrap
+container moves an item that does not fit onto the **next line** rather than shrinking it —
+so `<Icon/> + <span>a sentence</span>` dropped the sentence underneath the glyph the moment
+it ran past one line, leaving a column of orphaned icons.
+
+Measured at the flagship consumer: **52 rows across five marketing pages, in both locales,
+at 375px _and_ at 1280px** — `/`, `/pricing`, `/company`, `/contact`, `/customers`. Every
+"what you get" and "what to bring" checklist on the site.
+
+**Why nothing caught it, which is the part worth keeping.** The row stays inside the
+viewport, so an overflow gate measures nothing and `documentElement.scrollWidth` never
+moves. axe has no opinion about which line a glyph sits on. And the icon *is* beside the
+text whenever the text is short — so every specimen card, every screenshot and every review
+of a short label looks correct. It only fails on real sentences, which is what a consumer
+writes and what a card never does.
+
+- **Added `.lw-cluster-nowrap`** (base.css) — `flex-wrap: nowrap` plus a zero
+  `min-inline-size` floor on the children. The floor is the half that makes `nowrap` safe:
+  without it each child keeps its min-content width and the row **overflows** instead of
+  wrapping its text, which is the invisible failure this system has already fixed four times
+  (`.lw-grid-2`, `.lw-story`, `.lw-console-log`, `Console`'s inline tracks). Written with
+  `:where()` so the floor sits at zero specificity and a consumer's own rule still wins.
+  `.lw-icon` is `flex: none`, so the floor cannot shrink the glyph.
+- **`Cluster` gained `wrap`** (default `true` — no existing call site changes behaviour).
+  Pass `wrap={false}` for any row whose text is a sentence rather than a label.
+
+**Consumers:** additive. `leanwise-ai` → `#v1.5.5` and sets `wrap={false}` on its eight
+icon-and-prose call sites.
+
 ## [1.5.4] — 2026-08-05
 
 ### Fixed — properly this time: the themed ground hero follows the document
