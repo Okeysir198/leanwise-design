@@ -20,6 +20,20 @@ versions are breaking: **0.1.4** (dependency URL), **0.2.0** (removal), **0.7.0*
 and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additionally ships a
 `package.json` that reports the wrong version.
 
+## [1.5.4] — 2026-08-05
+
+### Fixed — properly this time: the themed ground hero follows the document
+
+v1.5.2 and v1.5.3 fixed the light theme by adding the hero to tokens.css's light band list,
+and broke dark theme doing it — measured at 1.00:1 the other way. Specificity is not what
+decides it: the band block sets the custom property ON the hero, and an element own
+declaration beats one inherited from the root however the selectors weigh, so the entry
+applied in both themes and pinned the hero light in both.
+
+The hero on this ground now re-points tokens.css dark-band channel set to `inherit` in
+marketing.css. It has no scope of its own; it uses the document. Correct in both themes by
+construction, no palette values duplicated. Measured after: light 18.72:1, dark 12.6:1.
+
 ## [1.5.3] — 2026-08-05
 
 ### Fixed — v1.5.2 shipped the hero fix in a form check:themes rejects

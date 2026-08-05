@@ -969,36 +969,24 @@
    asymmetry is the trap — `.lw-page-dark` is unconditionally navy and therefore
    genuinely a band; `.lw-page-light` is not.
 
-   `.lw-page-ground .lw-hero-dark` needs the SAME pairing and shipped without it
-   in v1.5.0 — a measured, sitewide break, not a theoretical one. `.lw-hero-dark`
-   is in the dark list above, so inside the themed ground it kept the dark token
-   scope while the ground painted `var(--lw-bg)` = white: `.lw-h1` computed
-   #E7ECF3 on #FFFFFF, **1.09:1**, on every marketing page in both locales, for
-   every default-theme visitor. marketing.css writes `color: var(--lw-fg)` there
-   believing it resolves light; it resolved dark.
+   `.lw-page-ground` — the THEMED ground — is deliberately NOT handled here, and
+   the reason is worth the space because two attempts got it wrong.
 
-   Nothing caught it. The consumer's axe scans run light by default, and axe
-   files text over the ground's gradient `::before`/`::after` as `incomplete`
-   rather than a `violation` — and `check:a11y` reads violations only. The new
-   dark-theme scans exercised the branch that already worked.
+   Its hero has the same defect: `.lw-hero-dark` is in the dark list above, so
+   inside a light-theme themed ground the hero kept dark tokens while the ground
+   painted white. Measured: `.lw-h1` #E7ECF3 on #FFFFFF, **1.09:1**, sitewide.
 
-   It is scoped `html:not(.dark):not([data-theme="dark"])` rather than added
-   bare, because `.lw-page-ground` is the THEMED ground: pinning its hero light
-   unconditionally would invert the bug in dark mode. Zero specificity inside
-   `:where()`, later in source than the dark block, so it wins exactly when it
-   matches and yields when it does not.
+   Adding `.lw-page-ground .lw-hero-dark` to the light list below fixes light and
+   BREAKS DARK — measured at 1.00:1 the other way. Specificity is not what
+   decides it: this block sets the custom property ON THE HERO, and an element's
+   own declaration beats one inherited from `<html>` whatever the selectors
+   weigh. So the entry applies in both themes and pins the hero light in both.
+   Scoping it `html:not(.dark)…` is not available either — `lw-tokens-dtcg`
+   matches these selectors with `[^)]*`, so a nested paren breaks `check:themes`.
 
-   ⚠ Two constraints on HOW it is written, both learned the hard way.
-   `tools/lw-tokens-dtcg.mjs` finds each theme block with a line-anchored regex
-   whose selector class is `[^)]*` — so this list must stay on ONE line AND must
-   contain no nested parentheses. The first two attempts failed `check:themes`
-   with "theme block not found": one wrapped the list over two lines, the other
-   scoped the new entry with `html:not(.dark):not([data-theme="dark"])`.
-
-   Which is why the entry is bare. It does not need the guard: the whole-document
-   dark scope is `.dark, [data-theme="dark"]` at specificity (0,1,0), and this
-   block is `:where(...)` at (0,0,0), so in dark theme the document scope wins at
-   the hero anyway. Verified by measuring both themes, not by reading.
+   The fix therefore lives in marketing.css, where the hero on this ground
+   re-points its channels to `inherit` and simply follows the document. See the
+   note there.
 
    `.lw-page-light .lw-hero-dark` is then added to the LIGHT list below, and
    that pairing is load-bearing, not belt-and-braces. Inside `.lw-page-light`
@@ -1046,7 +1034,7 @@
   color: var(--lw-fg);
 }
 
-:where(.lw-band-light, [data-band="light"], .lw-page-light .lw-hero-dark, .lw-page-ground .lw-hero-dark) {
+:where(.lw-band-light, [data-band="light"], .lw-page-light .lw-hero-dark) {
   color-scheme: light;
   /* Re-point onto the theme-invariant PALETTE tokens (never re-pointed by the
      dark block), so the band is light regardless of the surrounding site theme. */

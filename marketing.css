@@ -271,6 +271,66 @@ html:is(.dark, [data-theme="dark"]) .lw-page-ground .lw-hero-dark::before {
   .lw-page-light .lw-hero-dark::before, .lw-page-ground .lw-hero-dark::before { display: none; }
 }
 
+/* ---- The themed ground's hero follows the DOCUMENT (v1.5.3) ---------------
+   `.lw-hero-dark` is in tokens.css's DARK band list, because a standalone hero
+   is always navy and has to establish the scope to match. On `.lw-page-ground`
+   that is exactly wrong: the ground paints `var(--lw-bg)` and follows the
+   reader's theme, while the hero inside it stayed pinned dark. In light theme
+   the rules below then wrote `color: var(--lw-fg)` — resolving to the DARK tier
+   — and every hero rendered #E7ECF3 on #FFFFFF. **1.09:1, sitewide, in both
+   locales, for every default-theme visitor.** It shipped in v1.5.0.
+
+   Fixed by re-pointing the channels to `inherit`, which is the whole idea: this
+   hero has no scope of its own, it uses the document's. Correct in both themes
+   by construction, with no values duplicated here — the one thing a second copy
+   of the palette in this file would guarantee is drift.
+
+   Why not tokens.css, where the other two grounds are handled: adding
+   `.lw-page-ground .lw-hero-dark` to the light band list fixes light and breaks
+   dark (measured, 1.00:1 the other way). That block sets the property ON the
+   hero, and an element's own declaration beats one inherited from `<html>`
+   however the selectors weigh — so the entry cannot be made conditional there,
+   and `html:not(...)` is unavailable because `lw-tokens-dtcg` matches those
+   selectors with `[^)]*` and a nested paren fails `check:themes`.
+
+   The channel list is exactly tokens.css's dark-band set. If that block gains a
+   channel, this one must too — otherwise the new channel stays pinned dark here
+   and nothing fails. */
+.lw-page-ground .lw-hero-dark {
+  --lw-bg-c: inherit;
+  --lw-bg-subtle-c: inherit;
+  --lw-bg-muted-c: inherit;
+  --lw-bg-inset-c: inherit;
+  --lw-fg-c: inherit;
+  --lw-fg-muted-c: inherit;
+  --lw-fg-subtle-c: inherit;
+  --lw-fg-faint-c: inherit;
+  --lw-line-c: inherit;
+  --lw-line-strong-c: inherit;
+  --lw-line-control-c: inherit;
+  --lw-brand-text-c: inherit;
+  --lw-cta-text-c: inherit;
+  --lw-brand-on-c: inherit;
+  --lw-success-on-c: inherit;
+  --lw-warning-on-c: inherit;
+  --lw-danger-on-c: inherit;
+  --lw-info-on-c: inherit;
+  --lw-neutral-on-c: inherit;
+  --lw-success-soft-c: inherit;
+  --lw-warning-soft-c: inherit;
+  --lw-info-soft-c: inherit;
+  --lw-danger-soft-c: inherit;
+  --lw-neutral-soft-c: inherit;
+  --lw-cta-soft-c: inherit;
+  --lw-shadow-xs: inherit;
+  --lw-shadow-sm: inherit;
+  --lw-shadow-md: inherit;
+  --lw-shadow-lg: inherit;
+  --lw-shadow-xl: inherit;
+  --lw-focus-ring: inherit;
+  --lw-focus-ring-danger: inherit;
+}
+
 /* Inside a full-page ground the hero paints no ground of its own — it keeps
    only the mark, held against the RIGHT edge opposite the lattice. */
 .lw-page-dark .lw-hero-dark,
