@@ -921,8 +921,8 @@
    `.lw-hero-dark` JOINED the dark list in v1.3.1, and the omission was a real
    contrast trap rather than an oversight of taste. `.lw-section.dark` was never
    affected because its class list literally contains `dark`, which this
-   selector already names — so the hero was the ONE always-dark surface in the
-   package that painted navy without establishing the scope to match. Every
+   selector already names — so the hero painted navy without establishing the
+   scope to match. Every
    role token inside it (`--lw-fg-subtle`, `--lw-bg`, `--lw-line`, the focus
    ring) resolved against the LIGHT palette on navy paper, and marketing.css
    papered over the four cases anyone demos — `.lw-h1`, `.lw-lead`,
@@ -939,6 +939,36 @@
    this package: a fix that only reaches the React wrapper would let the two
    drift, which is the one thing the "no styling in a .jsx" rule exists to stop.
 
+   `.lw-page-dark` JOINS the dark list in v1.4.0, for the identical reason, and
+   the v1.3.1 note above was wrong to call the hero "the ONE" such surface —
+   there were two. `.lw-page-dark` paints `--lw-navy-deep` + `--lw-on-dark` at
+   `marketing.css` and establishes NO scope, so every `--lw-bg`, `--lw-line`,
+   `--lw-fg-muted` and focus ring inside a dark page ground resolved LIGHT.
+
+   It survived a whole release cycle because of a markup convention: the
+   package's own `MarketingLanding.dc.html` writes `class="dark lw-page-dark"`,
+   and `.dark` IS in this list — so the demo arrives with the scope by hand,
+   from a second class, enforced by nobody. Three gates are structurally unable
+   to see it: `check:contrast`'s band-scope rule requires a descendant claim and
+   a self-paint never enters the scan; `check:a11y` reads `violations` and axe
+   files a decorative pseudo-element as `incomplete`; and `check:visual` renders
+   no card that uses the ground at all.
+
+   ⚠ That third gap is still OPEN. A ground specimen is not trivial to add: the
+   ground's layers are `position: fixed`, so dropping one into an existing card
+   repaints the whole shot and swamps the diff it is supposed to sharpen. It
+   needs its own card and a manifest entry. Until then this line is held by the
+   CONSUMER's gates — `leanwise-ai` runs axe over seven URLs with the dark theme
+   cookie set — which is the wrong place for it and is recorded here so the next
+   person does not assume it is covered.
+
+   ⚠ `.lw-page-light` is deliberately NOT added to the light list. It paints
+   `var(--lw-bg)`, so it is the THEMED ground, not a light band: pinning it
+   light would break the `light ⊕ media-dark` scope, which is the commonest
+   deployment there is (a reader on a dark OS who has set no preference). The
+   asymmetry is the trap — `.lw-page-dark` is unconditionally navy and therefore
+   genuinely a band; `.lw-page-light` is not.
+
    `.lw-page-light .lw-hero-dark` is then added to the LIGHT list below, and
    that pairing is load-bearing, not belt-and-braces. Inside `.lw-page-light`
    the hero goes transparent and the light page owns the ground (marketing.css
@@ -947,7 +977,7 @@
    blocks are `:where(…)` at specificity 0, so the light one wins on SOURCE
    ORDER for the elements both match. Do not reorder them.
    ============================================================================= */
-:where(.lw-band-dark, [data-band="dark"], .lw-hero-dark) {
+:where(.lw-band-dark, [data-band="dark"], .lw-hero-dark, .lw-page-dark) {
   color-scheme: dark;
   --lw-bg-c: 220   48.8% 8.4%; /* @kind color */
   --lw-bg-subtle-c: 221.4 46.0% 12.4%; /* @kind color */

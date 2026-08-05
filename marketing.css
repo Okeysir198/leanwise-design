@@ -27,6 +27,19 @@
 .lw-footer { padding: clamp(48px, 5.5vw, 88px) 0; }
 .lw-section.tight { padding: clamp(32px, 3.5vw, 56px) 0; }
 
+/* Section separators (v1.4.0). Once a page carries ONE ground, bands can no
+   longer alternate fills to show where one ends — `.lw-page-* .lw-section.dark`
+   is neutralised further down, and correctly so. A border is what is left, and
+   it is untouched by that neutralisation, which is why this works at all.
+
+   One weight, because the package has exactly one hairline vocabulary and a
+   second thickness would be a second home for the number that decides how every
+   edge on the site reads. `--lw-section-rule-w` is a LOCAL knob with a fallback
+   — marketing.css's own discipline for exactly this: no new design token, so no
+   theme-scope obligation and nothing for check:themes to walk. */
+.lw-section-rule { border-block-start: var(--lw-section-rule-w, 1px) solid var(--lw-line); }
+.lw-section-rule-b { border-block-end: var(--lw-section-rule-w, 1px) solid var(--lw-line); }
+
 /* A dark BAND on a light page — not dark mode. */
 .lw-section.dark {
   background: var(--lw-navy-900);
@@ -61,7 +74,7 @@
    mark's own two stops sit close in value and flatten to one wash otherwise. */
 
 .lw-page-dark,
-.lw-page-light {
+.lw-page-light, .lw-page-ground {
   position: relative;
   min-height: 100vh;
   isolation: isolate;
@@ -72,14 +85,14 @@
      glow layers are unaffected. */
   overflow-x: clip;
 }
-.lw-page-dark::before, .lw-page-light::before,
-.lw-page-dark::after, .lw-page-light::after {
+.lw-page-dark::before, .lw-page-light::before, .lw-page-ground::before,
+.lw-page-dark::after, .lw-page-light::after, .lw-page-ground::after {
   content: "";
   position: fixed;
   inset: 0;
   pointer-events: none;
 }
-.lw-page-dark::before, .lw-page-light::before { z-index: -2; }
+.lw-page-dark::before, .lw-page-light::before, .lw-page-ground::before { z-index: -2; }
 /* Honeycomb on the LEFT, the mark on the RIGHT (v0.5.2) — the two brand shapes
    hold opposite ends of the page instead of stacking on the centre line, so
    neither sits under the copy. The lattice tiles from the left edge and its
@@ -93,7 +106,7 @@
    AND broke the comb — a generous corner pulls away from its neighbour's, so a
    gap opens at every shared vertex. The radius is now 3.5: enough to echo the
    mark's soft corners, small enough that the edges still meet. */
-.lw-page-dark::after, .lw-page-light::after {
+.lw-page-dark::after, .lw-page-light::after, .lw-page-ground::after {
   z-index: -1;
   background-repeat: repeat;
   background-position: left top;
@@ -119,14 +132,65 @@
    hairline of a mid-value teal at 0.5 stroke-opacity inside the file, so on
    white its layer alpha has to sit well above the dark ground's to land at the
    same visible weight. */
-.lw-page-light { background: var(--lw-bg); color: var(--lw-fg); }
-.lw-page-light::before {
+.lw-page-light, .lw-page-ground { background: var(--lw-bg); color: var(--lw-fg); }
+.lw-page-light::before, .lw-page-ground::before {
   background:
     radial-gradient(52rem 30rem at 84% -3rem, hsl(var(--lw-brand-500-c) / 0.12), transparent 66%),
     radial-gradient(76rem 48rem at 20% -4rem, hsl(var(--lw-logo-cyan-c) / 0.08), transparent 72%),
     radial-gradient(40rem 40rem at -6% 46%, hsl(var(--lw-brand-500-c) / 0.06), transparent 70%);
 }
-.lw-page-light::after { background-image: url("assets/hex-lattice-ink.svg"); opacity: 0.55; }
+.lw-page-light::after, .lw-page-ground::after { background-image: url("assets/hex-lattice-ink.svg"); opacity: 0.55; }
+
+/* ---- Themed ground (v1.4.0) ------------------------------------------------
+   `.lw-page-ground` is the THIRD ground and the one a themed site wants: it
+   follows the reader's theme instead of committing to one. Above, it shares
+   every rule with `.lw-page-light` — which is most of the work already, because
+   that ground paints `var(--lw-bg)` / `var(--lw-fg)`, and those re-point on
+   their own. What does NOT follow the theme is the artwork: the lattice and the
+   mark are two different SVGs with two different alphas, tuned for white and
+   for navy, and a hairline drawn for white paper is invisible on navy. Those
+   are the only overrides below.
+
+   Why a third class rather than picking `.lw-page-dark` or `.lw-page-light`
+   server-side: a class in the HTML makes the document cookie-dependent, and a
+   marketing page served with `s-maxage` and no `Vary: Cookie` is then cached on
+   URL alone — one dark-mode visitor's copy is handed to everyone. It also
+   cannot be right for the commonest visitor of all, who has set no preference:
+   the server has no way to know what `prefers-color-scheme` resolves to. CSS
+   off `[data-theme]` has neither problem, and the theme is already on `<html>`
+   before first paint.
+
+   `html:is(...)` rather than a bare `:is(...)`: `.dark .lw-page-ground` would be
+   (0,2,0) while the light default it has to beat is (0,1,0) — fine — but adding
+   `html` keeps BOTH branches at (0,2,1), so the pair is symmetric and neither
+   can quietly outrank the other when someone adds a third state later.
+   The two branches are mutually exclusive, so source order does not matter. */
+html:is(.dark, [data-theme="dark"]) .lw-page-ground {
+  color-scheme: dark;
+}
+html:is(.dark, [data-theme="dark"]) .lw-page-ground::before {
+  background:
+    radial-gradient(52rem 30rem at 84% -3rem, hsl(var(--lw-logo-cyan-c) / 0.30), transparent 66%),
+    radial-gradient(76rem 48rem at 20% -4rem, hsl(var(--lw-brand-500-c) / 0.18), transparent 72%),
+    radial-gradient(40rem 40rem at -6% 46%, hsl(var(--lw-navy-700-c) / 0.45), transparent 70%);
+}
+html:is(.dark, [data-theme="dark"]) .lw-page-ground::after {
+  background-image: url("assets/hex-lattice.svg");
+  opacity: 0.36;
+  animation-name: lwCombPulseDark;
+}
+/* The hero's mark and sheen swap with the ground, for the same reason. */
+html:is(.dark, [data-theme="dark"]) .lw-page-ground .lw-hero-dark::after {
+  background-image: url("assets/hero-mark.svg");
+  opacity: 0.62;
+}
+html:is(.dark, [data-theme="dark"]) .lw-page-ground .lw-hero-dark::before {
+  background: radial-gradient(closest-side, hsl(var(--lw-logo-cyan-c) / 0.22), transparent 100%);
+}
+/* The hero's on-dark text roles stand down on this ground in BOTH themes — the
+   light-ground rules above already do it with `--lw-fg` / `--lw-fg-muted` /
+   `--lw-brand-text`, which re-point by themselves. Nothing to undo here, and
+   an override would be the bug: it would pin the dark theme to light ink. */
 
 /* ---- Ground motion (v0.6.0) ------------------------------------------------
    Ambient by exception, same terms as the rest of this file's motion: it
@@ -148,18 +212,18 @@
    the radial fade along with the tiles and the fade visibly wanders. Hence a
    pulse (opacity, safe) for the comb, and a separate travelling element for the
    sense of movement across it. */
-.lw-page-dark::before, .lw-page-light::before {
+.lw-page-dark::before, .lw-page-light::before, .lw-page-ground::before {
   animation: lwGroundDrift var(--lw-dur-ground) var(--lw-ease-in-out) infinite alternate;
 }
 .lw-page-dark::after { animation: lwCombPulseDark var(--lw-dur-comb) var(--lw-ease-in-out) infinite alternate; }
-.lw-page-light::after { animation: lwCombPulseLight var(--lw-dur-comb) var(--lw-ease-in-out) infinite alternate; }
+.lw-page-light::after, .lw-page-ground::after { animation: lwCombPulseLight var(--lw-dur-comb) var(--lw-ease-in-out) infinite alternate; }
 .lw-page-dark .lw-hero-dark::after, .lw-page-light .lw-hero-dark::after {
   animation: lwMarkBreathe var(--lw-dur-breathe) var(--lw-ease-in-out) infinite alternate;
 }
 /* The sheen: the hero's ::before, which the full-page ground otherwise has no
    use for. Oversized and translated, so it never exposes its own edge. */
 .lw-page-dark .lw-hero-dark::before,
-.lw-page-light .lw-hero-dark::before {
+.lw-page-light .lw-hero-dark::before, .lw-page-ground .lw-hero-dark::before {
   content: "";
   position: absolute;
   top: -40%;
@@ -173,46 +237,46 @@
   animation: lwSheen var(--lw-dur-sheen) var(--lw-ease-in-out) infinite alternate;
 }
 .lw-page-dark .lw-hero-dark::before { background: radial-gradient(closest-side, hsl(var(--lw-logo-cyan-c) / 0.22), transparent 100%); }
-.lw-page-light .lw-hero-dark::before { background: radial-gradient(closest-side, hsl(var(--lw-brand-500-c) / 0.12), transparent 100%); }
+.lw-page-light .lw-hero-dark::before, .lw-page-ground .lw-hero-dark::before { background: radial-gradient(closest-side, hsl(var(--lw-brand-500-c) / 0.12), transparent 100%); }
 
 @keyframes lwGroundDrift {
   from { transform: translate3d(0, 0, 0) scale(1); }
-  to   { transform: translate3d(-3.5%, 2%, 0) scale(1.09); }
+  to { transform: translate3d(-3.5%, 2%, 0) scale(1.09); }
 }
 @keyframes lwCombPulseDark {
   from { opacity: 0.24; }
-  to   { opacity: 0.52; }
+  to { opacity: 0.52; }
 }
 @keyframes lwCombPulseLight {
   from { opacity: 0.38; }
-  to   { opacity: 0.7; }
+  to { opacity: 0.7; }
 }
 @keyframes lwSheen {
   from { transform: translate3d(0, 0, 0); }
-  to   { transform: translate3d(150%, -6%, 0); }
+  to { transform: translate3d(150%, -6%, 0); }
 }
 @keyframes lwMarkBreathe {
   from { transform: translateY(-50%) scale(1); }
-  to   { transform: translateY(-50%) scale(1.035); }
+  to { transform: translateY(-50%) scale(1.035); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .lw-page-dark::before, .lw-page-light::before,
-  .lw-page-dark::after, .lw-page-light::after,
-  .lw-page-dark .lw-hero-dark::before, .lw-page-light .lw-hero-dark::before,
-  .lw-page-dark .lw-hero-dark::after, .lw-page-light .lw-hero-dark::after {
+  .lw-page-dark::before, .lw-page-light::before, .lw-page-ground::before,
+  .lw-page-dark::after, .lw-page-light::after, .lw-page-ground::after,
+  .lw-page-dark .lw-hero-dark::before, .lw-page-light .lw-hero-dark::before, .lw-page-ground .lw-hero-dark::before,
+  .lw-page-dark .lw-hero-dark::after, .lw-page-light .lw-hero-dark::after, .lw-page-ground .lw-hero-dark::after {
     animation: none;
   }
   /* With the sheen parked it would sit as a bright blob off the left edge. */
   .lw-page-dark .lw-hero-dark::before,
-  .lw-page-light .lw-hero-dark::before { display: none; }
+  .lw-page-light .lw-hero-dark::before, .lw-page-ground .lw-hero-dark::before { display: none; }
 }
 
 /* Inside a full-page ground the hero paints no ground of its own — it keeps
    only the mark, held against the RIGHT edge opposite the lattice. */
 .lw-page-dark .lw-hero-dark,
-.lw-page-light .lw-hero-dark { background: none; overflow: visible; color: inherit; }
+.lw-page-light .lw-hero-dark, .lw-page-ground .lw-hero-dark { background: none; overflow: visible; color: inherit; }
 .lw-page-dark .lw-hero-dark::after,
-.lw-page-light .lw-hero-dark::after {
+.lw-page-light .lw-hero-dark::after, .lw-page-ground .lw-hero-dark::after {
   top: 50%;
   left: auto;
   right: clamp(12px, 4vw, 72px);
@@ -227,28 +291,28 @@
 /* Opacity high enough that the mark's navy->cyan run is actually legible as a
    gradient — below ~0.45 on either ground it flattens to one wash. */
 .lw-page-dark .lw-hero-dark::after { opacity: 0.62; }
-.lw-page-light .lw-hero-dark::after {
+.lw-page-light .lw-hero-dark::after, .lw-page-ground .lw-hero-dark::after {
   background-image: url("assets/hero-mark-ink.svg");
   opacity: 0.45;
 }
 /* On a light ground the hero's on-dark text roles have to stand down. */
-.lw-page-light .lw-hero-dark .lw-h1,
-.lw-page-light .lw-hero-dark .lw-h2,
-.lw-page-light .lw-hero-dark .lw-h3 { color: var(--lw-fg); }
-.lw-page-light .lw-hero-dark .lw-lead { color: var(--lw-fg-muted); }
-.lw-page-light .lw-hero-dark .lw-eyebrow,
-.lw-page-light .lw-hero-dark .lw-eyebrow::before { color: var(--lw-brand-text); background: none; }
-.lw-page-light .lw-hero-dark .lw-eyebrow::before { background: var(--lw-brand-500); }
-.lw-page-light .lw-hero-dark h1 em,
-.lw-page-light .lw-hero-dark h2 em { color: var(--lw-brand-text); }
-.lw-page-light .lw-hero-dark .lw-btn-ghost {
+.lw-page-light .lw-hero-dark .lw-h1, .lw-page-ground .lw-hero-dark .lw-h1,
+.lw-page-light .lw-hero-dark .lw-h2, .lw-page-ground .lw-hero-dark .lw-h2,
+.lw-page-light .lw-hero-dark .lw-h3, .lw-page-ground .lw-hero-dark .lw-h3 { color: var(--lw-fg); }
+.lw-page-light .lw-hero-dark .lw-lead, .lw-page-ground .lw-hero-dark .lw-lead { color: var(--lw-fg-muted); }
+.lw-page-light .lw-hero-dark .lw-eyebrow, .lw-page-ground .lw-hero-dark .lw-eyebrow,
+.lw-page-light .lw-hero-dark .lw-eyebrow::before, .lw-page-ground .lw-hero-dark .lw-eyebrow::before { color: var(--lw-brand-text); background: none; }
+.lw-page-light .lw-hero-dark .lw-eyebrow::before, .lw-page-ground .lw-hero-dark .lw-eyebrow::before { background: var(--lw-brand-500); }
+.lw-page-light .lw-hero-dark h1 em, .lw-page-ground .lw-hero-dark h1 em,
+.lw-page-light .lw-hero-dark h2 em, .lw-page-ground .lw-hero-dark h2 em { color: var(--lw-brand-text); }
+.lw-page-light .lw-hero-dark .lw-btn-ghost, .lw-page-ground .lw-hero-dark .lw-btn-ghost {
   color: var(--lw-fg);
   border-color: var(--lw-line-strong);
 }
-.lw-page-light .lw-hero-dark .lw-btn-ghost:hover { background: var(--lw-bg-subtle); }
+.lw-page-light .lw-hero-dark .lw-btn-ghost:hover, .lw-page-ground .lw-hero-dark .lw-btn-ghost:hover { background: var(--lw-bg-subtle); }
 /* A section can no longer paint its own band without breaking the ground. */
 .lw-page-dark .lw-section.dark,
-.lw-page-light .lw-section.dark { background: none; }
+.lw-page-light .lw-section.dark, .lw-page-ground .lw-section.dark { background: none; }
 
 /* ---- Full-bleed dark hero (v0.4.0) ----------------------------------------
    The hero background is now DERIVED FROM THE MARK, in three layers:
@@ -447,7 +511,7 @@
 }
 @keyframes lwMarquee {
   from { transform: translateX(0); }
-  to   { transform: translateX(-100%); }
+  to { transform: translateX(-100%); }
 }
 /* A rail item is a MASK over a single ink, not an <img>. Customer marks arrive in a
    dozen inks and two of them will clash with the page; masking guarantees one ink and
@@ -627,7 +691,7 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 }
 @keyframes lwScrollFade {
   from { opacity: 0; transform: translateY(14px); }
-  to   { opacity: 1; transform: translateY(0); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* Page/section scroll progress rail. Consumer sizes and positions the bar;
@@ -647,7 +711,7 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 }
 @keyframes lwScrollGrow {
   from { transform: scaleX(0); }
-  to   { transform: scaleX(1); }
+  to { transform: scaleX(1); }
 }
 
 /* SVG line-draw keyed to scroll. Apply to a path with a known length exported
@@ -666,7 +730,7 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 }
 @keyframes lwDrawIn {
   from { stroke-dashoffset: var(--lw-draw-len, 1000); }
-  to   { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: 0; }
 }
 
 /* ---- Browser frame (v0.4.0) ------------------------------------------------
@@ -784,15 +848,15 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 .lw-aurora > * { position: relative; z-index: var(--lw-z-raised); }
 @media (prefers-reduced-motion: no-preference) {
   .lw-aurora::before { animation: lwAuroraA var(--lw-dur-aurora-a) ease-in-out infinite alternate; }
-  .lw-aurora::after  { animation: lwAuroraB var(--lw-dur-aurora-b) ease-in-out infinite alternate; }
+  .lw-aurora::after { animation: lwAuroraB var(--lw-dur-aurora-b) ease-in-out infinite alternate; }
 }
 @keyframes lwAuroraA {
   from { transform: translate3d(0, 0, 0) scale(1); }
-  to   { transform: translate3d(10%, 8%, 0) scale(1.15); }
+  to { transform: translate3d(10%, 8%, 0) scale(1.15); }
 }
 @keyframes lwAuroraB {
   from { transform: translate3d(0, 0, 0) scale(1.1); }
-  to   { transform: translate3d(-8%, -10%, 0) scale(1); }
+  to { transform: translate3d(-8%, -10%, 0) scale(1); }
 }
 
 /* Perspective tilt for framed screenshots: rests flat, leans back a touch on
@@ -1649,7 +1713,7 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
   align-items: center;
 }
 .lw-compare-yes { color: var(--lw-success-on); }
-.lw-compare-no  { color: var(--lw-fg-subtle); }
+.lw-compare-no { color: var(--lw-fg-subtle); }
 
 /* ---- Flow -----------------------------------------------------------------
    A chain of labelled nodes joined by edges: a processing pipeline, an
@@ -1808,17 +1872,17 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
         entry calc(10% + var(--lw-flow-i, 0) * var(--lw-flow-step, 4%))
         entry calc(70% + var(--lw-flow-i, 0) * var(--lw-flow-step, 4%));
     }
-    .lw-flow > :nth-child(2)  { --lw-flow-i: 1; }
-    .lw-flow > :nth-child(3)  { --lw-flow-i: 2; }
-    .lw-flow > :nth-child(4)  { --lw-flow-i: 3; }
-    .lw-flow > :nth-child(5)  { --lw-flow-i: 4; }
-    .lw-flow > :nth-child(6)  { --lw-flow-i: 5; }
-    .lw-flow > :nth-child(7)  { --lw-flow-i: 6; }
-    .lw-flow > :nth-child(8)  { --lw-flow-i: 7; }
+    .lw-flow > :nth-child(2) { --lw-flow-i: 1; }
+    .lw-flow > :nth-child(3) { --lw-flow-i: 2; }
+    .lw-flow > :nth-child(4) { --lw-flow-i: 3; }
+    .lw-flow > :nth-child(5) { --lw-flow-i: 4; }
+    .lw-flow > :nth-child(6) { --lw-flow-i: 5; }
+    .lw-flow > :nth-child(7) { --lw-flow-i: 6; }
+    .lw-flow > :nth-child(8) { --lw-flow-i: 7; }
     .lw-flow > :nth-child(n+9) { --lw-flow-i: 8; }
   }
 }
 @keyframes lwFlowPulse {
   from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: none; }
+  to { opacity: 1; transform: none; }
 }

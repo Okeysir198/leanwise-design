@@ -1527,6 +1527,32 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
    here: `.lw-topbar .brand-mark` sat in this file while everything else that made
    a top bar a top bar sat in the layer a marketing page is told to drop. The
    brand-mark rules follow immediately below, so the component is one place. */
+/* ON THIS PAGE (promoted from product.css in v1.4.0) ------------------------
+   Position is free here: every declaration is on `.lw-toc` / `.lw-toc a`, names
+   nothing else in the package uses, so there is no equal-specificity competitor
+   to sit before or after. It sits with the other promoted navigation — `.lw-tabs`
+   and `.lw-pagination` came over in v1.3.1 — and above the pointer-affordance
+   list, which must stay last in the file. */
+/* ON THIS PAGE — the docs contents panel. A floating card rather than a bare
+   column of links: the trail of sections is a peer of the content, not chrome
+   welded to the page edge, and a border gives the sticky panel an edge to hold
+   as prose scrolls under it. */
+.lw-toc { display: flex; flex-direction: column; gap: 1px; padding: var(--lw-space-12); background: var(--lw-bg); border: 1px solid var(--lw-line); border-radius: var(--lw-radius-lg); }
+.lw-toc .lw-toc-h { font-family: var(--lw-font-mono); font-size: 10px; letter-spacing: 0.14em; word-spacing: var(--lw-word-spacing-caps); text-transform: uppercase; color: var(--lw-fg-subtle); padding: 2px var(--lw-space-8) var(--lw-space-8); }
+.lw-toc a { font-size: 12.5px; line-height: 1.4; text-decoration: none; padding: 6px var(--lw-space-8); border-radius: var(--lw-radius-sm); color: var(--lw-fg-muted); }
+.lw-toc a:hover { color: var(--lw-fg); background: var(--lw-bg-subtle); }
+.lw-toc a:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
+/* Reading position is a STATE, so it hangs off aria-current — the same attribute
+   that tells a screen reader where it is. One source for one fact, and no holed
+   style property (a hole cannot paint until the logic class lands).
+
+   NO transition on colour or ground here, deliberately. Scroll-spy re-targets
+   this row on every scroll step, so an easing curve on the highlight is mush
+   rather than polish — and a transitioned property reports its START value to
+   getComputedStyle until frames advance, which makes the highlight untestable
+   and cost this panel several rounds of misdiagnosis. Hover keeps its snap. */
+.lw-toc a[aria-current] { color: var(--lw-brand-on); font-weight: var(--lw-fw-medium); background: var(--lw-brand-soft); }
+
 /* TOP BAR — the app chrome. Sticky, hairline, never a shadow: a shadow under a
    1px bar reads as a rendering bug on a light ground. */
 .lw-topbar { position: sticky; top: 0; z-index: var(--lw-z-nav); display: flex; align-items: center; gap: var(--lw-space-16); height: 56px; padding: 0 var(--lw-space-20); background: hsl(var(--lw-bg-c) / 0.86); backdrop-filter: blur(12px) saturate(1.4); -webkit-backdrop-filter: blur(12px) saturate(1.4); border-bottom: 1px solid var(--lw-line); }

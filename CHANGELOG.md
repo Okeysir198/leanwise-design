@@ -20,6 +20,72 @@ versions are breaking: **0.1.4** (dependency URL), **0.2.0** (removal), **0.7.0*
 and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additionally ships a
 `package.json` that reports the wrong version.
 
+## [1.4.0] — 2026-08-05
+
+**One ground, one contents panel, one separator.** For a marketing site that reads as a
+single continuous page instead of a stack of alternating bands.
+
+### Fixed — `.lw-page-dark` never established the dark token scope
+
+It painted `--lw-navy-deep` + `--lw-on-dark` and declared nothing, so every `--lw-bg`,
+`--lw-line`, `--lw-fg-muted` and focus ring inside a dark page ground resolved **light**.
+This is `.lw-hero-dark`'s v1.3.1 finding one file over, and that entry's claim that the hero
+was "the ONE always-dark surface" with this defect was wrong — there were two.
+
+It survived because of a markup convention: `MarketingLanding.dc.html` writes
+`class="dark lw-page-dark"`, and `.dark` *is* in the band list, so the demo arrives with the
+scope by hand from a second class, enforced by nobody. **The case everyone demos is the one
+that cannot fail** — a fourth instance of that pattern in this package.
+
+Three gates are structurally unable to see it: `check:contrast`'s band-scope rule needs a
+descendant claim and a self-paint never enters the scan; `check:a11y` reads `violations` and
+axe files a decorative pseudo-element as `incomplete`; `check:visual` renders no card that
+uses the ground. **The third gap is still open** and is recorded in `tokens.css` — a ground
+specimen needs its own card, because the ground's layers are `position: fixed` and would
+repaint any shot they were added to.
+
+### Added — `.lw-page-ground`, the themed ground
+
+`.lw-page-dark` and `.lw-page-light` each commit to one appearance. `.lw-page-ground` follows
+the reader's theme off `[data-theme]` / `.dark` on `<html>`.
+
+Most of it was already free: `.lw-page-light` paints `var(--lw-bg)` / `var(--lw-fg)`, which
+re-point on their own. Only the artwork is hard-coded for white — the lattice and the mark are
+two SVGs at two alphas, and a hairline drawn for white paper is invisible on navy. Those five
+overrides are the whole addition.
+
+Why CSS and not a server-rendered class: a theme class in the HTML makes the document
+cookie-dependent, and a page served with `s-maxage` and no `Vary: Cookie` is then cached on URL
+alone — one dark-mode visitor's copy is served to everyone. It also cannot be right for the
+commonest visitor, who has set no preference and whose `prefers-color-scheme` the server cannot
+know.
+
+### Added — `Section` gains `rule`
+
+`rule?: boolean | "top" | "bottom"` → `.lw-section-rule` / `.lw-section-rule-b`. With one
+ground, bands can no longer alternate fills to show where one ends, and
+`.lw-page-* .lw-section.dark { background: none }` is exactly why a *border* still works.
+
+The rule owns the boundary **above** by default: a boundary has one owner or it is drawn
+twice, and "the first band has no rule above it" is then simply not setting the prop. One
+weight — the package's only hairline — with `--lw-section-rule-w` as a local knob. No new
+token, so no theme-scope obligation.
+
+### Changed — `.lw-toc` promoted from `product.css` to `base.css`
+
+Moved verbatim, with its `[aria-current]` rationale comment. A table of contents is
+navigation, not an app surface: `.lw-toc a` was **already** on base.css's pointer-affordance
+list — the same tell `.lw-topbar .brand-mark` was in v1.3.0 — and `marketing.css` has said
+since v1.3.0 that "the article + table-of-contents layout is `.lw-split`" while half that
+layout sat in the layer a marketing page is told to drop. A tombstone marks the vacated site.
+
+### Consumers
+
+`leanwise-ai` → `#v1.4.0`. No consumer change is required to take this release: it is
+additive, and the two behaviour-visible edges (`.lw-page-dark` now carrying the dark scope,
+`.lw-toc` resolving on a base+marketing page) are both fixes to things that were silently
+wrong.
+
 ## [1.3.5] — 2026-08-05
 
 ### Fixed
