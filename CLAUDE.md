@@ -4,7 +4,9 @@ Guidance for Claude Code when working in this repository.
 
 ## What this is
 
-**`@leanwise/design` v1.3.1** — the LeanWise design system. Tokens, five CSS layers, a Tailwind
+**`@leanwise/design`** — the LeanWise design system. (**`package.json` is the authority for the
+version.** This line named one and was four releases stale; the consumer's CLAUDE.md made the
+same mistake three times running. A version repeated in prose is a version that disagrees.) Tokens, five CSS layers, a Tailwind
 preset, ~77 React components across eight categories, twelve page templates, and the **gates**
 that turn the style guide into build failures.
 
@@ -360,6 +362,54 @@ so `check:themes` fails when `tokens.json` does not match what `tokens.css` woul
   `padding-right` (coupled to `background-position`, which has no logical form — convert one
   without the other and RTL gets the gap opposite the chevron).
 
+## Added in v1.4.0–v1.5.4, and the traps that came with them
+
+- **`.lw-page-ground`** — the THEMED ground, beside `.lw-page-dark` / `.lw-page-light`, which each
+  commit to one appearance. It resolves off `[data-theme]` on `<html>` rather than from a class the
+  consumer picks, because a theme class in the HTML makes the document cookie-dependent and a page
+  served with `s-maxage` and no `Vary` is then cached on URL alone.
+  ⚠ It is implemented as ~30 hand-written twins of the adjacent `.lw-page-light` selectors, and the
+  twinning has **already missed once** (`lwMarkBreathe`, v1.5.1 — the ground had a reduced-motion
+  rule disabling an animation it never had). The durable fix is to parameterise the three grounds:
+  which SVG, which alpha, which glow stops are all that differ.
+- **`.lw-page-dark` joined the dark band list** (v1.4.0). It painted navy and declared nothing, so
+  every role token inside a dark ground resolved LIGHT. It survived a release because
+  `MarketingLanding.dc.html` writes `class="dark lw-page-dark"` — the demo arrives with the scope
+  by hand, from a second class, enforced by nobody. **The case everyone demos is the one that
+  cannot fail**, and this is the fourth instance of that pattern here.
+- ⚠ **A hero on a themed ground must NOT carry a band scope.** `.lw-hero-dark` is in the dark list
+  because a standalone hero is always navy; inside `.lw-page-ground` that pinned it dark while the
+  ground painted white — **1.09:1, sitewide, at the consumer, for every default-theme visitor**.
+  Fixed by re-pointing its channels to `inherit` in marketing.css. Two earlier attempts added it to
+  the light band list and inverted the bug in dark mode: **the band block sets the property ON the
+  hero, and an element's own declaration beats one inherited from `<html>` however the selectors
+  weigh.** Specificity is not what decides it.
+  ⚠ And it cannot be scoped there: `lw-tokens-dtcg` matches theme-block selectors with `[^)]*`, so
+  a nested paren — or a wrapped line — fails `check:themes` with "theme block not found".
+- **`.lw-toc` and `.lw-crumbs` promoted `product.css` → `base.css`** (v1.4.0). Both components live
+  in `components/nav/`, both had their `a` rule already on base.css's pointer-affordance list, and
+  marketing.css had claimed since v1.3.0 that the contents-panel layout is `.lw-split` while half
+  that layout sat in the layer a marketing page is told to drop.
+- **`Section` gained `rule`** — a hairline owning the boundary *above* it. One owner per boundary or
+  it is drawn twice. One weight, plus a `--lw-section-rule-w` local knob, so no new token.
+- **`NavMenu`** (v1.5.0) — a native `<details>` nav dropdown that teaches a taxonomy in named groups.
+  Server-safe, works with JavaScript disabled. **Not** built on `Menu`/`Popover`: `.lw-menu` and
+  `.lw-popover` are in `product.css`, so a site header built on them strands its dropdown CSS in the
+  layer marketing drops — the defect v1.4.0 closed twice elsewhere. `role="menu"` is also wrong for
+  site navigation (APG): it is a disclosure containing links.
+  Escape-to-close and close-on-client-side-route-change are the **consumer's**, stated in the
+  `.d.ts` — a hook here would force every consumer's server-rendered header to become a client
+  component. The consumer shipped without both.
+- ⚠ **`.lw-topbar nav a` is now `nav > a`.** Equivalent while `TopBar` renders links as direct
+  children; not equivalent once a panel is nested in that `<nav>`, where the bar's padding and its
+  44px coarse-pointer floor would apply to every dropdown item. Turning the trigger into a
+  `<summary>` then dropped it from those rules entirely — `.lw-navmenu > summary` had to be added
+  back to all three (v1.5.2).
+
+**The gap all of this keeps re-opening: `check:visual` renders no card that uses a page ground.**
+Three of the defects above would have been caught by one. It needs its own card, because the
+ground's layers are `position: fixed` and would repaint any shot they joined.
+
 ## The design-project round-trip
 
 The Claude Design project is the authoring surface. This repo was replaced wholesale from it at
@@ -415,7 +465,7 @@ is not "on the new version."
 
 | Consumer | Pin | Consumes | Package manager |
 |---|---|---|---|
-| `leanwise-ai` | `#v1.1.8` | `tokens.css` + `lw.css` + `./assets` + `./react` | pnpm |
+| `leanwise-ai` | see its `package.json` | `tokens.css` + `lw.css` + `./assets` + `./react` | pnpm |
 | `P20260707-vss/frontend` | `#v0.2.3` | `tokens.css` + `shadcn.css` + preset + `./brand` | pnpm |
 | `P20260706-rag-service/frontend` | `#v0.2.2` (reports **0.2.1** — see below) | `tokens.css`, vanilla | npm |
 
