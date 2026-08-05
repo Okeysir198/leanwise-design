@@ -1127,6 +1127,36 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
 .lw-measure { max-width: 60ch; }
 .lw-measure-sm { max-width: 46ch; }
 
+/* FIGURE — a diagram or an image with a caption that is ABOUT it.
+   `<figcaption>` is not a paragraph that happens to follow a picture; a screen
+   reader announces it as the figure's caption, which is a different statement.
+
+   ⚠ The margin reset is the load-bearing line. The UA gives `<figure>` a
+   `margin: 1em 40px` — a **40px inline indent**, which is 25% of the content
+   width on a 320px phone — and `reset.css` deliberately does not normalise it:
+   its nine rules stop at `img`, and the presence gate forbids a bare element
+   selector outside that file. So every consumer that reaches for a real
+   `<figure>` inherits the indent silently, exactly the way `<a class="lw-btn">`
+   inherited an underline before v1.2. A class, not an element rule, so a
+   Tailwind consumer's preflight and this can both be right.
+
+   The caption's own measure is wider than `.lw-measure`: it sits under a
+   full-bleed drawing rather than in a column of prose, and 60ch under a 900px
+   diagram reads as a stray sentence rather than as its caption. */
+.lw-figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--lw-space-16);
+}
+.lw-figcaption {
+  font-size: var(--lw-text-xs);
+  line-height: 1.5;
+  color: var(--lw-fg-subtle);
+  text-wrap: pretty;
+  max-inline-size: 76ch;
+}
+
 /* The flexible gap in a row of controls — the thing that pushes what follows to
    the trailing edge. It was written six ways: inline in Artifact's footer, and
    as .lw-dgrid-selbar-spacer, .lw-pag-spacer, .lw-editor-spacer and a bare

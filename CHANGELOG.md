@@ -20,6 +20,29 @@ versions are breaking: **0.1.4** (dependency URL), **0.2.0** (removal), **0.7.0*
 and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additionally ships a
 `package.json` that reports the wrong version.
 
+## [1.6.1] — 2026-08-05
+
+### Added — `.lw-figure` / `.lw-figcaption`
+
+A diagram with a caption that is *about* it. `<figcaption>` is not a paragraph
+that happens to follow a picture — a screen reader announces it as the figure's
+caption, which is a different statement — and until now a consumer reaching for a
+real `<figure>` had nowhere to put the margin reset except its own stylesheet.
+
+The reset is the load-bearing line. The UA gives `<figure>` a `margin: 1em 40px`
+— a **40px inline indent**, a quarter of the content width on a 320px phone — and
+`reset.css` deliberately does not normalise it: its nine rules stop at `img`, and
+the presence gate forbids a bare element selector outside that file. So the indent
+arrives silently, exactly the way `<a class="lw-btn">` arrived underlined before
+v1.2. A class rather than an element rule, so a Tailwind consumer's preflight and
+this can both be right.
+
+`.lw-figcaption`'s measure is deliberately wider than `.lw-measure`: it sits under
+a full-bleed drawing rather than in a column of prose, and 60ch under a 900px
+diagram reads as a stray sentence rather than as its caption.
+
+**Consumers:** additive.
+
 ## [1.6.0] — 2026-08-05
 
 ### Added — `Flow` can draw a graph, not only a chain
