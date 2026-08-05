@@ -20,6 +20,21 @@ versions are breaking: **0.1.4** (dependency URL), **0.2.0** (removal), **0.7.0*
 and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additionally ships a
 `package.json` that reports the wrong version.
 
+## [1.5.3] — 2026-08-05
+
+### Fixed — v1.5.2 shipped the hero fix in a form check:themes rejects
+
+The selector added to the light band list was scoped
+`html:not(.dark):not([data-theme="dark"])`. `tools/lw-tokens-dtcg.mjs` locates each theme
+block with a line-anchored regex whose selector class is `[^)]*`, so a nested paren — or a
+wrapped line — makes it fail with "theme block not found". v1.5.2 was tagged anyway because
+the release command filtered `npm run check` through grep and read a success line from an
+earlier gate. The entry is now bare and the constraint is documented at the block.
+
+The guard was not needed: the whole-document dark scope is `.dark, [data-theme="dark"]` at
+(0,1,0) and the band block is `:where(...)` at (0,0,0), so in dark theme the document scope
+wins at the hero regardless. Verified by measuring both themes.
+
 ## [1.5.2] — 2026-08-05
 
 ### Fixed — every hero rendered near-white ink on the themed ground (light theme)

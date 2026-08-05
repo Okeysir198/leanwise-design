@@ -988,6 +988,18 @@
    `:where()`, later in source than the dark block, so it wins exactly when it
    matches and yields when it does not.
 
+   ⚠ Two constraints on HOW it is written, both learned the hard way.
+   `tools/lw-tokens-dtcg.mjs` finds each theme block with a line-anchored regex
+   whose selector class is `[^)]*` — so this list must stay on ONE line AND must
+   contain no nested parentheses. The first two attempts failed `check:themes`
+   with "theme block not found": one wrapped the list over two lines, the other
+   scoped the new entry with `html:not(.dark):not([data-theme="dark"])`.
+
+   Which is why the entry is bare. It does not need the guard: the whole-document
+   dark scope is `.dark, [data-theme="dark"]` at specificity (0,1,0), and this
+   block is `:where(...)` at (0,0,0), so in dark theme the document scope wins at
+   the hero anyway. Verified by measuring both themes, not by reading.
+
    `.lw-page-light .lw-hero-dark` is then added to the LIGHT list below, and
    that pairing is load-bearing, not belt-and-braces. Inside `.lw-page-light`
    the hero goes transparent and the light page owns the ground (marketing.css
@@ -1034,8 +1046,7 @@
   color: var(--lw-fg);
 }
 
-:where(.lw-band-light, [data-band="light"], .lw-page-light .lw-hero-dark,
-        html:not(.dark):not([data-theme="dark"]) .lw-page-ground .lw-hero-dark) {
+:where(.lw-band-light, [data-band="light"], .lw-page-light .lw-hero-dark, .lw-page-ground .lw-hero-dark) {
   color-scheme: light;
   /* Re-point onto the theme-invariant PALETTE tokens (never re-pointed by the
      dark block), so the band is light regardless of the surrounding site theme. */

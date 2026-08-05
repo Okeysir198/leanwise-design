@@ -1,6 +1,6 @@
 {
   "name": "@leanwise/design",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "LeanWise Design System — token core, CSS layers, React components, twelve templates.",
   "license": "UNLICENSED",
   "private": false,
