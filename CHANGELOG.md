@@ -20,6 +20,29 @@ versions are breaking: **0.1.4** (dependency URL), **0.2.0** (removal), **0.7.0*
 and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additionally ships a
 `package.json` that reports the wrong version.
 
+## [1.6.2] — 2026-08-05
+
+### Fixed — an object `edges` entry crashed the CHAIN renderer
+
+v1.6.0 normalised `[from, to]` tuples to `{ from, to }` at the top of `Flow`, used
+the normalised list to CHOOSE a renderer — and then handed the chain the **raw**
+prop. So the object form the release had just documented, written for an
+all-consecutive flow, selected the chain and threw
+`object is not iterable (cannot read property Symbol(Symbol.iterator))` during
+server rendering. Normalise once, at the boundary, and pass only the normalised
+value on.
+
+**Nothing here could have caught it.** Every specimen using the object form also
+branches, so the crash lived in exactly the path the new type invites and the new
+card never took — and a TanStack consumer does not see a stack trace, it sees the
+framework silently fall back to client rendering and ship a page with a hole in
+it. `flow-graph.card.html` therefore gains a fourth specimen that is a plain chain
+written in the object form; `check:a11y` fails a card on an uncaught page error,
+which turns the guard into a gate.
+
+The 39 pre-existing cards are pixel-identical; the flow-graph card's own baseline
+is re-recorded for the taller viewport.
+
 ## [1.6.1] — 2026-08-05
 
 ### Added — `.lw-figure` / `.lw-figcaption`

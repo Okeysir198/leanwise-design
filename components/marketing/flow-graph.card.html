@@ -1,4 +1,4 @@
-<!-- @dsCard group="Marketing" name="Flow (branching)" subtitle="A fan-in, a fan-out and a loop — laid on a routing lattice, drawn with CSS borders, and carrying an sr-only successors table because the connectivity is the content" viewport="1100x1500" -->
+<!-- @dsCard group="Marketing" name="Flow (branching)" subtitle="A fan-in, a fan-out and a loop — laid on a routing lattice, drawn with CSS borders, and carrying an sr-only successors table because the connectivity is the content" viewport="1100x1750" -->
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><title>Flow (branching)</title>
 <link rel="stylesheet" href="../../preview/_card.css">
@@ -24,6 +24,9 @@ box-drawing tiles, so two inputs can meet, one step can split, and a step can lo
 
 <span class="lbl-eyebrow">a loop — routed below every lane and drawn dashed, and named in words in the table</span>
 <div id="fg-back" style="padding:12px 0 4px"></div>
+
+<span class="lbl-eyebrow">a plain CHAIN, written in the object edge form — still the chain renderer, and it must not throw</span>
+<div id="fg-chain-obj" style="padding:12px 0 4px"></div>
 
 <div style="display:flex;flex-direction:column;gap:12px;padding-top:24px;margin-top:8px;border-top:1px solid var(--lw-line)">
 <span class="lbl-eyebrow">why it is built this way</span>
@@ -116,6 +119,28 @@ ReactDOM.createRoot(document.getElementById("fg-back")).render(
       { from: "draft", to: "review" },
       { from: "review", to: "publish" },
       { from: "review", to: "draft", kind: "back", label: "changes requested" },
+    ]}
+  />
+);
+
+/* ⚠ REGRESSION SPECIMEN, and the only reason it is on this card.
+   `layout="auto"` sends an all-consecutive flow to the CHAIN renderer, and for
+   one release that renderer received the raw `edges` prop rather than the
+   normalised one — so the object form documented by v1.6.0 destructured as an
+   array and threw "object is not iterable" during SSR. Every other specimen here
+   branches, which is exactly why nothing caught it: the crash lived in the path
+   the new type invites and the new card never took. `check:a11y` fails a card on
+   an uncaught page error, so this renders the guard as a gate. */
+ReactDOM.createRoot(document.getElementById("fg-chain-obj")).render(
+  <Flow
+    nodes={[
+      { id: "one", icon: "file", label: "First" },
+      { id: "two", icon: "shield", label: "Second" },
+      { id: "three", icon: "check", label: "Third" },
+    ]}
+    edges={[
+      { from: "one", to: "two" },
+      { from: "two", to: "three" },
     ]}
   />
 );

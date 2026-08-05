@@ -27,12 +27,12 @@ function Flow({
       }
     );
   }
-  return /* @__PURE__ */ jsx(FlowChain, { nodes, edges, orientation, as, className, ...rest });
+  return /* @__PURE__ */ jsx(FlowChain, { nodes, edges: list, orientation, as, className, ...rest });
 }
 function FlowChain({ nodes = [], edges, orientation = "horizontal", as, className, ...rest }) {
   const Tag = as || "ol";
   const Item = Tag === "ol" || Tag === "ul" ? "li" : "div";
-  const linked = edges ? new Set(edges.map(([a, b]) => `${a}\0${b}`)) : null;
+  const linked = edges ? new Set(edges.map((e) => `${e.from}\0${e.to}`)) : null;
   const hasEdge = (a, b) => linked ? linked.has(`${a}\0${b}`) : true;
   const children = [];
   nodes.forEach((n, i) => {
