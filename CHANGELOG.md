@@ -20,6 +20,31 @@ versions are breaking: **0.1.4** (dependency URL), **0.2.0** (removal), **0.7.0*
 and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additionally ships a
 `package.json` that reports the wrong version.
 
+## [1.5.2] — 2026-08-05
+
+### Fixed — every hero rendered near-white ink on the themed ground (light theme)
+
+`.lw-page-ground` shipped in v1.5.0 without a light-band twin for its hero. `.lw-hero-dark`
+is in the DARK scope, so inside the themed ground it kept dark tokens while the ground
+painted `var(--lw-bg)` = white. Measured: `.lw-h1` #E7ECF3 on #FFFFFF, **1.09:1**, on every
+marketing page in both locales, for every default-theme visitor. marketing.css writes
+`color: var(--lw-fg)` there on the belief it resolves light; it resolved dark.
+
+Scoped `html:not(.dark):not([data-theme="dark"])` rather than added bare — `.lw-page-ground`
+is the THEMED ground, and pinning its hero light unconditionally would invert the bug in dark
+mode.
+
+Nothing caught it, and that is the more useful half: axe files text over the ground's gradient
+pseudo-elements as `incomplete`, and `check:a11y` reads `violations`. The consumer's new
+dark-theme scans exercised the branch that already worked. This is the third defect in three
+releases that the ground's missing specimen card would have caught.
+
+### Fixed — the Product dropdown trigger lost its 44px touch target
+
+v1.5.0 narrowed `.lw-topbar nav a` to `nav > a` and made the Product item a `<summary>`, which
+took it out of the coarse-pointer rules the v1.3.4 pass added. `.lw-navmenu > summary` now
+joins the 44px floor, the hit-area pseudo-element and the relative-positioning rule.
+
 ## [1.5.1] — 2026-08-05
 
 ### Fixed — the themed ground's hero mark never breathed

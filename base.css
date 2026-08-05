@@ -1135,6 +1135,7 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
    * would overlap and each link would steal from its neighbour. Choose by
    * whether the control has a neighbour in the direction it needs to grow. */
   .lw-topbar .brand::after,
+  .lw-navmenu > summary::after,
   .lw-topbar nav > a::after,
   .lw-segmented button::after,
   .lw-pill-link::after {
@@ -1148,7 +1149,7 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
   /* The anchor the ::after resolves against. Without it the box escapes to
      whatever ancestor happens to be positioned and the target lands somewhere
      else on the page — silently, since nothing is painted. */
-  .lw-topbar .brand, .lw-topbar nav > a, .lw-segmented button, .lw-pill-link { position: relative; }
+  .lw-topbar .brand, .lw-topbar nav > a, .lw-navmenu > summary, .lw-segmented button, .lw-pill-link { position: relative; }
   /* REAL width for a short nav label, because the ::after cannot supply it here.
      A locale switch is two 39px links side by side: grown to 44px each, their
      hit boxes OVERLAP, and the one on top takes the shared strip — measured at
@@ -1158,7 +1159,8 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
      axis where a control has a neighbour has to be real, or it is a target two
      controls both claim. Only short labels are affected — the bar's own links
      are already wider than this. */
-  .lw-topbar nav > a { min-inline-size: 44px; }
+  .lw-topbar nav > a,
+  .lw-navmenu > summary { min-inline-size: 44px; }
 }
 
 /* ---- Code block surface ---------------------------------------------------
