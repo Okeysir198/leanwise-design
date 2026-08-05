@@ -20,6 +20,19 @@ versions are breaking: **0.1.4** (dependency URL), **0.2.0** (removal), **0.7.0*
 and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additionally ships a
 `package.json` that reports the wrong version.
 
+## [1.6.3] — 2026-08-06
+
+### Fixed — an image inside `.lw-figure` stretched on a narrow viewport
+
+`reset.css` gives every image `max-width: 100%` and deliberately no height rule.
+So an `<img>` carrying real `width`/`height` attributes — which it must, or the
+page reflows on load — narrows below its intrinsic width on a phone and keeps its
+attribute height. The picture stretches, at every width below its own. `.lw-prose
+img` has always carried `block-size: auto`; a figure outside prose had nowhere to
+get it, which is a gap v1.6.1 opened by shipping the figure role without it.
+
+**Consumers:** additive.
+
 ## [1.6.2] — 2026-08-05
 
 ### Fixed — an object `edges` entry crashed the CHAIN renderer
