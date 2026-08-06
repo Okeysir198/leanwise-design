@@ -20,6 +20,25 @@ versions are breaking: **0.1.4** (dependency URL), **0.2.0** (removal), **0.7.0*
 and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additionally ships a
 `package.json` that reports the wrong version.
 
+## [1.7.1] — 2026-08-06
+
+### Fixed — `Table`'s scroll region had no keyboard access, and v1.7.0 is what made that observable
+
+`.lw-table-wrap` gains `tabIndex={0}`, `role="region"` and the caption as its `aria-label` —
+exactly the treatment `CompareTable`'s scroll region was given in **v1.3.3**.
+
+A region a mouse can pan and a keyboard cannot is `scrollable-region-focusable`, an axe
+**serious** violation, and on a table wider than the viewport it is the only way to read the
+right-hand columns without a pointer. The gap was always in the component; it could not be
+*observed* until v1.7.0, because the rule that makes the wrapper scroll (`overflow-x: auto`)
+lived in `product.css`, and no page axe scanned loaded that file alongside a `Table`. The
+consumer's mobile a11y run went red the moment the promotion landed — which is the promotion
+working, not a regression it caused.
+
+Worth keeping: **fixing a stranding defect can surface a second defect the stranding was
+hiding.** The first release restored the styling; this one pays the accessibility bill that
+styling always implied.
+
 ## [1.7.0] — 2026-08-06
 
 ### Fixed — `Table` was stranded in the app-surface layer, and a marketing page was publishing its evidence in it

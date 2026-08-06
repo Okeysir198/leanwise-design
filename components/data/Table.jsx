@@ -51,7 +51,21 @@ export function Table({ columns, rows, hover = true, compact = false, caption, s
     })}</tr></thead>
   );
   return (
-    <div className="lw-table-wrap lw-scroll">
+    /* The wrapper SCROLLS, so it must be reachable by keyboard — a region a
+       mouse can pan and a keyboard cannot is `scrollable-region-focusable`, an
+       axe SERIOUS violation, and the only way to read the right-hand columns
+       without a pointer. `CompareTable` was given exactly this treatment in
+       v1.3.3; `Table` never was, because until v1.7.0 promoted `.lw-table-wrap`
+       out of product.css the rule that makes it scroll was not loaded on any
+       page axe scanned. The overflow was always in the component's intent — it
+       just could not be observed. `role="region"` + the caption as its label is
+       what stops a bare tabindex from announcing an unnamed stop. */
+    <div
+      className="lw-table-wrap lw-scroll"
+      tabIndex={0}
+      role="region"
+      aria-label={typeof caption === "string" ? caption : undefined}
+    >
       <table className={cx("lw-table", hover && "lw-table-hover", compact && "lw-table-compact", className)} {...rest}>
         {caption && <caption className="lw-sr-only">{caption}</caption>}
         {head}

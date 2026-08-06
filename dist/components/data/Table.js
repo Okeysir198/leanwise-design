@@ -29,11 +29,31 @@ function Table({ columns, rows, hover = true, compact = false, caption, sort: so
       c.key
     );
   }) }) });
-  return /* @__PURE__ */ jsx("div", { className: "lw-table-wrap lw-scroll", children: /* @__PURE__ */ jsxs("table", { className: cx("lw-table", hover && "lw-table-hover", compact && "lw-table-compact", className), ...rest, children: [
-    caption && /* @__PURE__ */ jsx("caption", { className: "lw-sr-only", children: caption }),
-    head,
-    rows ? /* @__PURE__ */ jsx("tbody", { children: rows.map((r, i) => /* @__PURE__ */ jsx("tr", { children: columns.map((c) => /* @__PURE__ */ jsx("td", { className: cx(c.num && "num", c.muted && "muted"), children: r[c.key] }, c.key)) }, r.id ?? i)) }) : children
-  ] }) });
+  return (
+    /* The wrapper SCROLLS, so it must be reachable by keyboard — a region a
+       mouse can pan and a keyboard cannot is `scrollable-region-focusable`, an
+       axe SERIOUS violation, and the only way to read the right-hand columns
+       without a pointer. `CompareTable` was given exactly this treatment in
+       v1.3.3; `Table` never was, because until v1.7.0 promoted `.lw-table-wrap`
+       out of product.css the rule that makes it scroll was not loaded on any
+       page axe scanned. The overflow was always in the component's intent — it
+       just could not be observed. `role="region"` + the caption as its label is
+       what stops a bare tabindex from announcing an unnamed stop. */
+    /* @__PURE__ */ jsx(
+      "div",
+      {
+        className: "lw-table-wrap lw-scroll",
+        tabIndex: 0,
+        role: "region",
+        "aria-label": typeof caption === "string" ? caption : void 0,
+        children: /* @__PURE__ */ jsxs("table", { className: cx("lw-table", hover && "lw-table-hover", compact && "lw-table-compact", className), ...rest, children: [
+          caption && /* @__PURE__ */ jsx("caption", { className: "lw-sr-only", children: caption }),
+          head,
+          rows ? /* @__PURE__ */ jsx("tbody", { children: rows.map((r, i) => /* @__PURE__ */ jsx("tr", { children: columns.map((c) => /* @__PURE__ */ jsx("td", { className: cx(c.num && "num", c.muted && "muted"), children: r[c.key] }, c.key)) }, r.id ?? i)) }) : children
+        ] })
+      }
+    )
+  );
 }
 export {
   Table
