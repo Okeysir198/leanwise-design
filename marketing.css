@@ -1505,6 +1505,27 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 }
 .lw-announce + .lw-topbar { inset-block-start: var(--lw-announce-h, 36px); }
 
+/* ...and the same coupling has a second consequence, one layer further out.
+   `.lw-prose :is(h2,h3,h4)` carries `scroll-margin-block-start: 64px` in base.css
+   precisely so a #fragment link does not land a heading under the sticky header —
+   64px clears the 56px bar with a gap. Put an announcement above that header and
+   the sticky chrome becomes 36 + 56 = 92px, the 64px clearance is no longer
+   enough, and the heading arrives 27px UNDER the bar with its first line eaten:
+   exactly the failure the rule beside it was written to prevent, reintroduced by
+   the component that offsets the header.
+
+   Stated here rather than in base.css because the dependency only runs one way —
+   marketing knows about `.lw-topbar`, base must not know about `.lw-announce`.
+   `:root:has()` because a custom property cannot travel sideways: `.lw-announce`
+   is a SIBLING of the prose, not an ancestor, so it cannot hand a value down.
+
+   Measured, not reasoned: announce 35px + topbar 56px = 91px of chrome against a
+   heading landing at 64px. No specimen paired an announcement with a prose
+   document, which is why two releases of `.lw-prose` shipped over it. */
+:root:has(.lw-announce) .lw-prose :is(h2, h3, h4) {
+  scroll-margin-block-start: calc(var(--lw-space-64) + var(--lw-announce-h, 36px));
+}
+
 /* ===========================================================================
    v1.3.0 — PRICING, COMPARISON, FLOW
    Three patterns a marketing site rebuilds locally every time, and the last of

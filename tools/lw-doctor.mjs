@@ -187,6 +187,38 @@ if (SELF) {
       const out = execFileSync("node", [path.join(HERE, "lw-presence.mjs")], { encoding: "utf8" });
       return Number(out.match(/OK — (\d+) name/)?.[1] ?? 0);
     },
+    /* The SHORTFALL in px: declared sticky chrome minus the prose clearance that
+       applies when an announcement bar is present. Static on purpose — the real
+       defect was measured in a browser (27px, the announcement box rendering 35px
+       rather than its 36px offset token), but a number this file records has to be
+       re-derivable headlessly, and the three declared values are.
+
+       Reads the clearance from the `:has(.lw-announce)` override if marketing.css
+       carries one and falls back to base.css's flat --lw-space-64 if it does not,
+       so deleting the fix makes this go non-zero again rather than silently pass. */
+    "announce-breaks-prose-anchors": () => {
+      const num = (re, css, d) => Number(css.match(re)?.[1] ?? d);
+      const base = fs.readFileSync(path.join(ROOT, "base.css"), "utf8");
+      const mk = fs.readFileSync(path.join(ROOT, "marketing.css"), "utf8");
+      const tok = fs.readFileSync(path.join(ROOT, "tokens.css"), "utf8");
+
+      const space64 = num(/--lw-space-64:\s*(\d+)px/, tok, 64);
+      const bar = num(/\.lw-topbar\s*\{[^}]*?height:\s*(\d+)px/, base, 56);
+      const announce = num(/\.lw-announce\s*\+\s*\.lw-topbar\s*\{[^}]*?--lw-announce-h,\s*(\d+)px/, mk, 36);
+
+      // Does a rule raise the prose clearance while an announcement is present?
+      const override = mk.match(
+        /:root:has\(\.lw-announce\)[^{]*\.lw-prose[^{]*\{[^}]*?scroll-margin-block-start:\s*([^;]+);/,
+      );
+      let clearance = space64;
+      if (override) {
+        const expr = override[1];
+        clearance =
+          (/--lw-space-64/.test(expr) ? space64 : 0) +
+          (/--lw-announce-h/.test(expr) ? num(/--lw-announce-h,\s*(\d+)px/, expr, announce) : 0);
+      }
+      return Math.max(0, announce + bar - clearance);
+    },
   };
 
   // For a defect that is now FIXED, the derived count should be 0 (the defect is

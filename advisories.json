@@ -131,6 +131,18 @@
       "measuredBy": "check:presence",
       "count": 143,
       "countMeans": "names now offered identically to v3 and v4"
+    },
+    {
+      "id": "announce-breaks-prose-anchors",
+      "fixedIn": "1.7.2",
+      "affects": "<1.7.2",
+      "severity": "medium",
+      "title": "With an AnnounceBar above the topbar, every #fragment link lands a .lw-prose heading UNDER the sticky chrome",
+      "detail": "`.lw-prose :is(h2,h3,h4)` carries `scroll-margin-block-start: var(--lw-space-64)` in base.css precisely so a fragment link does not park a heading behind the sticky header \u2014 64px clears the 56px `.lw-topbar` with a gap, and the comment beside it says so. `.lw-announce` then offsets that header by `var(--lw-announce-h, 36px)`, which is the whole reason the announcement bar belongs upstream. Nothing updated the prose clearance to match. So on any page that composes AnnounceBar + TopBar + a prose document \u2014 a changelog, a docs page, a legal page, a long-form post, all of which are exactly where fragment links get shared \u2014 the combined chrome is 91px and the heading arrives at 64px, 27px underneath the bar with its first line eaten. That is the identical failure the coupling rule was written to prevent, reintroduced one layer out by the component that does the offsetting. No specimen paired an announcement with a prose document, so no browser gate could see it: the same fixture blindness REVIEW.md records for the stranded-CSS and blank-card findings. Fixed by `:root:has(.lw-announce) .lw-prose :is(h2,h3,h4)` in marketing.css, next to the rule that causes it \u2014 `:has()` because .lw-announce is a SIBLING of the prose and a custom property cannot travel sideways, and marketing.css because the dependency only runs one way.",
+      "measuredBy": "check:advisories (static), confirmed in a browser with tokens + reset + base + marketing",
+      "count": 28,
+      "countMeans": "px by which the DECLARED sticky chrome (--lw-announce-h 36 + .lw-topbar height 56 = 92) exceeds the .lw-prose heading clearance (--lw-space-64 = 64). A real render measured 27, the announcement box being 35px rather than its 36px offset token; the declared numbers are the ones a headless check can re-derive, so they are the ones recorded here.",
+      "verifiedAgainst": "v1.7.1"
     }
   ]
 }
