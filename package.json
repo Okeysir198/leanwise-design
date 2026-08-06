@@ -62,7 +62,8 @@
   },
   "bin": {
     "lw-token-lint": "./tools/lw-token-lint.mjs",
-    "lw-doctor": "./tools/lw-doctor.mjs"
+    "lw-doctor": "./tools/lw-doctor.mjs",
+    "lw-favicon": "./tools/lw-favicon.mjs"
   },
   "files": [
     "react.js",
@@ -108,7 +109,7 @@
     "check:visual": "node tools/lw-visual.mjs",
     "check:presence": "node tools/lw-presence.mjs",
     "check:presence:list": "node tools/lw-presence.mjs --list",
-    "check": "npm run check:presence && npm run check:rsc && npm run check:build && npm run check:types && npm run check:registry && npm run check:advisories && npm run check:contrast && npm run check:tokens && npm run check:themes && npm run check:dts && npm run check:bundle && npm run check:templates",
+    "check": "npm run check:presence && npm run check:rsc && npm run check:build && npm run check:types && npm run check:registry && npm run check:advisories && npm run check:favicon && npm run check:contrast && npm run check:tokens && npm run check:themes && npm run check:dts && npm run check:bundle && npm run check:templates",
     "check:ci": "npm run check && npm run check:pack && npm run check:a11y && npm run check:visual",
     "tokens": "node tools/lw-tokens-dtcg.mjs",
     "dts": "node tools/lw-dts-barrel.mjs",
@@ -121,7 +122,9 @@
     "check:pack": "node tools/lw-pack-check.mjs",
     "registry": "node tools/lw-registry.mjs",
     "check:registry": "node tools/lw-registry.mjs --check",
-    "check:advisories": "node tools/lw-doctor.mjs --self-check"
+    "check:advisories": "node tools/lw-doctor.mjs --self-check",
+    "favicon": "node tools/lw-favicon.mjs",
+    "check:favicon": "node tools/lw-favicon.mjs --check"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",

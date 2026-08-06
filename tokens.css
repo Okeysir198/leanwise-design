@@ -194,6 +194,22 @@
   --lw-logo-cyan-c: 187.6 88.0% 32.0%; /* @kind color */   /* #0A8799 */
   --lw-logo-cyan: hsl(var(--lw-logo-cyan-c));
 
+  /* The SAME gradient, lifted for dark grounds — `logo-lockup-ondark.svg` and
+     `logo-favicon.svg`. Artwork-only on exactly the terms above: no UI rule may
+     consume either, and neither fits a role.
+
+     These existed as literal hexes inside logo-lockup-ondark.svg from the day that
+     asset shipped, and nothing guarded them. The README already states the argument
+     for why that is dangerous — "the gradient stops are literal hexes … that makes
+     the SVG a second home for a brand value, and lw-contrast-check.mjs fails if the
+     two disagree" — but `logoStops()` only ever read logo-mark.svg and
+     logo-lockup.svg, so the on-dark pair was a second home with no gate at all.
+     Naming them here is what lets the gate cover all four assets. */
+  --lw-logo-navy-ondark-c: 201.0 63.7% 57.8%; /* @kind color */   /* #4FA8D8 */
+  --lw-logo-navy-ondark: hsl(var(--lw-logo-navy-ondark-c));
+  --lw-logo-cyan-ondark-c: 185.9 82.1% 75.9%; /* @kind color */   /* #8FEAF4 */
+  --lw-logo-cyan-ondark: hsl(var(--lw-logo-cyan-ondark-c));
+
   /* ---- System chrome — Console's macOS traffic lights -------------------
      The second and last group that exists outside the palette, for the same
      reason as --lw-logo-cyan: these are quotations of someone else's artwork,

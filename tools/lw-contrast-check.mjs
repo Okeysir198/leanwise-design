@@ -772,10 +772,30 @@ function logoStops() {
     // a constraint a logo does not carry. See --lw-logo-cyan-c in tokens.css.
     { offset: "1", token: "logo-cyan" },
   ];
+  // The on-dark artwork is the same gradient lifted for a dark ground. It shipped
+  // with literal hexes and NO gate — this loop read two of the four logo assets,
+  // so the pair in logo-lockup-ondark.svg was exactly the unguarded second home
+  // the README warns about, for as long as that file has existed.
+  const wantOnDark = [
+    { offset: "0", token: "logo-navy-ondark" },
+    { offset: "1", token: "logo-cyan-ondark" },
+  ];
   const toHex = ({ r, g, b }) =>
     "#" + [r, g, b].map((v) => Math.round(v * 255).toString(16).padStart(2, "0")).join("").toUpperCase();
 
-  for (const file of ["logo-mark.svg", "logo-lockup.svg"]) {
+  const FILES = [
+    { file: "logo-mark.svg", stops: want },
+    { file: "logo-lockup.svg", stops: want },
+    { file: "logo-lockup-ondark.svg", stops: wantOnDark },
+    // The favicon's ATTRIBUTE stops are the light pair — the dark pair lives in its
+    // <style> block as declarations, and is asserted separately below. Both homes
+    // are real and both must be checked: the attributes are what a renderer that
+    // drops <style> falls back to, the declarations are what every modern browser
+    // actually paints on a dark tab strip.
+    { file: "logo-favicon.svg", stops: want },
+  ];
+
+  for (const { file, stops: wantStops } of FILES) {
     let svg;
     try {
       svg = readFileSync(join(ROOT, "assets", file), "utf8");
@@ -786,13 +806,13 @@ function logoStops() {
     // The lockup carries the same pair twice (mark and wordmark sweep separately),
     // so compare each gradient's stops rather than assuming a single pair.
     const found = [...svg.matchAll(/<stop offset="([\d.]+)"\s*stop-color="(#[0-9A-Fa-f]{3,6})"/g)];
-    if (found.length === 0 || found.length % want.length !== 0) {
-      fails.push(`assets/${file}: expected a multiple of ${want.length} gradient stops, found ${found.length}`);
+    if (found.length === 0 || found.length % wantStops.length !== 0) {
+      fails.push(`assets/${file}: expected a multiple of ${wantStops.length} gradient stops, found ${found.length}`);
       continue;
     }
     found.forEach(([, offset, hex], idx) => {
-      const i = idx % want.length;
-      const { offset: wantOffset, token } = want[i];
+      const i = idx % wantStops.length;
+      const { offset: wantOffset, token } = wantStops[i];
       const expect = resolveColor(token, "light");
       if (!expect) { fails.push(`assets/${file}: --lw-${token}-c did not resolve`); return; }
       if (offset !== wantOffset) {
@@ -806,6 +826,35 @@ function logoStops() {
       }
     });
   }
+
+  /* The favicon's dark-scheme override. It is the only logo asset that switches
+     itself, so it is the only one whose stops live in a <style> block as well as
+     in attributes — and a stale value there is invisible in a way the others are
+     not, because it only paints for a reader whose OS is in dark mode. */
+  try {
+    const svg = readFileSync(join(ROOT, "assets", "logo-favicon.svg"), "utf8");
+    const style = svg.match(/<style>([\s\S]*?)<\/style>/);
+    if (!style) {
+      fails.push("assets/logo-favicon.svg: no <style> block — the dark-tab variant is missing");
+    } else if (!/prefers-color-scheme\s*:\s*dark/.test(style[1])) {
+      fails.push("assets/logo-favicon.svg: <style> has no prefers-color-scheme:dark query");
+    } else {
+      const dark = style[1].slice(style[1].search(/@media[^{]*prefers-color-scheme\s*:\s*dark/));
+      for (const { token } of wantOnDark) {
+        const expect = resolveColor(token, "light");
+        if (!expect) { fails.push(`assets/logo-favicon.svg: --lw-${token}-c did not resolve`); continue; }
+        if (!dark.toUpperCase().includes(toHex(expect))) {
+          fails.push(
+            `assets/logo-favicon.svg: dark-scheme block does not carry ${toHex(expect)} for ` +
+            `--lw-${token}-c — run \`node tools/lw-favicon.mjs\``,
+          );
+        }
+      }
+    }
+  } catch {
+    fails.push("assets/logo-favicon.svg is missing — run `node tools/lw-favicon.mjs`");
+  }
+
   return fails;
 }
 
