@@ -661,6 +661,38 @@ nothing in most clients, and a bare anchor gives a 15px tap target. The amber CT
 ink here for exactly the reason it does in the app: white on `#FCB603` is 1.77. And ship the
 plain-text part: it is what a text-only client renders and what spam filters weigh.
 
+## Single-file artifacts
+
+`tokens.css` says *"Do not copy this file into an app; depend on the package."* That is right
+for every consumer with a bundler, and **unactionable for the one without**.
+
+A single-file HTML artifact — a report emailed to a customer, a briefing behind a password, a
+takeaway deck — has no npm, no build step and no second request: everything it renders with is
+already inside the one file. Told to depend on a package it cannot install, an author does the
+only thing left and retypes the values. That is not hypothetical. One such report shipped with
+~30 hand-transcribed HSL triples and four media queries at breakpoints this package does not
+declare, and nothing in it could ever have reported drift.
+
+This is the `email.css` argument one step further out. An email is a different *renderer*; a
+single-file artifact is a different *supply chain*. Both deserve a supported path rather than a
+prohibition that gets ignored:
+
+```bash
+npx lw-inline > tokens-block.css                       # token core only
+npx lw-inline --fonts --logo=lockup-ondark --out b.css # + woff2 + a --lw-logo data URI
+```
+
+The output carries the package version and a `sha256` of `tokens.css`. **That banner is the
+whole point** — a vendored copy that says where it came from can be diffed against a later
+release; a hand-typed one cannot be checked by anything, ever.
+
+It emits the token core and nothing else. A static artifact writes its own components; what it
+must not do is invent its own colour, radius, spacing or breakpoint values. And it refuses
+`--logo=mark-mono` outright, because `currentColor` cannot resolve inside a data URI — see
+§Logo.
+
+---
+
 ## Mobile
 
 Safe areas are tokens — `--lw-safe-top/right/bottom/left` — so a layout reserves the notch
@@ -698,6 +730,23 @@ review is the thing to catch, not an unused declared one.
 Most layouts need no query at all: `Grid` auto-fits, `Cluster` wraps, `Split` collapses at
 `--lw-bp-lg`. Controls reach a 44px target on a coarse pointer without changing the desktop
 size, so density and the touch minimum are not forced to be one number.
+
+### Anchors under sticky chrome
+
+`.lw-prose :is(h2,h3,h4)` carries `scroll-margin-block-start: var(--lw-space-64)` so a
+`#fragment` link does not park a heading behind `.lw-topbar`. Two things about that are easy to
+get wrong:
+
+- **`scroll-padding-top` on the container and `scroll-margin-top` on the target STACK.** They are
+  not alternatives. Set both — the container insets its snapport, the target expands its own
+  scroll box — and every anchor lands at *twice* the clearance, which reads as a mysteriously
+  generous gap rather than as a bug. Use one. This package uses the target property, so a
+  consumer that adds `html { scroll-padding-top }` on top is the case to watch for.
+- **Anything else sticky above the header adds to the clearance.** `AnnounceBar` offsets
+  `.lw-topbar` by `--lw-announce-h`, which made the chrome 92px against a 64px clearance and put
+  every heading 28px under the bar — fixed in 1.7.2 by a `:root:has(.lw-announce)` override in
+  `marketing.css`, and recorded in `advisories.json`. If you stack your own sticky element above
+  the header, its height is yours to add.
 
 ## Charts
 
@@ -933,9 +982,32 @@ assets/logo-mark.svg        the hexagon mark, brand gradient — for light groun
 assets/logo-mark-mono.svg   the same geometry in currentColor — for dark grounds
 assets/logo-lockup.svg      mark + LEANWISE AI wordmark
 assets/logo-lockup-ondark.svg  the lockup with the wordmark in white — dark grounds
-assets/logo-icon.png        raster fallback of the mark (favicons, apple-touch-icon)
+assets/logo-favicon.svg     the mark, squared and self-switching — the browser tab
+assets/logo-icon.png        raster fallback of the mark (apple-touch-icon, and any
+                            surface that cannot take an SVG)
 assets/logo-leanwise.png    raster fallback of the lockup (JSON-LD, crawlers)
 ```
+
+**The favicon is generated, not drawn** — `npx lw-favicon` (and `--check`, which runs inside
+`npm run check`). It is derived from `logo-mark.svg` and differs in exactly two ways, both of
+which exist because a tab strip is the one surface where the ground is not ours:
+
+- **Square viewBox.** The mark is 871.1 × 1000 and a favicon slot is square, so a browser
+  letterboxes it and the drawing renders smaller than the space allows. The viewBox widens to
+  1000 and the origin shifts to `-64.45`, centring the identical paths — no coordinate moves,
+  so the geometry stays the autotrace.
+- **It switches itself.** Every other asset is placed on a ground you chose, which is why there
+  is a light variant and a dark one and a rule for picking. A tab gives you neither the choice
+  nor the knowledge: the same file is painted on near-white and near-black depending on an OS
+  setting, and `#024576` is invisible on the second. So this asset alone carries both pairs and
+  a `prefers-color-scheme` query inside the SVG. Renderers that ignore the query keep the light
+  stops, which is the safer default.
+
+**The on-dark gradient is tokenised too** — `--lw-logo-navy-ondark` `#4FA8D8` and
+`--lw-logo-cyan-ondark` `#8FEAF4`, artwork-only on exactly the terms `--lw-logo-cyan` is. They
+were literal hexes inside `logo-lockup-ondark.svg` with nothing guarding them, because
+`logoStops()` read only `logo-mark.svg` and `logo-lockup.svg`. It now reads all four assets,
+including the favicon's `<style>` block.
 
 **Geometry** is an autotrace of the master art (IoU 0.991 mark, 0.975 wordmark) — re-trace
 only when the art changes, never hand-edit the paths. **Colour** is resolved from `tokens.css`

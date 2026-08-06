@@ -20,6 +20,67 @@ versions are breaking: **0.1.4** (dependency URL), **0.2.0** (removal), **0.7.0*
 and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additionally ships a
 `package.json` that reports the wrong version.
 
+## [Unreleased]
+
+### Fixed — an AnnounceBar put every prose anchor UNDER the header, undoing the rule beside it
+
+`.lw-prose :is(h2,h3,h4)` has carried `scroll-margin-block-start: var(--lw-space-64)` since the
+`.lw-topbar` promotion, with a comment stating exactly why: 64px clears the 56px bar so a
+`#fragment` link does not land a heading behind it. `.lw-announce` then offsets that bar by
+`var(--lw-announce-h, 36px)` — the coupling rule the announcement bar exists upstream to own.
+Nothing raised the prose clearance to match, so composing AnnounceBar + TopBar + a prose
+document gave 92px of chrome against a 64px clearance and ate the heading's first line.
+
+Fixed with `:root:has(.lw-announce) .lw-prose :is(h2,h3,h4)` in `marketing.css`, beside the rule
+that causes it. `:has()` because `.lw-announce` is a **sibling** of the prose and a custom
+property cannot travel sideways; `marketing.css` because the dependency runs one way only —
+marketing knows about `.lw-topbar`, base must not know about `.lw-announce`.
+
+**Worth keeping: the fixture blindness is the finding, not the CSS.** No specimen ever paired an
+announcement with a prose document, so neither browser gate could see it — the same shape as the
+stranded-CSS and blank-card findings in `REVIEW.md`. Recorded as
+`announce-breaks-prose-anchors` with a derivation that goes non-zero again if the override is
+deleted; that was watched failing before it was trusted.
+
+### Added — `logo-favicon.svg`, generated, and the on-dark gradient is finally a token
+
+`npx lw-favicon` derives `assets/logo-favicon.svg` from `logo-mark.svg`: a square viewBox (a
+871.1 × 1000 mark letterboxes in a square slot) and a `prefers-color-scheme` query **inside** the
+SVG, because a tab strip is the one surface whose ground the page does not choose, and the
+gradient's `#024576` end is invisible on a dark one. `check:favicon` now runs inside
+`npm run check`.
+
+Doing it properly surfaced a pre-existing gap. `--lw-logo-navy-ondark` (`#4FA8D8`) and
+`--lw-logo-cyan-ondark` (`#8FEAF4`) were **literal hexes inside `logo-lockup-ondark.svg` with no
+gate at all** — `logoStops()` only ever read `logo-mark.svg` and `logo-lockup.svg`, so exactly
+the unguarded second home the README warns about had been shipping since that asset landed. Both
+are now artwork-only tokens on the same terms as `--lw-logo-cyan`, and the gate reads all four
+assets plus the favicon's `<style>` block.
+
+### Added — `npx lw-inline` for consumers that cannot import
+
+`tokens.css` says "do not copy this file; depend on the package". Right for anything with a
+bundler, unactionable for a single-file HTML artifact with no npm, no build step and no second
+request. Told to depend on a package it cannot install, an author retypes the values: one report
+shipped ~30 hand-transcribed HSL triples and four media queries at undeclared breakpoints, and
+nothing in it could report drift.
+
+`lw-inline` emits the token core — optionally with woff2 and a logo data URI — under a banner
+carrying the package version and a `sha256` of `tokens.css`. The banner is the point: a vendored
+copy that says where it came from can be diffed; a hand-typed one cannot be checked by anything.
+It emits **only** the token core, and refuses `--logo=mark-mono`, whose `currentColor` cannot
+resolve inside a data URI.
+
+This is the `email.css` argument one step out — an email is a different renderer, a single-file
+artifact is a different supply chain — and it gets the same answer: a supported path rather than
+a prohibition that gets ignored.
+
+### Docs
+
+README gains **§Single-file artifacts**, and **§Responsive → Anchors under sticky chrome**, which
+states the one that keeps biting: `scroll-padding-top` on the container and `scroll-margin-top`
+on the target **stack**, so setting both lands every anchor at twice the clearance.
+
 ## [1.7.1] — 2026-08-06
 
 ### Fixed — `Table`'s scroll region had no keyboard access, and v1.7.0 is what made that observable
