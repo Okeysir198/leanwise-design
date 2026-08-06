@@ -56,44 +56,13 @@
 
 /* ---- Data display ---------------------------------------------------------- */
 
-/* TABLE. Hairline rows, mono numerics, a sticky head. tabular-nums on every
-   numeric cell is the whole reason a table reads as data rather than as text. */
-.lw-table-wrap { width: 100%; overflow-x: auto; border: 1px solid var(--lw-line); border-radius: var(--lw-radius-lg); background: var(--lw-bg); }
-.lw-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: var(--lw-text-sm); }
-.lw-table th {
-  text-align: start; font-family: var(--lw-font-mono); font-size: var(--lw-th-text);
-  letter-spacing: var(--lw-th-tracking); word-spacing: var(--lw-word-spacing-caps); text-transform: uppercase; font-weight: var(--lw-fw-medium);
-  color: var(--lw-fg-subtle); background: var(--lw-bg-subtle);
-  padding: 10px var(--lw-space-16); white-space: nowrap;
-  border-bottom: 1px solid var(--lw-line); position: sticky; top: 0; z-index: var(--lw-z-raised);
-}
-.lw-table td { padding: 12px var(--lw-space-16); border-bottom: 1px solid var(--lw-line); color: var(--lw-fg); vertical-align: middle; }
-.lw-table tbody tr:last-child td { border-bottom: 0; }
-.lw-table .num { font-family: var(--lw-font-mono); font-variant-numeric: tabular-nums; text-align: end; }
-.lw-table th.num { text-align: end; }
-.lw-table .muted { color: var(--lw-fg-muted); }
-.lw-table tbody tr { transition: background var(--lw-dur-xs) var(--lw-ease-out); }
-.lw-table-hover tbody tr:hover td { background: var(--lw-bg-subtle); }
-.lw-table-compact td { padding: 8px var(--lw-space-12); }
-.lw-table-compact th { padding: 8px var(--lw-space-12); }
-/* A sortable header is a button, not a th with a click handler. */
-.lw-table th button { appearance: none; border: 0; background: none; font: inherit; color: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; padding: 0; }
-.lw-table th button:hover { color: var(--lw-fg); }
-.lw-table th button:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); border-radius: var(--lw-radius-xs); }
-/* Only the column that is ACTUALLY sorted takes brand ink. Every sortable
-   header carries aria-sort — "none" when it is not the active one, which is
-   correct for assistive tech — so the selector has to exclude that value or the
-   whole header row reads as active. */
-.lw-table th[aria-sort]:not([aria-sort="none"]) button { color: var(--lw-brand-text); }
-/* The caret is an affordance on an inactive header and a state on the active
-   one, so the two must not be a hair apart. */
-.lw-table th button .lw-icon { opacity: 0.3; }
-.lw-table th[aria-sort]:not([aria-sort="none"]) button .lw-icon { opacity: 1; }
-/* On a right-aligned column the caret must sit to the LEFT of the label. Trailing
-   it puts the caret's width between the header text and the cell's right edge,
-   so the label stops one glyph short of the column of figures it names and the
-   two read as different columns. Reversing keeps label and figures on one edge. */
-.lw-table th.num button { flex-direction: row-reverse; }
+/* MOVED to base.css in v1.7.0, verbatim and in source order, with its dark-band
+   patches in the same commit: the whole `.lw-table` family. A table is a data
+   display, and the consumer that needed it most — `leanwise-ai`'s published
+   accuracy figures at `/product#evidence` — is a MARKETING page that loads base +
+   marketing and never sees this file. It had rendered as a bare UA table since
+   the split. What stays here is genuinely app surface: the KPI tile below, and
+   `.lw-kpi` / `.lw-source-item`'s share of the dark-ground rule at the foot. */
 
 /* KPI TILE — one number, its label, and at most one delta. Anything more is a
    card, not a KPI. The number is mono + tabular so a row of tiles aligns. */
@@ -477,7 +446,8 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
    dark-band treatment — on a site that puts its contact form on a dark ground.
    Position is not load-bearing; presence is. What stays below is what was
    never promoted: `.lw-prompt` (an AI surface), the bare `[data-focus-demo]`
-   review hook, and the table/kpi/empty/eyebrow family. */
+   review hook, and the kpi/eyebrow family. The table's share went to base.css in
+   v1.7.0, for the same reason and after the same failure. */
 :is(.dark, [data-band="dark"], .lw-band-dark) .lw-prompt { background-color: var(--lw-bg-subtle); }
 /* background-COLOR, never the shorthand: the shorthand resets background-image
    and would erase the two gradients that draw .lw-select's chevron, leaving the
@@ -488,15 +458,10 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 
 /* A dark band inside a light page has no --lw-bg of its own to lean on. */
 .lw-band-dark, [data-band="dark"] { color: var(--lw-on-dark-2); }
-.lw-band-dark .lw-table-wrap, [data-band="dark"] .lw-table-wrap,
+/* `.lw-table-wrap` left this grouped selector in v1.7.0 and took its two
+   header/cell patches with it — they are in base.css beside the component now. */
 .lw-band-dark .lw-kpi, [data-band="dark"] .lw-kpi,
 .lw-band-dark .lw-source-item, [data-band="dark"] .lw-source-item { background: var(--lw-on-dark-wash); border-color: var(--lw-on-dark-line); }
-/* The WASH tier, not the fill. --lw-on-dark-3 is the muted floor (4.91 on
-   navy-deep) and has no headroom: every point the header ground is lightened
-   comes straight off the ink. At the 0.06 fill this measured 4.33 and axe
-   caught it; at 0.03 it is 4.67. A header band is a wash by intent anyway. */
-.lw-band-dark .lw-table th, [data-band="dark"] .lw-table th { background: var(--lw-on-dark-wash); color: var(--lw-on-dark-3); border-bottom-color: var(--lw-on-dark-line); }
-.lw-band-dark .lw-table td, [data-band="dark"] .lw-table td { color: var(--lw-on-dark-1); border-bottom-color: var(--lw-on-dark-line); }
 .lw-band-dark .lw-kpi .v, [data-band="dark"] .lw-kpi .v { color: var(--lw-on-dark-1); }
 .lw-band-dark .lw-kpi .k, [data-band="dark"] .lw-kpi .k { color: var(--lw-on-dark-3); }
 /* The three `.lw-empty` patches that stood here MOVED to base.css in v1.3.1,

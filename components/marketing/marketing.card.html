@@ -1,4 +1,4 @@
-<!-- @dsCard group="Marketing" name="Marketing composites" subtitle="Hero, FeatureGrid, StoryCard, LogoRail, Steps, Quote, Byline, ArticleCard, Tabs, Pagination, EmptyState — on base + marketing ONLY, which is what makes this card a presence gate" viewport="1100x1900" -->
+<!-- @dsCard group="Marketing" name="Marketing composites" subtitle="Hero, FeatureGrid, StoryCard, LogoRail, Steps, Quote, Byline, ArticleCard, Tabs, Pagination, EmptyState, Table — on base + marketing ONLY, which is what makes this card a presence gate" viewport="1100x2100" -->
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><title>Marketing</title>
 <link rel="stylesheet" href="../../preview/_card.css">
@@ -85,6 +85,13 @@ That is the only rule that keeps a call to action meaning anything.</p></header>
   to <i>drop</i>, so four marketing components rendered correctly here and unstyled in the flagship consumer,
   which had resorted to a <span class="mono">?url</span> import of <span class="mono">product.css</span> on two
   public routes to get them back.</p>
+<p class="sub"><b>It caught a twelfth in v1.7.0: <span class="mono">Table</span>.</b> The consumer publishes its
+  measured extraction accuracy — one row per document type, every percentage beside the sample count it was
+  measured on — on a <i>marketing</i> page. That table had rendered as bare UA markup since the split: no frame,
+  no radius, no header face, no tabular figures, and no <span class="mono">overflow-x: auto</span>, which is the
+  one that turns a wide table into a sideways page on a phone. The specimen above is the gate; the lesson is that
+  <b>a data display is not automatically an app surface</b> — a page arguing from evidence has to show the
+  evidence, and it does not get to load a different stylesheet to do it.</p>
 <p class="sub"><b>The hero is a dark BAND now, not just a navy background.</b>
   <span class="mono">.lw-hero-dark</span> was never in <span class="mono">tokens.css</span>'s band-selector
   list — <span class="mono">.lw-section.dark</span> escaped only because its class list literally contains
@@ -115,7 +122,7 @@ const LW = window.LeanWiseDesign_f2d907;
 
 const { Hero, FeatureGrid, StoryCard, LogoRail, Button, Stack, Grid } = LW;
 const { Steps, Quote, Byline, ArticleCard } = LW;
-const { Tabs, Pagination, EmptyState } = LW;
+const { Tabs, Pagination, EmptyState, Table } = LW;
 ReactDOM.createRoot(document.getElementById("hero")).render(
   <Hero eyebrow="Retrieval you can audit"
     title={<>Answers your legal team can <em>defend</em>.</>}
@@ -184,6 +191,22 @@ ReactDOM.createRoot(document.getElementById("editorial")).render(
         </div>
         <Byline name="A. Rossi" role="Head of Legal Ops" date="4 August 2026" dateTime="2026-08-04" />
       </div>
+    </div>
+    <div>
+      <span className="lbl-eyebrow">table — promoted to base.css in v1.7.0; a marketing page that argues from evidence has to show the evidence</span>
+      <Table
+        caption="Field-extraction accuracy by document type"
+        columns={[
+          { key: "type", header: "Document type" },
+          { key: "score", header: "Accuracy", num: true },
+          { key: "n", header: "Samples", num: true },
+        ]}
+        rows={[
+          { type: "Test Report", score: "96.5%", n: "292" },
+          { type: "Self Declaration", score: "86.1%", n: "20" },
+          { type: "Bill of Materials", score: "100.0%", n: "2" },
+        ]}
+      />
     </div>
     <div>
       <span className="lbl-eyebrow">article index chrome — Tabs, Pagination and EmptyState, all promoted to base.css in v1.3.1</span>

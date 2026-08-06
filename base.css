@@ -741,12 +741,83 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
 .lw-empty .t { font-size: var(--lw-text-body); font-weight: var(--lw-fw-semibold); letter-spacing: -0.012em; color: var(--lw-fg); }
 .lw-empty .s { font-size: var(--lw-text-sm); color: var(--lw-fg-muted); max-width: 46ch; text-wrap: pretty; }
 .lw-empty .glyph { display: inline-flex; font-family: var(--lw-font-mono); font-size: 20px; color: var(--lw-fg-subtle); }
-/* The dashed frame and its ink on a dark band. The generic `.lw-band-dark`
-   ground rule these sat beside (`.lw-table-wrap`, `.lw-kpi`, `.lw-source-item`)
-   is app surface and stayed in product.css. */
+/* The dashed frame and its ink on a dark band. Of the generic `.lw-band-dark`
+   ground rule these sat beside, `.lw-kpi` and `.lw-source-item` are app surface
+   and stayed in product.css; `.lw-table-wrap` followed the table here in v1.7.0
+   — see the promotion below. */
 .lw-band-dark .lw-empty, [data-band="dark"] .lw-empty { background: var(--lw-on-dark-wash); border-color: var(--lw-on-dark-line-strong); }
 .lw-band-dark .lw-empty .t, [data-band="dark"] .lw-empty .t { color: var(--lw-on-dark-1); }
 .lw-band-dark .lw-empty .s, [data-band="dark"] .lw-empty .s { color: var(--lw-on-dark-2); }
+
+/* PROMOTED from product.css in v1.7.0, verbatim and in source order, WITH its
+   dark-band patches — the fb2d3ad lesson is that position is not load-bearing
+   but PRESENCE is, and a base-only page never loads product.css at all.
+
+   Why a table is not app surface: `leanwise-ai` publishes its measured
+   field-extraction accuracy — seven rows, each percentage beside the sample it
+   was measured on — on a MARKETING page, `/product#evidence`. That is the site's
+   single most important evidence artifact and it rendered as a bare UA table for
+   four releases: no frame, no radius, no header face, no tabular figures, and no
+   `overflow-x: auto`, which is the one that turns a wide table into a sideways
+   page on a phone. Nothing could see it — axe does not score aesthetics, and a
+   narrow table never trips a width gate. A table is a DATA display, and data is
+   exactly what a page arguing from evidence has to show.
+
+   Placed here, before the v1.3.0 forms promotion, so the consolidated
+   pointer-affordance list at the FOOT of this file still comes last. The two
+   `.lw-table` cursor rules and the `.num` nowrap rule stay in that list where
+   they already were: it is documented as last-in-file precisely so a later
+   `cursor: default` cannot silently cancel it, and moving them up here would
+   break the invariant to tidy an import. */
+
+/* TABLE. Hairline rows, mono numerics, a sticky head. tabular-nums on every
+   numeric cell is the whole reason a table reads as data rather than as text. */
+.lw-table-wrap { width: 100%; overflow-x: auto; border: 1px solid var(--lw-line); border-radius: var(--lw-radius-lg); background: var(--lw-bg); }
+.lw-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: var(--lw-text-sm); }
+.lw-table th {
+  text-align: start; font-family: var(--lw-font-mono); font-size: var(--lw-th-text);
+  letter-spacing: var(--lw-th-tracking); word-spacing: var(--lw-word-spacing-caps); text-transform: uppercase; font-weight: var(--lw-fw-medium);
+  color: var(--lw-fg-subtle); background: var(--lw-bg-subtle);
+  padding: 10px var(--lw-space-16); white-space: nowrap;
+  border-bottom: 1px solid var(--lw-line); position: sticky; top: 0; z-index: var(--lw-z-raised);
+}
+.lw-table td { padding: 12px var(--lw-space-16); border-bottom: 1px solid var(--lw-line); color: var(--lw-fg); vertical-align: middle; }
+.lw-table tbody tr:last-child td { border-bottom: 0; }
+.lw-table .num { font-family: var(--lw-font-mono); font-variant-numeric: tabular-nums; text-align: end; }
+.lw-table th.num { text-align: end; }
+.lw-table .muted { color: var(--lw-fg-muted); }
+.lw-table tbody tr { transition: background var(--lw-dur-xs) var(--lw-ease-out); }
+.lw-table-hover tbody tr:hover td { background: var(--lw-bg-subtle); }
+.lw-table-compact td { padding: 8px var(--lw-space-12); }
+.lw-table-compact th { padding: 8px var(--lw-space-12); }
+/* A sortable header is a button, not a th with a click handler. */
+.lw-table th button { appearance: none; border: 0; background: none; font: inherit; color: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; padding: 0; }
+.lw-table th button:hover { color: var(--lw-fg); }
+.lw-table th button:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); border-radius: var(--lw-radius-xs); }
+/* Only the column that is ACTUALLY sorted takes brand ink. Every sortable
+   header carries aria-sort — "none" when it is not the active one, which is
+   correct for assistive tech — so the selector has to exclude that value or the
+   whole header row reads as active. */
+.lw-table th[aria-sort]:not([aria-sort="none"]) button { color: var(--lw-brand-text); }
+/* The caret is an affordance on an inactive header and a state on the active
+   one, so the two must not be a hair apart. */
+.lw-table th button .lw-icon { opacity: 0.3; }
+.lw-table th[aria-sort]:not([aria-sort="none"]) button .lw-icon { opacity: 1; }
+/* On a right-aligned column the caret must sit to the LEFT of the label. Trailing
+   it puts the caret's width between the header text and the cell's right edge,
+   so the label stops one glyph short of the column of figures it names and the
+   two read as different columns. Reversing keeps label and figures on one edge. */
+.lw-table th.num button { flex-direction: row-reverse; }
+
+/* The table's dark-band patches, moved in the same commit rather than left for a
+   follow-up pass — that is the one thing fb2d3ad got wrong and v1.3.0 had to
+   correct. The WASH tier on the header, not the fill: `--lw-on-dark-3` is the
+   muted floor (4.91 on navy-deep) and has no headroom, so every point the header
+   ground is lightened comes straight off the ink. At the 0.06 fill this measured
+   4.33 and axe caught it; at 0.03 it is 4.67. */
+.lw-band-dark .lw-table-wrap, [data-band="dark"] .lw-table-wrap { background: var(--lw-on-dark-wash); border-color: var(--lw-on-dark-line); }
+.lw-band-dark .lw-table th, [data-band="dark"] .lw-table th { background: var(--lw-on-dark-wash); color: var(--lw-on-dark-3); border-bottom-color: var(--lw-on-dark-line); }
+.lw-band-dark .lw-table td, [data-band="dark"] .lw-table td { color: var(--lw-on-dark-1); border-bottom-color: var(--lw-on-dark-line); }
 
 /* PROMOTED from product.css in v1.3.0, verbatim and in source order. A contact
    form is not an app surface, so the field, the shared control face and the two

@@ -20,6 +20,45 @@ versions are breaking: **0.1.4** (dependency URL), **0.2.0** (removal), **0.7.0*
 and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additionally ships a
 `package.json` that reports the wrong version.
 
+## [1.7.0] — 2026-08-06
+
+### Fixed — `Table` was stranded in the app-surface layer, and a marketing page was publishing its evidence in it
+
+`.lw-table` / `.lw-table-wrap` **move from `product.css` to `base.css`**, verbatim and in source
+order, with their two `.lw-band-dark` patches in the same commit.
+
+`leanwise-ai` publishes its measured field-extraction accuracy — one row per document type, every
+percentage beside the sample count it was measured on — at `/product#evidence`, which is a
+**marketing** page: it loads `base.css` + `marketing.css` and, by the documented recipe, does not
+load `product.css`. So the site's single most important evidence artifact had rendered as bare UA
+markup since the layers were split: no frame, no radius, no header face, no cell padding, no
+tabular figures, and **no `overflow-x: auto`** — the one that turns a wide table into a sideways
+page on a phone.
+
+**Nothing could see it.** axe does not score aesthetics; a narrow table never trips a width gate;
+the text was correct, so every content assertion passed. It is the third instance of the same
+pattern — v1.3.0 (`.lw-topbar` and the form controls), v1.3.1 (`Avatar` / `Tabs` / `Pagination` /
+`EmptyState`) — and the generalisation worth keeping is that **a data display is not automatically
+an app surface**. A page that argues from evidence has to show the evidence, and it does not get to
+load a different stylesheet to do it.
+
+The gate that would have caught it now exists: `marketing.card.html` — the specimen that loads
+**base + marketing and nothing else** — renders a `Table`. That card is a presence gate precisely
+because it loads the recipe a consumer is told to use, and it grew by one component for the same
+reason it dropped `product.css` in v1.3.1.
+
+Two things deliberately did **not** move. The `.lw-table` cursor rules and the `.num` nowrap rule
+stay in the consolidated pointer-affordance list at the foot of `base.css`, which is documented as
+last-in-file so a later `cursor: default` cannot silently cancel it — breaking that invariant to
+tidy an import would be a worse trade. And `.lw-kpi` / `.lw-source-item` keep their share of
+`product.css`'s dark-ground rule: those are genuinely app surface.
+
+### Consumers
+
+`leanwise-ai` moves to `#v1.7.0`. No API change, no class rename, nothing to migrate — a consumer
+already loading `product.css` sees the identical composited result, and one that is not gains the
+component it should always have had.
+
 ## [1.6.3] — 2026-08-06
 
 ### Fixed — an image inside `.lw-figure` stretched on a narrow viewport
