@@ -63,6 +63,7 @@
   "bin": {
     "lw-token-lint": "./tools/lw-token-lint.mjs",
     "lw-doctor": "./tools/lw-doctor.mjs",
+    "lw-inline": "./tools/lw-inline.mjs",
     "lw-favicon": "./tools/lw-favicon.mjs"
   },
   "files": [
