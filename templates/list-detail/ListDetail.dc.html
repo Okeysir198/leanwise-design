@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="./support.js"></script>
+<script src="../_shared/support.js"></script>
 </head>
 <body>
 <x-dc>
 <a class="lw-skip" href="#lw-main">Skip to content</a>
 <!-- @template name="List → detail → edit" description="The most common screen in any back-office: a filtered list, a detail view, an edit mode with an unsaved-changes guard, bulk actions and role-gated destructive controls." -->
-<helmet><script src="./ds-base.js"></script></helmet>
+<helmet><script src="../_shared/ds-base.js"></script></helmet>
 <div class="{{ themeClass }}" data-band="{{ band }}" data-density="{{ density }}" style="height:100vh;display:flex;flex-direction:column;background:var(--lw-bg);color:var(--lw-fg);font-family:var(--lw-font-sans);overflow:hidden">
 
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.AppBar" hint-size="100%,56px" brand="LeanWise AI" crumbs="{{ crumbs }}">

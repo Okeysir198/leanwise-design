@@ -7,7 +7,6 @@
 <link rel="stylesheet" href="../../product.css">
 <script src="../../preview/_vendor/react.development.js"></script>
 <script src="../../preview/_vendor/react-dom.development.js"></script>
-<script src="../../preview/_vendor/babel.min.js"></script>
 <script src="../../_ds_bundle.js"></script>
 <style>.demo{background:var(--lw-brand-soft);border:1px dashed var(--lw-brand-line);border-radius:6px;padding:12px;font-family:var(--lw-font-mono);font-size:11px;color:var(--lw-brand-on)}</style>
 </head><body><div class="card">
@@ -18,21 +17,5 @@ every consumer: Grid reflows on its own at any width, and Split collapses at
 <span class="mono">--lw-bp-lg</span> (1024px) — the width below which two panes stop being two panes.</p></header>
 <div id="root"></div>
 </div>
-<script type="text/babel">
-const LW = window.LeanWiseDesign_f2d907;
-
-const { Stack, Cluster, Grid, Split } = LW;
-const B = ({children}) => <div className="demo">{children}</div>;
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <Stack gap={24}>
-    <div><span className="lbl-eyebrow">Stack gap={24}</span><Stack gap={8} style={{marginTop:8}}><B>row</B><B>row</B><B>row</B></Stack></div>
-    <div><span className="lbl-eyebrow">Cluster — wraps, never overflows</span><Cluster gap={8} style={{marginTop:8}}>
-      {["all","contracts","policies","transcripts","email","tickets","wiki"].map(t=><B key={t}>{t}</B>)}</Cluster></div>
-    <div><span className="lbl-eyebrow">Grid min=180px — auto-fit, no breakpoint</span><Grid min={180} style={{marginTop:8}}>
-      {[1,2,3,4,5].map(i=><B key={i}>col {i}</B>)}</Grid></div>
-    <div><span className="lbl-eyebrow">Split rail=260 — one column below 1024px</span><Split rail={260} style={{marginTop:8}}>
-      <B>main</B><B>rail</B></Split></div>
-  </Stack>
-);
-
-</script></body></html>
+<script src="./layout.card.js"></script>
+</body></html>

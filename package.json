@@ -113,7 +113,7 @@
     "check:presence:list": "node tools/lw-presence.mjs --list",
     "test": "node --test test/*.test.mjs",
     "inline": "node tools/lw-inline.mjs",
-    "check": "npm test && npm run check:presence && npm run check:rsc && npm run check:build && npm run check:types && npm run check:registry && npm run check:advisories && npm run check:favicon && npm run check:contrast && npm run check:tone && npm run check:tokens && npm run check:themes && npm run check:dts && npm run check:bundle && npm run check:templates",
+    "check": "npm test && npm run check:presence && npm run check:rsc && npm run check:build && npm run check:types && npm run check:registry && npm run check:advisories && npm run check:favicon && npm run check:contrast && npm run check:tone && npm run check:tokens && npm run check:themes && npm run check:dts && npm run check:bundle && npm run check:templates && npm run check:cards && npm run check:assets",
     "check:ci": "npm run check && npm run check:pack && npm run check:a11y && npm run check:visual",
     "tokens": "node tools/lw-tokens-dtcg.mjs",
     "dts": "node tools/lw-dts-barrel.mjs",
@@ -128,7 +128,11 @@
     "check:registry": "node tools/lw-registry.mjs --check",
     "check:advisories": "node tools/lw-doctor.mjs --self-check",
     "favicon": "node tools/lw-favicon.mjs",
-    "check:favicon": "node tools/lw-favicon.mjs --check"
+    "check:favicon": "node tools/lw-favicon.mjs --check",
+    "cards": "node tools/lw-cards.mjs",
+    "check:cards": "node tools/lw-cards.mjs --check",
+    "assets": "node tools/lw-assets.mjs",
+    "check:assets": "node tools/lw-assets.mjs --check"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",

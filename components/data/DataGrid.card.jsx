@@ -1,0 +1,43 @@
+const LW = window.LeanWiseDesign_f2d907;
+const { DataGrid, Pagination, FilterBar, Toolbar, Input, Button, Chip, Stack } = LW;
+
+const NAMES = ["contracts/2024","policies/handbook","support/tickets","product/specs","legal/archive","research/notes","sales/decks","eng/runbooks"];
+const rows = Array.from({length:240},(_,i)=>({
+  id:i+1, source:NAMES[i%NAMES.length]+"/"+String(i+1).padStart(3,"0"),
+  status:["Indexed","Queued","Failed"][i%3], chunks:(i*137)%48000, latency:(40+(i*7)%260)+"ms",
+  owner:["A. Mensah","R. Okafor","J. Tran","M. Silva"][i%4],
+}));
+
+function Demo(){
+  const [sort,setSort]=React.useState({key:"chunks",dir:"desc"});
+  const [sel,setSel]=React.useState([]);
+  const [page,setPage]=React.useState(1);
+  const [size,setSize]=React.useState(50);
+  const [filters,setFilters]=React.useState([{id:1,key:"status",value:"Indexed"},{id:2,key:"owner",value:"J. Tran"}]);
+  const sorted=React.useMemo(()=>{
+    const d=sort.dir==="asc"?1:-1;
+    return [...rows].sort((a,b)=> (a[sort.key]>b[sort.key]?1:a[sort.key]<b[sort.key]?-1:0)*d);
+  },[sort]);
+  const cols=[
+    {key:"source",header:"Source",width:250,pin:true,sortable:true},
+    {key:"status",header:"Status",width:120,render:r=><Chip tone={r.status==="Indexed"?"success":r.status==="Queued"?"neutral":"danger"}>{r.status}</Chip>},
+    {key:"chunks",header:"Chunks",width:110,num:true,sortable:true,render:r=>r.chunks.toLocaleString()},
+    {key:"latency",header:"p95",width:90,num:true},
+    {key:"owner",header:"Owner",width:150},
+  ];
+  return (
+    <Stack gap={12}>
+      <Toolbar>
+        <span className="lw-toolbar-grow"><Input placeholder="Search sources" aria-label="Search sources" /></span>
+        <Button variant="ghost" size="sm">Columns</Button>
+        <Button variant="ghost" size="sm">Export</Button>
+      </Toolbar>
+      <FilterBar filters={filters} onRemove={f=>setFilters(fs=>fs.filter(x=>x.id!==f.id))} onClear={()=>setFilters([])} />
+      <DataGrid columns={cols} rows={sorted} sort={sort} onSort={setSort} selectable selected={sel}
+        onSelectionChange={setSel} virtualize height={340} rowHeight={44} label="Indexed sources"
+        selectionActions={<><Button size="sm" variant="ghost">Re-index</Button><Button size="sm" variant="danger">Delete</Button></>} />
+      <Pagination page={page} pageSize={size} total={rows.length} onPageChange={setPage} onPageSizeChange={setSize} />
+    </Stack>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo />);

@@ -301,7 +301,8 @@ function jsxSelfCheck() {
       if (entry === "node_modules" || entry.startsWith(".")) continue;
       const p2 = join(d, entry);
       if (statSync(p2).isDirectory()) scan(p2);
-      else if (extname(p2) === ".jsx") jsx.push(p2);
+      // `*.card.jsx` is a card body (tools/lw-cards.mjs): React is a page global there, by design.
+      else if (extname(p2) === ".jsx" && !p2.endsWith(".card.jsx")) jsx.push(p2);
     }
   };
   scan(dir);

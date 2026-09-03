@@ -82,7 +82,7 @@ const KIND = (name, value, hinted) => {
   // A derived colour is `var(--lw-x-c)`; resolve one hop to type it correctly
   // rather than falling through to "other".
   if (/^--lw-text-(xs|sm|base|lg|xl|\d?xl)$/.test(name)) return "dimension";
-  if (/^--lw-(text|fg|bg|line|border|surface|brand|navy|cta|success|warning|danger|neutral|chart|on|diff|scrim|logo)/.test(name)) return "color";
+  if (/^--lw-(text|fg|bg|line|border|surface|brand|navy|cta|success|warning|danger|neutral|chart|on|diff|scrim|logo|art)/.test(name)) return "color";
   if (/hsl|rgb|#[0-9a-f]{3,8}/i.test(value)) return "color";
   return "other";
 };

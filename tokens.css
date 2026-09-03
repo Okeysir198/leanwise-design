@@ -234,6 +234,29 @@
   --lw-logo-cyan-ondark-c: 185.9 82.1% 75.9%; /* @kind color */   /* #8FEAF4 */
   --lw-logo-cyan-ondark: hsl(var(--lw-logo-cyan-ondark-c));
 
+  /* The rest of the artwork's palette — the hero lattice stroke and the hero
+     mark's re-ranged gradient ends. Artwork-only on exactly the terms above: no
+     UI rule may consume any of these, and none fits a role. Until v1.13.0 they
+     were literal hexes in `hex-lattice.svg`, `hero-mark.svg` and
+     `hero-mark-ink.svg`, with no token and no gate — three more second homes
+     for a brand value. `tools/lw-assets.mjs` now generates the on-dark twin of
+     each asset from its ink source by substituting these, and `logoStops()`
+     in lw-contrast-check.mjs asserts every stop and stroke against them.
+     (hex-lattice-ink.svg's stroke is --lw-brand-500 and the hero mark's middle
+     stop is --lw-logo-cyan; both already had a name.) The channels are the
+     literal hex converted to HSL at one decimal, and each round-trips back to
+     the same hex — verified when they were written. */
+  --lw-art-lattice-ondark-c: 185.9 71.1% 63.3%; /* @kind color */   /* #5FD7E4 — hex-lattice.svg stroke */
+  --lw-art-lattice-ondark: hsl(var(--lw-art-lattice-ondark-c));
+  --lw-art-mark-navy-c: 205.7 96.3% 21.4%; /* @kind color */        /* #023E6B — hero-mark-ink.svg stop 0 */
+  --lw-art-mark-navy: hsl(var(--lw-art-mark-navy-c));
+  --lw-art-mark-navy-ondark-c: 204.8 69.7% 38.8%; /* @kind color */ /* #1E6FA8 — hero-mark.svg stop 0 */
+  --lw-art-mark-navy-ondark: hsl(var(--lw-art-mark-navy-ondark-c));
+  --lw-art-mark-cyan-c: 185.3 79.3% 47.3%; /* @kind color */        /* #19C7D8 — hero-mark-ink.svg stop 1 */
+  --lw-art-mark-cyan: hsl(var(--lw-art-mark-cyan-c));
+  --lw-art-mark-cyan-ondark-c: 185.9 83.6% 78.4%; /* @kind color */ /* #9AEDF6 — hero-mark.svg stop 1 */
+  --lw-art-mark-cyan-ondark: hsl(var(--lw-art-mark-cyan-ondark-c));
+
   /* ---- System chrome — Console's macOS traffic lights -------------------
      The second and last group that exists outside the palette, for the same
      reason as --lw-logo-cyan: these are quotations of someone else's artwork,

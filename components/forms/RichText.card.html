@@ -7,7 +7,6 @@
 <link rel="stylesheet" href="../../product.css">
 <script src="../../preview/_vendor/react.development.js"></script>
 <script src="../../preview/_vendor/react-dom.development.js"></script>
-<script src="../../preview/_vendor/babel.min.js"></script>
 <script src="../../_ds_bundle.js"></script>
 </head><body><div class="card">
 <header><h1>RichText</h1>
@@ -20,20 +19,5 @@ is a real control with a label and <code>aria-pressed</code>, and the surface is
 <code>role="textbox" aria-multiline</code> — a bare contenteditable div announces nothing.</p></header>
 <div class="panes"><div class="pane" id="light"></div><div class="pane dark lw-band-dark" id="dark"></div></div>
 </div>
-<script type="text/babel">
-const LW = window.LeanWiseDesign_f2d907;
-const { RichText, Field } = LW;
-function Demo(){
-  const [html,setHtml]=React.useState("<h2>Termination clause</h2><p>Either party may terminate for convenience on <strong>60 days'</strong> written notice.</p><ul><li>Rises to 90 days after the second renewal</li><li>Notice must be in writing</li></ul>");
-  return (<>
-    <Field label="Summary" help="Bold, italic, headings, lists, quote, code and links.">
-      <RichText value={html} onChange={setHtml} maxLength={600} label="Summary" />
-    </Field>
-    <div><span className="lbl-eyebrow lbl-above">read-only — same chrome, no editing</span>
-      <RichText value="<p>Locked while the source re-indexes.</p>" readOnly label="Locked summary" />
-    </div>
-  </>);
-}
-ReactDOM.createRoot(document.getElementById("light")).render(<Demo />);
-ReactDOM.createRoot(document.getElementById("dark")).render(<Demo />);
-</script></body></html>
+<script src="./RichText.card.js"></script>
+</body></html>

@@ -97,7 +97,8 @@ if (SELF) {
         for (const e of fs.readdirSync(d)) {
           const p = path.join(d, e);
           if (fs.statSync(p).isDirectory()) { walk(p); continue; }
-          if (!p.endsWith(".jsx")) continue;
+          // `*.card.jsx` is a specimen card's body (tools/lw-cards.mjs), not a component.
+          if (!p.endsWith(".jsx") || p.endsWith(".card.jsx")) continue;
           n += (fs.readFileSync(p, "utf8").match(/(?:aria-label|title|placeholder|alt)="[^"]*"/g) ?? []).length;
         }
       })(path.join(ROOT, "components"));
@@ -116,7 +117,12 @@ if (SELF) {
       const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, "_ds_manifest.json"), "utf8"));
       return (manifest.cards ?? []).filter((c) => {
         const p = path.join(ROOT, c.path);
-        return fs.existsSync(p) && /ReactDOM\.(createRoot|hydrateRoot|render)\s*\(/.test(fs.readFileSync(p, "utf8"));
+        if (!fs.existsSync(p)) return false;
+        // Since v1.13.0 a card's script is the `<name>.card.jsx` beside it (tools/lw-cards.mjs),
+        // so the mount call lives there, not inline in the .html.
+        const jsx = p.replace(/\.card\.html$/, ".card.jsx");
+        const src = fs.readFileSync(p, "utf8") + (fs.existsSync(jsx) ? fs.readFileSync(jsx, "utf8") : "");
+        return /ReactDOM\.(createRoot|hydrateRoot|render)\s*\(/.test(src);
       }).length;
     },
     "no-use-client": () => {

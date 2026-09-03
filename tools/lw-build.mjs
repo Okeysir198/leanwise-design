@@ -48,6 +48,8 @@ const ENTRIES = [];
   for (const e of fs.readdirSync(dir).sort()) {
     const p = path.join(dir, e);
     if (fs.statSync(p).isDirectory()) { walk(p); continue; }
+    // `*.card.jsx` / `*.card.js` are card fixtures (tools/lw-cards.mjs), not entry points.
+    if (/\.card\.(jsx|js)$/.test(p)) continue;
     if (/\.(jsx|js)$/.test(p)) ENTRIES.push(path.relative(ROOT, p));
   }
 })(path.join(ROOT, "components"));

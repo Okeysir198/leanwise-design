@@ -871,7 +871,57 @@ function logoStops() {
     // drops <style> falls back to, the declarations are what every modern browser
     // actually paints on a dark tab strip.
     { file: "logo-favicon.svg", stops: want },
+    // The hero mark — the same hexagon, re-ranged per ground (marketing.css
+    // explains why). Three stops: the ends are the v1.13.0 `--lw-art-mark-*`
+    // tokens, the middle is the mark's own cyan on both grounds. hero-mark.svg
+    // is GENERATED from the ink file by lw-assets.mjs; both are asserted here
+    // because the generator and this gate must agree on the same tokens, and a
+    // hand-edit of the source would otherwise propagate into the twin unseen.
+    {
+      file: "hero-mark-ink.svg",
+      stops: [
+        { offset: "0", token: "art-mark-navy" },
+        { offset: "0.5", token: "logo-cyan" },
+        { offset: "1", token: "art-mark-cyan" },
+      ],
+    },
+    {
+      file: "hero-mark.svg",
+      stops: [
+        { offset: "0", token: "art-mark-navy-ondark" },
+        { offset: "0.5", token: "logo-cyan" },
+        { offset: "1", token: "art-mark-cyan-ondark" },
+      ],
+    },
   ];
+
+  /* The lattice has no gradient — one stroke per file. Same second-home
+     argument, same fix: the ink stroke is brand-500, the on-dark stroke is
+     `--lw-art-lattice-ondark`, and hex-lattice.svg is generated from the ink. */
+  const STROKES = [
+    { file: "hex-lattice-ink.svg", token: "brand-500" },
+    { file: "hex-lattice.svg", token: "art-lattice-ondark" },
+  ];
+  for (const { file, token } of STROKES) {
+    let svg;
+    try {
+      svg = readFileSync(join(ROOT, "assets", file), "utf8");
+    } catch {
+      fails.push(`assets/${file} is missing — run \`node tools/lw-assets.mjs\``);
+      continue;
+    }
+    const strokes = [...svg.matchAll(/\sstroke="(#[0-9A-Fa-f]{3,6})"/g)].map((m) => m[1]);
+    const expect = resolveColor(token, "light");
+    if (!expect) { fails.push(`assets/${file}: --lw-${token}-c did not resolve`); continue; }
+    if (strokes.length !== 1) {
+      fails.push(`assets/${file}: expected exactly one stroke colour, found ${strokes.length}`);
+    } else if (toHex(hexToRgb(strokes[0].slice(1))) !== toHex(expect)) {
+      fails.push(
+        `assets/${file}: stroke is ${strokes[0].toUpperCase()}, but --lw-${token}-c resolves to ` +
+        `${toHex(expect)} — run \`node tools/lw-assets.mjs\``,
+      );
+    }
+  }
 
   for (const { file, stops: wantStops } of FILES) {
     let svg;

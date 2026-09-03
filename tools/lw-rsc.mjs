@@ -70,6 +70,9 @@ const files = [];
   for (const e of fs.readdirSync(dir).sort()) {
     const p = path.join(dir, e);
     if (fs.statSync(p).isDirectory()) { walk(p); continue; }
+    // `*.card.jsx` / `*.card.js` are the specimen cards' bodies (tools/lw-cards.mjs),
+    // browser fixtures that read React off a UMD global — not components, not shipped surface.
+    if (/\.card\.(jsx|js)$/.test(p)) continue;
     if (/\.(jsx|js)$/.test(p)) files.push(p);
   }
 })(path.join(ROOT, "components"));

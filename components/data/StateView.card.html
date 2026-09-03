@@ -7,7 +7,6 @@
 <link rel="stylesheet" href="../../product.css">
 <script src="../../preview/_vendor/react.development.js"></script>
 <script src="../../preview/_vendor/react-dom.development.js"></script>
-<script src="../../preview/_vendor/babel.min.js"></script>
 <script src="../../_ds_bundle.js"></script>
 <style>.grid4{display:grid;grid-template-columns:1fr 1fr;gap:14px}.cell{border:1px solid var(--lw-line);border-radius:10px}</style>
 </head><body><div class="card">
@@ -21,19 +20,5 @@ with three ways to guess. <b>The announcement differs by variant</b> — <code>e
 <code>aria-busy</code>, because a progress report is not an interruption.</p></header>
 <div class="grid4" id="root"></div>
 </div>
-<script type="text/babel">
-const LW = window.LeanWiseDesign_f2d907;
-const { StateView, Button } = LW;
-function Demo(){
-  return (<>
-    <div className="cell"><StateView variant="empty" title="No sources connected"
-      description="Connect a database, a bucket or a folder and its documents become queryable within a few minutes."
-      action={<Button size="sm">Connect a source</Button>} /></div>
-    <div className="cell"><StateView variant="loading" lines={4} /></div>
-    <div className="cell"><StateView variant="error" onAction={()=>{}} /></div>
-    <div className="cell"><StateView variant="offline" onAction={()=>{}} /></div>
-    <div className="cell" style={{gridColumn:"span 2"}}><StateView variant="denied" /></div>
-  </>);
-}
-ReactDOM.createRoot(document.getElementById("root")).render(<Demo />);
-</script></body></html>
+<script src="./StateView.card.js"></script>
+</body></html>

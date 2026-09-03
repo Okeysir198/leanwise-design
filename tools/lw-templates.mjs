@@ -6,10 +6,18 @@
  * None of them opens a `.dc.html`, so every rule CLAUDE.md states about the
  * templates was enforced by nothing but memory:
  *
- *  1. `ds-base.js` and `support.js` are GENERATED and byte-identical across all
- *     twelve templates. CLAUDE.md says "never hand-edit one copy" — and until
- *     this file existed, hand-editing one copy was undetectable. The twelve
- *     stay in step because everyone remembered to, which is not a mechanism.
+ *  1. `ds-base.js` and `support.js` are the ONE runtime every template shares,
+ *     and since v1.13.0 they live ONCE, in `templates/_shared/`. Until then each
+ *     of the twelve directories carried its own byte-identical copy (12 × 71 KB),
+ *     and this rule's job was to prove the copies had not drifted. Now it proves
+ *     three things instead: both shared files exist; every `.dc.html` loads
+ *     exactly `../_shared/support.js` and then `../_shared/ds-base.js`, in that
+ *     order (support.js defines what ds-base.js calls); and NO template directory
+ *     contains a file by either name. That last one is the trap: there is no
+ *     generator for these files in this repo — they arrive from the Claude Design
+ *     project — and a wholesale re-pull recreates all twelve copies. Twelve
+ *     stale duplicates that nothing loads would sit there silently forever, so
+ *     a copy inside a template directory is a hard failure, not a warning.
  *
  *  2. A template must not load `lw.css` / `app.css` (the one-major shims)
  *     alongside the real layers — you get every rule twice, and specificity
@@ -22,18 +30,19 @@
  *
  * Usage: node tools/lw-templates.mjs
  */
-import { readFileSync, readdirSync, statSync } from "node:fs";
-import { createHash } from "node:crypto";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { report } from "./_report.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const TEMPLATES = join(ROOT, "templates");
 
-/* Files generated once and copied into every template. A divergence here is
-   either a hand-edit (the thing CLAUDE.md forbids) or a partial regeneration —
-   both leave eleven templates on one runtime and one on another. */
-const GENERATED = ["ds-base.js", "support.js"];
+/* The shared runtime, in load order. Not generated here (no generator exists in
+   this repo — see the header); shared, so a hand-edit lands on every template
+   at once rather than on one of twelve. */
+const SHARED_DIR = "_shared";
+const SHARED = ["support.js", "ds-base.js"];
 
 /* A template that legitimately has no skip link, with the reason. The point of
    naming them is that the list is short, greppable and arguable — the same
@@ -51,38 +60,20 @@ const dirs = readdirSync(TEMPLATES)
 const problems = [];
 const note = (m) => problems.push(m);
 
-if (!dirs.length) {
-  // Same reasoning as _cards.mjs: an empty walk must never read as a clean run.
-  console.error("lw-templates: no template directories found under templates/. Refusing to report a clean run.");
-  process.exit(1);
-}
-
-/* ---- 1. the generated files are identical everywhere -------------------- */
-for (const file of GENERATED) {
-  const byHash = new Map();
-  for (const d of dirs) {
-    let buf;
-    try {
-      buf = readFileSync(join(TEMPLATES, d, file));
-    } catch {
-      note(`${d}/${file} is missing — every template carries the generated pair`);
-      continue;
-    }
-    const h = createHash("sha256").update(buf).digest("hex").slice(0, 12);
-    if (!byHash.has(h)) byHash.set(h, []);
-    byHash.get(h).push(d);
+/* ---- 1. the shared runtime lives once, and every template loads it ------- */
+for (const file of SHARED) {
+  if (!existsSync(join(TEMPLATES, SHARED_DIR, file))) {
+    note(`${SHARED_DIR}/${file} is missing — every template loads it from there`);
   }
-  if (byHash.size > 1) {
-    // Report the ODD ONE OUT, not just "they differ" — with twelve copies the
-    // useful answer is which one to revert.
-    const groups = [...byHash.entries()].sort((a, b) => b[1].length - a[1].length);
-    const [, majority] = groups[0];
-    note(
-      `${file} is not byte-identical across the twelve templates — it is generated, so one copy was hand-edited:\n` +
-        groups
-          .map(([h, ds]) => `      ${h}  ${ds.join(", ")}${ds === majority ? "   (majority)" : ""}`)
-          .join("\n")
-    );
+}
+for (const d of dirs) {
+  for (const file of SHARED) {
+    if (existsSync(join(TEMPLATES, d, file))) {
+      note(
+        `${d}/${file} exists — the runtime lives ONLY in templates/${SHARED_DIR}/. ` +
+          "A design-project re-pull recreates the per-template copies; delete this one, nothing loads it",
+      );
+    }
   }
 }
 
@@ -109,6 +100,15 @@ for (const d of dirs) {
       note(`${where} loads the shim ${m[1]} — it @imports the real layers, so every rule lands twice`);
     }
 
+    /* Order matters: support.js defines the helpers ds-base.js calls at load.
+       Scanned over the comment-stripped SOURCE, not `markup` — that one has the
+       script tags removed, which is exactly what this rule needs to see. */
+    const loads = [...src.replace(/<!--[\s\S]*?-->/g, "").matchAll(/<script\b[^>]*\ssrc\s*=\s*["']([^"']*(?:support|ds-base)\.js)["']/gi)].map((m) => m[1]);
+    const wantLoads = SHARED.map((f) => `../${SHARED_DIR}/${f}`);
+    if (loads.join(" ") !== wantLoads.join(" ")) {
+      note(`${where} loads [${loads.join(", ") || "nothing"}] — expected exactly ${wantLoads.join(" then ")}`);
+    }
+
     if (!/<html[^>]*\slang\s*=\s*["'][^"']+["']/i.test(src)) {
       note(`${where} has no lang on <html> — a screen reader picks a voice per document, not per app`);
     }
@@ -130,13 +130,12 @@ for (const d of dirs) {
   }
 }
 
-if (problems.length) {
-  console.error(`lw-templates: ${problems.length} problem(s):`);
-  for (const p of problems) console.error("  · " + p);
-  process.exit(1);
-}
 const exempt = Object.keys(NO_SKIP_LINK).length;
-console.log(
-  `lw-templates: OK — ${dirs.length} templates, ${GENERATED.length} generated files byte-identical across all of them, ` +
-    `landmarks and skip links present (${exempt} documented skip-link exemption${exempt === 1 ? "" : "s"}).`
-);
+process.exit(report("lw-templates", {
+  problems,
+  checked: dirs.length,
+  minChecked: 1,
+  summary:
+    `lw-templates: OK — ${dirs.length} templates, ${SHARED.length} shared runtime files in ${SHARED_DIR}/ loaded in order by every one, ` +
+    `landmarks and skip links present (${exempt} documented skip-link exemption${exempt === 1 ? "" : "s"}).`,
+}));

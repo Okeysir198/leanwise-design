@@ -65,7 +65,7 @@
  *
  * DRIFT GUARD
  * -----------
- * Beyond `--check`, the generator scans every `*.card.html` and `*.dc.html` for
+ * Beyond `--check`, the generator scans every `*.card.html`, `*.card.jsx` and `*.dc.html` for
  * `LeanWiseDesign_f2d907.X` and for `const { X } = window.LeanWiseDesign_f2d907`, and fails if a
  * name a card consumes is not on the namespace. Removing a barrel export therefore breaks the
  * build here rather than rendering a blank card under axe.
@@ -308,7 +308,12 @@ async function walkHtml(dir, out = []) {
     if (e.name === "node_modules" || e.name.startsWith(".")) continue;
     const p = path.join(dir, e.name);
     if (e.isDirectory()) await walkHtml(p, out);
-    else if (e.name.endsWith(".html")) out.push(p);
+    // `.card.jsx` since v1.13.0: the card bodies moved out of inline
+    // <script type="text/babel"> blocks into source files beside the card
+    // (tools/lw-cards.mjs). The names a card reads off the namespace now live
+    // there, and a guard that only read .html would have gone quiet the day
+    // they moved — every card would look like it consumed nothing.
+    else if (e.name.endsWith(".html") || e.name.endsWith(".card.jsx")) out.push(p);
   }
   return out;
 }

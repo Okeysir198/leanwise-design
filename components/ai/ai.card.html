@@ -7,7 +7,6 @@
 <link rel="stylesheet" href="../../product.css">
 <script src="../../preview/_vendor/react.development.js"></script>
 <script src="../../preview/_vendor/react-dom.development.js"></script>
-<script src="../../preview/_vendor/babel.min.js"></script>
 <script src="../../_ds_bundle.js"></script>
 <style>/* Per-turn actions are hover-revealed in the product. A specimen has no pointer,
    so this card pins them open — the ONLY deviation from the shell here, and it is
@@ -31,79 +30,5 @@ open, because a specimen of an invisible control shows nothing. The provenance l
 panel's contents, summoned rather than always on screen.</p></header>
 <div class="panes"><div class="pane" id="light"></div><div class="pane dark lw-band-dark" id="dark"></div></div>
 </div>
-<script type="text/babel">
-const LW = window.LeanWiseDesign_f2d907;
-
-const { PromptInput, Message, SourceChip, SourceList, ConfidenceMeter, AgentTrace, Button, Icon, Stack, Cluster, Chip } = LW;
-// One borderless icon control, exactly as the shell writes them.
-function Act({ icon, label, title }) {
-  return (
-    <button type="button" className="lw-icon-btn" aria-label={label} title={title || label}>
-      <Icon name={icon} size={17} />
-    </button>
-  );
-}
-function Demo({ns}) {
-  const [q, setQ] = React.useState("");
-  return (
-    <Stack gap={16}>
-      <span className="lbl-eyebrow">conversation</span>
-      <div className="thread">
-        <Message role="user" who="You">Which contracts auto-renew before the end of Q3?
-          <div className="lw-msg-actions"><Act icon="edit" label="Edit question" title="Edit" /></div>
-        </Message>
-        <Message role="ai" streaming>
-          <p style={{margin:0}}>Four agreements auto-renew before 30 September.</p>
-          <p style={{margin:".7em 0 0"}}>The <b>master services agreement</b> renews on 12 August with a 60-day
-          notice window, so the decision date has already passed <SourceChip n={1} />. <b>Statement of work 3</b> and
-          the <b>amended agreement</b> both renew on 1 September <SourceChip n={2} /><SourceChip n={3} />, and the
-          <b> framework agreement</b> renews on 22 September under an evergreen clause <SourceChip n={4} />.</p>
-          <div style={{display:"flex",flexWrap:"wrap",alignItems:"center",gap:8,marginTop:14}}>
-            <button type="button" className="lw-icon-btn" aria-label="Show the 4 cited passages" title="4 citations"
-              style={{width:"auto",gap:7,height:28,padding:"0 4px",color:"var(--lw-fg-muted)",fontFamily:"var(--lw-font-mono)",fontSize:11,letterSpacing:".04em"}}>
-              <Icon name="list" size={18} />4
-            </button>
-            <span style={{flex:1}} />
-            <div className="lw-msg-actions">
-              <Act icon="copy" label="Copy answer" title="Copy" />
-              <Act icon="retry" label="Regenerate answer" title="Retry" />
-              <Act icon="download" label="Export answer" title="Export" />
-            </div>
-          </div>
-        </Message>
-      </div>
-      <span className="lbl-eyebrow">provenance panel</span>
-      {/* The score lives with the evidence, not in the answer's footer: it grades
-          the retrieval, so it belongs beside the passages that were retrieved. */}
-      <ConfidenceMeter value={91} />
-      <AgentTrace steps={[
-        {label:"Parsed the question",meta:"intent: date-filter · entity: contract",state:"done"},
-        {label:"Retrieved 41 candidate passages",meta:"hybrid · 240ms",state:"done"},
-        {label:"Reranking and grounding",meta:"cross-encoder",state:"active"},
-        {label:"Compose answer",state:"pending"}]} />
-      <SourceList sources={[
-        {n:1,title:"Northwind — Master Services Agreement",meta:"contracts/2024 · p.14 · 94% match"},
-        {n:2,title:"Orbital Systems — Statement of Work 3",meta:"contracts/2024 · p.2 · 88% match"},
-        {n:3,title:"Kestrel Data — MSA (amended)",meta:"contracts/2023 · p.31 · 81% match"}]} />
-      <span className="lbl-eyebrow">prompt</span>
-      {/* One footer row passed as children — the shell's arrangement: tools left,
-          the Enter hint and Send pushed right by a spacer. */}
-      <div className="thread">
-        <PromptInput value={q} onChange={setQ}>
-          <div style={{display:"flex",flexWrap:"wrap",alignItems:"center",gap:8,width:"100%"}}>
-            <button type="button" className="lw-icon-btn" aria-label="Attach a document" title="Attach a document"><Icon name="paperclip" size={19} /></button>
-            <button type="button" className="lw-icon-btn" aria-label="Choose which sources to search" title="All sources"><Icon name="layers" size={19} /></button>
-            <span style={{flex:1}} />
-            <span className="lw-prompt-hint">&#8679;&#8629; for newline</span>
-            <Button size="sm" iconOnly aria-label="Send" title="Send"><Icon name="send" size={16} /></Button>
-          </div>
-        </PromptInput>
-        <p style={{margin:"8px 0 0",textAlign:"center",fontSize:11.5,color:"var(--lw-fg-subtle)",textWrap:"pretty"}}>AI can make mistakes. Please double-check responses.</p>
-      </div>
-    </Stack>
-  );
-}
-ReactDOM.createRoot(document.getElementById("light")).render(<Demo ns="l" />);
-ReactDOM.createRoot(document.getElementById("dark")).render(<Demo ns="d" />);
-
-</script></body></html>
+<script src="./ai.card.js"></script>
+</body></html>

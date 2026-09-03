@@ -7,7 +7,6 @@
 <link rel="stylesheet" href="../../product.css">
 <script src="../../preview/_vendor/react.development.js"></script>
 <script src="../../preview/_vendor/react-dom.development.js"></script>
-<script src="../../preview/_vendor/babel.min.js"></script>
 <script src="../../preview/_card.js"></script>
 <script src="../../_ds_bundle.js"></script>
 <style>.sheet{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:1px;background:var(--lw-line);border:1px solid var(--lw-line);border-radius:10px;overflow:hidden}
@@ -46,30 +45,5 @@ control needs a name — and the control usually carries it already, via
 <span class="mono">aria-label</span> on the button.</p>
 </div>
 </div>
-<script type="text/babel">
-const { Icon, IconNames } = window.LeanWiseDesign_f2d907;
-const names = IconNames || [];
-function Sheet() {
-  // The card practises what it preaches: an unavailable list says so, in place.
-  // An empty grid renders as a 2px rule and reads as "the system has no icons".
-  if (!names.length) return (
-    <div className="cellx" style={{gridColumn:"1 / -1",color:"var(--lw-danger-on)"}}>
-      <span className="nm" style={{color:"inherit",fontSize:11}}>
-        IconNames is unavailable — _ds_bundle.js is stale or failed to load. Recompile.
-      </span>
-    </div>
-  );
-  return names.map(n => (
-    <div className="cellx" key={n}><Icon name={n} size={20} /><span className="nm">{n}</span></div>
-  ));
-}
-function Scale() {
-  return [14, 16, 17, 19, 20].map(s => (
-    <div className="s" key={s}><Icon name="spark" size={s} /><span>{s}</span></div>
-  ));
-}
-ReactDOM.createRoot(document.getElementById("light")).render(<Sheet />);
-ReactDOM.createRoot(document.getElementById("dark")).render(<Sheet />);
-ReactDOM.createRoot(document.getElementById("scale")).render(<Scale />);
-</script>
+<script src="./Icon.card.js"></script>
 </body></html>
