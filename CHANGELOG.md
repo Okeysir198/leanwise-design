@@ -24,6 +24,48 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 ## [Unreleased]
 
+## [2.1.0] — 2026-09-04
+
+### Added
+
+- **`Table` collapses to cards on a narrow container** — `collapse="cards"` plus a required
+  `detailsLabel` (and `sortLabel` for a sortable table). Below `--lw-bp-md` of the WRAPPER's
+  width each row paints as a card: the first cell titles it, the next two are its meta line,
+  the rest sit behind a native `<details>`. A **container** query, not a media query — the
+  thing that is too narrow is the table's track, not the screen, and the same table is fine at
+  768px of page inside a 300px rail and unreadable at 1280px of page inside a 318px one, which
+  is where leanwise-inspect's six console lists sat at 1.5–2.4× the viewport.
+  **The DOM does not change**: one real `<table>` at every width, re-laid-out by CSS, so
+  nothing is measured and the server and the client cannot disagree about which form to emit.
+  Because `display: block` drops a table's implicit semantics, the explicit
+  `role="table"/"rowgroup"/"row"/"columnheader"/"cell"` are emitted whenever `collapse` is set
+  — and only then, so a table that does not collapse keeps its markup byte for byte. The
+  header row is hidden and each detail cell prints its column name from `data-label`; a
+  visually-hidden header would leave the name in the accessibility tree AND in the prefix, so
+  every cell would announce its column twice. The `<details>` holds the CONTROL, not the cells,
+  because the HTML parser foster-parents a non-cell child of a `<tr>` out of the table
+  entirely. Sorting survives the collapse through `Menu` ("Sort ▾"), the active column as a
+  `menuitemcheckbox`. ⚠ `Menu` paints on `.lw-popover`/`.lw-menu`, which are **product.css**.
+- **An overflow hint on every `.lw-table-wrap`**, collapsed or not. The wrap has scrolled
+  sideways since v1.7.0 and never said so — on a phone the only affordance was a scrollbar a
+  touch device does not paint until the finger is already moving. `useOverflow()`
+  (`components/_overflow.js`) sets `data-overflow="true"` while there is content past the
+  inline edge and clears it at the end of the scroll; the CSS fades that edge with a mask.
+  A mask and not a `::after`: the wrap IS the scroll container, so an absolutely positioned
+  pseudo-element parks at the far end of the CONTENT, hundreds of pixels off screen. The
+  contract is the attribute, so a vanilla consumer sees exactly what it saw before and anything
+  that can measure its own scroller can set it by hand.
+- **A sortable header is a 44px target on a coarse pointer.** `.lw-table th button` was a
+  zero-padding inline-flex at `--lw-th-text` — 16px tall, the smallest control in the console
+  by a wide margin. It now carries `min-height: var(--lw-control-h-sm)`, which tokens.css
+  re-points to 44px under `pointer: coarse`. Real height, not a `.lw-hit` overlay: the space
+  below a header cell belongs to the first data row, and an overlay would take that row's taps.
+  Nothing moves on a fine pointer — the header is already taller than 32px.
+- **A card, `components/data/Table-collapse.card.html`** ("Tables on phones"): the same
+  component at 360px and wide on one page, plus an uncollapsed table in a track too narrow for
+  it so the hint is visible. It loads **base.css only** — the recipe the pattern claims — which
+  is why it cannot show the open sort panel, and says so.
+
 ## [2.0.0] — 2026-09-04
 
 ### 2.0.0 — the overlays move to Radix, and everything 1.13 warned about is removed

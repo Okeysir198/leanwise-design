@@ -831,7 +831,15 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
 .lw-table-compact td { padding: 8px var(--lw-space-12); }
 .lw-table-compact th { padding: 8px var(--lw-space-12); }
 /* A sortable header is a button, not a th with a click handler. */
-.lw-table th button { appearance: none; border: 0; background: none; font: inherit; color: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; padding: 0; }
+/* The 16px-tall sort control was the console's smallest target by a wide
+   margin: font-size --lw-th-text on a zero-padding inline-flex, i.e. the
+   glyph box and nothing else. `--lw-control-h-sm` is 32px, and 44px under
+   `pointer: coarse` (tokens.css) — so this one declaration is the whole
+   touch story, and it is REAL height, not a `.lw-hit` overlay: the space
+   below a header cell belongs to the first data row, and an overlaid 44px
+   box would take that row's taps. The th grows with it; nothing else moves,
+   because the header is already taller than 32px on a fine pointer. */
+.lw-table th button { appearance: none; border: 0; background: none; font: inherit; color: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; padding: 0; min-height: var(--lw-control-h-sm); }
 .lw-table th button:hover { color: var(--lw-fg); }
 .lw-table th button:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); border-radius: var(--lw-radius-xs); }
 /* Only the column that is ACTUALLY sorted takes brand ink. Every sortable
@@ -858,6 +866,175 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
 .lw-band-dark .lw-table-wrap, [data-band="dark"] .lw-table-wrap { background: var(--lw-on-dark-wash); border-color: var(--lw-on-dark-line); }
 .lw-band-dark .lw-table th, [data-band="dark"] .lw-table th { background: var(--lw-on-dark-wash); color: var(--lw-on-dark-3); border-bottom-color: var(--lw-on-dark-line); }
 .lw-band-dark .lw-table td, [data-band="dark"] .lw-table td { color: var(--lw-on-dark-1); border-bottom-color: var(--lw-on-dark-line); }
+
+/* ---- The overflow hint ----------------------------------------------------
+   `.lw-table-wrap` has scrolled sideways since v1.7.0 and never SAID so. On a
+   phone a 318px track holding an 832px table shows the first two columns and
+   nothing that suggests there are five more: leanwise-inspect's console shipped
+   six such tables, each 1.5-2.4x the viewport, and the only affordance was the
+   scrollbar — which a touch device does not paint until the finger is already
+   moving.
+
+   `data-overflow` is set by `useOverflow()` (components/_overflow.js) and ONLY
+   when the wrap actually overflows, so a table that fits is untouched and a
+   vanilla consumer (no React, no effect) sees exactly what it saw before. The
+   attribute is the whole contract: any consumer that measures its own scroller
+   can set it by hand.
+
+   MASK, not a pseudo-element: `.lw-table-wrap` is the scroll container, so an
+   absolutely positioned `::after` resolves against its SCROLLABLE area and
+   parks at the far end of the content rather than at the visible edge — the
+   fade would sit 800px off-screen. A mask is painted with the element's own
+   box and stays put. The cost is that the frame fades with the content; that
+   reads as the surface running past the edge, which is the message.
+
+   The direction is PHYSICAL and has to be: `linear-gradient` has no logical
+   `to inline-end`, and in RTL the overflow is on the other side — so the flip
+   is stated rather than inherited. Same call, and the same reason, as
+   `.lw-dgrid`'s pinned-column shadow two files over. */
+.lw-table-wrap[data-overflow="true"] {
+  --lw-table-fade: var(--lw-space-32);
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - var(--lw-table-fade)), transparent);
+  mask-image: linear-gradient(to right, #000 calc(100% - var(--lw-table-fade)), transparent);
+}
+[dir="rtl"] .lw-table-wrap[data-overflow="true"] {
+  -webkit-mask-image: linear-gradient(to left, #000 calc(100% - var(--lw-table-fade)), transparent);
+  mask-image: linear-gradient(to left, #000 calc(100% - var(--lw-table-fade)), transparent);
+}
+
+/* ---- Collapse to cards ----------------------------------------------------
+   `<Table collapse="cards">`. Below --lw-bp-md of CONTAINER width every row
+   paints as a card: first cell the title, the next two a meta line, the rest
+   behind a native <details>.
+
+   A CONTAINER query, not a media query, because the thing that is too narrow is
+   the table's track, not the screen — the same table is fine at 768px of page
+   inside a 300px rail and unreadable at 1280px of page inside a 318px one. The
+   containment is scoped to `[data-collapse="cards"]` so no existing table
+   acquires a containment context it did not ask for.
+
+   Where `@container` is not supported the whole block is dropped and the table
+   scrolls as it always did, hint included. That is the fallback, and it is why
+   `.lw-table-sort` and `.lw-row-more` are hidden by DEFAULT and revealed by the
+   query rather than the other way round: an unsupporting browser must not be
+   left with a sort control the visible header row already carries.
+
+   THE DOM DOES NOT CHANGE. One `<table>` at every width, re-laid-out by CSS —
+   no width measurement, no second render tree, and nothing that can disagree
+   with itself between the server and the client. The price is that `display:
+   block` on table elements drops the implicit table semantics, so `Table` emits
+   explicit `role="table"/"rowgroup"/"row"/"columnheader"/"cell"` whenever
+   `collapse` is set. See Table.d.ts for why the <details> holds the control and
+   not the cells. */
+.lw-table-wrap[data-collapse="cards"] { container: lw-table / inline-size; }
+.lw-table-sort { display: none; }
+.lw-table-collapse .lw-row-more { display: none; }
+
+/* 767.98px is --lw-bp-md (768px) in the .98 form this file uses everywhere. A
+   custom property cannot be read in a container or media condition, so the
+   number is written out here as it is in every @media above. */
+@container lw-table (max-width: 767.98px) {
+  .lw-table-sort {
+    display: flex; justify-content: flex-end;
+    padding: var(--lw-space-8) var(--lw-space-12);
+    border-bottom: 1px solid var(--lw-line);
+    background: var(--lw-bg-subtle);
+  }
+  .lw-table-collapse { display: block; }
+  /* The header row goes, and with it every `aria-sort` button — which is why
+     the sort menu exists. `display: none` and not a visually-hidden thead: a
+     hidden-but-present header would be read by assistive tech AND printed by
+     the `data-label` prefixes below, so every detail cell would announce its
+     column name twice. */
+  .lw-table-collapse > thead { display: none; }
+  .lw-table-collapse > tbody { display: block; }
+  .lw-table-collapse > tbody > tr {
+    display: flex; flex-wrap: wrap; align-items: baseline;
+    gap: var(--lw-space-4) var(--lw-space-12);
+    padding: var(--lw-space-12) var(--lw-space-16);
+    border-bottom: 1px solid var(--lw-line);
+  }
+  .lw-table-collapse > tbody > tr:last-child { border-bottom: 0; }
+  .lw-table-collapse > tbody > tr > td { display: block; padding: 0; border: 0; }
+  .lw-table-collapse td[data-part="title"] {
+    flex: 1 0 100%;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: var(--lw-space-12);
+    font-size: var(--lw-text-body); font-weight: var(--lw-fw-semibold); color: var(--lw-fg);
+  }
+  .lw-table-collapse td[data-part="meta"] { color: var(--lw-fg-muted); font-size: var(--lw-text-xs); }
+  .lw-table-collapse td[data-part="detail"] { display: none; flex: 1 0 100%; }
+  /* The column header, per cell, from `data-label`. It is generated content on
+     purpose: the alternative is a real element in every detail cell of every
+     row, which a WIDE table then has to hide — markup carried at all widths to
+     be used at one. Chromium, Gecko and WebKit all expose `content` text to the
+     accessibility tree, and the thead above is gone, so this is the ONLY
+     spelling of the column name in the collapsed view. A non-string header
+     leaves the attribute off and the cell prints its value alone. */
+  .lw-table-collapse td[data-part="detail"]::before {
+    content: attr(data-label);
+    font-family: var(--lw-font-mono); font-size: var(--lw-th-text);
+    letter-spacing: var(--lw-th-tracking); text-transform: uppercase;
+    color: var(--lw-fg-subtle);
+  }
+  .lw-table-collapse tr:has(> td > .lw-row-more[open]) > td[data-part="detail"] {
+    display: flex; align-items: baseline; justify-content: space-between; gap: var(--lw-space-16);
+  }
+  /* Right alignment is a COLUMN affordance: it exists so figures stack under
+     one another. In a card there is no column to stack in, and a lone
+     right-aligned meta value reads as detached from the label it answers. The
+     mono tabular face stays — that is about the figures themselves. */
+  .lw-table-collapse td.num { text-align: start; }
+  .lw-table-collapse td[data-part="detail"].num { text-align: end; }
+  /* The disclosure. Not `.lw-disclosure`: that class owns a full-width block
+     with a 16px block padding and a bottom rule, which is a section boundary,
+     not a control sitting on a card's title line. */
+  .lw-table-collapse .lw-row-more { display: block; flex: none; }
+  .lw-table-collapse .lw-row-more > summary {
+    display: inline-flex; align-items: center; gap: var(--lw-space-4);
+    /* --lw-control-h-sm is 44px under `pointer: coarse` (tokens.css), so the
+       target is real height rather than an overlaid ::after — a row card has a
+       neighbour directly below it, and an overlay would take its taps. */
+    min-height: var(--lw-control-h-sm);
+    font-family: var(--lw-font-mono); font-size: var(--lw-th-text);
+    letter-spacing: var(--lw-th-tracking); text-transform: uppercase;
+    font-weight: var(--lw-fw-medium); color: var(--lw-fg-subtle);
+    list-style: none;
+  }
+  .lw-table-collapse .lw-row-more > summary::-webkit-details-marker { display: none; }
+  .lw-table-collapse .lw-row-more > summary:hover { color: var(--lw-fg); }
+  .lw-table-collapse .lw-row-more > summary:focus-visible {
+    outline: none; box-shadow: var(--lw-focus-ring); border-radius: var(--lw-radius-xs);
+  }
+  .lw-table-collapse .lw-row-more > summary > svg,
+  .lw-table-collapse .lw-row-more > summary > .lw-icon {
+    transition: transform var(--lw-dur-sm) var(--lw-ease-out);
+  }
+  .lw-table-collapse .lw-row-more[open] > summary > svg,
+  .lw-table-collapse .lw-row-more[open] > summary > .lw-icon { transform: rotate(180deg); }
+  /* A card is the hover unit once the row is one. The cell-level rule would
+     paint four disjoint blocks with the card's padding left cold between them. */
+  .lw-table-hover.lw-table-collapse tbody tr:hover td { background: none; }
+  .lw-table-hover.lw-table-collapse tbody tr:hover { background: var(--lw-bg-subtle); }
+  /* The dark-band patch, in the same commit as the rules it patches — the one
+     thing fb2d3ad got wrong and v1.3.0 had to correct. */
+  .lw-band-dark .lw-table-collapse > tbody > tr,
+  [data-band="dark"] .lw-table-collapse > tbody > tr { border-bottom-color: var(--lw-on-dark-line); }
+  .lw-band-dark .lw-table-sort,
+  [data-band="dark"] .lw-table-sort { background: var(--lw-on-dark-wash); border-bottom-color: var(--lw-on-dark-line); }
+  .lw-band-dark .lw-table-collapse td[data-part="title"],
+  [data-band="dark"] .lw-table-collapse td[data-part="title"] { color: var(--lw-on-dark-1); }
+  .lw-band-dark .lw-table-collapse td[data-part="meta"],
+  [data-band="dark"] .lw-table-collapse td[data-part="meta"] { color: var(--lw-on-dark-2); }
+  .lw-band-dark .lw-table-collapse td[data-part="detail"]::before,
+  [data-band="dark"] .lw-table-collapse td[data-part="detail"]::before,
+  .lw-band-dark .lw-table-collapse .lw-row-more > summary,
+  [data-band="dark"] .lw-table-collapse .lw-row-more > summary { color: var(--lw-on-dark-3); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lw-table-collapse .lw-row-more > summary > svg,
+  .lw-table-collapse .lw-row-more > summary > .lw-icon { transition: none; }
+}
 
 /* PROMOTED from product.css in v1.3.0, verbatim and in source order. A contact
    form is not an app surface, so the field, the shared control face and the two
@@ -2244,6 +2421,10 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
    this list is what stays last in the file. */
 .lw-disclosure > summary,
 .lw-navmenu > summary,
+/* The collapsed row's disclosure. Same reason as the two above: a <summary> is
+   neither a button nor a link, so nothing in the UA sheet makes it read as
+   clickable, and this list is what stays last in the file. */
+.lw-row-more > summary,
 .lw-source, .lw-source-item, .lw-toc a, .lw-crumbs a, .lw-pill-link, .lw-icon-btn, .lw-dialog-close,
 .lw-card-interactive, .lw-feature-interactive, .lw-story-interactive,
 .lw-stat-tile.lw-card-interactive, .lw-stat-tile[role="button"],

@@ -1,0 +1,87 @@
+<!-- @dsCard group="Data" name="Tables on phones" subtitle="collapse=&quot;cards&quot; under a container query, and the overflow hint every wide table gets" viewport="1060x1180" -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Tables on phones</title>
+<link rel="stylesheet" href="../../preview/_card.css">
+<link rel="stylesheet" href="../../base.css">
+<script src="../../preview/_vendor/react.development.js"></script>
+<script src="../../preview/_vendor/react-dom.development.js"></script>
+<script src="../../preview/_card.js"></script>
+<script src="../../_ds_bundle.js"></script>
+</head><body><div class="card">
+<header><h1>Tables on phones</h1>
+<p class="sub"><b>base.css alone.</b> This card loads no product layer on purpose: <span class="mono">.lw-table</span>,
+the wrap, the cards and the hint are all base, and a specimen that loads more than its documented recipe cannot
+measure the recipe. The one thing it therefore cannot show is the open <i>Sort</i> panel — <span class="mono">Menu</span>
+paints on <span class="mono">.lw-popover</span>, which is product.css. That is a real caveat of the pattern, and it is
+stated in <span class="mono">Table.d.ts</span> rather than papered over here.</p>
+<p class="sub"><b>The width that matters is the container's, not the screen's.</b> The two panes below are the same
+component with the same props on the same page, at the same viewport. The first is 360px wide — a phone, or the
+318px track a console list actually gets inside a rail — and every row is a card. The second is wide, and it is a
+table with its header row and its sort buttons. Nothing measured anything in JavaScript to decide that; <span class="mono">@container lw-table (max-width:
+767.98px)</span> did, off the wrapper's own inline size.</p></header>
+
+<div class="pane" style="width:360px"><span class="lbl">360px container — every row is a card</span><div id="narrow" style="min-width:0"></div></div>
+<div class="pane"><span class="lbl">wide container — the same component, a table</span><div id="wide" style="min-width:0"></div></div>
+
+<div style="display:flex;flex-direction:column;gap:12px;padding-top:20px;margin-top:6px;border-top:1px solid var(--lw-line)">
+<span class="lbl-eyebrow">why it is built this way</span>
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">One DOM, two layouts</h2>
+<p class="sub"><b>The markup does not change at the breakpoint.</b> It is one real
+<span class="mono">&lt;table&gt;</span> at every width, re-laid-out by CSS — so nothing is measured, nothing
+re-renders, and the server and the client cannot disagree about which form to emit. Re-rendering a card list below
+768px is the obvious alternative and it costs the table its semantics, its column headers and its keyboard the moment
+the JavaScript is late.</p>
+<p class="sub">The price is stated rather than hidden: <span class="mono">display: block</span> on a table element
+drops the <i>implicit</i> table semantics in every engine, so <span class="mono">Table</span> emits explicit
+<span class="mono">role="table" / "rowgroup" / "row" / "columnheader" / "cell"</span> whenever
+<span class="mono">collapse</span> is set — and only then, so a table that does not collapse keeps the markup it has
+always had, byte for byte.</p>
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">First cell, next two, then the rest</h2>
+<p class="sub"><b>Three is not arbitrary.</b> A card read at a glance carries one strong line and one weak one;
+everything past that is detail by definition. So the first cell titles the card, the next two are its meta line, and
+the remainder sit behind a native <span class="mono">&lt;details&gt;</span> whose label the consumer supplies —
+"Chi tiết", "Details", "Detalles". This package holds no display text, which is why
+<span class="mono">detailsLabel</span> is <i>required</i> in the type the moment
+<span class="mono">collapse</span> is set rather than defaulted to an English word.</p>
+<p class="sub">The disclosure holds the <b>control</b>, not the cells, and that is forced rather than chosen: a
+<span class="mono">&lt;details&gt;</span> wrapping <span class="mono">&lt;td&gt;</span>s is not expressible, because
+the HTML parser foster-parents any non-cell child of a <span class="mono">&lt;tr&gt;</span> straight out of the table.
+The summary rides in the title cell and <span class="mono">tr:has(.lw-row-more[open])</span> reveals the siblings that
+follow it.</p>
+<p class="sub">Each detail cell prints its own column name from <span class="mono">data-label</span>, because the
+header row is gone. Hiding that row with <span class="mono">display: none</span> rather than
+visually — the tempting choice — is deliberate: a visually-hidden header stays in the accessibility tree
+<i>and</i> in the prefix, so every cell would announce its column twice.</p>
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">Sorting survives the collapse</h2>
+<p class="sub">Collapsing hides the header row and with it every sort button, so the sortable columns are re-offered
+through <span class="mono">Menu</span> — the component that already owns roving focus, typeahead and Esc here. The
+active column is a <span class="mono">menuitemcheckbox</span>, so which way the list is sorted is <i>announced</i>
+rather than being a caret a screen reader never reaches, and choosing it again flips the direction. The trigger is a
+real <span class="mono">.lw-btn</span>; sort the narrow pane and the wide one does not move, because they are two
+independent roots, which is the point of showing both.</p>
+<h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">The hint, for every table that has not migrated</h2>
+<p class="sub"><b>A wrap has scrolled sideways since v1.7.0 and never said so.</b> Below is the same table with no
+<span class="mono">collapse</span> at all, in a track too narrow for it — six console lists ship in exactly this state,
+1.5–2.4× the viewport wide, with the scrollbar as the only affordance, and a touch device does not paint one until the
+finger is already moving.</p>
+<div class="pane" style="width:360px"><span class="lbl">no collapse — the fade says there is more</span><div id="hint" style="min-width:0"></div></div>
+<p class="sub">The fade is a <b>mask on the wrapper</b>, not a pseudo-element:
+<span class="mono">.lw-table-wrap</span> <i>is</i> the scroll container, so an absolutely positioned
+<span class="mono">::after</span> resolves against its scrollable area and parks at the far end of the content —
+800px off screen. A mask is painted with the element's own box and stays put. It costs the frame's right edge, which
+reads as the surface running past the edge, which is the message.</p>
+<p class="sub"><b>One trap worth naming</b>, because this card fell into it first: a
+<span class="mono">.lw-table-wrap</span> inside a grid or flex item needs a <span class="mono">min-width: 0</span>
+ancestor. The wrap is a scroll container, so it will shrink — but the plain <span class="mono">&lt;div&gt;</span>
+holding it is a grid item with <span class="mono">min-width: auto</span>, which is the table's min-content width. The
+wrap then grows past its pane instead of scrolling, and there is no overflow to hint at: the page scrolls sideways
+instead, which is the defect one layer up.</p>
+<p class="sub">It appears only when the wrap <i>actually</i> overflows, and clears the moment the reader reaches the
+end. A permanent fade is worse than none: it promises content that is not there. The measurement is a
+<span class="mono">ResizeObserver</span> in <span class="mono">useOverflow()</span>, and all it does is set
+<span class="mono">data-overflow="true"</span> — so a vanilla consumer with no React sees exactly what it saw before,
+and anything that can measure its own scroller can set the attribute by hand.</p>
+</div>
+</div>
+<script src="./Table-collapse.card.js"></script>
+</body></html>

@@ -108,7 +108,7 @@ what is still open. `CONTRIBUTING.md` points back here — the checklist lives i
 ## Install
 
 ```jsonc
-"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v2.0.0" }
+"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v2.1.0" }
 ```
 
 ```css
@@ -328,7 +328,7 @@ rule; every transform stands down under `prefers-reduced-motion`.
 
 | Component | Purpose |
 |---|---|
-| `Table` | `columns` + `rows`. A column with `num` gets mono tabular-nums, right-aligned. `sortable` + `onSort` renders the header as a real button with a caret |
+| `Table` | `columns` + `rows`. A column with `num` gets mono tabular-nums, right-aligned. `sortable` + `onSort` renders the header as a real button with a caret. `collapse="cards"` + `detailsLabel` turns each row into a card below `--lw-bp-md` of **container** width — one DOM, a container query, explicit roles; see §Responsive |
 | `KpiTile` | `icon` + `accent` draw a tinted subject chip; the delta sits on the number's baseline beside it. `accent` is the SUBJECT's family, `tone` judges the movement — two different facts |
 | `StatMeter` | A number with a unit, a bar and a target marker — a reading, not a decoration |
 | `EmptyState` | `icon` (a glyph name) `title` `description` `action` — exactly one action |
@@ -784,6 +784,35 @@ review is the thing to catch, not an unused declared one.
 Most layouts need no query at all: `Grid` auto-fits, `Cluster` wraps, `Split` collapses at
 `--lw-bp-lg`. Controls reach a 44px target on a coarse pointer without changing the desktop
 size, so density and the touch minimum are not forced to be one number.
+
+### Tables on phones
+
+A wide table is the one layout no breakpoint fixes: the columns are the content. `Table`
+takes `collapse="cards"`, and below `--lw-bp-md` of the WRAPPER's width every row paints as a
+card — first cell the title, next two a meta line, the rest behind a native `<details>` whose
+label you supply (`detailsLabel`; the sort menu's is `sortLabel`). This package holds no
+display text, so both are yours, and `detailsLabel` is required by the type the moment
+`collapse` is set.
+
+**A container query, not a media query**, and that is the whole point: the thing that is too
+narrow is the table's track, not the screen. The same table is fine at 768px of page inside a
+300px rail and unreadable at 1280px of page inside a 318px one — which is exactly where
+leanwise-inspect's six console lists sat, 1.5–2.4× the viewport wide.
+
+**The DOM does not change.** One real `<table>` at every width, re-laid-out by CSS: nothing is
+measured, nothing re-renders at a breakpoint, and the server and the client cannot disagree
+about which form to emit. The price is stated rather than hidden — `display: block` on a table
+element drops the implicit table semantics, so `Table` emits explicit
+`role="table" / "rowgroup" / "row" / "columnheader" / "cell"` whenever `collapse` is set, and
+only then. Where `@container` is unsupported nothing applies and the table scrolls as it always
+did. `Table.d.ts` carries the rest, including why the `<details>` holds the control and not the
+cells.
+
+**Every `.lw-table-wrap` gains an overflow hint**, collapsed or not: while it actually scrolls
+sideways it carries `data-overflow="true"` and fades its inline edge. React sets the attribute
+from a `ResizeObserver`; a vanilla page sets it or does not, and sees exactly what it saw
+before. ⚠ A wrap inside a grid or flex item needs a `min-width: 0` ancestor, or it grows past
+its pane instead of scrolling and there is nothing to hint at.
 
 ### Anchors under sticky chrome
 
