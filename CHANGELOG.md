@@ -24,6 +24,15 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 ## [Unreleased]
 
+## [2.1.2] — 2026-09-04
+
+### Fixed
+
+- **`.lw-segmented` buttons reach the 44px floor under a coarse pointer** — they read
+  `--lw-control-h-sm` there, like every other control. A consumer measured them at 29px.
+- **`.lw-disclosure > summary` children get `min-width: 0`**, so a truncating label
+  ellipsises instead of widening the summary and the page (855px on a 768 viewport).
+
 ## [2.1.1] — 2026-09-04
 
 ### Fixed

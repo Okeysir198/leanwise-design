@@ -1206,7 +1206,9 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
   /* Control HEIGHTS are raised on the density tokens in tokens.css, not here: a
      height written on the control would outrank the token the touch block already
      lifted. Only what has no token left stays. */
-  .lw-segmented button { padding: 10px 14px; }
+  .lw-segmented button { padding: 10px 14px; min-height: var(--lw-control-h-sm); }
+  /* ^ the token is 44px under a coarse pointer; a 12.5px label with 10px padding is
+     33px, and the first v2 consumer measured its language toggles at 29px. */
 }
 
 /* The one-button form of `ThemeToggle` (v1.3.4, `compact`). Shape and ink come
@@ -1670,6 +1672,10 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
      the Icon draws. */
   list-style: none;
 }
+/* A flex child defaults to `min-width: auto`, so a long label with `truncate` does
+   not truncate — it widens the summary, then the page (measured at 855px on a 768
+   viewport in the first v2 consumer). Zero lets the label shrink and ellipsise. */
+.lw-disclosure > summary > * { min-width: 0; }
 .lw-disclosure > summary::-webkit-details-marker { display: none; }
 .lw-disclosure > summary:focus-visible {
   outline: none;
