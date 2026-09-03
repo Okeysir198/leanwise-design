@@ -46,6 +46,7 @@
   /* ---- type ------------------------------------------------------------- */
   --font-sans: var(--lw-font-sans);
   --font-mono: var(--lw-font-mono);
+  --font-display: var(--lw-font-display);
 
   /* The six semantic type roles, with their line-height/tracking/weight riding
      along. v3 expressed these as `fontSize: { h1: [size, {lineHeight, ...}] }`;
@@ -67,16 +68,16 @@
   --text-h2--letter-spacing: var(--lw-tracking-tight);
   --text-h2--font-weight: 600;
 
-  /* 1.18 is a literal in the v3 preset too — there is no --lw-lh-* at this
-     value. Kept identical rather than rounded to --lw-lh-tight (1.12), which
-     would be a silent type change on every h3. */
+  /* v1.13.0: h3 and lead moved from literals (1.18 / 1.6) onto the ladder
+     tokens, in the preset and in base.css at once — the card already showed
+     --lw-lh-snug and --lw-lh-normal for them, so this is the CSS agreeing. */
   --text-h3: var(--lw-text-h3);
-  --text-h3--line-height: 1.18;
+  --text-h3--line-height: var(--lw-lh-snug);
   --text-h3--letter-spacing: var(--lw-tracking-tight);
   --text-h3--font-weight: 600;
 
   --text-lead: var(--lw-text-lead);
-  --text-lead--line-height: 1.6;
+  --text-lead--line-height: var(--lw-lh-normal);
 
   --text-eyebrow: var(--lw-text-eyebrow);
   --text-eyebrow--letter-spacing: var(--lw-tracking-eyebrow);

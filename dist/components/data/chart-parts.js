@@ -19,7 +19,7 @@ function DataTable({ labels, series, caption, categoryHeader = "Category" }) {
 function Legend({ series }) {
   if (series.length < 2) return null;
   return /* @__PURE__ */ jsx("div", { className: "lw-chart-legend", children: series.map((s, i) => /* @__PURE__ */ jsxs("span", { children: [
-    /* @__PURE__ */ jsx("i", { style: { background: s.color || SERIES(i) } }),
+    /* @__PURE__ */ jsx("i", { style: { "--lw-swatch": s.color || SERIES(i) } }),
     s.name
   ] }, i)) });
 }

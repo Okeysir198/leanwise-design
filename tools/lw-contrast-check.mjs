@@ -10,8 +10,10 @@
  * DERIVED, NOT HAND-LISTED — the old gate hardcoded a PAIRS array of triples.
  * This rewrite reads the color graph straight out of tokens.css:
  *
- *   1. Parse every theme block (:root, .dark, :root[data-theme="dark"],
- *      the @media dark inner rule, :where(.lw-band-dark/-light)) by brace-walking.
+ *   1. Parse every theme block (:root, `.dark, [data-theme="dark"]`, the @media
+ *      dark inner rule, :where(.lw-band-dark/-light)) by brace-walking. Blocks
+ *      are recognised by their selector-list MEMBERS (splitSelectorList), not by
+ *      a regex over the prelude — a nested paren used to make one unfindable.
  *   2. Per block, collect --lw-*-c channel declarations (HSL triples OR var()
  *      references) plus the bare-name color literals (the --lw-on-dark* rgba
  *      family). Resolve the var() chains to their final RGB within each scope.
@@ -54,7 +56,8 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { splitRules, stripComments, declarationsIn } from "./_css.mjs";
+import { splitRules, stripComments, declarationsIn, splitSelectorList } from "./_css.mjs";
+import { hslToRgb, hexToRgb, luminance, contrast, deltaE76 } from "./_color.mjs";
 
 /* PATH NOTE — this folder sits under templates/ because everything outside it is
    compiled into the design system's browser bundle, and a Node script (node:fs,
@@ -279,42 +282,69 @@ function isTopLevel(rules, r) {
 }
 
 /**
- * Declarations from EVERY top-level rule matching `re`, merged in source order
- * (later wins, as the cascade would). A scope authored across several blocks —
- * which `:root` and `.dark, …` both are — must be read whole or half its
- * channels look unresolved. Throws if nothing matched.
+ * Declarations from EVERY top-level rule whose selector satisfies `test`,
+ * merged in source order (later wins, as the cascade would). A scope authored
+ * across several blocks — which `:root` and `.dark, …` both are — must be read
+ * whole or half its channels look unresolved. Throws if nothing matched.
  */
-function mergeRules(rules, re, label) {
-  const matched = rules.filter((r) => re.test(r.selector) && isTopLevel(rules, r));
-  if (!matched.length) throw new Error(`theme block not found: ${label} (no selector matched ${re})`);
+function mergeRules(rules, test, label) {
+  const matched = rules.filter((r) => test(r.selector) && isTopLevel(rules, r));
+  if (!matched.length) throw new Error(`theme block not found: ${label} (no selector satisfied ${test.name || "the predicate"})`);
   return Object.assign({}, ...matched.map((r) => declarationsIn(r.body)));
 }
 
-/** First rule whose selector matches the regexp. Throws if absent. */
-function findRule(rules, re, label) {
-  const r = rules.find((r) => re.test(r.selector));
-  if (!r) throw new Error(`theme block not found: ${label} (no selector matched ${re})`);
+/** First rule whose selector satisfies `test`. Throws if absent. */
+function findRule(rules, test, label) {
+  const r = rules.find((r) => test(r.selector));
+  if (!r) throw new Error(`theme block not found: ${label} (no selector satisfied ${test.name || "the predicate"})`);
   return r;
 }
+
+/* -----------------------------------------------------------------------------
+   Theme-block recognition is a MEMBERSHIP question, answered on the split list.
+
+   Through v1.12 these were regexes over the whole prelude —
+   `^:where\((?![^)]*\.lw-band-light)[^)]*\.lw-band-dark\b[^)]*\)$` — and `[^)]*`
+   stops at the first `)`, so a member carrying its own parens (`html:not(.dark)
+   .lw-hero-dark`) made the block unfindable and the gate threw "theme block not
+   found" for a change that was a scoping decision, not a parse error. tokens.css
+   recorded that limitation as a reason NOT to scope an entry. The reason was the
+   matcher.
+   -------------------------------------------------------------------------- */
+
+/** The members of a `:where(…)` / `:is(…)` prelude, or of a plain selector list. */
+function members(selector) {
+  const m = selector.match(/^:(?:where|is)\((.*)\)\s*$/s);
+  return splitSelectorList(m ? m[1] : selector);
+}
+/** Members of a `:where(…)` prelude only; null for anything else. */
+function whereMembers(selector) {
+  const m = selector.match(/^:where\((.*)\)\s*$/s);
+  return m ? splitSelectorList(m[1]) : null;
+}
+/** `:root`, optionally guarded by `:not(…)`; never a class or attribute on it. */
+const isBareRoot = (m) => /^:root(?::not\(.*\))*$/s.test(m);
+/** A ROOT block: every member is a bare `:root`. `:root.light` is not one. */
+function isRootBlock(selector) {
+  const ms = members(selector);
+  return ms.length > 0 && ms.every(isBareRoot);
+}
+/** The canonical dark overlay, `.dark, [data-theme="dark"], …`. */
+const isDarkClassBlock = (selector) => members(selector)[0] === ".dark";
+/** A band block: a `:where()` list that names one band class and not the other. */
+const isBandDark = (selector) => { const ms = whereMembers(selector); return !!ms && ms.includes(".lw-band-dark") && !ms.includes(".lw-band-light"); };
+const isBandLight = (selector) => { const ms = whereMembers(selector); return !!ms && ms.includes(".lw-band-light") && !ms.includes(".lw-band-dark"); };
+/** The shared RE-DERIVE block: the one `:where()` list that names BOTH bands. */
+const isRederiveBlock = (selector) => { const ms = whereMembers(selector); return !!ms && ms.includes(".lw-band-dark") && ms.includes(".lw-band-light"); };
+/** The `:root[data-theme="dark"]` form that v1.13.0 deleted as redundant. */
+const REDUNDANT_ROOT_ATTR = ':root[data-theme="dark"]';
+const namesRedundantRootAttr = (selector) => members(selector).some((m) => m.replace(/\s+/g, "").startsWith(REDUNDANT_ROOT_ATTR));
 
 
 /* =============================================================================
    3. COLOR VALUE PARSING + VAR() CHASE
+   (hslToRgb / hexToRgb live in _color.mjs since v1.13.0.)
    ============================================================================= */
-
-function hslToRgb(h, s, l) {
-  s /= 100;
-  l /= 100;
-  const k = (n) => (n + h / 30) % 12;
-  const a = s * Math.min(l, 1 - l);
-  const f = (n) => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
-  return { r: f(0), g: f(8), b: f(4) };
-}
-
-function hexToRgb(hex) {
-  const h = hex.length === 3 ? hex.split("").map((c) => c + c).join("") : hex;
-  return { r: parseInt(h.slice(0, 2), 16) / 255, g: parseInt(h.slice(2, 4), 16) / 255, b: parseInt(h.slice(4, 6), 16) / 255 };
-}
 
 /**
  * Parse one declared value into one of:
@@ -430,10 +460,10 @@ const rules = splitRules(css);
 // opens several (the scale, then the color roles, then the late addenda); taking
 // only the first resolves none of the color channels. NOT :root[data-theme="dark"],
 // and not the :root nested inside the system-preference @media.
-const lightDecls = mergeRules(rules, /^:root\s*$/, ":root (light defaults)");
+const lightDecls = mergeRules(rules, isRootBlock, ":root (light defaults)");
 // The canonical dark overlay — the `.dark, [data-theme="dark"], …` rules, likewise
 // authored as more than one block.
-const darkClassDecls = mergeRules(rules, /^\.dark\s*,/, ".dark, [data-theme=\"dark\"]");
+const darkClassDecls = mergeRules(rules, isDarkClassBlock, ".dark, [data-theme=\"dark\"]");
 
 // Dark = light ⊕ dark overlay (everything the dark block does NOT redeclare is
 // inherited from :root — e.g. --lw-text-1-c stays navy, which is the whole reason
@@ -445,7 +475,6 @@ const darkDecls = { ...lightDecls, ...darkClassDecls };
    into `base` in lw-tokens-dtcg.mjs. Anchor on the enclosing at-rule, which
    _css.mjs already reports per rule as `atRule`. */
 const MEDIA_DARK_RE = /^@media\s*\(prefers-color-scheme:\s*dark\)\s*$/;
-const MEDIA_ROOT_RE = /^:root(?::not\([^)]*\))*\s*$/;
 
 /**
  * MEDIA-DARK = the base `:root` cascade with the `@media (prefers-color-scheme:
@@ -463,11 +492,11 @@ const MEDIA_ROOT_RE = /^:root(?::not\([^)]*\))*\s*$/;
  * (`:root.light, :root[data-theme="light"]`) is (0,2,0) and never participates
  * here: that visitor has made a choice and is not on this path.
  */
-const mediaDarkRootRules = rules.filter((r) => MEDIA_DARK_RE.test(r.atRule) && MEDIA_ROOT_RE.test(r.selector));
+const mediaDarkRootRules = rules.filter((r) => MEDIA_DARK_RE.test(r.atRule) && isRootBlock(r.selector));
 if (!mediaDarkRootRules.length) {
   throw new Error("no `:root` found inside @media (prefers-color-scheme: dark) — the system-dark path is the default deployment; it cannot go unmeasured");
 }
-const lightRootRules = rules.filter((r) => /^:root\s*$/.test(r.selector) && isTopLevel(rules, r));
+const lightRootRules = rules.filter((r) => isRootBlock(r.selector) && isTopLevel(rules, r));
 const mediaDarkDecls = Object.assign(
   {},
   ...[...lightRootRules, ...mediaDarkRootRules]
@@ -521,45 +550,43 @@ function darkScopeDivergence() {
 }
 
 /**
- * Parity guard — the design intent (documented at tokens.css ≈ line 400) is that
- * every DARK context re-points the SAME set. The explicit attribute form
- * (:root[data-theme="dark"]) and the dark band (:where(.lw-band-dark)) MUST agree
- * with .dark declaration-for-declaration; a divergence here is a real drift bug
- * and fails the gate.
+ * Parity guard — the design intent (documented in tokens.css's "Theme — two
+ * layers" note) is that every DARK context re-points the SAME set. The dark band
+ * (:where(.lw-band-dark)) MUST agree with .dark declaration-for-declaration; a
+ * divergence there is a real drift bug and fails the gate.
  *
- * The @media (system-preference) block stays a WARNING here, and that is no
- * longer a hole: it is a DECLARATION-SHAPE check, and the rendered result of that
- * block is now measured directly — every `scope: "dark"` pair is evaluated in the
- * media-dark scope, and `darkScopeDivergence()` compares the two dark scopes token
- * for token as a hard failure. What this warning adds on top is the case where the
- * media block reaches the same colour by a different declaration (an inlined
+ * The @media (system-preference) block is STRICT for a MISSING key since
+ * v1.13.0: with the `:root[data-theme="dark"]` block gone, the media block and
+ * `.dark, [data-theme="dark"]` are the two homes of the dark palette, and a key
+ * present in one and absent from the other is exactly the v0.1.2 badge
+ * regression. A value-SHAPE mismatch on a key both declare stays a warning —
+ * the rendered result is measured directly (every `scope: "dark"` pair runs in
+ * the media-dark scope, and `darkScopeDivergence()` compares the two dark scopes
+ * token for token as a hard failure), so what the warning adds is the case where
+ * the media block reaches the same colour by a different declaration (an inlined
  * triple where .dark uses a var(), say) — worth saying, not worth failing.
  *
  * Likewise :where(.lw-band-light) must reproduce the light role set.
+ *
+ * The `:root[data-theme="dark"]` row that used to lead this list was DELETED
+ * with its block in v1.13.0. It restated `.dark, [data-theme="dark"]` byte for
+ * byte, and parity guaranteed it always would — a block whose only permitted
+ * content is a copy of another block is a second home with no second reader.
+ * `[data-theme="dark"]` on <html> is still covered by the class-list block; the
+ * media `:root` has the same specificity and identical values, so source order
+ * between them cannot matter. The guard below fails if the block comes back.
  */
-/**
- * The band blocks are authored as selector LISTS — `:where(.lw-band-dark,
- * [data-band="dark"])` — so an exact-match regex never finds them. Match the
- * class anywhere in the list, and exclude the block that carries BOTH bands
- * (the shared-declaration block), which is not the role set we are comparing.
- */
-const BAND_DARK_RE = /^:where\((?![^)]*\.lw-band-light)[^)]*\.lw-band-dark\b[^)]*\)\s*$/;
-const BAND_LIGHT_RE = /^:where\((?![^)]*\.lw-band-dark)[^)]*\.lw-band-light\b[^)]*\)\s*$/;
-/* MEDIA_DARK_RE / MEDIA_ROOT_RE are declared with the scope assembly above — the
-   media-dark scope needs them before this point. */
-
 function parity() {
   const failPairs = []; // hard fails (explicit dark forms disagree)
   const warnings = [];  // soft (media block / informational)
 
   const want = [
-    { label: ":root[data-theme=\"dark\"]", re: /^:root\[data-theme="dark"\]\s*$/, here: declarationsIn(findRule(rules, /^:root\[data-theme="dark"\]\s*$/, ":root[data-theme=\"dark\"]").body), strict: true },
-    { label: ":where(.lw-band-dark)",     re: BAND_DARK_RE,                       here: declarationsIn(findRule(rules, BAND_DARK_RE, ":where(.lw-band-dark)").body), strict: true },
+    { label: ":where(.lw-band-dark)", here: declarationsIn(findRule(rules, isBandDark, ":where(.lw-band-dark)").body), strictMissing: true, strictValue: true },
     // ALL the system-dark `:root` blocks, merged — tokens.css may state the
     // re-points in more than one media block (source order relative to the plain
     // `:root` blocks forces that for the chart palette and the diff grounds), and
     // reading only the first would warn about tokens that are in fact re-pointed.
-    { label: "@media (prefers-color-scheme: dark)", re: MEDIA_ROOT_RE, here: Object.assign({}, ...mediaDarkRootRules.map((r) => declarationsIn(r.directBody))), strict: false },
+    { label: "@media (prefers-color-scheme: dark)", here: Object.assign({}, ...mediaDarkRootRules.map((r) => declarationsIn(r.directBody))), strictMissing: true, strictValue: false },
   ];
 
   // Compare COLOR declarations only (-c channels + the rgba on-dark family).
@@ -568,22 +595,31 @@ function parity() {
   // (both blocks author the same triple; spacing is not a color difference).
   const norm = (s) => s.replace(/\s+/g, " ").trim();
 
-  for (const { label, here, strict } of want) {
+  for (const { label, here, strictMissing, strictValue } of want) {
     for (const k of Object.keys(darkClassDecls)) {
       if (!isColorDecl(k)) continue;
       const mine = here[k];
       if (mine === undefined) {
         const msg = `${label} is missing --lw-${k} (present in .dark)`;
-        (strict ? failPairs : warnings).push(msg);
+        (strictMissing ? failPairs : warnings).push(msg);
       } else if (norm(mine) !== norm(darkClassDecls[k])) {
         const msg = `${label}: --lw-${k} = "${mine}" ≠ .dark "${darkClassDecls[k]}"`;
-        (strict ? failPairs : warnings).push(msg);
+        (strictValue ? failPairs : warnings).push(msg);
       }
     }
   }
 
+  for (const r of rules) {
+    if (isTopLevel(rules, r) && namesRedundantRootAttr(r.selector)) {
+      failPairs.push(
+        `redundant root-attribute block reintroduced: \`${r.selector.replace(/\s+/g, " ")}\` — ` +
+        `\`.dark, [data-theme="dark"]\` already covers the attribute on <html>; the copy was deleted in v1.13.0 and must stay deleted`,
+      );
+    }
+  }
+
   // Band-light must reproduce the light role set for color decls it shares.
-  const bandLightDecls = declarationsIn(findRule(rules, BAND_LIGHT_RE, ":where(.lw-band-light)").body);
+  const bandLightDecls = declarationsIn(findRule(rules, isBandLight, ":where(.lw-band-light)").body);
   for (const k of Object.keys(bandLightDecls)) {
     if (!isColorDecl(k)) continue;
     const lightVal = lightDecls[k];
@@ -595,30 +631,72 @@ function parity() {
   return { failPairs, warnings };
 }
 
+/* -----------------------------------------------------------------------------
+   4b. RE-DERIVE COMPLETENESS (v1.13.0).
+
+   `--lw-fg: hsl(var(--lw-fg-c))` is substituted where it is DECLARED. A band
+   that re-points `--lw-fg-c` and does not restate `--lw-fg` inherits the PAGE
+   theme's colour — the trap tokens.css's re-derive block exists to close, and
+   the one this file's "Facts" section records as having bitten `.dark` used as
+   a subtree, every shadcn.css alias, and the two chart-chrome tokens.
+
+   Two things can silently re-open it, and neither was measured:
+
+     · a NEW role. Someone adds `--lw-x-c` to the dark band and `--lw-x:
+       hsl(var(--lw-x-c))` to :root, and forgets the third line. Nothing pairs
+       it, nothing fails, and inside a band `--lw-x` is the page colour.
+     · a NEW band member. `.lw-page-dark` joined the dark list in v1.4.0 and
+       was never added to the re-derive list — so on a dark ground inside a
+       light page every derived role stayed LIGHT, exactly the defect the list
+       was created to fix, for two releases. Only `MarketingLanding` writes
+       `class="dark lw-page-dark"`, so the demo carried the re-derive by hand.
+
+   Rule: for every channel the dark band re-points whose :root derived line is
+   `hsl(var(--lw-<role>-c) …)`, the re-derive block must declare `--lw-<role>`;
+   and the re-derive block's member list must be a superset of BOTH band lists.
+   -------------------------------------------------------------------------- */
+function rederiveCompleteness() {
+  const fails = [];
+  const bandDark = findRule(rules, isBandDark, ":where(.lw-band-dark)");
+  const bandLight = findRule(rules, isBandLight, ":where(.lw-band-light)");
+  const rederive = rules.find((r) => isRederiveBlock(r.selector));
+  if (!rederive) {
+    fails.push("no re-derive block — expected one `:where(…)` list naming BOTH .lw-band-dark and .lw-band-light");
+    return { fails, roles: 0, members: 0 };
+  }
+  const restated = declarationsIn(rederive.body);
+  let roles = 0;
+  for (const k of Object.keys(declarationsIn(bandDark.body))) {
+    if (!k.endsWith("-c")) continue;
+    const role = k.slice(0, -2);
+    const derived = lightDecls[role];
+    if (!derived || !new RegExp(`^hsl\\(\\s*var\\(--lw-${role}-c\\)`).test(derived)) continue;
+    roles++;
+    if (!(role in restated)) {
+      fails.push(
+        `re-derive block does not restate --lw-${role} — the dark band re-points --lw-${role}-c, ` +
+        `and :root's \`--lw-${role}: ${derived}\` is substituted at :root, so inside a band it keeps the page theme's colour`,
+      );
+    }
+  }
+  const have = whereMembers(rederive.selector);
+  for (const [label, rule] of [[".lw-band-dark", bandDark], [".lw-band-light", bandLight]]) {
+    for (const m of whereMembers(rule.selector)) {
+      if (!have.includes(m)) {
+        fails.push(
+          `re-derive :where() list is missing \`${m}\` (a member of the ${label} list) — ` +
+          `${roles} derived role(s) keep the page theme's colour inside it`,
+        );
+      }
+    }
+  }
+  return { fails, roles, members: have.length };
+}
+
 /* =============================================================================
-   5. CONTRAST MATH (WCAG 2.1 relative luminance + alpha compositing)
+   5. CONTRAST MATH — luminance() and contrast() live in _color.mjs since v1.13.0
+      (WCAG 2.1 relative luminance + alpha compositing, unchanged).
    ============================================================================= */
-
-function luminance([r, g, b]) {
-  const lin = (v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
-  return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
-}
-
-/**
- * Contrast between a foreground and its background. If the foreground has alpha
- * (the --lw-on-dark* tier), it is composited OVER the background first — that is
- * the color the viewer actually perceives, and the only honest basis for the ratio.
- */
-function contrast(fg, bg) {
-  const a = fg.a ?? 1;
-  const eff = [
-    a * fg.r + (1 - a) * bg.r,
-    a * fg.g + (1 - a) * bg.g,
-    a * fg.b + (1 - a) * bg.b,
-  ];
-  const [hi, lo] = [luminance(eff), luminance([bg.r, bg.g, bg.b])].sort((x, y) => y - x);
-  return (hi + 0.05) / (lo + 0.05);
-}
 
 /* =============================================================================
    6. EVALUATE THE MANIFEST
@@ -985,26 +1063,12 @@ for (const c of composedPairs()) {
    tuned away here. `.lw-code-head` is the same surface, one level in. */
 const BAND_SCOPE_EXEMPT = new Set([".lw-code", ".lw-code-head"]);
 
-/** Split a selector list on TOP-LEVEL commas only — `:is(a, b) .x` is one selector. */
-function splitSelectorList(list) {
-  const out = [];
-  let depth = 0, buf = "";
-  for (const ch of list) {
-    if (ch === "(") depth++;
-    else if (ch === ")") depth--;
-    else if (ch === "," && depth === 0) { out.push(buf); buf = ""; continue; }
-    buf += ch;
-  }
-  if (buf.trim()) out.push(buf);
-  return out.map((s) => s.trim()).filter(Boolean);
-}
-
 function bandScopes() {
   // Every class named anywhere in tokens.css's two band selector lists, plus the
   // page-theme selectors, which are bands by construction.
   const declared = new Set(["dark", "lw-band-dark", "lw-band-light", "light"]);
-  for (const re of [BAND_DARK_RE, BAND_LIGHT_RE]) {
-    const rule = rules.find((r) => re.test(r.selector));
+  for (const test of [isBandDark, isBandLight]) {
+    const rule = rules.find((r) => test(r.selector));
     if (!rule) continue;
     for (const m of rule.selector.matchAll(/\.([A-Za-z0-9_-]+)/g)) declared.add(m[1]);
   }
@@ -1044,6 +1108,7 @@ function bandScopes() {
    ============================================================================= */
 
 const { failPairs: parityFails, warnings: parityWarnings } = parity();
+const { fails: rederiveFails, roles: rederiveRoles, members: rederiveMembers } = rederiveCompleteness();
 const { offenders: bandOffenders, scanned: bandScanned } = bandScopes();
 const logoFails = logoStops();
 const emailFails = emailLiterals();
@@ -1096,6 +1161,14 @@ if (parityFails.length) {
   for (const m of parityFails) console.log(`  ${C.red}✗${C.reset} ${m}`);
   console.log();
   failed += parityFails.length;
+}
+
+if (rederiveFails.length) {
+  console.log(`${C.bold}Re-derive completeness (hard fail — a band re-points a channel whose derived role is not restated)${C.reset}`);
+  for (const m of rederiveFails) console.log(`  ${C.red}✗${C.reset} ${m}`);
+  console.log(`${C.dim}  \`--lw-x: hsl(var(--lw-x-c))\` is substituted where it is DECLARED. Add the role to the${C.reset}`);
+  console.log(`${C.dim}  :where(.lw-band-dark, …, .lw-band-light, …) re-derive block in tokens.css, or the member.${C.reset}\n`);
+  failed += rederiveFails.length;
 }
 
 if (logoFails.length) {
@@ -1207,25 +1280,8 @@ if (bindingFails.length) {
 
 const CHART_KEYS = Array.from({ length: 12 }, (_, i) => `chart-${i + 1}`);
 
-/** sRGB -> CIE L*a*b*, D65. Takes this file's resolved `{kind,r,g,b,a}`.
-    NOTE the channels here are 0-1, NOT 0-255 — `hslToRgb` above returns
-    normalised values and `luminance` consumes them that way. Dividing by 255
-    again collapses every colour to near-black, which showed up as dE 0.2 between
-    obviously different hues on the first run of this check. */
-function toLab({ r, g, b }) {
-  const lin = (v) => (v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
-  const [R, G, B] = [lin(r), lin(g), lin(b)];
-  const X = (R * 0.4124 + G * 0.3576 + B * 0.1805) / 0.95047;
-  const Y = (R * 0.2126 + G * 0.7152 + B * 0.0722) / 1.0;
-  const Z = (R * 0.0193 + G * 0.1192 + B * 0.9505) / 1.08883;
-  const f = (t) => (t > 0.008856 ? Math.cbrt(t) : 7.787 * t + 16 / 116);
-  const [fx, fy, fz] = [f(X), f(Y), f(Z)];
-  return [116 * fy - 16, 500 * (fx - fy), 200 * (fy - fz)];
-}
-const deltaE76 = (a, b) => {
-  const [la, lb] = [toLab(a), toLab(b)];
-  return Math.hypot(la[0] - lb[0], la[1] - lb[1], la[2] - lb[2]);
-};
+/* toLab / deltaE76 (sRGB -> CIE L*a*b*, D65; CIE76 distance) live in _color.mjs
+   since v1.13.0. The channels are 0-1, NOT 0-255 — see the note there. */
 
 /* MEASURED against the shipped v1.1.8 ramp, not guessed: its tightest pair is
    chart-1 (brand cyan) vs chart-7 (light blue) at dE 20.0, in BOTH dark scopes.
@@ -1294,5 +1350,7 @@ console.log(`${C.dim}composition manifest — add a pair to MANIFEST and it is c
 console.log(`${C.dim}scope(s) you declare; a "dark" pair is checked in the @media path too.${C.reset}\n`);
 console.log(`${C.dim}Band scope: ${bandScanned} on-dark descendant rule(s) scanned, every ancestor a declared${C.reset}`);
 console.log(`${C.dim}band in tokens.css (${BAND_SCOPE_EXEMPT.size} exempted by name: ${[...BAND_SCOPE_EXEMPT].join(", ")}).${C.reset}\n`);
+console.log(`${C.dim}Re-derive: ${rederiveRoles} derived role(s) restated for ${rederiveMembers} band member(s); the re-derive list${C.reset}`);
+console.log(`${C.dim}is a superset of both band lists.${C.reset}\n`);
 console.log(`${C.dim}Categorical separation: ${chartPairs} chart pairs at dE >= ${CHART_DE_FLOOR}; tightest is${C.reset}`);
 console.log(`${C.dim}${tightest.a} vs ${tightest.b} [${tightest.scope}] at dE ${tightest.d.toFixed(1)}.${C.reset}\n`);

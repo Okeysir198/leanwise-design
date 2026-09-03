@@ -274,10 +274,22 @@ table.visually-hidden > caption,
 :is(.dark, [data-band="dark"], .lw-band-dark) .lw-eyebrow.muted::before { background: var(--lw-fg-faint); }
 
 .lw-h1 {
+  font-family: var(--lw-font-display);
   font-size: var(--lw-text-h1);
   line-height: var(--lw-lh-tight);
   letter-spacing: var(--lw-tracking-tighter);
   font-weight: var(--lw-fw-semibold);
+  margin: 0;
+  text-wrap: balance;
+}
+/* DISPLAY — one notch above h1, weight 500: the lighter editorial voice of a
+   landing/auth hero headline. Mirrors the preset's `text-display`. */
+.lw-display {
+  font-family: var(--lw-font-display);
+  font-size: var(--lw-text-display);
+  line-height: var(--lw-lh-tight);
+  letter-spacing: var(--lw-tracking-tighter);
+  font-weight: var(--lw-fw-medium);
   margin: 0;
   text-wrap: balance;
 }
@@ -288,6 +300,7 @@ table.visually-hidden > caption,
    README rule 1, applied to a declaration instead of a component. */
 .lw-h2,
 .lw-prose h2 {
+  font-family: var(--lw-font-display);
   font-size: var(--lw-text-h2);
   line-height: var(--lw-lh-snug);
   letter-spacing: var(--lw-tracking-tight);
@@ -298,16 +311,16 @@ table.visually-hidden > caption,
 .lw-h3,
 .lw-prose h3 {
   font-size: var(--lw-text-h3);
-  line-height: 1.18;
+  line-height: var(--lw-lh-snug);
   letter-spacing: var(--lw-tracking-tight);
   font-weight: var(--lw-fw-semibold);
   margin: 0;
 }
 .lw-lead {
   font-size: var(--lw-text-lead);
-  line-height: 1.6;
+  line-height: var(--lw-lh-normal);
   color: var(--lw-fg-muted);
-  max-width: 60ch;
+  max-width: var(--lw-measure);
   margin: 0;
   text-wrap: pretty;
 }
@@ -356,9 +369,9 @@ table.visually-hidden > caption,
   font-weight: var(--lw-fw-medium);
   letter-spacing: var(--lw-btn-tracking);
   border-radius: var(--lw-radius-md);
-  transition: background var(--lw-duration), color var(--lw-duration),
-              border-color var(--lw-duration), transform var(--lw-duration),
-              box-shadow var(--lw-duration);
+  transition: background var(--lw-dur-sm), color var(--lw-dur-sm),
+              border-color var(--lw-dur-sm), transform var(--lw-dur-sm),
+              box-shadow var(--lw-dur-sm);
   white-space: nowrap;
   line-height: 1.2;
 }
@@ -378,7 +391,7 @@ table.visually-hidden > caption,
 .lw-btn-icon { font-size: 17px; line-height: 1; }
 .lw-btn-icon.lw-btn-sm { font-size: 14px; }
 .lw-btn-icon.lw-btn-lg { font-size: 20px; }
-.lw-btn .arrow { transition: transform var(--lw-duration); }
+.lw-btn .arrow { transition: transform var(--lw-dur-sm); }
 .lw-btn:hover .arrow { transform: translateX(2px); }
 .lw-btn:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
 /* A brand ring on a brand FILL is 1:1 against it, so the filled variants take an
@@ -517,9 +530,9 @@ table.visually-hidden > caption,
 .lw-btn[data-loading="true"]::after {
   content: ""; position: absolute; width: 15px; height: 15px; border-radius: 999px;
   border: 2px solid var(--lw-btn-spin-ink); border-top-color: transparent; opacity: .9;
-  animation: lw-btn-spin var(--lw-dur-spin) linear infinite;
+  animation: lwBtnSpin var(--lw-dur-spin) linear infinite;
 }
-@keyframes lw-btn-spin { to { transform: rotate(360deg); } }
+@keyframes lwBtnSpin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) {
   .lw-btn:hover { transform: none; }
   .lw-btn[data-loading="true"]::after { animation-duration: var(--lw-dur-spin-slow); }
@@ -624,7 +637,7 @@ table.visually-hidden > caption,
   background: var(--lw-bg);
   border: 1px solid var(--lw-line);
   border-radius: var(--lw-radius-lg);
-  transition: border-color var(--lw-duration), box-shadow var(--lw-duration), transform var(--lw-duration);
+  transition: border-color var(--lw-dur-sm), box-shadow var(--lw-dur-sm), transform var(--lw-dur-sm);
 }
 /* Interactive cards. A card that lifts on hover is a control: it needs a pointer
    cursor, a keyboard focus ring and a press state, or it looks clickable to a mouse
@@ -765,7 +778,7 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
    as "No data". Title, one line of why, one action. */
 .lw-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-align: center; padding: var(--lw-space-48) var(--lw-space-24); border: 1px dashed var(--lw-line-strong); border-radius: var(--lw-radius-lg); background: var(--lw-bg-subtle); }
 .lw-empty .t { font-size: var(--lw-text-body); font-weight: var(--lw-fw-semibold); letter-spacing: -0.012em; color: var(--lw-fg); }
-.lw-empty .s { font-size: var(--lw-text-sm); color: var(--lw-fg-muted); max-width: 46ch; text-wrap: pretty; }
+.lw-empty .s { font-size: var(--lw-text-sm); color: var(--lw-fg-muted); max-width: var(--lw-measure-sm); text-wrap: pretty; }
 .lw-empty .glyph { display: inline-flex; font-family: var(--lw-font-mono); font-size: 20px; color: var(--lw-fg-subtle); }
 /* The dashed frame and its ink on a dark band. Of the generic `.lw-band-dark`
    ground rule these sat beside, `.lw-kpi` and `.lw-source-item` are app surface
@@ -1231,8 +1244,8 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
 .lw-mb-5 { margin-bottom: var(--lw-space-20); }
 .lw-mb-6 { margin-bottom: var(--lw-space-24); }
 .lw-mb-8 { margin-bottom: var(--lw-space-32); }
-.lw-measure { max-width: 60ch; }
-.lw-measure-sm { max-width: 46ch; }
+.lw-measure { max-width: var(--lw-measure); }
+.lw-measure-sm { max-width: var(--lw-measure-sm); }
 
 /* FIGURE — a diagram or an image with a caption that is ABOUT it.
    `<figcaption>` is not a paragraph that happens to follow a picture; a screen
@@ -1297,9 +1310,9 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
    prefers-reduced-motion: no-preference; the static state is complete. */
 
 /* Hover lift + brand glow for cards. Opt-in class beside .lw-card etc. */
-.lw-card-glow { transition: transform var(--lw-duration-fast) var(--lw-ease-out),
-                            border-color var(--lw-duration-fast) var(--lw-ease-out),
-                            box-shadow var(--lw-duration-fast) var(--lw-ease-out); }
+.lw-card-glow { transition: transform var(--lw-dur-xs) var(--lw-ease-out),
+                            border-color var(--lw-dur-xs) var(--lw-ease-out),
+                            box-shadow var(--lw-dur-xs) var(--lw-ease-out); }
 .lw-card-glow:hover {
   border-color: hsl(var(--lw-brand-500-c) / 0.55);
   box-shadow: var(--lw-shadow-md), var(--lw-brand-glow);
@@ -1309,7 +1322,7 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
 }
 
 /* Row highlight for data tables. */
-.lw-row-hover tbody tr { transition: background var(--lw-duration-fast) var(--lw-ease-out); }
+.lw-row-hover tbody tr { transition: background var(--lw-dur-xs) var(--lw-ease-out); }
 .lw-row-hover tbody tr:hover td { background: var(--lw-bg-subtle); }
 
 /* Flowing connector line — pair with an SVG path (fill none, stroke set by the
@@ -1333,7 +1346,9 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
 }
 .lw-wash > * { position: relative; z-index: var(--lw-z-raised); }
 @media (prefers-reduced-motion: no-preference) {
-  .lw-wash::before { animation: lwDrift var(--lw-dur-wash) ease-in-out infinite alternate; }
+  /* AMBIENT loop: `--lw-ambient-play` can pause it (a signal loop — skeleton,
+     caret, spinner — never reads this token; those stay unconditional). */
+  .lw-wash::before { animation: lwDrift var(--lw-dur-wash) ease-in-out infinite alternate; animation-play-state: var(--lw-ambient-play); }
 }
 @keyframes lwDrift {
   from { transform: translate3d(-4%, -3%, 0) scale(1); }
@@ -1502,14 +1517,14 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
 
    The measure lives on --lw-prose-max so a consumer can widen it for a docs
    column without overriding a rule; `.lw-prose-narrow` is the shipped second
-   value, the same 46ch as `.lw-measure-sm`. */
+   value, the same `--lw-measure-sm` as `.lw-measure-sm`. */
 .lw-prose {
-  max-inline-size: var(--lw-prose-max, 68ch);
+  max-inline-size: var(--lw-prose-max, var(--lw-measure-prose));
   color: var(--lw-fg);
   font-size: var(--lw-text-body);
   line-height: var(--lw-lh-relaxed);
 }
-.lw-prose-narrow { --lw-prose-max: 46ch; }
+.lw-prose-narrow { --lw-prose-max: var(--lw-measure-sm); }
 
 /* Clear the UA's own block margins on the direct children FIRST, so the owl
    below is the only thing spacing this surface. Left in place they add to it,
@@ -1805,7 +1820,7 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
 /* As a link the brand is one target covering mark and name. Opacity, not a
    colour change: the name is already the brand colour, so darkening it on hover
    would read as a different brand rather than a hover state. */
-a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity var(--lw-duration) var(--lw-ease-out); }
+a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity var(--lw-dur-sm) var(--lw-ease-out); }
 .lw-topbar a.brand:hover { opacity: 0.72; }
 .lw-topbar a.brand:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); border-radius: var(--lw-radius-sm); }
 @media (prefers-reduced-motion: reduce) { .lw-topbar a.brand { transition: none; } }

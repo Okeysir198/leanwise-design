@@ -36,6 +36,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { compileProbe } from "./_tw-probe.mjs";
+import { generated } from "./_generated.mjs";
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, "..");
@@ -71,18 +72,14 @@ for (const item of manifest.items) {
 
 const problems = [];
 
-if (!CHECK) {
-  fs.rmSync(OUT, { recursive: true, force: true });
-  fs.mkdirSync(OUT, { recursive: true });
-  for (const [name, body] of built) fs.writeFileSync(path.join(OUT, name), body);
-} else {
+// Written and staleness-checked through the shared harness. The orphan check is
+// registry-specific — a stale-file harness cannot know a file should NOT exist.
+if (!CHECK) fs.rmSync(OUT, { recursive: true, force: true });
+const files = new Map([...built].map(([name, body]) => [path.join(OUT, name), body]));
+const stale = await generated({ name: "lw-registry", files, check: CHECK, hint: "run `npm run registry`" });
+if (stale) problems.push(`${stale} file(s) under r/ missing or stale — see above`);
+if (CHECK) {
   const have = fs.existsSync(OUT) ? new Set(fs.readdirSync(OUT)) : new Set();
-  for (const [name, body] of built) {
-    if (!have.has(name)) problems.push(`r/${name} is missing — run \`npm run registry\``);
-    else if (fs.readFileSync(path.join(OUT, name), "utf8") !== body) {
-      problems.push(`r/${name} is stale — registry/ has moved since it was generated`);
-    }
-  }
   for (const name of have) if (!built.has(name)) problems.push(`r/${name} is orphaned — no such item in registry.json`);
 }
 
@@ -157,5 +154,5 @@ if (problems.length) {
 console.log(green(
   CHECK
     ? `lw-registry: OK — ${built.size} item(s) current, ${classes.size} design-system class(es) verified against the compiler.`
-    : `lw-registry: wrote ${built.size} item(s) to r/; ${classes.size} design-system class(es) verified against the compiler.`,
+    : `lw-registry: ${built.size} item(s) in r/; ${classes.size} design-system class(es) verified against the compiler.`,
 ));

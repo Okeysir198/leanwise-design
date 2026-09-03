@@ -22,7 +22,8 @@
  *   node lw-dts-barrel.mjs            # write react.d.ts
  *   node lw-dts-barrel.mjs --check    # fail if the committed file is stale
  */
-import { readFileSync, writeFileSync, existsSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
+import { generated } from "./_generated.mjs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -122,26 +123,16 @@ const iconUnion = "export type IconName =\n" + iconLines.join("\n") + ";";
 const iconHave = readFileSync(ICON_DTS, "utf8");
 const iconWant = iconHave.replace(/export type IconName =[\s\S]*?;/, iconUnion);
 
+const exports_ = groups.reduce((n, g) => n + g.names.length, 0);
+const propTypes = groups.reduce((n, g) => n + g.props.length, 0);
+const files = new Map([[OUT, want], [ICON_DTS, iconWant]]);
+const stale = await generated({
+  name: "lw-dts-barrel", files, check: checkOnly,
+  hint: "react.js / Icon.jsx have moved since it was generated (a missing IconName member makes a name the component RENDERS a type error). Run `npm run dts` and commit the result.",
+});
+if (stale) process.exit(1);
 if (checkOnly) {
-  if (iconHave !== iconWant) {
-    console.error("lw-dts-barrel: IconName is stale — Icon.jsx has " + glyphs.length + " glyphs and the union does not match.");
-    console.error("  A missing member makes a name the component RENDERS a type error. Run `npm run dts`.");
-    process.exit(1);
-  }
-} else if (iconHave !== iconWant) {
-  writeFileSync(ICON_DTS, iconWant);
-  console.log("lw-dts-barrel: regenerated IconName — " + glyphs.length + " glyphs.");
+  console.log("lw-dts-barrel: OK — react.d.ts covers all " + exports_ + " barrel exports; IconName has " + glyphs.length + " glyphs.");
+} else {
+  console.log("lw-dts-barrel: react.d.ts — " + exports_ + " exports, " + propTypes + " prop types; IconName — " + glyphs.length + " glyphs.");
 }
-
-if (checkOnly) {
-  const have = existsSync(OUT) ? readFileSync(OUT, "utf8") : null;
-  if (have !== want) {
-    console.error("lw-dts-barrel: react.d.ts is stale — react.js has moved since it was generated.");
-    console.error("  Run `npm run dts` and commit the result.");
-    process.exit(1);
-  }
-  console.log("lw-dts-barrel: OK — react.d.ts covers all " + groups.reduce((n, g) => n + g.names.length, 0) + " barrel exports.");
-  process.exit(0);
-}
-writeFileSync(OUT, want);
-console.log("lw-dts-barrel: wrote react.d.ts — " + groups.reduce((n, g) => n + g.names.length, 0) + " exports, " + groups.reduce((n, g) => n + g.props.length, 0) + " prop types.");

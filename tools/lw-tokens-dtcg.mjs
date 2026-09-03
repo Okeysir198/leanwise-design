@@ -12,12 +12,20 @@
  * froze to the light palette on dark), and a generator that walks every scope is
  * the cheapest place to catch it.
  *
+ * Trailing same-line comments on a declaration are read as annotations:
+ *   /* @kind color *\/                → $type (a hint beats the KIND guess)
+ *   /* @deprecated use --lw-x *\/      → "$deprecated": "use --lw-x" on the leaf
+ *   /* @tier primitive|semantic|component *\/
+ *                                    → "$extensions": { "com.leanwise.tier": … }
+ * Several comments may sit on one line; each is read on its own.
+ *
  * Usage: node tools/lw-tokens-dtcg.mjs [--out tokens.json] [--check]
  */
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { splitRules, stripComments, declarationsIn } from "./_css.mjs";
+import { generated } from "./_generated.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const args = process.argv.slice(2);
@@ -63,6 +71,10 @@ const KIND = (name, value, hinted) => {
   if (/^(hsla?\(|rgba?\(|#[0-9a-f]{3,8}$)/i.test(value.trim())) return "color";
   if (/^--lw-(space|radius|control-h|row-h|cell-pad|card-pad|stack-gap|field-pad|bp|sidebar|bottom-nav|mobile-bar)/.test(name)) return "dimension";
   if (/^--lw-(dur)/.test(name)) return "duration";
+  // Type-scale roles are clamp()/px, and `--lw-text-` is also the colour ramp's
+  // prefix — so these must be named BEFORE the colour family below claims them.
+  if (/^--lw-text-(display|h1|h2|h3|lead|body|eyebrow)$/.test(name)) return "dimension";
+  if (/^--lw-lh-/.test(name)) return "number";
   if (/^--lw-(ease)/.test(name)) return "cubicBezier";
   if (/^--lw-(fw)/.test(name)) return "fontWeight";
   if (/^--lw-font/.test(name)) return "fontFamily";
@@ -78,7 +90,26 @@ const KIND = (name, value, hinted) => {
 // Strip comments but keep the /* @kind x */ hints, which are authored precisely
 // so this generator does not have to guess a type from a string.
 const hints = new Map();
-for (const m of css.matchAll(/(--[\w-]+)\s*:\s*([^;]+);\s*\/\*\s*@kind\s+(\w+)/g)) hints.set(m[1], m[3]);
+const deprecated = new Map();
+const tiers = new Map();
+const TIERS = new Set(["primitive", "semantic", "component"]);
+// Every comment on the rest of the declaration's LINE, each read on its own —
+// `@kind color` and `@tier` are usually separate comments side by side.
+for (const m of css.matchAll(/(--[\w-]+)\s*:\s*[^;\n]+;([^\n]*)/g)) {
+  for (const c of m[2].matchAll(/\/\*\s*@(kind|deprecated|tier)\s+([^*]*?)\s*\*\//g)) {
+    const [, tag, text] = c;
+    if (tag === "kind") hints.set(m[1], text.trim().split(/\s+/)[0]);
+    else if (tag === "deprecated") deprecated.set(m[1], text.trim());
+    else if (tag === "tier") {
+      const t = text.trim();
+      if (!TIERS.has(t)) {
+        console.error(`lw-tokens-dtcg: ${m[1]} carries @tier ${JSON.stringify(t)} — must be primitive | semantic | component`);
+        process.exit(1);
+      }
+      tiers.set(m[1], t);
+    }
+  }
+}
 
 /* Shared walker — this file previously used a regex block matcher and had to be
    taught the `@import` case by hand after the contrast gate hit it. Same parser
@@ -107,6 +138,8 @@ const nest = (flat) => {
     parts.forEach((p, i) => {
       if (i === parts.length - 1) {
         const leaf = { $value: value, $type: KIND(name, value, hints.get(name)) };
+        if (deprecated.has(name)) leaf.$deprecated = deprecated.get(name);
+        if (tiers.has(name)) leaf.$extensions = { "com.leanwise.tier": tiers.get(name) };
         // Group-then-leaf is the mirror of the case handled below: `brand-500-c`
         // creates the group `brand.500`, and `brand-500` arriving after it would
         // overwrite that group with a leaf and take every channel under it with
@@ -150,6 +183,8 @@ const EXEMPT = new RegExp(
   + "|^--lw-border-(\\d+|control)-c$"                // border ramp + the 1.4.11 control boundary
   + "|^--lw-navy-(700|900|deep)-c$"                  // the mark's navy constants
   + "|^--lw-(success|warning|danger|neutral)(-text)?-c$" // status fills + their light ink
+  + "|^--lw-navy-(paper|raised|inset|line-1|line-2|line-control)-c$" // the navy band's own surfaces: theme-invariant by construction
+  + "|^--lw-on-navy-[1-4]-c$"                       // inks on that band (already under ^--lw-on-; named for the grep)
 );
 const problems = [];
 for (const theme of ["dark"]) {
@@ -177,25 +212,18 @@ if (problems.length) {
   if (problems.length > 20) console.error("  … and " + (problems.length - 20) + " more");
   process.exit(1);
 }
+// tokens.json is committed (it is in package.json#exports, and every consumer
+// installs from a git tag, where a generated-at-publish file does not exist).
+// A committed generated file can go stale silently, so the check that runs on
+// every token change is also the one that catches it.
+const files = new Map([[outPath, JSON.stringify(doc, null, 2) + "\n"]]);
+const stale = await generated({
+  name: "lw-tokens-dtcg", files, check: checkOnly,
+  hint: "tokens.css has moved since it was generated. Run `npm run tokens` and commit the result.",
+});
+if (stale) process.exit(1);
 if (checkOnly) {
-  // tokens.json is committed (it is in package.json#exports, and every consumer
-  // installs from a git tag, where a generated-at-publish file does not exist).
-  // A committed generated file can go stale silently, so the check that runs on
-  // every token change is also the one that catches it.
-  const want = JSON.stringify(doc, null, 2) + "\n";
-  let have = null;
-  try { have = readFileSync(outPath, "utf8"); } catch { /* absent — reported below */ }
-  if (have === null) {
-    console.error("lw-tokens-dtcg: " + outPath + " is missing. Run `npm run tokens` and commit it.");
-    process.exit(1);
-  }
-  if (have !== want) {
-    console.error("lw-tokens-dtcg: " + outPath + " is stale — tokens.css has moved since it was generated.");
-    console.error("  Run `npm run tokens` and commit the result.");
-    process.exit(1);
-  }
   console.log("lw-tokens-dtcg: OK — " + count + " base tokens across " + scopes.size + " scopes, every themable channel re-pointed; tokens.json current.");
-  process.exit(0);
+} else {
+  console.log("lw-tokens-dtcg: " + count + " base tokens, " + scopes.size + " scopes.");
 }
-writeFileSync(outPath, JSON.stringify(doc, null, 2) + "\n");
-console.log("lw-tokens-dtcg: wrote " + outPath + " — " + count + " base tokens, " + scopes.size + " scopes.");

@@ -38,6 +38,7 @@ import { readdirSync, readFileSync, statSync, existsSync } from "node:fs";
 import { join, relative, extname, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { splitRules, stripComments } from "./_css.mjs";
+import { report } from "./_report.mjs";
 
 /* PATH NOTE — this folder sits under templates/ because everything outside it is
    compiled into the design system's browser bundle, and a Node script (node:fs,
@@ -52,16 +53,16 @@ const arg = process.argv[2];
 // Function declaration is hoisted, so it is callable here despite being defined
 // at the bottom of the file.
 if (!arg || arg === "--css") {
-  const errs = cssSelfCheck().concat(jsxSelfCheck(), docPinSelfCheck());
-  if (errs.length) {
-    for (const e of errs) {
-      console.error(`${e.file || "css"}  [${e.rule}]  ${e.hit}\n    in \`${e.selector}\` — ${e.msg}`);
-    }
-    console.error(`\n\x1b[31m${errs.length} self-check violation(s).\x1b[0m See @leanwise/design/CLAUDE.md.\n`);
-    process.exit(1);
-  }
-  console.log(`\x1b[32mSelf-check clean.\x1b[0m`);
-  process.exit(0);
+  const errs = cssSelfCheck().concat(
+    jsxSelfCheck(), docPinSelfCheck(),
+    legacyDurationSelfCheck(), keyframeNameSelfCheck(), breakpointSelfCheck(),
+    docCountSelfCheck(), readmeCoverageSelfCheck(),
+  );
+  process.exit(report("lw-token-lint --css", {
+    problems: errs.map((e) => `${e.file || "css"}  [${e.rule}]  ${e.hit}\n      in \`${e.selector}\` — ${e.msg}`),
+    summary: "Self-check clean.",
+    footer: "See @leanwise/design/CLAUDE.md.",
+  }));
 }
 
 const target = arg;
@@ -151,11 +152,12 @@ for (const file of walk(target)) {
   }
 }
 
-if (violations) {
-  console.error(`\n\x1b[31m${violations} token violation(s).\x1b[0m See @leanwise/design/README.md.\n`);
-  process.exit(1);
-}
-console.log(`\x1b[32mToken lint clean.\x1b[0m`);
+// Detail lines were printed as they were found; the report only counts them.
+process.exit(report("lw-token-lint", {
+  problems: Array.from({ length: violations }, (_, i) => `token violation ${i + 1} of ${violations} — see above`),
+  summary: "Token lint clean.",
+  footer: "See @leanwise/design/README.md.",
+}));
 
 /**
  * CSS self-check — keeps the CSS layers honest about their own token contract. See the
@@ -359,6 +361,172 @@ function docPinSelfCheck() {
       errs.push({ rule: "no-install-pin", hit: "README.md", selector: "README.md", file: doc,
         msg: "no `leanwise-design#vX.Y.Z` install pin found — if the install snippet moved, move this rule with it rather than leaving it asserting nothing" });
     }
+  }
+  return errs;
+}
+
+/* ---------------------------------------------------------------------------
+ * The layers' own contract, continued. Each rule below reads the real files
+ * and returns the same {rule, hit, selector, msg, file} records as the others.
+ * ------------------------------------------------------------------------- */
+
+// Function declarations, not consts: the --css entry at the top of the file runs
+// before this section is evaluated, and a `const` here is in its temporal dead zone.
+function LAYERS3() { return ["base.css", "marketing.css", "product.css"]; }
+function readLayer(name) {
+  const p = join(PKG_ROOT, name);
+  return existsSync(p) ? readFileSync(p, "utf8") : null;
+}
+function lineOf(src, index) { return src.slice(0, index).split("\n").length; }
+/** Blank comments in place so line numbers survive. */
+function blankComments(src) { return src.replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, " ")); }
+
+/** Rule 9: `--lw-duration-*` is the legacy alias family; the scale is `--lw-dur-*`. */
+function legacyDurationSelfCheck() {
+  const errs = [];
+  for (const name of LAYERS3()) {
+    const src = readLayer(name);
+    if (src === null) continue;
+    const blanked = blankComments(src);
+    for (const m of blanked.matchAll(/var\(\s*--lw-duration[\w-]*/g)) {
+      errs.push({
+        rule: "legacy-duration", file: name, hit: m[0] + ")",
+        selector: `${name}:${lineOf(blanked, m.index)}`,
+        msg: "use --lw-dur-* — --lw-duration-* is the legacy alias kept for one major",
+      });
+    }
+  }
+  return errs;
+}
+
+/** Rule 10: a keyframe name is GLOBAL and last-wins; it must be unique and lwCamelCase. */
+function keyframeNameSelfCheck() {
+  const errs = [];
+  const seen = new Map(); // name -> [file:line]
+  for (const name of [...LAYERS3(), "tokens.css"]) {
+    const src = readLayer(name);
+    if (src === null) continue;
+    const blanked = blankComments(src);
+    for (const m of blanked.matchAll(/@(?:-webkit-)?keyframes\s+([\w-]+)/g)) {
+      const at = `${name}:${lineOf(blanked, m.index)}`;
+      const list = seen.get(m[1]) || [];
+      list.push(at);
+      seen.set(m[1], list);
+      if (!/^lw[A-Z][A-Za-z0-9]*$/.test(m[1])) {
+        errs.push({ rule: "keyframe-name", file: name, hit: `@keyframes ${m[1]}`, selector: at,
+          msg: "keyframe names are lwCamelCase (lwPulse) — the lw prefix is what keeps a global name from colliding with a consumer's" });
+      }
+    }
+  }
+  for (const [kf, sites] of seen) {
+    if (sites.length < 2) continue;
+    errs.push({ rule: "keyframe-name", file: sites[0].split(":")[0], hit: `@keyframes ${kf}`, selector: sites.join(", "),
+      msg: "duplicate keyframe — a keyframe name is global and last-wins, so which definition animates depends on load order and no gate can see it" });
+  }
+  return errs;
+}
+
+/** Rule 11: every @media width in the layers is spelled from a `--lw-bp-*` token. */
+function breakpointSelfCheck() {
+  const errs = [];
+  const tokens = readLayer("tokens.css");
+  if (tokens === null) return [{ rule: "no-css", file: "tokens.css", hit: "tokens.css", selector: "-", msg: "not found" }];
+  const bps = new Map();
+  for (const m of stripComments(tokens).matchAll(/--lw-bp-([\w-]+)\s*:\s*([\d.]+)px/g)) bps.set(m[1], Number(m[2]));
+  if (bps.size < 3) {
+    return [{ rule: "breakpoint-spelling", file: "tokens.css", hit: `${bps.size} --lw-bp-* token(s)`, selector: "tokens.css",
+      msg: "expected the breakpoint scale in tokens.css — if it moved, move this rule with it" }];
+  }
+  const mins = [...bps.values()];
+  const maxes = mins.map((v) => Math.round((v - 0.02) * 100) / 100);
+  const nearest = (x, arr) => arr.reduce((a, b) => (Math.abs(b - x) < Math.abs(a - x) ? b : a));
+  const nameOf = (v) => [...bps].find(([, n]) => n === v || Math.round((n - 0.02) * 100) / 100 === v)?.[0];
+  for (const name of LAYERS3()) {
+    const src = readLayer(name);
+    if (src === null) continue;
+    const blanked = blankComments(src);
+    for (const m of blanked.matchAll(/@media[^{;]*/g)) {
+      const prelude = m[0];
+      const at = `${name}:${lineOf(blanked, m.index)}`;
+      const check = (kind, lit) => {
+        const px = /^([\d.]+)px$/.exec(lit.trim());
+        const want = kind === "max" ? maxes : mins;
+        if (!px) {
+          errs.push({ rule: "breakpoint-spelling", file: name, hit: `${kind}-width: ${lit.trim()}`, selector: at,
+            msg: `breakpoints are px from --lw-bp-* — nearest is --lw-bp-${nameOf(nearest(0, want))}` });
+          return;
+        }
+        const v = Number(px[1]);
+        if (!want.includes(v)) {
+          const n = nearest(v, want);
+          errs.push({ rule: "breakpoint-spelling", file: name, hit: `${kind}-width: ${v}px`, selector: at,
+            msg: `not a --lw-bp-* value${kind === "max" ? " minus 0.02px" : ""} — nearest is ${n}px (--lw-bp-${nameOf(n)})` });
+        }
+      };
+      for (const w of prelude.matchAll(/\((min|max)-width\s*:\s*([^)]+)\)/g)) check(w[1], w[2]);
+      for (const w of prelude.matchAll(/\(\s*width\s*(>=|<=|<|>)\s*([^)]+)\)/g)) check(w[1] === "<=" ? "max" : "min", w[2]);
+      for (const w of prelude.matchAll(/\(\s*([^()<>=]+?)\s*(<=|<)\s*width\s*(<=|<)\s*([^)]+)\)/g)) { check("min", w[1]); check(w[3] === "<=" ? "max" : "min", w[4]); }
+    }
+  }
+  return errs;
+}
+
+/* Rule 12: a COUNT in prose is a second home for a fact the scripts own. "The six
+   fast gates" was written when there were six; there are fourteen, and the sentence
+   still reads as maintained. Fenced code is skipped except for `#` comment lines
+   inside it, because a shell comment is prose that happens to sit in a fence. */
+function docCountSelfCheck() {
+  const errs = [];
+  const ONES = "one|two|three|four|five|six|seven|eight|nine";
+  const WORDS = `(?:twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety)(?:-(?:${ONES}))?|${ONES}|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|a dozen`;
+  const COUNT = new RegExp(`\\b(?:\\d+|${WORDS})\\s+(?:(?:fast|browserless)\\s+)?gates\\b|\\b(?:\\d+|${WORDS})\\s+(?:React\\s+)?components\\b|\\bthree CSS layers\\b`, "gi");
+  for (const doc of ["README.md", "CLAUDE.md", "CONTRIBUTING.md"]) {
+    const src = readLayer(doc);
+    if (src === null) continue;
+    let fenced = false;
+    src.split("\n").forEach((line, i) => {
+      if (/^\s*```/.test(line)) { fenced = !fenced; return; }
+      if (fenced && !/#/.test(line)) return;
+      const text = fenced ? line.slice(line.indexOf("#")) : line;
+      for (const m of text.matchAll(COUNT)) {
+        const isComponents = /components/i.test(m[0]);
+        errs.push({ rule: "doc-count", file: doc, hit: `"${m[0]}"`, selector: `${doc}:${i + 1}`,
+          msg: "a count in prose is a second home; say " + (isComponents ? "`see README §Components`" : "`npm run check`") });
+      }
+    });
+  }
+  return errs;
+}
+
+/* Rule 13: every component the barrel exports has a row in README §Components.
+   Uppercase-first exports that are NOT components are named here, so a helper
+   added to the barrel is a one-line change rather than a silent exemption. */
+function readmeCoverageSelfCheck() {
+  const NOT_A_COMPONENT = new Set(["SERIES", "IconNames", "TONES", "RANGE_PRESETS"]);
+  const errs = [];
+  const barrel = readLayer("react.js"), readme = readLayer("README.md");
+  if (barrel === null || readme === null) return errs;
+  const names = new Set();
+  for (const m of stripComments(barrel).matchAll(/export\s*\{([^}]*)\}\s*from/g)) {
+    for (const raw of m[1].split(",")) {
+      const n = raw.trim().split(/\s+as\s+/).pop();
+      if (/^[A-Z]/.test(n) && !NOT_A_COMPONENT.has(n)) names.add(n);
+    }
+  }
+  if (names.size < 40) {
+    return [{ rule: "readme-coverage", file: "react.js", hit: `${names.size} export(s)`, selector: "react.js",
+      msg: "the barrel parse found too few exports — fix the parser, not this number" }];
+  }
+  const start = readme.indexOf("\n## Components");
+  const rest = start < 0 ? "" : readme.slice(start + 1);
+  const section = rest.slice(0, (rest.slice(3).search(/\n## /) + 3) || undefined);
+  if (start < 0) {
+    return [{ rule: "readme-coverage", file: "README.md", hit: "## Components", selector: "README.md", msg: "no `## Components` section — if it moved, move this rule with it" }];
+  }
+  const rows = new Set([...section.matchAll(/^\|\s*`([A-Za-z0-9]+)`/gm)].map((m) => m[1]));
+  for (const n of [...names].sort()) {
+    if (!rows.has(n)) errs.push({ rule: "readme-coverage", file: "README.md", hit: n, selector: "README.md §Components",
+      msg: "exported from react.js but has no row in README §Components — a consumer cannot find it" });
   }
   return errs;
 }

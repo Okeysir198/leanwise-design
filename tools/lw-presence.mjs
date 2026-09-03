@@ -46,15 +46,14 @@ import path from "node:path";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import { compileProbe } from "./_tw-probe.mjs";
+import { report, red, green, dim } from "./_report.mjs";
+import { splitSelectorList } from "./_css.mjs";
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, "..");
 const LIST = process.argv.includes("--list");
 const require = createRequire(import.meta.url);
 
-const red = (s) => `\x1b[31m${s}\x1b[0m`;
-const green = (s) => `\x1b[32m${s}\x1b[0m`;
-const dim = (s) => `\x1b[2m${s}\x1b[0m`;
 
 /* ---------------------------------------------------------------------------
  * The map between a v3 `theme.extend` family and its v4 `@theme` namespace.
@@ -239,21 +238,7 @@ const gaps = SHADCN_KNOWN_GAPS.filter((n) => !shadcnDeclared.has(n));
  * importing only base.css does not, and nothing says so.
  * ------------------------------------------------------------------------- */
 
-/** Split a selector list on commas that are NOT inside ()/[] — `:where(a, button)`
-    and `[data-x="a,b"]` are one selector, not two. Splitting naively reported
-    phantom bare `button` and `input` rules on the first run of this check. */
-function splitSelectors(prelude) {
-  const out = [];
-  let depth = 0, buf = "";
-  for (const ch of prelude) {
-    if (ch === "(" || ch === "[") depth++;
-    else if (ch === ")" || ch === "]") depth--;
-    if (ch === "," && depth === 0) { out.push(buf); buf = ""; continue; }
-    buf += ch;
-  }
-  out.push(buf);
-  return out.map((s) => s.trim()).filter(Boolean);
-}
+// splitSelectorList lives in _css.mjs now — one splitter for every gate that reads a prelude.
 
 /** Every selector in a stylesheet, minus at-rule preludes and @keyframes stops. */
 function selectorsOf(file) {
@@ -264,7 +249,7 @@ function selectorsOf(file) {
   for (const m of css.matchAll(/([^{}]+)\{/g)) {
     const prelude = m[1].trim();
     if (!prelude || prelude.startsWith("@")) continue;   // @media / @supports / @layer
-    out.push(...splitSelectors(prelude));
+    out.push(...splitSelectorList(prelude));
   }
   return out;
 }
@@ -312,6 +297,9 @@ const LAYER_PURITY_EXEMPT = new Map([
    "same contract — a child opts into being dropped when the rail collapses"],
   ['[data-collapsed="true"] [data-collapse-center]',
    "same contract — a child opts into becoming a centred icon slot"],
+  ['[data-ambient="off"]',
+   "documented opt-out (v1.13): pauses every ambient loop by setting ONE custom " +
+   "property, --lw-ambient-play. It declares no paint, so it cannot beat a utility"],
 ]);
 
 const COMPONENT_LAYERS = ["base.css", "marketing.css", "product.css"];
@@ -425,21 +413,20 @@ if (LIST) {
   process.exit(0);
 }
 
-if (problems.length) {
-  console.error(red(`\nlw-presence: ${problems.length} problem(s).\n`));
-  for (const [p] of problems) console.error(`  - ${p}`);
-  console.error(
-    "\n  These are absences, and an absence is invisible everywhere else: Tailwind v4\n" +
-    "  emits nothing for a name it cannot resolve, and every other gate here is a\n" +
-    "  deny-list or a value check over names that already exist.\n",
-  );
-  process.exit(1);
-}
-
 const total = rows.length + (v3HasContainer ? 1 : 0);
-console.log(
-  green(`lw-presence: OK — ${total} name(s) offered identically by tailwind-preset.cjs (v3) and theme.css (v4); ` +
-  `every namespace reset carries its bare key; shadcn's required properties all present; ` +
-  `${wanted.size} utility(ies) verified against the compiler.`) +
-  (gaps.length ? dim(`\n  (${gaps.length} shadcn name(s) knowingly absent: ${gaps.slice(0, 4).join(", ")}${gaps.length > 4 ? ", …" : ""})`) : ""),
-);
+process.exit(report("lw-presence", {
+  problems: problems.map(([p]) => p),
+  // `rows` is what check 1 read off the v3 preset; an empty preset must not
+  // read as "nothing missing".
+  checked: rows.length,
+  minChecked: 50,
+  footer:
+    "  These are absences, and an absence is invisible everywhere else: Tailwind v4\n" +
+    "  emits nothing for a name it cannot resolve, and every other gate here is a\n" +
+    "  deny-list or a value check over names that already exist.",
+  summary:
+    `lw-presence: OK — ${total} name(s) offered identically by tailwind-preset.cjs (v3) and theme.css (v4); ` +
+    `every namespace reset carries its bare key; shadcn's required properties all present; ` +
+    `${wanted.size} utility(ies) verified against the compiler.` +
+    (gaps.length ? dim(`\n  (${gaps.length} shadcn name(s) knowingly absent: ${gaps.slice(0, 4).join(", ")}${gaps.length > 4 ? ", …" : ""})`) : ""),
+}));

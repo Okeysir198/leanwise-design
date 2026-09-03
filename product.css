@@ -14,6 +14,30 @@
  * @import base itself: an @import here would apply those rules a second time in a
  * page that also loads the marketing layer, reordering the cascade between them.
  * Load order belongs to the consumer; ds-base.js does it for the templates.
+ *
+ * WHAT LEFT THIS FILE FOR base.css (one list; the substantive tombstones for the
+ * layout primitives, the forms, the table, the TOC and the tabs stay in place):
+ *   v1.3.0  `.lw-sr-only` (was defined twice under two names); `.lw-topbar` with
+ *           every descendant/state rule and BOTH `@media (max-width: 767.98px)`
+ *           blocks (it had been split across two layers — `.brand-mark` was
+ *           already in base); `.lw-icon-btn` (composed by `.lw-topbar-toggle`,
+ *           AnnounceBar's dismiss and SiteFooter's social row; REVIEW.md item 6);
+ *           the `.lw-segmented` dark patch (the shell is an inset TRACK, not a
+ *           field, so the input patch misses it); the offset-ring tier swap and
+ *           the reduced-motion stand-down for `.lw-switch`/`.lw-check`; the
+ *           `.lw-eyebrow` dark hexagon patch (its duplicate lingered here until
+ *           v1.13.0 — same rule, second home).
+ *   v1.3.1  `.lw-avatar` + `img` + size variants (Byline → Avatar, ArticleCard →
+ *           Byline: two MARKETING components); `.lw-empty` with its three
+ *           dark-band patches (EmptyState is in the marketing article-index
+ *           recipe); `.lw-icon` (the whole layout contract for the icon set —
+ *           without it an <svg> falls to `display: inline` and a footer link
+ *           with an `external` marker measured 39px instead of 27px — found by
+ *           `check:visual` only because `marketing.card.html` and
+ *           `site-chrome.card.html` stopped loading this file in the same
+ *           commit; every icon specimen had been loading product.css);
+ *           `.lw-pagination`/`.lw-pag-*` (a blog index paginates).
+ *   v1.7.0  `.lw-table-wrap`'s two header/cell dark patches, with the table.
  */
 
 /* ---- Layout primitives -----------------------------------------------------
@@ -29,10 +53,6 @@
    So every uppercase mono label here pairs its letter-spacing with
    --lw-word-spacing-caps, which OPENS the word space and keeps word white at
    roughly 5x letter white. Tightening the space instead makes it worse. */
-
-/* Screen-reader-only, for the labels a visual design drops but a11y needs. */
-/* .lw-sr-only now lives in base.css — every surface needs it, and it was
-   defined twice under two names. */
 
 /* ---- Forms -----------------------------------------------------------------
    MOVED to base.css in v1.3.0, verbatim. `.lw-field`/`.lw-label`/`.lw-help`/
@@ -145,18 +165,6 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 }
 @keyframes lwShimmer { to { transform: translateX(100%); } }
 
-/* AVATAR — MOVED to base.css in v1.3.1, verbatim: `.lw-avatar`, its `img` and
-   the two size variants. `Byline` renders an `Avatar` and `ArticleCard` renders
-   a `Byline`, so the atom is load-bearing for two MARKETING components and was
-   sitting in the layer a marketing page is told to drop. It now sits with the
-   chip, immediately above the promoted form controls. */
-
-/* EMPTY STATE — MOVED to base.css in v1.3.1, verbatim, together with its three
-   `.lw-band-dark` / `[data-band="dark"]` patches (which used to sit ~340 lines
-   below, in the generic dark-band block). "No results for this filter" is the
-   same screen on a blog index as in a data grid, and the package's own
-   article-index recipe names `EmptyState` for it. */
-
 /* ON THIS PAGE — MOVED to base.css in v1.4.0, verbatim: `.lw-toc`,
    `.lw-toc .lw-toc-h`, the three `.lw-toc a` rules and the `[aria-current]`
    state, with the rationale comment explaining why that rule carries no
@@ -199,12 +207,6 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
    exactly this reason. The dark-code-surface rules went with it: `.lw-code` has
    been in base.css since v1.1, so the patch and the surface are now one place
    instead of split across the layer boundary. */
-
-/* TOP BAR — MOVED to base.css in v1.3.0, verbatim: `.lw-topbar`, every descendant
-   and state rule, and BOTH `@media (max-width: 767.98px)` blocks. It now sits directly
-   above the `.lw-topbar .brand-mark` rules that were already in base.css — the
-   component had been split across two layers, so a marketing site that dropped this
-   one got a correct brand mark inside an unstyled site header. */
 
 /* SIDEBAR — the product rail. Collapses to icons via [data-collapsed], which is
    a state on the element rather than a second class, so it is one source. */
@@ -265,19 +267,7 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 .lw-nav-item[aria-current="page"], .lw-nav-item.is-active { background: var(--lw-brand-soft); color: var(--lw-brand-on); font-weight: var(--lw-fw-medium); }
 .lw-nav-item[aria-current="page"] .ic, .lw-nav-item.is-active .ic { opacity: 1; }
 
-/* ICON — MOVED to base.css in v1.3.1, verbatim. `.lw-icon` is ONE rule, and it
-   was the whole layout contract for the icon set: `Icon` is a PRIMITIVE, and
-   `SiteFooter`, `AnnounceBar`, `FeatureGrid`, `PlanCard`, `CompareTable`,
-   `Steps`, `EmptyState`, `Disclosure`, `NavToggle` and `Button` all name a
-   glyph. Without it an `<svg>` falls back to the UA's `display: inline`, sits
-   on the text baseline and grows its line box — a footer link with an
-   `external` marker measured 39px instead of 27px.
-
-   Found by `check:visual`, and only because `marketing.card.html` and
-   `site-chrome.card.html` stopped loading this file in the same commit. Every
-   specimen that renders an icon had been loading product.css, so the four
-   promotions this release is named for were not the only ones stranded — they
-   were the ones somebody had noticed. */
+/* ICON — MOVED to base.css in v1.3.1; see the header block. */
 
 /* ---- Overlays -------------------------------------------------------------- */
 
@@ -295,13 +285,8 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 .lw-dialog-head { flex: none; display: flex; align-items: flex-start; justify-content: space-between; gap: var(--lw-space-16); padding: var(--lw-space-20) var(--lw-space-24) var(--lw-space-12); }
 .lw-dialog-title { font-size: var(--lw-text-h3); font-weight: var(--lw-fw-semibold); letter-spacing: var(--lw-tracking-tight); line-height: 1.25; margin: 0; }
 /* Bare glyph, like every other dismiss in the system — a boxed close competes
-   with the dialog's own actions for the eye.
-
-   MOVED to base.css in v1.3.0: `.lw-icon-btn`, the shared borderless icon
-   control — its face, hover ink, focus ring, disabled ink and reduced-motion
-   stand-down. `.lw-topbar-toggle` composes it, `AnnounceBar`'s dismiss is one
-   and `SiteFooter`'s social row is a line of them, none of which load this
-   file. REVIEW.md open item 6; closed.
+   with the dialog's own actions for the eye. (`.lw-icon-btn` MOVED to base.css
+   in v1.3.0 — see the header block.)
 
    `.lw-dialog-close` STAYED, because a dialog is an app surface. It is now a
    DELTA on `.lw-icon-btn` rather than a second copy of it — `Dialog.jsx` emits
@@ -509,34 +494,13 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 
 /* A dark band inside a light page has no --lw-bg of its own to lean on. */
 .lw-band-dark, [data-band="dark"] { color: var(--lw-on-dark-2); }
-/* `.lw-table-wrap` left this grouped selector in v1.7.0 and took its two
-   header/cell patches with it — they are in base.css beside the component now. */
 .lw-band-dark .lw-kpi, [data-band="dark"] .lw-kpi,
 .lw-band-dark .lw-source-item, [data-band="dark"] .lw-source-item { background: var(--lw-on-dark-wash); border-color: var(--lw-on-dark-line); }
 .lw-band-dark .lw-kpi .v, [data-band="dark"] .lw-kpi .v { color: var(--lw-on-dark-1); }
 .lw-band-dark .lw-kpi .k, [data-band="dark"] .lw-kpi .k { color: var(--lw-on-dark-3); }
-/* The three `.lw-empty` patches that stood here MOVED to base.css in v1.3.1,
-   with the component. Taken in the same commit rather than left for a follow-up
-   pass — that is the one thing fb2d3ad got wrong and v1.3.0 had to correct. */
-
-/* Segmented's dark patch MOVED to base.css in v1.3.0 with the control itself —
-   see the tombstone above. Its reasoning (the shell is an inset TRACK, not a
-   field, so the input patch misses it) moved with the rules. */
-
-/* The eyebrow's hexagon is the one part of the motif pinned to a TIER, so on a
-   dark band the label re-pointed to the dark subtle ink while its node stayed
-   the light-theme cyan. .lw-section.dark and .lw-hero-dark already patched this;
-   a plain dark band was the gap. */
-:is(.dark, [data-band="dark"], .lw-band-dark) .lw-eyebrow::before { background: var(--lw-brand-400); }
-:is(.dark, [data-band="dark"], .lw-band-dark) .lw-eyebrow.muted::before { background: var(--lw-fg-faint); }
-
-/* The offset-ring tier swap for `.lw-switch` and `.lw-check` MOVED to base.css
-   in v1.3.0 with those controls — see the tombstone above. */
+/* .lw-eyebrow dark patch: MOVED to base.css (v1.3.0). */
 
 @media (prefers-reduced-motion: reduce) {
-  /* `.lw-switch .track::after` moved to base.css with the control: its knob
-     travel is the promoted control's only motion, so the stand-down had to go
-     with it or a base-only page animates under reduced motion. */
   .lw-sidebar, .lw-confidence .rail > i { transition: none; }
 }
 
@@ -814,11 +778,7 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 .lw-datefield[data-placeholder="true"] .lw-datefield-text { color: var(--lw-fg-subtle); }
 
 /* ---- Pagination -------------------------------------------------------------
-   MOVED to base.css in v1.3.1, verbatim: `.lw-pagination` and its two
-   descendants, `.lw-pag-size`, the whole `.lw-pag-btn` block with its four state
-   rules, and `.lw-pag-gap`. A blog index paginates; `Pagination` is named in the
-   marketing article-index recipe beside `Tabs` and `EmptyState`, and all three
-   were in the layer that recipe tells you to drop.
+   MOVED to base.css in v1.3.1 — see the header block.
 
    One ordering fact travelled with them and is restated at the new site:
    `.lw-pag-size { width: auto }` beats `.lw-select { width: 100% }` on SOURCE
@@ -1011,7 +971,9 @@ button.lw-stepper-step:focus-visible .lw-stepper-marker { box-shadow: var(--lw-f
 .lw-chart .dot { stroke: var(--lw-bg); stroke-width: 2; }
 .lw-chart-legend { display: flex; flex-wrap: wrap; gap: var(--lw-space-12); font-size: var(--lw-text-xs); color: var(--lw-fg-muted); }
 .lw-chart-legend span { display: inline-flex; align-items: center; gap: var(--lw-space-4); }
-.lw-chart-legend i { width: 9px; height: 9px; border-radius: 2px; flex: none; }
+.lw-chart-legend i { width: 9px; height: 9px; border-radius: 2px; flex: none; background: var(--lw-swatch); }
+/* `--lw-swatch` is set inline by Legend (chart-parts.jsx); the paint stays here
+   so the colour is a CSS declaration the contrast gate can see, not a JSX style. */
 
 /* ---- Activity feed / notifications -------------------------------------------
    Unread is a DOT plus weight, never a tint alone: a row that is only slightly

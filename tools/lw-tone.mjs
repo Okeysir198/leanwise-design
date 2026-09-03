@@ -29,6 +29,7 @@
 
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
+import { report } from "./_report.mjs";
 
 const ROOT = new URL("..", import.meta.url).pathname;
 const TONES = ["brand", "success", "warning", "danger", "neutral", "info", "cta"];
@@ -131,22 +132,14 @@ if (process.argv.includes("--self-test")) {
 
 const { problems, checked } = check(EMITTERS, readFile);
 
-// A gate that checked nothing must not report a clean run.
-if (checked < 20) {
-  console.error(`\nlw-tone FAILED — only ${checked} tone value(s) found. The declaration shape`);
-  console.error(`probably changed and this gate is reading nothing. Fix the parser, not this number.\n`);
-  process.exit(1);
-}
-
-if (problems.length === 0) {
-  console.log(
+// A gate that checked nothing must not report a clean run — `minChecked` is
+// what refuses it (see _report.mjs).
+process.exit(report("lw-tone", {
+  problems,
+  checked,
+  minChecked: 20,
+  summary:
     `lw-tone      OK — ${checked} tone value(s) across ${EMITTERS.length} prop(s), one vocabulary, ` +
-      `every advertised value backed by a rule`,
-  );
-  process.exit(0);
-}
-
-console.error(`\nlw-tone FAILED — ${problems.length} problem(s).\n`);
-for (const p of problems) console.error(`  ${p}`);
-console.error(`\nThe vocabulary is ${TONES.join(" | ")} — components/_tone.js.\n`);
-process.exit(1);
+    `every advertised value backed by a rule`,
+  footer: `The vocabulary is ${TONES.join(" | ")} — components/_tone.js.`,
+}));

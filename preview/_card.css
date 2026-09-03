@@ -128,3 +128,9 @@ svg { display: block; width: 100%; height: auto; }
    PALETTE value and on-dark-3 is a raw white alpha; the band's `--lw-bg-subtle` and
    `--lw-fg-subtle` are the roles, and the eyebrow measures slightly BETTER on them
    (5.02 vs 4.86) because a flattened .48 alpha is not what the contrast gate models. */
+
+/* A stage for a full-page ground (components/marketing/ground.card.html). The
+   grounds' glow and lattice layers are `position: fixed`; paint containment makes
+   the stage their containing block, so each ground is clipped to its own stage
+   without touching the ground CSS. */
+.stage { contain: paint; position: relative; height: 640px; }

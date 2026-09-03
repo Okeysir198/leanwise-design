@@ -36,7 +36,7 @@ export function Legend({ series }) {
   return (
     <div className="lw-chart-legend">
       {series.map((s, i) => (
-        <span key={i}><i style={{ background: s.color || SERIES(i) }} />{s.name}</span>
+        <span key={i}><i style={{ "--lw-swatch": s.color || SERIES(i) }} />{s.name}</span>
       ))}
     </div>
   );

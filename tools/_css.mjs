@@ -128,3 +128,37 @@ export function declarationsIn(body) {
   while ((m = re.exec(body))) out[m[1]] = m[2].trim();
   return out;
 }
+
+/**
+ * Split a selector PRELUDE on its top-level commas only — `:is(a, b) .x` is one
+ * selector, `[data-x="a,b"]` is one selector, `:where(.a, .b)` is one selector
+ * whose MEMBERS are `.a` and `.b` (call this again on the text inside the
+ * parens to get them). Depth-aware on parentheses, brackets and quotes.
+ *
+ * The contrast gate used to match theme blocks with regexes of the shape
+ * `^:where\((?![^)]*\.lw-band-light)[^)]*\.lw-band-dark\b[^)]*\)$`, which
+ * cannot see past a nested paren: `:where(html:not(.dark) .x, .y)` matched
+ * nothing, so an author who scoped a band entry got "theme block not found"
+ * from a gate that had nothing to say about scoping. Membership is a list
+ * question; answer it by splitting the list.
+ */
+export function splitSelectorList(prelude) {
+  const out = [];
+  let depth = 0, buf = "", quote = null;
+  for (let i = 0; i < prelude.length; i++) {
+    const ch = prelude[i];
+    if (quote) {
+      buf += ch;
+      if (ch === "\\") buf += prelude[++i] ?? "";
+      else if (ch === quote) quote = null;
+      continue;
+    }
+    if (ch === '"' || ch === "'") { quote = ch; buf += ch; continue; }
+    if (ch === "(" || ch === "[") depth++;
+    else if (ch === ")" || ch === "]") depth--;
+    else if (ch === "," && depth === 0) { out.push(buf); buf = ""; continue; }
+    buf += ch;
+  }
+  if (buf.trim()) out.push(buf);
+  return out.map((s) => s.replace(/\s+/g, " ").trim()).filter(Boolean);
+}

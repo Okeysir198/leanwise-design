@@ -1,0 +1,80 @@
+<!-- @dsCard group="Marketing" name="Page grounds" subtitle="lw-page-light, lw-page-dark and lw-page-ground side by side — each stage paint-contained so the fixed glow and lattice layers stay inside it, which is what let the three grounds be measured for the first time" viewport="1100x2150" -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Page grounds</title>
+<link rel="stylesheet" href="../../preview/_card.css">
+<!-- base + marketing ONLY. A page ground is the marketing recipe's outermost
+     element; a specimen that loads product.css too cannot measure the recipe
+     (see marketing.card.html, v1.3.1). Do not add it. -->
+<link rel="stylesheet" href="../../base.css">
+<link rel="stylesheet" href="../../marketing.css">
+<script src="../../preview/_card.js"></script>
+<style>
+  /* The three grounds are ~26 hand-twinned rule blocks through v1.12 and their
+     glow/lattice layers are `position: fixed`, which is why no visual card
+     existed: a fixed layer joins EVERY shot it appears in. `.stage` (in
+     _card.css) uses `contain: paint`, which makes the stage the containing
+     block for fixed descendants — the ground CSS is untouched and each stage
+     clips its own layers. */
+  .stage .lw-page-dark, .stage .lw-page-light, .stage .lw-page-ground { min-height: 100%; }
+  .stage .lw-hero-dark { padding: 44px 0 40px; }
+  .stage .lw-section { padding: 28px 0; }
+  .stage .lw-container { padding-inline: 28px; }
+  .ground-note { display: grid; gap: 4px; }
+</style>
+</head><body><div class="card">
+<header><h1>Page grounds</h1>
+<p class="sub"><b>Three grounds, one geometry.</b> Honeycomb on the left, the mark on the right, a mirrored
+glow along the top. They differ only in what each commits to: <span class="mono">.lw-page-light</span> commits to the
+light ARTWORK (the ink lattice, the ink mark) over the page tokens and is deliberately not a band;
+<span class="mono">.lw-page-dark</span> is always navy and carries the dark band scope;
+<span class="mono">.lw-page-ground</span> swaps its artwork with <span class="mono">[data-theme]</span>
+on <span class="mono">&lt;html&gt;</span>, so a cached page is correct for every visitor.</p>
+<p class="sub"><b>Every value that differs is a custom property</b> (glow stops, lattice alpha, comb pulse, mark
+alpha, sheen colour); the artwork URLs stay in explicit rules because Firefox resolves <span class="mono">url()</span>
+inside a custom property against the document, not the stylesheet.</p></header>
+
+<div class="ground-note"><span class="lbl-eyebrow">lw-page-light — light artwork, no band</span></div>
+<div class="stage"><div class="lw-page-light">
+  <section class="lw-hero-dark"><div class="lw-container">
+    <p class="lw-eyebrow">Retrieval you can audit</p>
+    <h1 class="lw-h1" style="max-width:17ch;margin:0">Answers your team can <em>defend</em>.</h1>
+    <p class="lw-lead" style="max-width:50ch;margin:0">Every response is grounded in your own documents and shows the passage it came from.</p>
+    <div class="lw-hero-actions" style="display:flex;gap:10px"><a class="lw-btn lw-btn-ghost" href="#">Read the spec</a><a class="lw-btn lw-btn-cta" href="#">Book a walkthrough</a></div>
+  </div></section>
+  <section class="lw-section"><div class="lw-container">
+    <p style="max-width:60ch;margin:0 0 10px">Page tokens, light artwork. Cards, tables and inputs inside need no per-section overrides, because every role token resolves against the page ground here.</p>
+    <p style="font-size:12.5px;color:var(--lw-fg-subtle);margin:0 0 10px">Design system · Marketing layer · Ground specimen</p>
+    <div class="row"><span class="lw-chip">light</span><span class="lw-chip">no scope</span><span class="lw-chip">hex-lattice-ink · 0.55</span></div>
+  </div></section>
+</div></div>
+
+<div class="ground-note"><span class="lbl-eyebrow">lw-page-dark — commits to navy, carries the dark band</span></div>
+<div class="stage"><div class="lw-page-dark">
+  <section class="lw-hero-dark"><div class="lw-container">
+    <p class="lw-eyebrow">Retrieval you can audit</p>
+    <h1 class="lw-h1" style="max-width:17ch;margin:0">Answers your team can <em>defend</em>.</h1>
+    <p class="lw-lead" style="max-width:50ch;margin:0">Every response is grounded in your own documents and shows the passage it came from.</p>
+    <div class="lw-hero-actions" style="display:flex;gap:10px"><a class="lw-btn lw-btn-ghost" href="#">Read the spec</a><a class="lw-btn lw-btn-cta" href="#">Book a walkthrough</a></div>
+  </div></section>
+  <section class="lw-section"><div class="lw-container">
+    <p style="max-width:60ch;margin:0 0 10px">The ink is the on-dark tier, in BOTH page themes: this ground is in tokens.css's dark band list, so every role inside re-points on its own.</p>
+    <p style="font-size:12.5px;color:var(--lw-fg-subtle);margin:0 0 10px">Design system · Marketing layer · Ground specimen</p>
+    <div class="row"><span class="lw-chip">dark</span><span class="lw-chip">dark band scope</span><span class="lw-chip">hex-lattice · 0.36</span></div>
+  </div></section>
+</div></div>
+
+<div class="ground-note"><span class="lbl-eyebrow">lw-page-ground — follows [data-theme]</span></div>
+<div class="stage"><div class="lw-page-ground">
+  <section class="lw-hero-dark"><div class="lw-container">
+    <p class="lw-eyebrow">Retrieval you can audit</p>
+    <h1 class="lw-h1" style="max-width:17ch;margin:0">Answers your team can <em>defend</em>.</h1>
+    <p class="lw-lead" style="max-width:50ch;margin:0">Every response is grounded in your own documents and shows the passage it came from.</p>
+    <div class="lw-hero-actions" style="display:flex;gap:10px"><a class="lw-btn lw-btn-ghost" href="#">Read the spec</a><a class="lw-btn lw-btn-cta" href="#">Book a walkthrough</a></div>
+  </div></section>
+  <section class="lw-section"><div class="lw-container">
+    <p style="max-width:60ch;margin:0 0 10px">Identical to the light ground in light theme and to the dark ground in dark theme — including the artwork swap. The hero inside carries no band scope of its own; it inherits the document's.</p>
+    <p style="font-size:12.5px;color:var(--lw-fg-subtle);margin:0 0 10px">Design system · Marketing layer · Ground specimen</p>
+    <div class="row"><span class="lw-chip">themed</span><span class="lw-chip">no cookie dependency</span><span class="lw-chip">artwork follows theme</span></div>
+  </div></section>
+</div></div>
+</div></body></html>

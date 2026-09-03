@@ -129,7 +129,7 @@
       "title": "No Tailwind v4 artifact \u2014 a v4 app has to hand-write the whole bridge",
       "detail": "tailwind-preset.cjs is v3-only. A v4 consumer got no `bg-cta`, no `text-h1`, no `shadow-focus` and no keyframes unless it wrote them itself; tss-app wrote ~600 lines and still lost the fontSize roles, all four backgroundImage surfaces, both durations, the container and every animation. theme.css ships from 1.2.0.",
       "measuredBy": "check:presence",
-      "count": 143,
+      "count": 144,
       "countMeans": "names now offered identically to v3 and v4"
     },
     {

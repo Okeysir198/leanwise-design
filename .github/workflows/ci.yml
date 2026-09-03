@@ -24,29 +24,14 @@ jobs:
 
       - run: npm ci
 
-      # Fast, no browser: token pairs, palette escapes, theme-scope completeness.
-      - name: Contrast gate
-        run: npm run check:contrast
-      - name: Token lint
-        run: npm run check:tokens
-      - name: Theme completeness
-        run: npm run check:themes
-      # The barrel's types are generated from react.js; a drifted react.d.ts
-      # broke `npm run build` (and prepublishOnly) for two releases.
-      - name: Barrel types
-        run: npm run check:dts
-      # The cards render from _ds_bundle.js, not from components/**/*.jsx. Until
-      # v1.1.7 that bundle was cut in the design project, so a component fix was
-      # invisible to the two browser gates below until the next wholesale sync —
-      # 34 sources had drifted by the time the generator landed. This must run
-      # BEFORE Accessibility and Visual, or they score the old components.
-      - name: Bundle freshness
-        run: npm run check:bundle
-      # The only gate that opens a .dc.html: the twelve generated files are
-      # byte-identical, no template loads the shims, landmarks and skip links
-      # resolve. It found four real gaps the first time it ran.
-      - name: Templates
-        run: npm run check:templates
+      # Every browserless gate, in the order package.json#scripts.check states
+      # them. They used to be six hand-listed steps here — a second home for
+      # the list, which had drifted: presence, rsc, build, types, registry,
+      # advisories, favicon and tone were in `check` and NOT in CI. One step,
+      # one list. Bundle freshness is inside it, and must run BEFORE the
+      # browser gates below or they score the previous components.
+      - name: Browserless gates
+        run: npm run check
 
       # check:dts proves react.d.ts is not STALE; it does not run
       # rollup-plugin-dts, whose own resolution rules are what actually failed
@@ -56,6 +41,12 @@ jobs:
       # prepublishOnly that CI did not exercise.
       - name: Build
         run: npm run build
+
+      # The packed tarball — what a consumer actually installs from a git tag.
+      # It was in check:ci and never in this workflow, so CI proved the tree
+      # and not the package.
+      - name: Pack check
+        run: npm run check:pack
 
       - name: Install Chromium
         run: npx playwright install --with-deps chromium

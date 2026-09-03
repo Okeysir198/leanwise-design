@@ -205,6 +205,9 @@ module.exports = {
       fontFamily: {
         sans: ["Geist", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "system-ui", "sans-serif"],
         mono: ["Geist Mono", "ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
+        // Display/h1/h2 family — `font-display`. Same face as sans today; the token
+        // exists so a tenant can re-point the headline voice without touching body.
+        display: ["var(--lw-font-display)"],
       },
 
       // The fluid role scale. `text-h1` is a real utility, so a heading never
@@ -221,8 +224,8 @@ module.exports = {
         display: ["var(--lw-text-display)", { lineHeight: "var(--lw-lh-tight)", letterSpacing: "var(--lw-tracking-tighter)", fontWeight: "500" }],
         h1: ["var(--lw-text-h1)", { lineHeight: "var(--lw-lh-tight)", letterSpacing: "var(--lw-tracking-tighter)", fontWeight: "600" }],
         h2: ["var(--lw-text-h2)", { lineHeight: "var(--lw-lh-snug)", letterSpacing: "var(--lw-tracking-tight)", fontWeight: "600" }],
-        h3: ["var(--lw-text-h3)", { lineHeight: "1.18", letterSpacing: "var(--lw-tracking-tight)", fontWeight: "600" }],
-        lead: ["var(--lw-text-lead)", { lineHeight: "1.6" }],
+        h3: ["var(--lw-text-h3)", { lineHeight: "var(--lw-lh-snug)", letterSpacing: "var(--lw-tracking-tight)", fontWeight: "600" }],
+        lead: ["var(--lw-text-lead)", { lineHeight: "var(--lw-lh-normal)" }],
         eyebrow: ["var(--lw-text-eyebrow)", { letterSpacing: "var(--lw-tracking-eyebrow)", fontWeight: "500" }],
       },
 

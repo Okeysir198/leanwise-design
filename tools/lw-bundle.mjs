@@ -78,6 +78,7 @@ import { readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import esbuild from "esbuild";
+import { generated } from "./_generated.mjs";
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, "..");
@@ -400,35 +401,22 @@ try {
   const { text, exposed, unexposed, bundled, cardNames } = await generate();
   const rel = path.relative(ROOT, OUT_PATH);
 
+  const stale = await generated({
+    name: "lw-bundle", files: new Map([[OUT_PATH, text]]), check,
+    hint:
+      `the cards render from this file, not from components/**/*.jsx — until it is ` +
+      `regenerated, check:a11y and check:visual are testing the previous sources. ` +
+      `Fix: npm run bundle && git add ${rel}`,
+  });
+  if (stale) process.exit(1);
   if (check) {
-    let current = null;
-    try {
-      current = await readFile(OUT_PATH, "utf8");
-    } catch {
-      /* absent — reported below */
-    }
-    if (current === text) {
-      console.log(
-        `_ds_bundle.js is current — ${exposed.length} exports on ${NAMESPACE} from ` +
-          `${bundled.length} sources (${cardNames} names read by the cards).`,
-      );
-    } else {
-      const why =
-        current === null
-          ? `${rel} is missing.`
-          : `${rel} is ${current.length} bytes; a fresh build is ${text.length}.`;
-      console.error(
-        `${rel} is STALE.\n  ${why}\n` +
-          `  The cards render from this file, not from components/**/*.jsx — until it is\n` +
-          `  regenerated, check:a11y and check:visual are testing the previous sources.\n` +
-          `  Fix: npm run bundle && git add ${rel}`,
-      );
-      process.exit(1);
-    }
-  } else {
-    await writeFile(OUT_PATH, text);
     console.log(
-      `wrote ${rel} — ${(text.length / 1024).toFixed(0)} KB, ${exposed.length} exports on ` +
+      `_ds_bundle.js is current — ${exposed.length} exports on ${NAMESPACE} from ` +
+        `${bundled.length} sources (${cardNames} names read by the cards).`,
+    );
+  } else {
+    console.log(
+      `  ${(text.length / 1024).toFixed(0)} KB, ${exposed.length} exports on ` +
         `${NAMESPACE}, ${unexposed.length} internal exports withheld, ${bundled.length} sources.`,
     );
   }

@@ -31,7 +31,8 @@
  * this file is guarded exactly like the other logo assets rather than becoming a
  * third unguarded home for a brand value.
  */
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
+import { generated } from "./_generated.mjs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -112,22 +113,16 @@ function build() {
 const built = build();
 const check = process.argv.includes("--check");
 
+const stale = await generated({
+  name: "lw-favicon", files: new Map([[OUT, built]]), check,
+  hint: "run `node tools/lw-favicon.mjs` and commit the result",
+});
+if (stale) process.exit(1);
 if (check) {
-  let onDisk = null;
-  try { onDisk = readFileSync(OUT, "utf8"); } catch { /* missing */ }
-  if (onDisk !== built) {
-    console.error(
-      onDisk === null
-        ? "✗ assets/logo-favicon.svg is missing — run `node tools/lw-favicon.mjs`"
-        : "✗ assets/logo-favicon.svg is stale — run `node tools/lw-favicon.mjs`",
-    );
-    process.exit(1);
-  }
   console.log("✓ assets/logo-favicon.svg is current");
 } else {
-  writeFileSync(OUT, built);
   console.log(
-    `wrote assets/logo-favicon.svg  ${(Buffer.byteLength(built) / 1024).toFixed(1)} KB  ` +
+    `  ${(Buffer.byteLength(built) / 1024).toFixed(1)} KB  ` +
       `light ${LIGHT.join(" → ")}  dark ${DARK.join(" → ")}`,
   );
 }

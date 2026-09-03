@@ -31,6 +31,10 @@
     <p class="sub"><b>The four heading roles are fluid</b> — <span class="mono">clamp()</span> against the
       viewport, so a hero on a phone is not a desktop hero scaled down. Body, sm and eyebrow are fixed:
       reading size is not a function of window width.</p>
+    <p class="sub"><b>Every line-height shown is the token the class uses</b> — <span class="mono">.lw-h3</span>
+      reads <span class="mono">--lw-lh-snug</span> and <span class="mono">.lw-lead</span>
+      <span class="mono">--lw-lh-normal</span> (v1.13.0; they were literals 1.18 / 1.6 before, so this card was
+      ahead of the CSS). Display, h1 and h2 set in <span class="mono">--lw-font-display</span>.</p>
   </header>
   <div id="rows"></div>
 </div>
@@ -50,7 +54,7 @@ const root = getComputedStyle(document.documentElement);
 document.getElementById("rows").innerHTML = ROLES.map(([name, size, weight, lh, track]) => `
 <div class="row">
   <span class="tok">${name}</span>
-  <span class="spec-text" data-role="${name}" style="font-size:var(${size});font-weight:${weight};line-height:var(${lh});letter-spacing:var(${track});${name === "eyebrow" ? "text-transform:uppercase" : ""}">${SAMPLE}</span>
+  <span class="spec-text" data-role="${name}" style="${["display","h1","h2"].includes(name) ? "font-family:var(--lw-font-display);" : ""}font-size:var(${size});font-weight:${weight};line-height:var(${lh});letter-spacing:var(${track});${name === "eyebrow" ? "text-transform:uppercase" : ""}">${SAMPLE}</span>
   <span class="vals" data-vals="${name}"></span>
 </div>`).join("");
 for (const [name, size, weight, lh] of ROLES) {

@@ -43,8 +43,24 @@
       <tr><td class="mono">stagger · 60ms</td><td>per-sibling reveal delay</td></tr>
     </tbody>
   </table>
-  <p class="sub">Ambient loops (marquee 40s, wash 32s, aurora 26/32s, caret 1.1s) are deliberately
-  <b>not</b> on this scale — their feel is calibrated to the effect, not to an interaction.</p>
+  <table>
+    <thead><tr><th>Loops and ambient</th><th>Use</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">dur-loop-fast</td><td>a blinking caret, a live dot, a running-tool pulse</td></tr>
+      <tr><td class="mono">dur-loop</td><td>a skeleton shimmer, a trace step, a dashed flow line</td></tr>
+      <tr><td class="mono">dur-loop-slow</td><td>the reduced-motion spinner, a logo marquee</td></tr>
+      <tr><td class="mono">dur-ambient</td><td>the ground's comb pulse and sheen — a loop nobody is meant to notice</td></tr>
+      <tr><td class="mono">dur-ambient-slow</td><td>the glow drift, the mark's breathe, the aurora and wash</td></tr>
+      <tr><td class="mono">data-ambient="off"</td><td>on any ancestor: every ambient loop parks at frame 0 (<span class="mono">--lw-ambient-play: paused</span>) and the sheen hides</td></tr>
+    </tbody>
+  </table>
+  <p class="sub">Ambient loops are on a scale of their own (v1.13.0): the bespoke names — <span class="mono">--lw-dur-marquee</span>,
+  <span class="mono">-wash</span>, <span class="mono">-aurora-a/b</span>, <span class="mono">-ground</span>, <span class="mono">-comb</span>,
+  <span class="mono">-breathe</span>, <span class="mono">-sheen</span>, <span class="mono">-caret</span> and the rest — still resolve, but are
+  <b>deprecated for v2.0</b>. Their feel is calibrated to the effect, not to an interaction, which is why they are not on the
+  interaction scale above. A page that wants to be still without asking the reader to set a preference (a screenshot, a
+  print view, a template) sets <span class="mono">data-ambient="off"</span>; the frame it parks on is the same frame the
+  loop starts from, so the static render is identical.</p>
   <p class="sub">The legacy <span class="mono">--lw-duration-*</span> names still resolve, as aliases
   onto this scale. <b>Do not remove them</b> — consumers reference them by name.</p>
   <p class="sub">Every animation is wrapped in <code class="mono">@media (prefers-reduced-motion: reduce)</code>,
