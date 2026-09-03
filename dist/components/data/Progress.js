@@ -1,6 +1,8 @@
 import { jsx } from "react/jsx-runtime";
+import { normTone } from "../_tone.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
-function Progress({ value = 0, max = 100, label, tone, className, ...rest }) {
+function Progress({ value = 0, max = 100, label, tone: toneIn, className, ...rest }) {
+  const tone = normTone("Progress", toneIn);
   const pct = Math.max(0, Math.min(100, Number(value) / Number(max || 100) * 100));
   return /* @__PURE__ */ jsx(
     "span",

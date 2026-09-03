@@ -110,7 +110,7 @@ what is still open. `CONTRIBUTING.md` points back here — the checklist lives i
 ## Install
 
 ```jsonc
-"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v1.8.0" }
+"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v1.9.0" }
 ```
 
 ```css
@@ -966,7 +966,18 @@ The checklist, in order. A component that skips a step is the one that drifts.
 9. **Add it to the folder's composition card**, and give it a state card of its own if it has a
    state axis (rest / hover / invalid / disabled) a composition cannot show.
 10. **Update this README's table.** An undocumented component is one a consumer will rebuild.
-11. **Paint from ROLES, never raw tiers.** `--lw-fg`, `--lw-fg-subtle`, `--lw-bg`, `--lw-bg-subtle`,
+11. **Spell a judgement the way the token spells it.** If the component carries pass/fail/caution,
+    the prop is `tone` and its values come from **`success | warning | danger | neutral | brand |
+    info | cta`** — the vocabulary in `components/_tone.js`, which is the vocabulary `tokens.css`
+    already uses. Support whatever subset makes sense; invent no spelling. `npm run check:tone`
+    fails on a new name, and fails again if a value you advertise has no CSS rule behind it.
+
+    This was the one load-bearing rule in the package left to memory instead of a script, and it
+    is the one that rotted: seven components spelled five judgements six different ways —
+    "warning" three ways, "danger" three, "success" three — while every one of them resolved to
+    `--lw-warning-on` / `--lw-danger-on` / `--lw-success-on` underneath. The tokens were never
+    drifted. Only the props were.
+12. **Paint from ROLES, never raw tiers.** `--lw-fg`, `--lw-fg-subtle`, `--lw-bg`, `--lw-bg-subtle`,
     `--lw-line` re-point under every theme scope; `--lw-text-1`, `--lw-surface-1`, `--lw-border-1`
     do not. A raw tier looks correct on light and silently freezes on dark — and it is worse when
     only *part* of an element uses one, as when a status dot's fill re-pointed and its halo did not.

@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { Tone, LegacyTone } from "../_tone";
 
 export interface ConsoleCell {
   text?: React.ReactNode;
@@ -11,7 +12,7 @@ export interface ConsoleLine {
   /** Timestamp or prefix, rendered faint. */
   t?: string;
   text: React.ReactNode;
-  tone?: "ok" | "warn" | "err";
+  tone?: Extract<Tone, "success" | "warning" | "danger"> | LegacyTone;
   /** Aligned fields. Prefer this over padding `text` with runs of spaces. */
   cells?: (string | ConsoleCell)[];
 }

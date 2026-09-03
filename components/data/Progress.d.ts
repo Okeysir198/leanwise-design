@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { Tone, LegacyTone } from "../_tone";
 
 export interface ProgressProps extends React.HTMLAttributes<HTMLSpanElement> {
   value?: number;
@@ -7,7 +8,7 @@ export interface ProgressProps extends React.HTMLAttributes<HTMLSpanElement> {
   /** Accessible name. Required when nothing beside it names the bar. */
   label?: string;
   /** `ok` / `warn` / `err` for a bar that has to carry a judgement too. */
-  tone?: "ok" | "warn" | "err";
+  tone?: Extract<Tone, "success" | "warning" | "danger"> | LegacyTone;
 }
 /**
  * Determinate progress with real `role="progressbar"` values. For work with no

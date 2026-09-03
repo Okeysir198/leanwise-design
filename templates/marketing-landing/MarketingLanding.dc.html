@@ -145,9 +145,9 @@ class Component extends DCLogic {
       // aligned in the source, at one width, until a value grows.
       consoleLines: [
         { t: "→", text: "Which agreements auto-renew this quarter?" },
-        { cells: ["retrieve", "hybrid", { text: "rerank top 4", muted: true }], tone: "ok" },
+        { cells: ["retrieve", "hybrid", { text: "rerank top 4", muted: true }], tone:"success" },
         { t: "←", text: "Four, each with the renewal clause cited." },
-        { cells: ["grounding", "0.91", { text: "every claim cited", muted: true }], tone: "ok" }
+        { cells: ["grounding", "0.91", { text: "every claim cited", muted: true }], tone:"success" }
       ]
     };
   }

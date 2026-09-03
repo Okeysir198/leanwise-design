@@ -38,10 +38,10 @@ function Demo(){
     </div>
     <div><span className="lbl-eyebrow lbl-above">activity</span>
       <ActivityFeed now={NOW} items={[
-        {title:"Index rebuilt for contracts/2024", when:NOW-1000*60*8, meta:"41,208 chunks", icon:"check", tone:"ok", unread:true},
-        {title:"3 documents skipped — unsupported encoding", when:NOW-1000*60*95, icon:"alert", tone:"warn", unread:true},
+        {title:"Index rebuilt for contracts/2024", when:NOW-1000*60*8, meta:"41,208 chunks", icon:"check", tone:"success", unread:true},
+        {title:"3 documents skipped — unsupported encoding", when:NOW-1000*60*95, icon:"alert", tone:"warning", unread:true},
         {title:"R. Okafor invited J. Tran to the workspace", when:NOW-1000*60*60*26, icon:"users"},
-        {title:"Embedding failed after 2 retries", when:NOW-1000*60*60*72, icon:"x-circle", tone:"err"},
+        {title:"Embedding failed after 2 retries", when:NOW-1000*60*60*72, icon:"x-circle", tone:"danger"},
       ]} />
     </div>
   </>);

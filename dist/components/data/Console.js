@@ -1,4 +1,5 @@
 import { jsx, jsxs } from "react/jsx-runtime";
+import { normTone } from "../_tone.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
 function Console({ url = "leanwise.ai", title, lines, foot, className, children, ...rest }) {
   const cellCount = lines ? lines.reduce((n, l) => Math.max(n, l.cells ? l.cells.length : 0), 0) : 0;
@@ -17,7 +18,7 @@ function Console({ url = "leanwise.ai", title, lines, foot, className, children,
       ] }),
       url && /* @__PURE__ */ jsx("span", { className: "url", children: url })
     ] }),
-    /* @__PURE__ */ jsx("div", { className: "lw-console-body", children: lines ? /* @__PURE__ */ jsx("div", { className: "lw-console-log", role: "log", style: logStyle, children: lines.map((l, i) => /* @__PURE__ */ jsxs("div", { className: cx("lw-console-line", l.tone), children: [
+    /* @__PURE__ */ jsx("div", { className: "lw-console-body", children: lines ? /* @__PURE__ */ jsx("div", { className: "lw-console-log", role: "log", style: logStyle, children: lines.map((l, i) => /* @__PURE__ */ jsxs("div", { className: cx("lw-console-line", normTone("Console", l.tone)), children: [
       (l.t || cellCount > 0) && /* @__PURE__ */ jsx("span", { className: "t", children: l.t }),
       l.cells ? l.cells.map((c, j) => {
         const cell = typeof c === "string" ? { text: c } : c || {};

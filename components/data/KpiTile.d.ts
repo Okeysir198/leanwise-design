@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { Tone, LegacyTone } from "../_tone";
 
 export interface KpiTileProps extends React.HTMLAttributes<HTMLDivElement> {
   label: React.ReactNode;
@@ -7,13 +8,13 @@ export interface KpiTileProps extends React.HTMLAttributes<HTMLDivElement> {
   icon?: string;
   /** Semantic family for the icon's tint — the tile's SUBJECT, not its movement.
    *  Keep it distinct from `tone`, which judges the delta. Defaults to brand. */
-  accent?: "brand" | "pos" | "neg" | "warn" | "neutral";
+  accent?: Extract<Tone, "brand" | "success" | "danger" | "warning" | "neutral"> | LegacyTone;
   delta?: React.ReactNode;
   /** Which way the number moved — draws the arrow glyph. */
   direction?: "up" | "down";
   /** Whether that movement is good — sets the ink. Defaults to `direction`.
    *  Pass explicitly wherever down is good (latency, cost, error count). */
-  tone?: "pos" | "neg";
+  tone?: Extract<Tone, "success" | "danger"> | LegacyTone;
   note?: React.ReactNode;
 }
 export declare function KpiTile(props: KpiTileProps): React.JSX.Element;

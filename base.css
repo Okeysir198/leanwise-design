@@ -1156,6 +1156,9 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
 .lw-console-line.ok .lw-console-cell.muted,
 .lw-console-line.warn .lw-console-cell.muted,
 .lw-console-line.err .lw-console-cell.muted { color: inherit; opacity: 0.72; }
+.lw-console-line.success .lw-console-cell.muted,
+.lw-console-line.warning .lw-console-cell.muted,
+.lw-console-line.danger .lw-console-cell.muted { color: inherit; opacity: 0.72; }
 .lw-console-line .t {
   white-space: pre;
   color: var(--lw-fg-subtle);
@@ -1170,6 +1173,13 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
 .lw-console-line.ok { color: var(--lw-success-on); }
 .lw-console-line.warn { color: var(--lw-warning-on); }
 .lw-console-line.err { color: var(--lw-danger-on); }
+/* CANONICAL TONE SPELLINGS. The abbreviated selectors above are kept because raw
+   markup in the wild uses them and a design system does not get to break a page it
+   already styled; the components emit these. One vocabulary, and both resolve to the
+   same token — see components/_tone.js. */
+.lw-console-line.success { color: var(--lw-success-on); }
+.lw-console-line.warning { color: var(--lw-warning-on); }
+.lw-console-line.danger { color: var(--lw-danger-on); }
 
 /* Blinking caret — decorative; a solid block under reduced motion. */
 .lw-console-caret::after {

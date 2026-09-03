@@ -1,4 +1,5 @@
 import { Icon } from "../primitives/Icon.jsx";
+import { normTone } from "../_tone.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
 
 
@@ -26,8 +27,13 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  * outranks — so any mismatch between this file and the stylesheet would paint a
  * tinted 16px square rather than falling back to a plain glyph.
  */
-export function KpiTile({ label, value, icon, accent = "brand", delta, direction, tone, note, className, ...rest }) {
-  const ink = tone || (direction === "up" ? "pos" : direction === "down" ? "neg" : undefined);
+export function KpiTile({ label, value, icon, accent: accentIn = "brand", delta, direction, tone: toneIn, note, className, ...rest }) {
+  // Two props, two questions, one vocabulary. `accent` tints by SUBJECT (what the
+  // tile measures), `tone` judges how the number MOVED — they disagree for latency,
+  // which is why both exist. Only the spelling was ever the problem.
+  const accent = normTone("KpiTile", accentIn, "accent");
+  const tone = normTone("KpiTile", toneIn);
+  const ink = tone || (direction === "up" ? "success" : direction === "down" ? "danger" : undefined);
   return (
     <div className={cx("lw-kpi", className)} {...rest}>
       <span className="lw-kpi-head">

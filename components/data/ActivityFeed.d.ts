@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { Tone, LegacyTone } from "../_tone";
 
 export interface ActivityItem {
   id?: string | number;
@@ -8,7 +9,7 @@ export interface ActivityItem {
   meta?: React.ReactNode;
   /** A glyph NAME from the icon set. */
   icon?: string;
-  tone?: "ok" | "warn" | "err";
+  tone?: Extract<Tone, "success" | "warning" | "danger"> | LegacyTone;
   unread?: boolean;
   href?: string;
   onClick?(item: ActivityItem): void;

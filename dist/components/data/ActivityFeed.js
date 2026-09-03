@@ -2,6 +2,7 @@
 import { jsx, jsxs } from "react/jsx-runtime";
 import * as React from "react";
 import { Icon } from "../primitives/Icon.js";
+import { normTone } from "../_tone.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
 const ms = (when) => when instanceof Date ? when.getTime() : new Date(when).getTime();
 const stamp = (when) => new Intl.DateTimeFormat(void 0, { day: "numeric", month: "short" }).format(ms(when));
@@ -60,7 +61,7 @@ function ActivityFeed({
             href: it.href || void 0,
             type: Tag === "button" ? "button" : void 0,
             "data-unread": it.unread ? "true" : void 0,
-            "data-tone": it.tone,
+            "data-tone": normTone("ActivityFeed", it.tone),
             onClick: Tag === "div" ? void 0 : () => it.onClick ? it.onClick(it) : onItemClick && onItemClick(it),
             children: [
               it.icon && /* @__PURE__ */ jsx("span", { className: "lw-feed-ic", children: /* @__PURE__ */ jsx(Icon, { name: it.icon, size: 15 }) }),

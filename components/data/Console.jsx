@@ -1,3 +1,4 @@
+import { normTone } from "../_tone.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
 
 
@@ -49,7 +50,7 @@ export function Console({ url = "leanwise.ai", title, lines, foot, className, ch
         {lines ? (
           <div className="lw-console-log" role="log" style={logStyle}>
             {lines.map((l, i) => (
-              <div key={i} className={cx("lw-console-line", l.tone)}>
+              <div key={i} className={cx("lw-console-line", normTone("Console", l.tone))}>
                 {/* The gutter column is HELD even when this line has no prefix,
                     so a line's fields start in the stream rather than sliding
                     left into the prefix column and misaligning with every line

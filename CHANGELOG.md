@@ -22,6 +22,62 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 ## [Unreleased]
 
+## [1.9.0] — 2026-09-03
+
+### Changed — one tone vocabulary, and a gate so it cannot drift again
+
+Seven components took a `tone`-shaped prop and between them spelled the same five
+judgements **six different ways**. "warning" had three spellings, "danger" three, "success"
+three. A developer moving between two components in one file could not carry a habit across:
+
+    Chip          brand | success | warning | danger | neutral
+    Toast         info  | ok      | warn    | err
+    Progress      ok    | warn    | err
+    ActivityFeed  ok    | warn    | err
+    Console       ok    | warn    | err
+    StatMeter     warning | danger                    (typed; the CSS did five)
+    KpiTile       tone: pos | neg   accent: brand | pos | neg | warn | neutral
+
+**The tokens were never drifted — only the APIs were.** Every abbreviated rule already
+resolved to a canonical token: `.lw-toast.err` sets `var(--lw-danger-on)`,
+`[data-tone="ok"]` sets `var(--lw-success-on)`. The package has always known these five
+things by their full names in the layer that decides what they look like, and disagreed
+with itself only in the layer consumers type. That is what makes
+`success | warning | danger | neutral | brand | info | cta` the canonical set rather than an
+arbitrary pick — it is the spelling `tokens.css` already uses.
+
+Each component still supports whatever subset makes sense (a Progress bar has no use for
+`brand`; there is no `.lw-chip-info`). What is gone is spelling a judgement one component
+supports differently from the token behind it.
+
+Two fixes fell out of doing it. `StatMeter`'s type was **narrower than its own CSS** —
+`.lw-bar[data-tone]` implemented `cta | success | warning | danger | neutral` while the type
+admitted two, so three working values could not be written down; the type now matches what
+the CSS paints. And `Chip` now routes through the same normaliser it did not need: a
+consumer who learned `ok` from `Toast` and typed it on a `Chip` got `.lw-chip-ok`, which
+matches no rule, so the chip rendered untinted and nothing said why.
+
+`KpiTile` keeps **both** `accent` and `tone`. The distinction is right and well argued —
+`accent` tints by subject, `tone` judges how the number moved, and they genuinely disagree
+for latency. Only the spelling was ever the problem.
+
+**Consumers: nothing breaks.** Legacy names are still accepted, normalised at render, and
+warn once per component+value in development only. Per the deprecation policy above they are
+removed at the next MAJOR. The components now emit the canonical name into the DOM, so
+`base.css` and `product.css` gained canonical selectors beside the abbreviated ones — the old
+selectors are kept, because raw markup in the wild uses them and a design system does not get
+to break a page it already styled. Every pair resolves to the same token, so nothing moves a
+pixel.
+
+**And the actual fix is the gate.** `check:tone` (`tools/lw-tone.mjs`) asserts every literal
+in a `tone`/`accent` union is canonical or reached through the deprecated `LegacyTone` alias,
+**and** that every value a component advertises has a CSS selector matching what it emits —
+which is what would have caught `StatMeter` in either direction. It cannot pass vacuously,
+and `--self-test` feeds it a misspelled tone and an unbacked value and requires both to be
+caught. README's "Adding a component" checklist gains the rule as step 11; it was the only
+load-bearing invariant in this package left to memory instead of a script, and it is the one
+that rotted.
+
 ## [1.8.0] — 2026-09-03
 
 ### Added — five glyphs for field work

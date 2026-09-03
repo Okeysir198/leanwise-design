@@ -91,8 +91,8 @@ function Demo() {
           a noted delta cannot stay inline. */}
       <Grid min={200}>
         <KpiTile label="Queries / day" icon="search" value="18.4k" delta="12.1%" direction="up" />
-        <KpiTile label="Grounded" icon="shield" accent="pos" value="97.3%" delta="0.4pt" direction="up" />
-        <KpiTile label="p95 latency" icon="clock" value="840ms" delta="60ms" direction="down" tone="pos" />
+        <KpiTile label="Grounded" icon="shield" accent="success" value="97.3%" delta="0.4pt" direction="up" />
+        <KpiTile label="p95 latency" icon="clock" value="840ms" delta="60ms" direction="down" tone="success" />
       </Grid>
       <Grid min={190}>
         {/* The delta carries no ▲: `direction` draws the arrow from the icon set,
@@ -112,10 +112,10 @@ function Demo() {
           minute-precision stamps here rather than seconds, which buys the
           detail column the ~24px it needs. */}
       <Console url="ops.leanwise.ai/index" lines={[
-        {t:"09:14",cells:["embed","contracts/2024",{text:"1,284 docs",num:true}],tone:"ok"},
-        {t:"09:15",cells:["reindex","policy-handbook",{text:"312 docs",num:true}],tone:"ok"},
-        {t:"09:15",cells:["skip","legacy-wiki",{text:"parser timeout"}],tone:"warn"},
-        {t:"09:16",cells:["fail","legacy-wiki",{text:"4 unreadable"}],tone:"err"}
+        {t:"09:14",cells:["embed","contracts/2024",{text:"1,284 docs",num:true}],tone:"success"},
+        {t:"09:15",cells:["reindex","policy-handbook",{text:"312 docs",num:true}],tone:"success"},
+        {t:"09:15",cells:["skip","legacy-wiki",{text:"parser timeout"}],tone:"warning"},
+        {t:"09:16",cells:["fail","legacy-wiki",{text:"4 unreadable"}],tone:"danger"}
       ]} />
       {/* Raw `code`, so the copy control is on by default — a snippet a reader
           has to select by hand is a snippet they mis-copy. */}

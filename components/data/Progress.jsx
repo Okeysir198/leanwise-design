@@ -1,3 +1,4 @@
+import { normTone } from "../_tone.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
 
 /**
@@ -11,7 +12,8 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  * that animates without knowing how far along it is tells the user a number it
  * does not have.
  */
-export function Progress({ value = 0, max = 100, label, tone, className, ...rest }) {
+export function Progress({ value = 0, max = 100, label, tone: toneIn, className, ...rest }) {
+  const tone = normTone("Progress", toneIn);
   const pct = Math.max(0, Math.min(100, (Number(value) / Number(max || 100)) * 100));
   return (
     <span className={cx("lw-progress", className)} data-tone={tone}

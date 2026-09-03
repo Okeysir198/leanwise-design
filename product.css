@@ -93,6 +93,13 @@ span.lw-kpi-icon, .lw-kpi-badge {
 span.lw-kpi-icon[data-accent="pos"], .lw-kpi-badge[data-accent="pos"] { background: var(--lw-success-soft); color: var(--lw-success-on); }
 span.lw-kpi-icon[data-accent="neg"], .lw-kpi-badge[data-accent="neg"] { background: var(--lw-danger-soft); color: var(--lw-danger-on); }
 span.lw-kpi-icon[data-accent="warn"], .lw-kpi-badge[data-accent="warn"] { background: var(--lw-warning-soft); color: var(--lw-warning-on); }
+/* CANONICAL TONE SPELLINGS. The abbreviated selectors above are kept because raw
+   markup in the wild uses them and a design system does not get to break a page it
+   already styled; the components emit these. One vocabulary, and both resolve to the
+   same token — see components/_tone.js. */
+span.lw-kpi-icon[data-accent="success"], .lw-kpi-badge[data-accent="success"] { background: var(--lw-success-soft); color: var(--lw-success-on); }
+span.lw-kpi-icon[data-accent="danger"], .lw-kpi-badge[data-accent="danger"] { background: var(--lw-danger-soft); color: var(--lw-danger-on); }
+span.lw-kpi-icon[data-accent="warning"], .lw-kpi-badge[data-accent="warning"] { background: var(--lw-warning-soft); color: var(--lw-warning-on); }
 span.lw-kpi-icon[data-accent="neutral"], .lw-kpi-badge[data-accent="neutral"] { background: var(--lw-neutral-soft); color: var(--lw-neutral-on); }
 /* If a build ever lands the class on the svg itself, it stays a plain glyph. */
 svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
@@ -116,6 +123,12 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 .lw-kpi .d .w { color: var(--lw-fg-subtle); }
 .lw-kpi .d.pos { color: var(--lw-success-on); }
 .lw-kpi .d.neg { color: var(--lw-danger-on); }
+/* CANONICAL TONE SPELLINGS. The abbreviated selectors above are kept because raw
+   markup in the wild uses them and a design system does not get to break a page it
+   already styled; the components emit these. One vocabulary, and both resolve to the
+   same token — see components/_tone.js. */
+.lw-kpi .d.success { color: var(--lw-success-on); }
+.lw-kpi .d.danger { color: var(--lw-danger-on); }
 
 /* SKELETON — a loading placeholder shaped like the thing it replaces. The sweep
    is the one ambient animation the restrained motion policy allows, because it
@@ -299,6 +312,13 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 .lw-toast.ok .k { color: var(--lw-success-on); }
 .lw-toast.warn .k { color: var(--lw-warning-on); }
 .lw-toast.err .k { color: var(--lw-danger-on); }
+/* CANONICAL TONE SPELLINGS. The abbreviated selectors above are kept because raw
+   markup in the wild uses them and a design system does not get to break a page it
+   already styled; the components emit these. One vocabulary, and both resolve to the
+   same token — see components/_tone.js. */
+.lw-toast.success .k { color: var(--lw-success-on); }
+.lw-toast.warning .k { color: var(--lw-warning-on); }
+.lw-toast.danger .k { color: var(--lw-danger-on); }
 .lw-toast .msg { flex: 1; min-width: 0; line-height: 1.5; text-wrap: pretty; }
 .lw-toast .lw-icon-btn { width: 22px; height: 22px; margin: -1px -4px 0 0; }
 @media (prefers-reduced-motion: no-preference) { .lw-toast { animation: lwToastIn var(--lw-dur-sm) var(--lw-ease-out); } }
@@ -988,6 +1008,13 @@ a.lw-feed-item:hover, button.lw-feed-item:hover { background: var(--lw-bg-subtle
 .lw-feed-item[data-tone="ok"] .lw-feed-ic { background: var(--lw-success-soft); color: var(--lw-success-on); }
 .lw-feed-item[data-tone="warn"] .lw-feed-ic { background: var(--lw-warning-soft); color: var(--lw-warning-on); }
 .lw-feed-item[data-tone="err"] .lw-feed-ic { background: var(--lw-danger-soft); color: var(--lw-danger-on); }
+/* CANONICAL TONE SPELLINGS. The abbreviated selectors above are kept because raw
+   markup in the wild uses them and a design system does not get to break a page it
+   already styled; the components emit these. One vocabulary, and both resolve to the
+   same token — see components/_tone.js. */
+.lw-feed-item[data-tone="success"] .lw-feed-ic { background: var(--lw-success-soft); color: var(--lw-success-on); }
+.lw-feed-item[data-tone="warning"] .lw-feed-ic { background: var(--lw-warning-soft); color: var(--lw-warning-on); }
+.lw-feed-item[data-tone="danger"] .lw-feed-ic { background: var(--lw-danger-soft); color: var(--lw-danger-on); }
 .lw-feed-main { flex: 1; min-width: 0; display: grid; gap: 2px; }
 .lw-feed-title { line-height: 1.45; text-wrap: pretty; }
 .lw-feed-meta { font-family: var(--lw-font-mono); font-size: var(--lw-text-xs); color: var(--lw-fg-subtle); }
@@ -1120,6 +1147,13 @@ a.lw-feed-item:hover, button.lw-feed-item:hover { background: var(--lw-bg-subtle
 .lw-progress[data-tone="ok"] > i { background: var(--lw-success-on); }
 .lw-progress[data-tone="warn"] > i { background: var(--lw-warning-on); }
 .lw-progress[data-tone="err"] > i { background: var(--lw-danger-on); }
+/* CANONICAL TONE SPELLINGS. The abbreviated selectors above are kept because raw
+   markup in the wild uses them and a design system does not get to break a page it
+   already styled; the components emit these. One vocabulary, and both resolve to the
+   same token — see components/_tone.js. */
+.lw-progress[data-tone="success"] > i { background: var(--lw-success-on); }
+.lw-progress[data-tone="warning"] > i { background: var(--lw-warning-on); }
+.lw-progress[data-tone="danger"] > i { background: var(--lw-danger-on); }
 @media (prefers-reduced-motion: reduce) { .lw-progress > i { transition: none; } }
 .lw-job[data-status="failed"] .lw-job-meta { color: var(--lw-danger-on); }
 
