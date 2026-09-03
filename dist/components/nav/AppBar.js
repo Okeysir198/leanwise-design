@@ -10,6 +10,8 @@ function AppBar({
   crumbs = [],
   onMenuClick,
   menuExpanded,
+  menuIcon = "sidebar",
+  menuClassName,
   actions,
   linkAs = "a",
   collapseNavLabel = "Collapse navigation",
@@ -27,11 +29,11 @@ function AppBar({
         "button",
         {
           type: "button",
-          className: "lw-icon-btn",
+          className: cx("lw-icon-btn", menuClassName),
           onClick: onMenuClick,
           "aria-expanded": menuExpanded,
           "aria-label": menuExpanded ? collapseNavLabel : expandNavLabel,
-          children: /* @__PURE__ */ jsx(Icon, { name: "sidebar", size: 21 })
+          children: /* @__PURE__ */ jsx(Icon, { name: menuIcon, size: 21 })
         }
       ),
       /* @__PURE__ */ jsxs(

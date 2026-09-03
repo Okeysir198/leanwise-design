@@ -18,7 +18,7 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  */
 export function AppBar({
   brand = "LeanWise AI", brandHref = "#", mark = true, crumbs = [],
-  onMenuClick, menuExpanded, actions, linkAs = "a",
+  onMenuClick, menuExpanded, menuIcon = "sidebar", menuClassName, actions, linkAs = "a",
   collapseNavLabel = "Collapse navigation", expandNavLabel = "Expand navigation",
   homeLabel = "Home", formatBrandLabel = (b) => b + " \u2014 home",
   className, children, ...rest
@@ -27,10 +27,20 @@ export function AppBar({
   return (
     <TopBar className={className} {...rest}>
       <div className="lw-appbar-lead">
+        {/* `menuClassName` because this button is not always wanted at every
+            width. The standard product shape is a persistent rail from `md` up
+            and a Drawer below it, so the bar's toggle belongs to the NARROW case
+            only — and without a hook for that a consumer either ships a button
+            that duplicates a rail already on screen, or hand-writes the whole
+            row again, which is the thing this component exists to stop.
+
+            `menuIcon` for the same reason: `sidebar` is the panel glyph and
+            reads as "collapse the rail"; a drawer opener is a hamburger. One
+            component, both jobs. */}
         {onMenuClick && (
-          <button type="button" className="lw-icon-btn" onClick={onMenuClick}
+          <button type="button" className={cx("lw-icon-btn", menuClassName)} onClick={onMenuClick}
             aria-expanded={menuExpanded} aria-label={menuExpanded ? collapseNavLabel : expandNavLabel}>
-            <Icon name="sidebar" size={21} />
+            <Icon name={menuIcon} size={21} />
           </button>
         )}
         <Brand className="lw-appbar-brand" href={brandHref || undefined}

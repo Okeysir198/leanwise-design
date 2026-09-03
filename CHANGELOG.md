@@ -22,6 +22,22 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 ## [Unreleased]
 
+## [1.12.0] — 2026-09-03
+
+### Added — `AppBar` can put its toggle where it belongs
+
+`AppBar` renders one rail toggle, unconditionally, at every width, with the
+`sidebar` glyph. That made it unusable for the standard product shape — a
+persistent rail from `md` up and a `Drawer` below it — because the bar's button
+belongs to the NARROW case only. A consumer either shipped a button duplicating
+a rail already on screen, or hand-wrote the whole row again, which is the thing
+this component exists to stop. `leanwise-inspect` did the second, and its note
+said `AppBar` "renders exactly one always-visible toggle" as the reason.
+
+`menuClassName` puts a class on the toggle — almost always a breakpoint.
+`menuIcon` changes the glyph: `sidebar` is a panel and reads as "collapse the
+rail", so a drawer opener wants `menu`. One component, both jobs.
+
 ## [1.11.0] — 2026-09-03
 
 ### Changed — `LocaleSwitcher compact` toggles when there are two languages

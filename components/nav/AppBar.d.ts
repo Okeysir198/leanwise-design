@@ -18,6 +18,17 @@ export interface AppBarProps extends React.HTMLAttributes<HTMLElement> {
   /** Set false to drop the hexagon mark and keep the name. */
   mark?: boolean;
   crumbs?: Crumb[];
+  /**
+   * A class on the toggle — almost always a breakpoint. The standard product
+   * shape is a persistent rail from `md` up and a `Drawer` below it, so the
+   * bar's toggle belongs to the narrow case only.
+   */
+  menuClassName?: string;
+  /**
+   * The toggle's glyph. Defaults to `"sidebar"`, which reads as "collapse the
+   * rail"; pass `"menu"` when the button opens a drawer.
+   */
+  menuIcon?: string;
   /** Renders the sidebar toggle. Omit and no toggle appears. */
   onMenuClick?(): void;
   menuExpanded?: boolean;
