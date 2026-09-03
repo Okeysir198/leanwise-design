@@ -24,6 +24,8 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 ## [Unreleased]
 
+## [1.13.0] — 2026-09-04
+
 ### Added — warm paper, one dark palette, and the names the tokens were missing
 
 - **Warm paper under navy ink.** The light surfaces `--lw-surface-1..3` and the borders
