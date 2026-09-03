@@ -111,7 +111,35 @@ const ICONS = {
      a bulleted-list glyph are different meanings and get different names, but
      they share the geometry so the two never look like two icon sets. Its
      partner is the existing `close`; there is no second X. */
-  menu: ["M4.5 7h15", "M4.5 12h15", "M4.5 17h15"]
+  menu: ["M4.5 7h15", "M4.5 12h15", "M4.5 17h15"],
+  /* ── Field-work glyphs (v1.8.0) ──────────────────────────────────────────
+     Added for an inspection app whose whole surface is a phone at a pallet.
+     Each one had a NEAR miss already in the set, and the near miss was the
+     problem: `image` for a camera, `search` for a QR scan, `webhook` for
+     offline, `edit` for a signature, `pin` (a thumbtack) for a location. A
+     glyph that is nearly right is read as the thing it actually draws. */
+
+  /* The camera. Body + lens + the hump over the viewfinder, so it cannot be
+     mistaken for `image`, which is a picture IN a frame. */
+  camera: ["M3.5 8.5A1.5 1.5 0 0 1 5 7h2.2l1.3-2h7l1.3 2H19a1.5 1.5 0 0 1 1.5 1.5v9A1.5 1.5 0 0 1 19 19H5a1.5 1.5 0 0 1-1.5-1.5z", "M12 15.8a3.3 3.3 0 1 0 0-6.6 3.3 3.3 0 0 0 0 6.6"],
+
+  /* A code being scanned: four framing corners and the sweep line. The corners
+     are what say "scan" — a filled QR block at 16px is mud. */
+  scan: ["M4 8.5V6a2 2 0 0 1 2-2h2.5", "M15.5 4H18a2 2 0 0 1 2 2v2.5", "M20 15.5V18a2 2 0 0 1-2 2h-2.5", "M8.5 20H6a2 2 0 0 1-2-2v-2.5", "M4 12h16"],
+
+  /* No connection. `wifi` itself is deliberately NOT in the set: the app never
+     needs to say "you are online", only that you are not. Arcs plus the slash,
+     which is the one convention every platform shares. */
+  "wifi-off": ["M4 8.6a15 15 0 0 1 4.2-2.4", "M14.4 5.6A15 15 0 0 1 20 8.6", "M7.6 12.3a10 10 0 0 1 2.2-1.3", "M16.4 12.3a10 10 0 0 0-2.2-1.3", "M12 18.5h.01", "M3.5 3.5l17 17"],
+
+  /* A signature: a written stroke over the rule it is written on. `edit` is a
+     pencil — the tool, not the mark — and a record signed with a pencil icon
+     reads as an editable record, which is the opposite of what it is. */
+  signature: ["M4 15.5c2.5 0 3-8 5-8s1.5 8 3.5 8c1.4 0 2-2.5 3.5-2.5 1.1 0 1.5 1 2.5 1", "M4 19.5h16"],
+
+  /* A location on a map. `pin` is a thumbtack — the drawing-pin that holds
+     paper to a board — and the two are not interchangeable at 16px. */
+  "map-pin": ["M12 21s6.5-5.6 6.5-10.5a6.5 6.5 0 1 0-13 0C5.5 15.4 12 21 12 21z", "M12 13a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"]
 };
 
 /* Drawn when a name is not in the set. Deliberately generic — it must read as

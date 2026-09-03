@@ -19,7 +19,7 @@ export type IconName =
   | "lock" | "mail" | "link" | "image" | "folder" | "star"
   | "bell" | "inbox" | "play" | "pause" | "mic" | "mic-off"
   | "thumbs-up" | "thumbs-down" | "maximize" | "minimize" | "undo" | "help"
-  | "menu";
+  | "menu" | "camera" | "scan" | "wifi-off" | "signature" | "map-pin";
 
 export interface IconProps extends Omit<React.SVGAttributes<SVGSVGElement>, "children"> {
   name: IconName;

@@ -287,6 +287,13 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
    belongs to Chip, and a stack of three tinted toasts is louder than any of the
    three messages. The mono label carries the status for a colour-blind reader. */
 .lw-toast-region { position: fixed; bottom: var(--lw-space-24); right: var(--lw-space-24); z-index: var(--lw-z-toast); display: flex; flex-direction: column; gap: var(--lw-space-8); width: min(360px, calc(100vw - 32px)); }
+/* A toast in an app that has a BOTTOM NAV. Two pieces of this package fought each
+   other: the region is fixed 24px from the bottom and `.lw-bottom-nav` is
+   `56px + safe-bottom` tall and sticky above it, so on a phone the toast landed
+   underneath the bar. An `data-` attribute rather than a modifier CLASS on purpose —
+   a consumer's presence gate treats an unknown `lw-*` class as an invented one, and
+   this is layout the app declares about itself, not a role it is inventing. */
+.lw-toast-region[data-above-nav] { bottom: calc(var(--lw-bottom-nav-h) + var(--lw-safe-bottom) + var(--lw-space-12)); }
 .lw-toast { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; background: var(--lw-bg); border: 1px solid var(--lw-line); border-radius: var(--lw-radius-md); box-shadow: var(--lw-shadow-lg); font-size: var(--lw-text-sm); color: var(--lw-fg); }
 .lw-toast .k { font-family: var(--lw-font-mono); font-size: 10px; letter-spacing: 0.12em; word-spacing: var(--lw-word-spacing-caps); text-transform: uppercase; padding-top: 3px; flex: none; color: var(--lw-fg-subtle); }
 .lw-toast.ok .k { color: var(--lw-success-on); }
