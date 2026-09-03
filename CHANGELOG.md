@@ -24,6 +24,15 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 ## [Unreleased]
 
+## [2.1.4] — 2026-09-04
+
+### Fixed
+
+- **`.lw-input-group > input` stretches to the group's height.** It measured 21.7px
+  inside a 44px frame, so a tap near the frame's edge focused nothing — half of every
+  `PasswordInput` was dead on a phone.
+- **`.lw-skip` meets the coarse-pointer floor** (41px measured).
+
 ## [2.1.3] — 2026-09-04
 
 ### Fixed

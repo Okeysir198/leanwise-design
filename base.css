@@ -1141,7 +1141,10 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
    :has() keeps the attribute as the single source of truth: still no .error class. */
 .lw-input-group:has(> input[aria-invalid="true"]) { border-color: var(--lw-danger-on); }
 .lw-input-group:has(> input[aria-invalid="true"]):focus-within { border-color: var(--lw-danger-on); box-shadow: var(--lw-focus-ring-danger); }
-.lw-input-group > input { flex: 1; min-width: 0; border: 0; background: none; font: inherit; font-size: var(--lw-text-sm); color: var(--lw-fg); }
+/* The input STRETCHES to the group's height: with `align-items: center` and no height
+   of its own it measured 21.7px inside a 44px frame, and a tap 6px from the frame's top
+   focused nothing — half of every PasswordInput was dead on a phone. */
+.lw-input-group > input { flex: 1; min-width: 0; align-self: stretch; height: auto; border: 0; background: none; font: inherit; font-size: var(--lw-text-sm); color: var(--lw-fg); }
 .lw-input-group > input:focus { outline: none; }
 .lw-input-group .affix { color: var(--lw-fg-subtle); font-size: 14px; display: inline-flex; align-items: center; flex: none; }
 .lw-input-group .affix.mono { font-family: var(--lw-font-mono); font-size: var(--lw-text-xs); }
@@ -1208,6 +1211,7 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
      lifted. Only what has no token left stays. */
   .lw-segmented button { padding: 10px 14px; min-height: var(--lw-control-h-sm); }
   .lw-tabs [role="tab"] { min-height: var(--lw-control-h-sm); } /* measured 43px: 1px under the floor */
+  .lw-skip { min-height: var(--lw-control-h-sm); display: inline-flex; align-items: center; } /* 41px measured */
   /* ^ the token is 44px under a coarse pointer; a 12.5px label with 10px padding is
      33px, and the first v2 consumer measured its language toggles at 29px. */
 }
