@@ -441,13 +441,28 @@ directly undercuts the pitch.
 To release `vX.Y.Z`:
 
 1. Make the change. Run `npm run check` green; run the browser gates or let CI.
-2. Bump `package.json#version` **in the same commit**.
-3. `git tag vX.Y.Z` on that commit, `git push && git push --tags`.
-4. Bump the pin in each consumer and refresh its lockfile.
+2. **Promote `## [Unreleased]` to `## [X.Y.Z] — <date>` in `CHANGELOG.md`, and leave a new empty
+   `[Unreleased]` above it.** `CONTRIBUTING.md` already requires every change to land under
+   `[Unreleased]`; nothing promoted it, so this step did not exist and the omission was
+   invisible — the file still looked maintained.
+3. **Re-point any `advisories.json` entry whose `fixedIn` names the release you are about to
+   cut**, and check that every `fixedIn` in the file names a tag that will exist:
+   `node -e "…"` against `git tag -l`, or simply eyeball it — there are eleven.
+4. Bump `package.json#version` **in the same commit** as 1–3.
+5. `git tag vX.Y.Z` on that commit, `git push && git push --tags`.
+6. Bump the pin in each consumer and refresh its lockfile. Enumerate them — see §Consumers.
 
 **Never move a published tag** to fix a missed bump — cut the next version. A re-pointed tag
 breaks reproducibility for anyone who already fetched the tarball, and surfaces as a confusing
 cache error rather than a clean update.
+
+**Steps 2 and 3 were added on 2026-09-03, after both failed at once.** v1.7.2 was written up in
+the CHANGELOG and in an advisory (`announce-breaks-prose-anchors`, `fixedIn: 1.7.2`) and then
+never cut — so `lw-doctor`, the tool whose entire purpose is telling a consumer which release
+fixes their defect, pointed at a tag that does not exist. The fix had shipped; only the label was
+wrong. Then v1.8.0 was cut following steps 1–4 exactly as they were written, and recorded
+nothing, because the procedure did not ask. A four-step procedure that omits the two steps that
+keep the record honest will be followed correctly and still lose the record.
 
 ### The lockfile-no-op gotcha
 
@@ -463,20 +478,35 @@ is not "on the new version."
 
 ## Consumers
 
+Verified 2026-09-03 by enumeration (the command below), not by memory.
+
 | Consumer | Pin | Consumes | Package manager |
 |---|---|---|---|
-| `leanwise-ai` | see its `package.json` | `tokens.css` + `lw.css` + `./assets` + `./react` | pnpm |
-| `P20260707-vss/frontend` | `#v0.2.3` | `tokens.css` + `shadcn.css` + preset + `./brand` | pnpm |
-| `P20260706-rag-service/frontend` | `#v0.2.2` (reports **0.2.1** — see below) | `tokens.css`, vanilla | npm |
+| `leanwise-ai` | `#v1.7.1` | `tokens.css` `fonts.css` `reset.css` `base.css` `marketing.css` `product.css` + `./react` | pnpm |
+| `P20251121-tss-app/frontend` | `#v1.7.1` | `tokens.css` `fonts.css` `shadcn.css` `theme.css` `base.css` `email.css` | npm |
+| `4DXs_plan/app` | `#v1.7.1` | `tokens.css` `fonts.css` `reset.css` `base.css` `marketing.css` `product.css` + `./react` | npm |
+| `leanwise-inspect/frontend` | `#v1.8.0` | `tokens.css` `fonts.css` `shadcn.css` `theme.css` `base.css` `product.css` + `./react` | npm |
+| `P20260707-vss/frontend` | `#v0.2.3` | `tokens.css` `fonts.css` `shadcn.css` + preset + `./brand` | pnpm |
+| `P20260706-rag-service/frontend` | `#v0.2.2` (reports **0.2.1** — see below) | `tokens.css` `fonts.css`, vanilla | npm |
 
-**This table is hand-maintained, and it has been wrong.** It read `#v0.8.1` for `leanwise-ai`
-until 2026-07-31, when the real pin was `#v1.1.8` — eighteen tags of drift that did not exist.
-The cost is not cosmetic: the entry is what anyone reasons from when deciding whether a change
-is safe to ship, and it pointed at the flagship consumer. Verify against the consumer's own
-`package.json` before trusting a row:
+**This table is hand-maintained, and it has now been wrong twice, in both directions.** It read
+`#v0.8.1` for `leanwise-ai` until 2026-07-31, when the real pin was `#v1.1.8` — eighteen tags of
+drift that did not exist. Then on 2026-09-03 an audit found it listing **three** consumers when
+there were **six**: `tss-app`, `leanwise-inspect` and `4DXs_plan` were absent, and `tss-app` is
+discussed by name elsewhere in this very file. The cost is not cosmetic — this table is what
+anyone reasons from when deciding whether a change is safe to ship, and a missing row reads as
+"nobody depends on that".
+
+`lw-doctor` was built to end exactly this class of error, but it inverts **version** lookup, not
+**consumer enumeration** — it can tell a consumer it is behind and cannot tell this file that a
+consumer exists. So enumerate rather than remember. This finds every consumer on the box and its
+real pin, and is what should be run before trusting a row:
 
 ```bash
-node -p "require('/srv/share/01_project-dev/leanwise-ai/package.json').dependencies['@leanwise/design']"
+for d in /srv/share/01_project-dev/*/ /srv/share/01_project-dev/*/frontend/ /srv/share/01_project-dev/*/app/; do
+  pin=$(grep -o '"@leanwise/design": *"[^"]*"' "$d/package.json" 2>/dev/null | sed 's/.*: *"//;s/"$//')
+  [ -n "$pin" ] && printf '%-46s %s\n' "${d#/srv/share/01_project-dev/}" "$pin"
+done | sort -u
 ```
 
 Real drift today is **VSS alone** (`#v0.2.3`) and **rag-service** (`#v0.2.2`).

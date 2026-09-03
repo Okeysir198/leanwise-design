@@ -22,6 +22,37 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 ## [Unreleased]
 
+## [1.8.0] — 2026-09-03
+
+### Added — five glyphs for field work
+
+Each had a NEAR miss in the set already, and the near miss was the problem. An inspection app
+running on a phone at a pallet reached for `image` to mean a camera, `search` to mean a QR scan,
+`webhook` to mean offline, `edit` to mean a signature and `pin` — a thumbtack — to mean a
+location. At 16px a glyph that is nearly right is read as the thing it actually draws: the camera
+button looked like a gallery, and a record signed with a pencil read as a record you could still
+edit.
+
+`camera` (body + lens + viewfinder hump, so it cannot be read as `image`, which is a picture IN a
+frame) · `scan` (four framing corners and a sweep line; the corners are what say "scan", because a
+filled QR block at 16px is mud) · `wifi-off` (arcs plus the slash — there is deliberately no
+`wifi`: an app never needs to say you are online, only that you are not) · `signature` (a written
+stroke over the rule it sits on — the mark, where `edit` is the tool) · `map-pin` (the teardrop;
+`pin` stays what it is, a drawing pin).
+
+**Consumers:** additive. `IconName` gains five members; nothing existing moves.
+
+### Fixed — a toast landed underneath a bottom nav
+
+Two pieces of this package fought each other. `.lw-toast-region` is `position: fixed; bottom:
+24px`, and `.lw-bottom-nav` is `56px + safe-bottom` and sticky above it — so in any app with a
+bottom bar the toast sat under the bar. Added `.lw-toast-region[data-above-nav]`, which offsets by
+`--lw-bottom-nav-h + --lw-safe-bottom + --lw-space-12`.
+
+A `data-` attribute rather than a modifier class on purpose: a consumer's presence gate is right
+to treat an unknown `lw-*` class as invented, and this is layout the app declares about itself,
+not a role it is inventing.
+
 ### Fixed — an AnnounceBar put every prose anchor UNDER the header, undoing the rule beside it
 
 `.lw-prose :is(h2,h3,h4)` has carried `scroll-margin-block-start: var(--lw-space-64)` since the

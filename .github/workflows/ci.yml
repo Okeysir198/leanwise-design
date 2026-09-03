@@ -82,7 +82,7 @@ jobs:
         # perturbed image FAILS. A comparator that always answers "same" is the
         # exact defect this whole section exists to remove, and it is invisible
         # to a green run.
-        run: node templates/_tooling/lw-visual.mjs --self-test
+        run: node tools/lw-visual.mjs --self-test
 
       - name: Resolve the base ref
         id: base
@@ -123,8 +123,8 @@ jobs:
           # Otherwise a PR that touches this gate is scored by two different
           # gates and the diff is uninterpretable. node_modules is untracked,
           # so the browser and its deps stay exactly as `npm ci` left them.
-          git checkout --force "${{ steps.base.outputs.head }}" -- templates/_tooling
-          node templates/_tooling/lw-visual.mjs --record --dir "$RUNNER_TEMP/visual"
+          git checkout --force "${{ steps.base.outputs.head }}" -- tools
+          node tools/lw-visual.mjs --record --dir "$RUNNER_TEMP/visual"
 
       - name: Restore HEAD
         if: always() && steps.base.outputs.skip != 'true'
@@ -150,7 +150,7 @@ jobs:
             echo "::warning title=lw-visual::[visual-ok] in the head commit — visual differences will be reported but will not fail the build. Review the uploaded diff artifact."
             ACCEPT="--report-only"
           fi
-          node templates/_tooling/lw-visual.mjs --compare $ACCEPT --dir "$RUNNER_TEMP/visual"
+          node tools/lw-visual.mjs --compare $ACCEPT --dir "$RUNNER_TEMP/visual"
 
       # always(), not failure(): under [visual-ok] the gate exits 0, and that is
       # precisely the run whose diff a reviewer has to look at. `if-no-files-found:
