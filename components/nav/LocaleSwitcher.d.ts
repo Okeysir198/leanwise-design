@@ -20,11 +20,17 @@ export interface LocaleSwitcherProps
   /** The control's accessible name. Default "Language". */
   label?: string;
   /**
-   * Narrow form: a globe button that opens a MENU listing every language.
+   * Narrow form: a globe button.
    *
-   * Deliberately not `ThemeToggle compact`'s cycle. A reader who does not read
-   * the current language cannot predict what the next press gives them, and
-   * overshooting means cycling through languages they cannot read to get back.
+   * With exactly TWO locales it TOGGLES in one press, with no panel — there is
+   * one other option, it is named on the control before you press, and a menu
+   * to choose between two things (one of which you are already using) asks a
+   * question with one answer.
+   *
+   * With three or more it opens a menu. Deliberately not `ThemeToggle compact`'s
+   * cycle past two: a reader who does not read the current language cannot
+   * predict what the next press gives them, and overshooting means cycling
+   * through languages they cannot read to get back.
    */
   compact?: boolean;
 }

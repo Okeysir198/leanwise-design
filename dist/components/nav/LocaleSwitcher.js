@@ -18,6 +18,23 @@ function LocaleSwitcher({
   const codes = locales.length ? locales : Object.keys(localeLabels);
   const nameOf = (code) => localeLabels[code] || code;
   const apply = (code) => code !== value && onChange?.(code);
+  if (compact && codes.length === 2) {
+    const other = codes[0] === value ? codes[1] : codes[0];
+    return /* @__PURE__ */ jsx(
+      "button",
+      {
+        type: "button",
+        className: cx("lw-icon-btn", "lw-hit", "lw-locale-compact", className),
+        "aria-label": label + ": " + nameOf(value) + " \u2192 " + nameOf(other),
+        title: label + ": " + nameOf(value) + " \u2192 " + nameOf(other),
+        onClick: () => apply(other),
+        "data-testid": "locale-toggle",
+        lang: other,
+        ...rest,
+        children: /* @__PURE__ */ jsx(Icon, { name: "globe", size: 18 })
+      }
+    );
+  }
   if (compact) {
     return /* @__PURE__ */ jsx(
       Menu,

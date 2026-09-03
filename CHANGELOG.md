@@ -22,6 +22,24 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 ## [Unreleased]
 
+## [1.11.0] — 2026-09-03
+
+### Changed — `LocaleSwitcher compact` toggles when there are two languages
+
+It always opened a menu. For the common case — a bilingual product — that is a
+panel asking a question with one answer: there is a single other option, it is
+named on the control before you press, and you are already using the other one.
+
+It now toggles in one press when `locales` has exactly two, and opens the menu
+from three up. The reasoning for the menu still holds past two and is unchanged:
+a reader who does not read the CURRENT language cannot predict what a cycle would
+give them, and overshooting means cycling through languages they cannot read to
+get back. With two there is nothing to predict.
+
+The toggle's label names both sides — "Language: Tiếng Việt → English" — because
+a control naming only its destination reads as a label, and one naming only its
+current state does not say what pressing it does.
+
 ## [1.10.3] — 2026-09-03
 
 ### Fixed — `.lw-hit` never anchored itself, so its tap target escaped the control
