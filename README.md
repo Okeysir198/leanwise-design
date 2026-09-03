@@ -378,6 +378,7 @@ a design system whose API moves under a consumer's feet is a reason to vendor it
 | `Tooltip` | Hints only. Does not exist on touch |
 | `Popover` | **The one floating surface.** Menu, Combobox, DatePicker and every filter panel are this plus contents. Top-layer, so it escapes an ancestor's `overflow: hidden` without a portal. `placement` flips only when the preferred side does not fit; dismissal is explicit, because `popover="auto"`'s light-dismiss cannot tell the trigger from the outside world |
 | `Drawer` | The side sheet — a modal that enters from an edge, so it is the same native `<dialog>`. `side`: start · end · bottom (the touch answer to a centred dialog) |
+| `OverlayProvider` | The portal root every Radix-backed overlay renders into, plus the shared tooltip delay budget. One per app or per themed island, placed INSIDE the element carrying `brandVars()` / `.dark` — a portal inherits theme from its container, not its trigger. Never inside `.lw-topbar` (its `backdrop-filter` becomes the containing block for `position: fixed`) |
 | `Menu` | The action menu, on `Popover`. Arrows, Home/End, typeahead, Esc-returns-focus. `items` take `icon` (a glyph name), `kbd`, `checked` (→ `menuitemcheckbox`), `danger`, `separator` and `label` rows |
 
 ### AI — `components/ai/`

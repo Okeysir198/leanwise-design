@@ -271,8 +271,35 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 
 /* ---- Overlays -------------------------------------------------------------- */
 
-/* DIALOG — the native <dialog>, so focus trap, Esc and inertness are the
-   platform's job rather than 200 lines of ours. */
+/* LAYER — the box every Radix-backed overlay portals into (components/overlays/
+   _layer.js, v2.0.0). Fixed and full-viewport so a portal's `position: fixed`
+   content measures against the viewport; pointer-events off on the layer and
+   back on for its children, so an EMPTY layer never eats a click; `isolation`
+   so the popover/backdrop z-tokens inside stay local to this layer instead of
+   competing with page furniture. `color` is stated because the layer may carry
+   a mirrored `.dark` / `.lw-band-dark` class (tokens.css re-derives every role
+   on that element) — a portal on document.body has no ancestor to inherit ink
+   from. Modal layers ride `--lw-z-modal`; non-modal `--lw-z-overlay`. */
+.lw-layer { position: fixed; inset: 0; pointer-events: none; z-index: var(--lw-z-overlay); isolation: isolate; color: var(--lw-fg); }
+.lw-layer-modal { z-index: var(--lw-z-modal); }
+.lw-layer > * { pointer-events: auto; }
+/* The scrim, as an ELEMENT rather than `::backdrop`: a portal-rendered dialog
+   is not a top-layer <dialog>, so the UA pseudo does not exist for it. Same
+   scrim token and blur as the `::backdrop` rules it replaces — keep the three
+   in step until the retirement below lands. */
+.lw-backdrop { position: fixed; inset: 0; z-index: var(--lw-z-local-1); background: var(--lw-scrim); backdrop-filter: blur(2px); }
+/* Rendered by OverlayProvider: no box of its own, so it can sit anywhere in
+   the branded subtree without moving a pixel. */
+.lw-layer-root { display: contents; }
+@media (prefers-reduced-motion: no-preference) {
+  .lw-backdrop[data-state="open"] { animation: lwFadeIn var(--lw-dur-sm) var(--lw-ease-out) both; }
+}
+
+/* TOMBSTONE (v2.0.0, in flight): `.lw-dialog::backdrop`, `.lw-drawer::backdrop`
+   and `.lw-cmdk::backdrop` below are retired when those components move to
+   Radix `Dialog` and render `.lw-backdrop` instead. Until then both forms
+   share `--lw-scrim` + `blur(2px)`; move one, move the other. */
+
 /* DIALOG — the native <dialog>, so focus trap, Esc and inertness are the
    platform's job rather than 200 lines of ours.
    A column with a bounded height: the head and foot stay put and only the body

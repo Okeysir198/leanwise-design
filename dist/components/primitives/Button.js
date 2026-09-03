@@ -1,7 +1,8 @@
 "use client";
 import { jsx } from "react/jsx-runtime";
+import * as React from "react";
 const cx = (...a) => a.filter(Boolean).join(" ");
-function Button({
+const Button = React.forwardRef(function Button2({
   variant = "brand",
   size = "md",
   iconOnly = false,
@@ -13,11 +14,12 @@ function Button({
   onClick,
   children,
   ...rest
-}) {
+}, ref) {
   const Tag = as || (rest.href ? "a" : "button");
   return /* @__PURE__ */ jsx(
     Tag,
     {
+      ref,
       className: cx(
         "lw-btn",
         `lw-btn-${variant}`,
@@ -42,7 +44,8 @@ function Button({
       children
     }
   );
-}
+});
+Button.displayName = "Button";
 export {
   Button
 };

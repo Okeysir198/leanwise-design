@@ -50,6 +50,9 @@ const CLIENT_SIGNALS = [
   [/\b(window|document|localStorage|sessionStorage|navigator|matchMedia)\b/, "a browser global"],
   [/\bon[A-Z][a-zA-Z]*=\{\s*\(/, "an inline event handler"],
   [/\bcreatePortal\b/, "createPortal"],
+  // Every Radix primitive is a client component (state, context, portals), so a
+  // module that imports one is client whether or not its own source says so.
+  [/from\s+["']radix-ui["']/, "a Radix primitive"],
 ];
 
 /** Files outside components/ that are part of the public surface. */

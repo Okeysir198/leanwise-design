@@ -133,6 +133,8 @@ export { Menu } from "./components/overlays/Menu";
 export type { MenuProps, MenuItem } from "./components/overlays/Menu";
 export { Drawer } from "./components/overlays/Drawer";
 export type { DrawerProps } from "./components/overlays/Drawer";
+export { OverlayProvider } from "./components/overlays/OverlayProvider";
+export type { OverlayProviderProps } from "./components/overlays/OverlayProvider";
 export { PromptInput } from "./components/ai/PromptInput";
 export type { PromptInputProps } from "./components/ai/PromptInput";
 export { Message } from "./components/ai/Message";

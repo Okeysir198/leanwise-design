@@ -1,4 +1,4 @@
-/* @ds-bundle: {"format":4,"namespace":"LeanWiseDesign_f2d907","generator":"tools/lw-bundle.mjs","esbuild":"0.27.7","components":[{"name":"TONES","sourcePath":"components/_tone.js"},{"name":"AgentTrace","sourcePath":"components/ai/AgentTrace.jsx"},{"name":"Artifact","sourcePath":"components/ai/Artifact.jsx"},{"name":"ConfidenceMeter","sourcePath":"components/ai/ConfidenceMeter.jsx"},{"name":"DiffReview","sourcePath":"components/ai/DiffReview.jsx"},{"name":"Feedback","sourcePath":"components/ai/Feedback.jsx"},{"name":"Message","sourcePath":"components/ai/Message.jsx"},{"name":"PromptInput","sourcePath":"components/ai/PromptInput.jsx"},{"name":"SourceChip","sourcePath":"components/ai/SourceChip.jsx"},{"name":"SourceList","sourcePath":"components/ai/SourceList.jsx"},{"name":"ToolCall","sourcePath":"components/ai/ToolCall.jsx"},{"name":"ActivityFeed","sourcePath":"components/data/ActivityFeed.jsx"},{"name":"BUCKET_LABELS","sourcePath":"components/data/ActivityFeed.jsx"},{"name":"RELATIVE_LABELS","sourcePath":"components/data/ActivityFeed.jsx"},{"name":"timeAgo","sourcePath":"components/data/ActivityFeed.jsx"},{"name":"BarChart","sourcePath":"components/data/BarChart.jsx"},{"name":"CHART_PAD","sourcePath":"components/data/chart-parts.jsx"},{"name":"CHART_W","sourcePath":"components/data/chart-parts.jsx"},{"name":"DataTable","sourcePath":"components/data/chart-parts.jsx"},{"name":"Legend","sourcePath":"components/data/chart-parts.jsx"},{"name":"SERIES","sourcePath":"components/data/chart-parts.jsx"},{"name":"CodeBlock","sourcePath":"components/data/CodeBlock.jsx"},{"name":"Console","sourcePath":"components/data/Console.jsx"},{"name":"DataGrid","sourcePath":"components/data/DataGrid.jsx"},{"name":"EmptyState","sourcePath":"components/data/EmptyState.jsx"},{"name":"FilterBar","sourcePath":"components/data/FilterBar.jsx"},{"name":"Toolbar","sourcePath":"components/data/FilterBar.jsx"},{"name":"KpiTile","sourcePath":"components/data/KpiTile.jsx"},{"name":"LineChart","sourcePath":"components/data/LineChart.jsx"},{"name":"Pagination","sourcePath":"components/data/Pagination.jsx"},{"name":"Progress","sourcePath":"components/data/Progress.jsx"},{"name":"StateView","sourcePath":"components/data/StateView.jsx"},{"name":"StatMeter","sourcePath":"components/data/StatMeter.jsx"},{"name":"Table","sourcePath":"components/data/Table.jsx"},{"name":"Calendar","sourcePath":"components/forms/Calendar.jsx"},{"name":"Checkbox","sourcePath":"components/forms/Checkbox.jsx"},{"name":"Combobox","sourcePath":"components/forms/Combobox.jsx"},{"name":"DatePicker","sourcePath":"components/forms/DatePicker.jsx"},{"name":"RANGE_PRESETS","sourcePath":"components/forms/DatePicker.jsx"},{"name":"Field","sourcePath":"components/forms/Field.jsx"},{"name":"FileUpload","sourcePath":"components/forms/FileUpload.jsx"},{"name":"formatBytes","sourcePath":"components/forms/FileUpload.jsx"},{"name":"Input","sourcePath":"components/forms/Input.jsx"},{"name":"InputGroup","sourcePath":"components/forms/InputGroup.jsx"},{"name":"OtpInput","sourcePath":"components/forms/OtpInput.jsx"},{"name":"PasswordInput","sourcePath":"components/forms/PasswordInput.jsx"},{"name":"PasswordMeter","sourcePath":"components/forms/PasswordMeter.jsx"},{"name":"RichText","sourcePath":"components/forms/RichText.jsx"},{"name":"TOOLS","sourcePath":"components/forms/RichText.jsx"},{"name":"Segmented","sourcePath":"components/forms/Segmented.jsx"},{"name":"Select","sourcePath":"components/forms/Select.jsx"},{"name":"Stepper","sourcePath":"components/forms/Stepper.jsx"},{"name":"Switch","sourcePath":"components/forms/Switch.jsx"},{"name":"Textarea","sourcePath":"components/forms/Textarea.jsx"},{"name":"Cluster","sourcePath":"components/layout/Cluster.jsx"},{"name":"Container","sourcePath":"components/layout/Container.jsx"},{"name":"Grid","sourcePath":"components/layout/Grid.jsx"},{"name":"Page","sourcePath":"components/layout/Page.jsx"},{"name":"Section","sourcePath":"components/layout/Section.jsx"},{"name":"Split","sourcePath":"components/layout/Split.jsx"},{"name":"Stack","sourcePath":"components/layout/Stack.jsx"},{"name":"AnnounceBar","sourcePath":"components/marketing/AnnounceBar.jsx"},{"name":"ArticleCard","sourcePath":"components/marketing/ArticleCard.jsx"},{"name":"Byline","sourcePath":"components/marketing/Byline.jsx"},{"name":"CompareTable","sourcePath":"components/marketing/CompareTable.jsx"},{"name":"FeatureGrid","sourcePath":"components/marketing/FeatureGrid.jsx"},{"name":"Flow","sourcePath":"components/marketing/Flow.jsx"},{"name":"Hero","sourcePath":"components/marketing/Hero.jsx"},{"name":"LogoRail","sourcePath":"components/marketing/LogoRail.jsx"},{"name":"PlanCard","sourcePath":"components/marketing/PlanCard.jsx"},{"name":"Quote","sourcePath":"components/marketing/Quote.jsx"},{"name":"SiteFooter","sourcePath":"components/marketing/SiteFooter.jsx"},{"name":"Steps","sourcePath":"components/marketing/Steps.jsx"},{"name":"StoryCard","sourcePath":"components/marketing/StoryCard.jsx"},{"name":"AppBar","sourcePath":"components/nav/AppBar.jsx"},{"name":"BottomNav","sourcePath":"components/nav/BottomNav.jsx"},{"name":"Breadcrumbs","sourcePath":"components/nav/Breadcrumbs.jsx"},{"name":"CommandPalette","sourcePath":"components/nav/CommandPalette.jsx"},{"name":"score","sourcePath":"components/nav/CommandPalette.jsx"},{"name":"LocaleSwitcher","sourcePath":"components/nav/LocaleSwitcher.jsx"},{"name":"NavMenu","sourcePath":"components/nav/NavMenu.jsx"},{"name":"NavToggle","sourcePath":"components/nav/NavToggle.jsx"},{"name":"NavItem","sourcePath":"components/nav/Sidebar.jsx"},{"name":"Sidebar","sourcePath":"components/nav/Sidebar.jsx"},{"name":"Tabs","sourcePath":"components/nav/Tabs.jsx"},{"name":"THEME_LABELS","sourcePath":"components/nav/ThemeToggle.jsx"},{"name":"ThemeToggle","sourcePath":"components/nav/ThemeToggle.jsx"},{"name":"TopBar","sourcePath":"components/nav/TopBar.jsx"},{"name":"Dialog","sourcePath":"components/overlays/Dialog.jsx"},{"name":"Drawer","sourcePath":"components/overlays/Drawer.jsx"},{"name":"Menu","sourcePath":"components/overlays/Menu.jsx"},{"name":"Popover","sourcePath":"components/overlays/Popover.jsx"},{"name":"Toast","sourcePath":"components/overlays/Toast.jsx"},{"name":"ToastRegion","sourcePath":"components/overlays/Toast.jsx"},{"name":"Tooltip","sourcePath":"components/overlays/Tooltip.jsx"},{"name":"Avatar","sourcePath":"components/primitives/Avatar.jsx"},{"name":"Button","sourcePath":"components/primitives/Button.jsx"},{"name":"Card","sourcePath":"components/primitives/Card.jsx"},{"name":"CardBody","sourcePath":"components/primitives/Card.jsx"},{"name":"CardFoot","sourcePath":"components/primitives/Card.jsx"},{"name":"CardHead","sourcePath":"components/primitives/Card.jsx"},{"name":"CardTitle","sourcePath":"components/primitives/Card.jsx"},{"name":"Chip","sourcePath":"components/primitives/Chip.jsx"},{"name":"Disclosure","sourcePath":"components/primitives/Disclosure.jsx"},{"name":"Eyebrow","sourcePath":"components/primitives/Eyebrow.jsx"},{"name":"Icon","sourcePath":"components/primitives/Icon.jsx"},{"name":"iconNames","sourcePath":"components/primitives/Icon.jsx"},{"name":"IconNames","sourcePath":"components/primitives/Icon.jsx"},{"name":"Prose","sourcePath":"components/primitives/Prose.jsx"},{"name":"Skeleton","sourcePath":"components/primitives/Skeleton.jsx"},{"name":"RAIL_KEY","sourcePath":"hooks.js"},{"name":"THEME_EVENT","sourcePath":"hooks.js"},{"name":"THEME_KEY","sourcePath":"hooks.js"}],"sourceHashes":{"components/_deprecate.js":"1c84a2fda110","components/_merge-refs.js":"13fe3c69fe69","components/_radio-group.js":"26caa936f1de","components/_tone.js":"e423d6698432","components/ai/AgentTrace.jsx":"a89cdd6dbfea","components/ai/Artifact.jsx":"2f6f74bc6102","components/ai/ConfidenceMeter.jsx":"30190dcfb803","components/ai/DiffReview.jsx":"3e794caa9ef1","components/ai/Feedback.jsx":"b39a358e07a0","components/ai/Message.jsx":"e507e32b90ca","components/ai/PromptInput.jsx":"93ca1175d24c","components/ai/SourceChip.jsx":"ea58d31896df","components/ai/SourceList.jsx":"60e374a74c6a","components/ai/ToolCall.jsx":"7847c91c8842","components/data/ActivityFeed.jsx":"1e4aaf31913d","components/data/BarChart.jsx":"65761f1d2d2f","components/data/CodeBlock.jsx":"d4f25b21c63d","components/data/Console.jsx":"1593923dd8d8","components/data/DataGrid.jsx":"d6fd83a51115","components/data/EmptyState.jsx":"7340a557f731","components/data/FilterBar.jsx":"dc73bc4398fe","components/data/KpiTile.jsx":"69e34ea19237","components/data/LineChart.jsx":"6c16b6d59c9a","components/data/Pagination.jsx":"8d061ad75816","components/data/Progress.jsx":"0165b3d9952c","components/data/StatMeter.jsx":"3f9b77414ada","components/data/StateView.jsx":"1db574af4cf3","components/data/Table.jsx":"db3ce677b1a8","components/data/_columns.js":"d862780d1495","components/data/chart-parts.jsx":"20c2a6e5f8b1","components/forms/Calendar.jsx":"343335c77c44","components/forms/Checkbox.jsx":"fa0052232568","components/forms/Combobox.jsx":"c38e8d668db1","components/forms/DatePicker.jsx":"692aed22fa29","components/forms/Field.jsx":"f1b457ce9686","components/forms/FileUpload.jsx":"1b9765bb958f","components/forms/Input.jsx":"a43b7b4b5564","components/forms/InputGroup.jsx":"71d8de495436","components/forms/OtpInput.jsx":"e3eb4e6a8afb","components/forms/PasswordInput.jsx":"3bd1d9eae1b0","components/forms/PasswordMeter.jsx":"0533767a8e34","components/forms/RichText.jsx":"aac8293d49fd","components/forms/Segmented.jsx":"5d3fa220ea03","components/forms/Select.jsx":"378e70b32827","components/forms/Stepper.jsx":"7fe21c7619e6","components/forms/Switch.jsx":"cc99b023531b","components/forms/Textarea.jsx":"2d2aa2984da3","components/layout/Cluster.jsx":"6b4e132e4d5c","components/layout/Container.jsx":"6eda4bc56e54","components/layout/Grid.jsx":"8a093fe6ed4b","components/layout/Page.jsx":"51d1753d201a","components/layout/Section.jsx":"0fee1ca51dc5","components/layout/Split.jsx":"6786154d4ebd","components/layout/Stack.jsx":"005a591d8c24","components/marketing/AnnounceBar.jsx":"dc1787b8fe7e","components/marketing/ArticleCard.jsx":"81f2c4227ced","components/marketing/Byline.jsx":"529ce44347b1","components/marketing/CompareTable.jsx":"1ffe4c6713f5","components/marketing/FeatureGrid.jsx":"ff6d9c74ae63","components/marketing/Flow.jsx":"9ace63bc5975","components/marketing/Hero.jsx":"ba4893068f68","components/marketing/LogoRail.jsx":"1bedd4cadb90","components/marketing/PlanCard.jsx":"39f27cba6a4d","components/marketing/Quote.jsx":"d7d463bc50d4","components/marketing/SiteFooter.jsx":"82207f2c85e5","components/marketing/Steps.jsx":"08dfc37d83e9","components/marketing/StoryCard.jsx":"e28322d02714","components/marketing/_flow-graph.js":"df02b7f5d862","components/nav/AppBar.jsx":"4e104000142e","components/nav/BottomNav.jsx":"570ba83df9c7","components/nav/Breadcrumbs.jsx":"1f2cb1328942","components/nav/CommandPalette.jsx":"48d4ea9554c7","components/nav/LocaleSwitcher.jsx":"c10d52566f7d","components/nav/NavMenu.jsx":"63f181f5ba8d","components/nav/NavToggle.jsx":"7c2def3f8014","components/nav/Sidebar.jsx":"d6b95affe489","components/nav/Tabs.jsx":"09d2bf40f0e0","components/nav/ThemeToggle.jsx":"1bf447a338cb","components/nav/TopBar.jsx":"fd03a8ebf2de","components/overlays/Dialog.jsx":"ff8e21cb381a","components/overlays/Drawer.jsx":"269d2920684c","components/overlays/Menu.jsx":"4764582f0ae8","components/overlays/Popover.jsx":"717f23c3c127","components/overlays/Toast.jsx":"c9e9fc0680cd","components/overlays/Tooltip.jsx":"7b19e7dc9711","components/primitives/Avatar.jsx":"3ad1a1a0cee3","components/primitives/Button.jsx":"a613116ec327","components/primitives/Card.jsx":"4a9c9f081c1b","components/primitives/Chip.jsx":"20bf55453782","components/primitives/Disclosure.jsx":"250d58f947f5","components/primitives/Eyebrow.jsx":"ac1cc5e5856f","components/primitives/Icon.jsx":"d8f42e8663eb","components/primitives/Prose.jsx":"7b629b089f2a","components/primitives/Skeleton.jsx":"76129a849b43","hooks.js":"92c3801e49bc","react.js":"bcb0092cf65a"},"inlinedExternals":[],"unexposedExports":[{"name":"__resetDeprecations","sourcePath":"components/_deprecate.js"},{"name":"deprecate","sourcePath":"components/_deprecate.js"},{"name":"useMergedRef","sourcePath":"components/_merge-refs.js"},{"name":"useRadioGroup","sourcePath":"components/_radio-group.js"},{"name":"normTone","sourcePath":"components/_tone.js"},{"name":"normToneMap","sourcePath":"components/_tone.js"},{"name":"colHeader","sourcePath":"components/data/_columns.js"},{"name":"emitSort","sourcePath":"components/data/_columns.js"},{"name":"legacySortArgs","sourcePath":"components/data/_columns.js"},{"name":"Grid","sourcePath":"components/data/chart-parts.jsx"},{"name":"cx","sourcePath":"components/data/chart-parts.jsx"},{"name":"frame","sourcePath":"components/data/chart-parts.jsx"},{"name":"nf","sourcePath":"components/data/chart-parts.jsx"},{"name":"numberFormat","sourcePath":"components/data/chart-parts.jsx"},{"name":"ticks","sourcePath":"components/data/chart-parts.jsx"},{"name":"isChain","sourcePath":"components/marketing/_flow-graph.js"},{"name":"planGraph","sourcePath":"components/marketing/_flow-graph.js"},{"name":"animateCounter","sourcePath":"hooks.js"},{"name":"paint","sourcePath":"hooks.js"},{"name":"persist","sourcePath":"hooks.js"},{"name":"useDeterministicCascade","sourcePath":"hooks.js"},{"name":"useRailCollapsed","sourcePath":"hooks.js"},{"name":"useReducedMotion","sourcePath":"hooks.js"},{"name":"useReveal","sourcePath":"hooks.js"},{"name":"useSpotlight","sourcePath":"hooks.js"},{"name":"useTheme","sourcePath":"hooks.js"}]} */
+/* @ds-bundle: {"format":4,"namespace":"LeanWiseDesign_f2d907","generator":"tools/lw-bundle.mjs","esbuild":"0.27.7","components":[{"name":"TONES","sourcePath":"components/_tone.js"},{"name":"AgentTrace","sourcePath":"components/ai/AgentTrace.jsx"},{"name":"Artifact","sourcePath":"components/ai/Artifact.jsx"},{"name":"ConfidenceMeter","sourcePath":"components/ai/ConfidenceMeter.jsx"},{"name":"DiffReview","sourcePath":"components/ai/DiffReview.jsx"},{"name":"Feedback","sourcePath":"components/ai/Feedback.jsx"},{"name":"Message","sourcePath":"components/ai/Message.jsx"},{"name":"PromptInput","sourcePath":"components/ai/PromptInput.jsx"},{"name":"SourceChip","sourcePath":"components/ai/SourceChip.jsx"},{"name":"SourceList","sourcePath":"components/ai/SourceList.jsx"},{"name":"ToolCall","sourcePath":"components/ai/ToolCall.jsx"},{"name":"ActivityFeed","sourcePath":"components/data/ActivityFeed.jsx"},{"name":"BUCKET_LABELS","sourcePath":"components/data/ActivityFeed.jsx"},{"name":"RELATIVE_LABELS","sourcePath":"components/data/ActivityFeed.jsx"},{"name":"timeAgo","sourcePath":"components/data/ActivityFeed.jsx"},{"name":"BarChart","sourcePath":"components/data/BarChart.jsx"},{"name":"CHART_PAD","sourcePath":"components/data/chart-parts.jsx"},{"name":"CHART_W","sourcePath":"components/data/chart-parts.jsx"},{"name":"DataTable","sourcePath":"components/data/chart-parts.jsx"},{"name":"Legend","sourcePath":"components/data/chart-parts.jsx"},{"name":"SERIES","sourcePath":"components/data/chart-parts.jsx"},{"name":"CodeBlock","sourcePath":"components/data/CodeBlock.jsx"},{"name":"Console","sourcePath":"components/data/Console.jsx"},{"name":"DataGrid","sourcePath":"components/data/DataGrid.jsx"},{"name":"EmptyState","sourcePath":"components/data/EmptyState.jsx"},{"name":"FilterBar","sourcePath":"components/data/FilterBar.jsx"},{"name":"Toolbar","sourcePath":"components/data/FilterBar.jsx"},{"name":"KpiTile","sourcePath":"components/data/KpiTile.jsx"},{"name":"LineChart","sourcePath":"components/data/LineChart.jsx"},{"name":"Pagination","sourcePath":"components/data/Pagination.jsx"},{"name":"Progress","sourcePath":"components/data/Progress.jsx"},{"name":"StateView","sourcePath":"components/data/StateView.jsx"},{"name":"StatMeter","sourcePath":"components/data/StatMeter.jsx"},{"name":"Table","sourcePath":"components/data/Table.jsx"},{"name":"Calendar","sourcePath":"components/forms/Calendar.jsx"},{"name":"Checkbox","sourcePath":"components/forms/Checkbox.jsx"},{"name":"Combobox","sourcePath":"components/forms/Combobox.jsx"},{"name":"DatePicker","sourcePath":"components/forms/DatePicker.jsx"},{"name":"RANGE_PRESETS","sourcePath":"components/forms/DatePicker.jsx"},{"name":"Field","sourcePath":"components/forms/Field.jsx"},{"name":"FileUpload","sourcePath":"components/forms/FileUpload.jsx"},{"name":"formatBytes","sourcePath":"components/forms/FileUpload.jsx"},{"name":"Input","sourcePath":"components/forms/Input.jsx"},{"name":"InputGroup","sourcePath":"components/forms/InputGroup.jsx"},{"name":"OtpInput","sourcePath":"components/forms/OtpInput.jsx"},{"name":"PasswordInput","sourcePath":"components/forms/PasswordInput.jsx"},{"name":"PasswordMeter","sourcePath":"components/forms/PasswordMeter.jsx"},{"name":"RichText","sourcePath":"components/forms/RichText.jsx"},{"name":"TOOLS","sourcePath":"components/forms/RichText.jsx"},{"name":"Segmented","sourcePath":"components/forms/Segmented.jsx"},{"name":"Select","sourcePath":"components/forms/Select.jsx"},{"name":"Stepper","sourcePath":"components/forms/Stepper.jsx"},{"name":"Switch","sourcePath":"components/forms/Switch.jsx"},{"name":"Textarea","sourcePath":"components/forms/Textarea.jsx"},{"name":"Cluster","sourcePath":"components/layout/Cluster.jsx"},{"name":"Container","sourcePath":"components/layout/Container.jsx"},{"name":"Grid","sourcePath":"components/layout/Grid.jsx"},{"name":"Page","sourcePath":"components/layout/Page.jsx"},{"name":"Section","sourcePath":"components/layout/Section.jsx"},{"name":"Split","sourcePath":"components/layout/Split.jsx"},{"name":"Stack","sourcePath":"components/layout/Stack.jsx"},{"name":"AnnounceBar","sourcePath":"components/marketing/AnnounceBar.jsx"},{"name":"ArticleCard","sourcePath":"components/marketing/ArticleCard.jsx"},{"name":"Byline","sourcePath":"components/marketing/Byline.jsx"},{"name":"CompareTable","sourcePath":"components/marketing/CompareTable.jsx"},{"name":"FeatureGrid","sourcePath":"components/marketing/FeatureGrid.jsx"},{"name":"Flow","sourcePath":"components/marketing/Flow.jsx"},{"name":"Hero","sourcePath":"components/marketing/Hero.jsx"},{"name":"LogoRail","sourcePath":"components/marketing/LogoRail.jsx"},{"name":"PlanCard","sourcePath":"components/marketing/PlanCard.jsx"},{"name":"Quote","sourcePath":"components/marketing/Quote.jsx"},{"name":"SiteFooter","sourcePath":"components/marketing/SiteFooter.jsx"},{"name":"Steps","sourcePath":"components/marketing/Steps.jsx"},{"name":"StoryCard","sourcePath":"components/marketing/StoryCard.jsx"},{"name":"AppBar","sourcePath":"components/nav/AppBar.jsx"},{"name":"BottomNav","sourcePath":"components/nav/BottomNav.jsx"},{"name":"Breadcrumbs","sourcePath":"components/nav/Breadcrumbs.jsx"},{"name":"CommandPalette","sourcePath":"components/nav/CommandPalette.jsx"},{"name":"score","sourcePath":"components/nav/CommandPalette.jsx"},{"name":"LocaleSwitcher","sourcePath":"components/nav/LocaleSwitcher.jsx"},{"name":"NavMenu","sourcePath":"components/nav/NavMenu.jsx"},{"name":"NavToggle","sourcePath":"components/nav/NavToggle.jsx"},{"name":"NavItem","sourcePath":"components/nav/Sidebar.jsx"},{"name":"Sidebar","sourcePath":"components/nav/Sidebar.jsx"},{"name":"Tabs","sourcePath":"components/nav/Tabs.jsx"},{"name":"THEME_LABELS","sourcePath":"components/nav/ThemeToggle.jsx"},{"name":"ThemeToggle","sourcePath":"components/nav/ThemeToggle.jsx"},{"name":"TopBar","sourcePath":"components/nav/TopBar.jsx"},{"name":"Layer","sourcePath":"components/overlays/_layer.js"},{"name":"LayerContext","sourcePath":"components/overlays/_layer.js"},{"name":"Dialog","sourcePath":"components/overlays/Dialog.jsx"},{"name":"Drawer","sourcePath":"components/overlays/Drawer.jsx"},{"name":"Menu","sourcePath":"components/overlays/Menu.jsx"},{"name":"OverlayProvider","sourcePath":"components/overlays/OverlayProvider.jsx"},{"name":"Popover","sourcePath":"components/overlays/Popover.jsx"},{"name":"Toast","sourcePath":"components/overlays/Toast.jsx"},{"name":"ToastRegion","sourcePath":"components/overlays/Toast.jsx"},{"name":"Tooltip","sourcePath":"components/overlays/Tooltip.jsx"},{"name":"Avatar","sourcePath":"components/primitives/Avatar.jsx"},{"name":"Button","sourcePath":"components/primitives/Button.jsx"},{"name":"Card","sourcePath":"components/primitives/Card.jsx"},{"name":"CardBody","sourcePath":"components/primitives/Card.jsx"},{"name":"CardFoot","sourcePath":"components/primitives/Card.jsx"},{"name":"CardHead","sourcePath":"components/primitives/Card.jsx"},{"name":"CardTitle","sourcePath":"components/primitives/Card.jsx"},{"name":"Chip","sourcePath":"components/primitives/Chip.jsx"},{"name":"Disclosure","sourcePath":"components/primitives/Disclosure.jsx"},{"name":"Eyebrow","sourcePath":"components/primitives/Eyebrow.jsx"},{"name":"Icon","sourcePath":"components/primitives/Icon.jsx"},{"name":"iconNames","sourcePath":"components/primitives/Icon.jsx"},{"name":"IconNames","sourcePath":"components/primitives/Icon.jsx"},{"name":"Prose","sourcePath":"components/primitives/Prose.jsx"},{"name":"Skeleton","sourcePath":"components/primitives/Skeleton.jsx"},{"name":"RAIL_KEY","sourcePath":"hooks.js"},{"name":"THEME_EVENT","sourcePath":"hooks.js"},{"name":"THEME_KEY","sourcePath":"hooks.js"}],"sourceHashes":{"components/_deprecate.js":"1c84a2fda110","components/_merge-refs.js":"13fe3c69fe69","components/_radio-group.js":"26caa936f1de","components/_tone.js":"e423d6698432","components/ai/AgentTrace.jsx":"a89cdd6dbfea","components/ai/Artifact.jsx":"2f6f74bc6102","components/ai/ConfidenceMeter.jsx":"30190dcfb803","components/ai/DiffReview.jsx":"3e794caa9ef1","components/ai/Feedback.jsx":"b39a358e07a0","components/ai/Message.jsx":"e507e32b90ca","components/ai/PromptInput.jsx":"93ca1175d24c","components/ai/SourceChip.jsx":"ea58d31896df","components/ai/SourceList.jsx":"60e374a74c6a","components/ai/ToolCall.jsx":"7847c91c8842","components/data/ActivityFeed.jsx":"1e4aaf31913d","components/data/BarChart.jsx":"65761f1d2d2f","components/data/CodeBlock.jsx":"d4f25b21c63d","components/data/Console.jsx":"1593923dd8d8","components/data/DataGrid.jsx":"d6fd83a51115","components/data/EmptyState.jsx":"7340a557f731","components/data/FilterBar.jsx":"dc73bc4398fe","components/data/KpiTile.jsx":"69e34ea19237","components/data/LineChart.jsx":"6c16b6d59c9a","components/data/Pagination.jsx":"8d061ad75816","components/data/Progress.jsx":"0165b3d9952c","components/data/StatMeter.jsx":"3f9b77414ada","components/data/StateView.jsx":"1db574af4cf3","components/data/Table.jsx":"db3ce677b1a8","components/data/_columns.js":"d862780d1495","components/data/chart-parts.jsx":"20c2a6e5f8b1","components/forms/Calendar.jsx":"343335c77c44","components/forms/Checkbox.jsx":"fa0052232568","components/forms/Combobox.jsx":"c38e8d668db1","components/forms/DatePicker.jsx":"692aed22fa29","components/forms/Field.jsx":"f1b457ce9686","components/forms/FileUpload.jsx":"1b9765bb958f","components/forms/Input.jsx":"a43b7b4b5564","components/forms/InputGroup.jsx":"71d8de495436","components/forms/OtpInput.jsx":"e3eb4e6a8afb","components/forms/PasswordInput.jsx":"3bd1d9eae1b0","components/forms/PasswordMeter.jsx":"0533767a8e34","components/forms/RichText.jsx":"aac8293d49fd","components/forms/Segmented.jsx":"5d3fa220ea03","components/forms/Select.jsx":"378e70b32827","components/forms/Stepper.jsx":"7fe21c7619e6","components/forms/Switch.jsx":"cc99b023531b","components/forms/Textarea.jsx":"2d2aa2984da3","components/layout/Cluster.jsx":"6b4e132e4d5c","components/layout/Container.jsx":"6eda4bc56e54","components/layout/Grid.jsx":"8a093fe6ed4b","components/layout/Page.jsx":"51d1753d201a","components/layout/Section.jsx":"0fee1ca51dc5","components/layout/Split.jsx":"6786154d4ebd","components/layout/Stack.jsx":"005a591d8c24","components/marketing/AnnounceBar.jsx":"dc1787b8fe7e","components/marketing/ArticleCard.jsx":"81f2c4227ced","components/marketing/Byline.jsx":"529ce44347b1","components/marketing/CompareTable.jsx":"1ffe4c6713f5","components/marketing/FeatureGrid.jsx":"ff6d9c74ae63","components/marketing/Flow.jsx":"9ace63bc5975","components/marketing/Hero.jsx":"ba4893068f68","components/marketing/LogoRail.jsx":"1bedd4cadb90","components/marketing/PlanCard.jsx":"39f27cba6a4d","components/marketing/Quote.jsx":"d7d463bc50d4","components/marketing/SiteFooter.jsx":"82207f2c85e5","components/marketing/Steps.jsx":"08dfc37d83e9","components/marketing/StoryCard.jsx":"e28322d02714","components/marketing/_flow-graph.js":"df02b7f5d862","components/nav/AppBar.jsx":"4e104000142e","components/nav/BottomNav.jsx":"570ba83df9c7","components/nav/Breadcrumbs.jsx":"1f2cb1328942","components/nav/CommandPalette.jsx":"48d4ea9554c7","components/nav/LocaleSwitcher.jsx":"c10d52566f7d","components/nav/NavMenu.jsx":"63f181f5ba8d","components/nav/NavToggle.jsx":"7c2def3f8014","components/nav/Sidebar.jsx":"d6b95affe489","components/nav/Tabs.jsx":"09d2bf40f0e0","components/nav/ThemeToggle.jsx":"1bf447a338cb","components/nav/TopBar.jsx":"fd03a8ebf2de","components/overlays/Dialog.jsx":"ff8e21cb381a","components/overlays/Drawer.jsx":"269d2920684c","components/overlays/Menu.jsx":"4764582f0ae8","components/overlays/OverlayProvider.jsx":"3191d9e3826e","components/overlays/Popover.jsx":"717f23c3c127","components/overlays/Toast.jsx":"c9e9fc0680cd","components/overlays/Tooltip.jsx":"7b19e7dc9711","components/overlays/_layer.js":"fac4366a1316","components/primitives/Avatar.jsx":"3ad1a1a0cee3","components/primitives/Button.jsx":"093772a6cfd5","components/primitives/Card.jsx":"4a9c9f081c1b","components/primitives/Chip.jsx":"20bf55453782","components/primitives/Disclosure.jsx":"250d58f947f5","components/primitives/Eyebrow.jsx":"ac1cc5e5856f","components/primitives/Icon.jsx":"d8f42e8663eb","components/primitives/Prose.jsx":"7b629b089f2a","components/primitives/Skeleton.jsx":"76129a849b43","hooks.js":"92c3801e49bc","react.js":"d634d039e1c8"},"inlinedExternals":[{"name":"radix-ui","version":"1.6.7"}],"unexposedExports":[{"name":"__resetDeprecations","sourcePath":"components/_deprecate.js"},{"name":"deprecate","sourcePath":"components/_deprecate.js"},{"name":"useMergedRef","sourcePath":"components/_merge-refs.js"},{"name":"useRadioGroup","sourcePath":"components/_radio-group.js"},{"name":"normTone","sourcePath":"components/_tone.js"},{"name":"normToneMap","sourcePath":"components/_tone.js"},{"name":"colHeader","sourcePath":"components/data/_columns.js"},{"name":"emitSort","sourcePath":"components/data/_columns.js"},{"name":"legacySortArgs","sourcePath":"components/data/_columns.js"},{"name":"Grid","sourcePath":"components/data/chart-parts.jsx"},{"name":"cx","sourcePath":"components/data/chart-parts.jsx"},{"name":"frame","sourcePath":"components/data/chart-parts.jsx"},{"name":"nf","sourcePath":"components/data/chart-parts.jsx"},{"name":"numberFormat","sourcePath":"components/data/chart-parts.jsx"},{"name":"ticks","sourcePath":"components/data/chart-parts.jsx"},{"name":"isChain","sourcePath":"components/marketing/_flow-graph.js"},{"name":"planGraph","sourcePath":"components/marketing/_flow-graph.js"},{"name":"mirrorScope","sourcePath":"components/overlays/_layer.js"},{"name":"useLayer","sourcePath":"components/overlays/_layer.js"},{"name":"animateCounter","sourcePath":"hooks.js"},{"name":"paint","sourcePath":"hooks.js"},{"name":"persist","sourcePath":"hooks.js"},{"name":"useDeterministicCascade","sourcePath":"hooks.js"},{"name":"useRailCollapsed","sourcePath":"hooks.js"},{"name":"useReducedMotion","sourcePath":"hooks.js"},{"name":"useReveal","sourcePath":"hooks.js"},{"name":"useSpotlight","sourcePath":"hooks.js"},{"name":"useTheme","sourcePath":"hooks.js"}]} */
 (() => {
   var __create = Object.create;
   var __defProp = Object.defineProperty;
@@ -11,6 +11,10 @@
   };
   var __commonJS = (cb, mod) => function __require() {
     return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+  };
+  var __export = (target, all) => {
+    for (var name in all)
+      __defProp(target, name, { get: all[name], enumerable: true });
   };
   var __copyProps = (to, from, except, desc) => {
     if (from && typeof from === "object" || typeof from === "function") {
@@ -45,6 +49,45 @@
     }
   });
 
+  // ds-shim:ds:react-dom
+  var require_ds_react_dom = __commonJS({
+    "ds-shim:ds:react-dom"(exports, module) {
+      init_ds_inject_react();
+      module.exports = globalThis.ReactDOM;
+    }
+  });
+
+  // ds-shim:ds:jsx-runtime
+  var require_ds_jsx_runtime = __commonJS({
+    "ds-shim:ds:jsx-runtime"(exports, module) {
+      init_ds_inject_react();
+      module.exports = (function createJsxRuntime(React59) {
+        var createElement38 = React59.createElement;
+        var hasOwn = Object.prototype.hasOwnProperty;
+        function j(type, props, key) {
+          var config = {};
+          var children;
+          var hasChildren = false;
+          for (var k in props) {
+            if (!hasOwn.call(props, k)) continue;
+            if (k === "children") {
+              children = props[k];
+              hasChildren = true;
+            } else config[k] = props[k];
+          }
+          if (key !== void 0) config.key = key;
+          if (!hasChildren) return createElement38(type, config);
+          if (Array.isArray(children)) return createElement38.apply(null, [type, config].concat(children));
+          return createElement38(type, config, children);
+        }
+        function jsxDEV(type, props, key) {
+          return j(type, props, key);
+        }
+        return { jsx: j, jsxs: j, jsxDEV, Fragment: React59.Fragment };
+      })(globalThis.React);
+    }
+  });
+
   // ds-entry.js
   init_ds_inject_react();
 
@@ -55,19 +98,20 @@
   init_ds_inject_react();
   var React2 = __toESM(require_ds_react(), 1);
   var cx = (...a) => a.filter(Boolean).join(" ");
-  function Avatar({ name = "", src, size = "md", className, ...rest }) {
+  function Avatar({ name = "", src, size: size4 = "md", className, ...rest }) {
     const [broken, setBroken] = React2.useState(false);
     React2.useEffect(() => setBroken(false), [src]);
     const initials = name.trim().split(/\s+/).slice(0, 2).map((w) => w[0] || "").join("").toUpperCase();
-    return /* @__PURE__ */ React2.createElement("span", { className: cx("lw-avatar", size === "sm" && "lw-avatar-sm", size === "lg" && "lw-avatar-lg", className), title: name || void 0, ...rest }, src && !broken ? /* @__PURE__ */ React2.createElement("img", { src, alt: name, onError: () => setBroken(true) }) : initials);
+    return /* @__PURE__ */ React2.createElement("span", { className: cx("lw-avatar", size4 === "sm" && "lw-avatar-sm", size4 === "lg" && "lw-avatar-lg", className), title: name || void 0, ...rest }, src && !broken ? /* @__PURE__ */ React2.createElement("img", { src, alt: name, onError: () => setBroken(true) }) : initials);
   }
 
   // components/primitives/Button.jsx
   init_ds_inject_react();
+  var React3 = __toESM(require_ds_react(), 1);
   var cx2 = (...a) => a.filter(Boolean).join(" ");
-  function Button({
+  var Button = React3.forwardRef(function Button2({
     variant = "brand",
-    size = "md",
+    size: size4 = "md",
     iconOnly = false,
     loading = false,
     disabled = false,
@@ -77,16 +121,17 @@
     onClick,
     children,
     ...rest
-  }) {
+  }, ref) {
     const Tag = as || (rest.href ? "a" : "button");
-    return /* @__PURE__ */ React.createElement(
+    return /* @__PURE__ */ React3.createElement(
       Tag,
       {
+        ref,
         className: cx2(
           "lw-btn",
           `lw-btn-${variant}`,
-          size === "sm" && "lw-btn-sm",
-          size === "lg" && "lw-btn-lg",
+          size4 === "sm" && "lw-btn-sm",
+          size4 === "lg" && "lw-btn-lg",
           iconOnly && "lw-btn-icon",
           className
         ),
@@ -106,7 +151,8 @@
       },
       children
     );
-  }
+  });
+  Button.displayName = "Button";
 
   // components/primitives/Card.jsx
   init_ds_inject_react();
@@ -209,7 +255,7 @@
 
   // components/primitives/Icon.jsx
   init_ds_inject_react();
-  var React3 = __toESM(require_ds_react(), 1);
+  var React4 = __toESM(require_ds_react(), 1);
   var cx7 = (...a) => a.filter(Boolean).join(" ");
   var ICONS = {
     sidebar: ["M4 5.5A2 2 0 0 1 6 3.5h12a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z", "M10 3.5v17"],
@@ -349,21 +395,21 @@
   };
   var UNKNOWN = ["M5.5 5.5h13v13h-13z", "M9.4 9.4l5.2 5.2", "M14.6 9.4l-5.2 5.2"];
   var warned = /* @__PURE__ */ new Set();
-  function Icon({ name, size = 16, strokeWidth = 1.6, label, className, style, ...rest }) {
+  function Icon({ name, size: size4 = 16, strokeWidth = 1.6, label, className, style, ...rest }) {
     const known = ICONS[name];
     if (!known && !warned.has(name) && typeof console !== "undefined") {
       warned.add(name);
       console.warn(`Icon: no glyph named "${name}". Known names: ${Object.keys(ICONS).join(", ")}`);
     }
     const paths = known || UNKNOWN;
-    return /* @__PURE__ */ React3.createElement(
+    return /* @__PURE__ */ React4.createElement(
       "svg",
       {
         className: cx7("lw-icon", className),
-        width: size,
-        height: size,
+        width: size4,
+        height: size4,
         viewBox: "0 0 24 24",
-        style: { width: size, height: size, ...style },
+        style: { width: size4, height: size4, ...style },
         fill: "none",
         stroke: "currentColor",
         strokeWidth,
@@ -375,7 +421,7 @@
         "data-unknown": known ? void 0 : "true",
         ...rest
       },
-      paths.map((d, i) => /* @__PURE__ */ React3.createElement("path", { key: i, d }))
+      paths.map((d, i) => /* @__PURE__ */ React4.createElement("path", { key: i, d }))
     );
   }
   var iconNames = Object.keys(ICONS);
@@ -436,12 +482,12 @@
   // components/layout/Grid.jsx
   init_ds_inject_react();
   var cx14 = (...a) => a.filter(Boolean).join(" ");
-  function Grid({ min, gap = 16, as: Tag = "div", className, style, children, ...rest }) {
+  function Grid({ min: min2, gap = 16, as: Tag = "div", className, style, children, ...rest }) {
     return /* @__PURE__ */ React.createElement(
       Tag,
       {
         className: cx14("lw-grid", gap === 24 && "lw-grid-24", className),
-        style: min ? { "--lw-grid-min": typeof min === "number" ? min + "px" : min, ...style } : style,
+        style: min2 ? { "--lw-grid-min": typeof min2 === "number" ? min2 + "px" : min2, ...style } : style,
         ...rest
       },
       children
@@ -486,7 +532,7 @@
 
   // components/forms/Field.jsx
   init_ds_inject_react();
-  var React4 = __toESM(require_ds_react(), 1);
+  var React5 = __toESM(require_ds_react(), 1);
   var cx17 = (...a) => a.filter(Boolean).join(" ");
   function Field({
     label,
@@ -501,8 +547,8 @@
     children,
     ...rest
   }) {
-    const auto = React4.useId();
-    const single = React4.Children.count(children) === 1 && React4.isValidElement(children) ? children : null;
+    const auto = React5.useId();
+    const single = React5.Children.count(children) === 1 && React5.isValidElement(children) ? children : null;
     const id = htmlFor || single?.props?.id || auto;
     const msgId = id + "-msg";
     const describedBy = error || help ? [single?.props?.["aria-describedby"], msgId].filter(Boolean).join(" ") : single?.props?.["aria-describedby"];
@@ -510,20 +556,20 @@
     if (describedBy) cloned["aria-describedby"] = describedBy;
     if (error) cloned["aria-invalid"] = "true";
     if (required && single?.props?.required === void 0) cloned.required = true;
-    const wired = single ? React4.cloneElement(single, cloned) : children;
-    return /* @__PURE__ */ React4.createElement("div", { className: cx17("lw-field", className), ...rest }, label && /* @__PURE__ */ React4.createElement("label", { className: "lw-label", htmlFor: id }, label, required && /* @__PURE__ */ React4.createElement(React4.Fragment, null, /* @__PURE__ */ React4.createElement("span", { className: "req", "aria-hidden": "true" }, "*"), /* @__PURE__ */ React4.createElement("span", { className: "lw-sr-only" }, requiredLabel)), optional && /* @__PURE__ */ React4.createElement("span", { className: "opt" }, optionalLabel)), typeof children === "function" ? children({ id, "aria-describedby": error || help ? msgId : void 0, "aria-invalid": error ? "true" : void 0, required }) : wired, error ? /* @__PURE__ */ React4.createElement("span", { className: "lw-error", id: msgId, role: "alert" }, error) : help ? /* @__PURE__ */ React4.createElement("span", { className: "lw-help", id: msgId }, help) : null);
+    const wired = single ? React5.cloneElement(single, cloned) : children;
+    return /* @__PURE__ */ React5.createElement("div", { className: cx17("lw-field", className), ...rest }, label && /* @__PURE__ */ React5.createElement("label", { className: "lw-label", htmlFor: id }, label, required && /* @__PURE__ */ React5.createElement(React5.Fragment, null, /* @__PURE__ */ React5.createElement("span", { className: "req", "aria-hidden": "true" }, "*"), /* @__PURE__ */ React5.createElement("span", { className: "lw-sr-only" }, requiredLabel)), optional && /* @__PURE__ */ React5.createElement("span", { className: "opt" }, optionalLabel)), typeof children === "function" ? children({ id, "aria-describedby": error || help ? msgId : void 0, "aria-invalid": error ? "true" : void 0, required }) : wired, error ? /* @__PURE__ */ React5.createElement("span", { className: "lw-error", id: msgId, role: "alert" }, error) : help ? /* @__PURE__ */ React5.createElement("span", { className: "lw-help", id: msgId }, help) : null);
   }
 
   // components/forms/Input.jsx
   init_ds_inject_react();
-  var React5 = __toESM(require_ds_react(), 1);
+  var React6 = __toESM(require_ds_react(), 1);
   var cx18 = (...a) => a.filter(Boolean).join(" ");
-  var Input = React5.forwardRef(function Input2({ size = "md", invalid, className, ...rest }, ref) {
-    return /* @__PURE__ */ React5.createElement(
+  var Input = React6.forwardRef(function Input2({ size: size4 = "md", invalid, className, ...rest }, ref) {
+    return /* @__PURE__ */ React6.createElement(
       "input",
       {
         ref,
-        className: cx18("lw-input", size === "sm" && "lw-input-sm", size === "lg" && "lw-input-lg", className),
+        className: cx18("lw-input", size4 === "sm" && "lw-input-sm", size4 === "lg" && "lw-input-lg", className),
         "aria-invalid": invalid ? "true" : void 0,
         ...rest
       }
@@ -539,10 +585,10 @@
 
   // components/forms/PasswordInput.jsx
   init_ds_inject_react();
-  var React6 = __toESM(require_ds_react(), 1);
+  var React7 = __toESM(require_ds_react(), 1);
   var cx20 = (...a) => a.filter(Boolean).join(" ");
-  var PasswordInput = React6.forwardRef(function PasswordInput2({
-    size,
+  var PasswordInput = React7.forwardRef(function PasswordInput2({
+    size: size4,
     invalid,
     /* These NAME THE CURRENT STATE, per the note above — "the password is
        hidden", not "show the password". The first version of this shipped the
@@ -554,24 +600,24 @@
     className,
     ...rest
   }, ref) {
-    const [revealed, setRevealed] = React6.useState(false);
-    const [caps, setCaps] = React6.useState(false);
+    const [revealed, setRevealed] = React7.useState(false);
+    const [caps, setCaps] = React7.useState(false);
     const readCaps = (e) => {
       if (typeof e.getModifierState !== "function") return;
       const on = e.getModifierState("CapsLock");
       setCaps(on);
       onCapsLockChange?.(on);
     };
-    return /* @__PURE__ */ React6.createElement("div", { className: cx20("lw-pw", className) }, /* @__PURE__ */ React6.createElement(
+    return /* @__PURE__ */ React7.createElement("div", { className: cx20("lw-pw", className) }, /* @__PURE__ */ React7.createElement(
       "div",
       {
         className: cx20(
           "lw-input-group",
-          size === "sm" && "lw-input-group-sm",
-          size === "lg" && "lw-input-group-lg"
+          size4 === "sm" && "lw-input-group-sm",
+          size4 === "lg" && "lw-input-group-lg"
         )
       },
-      /* @__PURE__ */ React6.createElement(
+      /* @__PURE__ */ React7.createElement(
         "input",
         {
           ref,
@@ -583,7 +629,7 @@
           ...rest
         }
       ),
-      /* @__PURE__ */ React6.createElement(
+      /* @__PURE__ */ React7.createElement(
         "button",
         {
           type: "button",
@@ -594,9 +640,9 @@
           onClick: () => setRevealed((v) => !v),
           "data-testid": "password-reveal"
         },
-        /* @__PURE__ */ React6.createElement(Icon, { name: revealed ? "eye-off" : "eye", size: 16 })
+        /* @__PURE__ */ React7.createElement(Icon, { name: revealed ? "eye-off" : "eye", size: 16 })
       )
-    ), /* @__PURE__ */ React6.createElement("p", { className: "lw-help lw-pw-caps", role: "status", "data-on": caps ? "true" : void 0 }, caps ? capsLockLabel : ""));
+    ), /* @__PURE__ */ React7.createElement("p", { className: "lw-help lw-pw-caps", role: "status", "data-on": caps ? "true" : void 0 }, caps ? capsLockLabel : ""));
   });
 
   // components/forms/PasswordMeter.jsx
@@ -614,13 +660,13 @@
 
   // components/forms/OtpInput.jsx
   init_ds_inject_react();
-  var React7 = __toESM(require_ds_react(), 1);
+  var React8 = __toESM(require_ds_react(), 1);
   var cx22 = (...a) => a.filter(Boolean).join(" ");
-  var OtpInput = React7.forwardRef(function OtpInput2({ length = 6, value, defaultValue = "", onChange, onComplete, invalid, className, ...rest }, ref) {
-    const [internal, setInternal] = React7.useState(defaultValue);
+  var OtpInput = React8.forwardRef(function OtpInput2({ length = 6, value, defaultValue = "", onChange, onComplete, invalid, className, ...rest }, ref) {
+    const [internal, setInternal] = React8.useState(defaultValue);
     const isControlled = value != null;
     const code = isControlled ? value : internal;
-    const fired = React7.useRef(null);
+    const fired = React8.useRef(null);
     const set = (next) => {
       const digits = String(next).replace(/\D+/g, "").slice(0, length);
       if (!isControlled) setInternal(digits);
@@ -634,7 +680,7 @@
         fired.current = null;
       }
     };
-    return /* @__PURE__ */ React7.createElement(
+    return /* @__PURE__ */ React8.createElement(
       "input",
       {
         ref,
@@ -656,49 +702,49 @@
 
   // components/forms/Textarea.jsx
   init_ds_inject_react();
-  var React8 = __toESM(require_ds_react(), 1);
+  var React9 = __toESM(require_ds_react(), 1);
   var cx23 = (...a) => a.filter(Boolean).join(" ");
-  var Textarea = React8.forwardRef(function Textarea2({ invalid, className, ...rest }, ref) {
-    return /* @__PURE__ */ React8.createElement("textarea", { ref, className: cx23("lw-textarea", className), "aria-invalid": invalid ? "true" : void 0, ...rest });
+  var Textarea = React9.forwardRef(function Textarea2({ invalid, className, ...rest }, ref) {
+    return /* @__PURE__ */ React9.createElement("textarea", { ref, className: cx23("lw-textarea", className), "aria-invalid": invalid ? "true" : void 0, ...rest });
   });
 
   // components/forms/Select.jsx
   init_ds_inject_react();
-  var React9 = __toESM(require_ds_react(), 1);
+  var React10 = __toESM(require_ds_react(), 1);
   var cx24 = (...a) => a.filter(Boolean).join(" ");
-  var Select = React9.forwardRef(function Select2({ options, invalid, className, children, ...rest }, ref) {
-    return /* @__PURE__ */ React9.createElement("select", { ref, className: cx24("lw-select", className), "aria-invalid": invalid ? "true" : void 0, ...rest }, options ? options.map((o) => {
+  var Select = React10.forwardRef(function Select2({ options, invalid, className, children, ...rest }, ref) {
+    return /* @__PURE__ */ React10.createElement("select", { ref, className: cx24("lw-select", className), "aria-invalid": invalid ? "true" : void 0, ...rest }, options ? options.map((o) => {
       const v = typeof o === "string" ? o : o.value;
       const l = typeof o === "string" ? o : o.label;
-      return /* @__PURE__ */ React9.createElement("option", { key: v, value: v }, l);
+      return /* @__PURE__ */ React10.createElement("option", { key: v, value: v }, l);
     }) : children);
   });
 
   // components/forms/Switch.jsx
   init_ds_inject_react();
-  var React10 = __toESM(require_ds_react(), 1);
+  var React11 = __toESM(require_ds_react(), 1);
   var cx25 = (...a) => a.filter(Boolean).join(" ");
-  var Switch = React10.forwardRef(function Switch2({ label, className, ...rest }, ref) {
-    return /* @__PURE__ */ React10.createElement("label", { className: cx25("lw-switch", className) }, /* @__PURE__ */ React10.createElement("input", { ref, type: "checkbox", role: "switch", ...rest }), /* @__PURE__ */ React10.createElement("span", { className: "track" }), label && /* @__PURE__ */ React10.createElement("span", { className: "lw-switch-text" }, label));
+  var Switch = React11.forwardRef(function Switch2({ label, className, ...rest }, ref) {
+    return /* @__PURE__ */ React11.createElement("label", { className: cx25("lw-switch", className) }, /* @__PURE__ */ React11.createElement("input", { ref, type: "checkbox", role: "switch", ...rest }), /* @__PURE__ */ React11.createElement("span", { className: "track" }), label && /* @__PURE__ */ React11.createElement("span", { className: "lw-switch-text" }, label));
   });
 
   // components/forms/Checkbox.jsx
   init_ds_inject_react();
-  var React11 = __toESM(require_ds_react(), 1);
+  var React12 = __toESM(require_ds_react(), 1);
   var cx26 = (...a) => a.filter(Boolean).join(" ");
-  var Checkbox = React11.forwardRef(function Checkbox2({ label, radio = false, className, ...rest }, ref) {
-    return /* @__PURE__ */ React11.createElement("label", { className: cx26("lw-check", radio && "radio", className) }, /* @__PURE__ */ React11.createElement("input", { ref, type: radio ? "radio" : "checkbox", ...rest }), /* @__PURE__ */ React11.createElement("span", { className: "box" }), label && /* @__PURE__ */ React11.createElement("span", { className: "lw-check-text" }, label));
+  var Checkbox = React12.forwardRef(function Checkbox2({ label, radio = false, className, ...rest }, ref) {
+    return /* @__PURE__ */ React12.createElement("label", { className: cx26("lw-check", radio && "radio", className) }, /* @__PURE__ */ React12.createElement("input", { ref, type: radio ? "radio" : "checkbox", ...rest }), /* @__PURE__ */ React12.createElement("span", { className: "box" }), label && /* @__PURE__ */ React12.createElement("span", { className: "lw-check-text" }, label));
   });
 
   // components/forms/Segmented.jsx
   init_ds_inject_react();
-  var React14 = __toESM(require_ds_react(), 1);
+  var React15 = __toESM(require_ds_react(), 1);
 
   // components/_merge-refs.js
   init_ds_inject_react();
-  var React12 = __toESM(require_ds_react(), 1);
+  var React13 = __toESM(require_ds_react(), 1);
   function useMergedRef(localRef, forwardedRef) {
-    return React12.useCallback(
+    return React13.useCallback(
       (node) => {
         localRef.current = node;
         if (typeof forwardedRef === "function") forwardedRef(node);
@@ -710,9 +756,9 @@
 
   // components/_radio-group.js
   init_ds_inject_react();
-  var React13 = __toESM(require_ds_react(), 1);
+  var React14 = __toESM(require_ds_react(), 1);
   function useRadioGroup(values, value, select) {
-    const ref = React13.useRef(null);
+    const ref = React14.useRef(null);
     const at = values.indexOf(value);
     const tabIndexFor = (i) => at === -1 ? i === 0 ? 0 : -1 : i === at ? 0 : -1;
     const onKeyDown = (e) => {
@@ -734,7 +780,7 @@
 
   // components/forms/Segmented.jsx
   var cx27 = (...a) => a.filter(Boolean).join(" ");
-  var Segmented = React14.forwardRef(function Segmented2({ options = [], value, onChange, label, className, ...rest }, forwardedRef) {
+  var Segmented = React15.forwardRef(function Segmented2({ options = [], value, onChange, label, className, ...rest }, forwardedRef) {
     const opts = options.map((o) => typeof o === "string" ? { value: o, label: o } : o);
     const { ref, onKeyDown, tabIndexFor } = useRadioGroup(
       opts.map((o) => o.value),
@@ -742,7 +788,7 @@
       (v) => onChange && onChange(v)
     );
     const setGroupRef = useMergedRef(ref, forwardedRef);
-    return /* @__PURE__ */ React14.createElement(
+    return /* @__PURE__ */ React15.createElement(
       "div",
       {
         ref: setGroupRef,
@@ -752,7 +798,7 @@
         onKeyDown,
         ...rest
       },
-      opts.map((o, i) => /* @__PURE__ */ React14.createElement(
+      opts.map((o, i) => /* @__PURE__ */ React15.createElement(
         "button",
         {
           key: o.value,
@@ -769,25 +815,25 @@
 
   // components/forms/Combobox.jsx
   init_ds_inject_react();
-  var React16 = __toESM(require_ds_react(), 1);
+  var React17 = __toESM(require_ds_react(), 1);
 
   // components/overlays/Popover.jsx
   init_ds_inject_react();
-  var React15 = __toESM(require_ds_react(), 1);
+  var React16 = __toESM(require_ds_react(), 1);
   var cx28 = (...a) => a.filter(Boolean).join(" ");
-  function place(anchorRect, panelRect, placement, offset) {
+  function place(anchorRect, panelRect, placement, offset4) {
     const vw = window.innerWidth, vh = window.innerHeight, pad = 8;
     let [side, align = "start"] = String(placement).split("-");
-    const fitsBelow = anchorRect.bottom + offset + panelRect.height <= vh - pad;
-    const fitsAbove = anchorRect.top - offset - panelRect.height >= pad;
+    const fitsBelow = anchorRect.bottom + offset4 + panelRect.height <= vh - pad;
+    const fitsAbove = anchorRect.top - offset4 - panelRect.height >= pad;
     if (side === "bottom" && !fitsBelow && fitsAbove) side = "top";
     else if (side === "top" && !fitsAbove && fitsBelow) side = "bottom";
     let top, left;
-    if (side === "top") top = anchorRect.top - offset - panelRect.height;
-    else if (side === "bottom") top = anchorRect.bottom + offset;
+    if (side === "top") top = anchorRect.top - offset4 - panelRect.height;
+    else if (side === "bottom") top = anchorRect.bottom + offset4;
     else top = align === "end" ? anchorRect.bottom - panelRect.height : anchorRect.top;
-    if (side === "left") left = anchorRect.left - offset - panelRect.width;
-    else if (side === "right") left = anchorRect.right + offset;
+    if (side === "left") left = anchorRect.left - offset4 - panelRect.width;
+    else if (side === "right") left = anchorRect.right + offset4;
     else if (align === "end") left = anchorRect.right - panelRect.width;
     else if (align === "center") left = anchorRect.left + (anchorRect.width - panelRect.width) / 2;
     else left = anchorRect.left;
@@ -801,7 +847,7 @@
     defaultOpen = false,
     onOpenChange,
     placement = "bottom-start",
-    offset = 6,
+    offset: offset4 = 6,
     matchWidth,
     label,
     role = "dialog",
@@ -811,28 +857,28 @@
     children,
     ...rest
   }) {
-    const [uncontrolled, setUncontrolled] = React15.useState(defaultOpen);
+    const [uncontrolled, setUncontrolled] = React16.useState(defaultOpen);
     const isControlled = openProp != null;
     const open = isControlled ? openProp : uncontrolled;
-    const anchorRef = React15.useRef(null);
-    const panelRef = React15.useRef(null);
-    const uid = React15.useId();
+    const anchorRef = React16.useRef(null);
+    const panelRef = React16.useRef(null);
+    const uid = React16.useId();
     const anchorEl = () => {
       const w = anchorRef.current;
       return w && w.firstElementChild || w;
     };
-    const setOpen = React15.useCallback((next) => {
+    const setOpen = React16.useCallback((next) => {
       if (!isControlled) setUncontrolled(next);
       onOpenChange && onOpenChange(next);
     }, [isControlled, onOpenChange]);
-    React15.useEffect(() => {
+    React16.useEffect(() => {
       const el = panelRef.current;
       if (!el || typeof el.showPopover !== "function") return;
       const isOpen = el.matches(":popover-open");
       if (open && !isOpen) el.showPopover();
       if (!open && isOpen) el.hidePopover();
     }, [open]);
-    React15.useEffect(() => {
+    React16.useEffect(() => {
       if (!open) return;
       const reposition = () => {
         const anchor = anchorEl(), panel = panelRef.current;
@@ -840,7 +886,7 @@
         const rect = anchor.getBoundingClientRect();
         if (!rect.width && !rect.height) return;
         if (matchWidth) panel.style.minWidth = rect.width + "px";
-        const pos = place(rect, panel.getBoundingClientRect(), placement, offset);
+        const pos = place(rect, panel.getBoundingClientRect(), placement, offset4);
         panel.style.top = pos.top + "px";
         panel.style.left = pos.left + "px";
         panel.dataset.side = pos.side;
@@ -861,8 +907,8 @@
         window.removeEventListener("scroll", onScrollOrResize, true);
         window.removeEventListener("resize", onScrollOrResize);
       };
-    }, [open, placement, offset, matchWidth]);
-    React15.useEffect(() => {
+    }, [open, placement, offset4, matchWidth]);
+    React16.useEffect(() => {
       if (!open) return;
       const onPointerDown = (e) => {
         const anchor = anchorRef.current, panel = panelRef.current;
@@ -884,8 +930,8 @@
         document.removeEventListener("keydown", onKeyDown, true);
       };
     }, [open, setOpen]);
-    const wasOpen = React15.useRef(false);
-    React15.useEffect(() => {
+    const wasOpen = React16.useRef(false);
+    React16.useEffect(() => {
       const closing = wasOpen.current && !open;
       wasOpen.current = open;
       if (!closing) return;
@@ -895,7 +941,7 @@
       if (t && t.focus) t.focus({ preventScroll: true });
     }, [open]);
     const HASPOPUP = { menu: "menu", listbox: "listbox", grid: "grid", dialog: "dialog" };
-    const triggerEl = React15.isValidElement(trigger) ? React15.cloneElement(trigger, {
+    const triggerEl = React16.isValidElement(trigger) ? React16.cloneElement(trigger, {
       // A combobox input carries role="combobox" and its own aria-expanded /
       // aria-controls / aria-activedescendant. Cloning a second set onto the
       // field wrapper would announce two controls where there is one.
@@ -907,7 +953,7 @@
         if (!e.defaultPrevented) setOpen(!open);
       }
     }) : trigger;
-    return /* @__PURE__ */ React15.createElement(React15.Fragment, null, /* @__PURE__ */ React15.createElement("span", { className: "lw-popover-anchor", ref: anchorRef }, triggerEl), /* @__PURE__ */ React15.createElement(
+    return /* @__PURE__ */ React16.createElement(React16.Fragment, null, /* @__PURE__ */ React16.createElement("span", { className: "lw-popover-anchor", ref: anchorRef }, triggerEl), /* @__PURE__ */ React16.createElement(
       "div",
       {
         ref: panelRef,
@@ -927,13 +973,13 @@
   // components/forms/Combobox.jsx
   var cx29 = (...a) => a.filter(Boolean).join(" ");
   var norm = (o) => typeof o === "string" || typeof o === "number" ? { value: o, label: String(o) } : o;
-  var Combobox = React16.forwardRef(function Combobox2({
+  var Combobox = React17.forwardRef(function Combobox2({
     options = [],
     value,
     onChange,
     multiple,
     placeholder,
-    size = "md",
+    size: size4 = "md",
     invalid,
     disabled,
     loading,
@@ -946,28 +992,28 @@
     className,
     ...rest
   }, forwardedRef) {
-    const opts = React16.useMemo(() => options.map(norm), [options]);
-    const [open, setOpen] = React16.useState(false);
-    const [query, setQuery] = React16.useState("");
-    const [active, setActive] = React16.useState(0);
-    const inputRef = React16.useRef(null);
+    const opts = React17.useMemo(() => options.map(norm), [options]);
+    const [open, setOpen] = React17.useState(false);
+    const [query, setQuery] = React17.useState("");
+    const [active, setActive] = React17.useState(0);
+    const inputRef = React17.useRef(null);
     const setInputRef = useMergedRef(inputRef, forwardedRef);
-    const listRef = React16.useRef(null);
-    const uid = React16.useId();
+    const listRef = React17.useRef(null);
+    const uid = React17.useId();
     const listId = uid + "-list";
     const inputId = id || uid + "-in";
     const selected = multiple ? Array.isArray(value) ? value : [] : value;
     const selectedOpts = multiple ? opts.filter((o) => selected.includes(o.value)) : [];
     const current = !multiple ? opts.find((o) => o.value === value) : null;
-    const shown = React16.useMemo(() => {
+    const shown = React17.useMemo(() => {
       if (onSearch || !query) return opts;
       const q = query.toLowerCase();
       return opts.filter((o) => String(o.label).toLowerCase().includes(q));
     }, [opts, query, onSearch]);
-    React16.useEffect(() => {
+    React17.useEffect(() => {
       if (active >= shown.length) setActive(0);
     }, [shown.length, active]);
-    React16.useEffect(() => {
+    React17.useEffect(() => {
       if (!open || !listRef.current) return;
       const el = listRef.current.querySelector('[data-active="true"]');
       if (el && el.offsetParent) {
@@ -1011,16 +1057,16 @@
       }
       if (e.key === "Backspace" && multiple && !query && selected.length) return remove(selected[selected.length - 1]);
     };
-    const field = /* @__PURE__ */ React16.createElement(
+    const field = /* @__PURE__ */ React17.createElement(
       "div",
       {
-        className: cx29("lw-combo", size === "sm" && "lw-combo-sm", size === "lg" && "lw-combo-lg", className),
+        className: cx29("lw-combo", size4 === "sm" && "lw-combo-sm", size4 === "lg" && "lw-combo-lg", className),
         "data-disabled": disabled ? "true" : void 0,
         onMouseDown: (e) => {
           if (e.target === e.currentTarget && inputRef.current) inputRef.current.focus();
         }
       },
-      selectedOpts.map((o) => /* @__PURE__ */ React16.createElement("span", { key: o.value, className: "lw-combo-token" }, /* @__PURE__ */ React16.createElement("span", null, o.label), /* @__PURE__ */ React16.createElement(
+      selectedOpts.map((o) => /* @__PURE__ */ React17.createElement("span", { key: o.value, className: "lw-combo-token" }, /* @__PURE__ */ React17.createElement("span", null, o.label), /* @__PURE__ */ React17.createElement(
         "button",
         {
           type: "button",
@@ -1028,9 +1074,9 @@
           onMouseDown: (e) => e.preventDefault(),
           onClick: () => remove(o.value)
         },
-        /* @__PURE__ */ React16.createElement(Icon, { name: "close", size: 11 })
+        /* @__PURE__ */ React17.createElement(Icon, { name: "close", size: 11 })
       ))),
-      /* @__PURE__ */ React16.createElement(
+      /* @__PURE__ */ React17.createElement(
         "input",
         {
           ref: setInputRef,
@@ -1057,9 +1103,9 @@
           onFocus: () => setOpen(true)
         }
       ),
-      /* @__PURE__ */ React16.createElement("span", { className: "lw-combo-chev" }, /* @__PURE__ */ React16.createElement(Icon, { name: "chevrons-up-down", size: 15 }))
+      /* @__PURE__ */ React17.createElement("span", { className: "lw-combo-chev" }, /* @__PURE__ */ React17.createElement(Icon, { name: "chevrons-up-down", size: 15 }))
     );
-    return /* @__PURE__ */ React16.createElement(
+    return /* @__PURE__ */ React17.createElement(
       Popover,
       {
         trigger: field,
@@ -1072,9 +1118,9 @@
         label,
         ...rest
       },
-      loading ? /* @__PURE__ */ React16.createElement("div", { id: listId, role: "listbox", "aria-busy": "true", className: "lw-listbox-empty" }, loadingText) : !shown.length ? /* @__PURE__ */ React16.createElement("div", { id: listId, role: "listbox", className: "lw-listbox-empty" }, emptyText) : /* @__PURE__ */ React16.createElement("ul", { ref: listRef, className: "lw-listbox", id: listId, role: "listbox", "aria-multiselectable": multiple || void 0 }, shown.map((o, i) => {
+      loading ? /* @__PURE__ */ React17.createElement("div", { id: listId, role: "listbox", "aria-busy": "true", className: "lw-listbox-empty" }, loadingText) : !shown.length ? /* @__PURE__ */ React17.createElement("div", { id: listId, role: "listbox", className: "lw-listbox-empty" }, emptyText) : /* @__PURE__ */ React17.createElement("ul", { ref: listRef, className: "lw-listbox", id: listId, role: "listbox", "aria-multiselectable": multiple || void 0 }, shown.map((o, i) => {
         const isSel = multiple ? selected.includes(o.value) : o.value === value;
-        return /* @__PURE__ */ React16.createElement(
+        return /* @__PURE__ */ React17.createElement(
           "li",
           {
             key: o.value,
@@ -1088,9 +1134,9 @@
             onMouseDown: (e) => e.preventDefault(),
             onClick: () => commit(o)
           },
-          /* @__PURE__ */ React16.createElement("span", { className: "lw-option-lead" }, isSel && /* @__PURE__ */ React16.createElement(Icon, { name: "checkmark", size: 14 })),
-          /* @__PURE__ */ React16.createElement("span", { className: "lw-option-text" }, o.label),
-          o.meta && /* @__PURE__ */ React16.createElement("span", { className: "lw-option-meta" }, o.meta)
+          /* @__PURE__ */ React17.createElement("span", { className: "lw-option-lead" }, isSel && /* @__PURE__ */ React17.createElement(Icon, { name: "checkmark", size: 14 })),
+          /* @__PURE__ */ React17.createElement("span", { className: "lw-option-text" }, o.label),
+          o.meta && /* @__PURE__ */ React17.createElement("span", { className: "lw-option-meta" }, o.meta)
         );
       }))
     );
@@ -1098,7 +1144,7 @@
 
   // components/forms/Calendar.jsx
   init_ds_inject_react();
-  var React17 = __toESM(require_ds_react(), 1);
+  var React18 = __toESM(require_ds_react(), 1);
   var cx30 = (...a) => a.filter(Boolean).join(" ");
   var day = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate());
   var same = (a, b) => a && b && day(a).getTime() === day(b).getTime();
@@ -1120,8 +1166,8 @@
     range,
     month,
     onMonthChange,
-    min,
-    max,
+    min: min2,
+    max: max2,
     weekStart = 1,
     locale,
     prevMonthLabel = "Previous month",
@@ -1131,15 +1177,15 @@
   }) {
     const sel = range ? value || {} : value;
     const anchor = (range ? sel.start : sel) || /* @__PURE__ */ new Date();
-    const [viewRaw, setView] = React17.useState(() => addMonths(anchor, 0));
+    const [viewRaw, setView] = React18.useState(() => addMonths(anchor, 0));
     const view = month || viewRaw;
     const setMonth = (m) => {
       onMonthChange ? onMonthChange(m) : setView(m);
     };
-    const [focused, setFocused] = React17.useState(() => day(anchor));
-    const [hover, setHover] = React17.useState(null);
-    const gridRef = React17.useRef(null);
-    const navving = React17.useRef(false);
+    const [focused, setFocused] = React18.useState(() => day(anchor));
+    const [hover, setHover] = React18.useState(null);
+    const gridRef = React18.useRef(null);
+    const navving = React18.useRef(false);
     const fmtMonth = new Intl.DateTimeFormat(locale, { month: "long", year: "numeric" });
     const fmtDow = new Intl.DateTimeFormat(locale, { weekday: "narrow" });
     const fmtFull = new Intl.DateTimeFormat(locale, { weekday: "long", day: "numeric", month: "long", year: "numeric" });
@@ -1148,7 +1194,7 @@
     const cells = Array.from({ length: 42 }, (_, i) => addDays(first, i - lead));
     const dows = Array.from({ length: 7 }, (_, i) => fmtDow.format(addDays(new Date(2024, 0, 7 + weekStart), i)));
     const weeks = Array.from({ length: 6 }, (_, w) => cells.slice(w * 7, w * 7 + 7));
-    const disabled = (d) => min && day(d) < day(min) || max && day(d) > day(max);
+    const disabled = (d) => min2 && day(d) < day(min2) || max2 && day(d) > day(max2);
     const isSelected = (d) => range ? same(d, sel.start) || same(d, sel.end) : same(d, sel);
     const inRange = (d) => {
       if (!range) return false;
@@ -1167,11 +1213,11 @@
       setFocused(next);
       if (next.getMonth() !== view.getMonth()) setMonth(addMonths(next, 0));
     };
-    const [today, setToday] = React17.useState(null);
-    React17.useEffect(() => {
+    const [today, setToday] = React18.useState(null);
+    React18.useEffect(() => {
       setToday(day(/* @__PURE__ */ new Date()));
     }, []);
-    React17.useEffect(() => {
+    React18.useEffect(() => {
       if (!navving.current) return;
       navving.current = false;
       const el = gridRef.current && gridRef.current.querySelector('[tabindex="0"]');
@@ -1201,12 +1247,12 @@
         return moveFocus(addDays(focused, 6 - (focused.getDay() - weekStart + 7) % 7));
       }
     };
-    return /* @__PURE__ */ React17.createElement("div", { className: cx30("lw-cal", className), ...rest }, /* @__PURE__ */ React17.createElement("div", { className: "lw-cal-head" }, /* @__PURE__ */ React17.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": prevMonthLabel, onClick: () => setMonth(addMonths(view, -1)) }, /* @__PURE__ */ React17.createElement(Icon, { name: "chevron-left", size: 16 })), /* @__PURE__ */ React17.createElement("div", { className: "lw-cal-month", "aria-live": "polite" }, fmtMonth.format(view)), /* @__PURE__ */ React17.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": nextMonthLabel, onClick: () => setMonth(addMonths(view, 1)) }, /* @__PURE__ */ React17.createElement(Icon, { name: "chevron-right", size: 16 }))), /* @__PURE__ */ React17.createElement("div", { ref: gridRef, className: "lw-cal-grid", role: "grid", onKeyDown, onMouseLeave: () => setHover(null) }, /* @__PURE__ */ React17.createElement("div", { role: "row", className: "lw-cal-dow-row" }, dows.map((d, i) => /* @__PURE__ */ React17.createElement("div", { key: i, role: "columnheader", className: "lw-cal-dow" }, d))), /* @__PURE__ */ React17.createElement("div", { role: "rowgroup", className: "lw-cal-weeks" }, weeks.map((week, w) => /* @__PURE__ */ React17.createElement("div", { key: w, role: "row", className: "lw-cal-week" }, week.map((d, i) => {
+    return /* @__PURE__ */ React18.createElement("div", { className: cx30("lw-cal", className), ...rest }, /* @__PURE__ */ React18.createElement("div", { className: "lw-cal-head" }, /* @__PURE__ */ React18.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": prevMonthLabel, onClick: () => setMonth(addMonths(view, -1)) }, /* @__PURE__ */ React18.createElement(Icon, { name: "chevron-left", size: 16 })), /* @__PURE__ */ React18.createElement("div", { className: "lw-cal-month", "aria-live": "polite" }, fmtMonth.format(view)), /* @__PURE__ */ React18.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": nextMonthLabel, onClick: () => setMonth(addMonths(view, 1)) }, /* @__PURE__ */ React18.createElement(Icon, { name: "chevron-right", size: 16 }))), /* @__PURE__ */ React18.createElement("div", { ref: gridRef, className: "lw-cal-grid", role: "grid", onKeyDown, onMouseLeave: () => setHover(null) }, /* @__PURE__ */ React18.createElement("div", { role: "row", className: "lw-cal-dow-row" }, dows.map((d, i) => /* @__PURE__ */ React18.createElement("div", { key: i, role: "columnheader", className: "lw-cal-dow" }, d))), /* @__PURE__ */ React18.createElement("div", { role: "rowgroup", className: "lw-cal-weeks" }, weeks.map((week, w) => /* @__PURE__ */ React18.createElement("div", { key: w, role: "row", className: "lw-cal-week" }, week.map((d, i) => {
       const outside = d.getMonth() !== view.getMonth();
       const selected = isSelected(d);
       const end = range ? sel.end || hover : null;
       const off = disabled(d);
-      return /* @__PURE__ */ React17.createElement(
+      return /* @__PURE__ */ React18.createElement(
         "button",
         {
           key: i,
@@ -1234,7 +1280,7 @@
 
   // components/forms/DatePicker.jsx
   init_ds_inject_react();
-  var React18 = __toESM(require_ds_react(), 1);
+  var React19 = __toESM(require_ds_react(), 1);
   var cx31 = (...a) => a.filter(Boolean).join(" ");
   var day2 = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate());
   var shift = (n) => {
@@ -1248,14 +1294,14 @@
     { label: "Last 30 days", get: () => ({ start: shift(-29), end: day2(/* @__PURE__ */ new Date()) }) },
     { label: "Last 90 days", get: () => ({ start: shift(-89), end: day2(/* @__PURE__ */ new Date()) }) }
   ];
-  var DatePicker = React18.forwardRef(function DatePicker2({
+  var DatePicker = React19.forwardRef(function DatePicker2({
     value,
     onChange,
     range,
     presets = RANGE_PRESETS,
-    min,
-    max,
-    size = "md",
+    min: min2,
+    max: max2,
+    size: size4 = "md",
     invalid,
     disabled,
     placeholder,
@@ -1265,10 +1311,10 @@
     className,
     ...rest
   }, forwardedRef) {
-    const [open, setOpen] = React18.useState(false);
-    const uid = React18.useId();
+    const [open, setOpen] = React19.useState(false);
+    const uid = React19.useId();
     const fmt2 = new Intl.DateTimeFormat(locale, { day: "numeric", month: "short", year: "numeric" });
-    const text = React18.useMemo(() => {
+    const text = React19.useMemo(() => {
       if (range) {
         const v = value || {};
         if (!v.start) return "";
@@ -1280,7 +1326,7 @@
       const r = p.get();
       return r.start.getTime() === day2(value.start).getTime() && r.end.getTime() === day2(value.end).getTime();
     }) : -1;
-    const field = /* @__PURE__ */ React18.createElement(
+    const field = /* @__PURE__ */ React19.createElement(
       "button",
       {
         ref: forwardedRef,
@@ -1289,13 +1335,13 @@
         disabled,
         "aria-invalid": invalid ? "true" : void 0,
         "aria-label": label,
-        className: cx31("lw-input", "lw-datefield", size === "sm" && "lw-input-sm", size === "lg" && "lw-input-lg", className),
+        className: cx31("lw-input", "lw-datefield", size4 === "sm" && "lw-input-sm", size4 === "lg" && "lw-input-lg", className),
         "data-placeholder": text ? void 0 : "true"
       },
-      /* @__PURE__ */ React18.createElement(Icon, { name: "calendar", size: 15, className: "lw-datefield-ic" }),
-      /* @__PURE__ */ React18.createElement("span", { className: "lw-datefield-text" }, text || placeholder || (range ? "Pick a range" : "Pick a date"))
+      /* @__PURE__ */ React19.createElement(Icon, { name: "calendar", size: 15, className: "lw-datefield-ic" }),
+      /* @__PURE__ */ React19.createElement("span", { className: "lw-datefield-text" }, text || placeholder || (range ? "Pick a range" : "Pick a date"))
     );
-    return /* @__PURE__ */ React18.createElement(
+    return /* @__PURE__ */ React19.createElement(
       Popover,
       {
         trigger: field,
@@ -1307,14 +1353,14 @@
         placement: "bottom-start",
         ...rest
       },
-      /* @__PURE__ */ React18.createElement("div", { className: "lw-cal-wrap" }, range && presets.length > 0 && /* @__PURE__ */ React18.createElement("div", { className: "lw-cal-presets" }, presets.map((p, i) => (
+      /* @__PURE__ */ React19.createElement("div", { className: "lw-cal-wrap" }, range && presets.length > 0 && /* @__PURE__ */ React19.createElement("div", { className: "lw-cal-presets" }, presets.map((p, i) => (
         /* aria-current, not aria-pressed. These are shortcut ACTIONS —
            each applies a range and closes the panel — so `aria-pressed`
            announced four toggle buttons, three of them "not pressed",
            for a set where at most one is ever the current range and often
            none is. aria-current is the idiom for "this one in the set is
            the current one" and claims nothing about togglability. */
-        /* @__PURE__ */ React18.createElement(
+        /* @__PURE__ */ React19.createElement(
           "button",
           {
             key: p.label,
@@ -1328,17 +1374,17 @@
           },
           p.label
         )
-      ))), /* @__PURE__ */ React18.createElement(Calendar, { value, onChange: (v) => {
+      ))), /* @__PURE__ */ React19.createElement(Calendar, { value, onChange: (v) => {
         onChange && onChange(v);
         if (!range) setOpen(false);
         else if (v && v.end) setOpen(false);
-      }, range, min, max, locale }))
+      }, range, min: min2, max: max2, locale }))
     );
   });
 
   // components/forms/FileUpload.jsx
   init_ds_inject_react();
-  var React19 = __toESM(require_ds_react(), 1);
+  var React20 = __toESM(require_ds_react(), 1);
   var cx32 = (...a) => a.filter(Boolean).join(" ");
   var KB = 1024;
   function formatBytes(n) {
@@ -1351,7 +1397,7 @@
     }
     return (i === 0 ? v : v.toFixed(v < 10 ? 1 : 0)) + " " + u[i];
   }
-  var FileUpload = React19.forwardRef(function FileUpload2({
+  var FileUpload = React20.forwardRef(function FileUpload2({
     files = [],
     onFiles,
     onRemove,
@@ -1367,9 +1413,9 @@
     className,
     ...rest
   }, forwardedRef) {
-    const [over, setOver] = React19.useState(0);
-    const [rejected, setRejected] = React19.useState(null);
-    const inputRef = React19.useRef(null);
+    const [over, setOver] = React20.useState(0);
+    const [rejected, setRejected] = React20.useState(null);
+    const inputRef = React20.useRef(null);
     const setInputRef = useMergedRef(inputRef, forwardedRef);
     const take = (list) => {
       const arr = Array.from(list || []);
@@ -1379,7 +1425,7 @@
       const ok = maxSize ? arr.filter((f) => f.size <= maxSize) : arr;
       if (ok.length && onFiles) onFiles(multiple ? ok : ok.slice(0, 1));
     };
-    return /* @__PURE__ */ React19.createElement("div", { className: cx32(className), ...rest }, /* @__PURE__ */ React19.createElement(
+    return /* @__PURE__ */ React20.createElement("div", { className: cx32(className), ...rest }, /* @__PURE__ */ React20.createElement(
       "label",
       {
         className: "lw-dropzone",
@@ -1397,7 +1443,7 @@
           if (!disabled) take(e.dataTransfer.files);
         }
       },
-      /* @__PURE__ */ React19.createElement(
+      /* @__PURE__ */ React20.createElement(
         "input",
         {
           ref: setInputRef,
@@ -1411,10 +1457,10 @@
           }
         }
       ),
-      /* @__PURE__ */ React19.createElement(Icon, { name: "upload", size: 20 }),
-      /* @__PURE__ */ React19.createElement("span", { className: "lw-dz-title" }, title),
-      /* @__PURE__ */ React19.createElement("span", { className: "lw-dz-hint" }, hint || formatHint(accept, maxSize ? formatBytes(maxSize) : null))
-    ), rejected && /* @__PURE__ */ React19.createElement("div", { className: "lw-error", role: "alert" }, rejected), files.length > 0 && /* @__PURE__ */ React19.createElement("div", { className: "lw-file-list" }, files.map((f, i) => /* @__PURE__ */ React19.createElement(
+      /* @__PURE__ */ React20.createElement(Icon, { name: "upload", size: 20 }),
+      /* @__PURE__ */ React20.createElement("span", { className: "lw-dz-title" }, title),
+      /* @__PURE__ */ React20.createElement("span", { className: "lw-dz-hint" }, hint || formatHint(accept, maxSize ? formatBytes(maxSize) : null))
+    ), rejected && /* @__PURE__ */ React20.createElement("div", { className: "lw-error", role: "alert" }, rejected), files.length > 0 && /* @__PURE__ */ React20.createElement("div", { className: "lw-file-list" }, files.map((f, i) => /* @__PURE__ */ React20.createElement(
       "div",
       {
         key: f.id ?? f.name + i,
@@ -1422,9 +1468,9 @@
         "data-state": f.state,
         style: f.progress != null ? { "--lw-file-pct": f.progress + "%" } : void 0
       },
-      /* @__PURE__ */ React19.createElement("span", { className: "lw-file-ic" }, /* @__PURE__ */ React19.createElement(Icon, { name: f.state === "error" ? "x-circle" : f.state === "done" ? "check" : "file", size: 16 })),
-      /* @__PURE__ */ React19.createElement("span", { className: "lw-file-main" }, /* @__PURE__ */ React19.createElement("span", { className: "lw-file-name" }, f.name), f.state === "uploading" && f.progress != null ? /* @__PURE__ */ React19.createElement("span", { className: "lw-file-bar" }, /* @__PURE__ */ React19.createElement("i", null)) : /* @__PURE__ */ React19.createElement("span", { className: "lw-file-meta" }, f.error || formatBytes(f.size))),
-      onRemove && /* @__PURE__ */ React19.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": formatRemoveLabel(f.name), onClick: () => onRemove(f) }, /* @__PURE__ */ React19.createElement(Icon, { name: "close", size: 15 }))
+      /* @__PURE__ */ React20.createElement("span", { className: "lw-file-ic" }, /* @__PURE__ */ React20.createElement(Icon, { name: f.state === "error" ? "x-circle" : f.state === "done" ? "check" : "file", size: 16 })),
+      /* @__PURE__ */ React20.createElement("span", { className: "lw-file-main" }, /* @__PURE__ */ React20.createElement("span", { className: "lw-file-name" }, f.name), f.state === "uploading" && f.progress != null ? /* @__PURE__ */ React20.createElement("span", { className: "lw-file-bar" }, /* @__PURE__ */ React20.createElement("i", null)) : /* @__PURE__ */ React20.createElement("span", { className: "lw-file-meta" }, f.error || formatBytes(f.size))),
+      onRemove && /* @__PURE__ */ React20.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": formatRemoveLabel(f.name), onClick: () => onRemove(f) }, /* @__PURE__ */ React20.createElement(Icon, { name: "close", size: 15 }))
     ))));
   });
 
@@ -1473,7 +1519,7 @@
 
   // components/forms/RichText.jsx
   init_ds_inject_react();
-  var React20 = __toESM(require_ds_react(), 1);
+  var React21 = __toESM(require_ds_react(), 1);
   var cx34 = (...a) => a.filter(Boolean).join(" ");
   var TOOLS = [
     { id: "bold", icon: "spark", label: "Bold", cmd: "bold", glyph: "B" },
@@ -1488,7 +1534,7 @@
     { id: "link", icon: "link", label: "Link", cmd: "createLink", prompt: "Link URL" },
     { id: "clear", icon: "undo", label: "Clear formatting", cmd: "removeFormat" }
   ];
-  var RichText = React20.forwardRef(function RichText2({
+  var RichText = React21.forwardRef(function RichText2({
     value,
     onChange,
     placeholder = "Write something…",
@@ -1504,13 +1550,13 @@
     className,
     ...rest
   }, forwardedRef) {
-    const ref = React20.useRef(null);
+    const ref = React21.useRef(null);
     const setBodyRef = useMergedRef(ref, forwardedRef);
-    const bodyId = React20.useId();
-    const [active, setActive] = React20.useState({});
+    const bodyId = React21.useId();
+    const [active, setActive] = React21.useState({});
     const picked = tools ? TOOLS.filter((t) => t.sep || tools.includes(t.id)) : TOOLS;
     const list = toolLabels ? picked.map((t) => t.id && toolLabels[t.id] ? { ...t, ...toolLabels[t.id] } : t) : picked;
-    React20.useEffect(() => {
+    React21.useEffect(() => {
       const el = ref.current;
       if (el && value != null && el.innerHTML !== value) el.innerHTML = value;
     }, [value]);
@@ -1542,11 +1588,11 @@
       syncActive();
       onChange && onChange(el.innerHTML);
     };
-    const [len, setLen] = React20.useState(0);
+    const [len, setLen] = React21.useState(0);
     const syncLen = () => setLen((ref.current && ref.current.textContent || "").length);
-    React20.useEffect(syncLen, [value]);
+    React21.useEffect(syncLen, [value]);
     const over = maxLength != null && len > maxLength;
-    return /* @__PURE__ */ React20.createElement("div", { className: cx34("lw-editor", className), ...rest }, /* @__PURE__ */ React20.createElement("div", { className: "lw-editor-bar", role: "group", "aria-label": formatBarLabel(label || barLabel), "aria-controls": children ? void 0 : bodyId }, list.map((t, i) => t.sep ? /* @__PURE__ */ React20.createElement("span", { key: "s" + i, className: "sep", "aria-hidden": "true" }) : /* @__PURE__ */ React20.createElement(
+    return /* @__PURE__ */ React21.createElement("div", { className: cx34("lw-editor", className), ...rest }, /* @__PURE__ */ React21.createElement("div", { className: "lw-editor-bar", role: "group", "aria-label": formatBarLabel(label || barLabel), "aria-controls": children ? void 0 : bodyId }, list.map((t, i) => t.sep ? /* @__PURE__ */ React21.createElement("span", { key: "s" + i, className: "sep", "aria-hidden": "true" }) : /* @__PURE__ */ React21.createElement(
       "button",
       {
         key: t.id,
@@ -1559,8 +1605,8 @@
         onMouseDown: (e) => e.preventDefault(),
         onClick: () => run(t)
       },
-      t.glyph ? /* @__PURE__ */ React20.createElement("span", { className: "lw-editor-glyph", "data-glyph": t.id }, t.glyph) : /* @__PURE__ */ React20.createElement(Icon, { name: t.icon, size: 15 })
-    ))), children || /* @__PURE__ */ React20.createElement(
+      t.glyph ? /* @__PURE__ */ React21.createElement("span", { className: "lw-editor-glyph", "data-glyph": t.id }, t.glyph) : /* @__PURE__ */ React21.createElement(Icon, { name: t.icon, size: 15 })
+    ))), children || /* @__PURE__ */ React21.createElement(
       "div",
       {
         ref: setBodyRef,
@@ -1579,7 +1625,7 @@
         onKeyUp: syncActive,
         onMouseUp: syncActive
       }
-    ), (footer || maxLength != null) && /* @__PURE__ */ React20.createElement("div", { className: "lw-editor-foot" }, footer, /* @__PURE__ */ React20.createElement("span", { className: "lw-editor-spacer" }), maxLength != null && /* @__PURE__ */ React20.createElement("span", { className: "lw-editor-count", "data-over": over ? "true" : void 0, "aria-live": "polite" }, len, " / ", maxLength)));
+    ), (footer || maxLength != null) && /* @__PURE__ */ React21.createElement("div", { className: "lw-editor-foot" }, footer, /* @__PURE__ */ React21.createElement("span", { className: "lw-editor-spacer" }), maxLength != null && /* @__PURE__ */ React21.createElement("span", { className: "lw-editor-count", "data-over": over ? "true" : void 0, "aria-live": "polite" }, len, " / ", maxLength)));
   });
 
   // components/data/Table.jsx
@@ -1785,7 +1831,7 @@
 
   // components/data/CodeBlock.jsx
   init_ds_inject_react();
-  var React21 = __toESM(require_ds_react(), 1);
+  var React22 = __toESM(require_ds_react(), 1);
   var cx41 = (...a) => a.filter(Boolean).join(" ");
   function CodeBlock({
     code,
@@ -1798,9 +1844,9 @@
     className,
     ...rest
   }) {
-    const [copied, setCopied] = React21.useState(false);
+    const [copied, setCopied] = React22.useState(false);
     const canCopy = copy && typeof code === "string" && code.length > 0;
-    React21.useEffect(() => {
+    React22.useEffect(() => {
       if (!copied) return;
       const t = setTimeout(() => setCopied(false), 1600);
       return () => clearTimeout(t);
@@ -1812,7 +1858,7 @@
       } catch (e) {
       }
     };
-    return /* @__PURE__ */ React21.createElement("figure", { className: cx41("lw-code", className), ...rest }, (filename || lang || canCopy) && /* @__PURE__ */ React21.createElement("figcaption", { className: "lw-code-head" }, /* @__PURE__ */ React21.createElement("span", { className: "fn" }, filename), /* @__PURE__ */ React21.createElement("span", { className: "end" }, lang && /* @__PURE__ */ React21.createElement("span", { className: "lang" }, lang), canCopy && /* @__PURE__ */ React21.createElement(
+    return /* @__PURE__ */ React22.createElement("figure", { className: cx41("lw-code", className), ...rest }, (filename || lang || canCopy) && /* @__PURE__ */ React22.createElement("figcaption", { className: "lw-code-head" }, /* @__PURE__ */ React22.createElement("span", { className: "fn" }, filename), /* @__PURE__ */ React22.createElement("span", { className: "end" }, lang && /* @__PURE__ */ React22.createElement("span", { className: "lang" }, lang), canCopy && /* @__PURE__ */ React22.createElement(
       "button",
       {
         type: "button",
@@ -1821,21 +1867,21 @@
         "aria-label": copied ? copiedLabel : copyLabel,
         title: copied ? copiedLabel : copyLabel
       },
-      /* @__PURE__ */ React21.createElement(Icon, { name: copied ? "check" : "copy", size: 15 })
-    ))), /* @__PURE__ */ React21.createElement("pre", null, /* @__PURE__ */ React21.createElement("code", { dangerouslySetInnerHTML: html ? { __html: html } : void 0 }, html ? void 0 : code)));
+      /* @__PURE__ */ React22.createElement(Icon, { name: copied ? "check" : "copy", size: 15 })
+    ))), /* @__PURE__ */ React22.createElement("pre", null, /* @__PURE__ */ React22.createElement("code", { dangerouslySetInnerHTML: html ? { __html: html } : void 0 }, html ? void 0 : code)));
   }
 
   // components/data/Pagination.jsx
   init_ds_inject_react();
-  var React22 = __toESM(require_ds_react(), 1);
+  var React23 = __toESM(require_ds_react(), 1);
   var cx42 = (...a) => a.filter(Boolean).join(" ");
-  function pages(page, count) {
+  function pages(page, count2) {
     const out = [];
     const push = (p) => {
       if (out[out.length - 1] !== p) out.push(p);
     };
-    for (let p = 1; p <= count; p++) {
-      if (p === 1 || p === count || Math.abs(p - page) <= 1) push(p);
+    for (let p = 1; p <= count2; p++) {
+      if (p === 1 || p === count2 || Math.abs(p - page) <= 1) push(p);
       else if (out[out.length - 1] !== "gap") out.push("gap");
     }
     return out;
@@ -1862,12 +1908,12 @@
     className,
     ...rest
   }) {
-    const count = total != null ? Math.max(1, Math.ceil(total / pageSize)) : 1;
+    const count2 = total != null ? Math.max(1, Math.ceil(total / pageSize)) : 1;
     const from = total ? (page - 1) * pageSize + 1 : 0;
     const to = total ? Math.min(page * pageSize, total) : 0;
-    const nf2 = React22.useMemo(() => new Intl.NumberFormat(locale || void 0), [locale]);
-    const go = (p) => onPageChange && onPageChange(Math.min(Math.max(1, p), count));
-    return /* @__PURE__ */ React22.createElement("nav", { className: cx42("lw-pagination", className), "aria-label": label, ...rest }, /* @__PURE__ */ React22.createElement("span", { className: "lw-pag-info" }, cursor ? formatCursor(page) : total ? formatCount(from, to, total, (v) => nf2.format(v)) : ""), /* @__PURE__ */ React22.createElement("span", { className: "lw-spacer" }), onPageSizeChange && !cursor && /* @__PURE__ */ React22.createElement(
+    const nf2 = React23.useMemo(() => new Intl.NumberFormat(locale || void 0), [locale]);
+    const go = (p) => onPageChange && onPageChange(Math.min(Math.max(1, p), count2));
+    return /* @__PURE__ */ React23.createElement("nav", { className: cx42("lw-pagination", className), "aria-label": label, ...rest }, /* @__PURE__ */ React23.createElement("span", { className: "lw-pag-info" }, cursor ? formatCursor(page) : total ? formatCount(from, to, total, (v) => nf2.format(v)) : ""), /* @__PURE__ */ React23.createElement("span", { className: "lw-spacer" }), onPageSizeChange && !cursor && /* @__PURE__ */ React23.createElement(
       "select",
       {
         className: "lw-input lw-input-sm lw-pag-size",
@@ -1875,8 +1921,8 @@
         value: pageSize,
         onChange: (e) => onPageSizeChange(Number(e.target.value))
       },
-      pageSizes.map((s) => /* @__PURE__ */ React22.createElement("option", { key: s, value: s }, formatPageSize(s)))
-    ), /* @__PURE__ */ React22.createElement(
+      pageSizes.map((s) => /* @__PURE__ */ React23.createElement("option", { key: s, value: s }, formatPageSize(s)))
+    ), /* @__PURE__ */ React23.createElement(
       "button",
       {
         type: "button",
@@ -1885,9 +1931,9 @@
         disabled: cursor ? !hasPrev : page <= 1,
         onClick: () => go(page - 1)
       },
-      /* @__PURE__ */ React22.createElement(Icon, { name: "chevron-left", size: 15 })
-    ), !cursor && pages(page, count).map(
-      (p, i) => p === "gap" ? /* @__PURE__ */ React22.createElement("span", { key: "g" + i, className: "lw-pag-gap", "aria-hidden": "true" }, "…") : /* @__PURE__ */ React22.createElement(
+      /* @__PURE__ */ React23.createElement(Icon, { name: "chevron-left", size: 15 })
+    ), !cursor && pages(page, count2).map(
+      (p, i) => p === "gap" ? /* @__PURE__ */ React23.createElement("span", { key: "g" + i, className: "lw-pag-gap", "aria-hidden": "true" }, "…") : /* @__PURE__ */ React23.createElement(
         "button",
         {
           key: p,
@@ -1899,22 +1945,22 @@
         },
         p
       )
-    ), /* @__PURE__ */ React22.createElement(
+    ), /* @__PURE__ */ React23.createElement(
       "button",
       {
         type: "button",
         className: "lw-pag-btn",
         "aria-label": nextLabel,
-        disabled: cursor ? !hasNext : page >= count,
+        disabled: cursor ? !hasNext : page >= count2,
         onClick: () => go(page + 1)
       },
-      /* @__PURE__ */ React22.createElement(Icon, { name: "chevron-right", size: 15 })
+      /* @__PURE__ */ React23.createElement(Icon, { name: "chevron-right", size: 15 })
     ));
   }
 
   // components/data/DataGrid.jsx
   init_ds_inject_react();
-  var React23 = __toESM(require_ds_react(), 1);
+  var React24 = __toESM(require_ds_react(), 1);
   var cx43 = (...a) => a.filter(Boolean).join(" ");
   function DataGrid({
     columns = [],
@@ -1944,15 +1990,15 @@
   }) {
     const DEFAULT_W = 160, MIN_W = 72, SEL_W = 44;
     const legacyArgs = legacySortArgs("DataGrid", columns, onSort);
-    const [widths, setWidths] = React23.useState(() => columns.map((c) => c.width || DEFAULT_W));
-    const [scrollTop, setScrollTop] = React23.useState(0);
-    const scrollRef = React23.useRef(null);
-    const drag = React23.useRef(null);
+    const [widths, setWidths] = React24.useState(() => columns.map((c) => c.width || DEFAULT_W));
+    const [scrollTop, setScrollTop] = React24.useState(0);
+    const scrollRef = React24.useRef(null);
+    const drag = React24.useRef(null);
     const colKeys = columns.map((c) => c.key).join("\0");
-    React23.useEffect(() => {
+    React24.useEffect(() => {
       setWidths((prev) => columns.map((c, i) => prev[i] || c.width || DEFAULT_W));
     }, [colKeys]);
-    const selSet = React23.useMemo(() => new Set(selected), [selected]);
+    const selSet = React24.useMemo(() => new Set(selected), [selected]);
     const allOn = rows.length > 0 && rows.every((r, i) => selSet.has(rowKey(r, i)));
     const someOn = !allOn && rows.some((r, i) => selSet.has(rowKey(r, i)));
     const toggleAll = () => onSelectionChange && onSelectionChange(allOn ? [] : rows.map(rowKey));
@@ -1962,7 +2008,7 @@
       next.has(k) ? next.delete(k) : next.add(k);
       onSelectionChange(Array.from(next));
     };
-    const pinLefts = React23.useMemo(() => {
+    const pinLefts = React24.useMemo(() => {
       let acc = selectable ? SEL_W : 0;
       return columns.map((c, i) => {
         if (!c.pin) return null;
@@ -1980,8 +2026,8 @@
         frame2 = 0;
         const d = drag.current;
         if (!d || latest === null) return;
-        const min = columns[d.i].minWidth || MIN_W;
-        setWidths((w) => w.map((v, n) => n === d.i ? Math.max(min, d.w + latest - d.x) : v));
+        const min2 = columns[d.i].minWidth || MIN_W;
+        setWidths((w) => w.map((v, n) => n === d.i ? Math.max(min2, d.w + latest - d.x) : v));
       };
       const move = (ev) => {
         if (!drag.current) return;
@@ -2004,8 +2050,8 @@
       const d = e.key === "ArrowRight" ? 16 : e.key === "ArrowLeft" ? -16 : 0;
       if (!d) return;
       e.preventDefault();
-      const min = columns[i].minWidth || MIN_W;
-      setWidths((w) => w.map((v, n) => n === i ? Math.max(min, (v || DEFAULT_W) + d) : v));
+      const min2 = columns[i].minWidth || MIN_W;
+      setWidths((w) => w.map((v, n) => n === i ? Math.max(min2, (v || DEFAULT_W) + d) : v));
     };
     const win = virtualize && rows.length * rowHeight > height;
     const start = win ? Math.max(0, Math.floor(scrollTop / rowHeight) - overscan) : 0;
@@ -2014,7 +2060,7 @@
     const padTop = win ? start * rowHeight : 0;
     const padBottom = win ? Math.max(0, (rows.length - start - slice.length) * rowHeight) : 0;
     const total = (selectable ? SEL_W : 0) + widths.reduce((s, w) => s + (w || DEFAULT_W), 0);
-    return /* @__PURE__ */ React23.createElement("div", { className: cx43("lw-dgrid", className), ...rest }, selectable && selSet.size > 0 && /* @__PURE__ */ React23.createElement("div", { className: "lw-dgrid-selbar" }, /* @__PURE__ */ React23.createElement("span", { className: "count" }, selSet.size), /* @__PURE__ */ React23.createElement("span", null, selectedLabel), /* @__PURE__ */ React23.createElement("span", { className: "lw-spacer" }), selectionActions, /* @__PURE__ */ React23.createElement("button", { type: "button", className: "lw-filter-clear", onClick: () => onSelectionChange && onSelectionChange([]) }, clearSelectionLabel)), /* @__PURE__ */ React23.createElement(
+    return /* @__PURE__ */ React24.createElement("div", { className: cx43("lw-dgrid", className), ...rest }, selectable && selSet.size > 0 && /* @__PURE__ */ React24.createElement("div", { className: "lw-dgrid-selbar" }, /* @__PURE__ */ React24.createElement("span", { className: "count" }, selSet.size), /* @__PURE__ */ React24.createElement("span", null, selectedLabel), /* @__PURE__ */ React24.createElement("span", { className: "lw-spacer" }), selectionActions, /* @__PURE__ */ React24.createElement("button", { type: "button", className: "lw-filter-clear", onClick: () => onSelectionChange && onSelectionChange([]) }, clearSelectionLabel)), /* @__PURE__ */ React24.createElement(
       "div",
       {
         ref: scrollRef,
@@ -2022,7 +2068,7 @@
         style: { maxHeight: height },
         onScroll: win ? (e) => setScrollTop(e.currentTarget.scrollTop) : void 0
       },
-      /* @__PURE__ */ React23.createElement("table", { style: { minWidth: total }, "aria-label": label, "aria-rowcount": rows.length }, /* @__PURE__ */ React23.createElement("colgroup", null, selectable && /* @__PURE__ */ React23.createElement("col", { style: { width: SEL_W } }), columns.map((c, i) => /* @__PURE__ */ React23.createElement("col", { key: c.key, style: { width: widths[i] || DEFAULT_W } }))), /* @__PURE__ */ React23.createElement("thead", null, /* @__PURE__ */ React23.createElement("tr", null, selectable && /* @__PURE__ */ React23.createElement("th", { "data-pin": "true", style: { insetInlineStart: 0 }, scope: "col" }, /* @__PURE__ */ React23.createElement("span", { className: "lw-dgrid-check" }, /* @__PURE__ */ React23.createElement("label", { className: "lw-check" }, /* @__PURE__ */ React23.createElement(
+      /* @__PURE__ */ React24.createElement("table", { style: { minWidth: total }, "aria-label": label, "aria-rowcount": rows.length }, /* @__PURE__ */ React24.createElement("colgroup", null, selectable && /* @__PURE__ */ React24.createElement("col", { style: { width: SEL_W } }), columns.map((c, i) => /* @__PURE__ */ React24.createElement("col", { key: c.key, style: { width: widths[i] || DEFAULT_W } }))), /* @__PURE__ */ React24.createElement("thead", null, /* @__PURE__ */ React24.createElement("tr", null, selectable && /* @__PURE__ */ React24.createElement("th", { "data-pin": "true", style: { insetInlineStart: 0 }, scope: "col" }, /* @__PURE__ */ React24.createElement("span", { className: "lw-dgrid-check" }, /* @__PURE__ */ React24.createElement("label", { className: "lw-check" }, /* @__PURE__ */ React24.createElement(
         "input",
         {
           type: "checkbox",
@@ -2033,9 +2079,9 @@
           onChange: toggleAll,
           "aria-label": allOn ? clearAllSelectionLabel : selectAllLabel
         }
-      ), /* @__PURE__ */ React23.createElement("span", { className: "box" })))), columns.map((c, i) => {
+      ), /* @__PURE__ */ React24.createElement("span", { className: "box" })))), columns.map((c, i) => {
         const dir = sort && sort.key === c.key ? sort.dir : null;
-        return /* @__PURE__ */ React23.createElement(
+        return /* @__PURE__ */ React24.createElement(
           "th",
           {
             key: c.key,
@@ -2046,7 +2092,7 @@
             style: c.pin ? { insetInlineStart: pinLefts[i] } : void 0,
             "aria-sort": dir ? dir === "asc" ? "ascending" : "descending" : void 0
           },
-          c.sortable && onSort ? /* @__PURE__ */ React23.createElement(
+          c.sortable && onSort ? /* @__PURE__ */ React24.createElement(
             "button",
             {
               type: "button",
@@ -2054,9 +2100,9 @@
               onClick: () => emitSort(onSort, legacyArgs, c.key, dir === "asc" ? "desc" : "asc")
             },
             colHeader("DataGrid", c),
-            /* @__PURE__ */ React23.createElement(Icon, { name: dir === "asc" ? "sort-asc" : dir === "desc" ? "sort-desc" : "chevrons-up-down", size: 13 })
+            /* @__PURE__ */ React24.createElement(Icon, { name: dir === "asc" ? "sort-asc" : dir === "desc" ? "sort-desc" : "chevrons-up-down", size: 13 })
           ) : colHeader("DataGrid", c),
-          c.resizable !== false && /* @__PURE__ */ React23.createElement(
+          c.resizable !== false && /* @__PURE__ */ React24.createElement(
             "button",
             {
               type: "button",
@@ -2067,11 +2113,11 @@
             }
           )
         );
-      }))), /* @__PURE__ */ React23.createElement("tbody", null, padTop > 0 && /* @__PURE__ */ React23.createElement("tr", { "aria-hidden": "true", className: "lw-dgrid-pad", style: { height: padTop } }, /* @__PURE__ */ React23.createElement("td", { colSpan: columns.length + (selectable ? 1 : 0) })), slice.map((r, n) => {
+      }))), /* @__PURE__ */ React24.createElement("tbody", null, padTop > 0 && /* @__PURE__ */ React24.createElement("tr", { "aria-hidden": "true", className: "lw-dgrid-pad", style: { height: padTop } }, /* @__PURE__ */ React24.createElement("td", { colSpan: columns.length + (selectable ? 1 : 0) })), slice.map((r, n) => {
         const i = start + n;
         const k = rowKey(r, i);
         const on = selSet.has(k);
-        return /* @__PURE__ */ React23.createElement(
+        return /* @__PURE__ */ React24.createElement(
           "tr",
           {
             key: k,
@@ -2081,7 +2127,7 @@
             style: { height: rowHeight },
             onClick: onRowClick ? () => onRowClick(r, i) : void 0
           },
-          selectable && /* @__PURE__ */ React23.createElement("td", { "data-pin": "true", style: { insetInlineStart: 0 }, onClick: (e) => e.stopPropagation() }, /* @__PURE__ */ React23.createElement("span", { className: "lw-dgrid-check" }, /* @__PURE__ */ React23.createElement("label", { className: "lw-check" }, /* @__PURE__ */ React23.createElement(
+          selectable && /* @__PURE__ */ React24.createElement("td", { "data-pin": "true", style: { insetInlineStart: 0 }, onClick: (e) => e.stopPropagation() }, /* @__PURE__ */ React24.createElement("span", { className: "lw-dgrid-check" }, /* @__PURE__ */ React24.createElement("label", { className: "lw-check" }, /* @__PURE__ */ React24.createElement(
             "input",
             {
               type: "checkbox",
@@ -2089,8 +2135,8 @@
               onChange: () => toggleRow(k),
               "aria-label": formatRowSelectLabel(i + 1)
             }
-          ), /* @__PURE__ */ React23.createElement("span", { className: "box" })))),
-          columns.map((c, ci) => /* @__PURE__ */ React23.createElement(
+          ), /* @__PURE__ */ React24.createElement("span", { className: "box" })))),
+          columns.map((c, ci) => /* @__PURE__ */ React24.createElement(
             "td",
             {
               key: c.key,
@@ -2102,17 +2148,17 @@
             c.render ? c.render(r, i) : r[c.key]
           ))
         );
-      }), padBottom > 0 && /* @__PURE__ */ React23.createElement("tr", { "aria-hidden": "true", className: "lw-dgrid-pad", style: { height: padBottom } }, /* @__PURE__ */ React23.createElement("td", { colSpan: columns.length + (selectable ? 1 : 0) })))),
-      !rows.length && /* @__PURE__ */ React23.createElement("div", { className: "lw-dgrid-empty" }, empty)
+      }), padBottom > 0 && /* @__PURE__ */ React24.createElement("tr", { "aria-hidden": "true", className: "lw-dgrid-pad", style: { height: padBottom } }, /* @__PURE__ */ React24.createElement("td", { colSpan: columns.length + (selectable ? 1 : 0) })))),
+      !rows.length && /* @__PURE__ */ React24.createElement("div", { className: "lw-dgrid-empty" }, empty)
     ));
   }
 
   // components/data/Progress.jsx
   init_ds_inject_react();
   var cx44 = (...a) => a.filter(Boolean).join(" ");
-  function Progress({ value = 0, max = 100, label, tone: toneIn, className, ...rest }) {
+  function Progress({ value = 0, max: max2 = 100, label, tone: toneIn, className, ...rest }) {
     const tone = normTone("Progress", toneIn);
-    const pct = Math.max(0, Math.min(100, Number(value) / Number(max || 100) * 100));
+    const pct = Math.max(0, Math.min(100, Number(value) / Number(max2 || 100) * 100));
     return /* @__PURE__ */ React.createElement(
       "span",
       {
@@ -2174,16 +2220,16 @@
     if (series.length < 2) return null;
     return /* @__PURE__ */ React.createElement("div", { className: "lw-chart-legend" }, series.map((s, i) => /* @__PURE__ */ React.createElement("span", { key: i }, /* @__PURE__ */ React.createElement("i", { style: { "--lw-swatch": s.color || SERIES(i) } }), s.name)));
   }
-  var ticks = (max, n = 4) => {
-    const step = Math.pow(10, Math.floor(Math.log10(max / n || 1)));
-    const s = Math.ceil(max / n / step) * step;
+  var ticks = (max2, n = 4) => {
+    const step = Math.pow(10, Math.floor(Math.log10(max2 / n || 1)));
+    const s = Math.ceil(max2 / n / step) * step;
     return Array.from({ length: n + 1 }, (_, i) => i * s);
   };
   var CHART_W = 640;
   var CHART_PAD = { t: 8, r: 8, b: 22, l: 40 };
-  function frame(max, height) {
+  function frame(max2, height) {
     const pad = CHART_PAD, w = CHART_W;
-    const ts = ticks(max);
+    const ts = ticks(max2);
     const top = ts[ts.length - 1];
     const iw = w - pad.l - pad.r, ih = height - pad.t - pad.b;
     return { w, pad, ts, top, iw, ih, y: (v) => pad.t + ih - v / top * ih };
@@ -2195,8 +2241,8 @@
   // components/data/BarChart.jsx
   function BarChart({ labels = [], series = [], height = 200, stacked, label, locale, className, ...rest }) {
     const nf2 = numberFormat(locale);
-    const max = Math.max(1, ...series.flatMap((s) => stacked ? [] : s.data), ...stacked ? labels.map((_, i) => series.reduce((a, s) => a + s.data[i], 0)) : []);
-    const f = frame(max, height);
+    const max2 = Math.max(1, ...series.flatMap((s) => stacked ? [] : s.data), ...stacked ? labels.map((_, i) => series.reduce((a, s) => a + s.data[i], 0)) : []);
+    const f = frame(max2, height);
     const { w, pad, top, iw, ih, y } = f;
     const bandW = iw / Math.max(labels.length, 1);
     const barW = stacked ? bandW * 0.56 : bandW * 0.72 / Math.max(series.length, 1);
@@ -2230,8 +2276,8 @@
   init_ds_inject_react();
   function LineChart({ labels = [], series = [], height = 200, area, label, locale, className, ...rest }) {
     const nf2 = numberFormat(locale);
-    const max = Math.max(1, ...series.flatMap((s) => s.data));
-    const f = frame(max, height);
+    const max2 = Math.max(1, ...series.flatMap((s) => s.data));
+    const f = frame(max2, height);
     const { w, pad, top, iw, ih, y } = f;
     const x = (i) => pad.l + (labels.length < 2 ? iw / 2 : iw / (labels.length - 1) * i);
     return /* @__PURE__ */ React.createElement("div", { className: cx46("lw-chart-wrap", className), ...rest }, /* @__PURE__ */ React.createElement("svg", { className: "lw-chart", viewBox: "0 0 " + w + " " + height, role: "img", "aria-label": label }, /* @__PURE__ */ React.createElement(Grid2, { f }), /* @__PURE__ */ React.createElement("g", { className: "axis" }, labels.map((l, i) => /* @__PURE__ */ React.createElement("text", { key: i, x: x(i), y: height - 6, textAnchor: "middle" }, l))), series.map((s, si) => {
@@ -2243,7 +2289,7 @@
 
   // components/data/ActivityFeed.jsx
   init_ds_inject_react();
-  var React24 = __toESM(require_ds_react(), 1);
+  var React25 = __toESM(require_ds_react(), 1);
   var cx47 = (...a) => a.filter(Boolean).join(" ");
   var ms = (when) => when instanceof Date ? when.getTime() : new Date(when).getTime();
   var stamp = (when, locale) => new Intl.DateTimeFormat(locale || void 0, { day: "numeric", month: "short" }).format(ms(when));
@@ -2277,8 +2323,8 @@
     className,
     ...rest
   }) {
-    const [mounted, setMounted] = React24.useState(null);
-    React24.useEffect(() => {
+    const [mounted, setMounted] = React25.useState(null);
+    React25.useEffect(() => {
       setMounted(Date.now());
     }, []);
     const at = now != null ? now : mounted;
@@ -2289,12 +2335,12 @@
       if (last && last.name === g) last.items.push(it);
       else groups.push({ name: g, items: [it] });
     });
-    return /* @__PURE__ */ React24.createElement("div", { className: cx47("lw-feed", className), role: "group", "aria-label": label, ...rest }, groups.map((g, gi) => (
+    return /* @__PURE__ */ React25.createElement("div", { className: cx47("lw-feed", className), role: "group", "aria-label": label, ...rest }, groups.map((g, gi) => (
       /* Keyed on the index: two runs can carry the same bucket name when the
          items are not in date order, and a duplicate key is a dropped child. */
-      /* @__PURE__ */ React24.createElement(React24.Fragment, { key: gi }, g.name && /* @__PURE__ */ React24.createElement("div", { className: "lw-feed-group" }, g.name), g.items.map((it, i) => {
+      /* @__PURE__ */ React25.createElement(React25.Fragment, { key: gi }, g.name && /* @__PURE__ */ React25.createElement("div", { className: "lw-feed-group" }, g.name), g.items.map((it, i) => {
         const Tag = it.href ? linkAs : onItemClick || it.onClick ? "button" : "div";
-        return /* @__PURE__ */ React24.createElement(
+        return /* @__PURE__ */ React25.createElement(
           Tag,
           {
             key: it.id ?? gi + "-" + i,
@@ -2305,9 +2351,9 @@
             "data-tone": normTone("ActivityFeed", it.tone),
             onClick: Tag === "div" ? void 0 : () => it.onClick ? it.onClick(it) : onItemClick && onItemClick(it)
           },
-          it.icon && /* @__PURE__ */ React24.createElement("span", { className: "lw-feed-ic" }, /* @__PURE__ */ React24.createElement(Icon, { name: it.icon, size: 15 })),
-          /* @__PURE__ */ React24.createElement("span", { className: "lw-feed-main" }, /* @__PURE__ */ React24.createElement("span", { className: "lw-feed-title" }, it.title), /* @__PURE__ */ React24.createElement("span", { className: "lw-feed-meta" }, it.when ? at != null ? formatTimeAgo(it.when, at, RELATIVE_LABELS, locale) : stamp(it.when, locale) : null, it.meta ? (it.when ? " · " : "") + it.meta : "")),
-          it.unread && /* @__PURE__ */ React24.createElement("span", { className: "lw-sr-only" }, unreadLabel)
+          it.icon && /* @__PURE__ */ React25.createElement("span", { className: "lw-feed-ic" }, /* @__PURE__ */ React25.createElement(Icon, { name: it.icon, size: 15 })),
+          /* @__PURE__ */ React25.createElement("span", { className: "lw-feed-main" }, /* @__PURE__ */ React25.createElement("span", { className: "lw-feed-title" }, it.title), /* @__PURE__ */ React25.createElement("span", { className: "lw-feed-meta" }, it.when ? at != null ? formatTimeAgo(it.when, at, RELATIVE_LABELS, locale) : stamp(it.when, locale) : null, it.meta ? (it.when ? " · " : "") + it.meta : "")),
+          it.unread && /* @__PURE__ */ React25.createElement("span", { className: "lw-sr-only" }, unreadLabel)
         );
       }))
     )));
@@ -2361,11 +2407,11 @@
 
   // components/nav/Breadcrumbs.jsx
   init_ds_inject_react();
-  var React25 = __toESM(require_ds_react(), 1);
+  var React26 = __toESM(require_ds_react(), 1);
   var cx50 = (...a) => a.filter(Boolean).join(" ");
   function Breadcrumbs({ items = [], linkAs = "a", label = "Breadcrumb", className, ...rest }) {
     const Link = linkAs;
-    return /* @__PURE__ */ React25.createElement("nav", { className: cx50("lw-crumbs", className), "aria-label": label, ...rest }, items.map((it, i) => /* @__PURE__ */ React25.createElement(React25.Fragment, { key: i }, i > 0 && /* @__PURE__ */ React25.createElement("span", { className: "sep", "aria-hidden": "true" }, "/"), it.href && i < items.length - 1 ? /* @__PURE__ */ React25.createElement(Link, { href: it.href }, it.label) : /* @__PURE__ */ React25.createElement("span", { "aria-current": i === items.length - 1 ? "page" : void 0 }, it.label))));
+    return /* @__PURE__ */ React26.createElement("nav", { className: cx50("lw-crumbs", className), "aria-label": label, ...rest }, items.map((it, i) => /* @__PURE__ */ React26.createElement(React26.Fragment, { key: i }, i > 0 && /* @__PURE__ */ React26.createElement("span", { className: "sep", "aria-hidden": "true" }, "/"), it.href && i < items.length - 1 ? /* @__PURE__ */ React26.createElement(Link, { href: it.href }, it.label) : /* @__PURE__ */ React26.createElement("span", { "aria-current": i === items.length - 1 ? "page" : void 0 }, it.label))));
   }
 
   // components/nav/AppBar.jsx
@@ -2441,10 +2487,10 @@
 
   // components/nav/Tabs.jsx
   init_ds_inject_react();
-  var React26 = __toESM(require_ds_react(), 1);
+  var React27 = __toESM(require_ds_react(), 1);
   var cx53 = (...a) => a.filter(Boolean).join(" ");
   function Tabs({ tabs = [], value, onChange, label, className, ...rest }) {
-    const ref = React26.useRef(null);
+    const ref = React27.useRef(null);
     const move = (next) => {
       onChange && onChange(tabs[next].value);
       const el = ref.current && ref.current.querySelectorAll('[role="tab"]')[next];
@@ -2467,7 +2513,7 @@
       e.preventDefault();
       move((i + d + tabs.length) % tabs.length);
     };
-    return /* @__PURE__ */ React26.createElement("div", { ref, className: cx53("lw-tabs", className), role: "tablist", "aria-label": label, onKeyDown, ...rest }, tabs.map((t) => /* @__PURE__ */ React26.createElement(
+    return /* @__PURE__ */ React27.createElement("div", { ref, className: cx53("lw-tabs", className), role: "tablist", "aria-label": label, onKeyDown, ...rest }, tabs.map((t) => /* @__PURE__ */ React27.createElement(
       "button",
       {
         key: t.value,
@@ -2480,13 +2526,13 @@
         onClick: () => onChange && onChange(t.value)
       },
       t.label,
-      t.count != null && /* @__PURE__ */ React26.createElement("span", { className: "count" }, t.count)
+      t.count != null && /* @__PURE__ */ React27.createElement("span", { className: "count" }, t.count)
     )));
   }
 
   // components/nav/ThemeToggle.jsx
   init_ds_inject_react();
-  var React27 = __toESM(require_ds_react(), 1);
+  var React28 = __toESM(require_ds_react(), 1);
 
   // hooks.js
   init_ds_inject_react();
@@ -2533,8 +2579,8 @@
     className,
     ...rest
   }) {
-    const [internal, setInternal] = React27.useState(modes.includes("system") ? "system" : modes[0]);
-    React27.useEffect(() => {
+    const [internal, setInternal] = React28.useState(modes.includes("system") ? "system" : modes[0]);
+    React28.useEffect(() => {
       if (value !== void 0) return;
       try {
         const saved = localStorage.getItem(THEME_KEY);
@@ -2545,7 +2591,7 @@
       } catch (e) {
       }
     }, [value]);
-    React27.useEffect(() => {
+    React28.useEffect(() => {
       if (value !== void 0) return;
       const on = (e) => {
         if (modes.includes(e.detail)) setInternal(e.detail);
@@ -2563,7 +2609,7 @@
     if (compact) {
       const next = modes[(Math.max(0, modes.indexOf(mode)) + 1) % modes.length];
       const name = formatCompactLabel(label, modeLabels[mode] || mode, modeLabels[next] || next);
-      return /* @__PURE__ */ React27.createElement(
+      return /* @__PURE__ */ React28.createElement(
         "button",
         {
           type: "button",
@@ -2573,11 +2619,11 @@
           onClick: () => apply(next),
           ...rest
         },
-        /* @__PURE__ */ React27.createElement(Icon, { name: GLYPHS[mode] || "monitor", size: 18 })
+        /* @__PURE__ */ React28.createElement(Icon, { name: GLYPHS[mode] || "monitor", size: 18 })
       );
     }
     const { ref, onKeyDown, tabIndexFor } = useRadioGroup(modes, mode, apply);
-    return /* @__PURE__ */ React27.createElement(
+    return /* @__PURE__ */ React28.createElement(
       "div",
       {
         ref,
@@ -2587,7 +2633,7 @@
         onKeyDown,
         ...rest
       },
-      modes.map((m, i) => /* @__PURE__ */ React27.createElement(
+      modes.map((m, i) => /* @__PURE__ */ React28.createElement(
         "button",
         {
           key: m,
@@ -2599,24 +2645,24 @@
           "aria-label": modeLabels[m] || m,
           title: modeLabels[m] || m
         },
-        /* @__PURE__ */ React27.createElement(Icon, { name: GLYPHS[m] || "monitor", size: 16 })
+        /* @__PURE__ */ React28.createElement(Icon, { name: GLYPHS[m] || "monitor", size: 16 })
       ))
     );
   }
 
   // components/nav/LocaleSwitcher.jsx
   init_ds_inject_react();
-  var React29 = __toESM(require_ds_react(), 1);
+  var React30 = __toESM(require_ds_react(), 1);
 
   // components/overlays/Menu.jsx
   init_ds_inject_react();
-  var React28 = __toESM(require_ds_react(), 1);
+  var React29 = __toESM(require_ds_react(), 1);
   var cx55 = (...a) => a.filter(Boolean).join(" ");
   function Menu({ items = [], trigger, onSelect, label, placement = "bottom-start", matchWidth, linkAs = "a", className, ...rest }) {
-    const [open, setOpen] = React28.useState(false);
-    const listEl = React28.useRef(null);
-    const typed = React28.useRef({ s: "", t: 0 });
-    const intent = React28.useRef(0);
+    const [open, setOpen] = React29.useState(false);
+    const listEl = React29.useRef(null);
+    const typed = React29.useRef({ s: "", t: 0 });
+    const intent = React29.useRef(0);
     const ROWS = '[role^="menuitem"]:not([aria-disabled="true"])';
     const rows = () => Array.from(listEl.current ? listEl.current.querySelectorAll(ROWS) : []);
     const focusAt = (i) => {
@@ -2628,7 +2674,7 @@
       const el = r[(i + r.length) % r.length];
       el && el.focus({ preventScroll: true });
     };
-    const listRef = React28.useCallback((el) => {
+    const listRef = React29.useCallback((el) => {
       listEl.current = el;
       if (!el) return;
       const want = intent.current;
@@ -2640,7 +2686,7 @@
         if (target) target.focus({ preventScroll: true });
       });
     }, []);
-    React28.useEffect(() => {
+    React29.useEffect(() => {
       if (!open) intent.current = 0;
     }, [open]);
     const onKeyDown = (e) => {
@@ -2685,7 +2731,7 @@
       setOpen(false);
       it.onSelect ? it.onSelect(it) : onSelect && onSelect(it.value, it);
     };
-    const triggerEl = React28.isValidElement(trigger) ? React28.cloneElement(trigger, {
+    const triggerEl = React29.isValidElement(trigger) ? React29.cloneElement(trigger, {
       onKeyDown: (e) => {
         trigger.props.onKeyDown && trigger.props.onKeyDown(e);
         if (e.defaultPrevented) return;
@@ -2702,7 +2748,7 @@
         }
       }
     }) : trigger;
-    return /* @__PURE__ */ React28.createElement(
+    return /* @__PURE__ */ React29.createElement(
       Popover,
       {
         trigger: triggerEl,
@@ -2714,12 +2760,12 @@
         matchWidth,
         ...rest
       },
-      /* @__PURE__ */ React28.createElement("div", { ref: listRef, role: "none", className: cx55("lw-menu", className), onKeyDown }, items.map((it, i) => {
-        if (it.type === "separator") return /* @__PURE__ */ React28.createElement("hr", { key: i, className: "lw-menu-sep" });
-        if (it.type === "label") return /* @__PURE__ */ React28.createElement("div", { key: i, className: "lw-menu-label" }, it.label);
+      /* @__PURE__ */ React29.createElement("div", { ref: listRef, role: "none", className: cx55("lw-menu", className), onKeyDown }, items.map((it, i) => {
+        if (it.type === "separator") return /* @__PURE__ */ React29.createElement("hr", { key: i, className: "lw-menu-sep" });
+        if (it.type === "label") return /* @__PURE__ */ React29.createElement("div", { key: i, className: "lw-menu-label" }, it.label);
         const checkable = it.checked != null;
         const Tag = it.href ? linkAs : "button";
-        return /* @__PURE__ */ React28.createElement(
+        return /* @__PURE__ */ React29.createElement(
           Tag,
           {
             key: it.value ?? i,
@@ -2736,9 +2782,9 @@
               choose(it);
             }
           },
-          (checkable || it.icon) && /* @__PURE__ */ React28.createElement("span", { className: "lw-menu-lead" }, checkable ? it.checked ? /* @__PURE__ */ React28.createElement(Icon, { name: "checkmark", size: 14 }) : null : /* @__PURE__ */ React28.createElement(Icon, { name: it.icon, size: 15 })),
-          /* @__PURE__ */ React28.createElement("span", { className: "lw-menu-text" }, it.label),
-          it.kbd && /* @__PURE__ */ React28.createElement("span", { className: "lw-menu-kbd" }, it.kbd)
+          (checkable || it.icon) && /* @__PURE__ */ React29.createElement("span", { className: "lw-menu-lead" }, checkable ? it.checked ? /* @__PURE__ */ React29.createElement(Icon, { name: "checkmark", size: 14 }) : null : /* @__PURE__ */ React29.createElement(Icon, { name: it.icon, size: 15 })),
+          /* @__PURE__ */ React29.createElement("span", { className: "lw-menu-text" }, it.label),
+          it.kbd && /* @__PURE__ */ React29.createElement("span", { className: "lw-menu-kbd" }, it.kbd)
         );
       }))
     );
@@ -2761,7 +2807,7 @@
     const apply = (code) => code !== value && onChange?.(code);
     if (compact && codes.length === 2) {
       const other = codes[0] === value ? codes[1] : codes[0];
-      return /* @__PURE__ */ React29.createElement(
+      return /* @__PURE__ */ React30.createElement(
         "button",
         {
           type: "button",
@@ -2773,11 +2819,11 @@
           lang: other,
           ...rest
         },
-        /* @__PURE__ */ React29.createElement(Icon, { name: "globe", size: 18 })
+        /* @__PURE__ */ React30.createElement(Icon, { name: "globe", size: 18 })
       );
     }
     if (compact) {
-      return /* @__PURE__ */ React29.createElement(
+      return /* @__PURE__ */ React30.createElement(
         Menu,
         {
           label,
@@ -2790,7 +2836,7 @@
             checked: code === value,
             onSelect: () => apply(code)
           })),
-          trigger: /* @__PURE__ */ React29.createElement(
+          trigger: /* @__PURE__ */ React30.createElement(
             "button",
             {
               type: "button",
@@ -2800,13 +2846,13 @@
               "data-testid": "locale-compact",
               ...rest
             },
-            /* @__PURE__ */ React29.createElement(Icon, { name: "globe", size: 18 })
+            /* @__PURE__ */ React30.createElement(Icon, { name: "globe", size: 18 })
           )
         }
       );
     }
     const { ref, onKeyDown, tabIndexFor } = useRadioGroup(codes, value, apply);
-    return /* @__PURE__ */ React29.createElement(
+    return /* @__PURE__ */ React30.createElement(
       "div",
       {
         ref,
@@ -2817,7 +2863,7 @@
         "data-testid": "locale-switcher",
         ...rest
       },
-      codes.map((code, i) => /* @__PURE__ */ React29.createElement(
+      codes.map((code, i) => /* @__PURE__ */ React30.createElement(
         "button",
         {
           key: code,
@@ -2835,7 +2881,7 @@
 
   // components/nav/CommandPalette.jsx
   init_ds_inject_react();
-  var React30 = __toESM(require_ds_react(), 1);
+  var React31 = __toESM(require_ds_react(), 1);
   var cx57 = (...a) => a.filter(Boolean).join(" ");
   function score(query, text) {
     if (!query) return 0;
@@ -2863,12 +2909,12 @@
     className,
     ...rest
   }) {
-    const ref = React30.useRef(null);
-    const inputRef = React30.useRef(null);
-    const [q, setQ] = React30.useState("");
-    const [active, setActive] = React30.useState(0);
-    const uid = React30.useId();
-    React30.useEffect(() => {
+    const ref = React31.useRef(null);
+    const inputRef = React31.useRef(null);
+    const [q, setQ] = React31.useState("");
+    const [active, setActive] = React31.useState(0);
+    const uid = React31.useId();
+    React31.useEffect(() => {
       const el = ref.current;
       if (!el) return;
       if (open && !el.open) {
@@ -2878,11 +2924,11 @@
       }
       if (!open && el.open) el.close();
     }, [open]);
-    React30.useEffect(() => {
+    React31.useEffect(() => {
       if (open && inputRef.current) inputRef.current.focus({ preventScroll: true });
     }, [open]);
-    const shown = React30.useMemo(() => commands.filter((c) => !c.hidden).map((c) => ({ c, s: Math.max(score(q, c.label), score(q, c.group || "") - 4, ...(c.keywords || []).map((k) => score(q, k) - 2)) })).filter((x) => x.s >= 0).sort((a, b) => b.s - a.s).map((x) => x.c), [q, commands]);
-    React30.useEffect(() => {
+    const shown = React31.useMemo(() => commands.filter((c) => !c.hidden).map((c) => ({ c, s: Math.max(score(q, c.label), score(q, c.group || "") - 4, ...(c.keywords || []).map((k) => score(q, k) - 2)) })).filter((x) => x.s >= 0).sort((a, b) => b.s - a.s).map((x) => x.c), [q, commands]);
+    React31.useEffect(() => {
       setActive(0);
     }, [q]);
     const run = (c) => {
@@ -2903,7 +2949,7 @@
       }
     };
     let lastGroup = null;
-    return /* @__PURE__ */ React30.createElement(
+    return /* @__PURE__ */ React31.createElement(
       "dialog",
       {
         ref,
@@ -2917,7 +2963,7 @@
         onKeyDown,
         ...rest
       },
-      /* @__PURE__ */ React30.createElement("div", { className: "lw-cmdk-input" }, /* @__PURE__ */ React30.createElement(Icon, { name: "search", size: 17 }), /* @__PURE__ */ React30.createElement(
+      /* @__PURE__ */ React31.createElement("div", { className: "lw-cmdk-input" }, /* @__PURE__ */ React31.createElement(Icon, { name: "search", size: 17 }), /* @__PURE__ */ React31.createElement(
         "input",
         {
           ref: inputRef,
@@ -2932,9 +2978,9 @@
           onChange: (e) => setQ(e.target.value)
         }
       )),
-      /* @__PURE__ */ React30.createElement("ul", { className: "lw-cmdk-list lw-menu", id: uid, role: "listbox", "aria-label": label }, !shown.length && /* @__PURE__ */ React30.createElement("li", { className: "lw-listbox-empty" }, emptyText), shown.map((c, i) => {
+      /* @__PURE__ */ React31.createElement("ul", { className: "lw-cmdk-list lw-menu", id: uid, role: "listbox", "aria-label": label }, !shown.length && /* @__PURE__ */ React31.createElement("li", { className: "lw-listbox-empty" }, emptyText), shown.map((c, i) => {
         const head = c.group && c.group !== lastGroup ? lastGroup = c.group : null;
-        return /* @__PURE__ */ React30.createElement(React30.Fragment, { key: c.id ?? i }, head && /* @__PURE__ */ React30.createElement("li", { className: "lw-menu-label", role: "presentation" }, head), /* @__PURE__ */ React30.createElement(
+        return /* @__PURE__ */ React31.createElement(React31.Fragment, { key: c.id ?? i }, head && /* @__PURE__ */ React31.createElement("li", { className: "lw-menu-label", role: "presentation" }, head), /* @__PURE__ */ React31.createElement(
           "li",
           {
             id: uid + "-" + i,
@@ -2946,18 +2992,18 @@
             onMouseEnter: () => setActive(i),
             onClick: () => run(c)
           },
-          /* @__PURE__ */ React30.createElement("span", { className: "lw-menu-lead" }, c.icon && /* @__PURE__ */ React30.createElement(Icon, { name: c.icon, size: 15 })),
-          /* @__PURE__ */ React30.createElement("span", { className: "lw-menu-text" }, c.label),
-          c.kbd && /* @__PURE__ */ React30.createElement("span", { className: "lw-menu-kbd" }, c.kbd)
+          /* @__PURE__ */ React31.createElement("span", { className: "lw-menu-lead" }, c.icon && /* @__PURE__ */ React31.createElement(Icon, { name: c.icon, size: 15 })),
+          /* @__PURE__ */ React31.createElement("span", { className: "lw-menu-text" }, c.label),
+          c.kbd && /* @__PURE__ */ React31.createElement("span", { className: "lw-menu-kbd" }, c.kbd)
         ));
       })),
-      /* @__PURE__ */ React30.createElement("div", { className: "lw-cmdk-foot" }, hints.map((h, i) => /* @__PURE__ */ React30.createElement("span", { key: i }, h)))
+      /* @__PURE__ */ React31.createElement("div", { className: "lw-cmdk-foot" }, hints.map((h, i) => /* @__PURE__ */ React31.createElement("span", { key: i }, h)))
     );
   }
 
   // components/nav/BottomNav.jsx
   init_ds_inject_react();
-  var React31 = __toESM(require_ds_react(), 1);
+  var React32 = __toESM(require_ds_react(), 1);
   var cx58 = (...a) => a.filter(Boolean).join(" ");
   function BottomNav({
     items = [],
@@ -2969,14 +3015,14 @@
     className,
     ...rest
   }) {
-    React31.useEffect(() => {
+    React32.useEffect(() => {
       if (items.length <= 5 || typeof console === "undefined") return;
       console.warn("BottomNav: " + items.length + " items. Past five, labels truncate and the bar stops being scannable — use a sidebar or a More destination.");
     }, [items.length]);
-    return /* @__PURE__ */ React31.createElement("nav", { className: cx58("lw-bottom-nav", className), "aria-label": label, ...rest }, items.map((it) => {
+    return /* @__PURE__ */ React32.createElement("nav", { className: cx58("lw-bottom-nav", className), "aria-label": label, ...rest }, items.map((it) => {
       const on = it.value === value;
       const Tag = it.href ? linkAs : "button";
-      return /* @__PURE__ */ React31.createElement(
+      return /* @__PURE__ */ React32.createElement(
         Tag,
         {
           key: it.value,
@@ -2985,16 +3031,16 @@
           "aria-current": on ? "page" : void 0,
           onClick: it.href ? void 0 : () => onChange && onChange(it.value)
         },
-        /* @__PURE__ */ React31.createElement(Icon, { name: it.icon, size: 21 }),
-        /* @__PURE__ */ React31.createElement("span", { className: "lw-bn-label" }, it.label),
-        it.badge != null && /* @__PURE__ */ React31.createElement("span", { className: "lw-sr-only" }, formatBadgeLabel(it.badge))
+        /* @__PURE__ */ React32.createElement(Icon, { name: it.icon, size: 21 }),
+        /* @__PURE__ */ React32.createElement("span", { className: "lw-bn-label" }, it.label),
+        it.badge != null && /* @__PURE__ */ React32.createElement("span", { className: "lw-sr-only" }, formatBadgeLabel(it.badge))
       );
     }));
   }
 
   // components/nav/NavToggle.jsx
   init_ds_inject_react();
-  var React32 = __toESM(require_ds_react(), 1);
+  var React33 = __toESM(require_ds_react(), 1);
   var cx59 = (...a) => a.filter(Boolean).join(" ");
   function NavToggle({
     label = "Menu",
@@ -3006,10 +3052,10 @@
     children,
     ...rest
   }) {
-    const auto = React32.useId();
+    const auto = React33.useId();
     const panelId = id || "lw-nav-panel-" + auto;
-    const [open, setOpen] = React32.useState(defaultOpen);
-    const btnRef = React32.useRef(null);
+    const [open, setOpen] = React33.useState(defaultOpen);
+    const btnRef = React33.useRef(null);
     const set = (next) => {
       setOpen(next);
       onOpenChange?.(next);
@@ -3020,7 +3066,7 @@
       set(false);
       btnRef.current?.focus();
     };
-    return /* @__PURE__ */ React32.createElement(React32.Fragment, null, /* @__PURE__ */ React32.createElement(
+    return /* @__PURE__ */ React33.createElement(React33.Fragment, null, /* @__PURE__ */ React33.createElement(
       "button",
       {
         type: "button",
@@ -3033,27 +3079,27 @@
         onKeyDown,
         ...rest
       },
-      /* @__PURE__ */ React32.createElement(Icon, { name: open ? "close" : "menu", size: 20 })
-    ), /* @__PURE__ */ React32.createElement("div", { id: panelId, className: "lw-topbar-panel", hidden: !open, onKeyDown }, children));
+      /* @__PURE__ */ React33.createElement(Icon, { name: open ? "close" : "menu", size: 20 })
+    ), /* @__PURE__ */ React33.createElement("div", { id: panelId, className: "lw-topbar-panel", hidden: !open, onKeyDown }, children));
   }
 
   // components/overlays/Dialog.jsx
   init_ds_inject_react();
-  var React33 = __toESM(require_ds_react(), 1);
+  var React34 = __toESM(require_ds_react(), 1);
   var cx60 = (...a) => a.filter(Boolean).join(" ");
   function Dialog({ open, onClose, title, description, footer, width, closeLabel = "Close", className, children, ...rest }) {
-    const ref = React33.useRef(null);
-    const uid = React33.useId();
+    const ref = React34.useRef(null);
+    const uid = React34.useId();
     const titleId = title ? uid + "-t" : void 0;
     const descId = description ? uid + "-d" : void 0;
     const w = width == null || width === "" ? null : /^\d+(\.\d+)?$/.test(String(width)) ? String(width) + "px" : String(width);
-    React33.useEffect(() => {
+    React34.useEffect(() => {
       const el = ref.current;
       if (!el) return;
       if (open && !el.open) el.showModal();
       if (!open && el.open) el.close();
     }, [open]);
-    return /* @__PURE__ */ React33.createElement(
+    return /* @__PURE__ */ React34.createElement(
       "dialog",
       {
         ref,
@@ -3068,9 +3114,9 @@
         "aria-describedby": descId,
         ...rest
       },
-      title && /* @__PURE__ */ React33.createElement("div", { className: "lw-dialog-head" }, /* @__PURE__ */ React33.createElement("h2", { className: "lw-dialog-title", id: titleId }, title), /* @__PURE__ */ React33.createElement("button", { type: "button", className: "lw-icon-btn lw-dialog-close", "aria-label": closeLabel, title: closeLabel, onClick: onClose }, /* @__PURE__ */ React33.createElement(Icon, { name: "close", size: 17 }))),
-      /* @__PURE__ */ React33.createElement("div", { className: "lw-dialog-body" }, description && /* @__PURE__ */ React33.createElement("div", { id: descId }, description), children),
-      footer && /* @__PURE__ */ React33.createElement("div", { className: "lw-dialog-foot" }, footer)
+      title && /* @__PURE__ */ React34.createElement("div", { className: "lw-dialog-head" }, /* @__PURE__ */ React34.createElement("h2", { className: "lw-dialog-title", id: titleId }, title), /* @__PURE__ */ React34.createElement("button", { type: "button", className: "lw-icon-btn lw-dialog-close", "aria-label": closeLabel, title: closeLabel, onClick: onClose }, /* @__PURE__ */ React34.createElement(Icon, { name: "close", size: 17 }))),
+      /* @__PURE__ */ React34.createElement("div", { className: "lw-dialog-body" }, description && /* @__PURE__ */ React34.createElement("div", { id: descId }, description), children),
+      footer && /* @__PURE__ */ React34.createElement("div", { className: "lw-dialog-foot" }, footer)
     );
   }
 
@@ -3121,21 +3167,21 @@
 
   // components/overlays/Drawer.jsx
   init_ds_inject_react();
-  var React34 = __toESM(require_ds_react(), 1);
+  var React35 = __toESM(require_ds_react(), 1);
   var cx63 = (...a) => a.filter(Boolean).join(" ");
   function Drawer({ open, onClose, title, description, footer, side = "end", width, closeLabel = "Close", className, children, ...rest }) {
-    const ref = React34.useRef(null);
-    const uid = React34.useId();
+    const ref = React35.useRef(null);
+    const uid = React35.useId();
     const titleId = title ? uid + "-t" : void 0;
     const descId = description ? uid + "-d" : void 0;
     const w = width == null || width === "" ? null : /^\d+(\.\d+)?$/.test(String(width)) ? String(width) + "px" : String(width);
-    React34.useEffect(() => {
+    React35.useEffect(() => {
       const el = ref.current;
       if (!el) return;
       if (open && !el.open) el.showModal();
       if (!open && el.open) el.close();
     }, [open]);
-    return /* @__PURE__ */ React34.createElement(
+    return /* @__PURE__ */ React35.createElement(
       "dialog",
       {
         ref,
@@ -3151,15 +3197,4046 @@
         "aria-describedby": descId,
         ...rest
       },
-      title && /* @__PURE__ */ React34.createElement("div", { className: "lw-drawer-head" }, /* @__PURE__ */ React34.createElement("h2", { className: "lw-drawer-title", id: titleId }, title), /* @__PURE__ */ React34.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": closeLabel, title: closeLabel, onClick: onClose }, /* @__PURE__ */ React34.createElement(Icon, { name: "close", size: 17 }))),
-      /* @__PURE__ */ React34.createElement("div", { className: "lw-drawer-body" }, description && /* @__PURE__ */ React34.createElement("div", { id: descId }, description), children),
-      footer && /* @__PURE__ */ React34.createElement("div", { className: "lw-drawer-foot" }, footer)
+      title && /* @__PURE__ */ React35.createElement("div", { className: "lw-drawer-head" }, /* @__PURE__ */ React35.createElement("h2", { className: "lw-drawer-title", id: titleId }, title), /* @__PURE__ */ React35.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": closeLabel, title: closeLabel, onClick: onClose }, /* @__PURE__ */ React35.createElement(Icon, { name: "close", size: 17 }))),
+      /* @__PURE__ */ React35.createElement("div", { className: "lw-drawer-body" }, description && /* @__PURE__ */ React35.createElement("div", { id: descId }, description), children),
+      footer && /* @__PURE__ */ React35.createElement("div", { className: "lw-drawer-foot" }, footer)
     );
+  }
+
+  // components/overlays/OverlayProvider.jsx
+  init_ds_inject_react();
+  var React55 = __toESM(require_ds_react(), 1);
+
+  // node_modules/radix-ui/dist/index.mjs
+  init_ds_inject_react();
+
+  // node_modules/@radix-ui/react-visually-hidden/dist/index.mjs
+  init_ds_inject_react();
+  var React39 = __toESM(require_ds_react(), 1);
+
+  // node_modules/@radix-ui/react-primitive/dist/index.mjs
+  init_ds_inject_react();
+  var React38 = __toESM(require_ds_react(), 1);
+  var ReactDOM = __toESM(require_ds_react_dom(), 1);
+
+  // node_modules/@radix-ui/react-slot/dist/index.mjs
+  init_ds_inject_react();
+  var React37 = __toESM(require_ds_react(), 1);
+
+  // node_modules/@radix-ui/react-compose-refs/dist/index.mjs
+  init_ds_inject_react();
+  var React36 = __toESM(require_ds_react(), 1);
+  var __defProp2 = Object.defineProperty;
+  var __name = (target, value) => __defProp2(target, "name", { value, configurable: true });
+  function setRef(ref, value) {
+    if (typeof ref === "function") {
+      return ref(value);
+    } else if (ref !== null && ref !== void 0) {
+      ref.current = value;
+    }
+  }
+  __name(setRef, "setRef");
+  function composeRefs(...refs) {
+    return (node) => {
+      let hasCleanup = false;
+      const cleanups = refs.map((ref) => {
+        const cleanup = setRef(ref, node);
+        if (!hasCleanup && typeof cleanup == "function") {
+          hasCleanup = true;
+        }
+        return cleanup;
+      });
+      if (hasCleanup) {
+        return () => {
+          for (let i = 0; i < cleanups.length; i++) {
+            const cleanup = cleanups[i];
+            if (typeof cleanup == "function") {
+              cleanup();
+            } else {
+              setRef(refs[i], null);
+            }
+          }
+        };
+      }
+    };
+  }
+  __name(composeRefs, "composeRefs");
+  function useComposedRefs(...refs) {
+    return React36.useCallback(composeRefs(...refs), refs);
+  }
+  __name(useComposedRefs, "useComposedRefs");
+
+  // node_modules/@radix-ui/react-slot/dist/index.mjs
+  var __defProp3 = Object.defineProperty;
+  var __name2 = (target, value) => __defProp3(target, "name", { value, configurable: true });
+  // @__NO_SIDE_EFFECTS__
+  function createSlot(ownerName) {
+    const Slot2 = React37.forwardRef((props, forwardedRef) => {
+      let { children, ...slotProps } = props;
+      let slottableElement = null;
+      let hasSlottable = false;
+      const newChildren = [];
+      if (isLazyComponent(children) && typeof use === "function") {
+        children = use(children._payload);
+      }
+      React37.Children.forEach(children, (maybeSlottable) => {
+        if (isSlottable(maybeSlottable)) {
+          hasSlottable = true;
+          const slottable = maybeSlottable;
+          let child = "child" in slottable.props ? slottable.props.child : slottable.props.children;
+          if (isLazyComponent(child) && typeof use === "function") {
+            child = use(child._payload);
+          }
+          slottableElement = getSlottableElementFromSlottable(slottable, child);
+          newChildren.push(slottableElement?.props?.children);
+        } else {
+          newChildren.push(maybeSlottable);
+        }
+      });
+      if (slottableElement) {
+        slottableElement = React37.cloneElement(slottableElement, void 0, newChildren);
+      } else if (
+        // A `Slottable` was found but it didn't resolve to a single element (e.g.
+        // it wrapped multiple elements, text, or a render-prop `child` that
+        // wasn't an element). Don't fall back to treating the `Slottable` wrapper
+        // itself as the slot target — throw a descriptive error below instead.
+        !hasSlottable && React37.Children.count(children) === 1 && React37.isValidElement(children)
+      ) {
+        slottableElement = children;
+      }
+      const slottableElementRef = slottableElement ? getElementRef(slottableElement) : void 0;
+      const composedRef = useComposedRefs(forwardedRef, slottableElementRef);
+      if (!slottableElement) {
+        if (children || children === 0) {
+          throw new Error(
+            hasSlottable ? createSlottableError(ownerName) : createSlotError(ownerName)
+          );
+        }
+        return children;
+      }
+      const mergedProps = mergeProps(slotProps, slottableElement.props ?? {});
+      if (slottableElement.type !== React37.Fragment) {
+        mergedProps.ref = forwardedRef ? composedRef : slottableElementRef;
+      }
+      return React37.cloneElement(slottableElement, mergedProps);
+    });
+    Slot2.displayName = `${ownerName}.Slot`;
+    return Slot2;
+  }
+  __name2(createSlot, "createSlot");
+  var SLOTTABLE_IDENTIFIER = /* @__PURE__ */ Symbol.for("radix.slottable");
+  // @__NO_SIDE_EFFECTS__
+  function createSlottable(ownerName) {
+    const Slottable2 = /* @__PURE__ */ __name2((props) => "child" in props ? props.children(props.child) : props.children, "Slottable");
+    Slottable2.displayName = `${ownerName}.Slottable`;
+    Slottable2.__radixId = SLOTTABLE_IDENTIFIER;
+    return Slottable2;
+  }
+  __name2(createSlottable, "createSlottable");
+  var getSlottableElementFromSlottable = /* @__PURE__ */ __name2((slottable, child) => {
+    if ("child" in slottable.props) {
+      const child2 = slottable.props.child;
+      if (!React37.isValidElement(child2)) return null;
+      return React37.cloneElement(child2, void 0, slottable.props.children(child2.props.children));
+    }
+    return React37.isValidElement(child) ? child : null;
+  }, "getSlottableElementFromSlottable");
+  function mergeProps(slotProps, childProps) {
+    const overrideProps = { ...childProps };
+    for (const propName in childProps) {
+      const slotPropValue = slotProps[propName];
+      const childPropValue = childProps[propName];
+      const isHandler = /^on[A-Z]/.test(propName);
+      if (isHandler) {
+        if (slotPropValue && childPropValue) {
+          overrideProps[propName] = (...args) => {
+            const result = childPropValue(...args);
+            slotPropValue(...args);
+            return result;
+          };
+        } else if (slotPropValue) {
+          overrideProps[propName] = slotPropValue;
+        }
+      } else if (propName === "style") {
+        overrideProps[propName] = { ...slotPropValue, ...childPropValue };
+      } else if (propName === "className") {
+        overrideProps[propName] = [slotPropValue, childPropValue].filter(Boolean).join(" ");
+      }
+    }
+    return { ...slotProps, ...overrideProps };
+  }
+  __name2(mergeProps, "mergeProps");
+  function getElementRef(element) {
+    let getter = Object.getOwnPropertyDescriptor(element.props, "ref")?.get;
+    let mayWarn = getter && "isReactWarning" in getter && getter.isReactWarning;
+    if (mayWarn) {
+      return element.ref;
+    }
+    getter = Object.getOwnPropertyDescriptor(element, "ref")?.get;
+    mayWarn = getter && "isReactWarning" in getter && getter.isReactWarning;
+    if (mayWarn) {
+      return element.props.ref;
+    }
+    return element.props.ref || element.ref;
+  }
+  __name2(getElementRef, "getElementRef");
+  function isSlottable(child) {
+    return React37.isValidElement(child) && typeof child.type === "function" && "__radixId" in child.type && child.type.__radixId === SLOTTABLE_IDENTIFIER;
+  }
+  __name2(isSlottable, "isSlottable");
+  var REACT_LAZY_TYPE = /* @__PURE__ */ Symbol.for("react.lazy");
+  function isLazyComponent(element) {
+    return element != null && typeof element === "object" && "$$typeof" in element && element.$$typeof === REACT_LAZY_TYPE && "_payload" in element && isPromiseLike(element._payload);
+  }
+  __name2(isLazyComponent, "isLazyComponent");
+  function isPromiseLike(value) {
+    return typeof value === "object" && value !== null && "then" in value;
+  }
+  __name2(isPromiseLike, "isPromiseLike");
+  var createSlotError = /* @__PURE__ */ __name2((ownerName) => {
+    return `${ownerName} failed to slot onto its children. Expected a single React element child or \`Slottable\`.`;
+  }, "createSlotError");
+  var createSlottableError = /* @__PURE__ */ __name2((ownerName) => {
+    return `${ownerName} failed to slot onto its \`Slottable\`. Expected \`Slottable\` to receive a single React element child.`;
+  }, "createSlottableError");
+  var use = React37[" use ".trim().toString()];
+
+  // node_modules/@radix-ui/react-primitive/dist/index.mjs
+  var import_jsx_runtime = __toESM(require_ds_jsx_runtime(), 1);
+  var __defProp4 = Object.defineProperty;
+  var __name3 = (target, value) => __defProp4(target, "name", { value, configurable: true });
+  var NODES = [
+    "a",
+    "button",
+    "div",
+    "form",
+    "h2",
+    "h3",
+    "img",
+    "input",
+    "label",
+    "li",
+    "nav",
+    "ol",
+    "p",
+    "select",
+    "span",
+    "svg",
+    "ul"
+  ];
+  var Primitive = NODES.reduce((primitive, node) => {
+    const Slot = createSlot(`Primitive.${node}`);
+    const Node2 = React38.forwardRef((props, forwardedRef) => {
+      const { asChild, ...primitiveProps } = props;
+      const Comp = asChild ? Slot : node;
+      if (typeof window !== "undefined") {
+        window[/* @__PURE__ */ Symbol.for("radix-ui")] = true;
+      }
+      return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Comp, { ...primitiveProps, ref: forwardedRef });
+    });
+    Node2.displayName = `Primitive.${node}`;
+    return { ...primitive, [node]: Node2 };
+  }, {});
+  function dispatchDiscreteCustomEvent(target, event) {
+    if (target) ReactDOM.flushSync(() => target.dispatchEvent(event));
+  }
+  __name3(dispatchDiscreteCustomEvent, "dispatchDiscreteCustomEvent");
+
+  // node_modules/@radix-ui/react-visually-hidden/dist/index.mjs
+  var import_jsx_runtime2 = __toESM(require_ds_jsx_runtime(), 1);
+  var __defProp5 = Object.defineProperty;
+  var __name4 = (target, value) => __defProp5(target, "name", { value, configurable: true });
+  var VISUALLY_HIDDEN_STYLES = Object.freeze({
+    // See: https://github.com/twbs/bootstrap/blob/main/scss/mixins/_visually-hidden.scss
+    position: "absolute",
+    border: 0,
+    width: 1,
+    height: 1,
+    padding: 0,
+    margin: -1,
+    overflow: "hidden",
+    clip: "rect(0, 0, 0, 0)",
+    whiteSpace: "nowrap",
+    wordWrap: "normal"
+  });
+  var VisuallyHidden = /* @__PURE__ */ React39.forwardRef(
+    /* @__PURE__ */ __name4(function VisuallyHidden2(props, forwardedRef) {
+      return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+        Primitive.span,
+        {
+          ...props,
+          ref: forwardedRef,
+          style: { ...VISUALLY_HIDDEN_STYLES, ...props.style }
+        }
+      );
+    }, "VisuallyHidden")
+  );
+  var Root = VisuallyHidden;
+
+  // node_modules/@radix-ui/react-context/dist/index.mjs
+  init_ds_inject_react();
+  var React40 = __toESM(require_ds_react(), 1);
+  var import_jsx_runtime3 = __toESM(require_ds_jsx_runtime(), 1);
+  var __defProp6 = Object.defineProperty;
+  var __name5 = (target, value) => __defProp6(target, "name", { value, configurable: true });
+  // @__NO_SIDE_EFFECTS__
+  function createContext2(rootComponentName, defaultContext) {
+    const Context = React40.createContext(defaultContext);
+    Context.displayName = rootComponentName + "Context";
+    const Provider2 = /* @__PURE__ */ __name5((props) => {
+      const { children, ...context } = props;
+      const value = React40.useMemo(() => context, Object.values(context));
+      return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(Context.Provider, { value, children });
+    }, "Provider");
+    Provider2.displayName = rootComponentName + "Provider";
+    function useContext22(consumerName, options = {}) {
+      const { optional = false } = options;
+      const context = React40.useContext(Context);
+      if (context) return context;
+      if (defaultContext !== void 0) return defaultContext;
+      if (optional) return void 0;
+      throw new Error(`\`${consumerName}\` must be used within \`${rootComponentName}\``);
+    }
+    __name5(useContext22, "useContext");
+    return [Provider2, useContext22];
+  }
+  __name5(createContext2, "createContext");
+  // @__NO_SIDE_EFFECTS__
+  function createContextScope(scopeName, createContextScopeDeps = []) {
+    let defaultContexts = [];
+    function createContext32(rootComponentName, defaultContext) {
+      const BaseContext = React40.createContext(defaultContext);
+      BaseContext.displayName = rootComponentName + "Context";
+      const index2 = defaultContexts.length;
+      defaultContexts = [...defaultContexts, defaultContext];
+      const Provider2 = /* @__PURE__ */ __name5((props) => {
+        const { scope, children, ...context } = props;
+        const Context = scope?.[scopeName]?.[index2] || BaseContext;
+        const value = React40.useMemo(() => context, Object.values(context));
+        return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(Context.Provider, { value, children });
+      }, "Provider");
+      Provider2.displayName = rootComponentName + "Provider";
+      function useContext22(consumerName, scope, options = {}) {
+        const { optional = false } = options;
+        const Context = scope?.[scopeName]?.[index2] || BaseContext;
+        const context = React40.useContext(Context);
+        if (context) return context;
+        if (defaultContext !== void 0) return defaultContext;
+        if (optional) return void 0;
+        throw new Error(`\`${consumerName}\` must be used within \`${rootComponentName}\``);
+      }
+      __name5(useContext22, "useContext");
+      return [Provider2, useContext22];
+    }
+    __name5(createContext32, "createContext");
+    const createScope = /* @__PURE__ */ __name5(() => {
+      const scopeContexts = defaultContexts.map((defaultContext) => {
+        return React40.createContext(defaultContext);
+      });
+      return /* @__PURE__ */ __name5(function useScope(scope) {
+        const contexts = scope?.[scopeName] || scopeContexts;
+        return React40.useMemo(
+          () => ({ [`__scope${scopeName}`]: { ...scope, [scopeName]: contexts } }),
+          [scope, contexts]
+        );
+      }, "useScope");
+    }, "createScope");
+    createScope.scopeName = scopeName;
+    return [createContext32, composeContextScopes(createScope, ...createContextScopeDeps)];
+  }
+  __name5(createContextScope, "createContextScope");
+  function composeContextScopes(...scopes) {
+    const baseScope = scopes[0];
+    if (scopes.length === 1) return baseScope;
+    const createScope = /* @__PURE__ */ __name5(() => {
+      const scopeHooks = scopes.map((createScope2) => ({
+        useScope: createScope2(),
+        scopeName: createScope2.scopeName
+      }));
+      return /* @__PURE__ */ __name5(function useComposedScopes(overrideScopes) {
+        const nextScopes = scopeHooks.reduce((nextScopes2, { useScope, scopeName }) => {
+          const scopeProps = useScope(overrideScopes);
+          const currentScope = scopeProps[`__scope${scopeName}`];
+          return { ...nextScopes2, ...currentScope };
+        }, {});
+        return React40.useMemo(() => ({ [`__scope${baseScope.scopeName}`]: nextScopes }), [nextScopes]);
+      }, "useComposedScopes");
+    }, "createScope");
+    createScope.scopeName = baseScope.scopeName;
+    return createScope;
+  }
+  __name5(composeContextScopes, "composeContextScopes");
+
+  // node_modules/@radix-ui/primitive/dist/index.mjs
+  init_ds_inject_react();
+  var __defProp7 = Object.defineProperty;
+  var __name6 = (target, value) => __defProp7(target, "name", { value, configurable: true });
+  var canUseDOM = !!(typeof window !== "undefined" && window.document && window.document.createElement);
+  function composeEventHandlers(originalEventHandler, ourEventHandler, { checkForDefaultPrevented = true } = {}) {
+    return /* @__PURE__ */ __name6(function handleEvent(event) {
+      originalEventHandler?.(event);
+      if (checkForDefaultPrevented === false || !event || !event.defaultPrevented) {
+        return ourEventHandler?.(event);
+      }
+    }, "handleEvent");
+  }
+  __name6(composeEventHandlers, "composeEventHandlers");
+  function getOwnerWindow(element) {
+    if (!canUseDOM) {
+      throw new Error("Cannot access window outside of the DOM");
+    }
+    return element?.ownerDocument?.defaultView ?? window;
+  }
+  __name6(getOwnerWindow, "getOwnerWindow");
+  function getOwnerDocument(element) {
+    if (!canUseDOM) {
+      throw new Error("Cannot access document outside of the DOM");
+    }
+    return element?.ownerDocument ?? document;
+  }
+  __name6(getOwnerDocument, "getOwnerDocument");
+  function getActiveElement(node, activeDescendant = false) {
+    const { activeElement } = getOwnerDocument(node);
+    if (!activeElement?.nodeName) {
+      return null;
+    }
+    if (isFrame(activeElement) && activeElement.contentDocument) {
+      return getActiveElement(activeElement.contentDocument.body, activeDescendant);
+    }
+    if (activeDescendant) {
+      const id = activeElement.getAttribute("aria-activedescendant");
+      if (id) {
+        const element = getOwnerDocument(activeElement).getElementById(id);
+        if (element) {
+          return element;
+        }
+      }
+    }
+    return activeElement;
+  }
+  __name6(getActiveElement, "getActiveElement");
+  function isFrame(element) {
+    return element.tagName === "IFRAME";
+  }
+  __name6(isFrame, "isFrame");
+
+  // node_modules/@radix-ui/react-use-controllable-state/dist/index.mjs
+  init_ds_inject_react();
+  var React43 = __toESM(require_ds_react(), 1);
+
+  // node_modules/@radix-ui/primitive/dist/internal/is-development.false.mjs
+  init_ds_inject_react();
+  var IS_DEVELOPMENT = false;
+
+  // node_modules/@radix-ui/react-use-layout-effect/dist/index.mjs
+  init_ds_inject_react();
+  var React41 = __toESM(require_ds_react(), 1);
+  var useLayoutEffect2 = globalThis?.document ? React41.useLayoutEffect : () => {
+  };
+
+  // node_modules/@radix-ui/react-use-controllable-state/dist/index.mjs
+  var React210 = __toESM(require_ds_react(), 1);
+
+  // node_modules/@radix-ui/react-use-effect-event/dist/index.mjs
+  init_ds_inject_react();
+  var React42 = __toESM(require_ds_react(), 1);
+  var __defProp8 = Object.defineProperty;
+  var __name7 = (target, value) => __defProp8(target, "name", { value, configurable: true });
+  var useReactEffectEvent = React42[" useEffectEvent ".trim().toString()];
+  var useReactInsertionEffect = React42[" useInsertionEffect ".trim().toString()];
+  function useEffectEvent(callback) {
+    if (typeof useReactEffectEvent === "function") {
+      return useReactEffectEvent(callback);
+    }
+    const ref = React42.useRef(() => {
+      throw new Error("Cannot call an event handler while rendering.");
+    });
+    if (typeof useReactInsertionEffect === "function") {
+      useReactInsertionEffect(() => {
+        ref.current = callback;
+      });
+    } else {
+      useLayoutEffect2(() => {
+        ref.current = callback;
+      });
+    }
+    return React42.useMemo(() => ((...args) => ref.current?.(...args)), []);
+  }
+  __name7(useEffectEvent, "useEffectEvent");
+
+  // node_modules/@radix-ui/react-use-controllable-state/dist/index.mjs
+  var __defProp9 = Object.defineProperty;
+  var __name8 = (target, value) => __defProp9(target, "name", { value, configurable: true });
+  var useInsertionEffect = React43[" useInsertionEffect ".trim().toString()] || useLayoutEffect2;
+  function useControllableState({
+    prop,
+    defaultProp,
+    onChange = /* @__PURE__ */ __name8(() => {
+    }, "onChange"),
+    caller
+  }) {
+    const [uncontrolledProp, setUncontrolledProp, onChangeRef] = useUncontrolledState({
+      defaultProp,
+      onChange
+    });
+    const isControlled = prop !== void 0;
+    const value = isControlled ? prop : uncontrolledProp;
+    if (IS_DEVELOPMENT) {
+      const isControlledRef = React43.useRef(prop !== void 0);
+      React43.useEffect(() => {
+        const wasControlled = isControlledRef.current;
+        if (wasControlled !== isControlled) {
+          const from = wasControlled ? "controlled" : "uncontrolled";
+          const to = isControlled ? "controlled" : "uncontrolled";
+          console.warn(
+            `${caller} is changing from ${from} to ${to}. Components should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled value for the lifetime of the component.`
+          );
+        }
+        isControlledRef.current = isControlled;
+      }, [isControlled, caller]);
+    }
+    const setValue = React43.useCallback(
+      (nextValue) => {
+        if (isControlled) {
+          const value2 = isFunction(nextValue) ? nextValue(prop) : nextValue;
+          if (value2 !== prop) {
+            onChangeRef.current?.(value2);
+          }
+        } else {
+          setUncontrolledProp(nextValue);
+        }
+      },
+      [isControlled, prop, setUncontrolledProp, onChangeRef]
+    );
+    return [value, setValue];
+  }
+  __name8(useControllableState, "useControllableState");
+  function useUncontrolledState({
+    defaultProp,
+    onChange
+  }) {
+    const [value, setValue] = React43.useState(defaultProp);
+    const prevValueRef = React43.useRef(value);
+    const onChangeRef = React43.useRef(onChange);
+    useInsertionEffect(() => {
+      onChangeRef.current = onChange;
+    }, [onChange]);
+    React43.useEffect(() => {
+      if (prevValueRef.current !== value) {
+        onChangeRef.current?.(value);
+        prevValueRef.current = value;
+      }
+    }, [value, prevValueRef]);
+    return [value, setValue, onChangeRef];
+  }
+  __name8(useUncontrolledState, "useUncontrolledState");
+  function isFunction(value) {
+    return typeof value === "function";
+  }
+  __name8(isFunction, "isFunction");
+  var SYNC_STATE = /* @__PURE__ */ Symbol("RADIX:SYNC_STATE");
+  function useControllableStateReducer(reducer, userArgs, initialArg, init) {
+    const { prop: controlledState, defaultProp, onChange: onChangeProp, caller } = userArgs;
+    const isControlled = controlledState !== void 0;
+    const onChange = useEffectEvent(onChangeProp);
+    if (IS_DEVELOPMENT) {
+      const isControlledRef = React210.useRef(controlledState !== void 0);
+      React210.useEffect(() => {
+        const wasControlled = isControlledRef.current;
+        if (wasControlled !== isControlled) {
+          const from = wasControlled ? "controlled" : "uncontrolled";
+          const to = isControlled ? "controlled" : "uncontrolled";
+          console.warn(
+            `${caller} is changing from ${from} to ${to}. Components should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled value for the lifetime of the component.`
+          );
+        }
+        isControlledRef.current = isControlled;
+      }, [isControlled, caller]);
+    }
+    const args = [{ ...initialArg, state: defaultProp }];
+    if (init) {
+      args.push(init);
+    }
+    const [internalState, dispatch] = React210.useReducer(
+      (state2, action) => {
+        if (action.type === SYNC_STATE) {
+          return { ...state2, state: action.state };
+        }
+        const next = reducer(state2, action);
+        if (isControlled && !Object.is(next.state, state2.state)) {
+          onChange(next.state);
+        }
+        return next;
+      },
+      ...args
+    );
+    const uncontrolledState = internalState.state;
+    const prevValueRef = React210.useRef(uncontrolledState);
+    React210.useEffect(() => {
+      if (prevValueRef.current !== uncontrolledState) {
+        prevValueRef.current = uncontrolledState;
+        if (!isControlled) {
+          onChange(uncontrolledState);
+        }
+      }
+    }, [uncontrolledState, prevValueRef, isControlled]);
+    const state = React210.useMemo(() => {
+      const isControlled2 = controlledState !== void 0;
+      if (isControlled2) {
+        return { ...internalState, state: controlledState };
+      }
+      return internalState;
+    }, [internalState, controlledState]);
+    React210.useEffect(() => {
+      if (isControlled && !Object.is(controlledState, internalState.state)) {
+        dispatch({ type: SYNC_STATE, state: controlledState });
+      }
+    }, [controlledState, internalState.state, isControlled]);
+    return [state, dispatch];
+  }
+  __name8(useControllableStateReducer, "useControllableStateReducer");
+
+  // node_modules/@radix-ui/react-presence/dist/index.mjs
+  init_ds_inject_react();
+  var React211 = __toESM(require_ds_react(), 1);
+  var React44 = __toESM(require_ds_react(), 1);
+  var __defProp10 = Object.defineProperty;
+  var __name9 = (target, value) => __defProp10(target, "name", { value, configurable: true });
+  function useStateMachine(initialState, machine) {
+    return React44.useReducer((state, event) => {
+      const nextState = machine[state][event];
+      return nextState ?? state;
+    }, initialState);
+  }
+  __name9(useStateMachine, "useStateMachine");
+  var Presence = /* @__PURE__ */ __name9((props) => {
+    const { present, children } = props;
+    const presence = usePresence(present);
+    const child = typeof children === "function" ? children({ present: presence.isPresent }) : React211.Children.only(children);
+    const ref = useStableComposedRefs(presence.ref, getElementRef2(child));
+    const forceMount = typeof children === "function";
+    return forceMount || presence.isPresent ? React211.cloneElement(child, { ref }) : null;
+  }, "Presence");
+  function usePresence(present) {
+    const [node, setNode] = React211.useState();
+    const stylesRef = React211.useRef(null);
+    const prevPresentRef = React211.useRef(present);
+    const prevAnimationNameRef = React211.useRef("none");
+    const mountAnimationNameRef = React211.useRef(void 0);
+    const initialState = present ? "mounted" : "unmounted";
+    const [state, send] = useStateMachine(initialState, {
+      mounted: {
+        UNMOUNT: "unmounted",
+        ANIMATION_OUT: "unmountSuspended"
+      },
+      unmountSuspended: {
+        MOUNT: "mounted",
+        ANIMATION_END: "unmounted"
+      },
+      unmounted: {
+        MOUNT: "mounted"
+      }
+    });
+    React211.useEffect(() => {
+      if (state === "mounted") {
+        prevAnimationNameRef.current = mountAnimationNameRef.current ?? getAnimationName(stylesRef.current);
+        mountAnimationNameRef.current = void 0;
+      } else {
+        prevAnimationNameRef.current = "none";
+      }
+    }, [state]);
+    useLayoutEffect2(() => {
+      const styles = stylesRef.current;
+      const wasPresent = prevPresentRef.current;
+      const hasPresentChanged = wasPresent !== present;
+      if (hasPresentChanged) {
+        const prevAnimationName = prevAnimationNameRef.current;
+        const currentAnimationName = getAnimationName(styles);
+        if (present) {
+          mountAnimationNameRef.current = currentAnimationName;
+          send("MOUNT");
+        } else if (currentAnimationName === "none" || styles?.display === "none") {
+          send("UNMOUNT");
+        } else {
+          const isAnimating = prevAnimationName !== currentAnimationName;
+          if (wasPresent && isAnimating) {
+            send("ANIMATION_OUT");
+          } else {
+            send("UNMOUNT");
+          }
+        }
+        prevPresentRef.current = present;
+      }
+    }, [present, send]);
+    useLayoutEffect2(() => {
+      if (node) {
+        let timeoutId;
+        const ownerWindow = node.ownerDocument.defaultView ?? window;
+        const handleAnimationEnd = /* @__PURE__ */ __name9((event) => {
+          const currentAnimationName = getAnimationName(stylesRef.current);
+          const isCurrentAnimation = currentAnimationName.includes(CSS.escape(event.animationName));
+          if (event.target === node && isCurrentAnimation) {
+            send("ANIMATION_END");
+            if (!prevPresentRef.current) {
+              const currentFillMode = node.style.animationFillMode;
+              node.style.animationFillMode = "forwards";
+              timeoutId = ownerWindow.setTimeout(() => {
+                if (node.style.animationFillMode === "forwards") {
+                  node.style.animationFillMode = currentFillMode;
+                }
+              });
+            }
+          }
+        }, "handleAnimationEnd");
+        const handleAnimationStart = /* @__PURE__ */ __name9((event) => {
+          if (event.target === node) {
+            prevAnimationNameRef.current = getAnimationName(stylesRef.current);
+          }
+        }, "handleAnimationStart");
+        node.addEventListener("animationstart", handleAnimationStart);
+        node.addEventListener("animationcancel", handleAnimationEnd);
+        node.addEventListener("animationend", handleAnimationEnd);
+        return () => {
+          ownerWindow.clearTimeout(timeoutId);
+          node.removeEventListener("animationstart", handleAnimationStart);
+          node.removeEventListener("animationcancel", handleAnimationEnd);
+          node.removeEventListener("animationend", handleAnimationEnd);
+        };
+      } else {
+        send("ANIMATION_END");
+      }
+    }, [node, send]);
+    return {
+      isPresent: ["mounted", "unmountSuspended"].includes(state),
+      ref: React211.useCallback((node2) => {
+        if (node2) {
+          const styles = getComputedStyle(node2);
+          stylesRef.current = styles;
+          mountAnimationNameRef.current = getAnimationName(styles);
+        } else {
+          stylesRef.current = null;
+        }
+        setNode(node2);
+      }, [])
+    };
+  }
+  __name9(usePresence, "usePresence");
+  function setRef2(ref, value) {
+    if (typeof ref === "function") {
+      return ref(value);
+    } else if (ref !== null && ref !== void 0) {
+      ref.current = value;
+    }
+  }
+  __name9(setRef2, "setRef");
+  function useStableComposedRefs(...refs) {
+    const refsRef = React211.useRef(refs);
+    refsRef.current = refs;
+    return React211.useCallback((node) => {
+      const currentRefs = refsRef.current;
+      let hasCleanup = false;
+      const cleanups = currentRefs.map((ref) => {
+        const cleanup = setRef2(ref, node);
+        if (!hasCleanup && typeof cleanup === "function") {
+          hasCleanup = true;
+        }
+        return cleanup;
+      });
+      if (hasCleanup) {
+        return () => {
+          for (let i = 0; i < cleanups.length; i++) {
+            const cleanup = cleanups[i];
+            if (typeof cleanup === "function") {
+              cleanup();
+            } else {
+              setRef2(currentRefs[i], null);
+            }
+          }
+        };
+      }
+    }, []);
+  }
+  __name9(useStableComposedRefs, "useStableComposedRefs");
+  function getAnimationName(styles) {
+    return styles?.animationName || "none";
+  }
+  __name9(getAnimationName, "getAnimationName");
+  function getElementRef2(element) {
+    let getter = Object.getOwnPropertyDescriptor(element.props, "ref")?.get;
+    let mayWarn = getter && "isReactWarning" in getter && getter.isReactWarning;
+    if (mayWarn) {
+      return element.ref;
+    }
+    getter = Object.getOwnPropertyDescriptor(element, "ref")?.get;
+    mayWarn = getter && "isReactWarning" in getter && getter.isReactWarning;
+    if (mayWarn) {
+      return element.props.ref;
+    }
+    return element.props.ref || element.ref;
+  }
+  __name9(getElementRef2, "getElementRef");
+
+  // node_modules/@radix-ui/react-id/dist/index.mjs
+  init_ds_inject_react();
+  var React45 = __toESM(require_ds_react(), 1);
+  var __defProp11 = Object.defineProperty;
+  var __name10 = (target, value) => __defProp11(target, "name", { value, configurable: true });
+  var useReactId = React45[" useId ".trim().toString()] || (() => void 0);
+  var count = 0;
+  function useId10(deterministicId) {
+    const [id, setId] = React45.useState(useReactId());
+    useLayoutEffect2(() => {
+      if (!deterministicId) setId((reactId) => reactId ?? String(count++));
+    }, [deterministicId]);
+    return deterministicId || (id ? `radix-${id}` : "");
+  }
+  __name10(useId10, "useId");
+
+  // node_modules/@radix-ui/react-dismissable-layer/dist/index.mjs
+  init_ds_inject_react();
+  var React47 = __toESM(require_ds_react(), 1);
+
+  // node_modules/@radix-ui/react-use-callback-ref/dist/index.mjs
+  init_ds_inject_react();
+  var React46 = __toESM(require_ds_react(), 1);
+  var __defProp12 = Object.defineProperty;
+  var __name11 = (target, value) => __defProp12(target, "name", { value, configurable: true });
+  function useCallbackRef(callback) {
+    const callbackRef = React46.useRef(callback);
+    React46.useEffect(() => {
+      callbackRef.current = callback;
+    });
+    return React46.useMemo(() => ((...args) => callbackRef.current?.(...args)), []);
+  }
+  __name11(useCallbackRef, "useCallbackRef");
+
+  // node_modules/@radix-ui/react-dismissable-layer/dist/index.mjs
+  var import_jsx_runtime4 = __toESM(require_ds_jsx_runtime(), 1);
+  var __defProp13 = Object.defineProperty;
+  var __name12 = (target, value) => __defProp13(target, "name", { value, configurable: true });
+  var CONTEXT_UPDATE = "dismissableLayer.update";
+  var POINTER_DOWN_OUTSIDE = "dismissableLayer.pointerDownOutside";
+  var FOCUS_OUTSIDE = "dismissableLayer.focusOutside";
+  var originalBodyPointerEvents;
+  var DismissableLayerContext = React47.createContext({
+    layers: /* @__PURE__ */ new Set(),
+    layersWithOutsidePointerEventsDisabled: /* @__PURE__ */ new Set(),
+    branches: /* @__PURE__ */ new Set(),
+    // Outside elements that belong to a layer's own dismiss affordance (eg, a
+    // dialog overlay). Pressing them should dismiss the layer regardless of
+    // whether or not they stop propagation.
+    //
+    // See https://github.com/radix-ui/primitives/issues/3346
+    dismissableSurfaces: /* @__PURE__ */ new Set()
+  });
+  var DismissableLayer = /* @__PURE__ */ React47.forwardRef(
+    // blank line to reduce diff noise
+    /* @__PURE__ */ __name12(function DismissableLayer2(props, forwardedRef) {
+      const {
+        disableOutsidePointerEvents = false,
+        deferPointerDownOutside = false,
+        onEscapeKeyDown,
+        onPointerDownOutside,
+        onFocusOutside,
+        onInteractOutside,
+        onDismiss,
+        ...layerProps
+      } = props;
+      const context = React47.useContext(DismissableLayerContext);
+      const [node, setNode] = React47.useState(null);
+      const ownerDocument = node?.ownerDocument ?? globalThis?.document;
+      const [, force] = React47.useState({});
+      const composedRefs = useComposedRefs(forwardedRef, setNode);
+      const layers = Array.from(context.layers);
+      const [highestLayerWithOutsidePointerEventsDisabled] = [
+        ...context.layersWithOutsidePointerEventsDisabled
+      ].slice(-1);
+      const highestLayerWithOutsidePointerEventsDisabledIndex = highestLayerWithOutsidePointerEventsDisabled ? layers.indexOf(highestLayerWithOutsidePointerEventsDisabled) : -1;
+      const index2 = node ? layers.indexOf(node) : -1;
+      const isBodyPointerEventsDisabled = context.layersWithOutsidePointerEventsDisabled.size > 0;
+      const isPointerEventsEnabled = index2 >= highestLayerWithOutsidePointerEventsDisabledIndex;
+      const isDeferredPointerDownOutsideRef = React47.useRef(false);
+      const pointerDownOutside = usePointerDownOutside(
+        (event) => {
+          onPointerDownOutside?.(event);
+          onInteractOutside?.(event);
+          if (!event.defaultPrevented) onDismiss?.();
+        },
+        {
+          ownerDocument,
+          deferPointerDownOutside,
+          isDeferredPointerDownOutsideRef,
+          dismissableSurfaces: context.dismissableSurfaces,
+          shouldHandlePointerDownOutside: React47.useCallback(
+            (target) => {
+              if (!(target instanceof Node)) {
+                return false;
+              }
+              const isPointerDownOnBranch = [...context.branches].some(
+                (branch) => branch.contains(target)
+              );
+              return isPointerEventsEnabled && !isPointerDownOnBranch;
+            },
+            [context.branches, isPointerEventsEnabled]
+          )
+        }
+      );
+      const focusOutside = useFocusOutside((event) => {
+        if (deferPointerDownOutside && isDeferredPointerDownOutsideRef.current) {
+          return;
+        }
+        const target = event.target;
+        const isFocusInBranch = [...context.branches].some((branch) => branch.contains(target));
+        if (isFocusInBranch) return;
+        onFocusOutside?.(event);
+        onInteractOutside?.(event);
+        if (!event.defaultPrevented) onDismiss?.();
+      }, ownerDocument);
+      const isHighestLayer = node ? index2 === layers.length - 1 : false;
+      const handleKeyDown = useCallbackRef((event) => {
+        if (event.key !== "Escape") {
+          return;
+        }
+        onEscapeKeyDown?.(event);
+        if (!event.defaultPrevented && onDismiss) {
+          event.preventDefault();
+          onDismiss();
+        }
+      });
+      React47.useEffect(() => {
+        if (!isHighestLayer) {
+          return;
+        }
+        ownerDocument.addEventListener("keydown", handleKeyDown, { capture: true });
+        return () => ownerDocument.removeEventListener("keydown", handleKeyDown, { capture: true });
+      }, [ownerDocument, isHighestLayer, handleKeyDown]);
+      React47.useEffect(() => {
+        if (!node) return;
+        if (disableOutsidePointerEvents) {
+          if (context.layersWithOutsidePointerEventsDisabled.size === 0) {
+            originalBodyPointerEvents = ownerDocument.body.style.pointerEvents;
+            ownerDocument.body.style.pointerEvents = "none";
+          }
+          context.layersWithOutsidePointerEventsDisabled.add(node);
+        }
+        context.layers.add(node);
+        dispatchUpdate();
+        return () => {
+          if (disableOutsidePointerEvents) {
+            context.layersWithOutsidePointerEventsDisabled.delete(node);
+            if (context.layersWithOutsidePointerEventsDisabled.size === 0) {
+              ownerDocument.body.style.pointerEvents = originalBodyPointerEvents;
+            }
+          }
+        };
+      }, [node, ownerDocument, disableOutsidePointerEvents, context]);
+      React47.useEffect(() => {
+        return () => {
+          if (!node) return;
+          context.layers.delete(node);
+          context.layersWithOutsidePointerEventsDisabled.delete(node);
+          dispatchUpdate();
+        };
+      }, [node, context]);
+      React47.useEffect(() => {
+        const handleUpdate = /* @__PURE__ */ __name12(() => force({}), "handleUpdate");
+        document.addEventListener(CONTEXT_UPDATE, handleUpdate);
+        return () => document.removeEventListener(CONTEXT_UPDATE, handleUpdate);
+      }, []);
+      return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+        Primitive.div,
+        {
+          ...layerProps,
+          ref: composedRefs,
+          style: {
+            pointerEvents: isBodyPointerEventsDisabled ? isPointerEventsEnabled ? "auto" : "none" : void 0,
+            ...props.style
+          },
+          onFocusCapture: composeEventHandlers(props.onFocusCapture, focusOutside.onFocusCapture),
+          onBlurCapture: composeEventHandlers(props.onBlurCapture, focusOutside.onBlurCapture),
+          onPointerDownCapture: composeEventHandlers(
+            props.onPointerDownCapture,
+            pointerDownOutside.onPointerDownCapture
+          )
+        }
+      );
+    }, "DismissableLayer")
+  );
+  function useDismissableLayerSurface() {
+    const context = React47.useContext(DismissableLayerContext);
+    const [node, setNode] = React47.useState(null);
+    React47.useEffect(() => {
+      if (!node) {
+        return;
+      }
+      context.dismissableSurfaces.add(node);
+      return () => {
+        context.dismissableSurfaces.delete(node);
+      };
+    }, [node, context.dismissableSurfaces]);
+    return setNode;
+  }
+  __name12(useDismissableLayerSurface, "useDismissableLayerSurface");
+  var IS_TRUE = /* @__PURE__ */ __name12(() => true, "IS_TRUE");
+  function usePointerDownOutside(onPointerDownOutside, args) {
+    const {
+      ownerDocument = globalThis?.document,
+      deferPointerDownOutside = false,
+      isDeferredPointerDownOutsideRef,
+      dismissableSurfaces,
+      shouldHandlePointerDownOutside = IS_TRUE
+    } = args;
+    const handlePointerDownOutside = useCallbackRef(onPointerDownOutside);
+    const isPointerInsideReactTreeRef = React47.useRef(false);
+    const isPointerDownOutsideRef = React47.useRef(false);
+    const interceptedOutsideInteractionEventsRef = React47.useRef(/* @__PURE__ */ new Map());
+    const handleClickRef = React47.useRef(() => {
+    });
+    React47.useEffect(() => {
+      function resetOutsideInteraction() {
+        isPointerDownOutsideRef.current = false;
+        isDeferredPointerDownOutsideRef.current = false;
+        interceptedOutsideInteractionEventsRef.current.clear();
+      }
+      __name12(resetOutsideInteraction, "resetOutsideInteraction");
+      function isOutsideInteractionIntercepted() {
+        return Array.from(interceptedOutsideInteractionEventsRef.current.values()).some(Boolean);
+      }
+      __name12(isOutsideInteractionIntercepted, "isOutsideInteractionIntercepted");
+      function handleInteractionCapture(event) {
+        if (!isPointerDownOutsideRef.current) {
+          return;
+        }
+        const target = event.target;
+        const isDismissableSurface = target instanceof Node && [...dismissableSurfaces].some((surface) => surface.contains(target));
+        if (!isDismissableSurface) {
+          interceptedOutsideInteractionEventsRef.current.set(event.type, true);
+        }
+        if (event.type === "click") {
+          window.setTimeout(() => {
+            if (isPointerDownOutsideRef.current) {
+              handleClickRef.current();
+            }
+          }, 0);
+        }
+      }
+      __name12(handleInteractionCapture, "handleInteractionCapture");
+      function handleInteractionBubble(event) {
+        if (isPointerDownOutsideRef.current) {
+          interceptedOutsideInteractionEventsRef.current.set(event.type, false);
+        }
+      }
+      __name12(handleInteractionBubble, "handleInteractionBubble");
+      const handlePointerDown = /* @__PURE__ */ __name12((event) => {
+        if (event.target && !isPointerInsideReactTreeRef.current) {
+          let handleAndDispatchPointerDownOutsideEvent2 = function() {
+            ownerDocument.removeEventListener("click", handleClickRef.current);
+            const wasOutsideInteractionIntercepted = isOutsideInteractionIntercepted();
+            resetOutsideInteraction();
+            if (!wasOutsideInteractionIntercepted) {
+              handleAndDispatchCustomEvent(
+                POINTER_DOWN_OUTSIDE,
+                handlePointerDownOutside,
+                eventDetail,
+                { discrete: true }
+              );
+            }
+          };
+          var handleAndDispatchPointerDownOutsideEvent = handleAndDispatchPointerDownOutsideEvent2;
+          __name12(handleAndDispatchPointerDownOutsideEvent2, "handleAndDispatchPointerDownOutsideEvent");
+          if (!shouldHandlePointerDownOutside(event.target)) {
+            ownerDocument.removeEventListener("click", handleClickRef.current);
+            resetOutsideInteraction();
+            isPointerInsideReactTreeRef.current = false;
+            return;
+          }
+          const eventDetail = { originalEvent: event };
+          isPointerDownOutsideRef.current = true;
+          isDeferredPointerDownOutsideRef.current = deferPointerDownOutside && event.button === 0;
+          interceptedOutsideInteractionEventsRef.current.clear();
+          if (!deferPointerDownOutside || event.button !== 0) {
+            handleAndDispatchPointerDownOutsideEvent2();
+          } else {
+            ownerDocument.removeEventListener("click", handleClickRef.current);
+            handleClickRef.current = handleAndDispatchPointerDownOutsideEvent2;
+            ownerDocument.addEventListener("click", handleClickRef.current, { once: true });
+          }
+        } else {
+          ownerDocument.removeEventListener("click", handleClickRef.current);
+          resetOutsideInteraction();
+        }
+        isPointerInsideReactTreeRef.current = false;
+      }, "handlePointerDown");
+      const outsideInteractionEvents = [
+        "pointerup",
+        "mousedown",
+        "mouseup",
+        "touchstart",
+        "touchend",
+        "click"
+      ];
+      for (const eventName of outsideInteractionEvents) {
+        ownerDocument.addEventListener(eventName, handleInteractionCapture, true);
+        ownerDocument.addEventListener(eventName, handleInteractionBubble);
+      }
+      const timerId = window.setTimeout(() => {
+        ownerDocument.addEventListener("pointerdown", handlePointerDown);
+      }, 0);
+      return () => {
+        window.clearTimeout(timerId);
+        ownerDocument.removeEventListener("pointerdown", handlePointerDown);
+        ownerDocument.removeEventListener("click", handleClickRef.current);
+        for (const eventName of outsideInteractionEvents) {
+          ownerDocument.removeEventListener(eventName, handleInteractionCapture, true);
+          ownerDocument.removeEventListener(eventName, handleInteractionBubble);
+        }
+      };
+    }, [
+      ownerDocument,
+      handlePointerDownOutside,
+      deferPointerDownOutside,
+      isDeferredPointerDownOutsideRef,
+      dismissableSurfaces,
+      shouldHandlePointerDownOutside
+    ]);
+    return {
+      // ensures we check React component tree (not just DOM tree)
+      onPointerDownCapture: /* @__PURE__ */ __name12(() => isPointerInsideReactTreeRef.current = true, "onPointerDownCapture")
+    };
+  }
+  __name12(usePointerDownOutside, "usePointerDownOutside");
+  function useFocusOutside(onFocusOutside, ownerDocument = globalThis?.document) {
+    const handleFocusOutside = useCallbackRef(onFocusOutside);
+    const isFocusInsideReactTreeRef = React47.useRef(false);
+    React47.useEffect(() => {
+      const handleFocus = /* @__PURE__ */ __name12((event) => {
+        if (event.target && !isFocusInsideReactTreeRef.current) {
+          const eventDetail = { originalEvent: event };
+          handleAndDispatchCustomEvent(FOCUS_OUTSIDE, handleFocusOutside, eventDetail, {
+            discrete: false
+          });
+        }
+      }, "handleFocus");
+      ownerDocument.addEventListener("focusin", handleFocus);
+      return () => ownerDocument.removeEventListener("focusin", handleFocus);
+    }, [ownerDocument, handleFocusOutside]);
+    return {
+      onFocusCapture: /* @__PURE__ */ __name12(() => isFocusInsideReactTreeRef.current = true, "onFocusCapture"),
+      onBlurCapture: /* @__PURE__ */ __name12(() => isFocusInsideReactTreeRef.current = false, "onBlurCapture")
+    };
+  }
+  __name12(useFocusOutside, "useFocusOutside");
+  function dispatchUpdate() {
+    const event = new CustomEvent(CONTEXT_UPDATE);
+    document.dispatchEvent(event);
+  }
+  __name12(dispatchUpdate, "dispatchUpdate");
+  function handleAndDispatchCustomEvent(name, handler, detail, { discrete }) {
+    const target = detail.originalEvent.target;
+    const event = new CustomEvent(name, { bubbles: false, cancelable: true, detail });
+    if (handler) target.addEventListener(name, handler, { once: true });
+    if (discrete) {
+      dispatchDiscreteCustomEvent(target, event);
+    } else {
+      target.dispatchEvent(event);
+    }
+  }
+  __name12(handleAndDispatchCustomEvent, "handleAndDispatchCustomEvent");
+
+  // node_modules/@radix-ui/react-portal/dist/index.mjs
+  init_ds_inject_react();
+  var React48 = __toESM(require_ds_react(), 1);
+  var ReactDOM2 = __toESM(require_ds_react_dom(), 1);
+  var import_jsx_runtime5 = __toESM(require_ds_jsx_runtime(), 1);
+  var __defProp14 = Object.defineProperty;
+  var __name13 = (target, value) => __defProp14(target, "name", { value, configurable: true });
+  var Portal = /* @__PURE__ */ React48.forwardRef(
+    /* @__PURE__ */ __name13(function Portal2(props, forwardedRef) {
+      const { container: containerProp, ...portalProps } = props;
+      const [mounted, setMounted] = React48.useState(false);
+      useLayoutEffect2(() => setMounted(true), []);
+      const container = containerProp || mounted && globalThis?.document?.body;
+      return container ? ReactDOM2.createPortal(/* @__PURE__ */ (0, import_jsx_runtime5.jsx)(Primitive.div, { ...portalProps, ref: forwardedRef }), container) : null;
+    }, "Portal")
+  );
+
+  // node_modules/@radix-ui/react-use-size/dist/index.mjs
+  init_ds_inject_react();
+  var React49 = __toESM(require_ds_react(), 1);
+  var __defProp15 = Object.defineProperty;
+  var __name14 = (target, value) => __defProp15(target, "name", { value, configurable: true });
+  function useSize(element) {
+    const [size4, setSize] = React49.useState(void 0);
+    useLayoutEffect2(() => {
+      if (element) {
+        setSize({ width: element.offsetWidth, height: element.offsetHeight });
+        const resizeObserver = new ResizeObserver((entries) => {
+          if (!Array.isArray(entries)) {
+            return;
+          }
+          if (!entries.length) {
+            return;
+          }
+          const entry = entries[0];
+          let width;
+          let height;
+          if ("borderBoxSize" in entry) {
+            const borderSizeEntry = entry["borderBoxSize"];
+            const borderSize = Array.isArray(borderSizeEntry) ? borderSizeEntry[0] : borderSizeEntry;
+            width = borderSize["inlineSize"];
+            height = borderSize["blockSize"];
+          } else {
+            width = element.offsetWidth;
+            height = element.offsetHeight;
+          }
+          setSize({ width, height });
+        });
+        resizeObserver.observe(element, { box: "border-box" });
+        return () => resizeObserver.unobserve(element);
+      } else {
+        setSize(void 0);
+      }
+    }, [element]);
+    return size4;
+  }
+  __name14(useSize, "useSize");
+
+  // node_modules/@radix-ui/react-popper/dist/index.mjs
+  init_ds_inject_react();
+  var React52 = __toESM(require_ds_react(), 1);
+
+  // node_modules/@floating-ui/react-dom/dist/floating-ui.react-dom.mjs
+  init_ds_inject_react();
+
+  // node_modules/@floating-ui/dom/dist/floating-ui.dom.mjs
+  init_ds_inject_react();
+
+  // node_modules/@floating-ui/core/dist/floating-ui.core.mjs
+  init_ds_inject_react();
+
+  // node_modules/@floating-ui/utils/dist/floating-ui.utils.mjs
+  init_ds_inject_react();
+  var sides = ["top", "right", "bottom", "left"];
+  var min = Math.min;
+  var max = Math.max;
+  var round = Math.round;
+  var floor = Math.floor;
+  var createCoords = (v) => ({
+    x: v,
+    y: v
+  });
+  var oppositeSideMap = {
+    left: "right",
+    right: "left",
+    bottom: "top",
+    top: "bottom"
+  };
+  function clamp(start, value, end) {
+    return max(start, min(value, end));
+  }
+  function evaluate(value, param) {
+    return typeof value === "function" ? value(param) : value;
+  }
+  function getSide(placement) {
+    return placement.split("-")[0];
+  }
+  function getAlignment(placement) {
+    return placement.split("-")[1];
+  }
+  function getOppositeAxis(axis) {
+    return axis === "x" ? "y" : "x";
+  }
+  function getAxisLength(axis) {
+    return axis === "y" ? "height" : "width";
+  }
+  function getSideAxis(placement) {
+    const firstChar = placement[0];
+    return firstChar === "t" || firstChar === "b" ? "y" : "x";
+  }
+  function getAlignmentAxis(placement) {
+    return getOppositeAxis(getSideAxis(placement));
+  }
+  function getAlignmentSides(placement, rects, rtl) {
+    if (rtl === void 0) {
+      rtl = false;
+    }
+    const alignment = getAlignment(placement);
+    const alignmentAxis = getAlignmentAxis(placement);
+    const length = getAxisLength(alignmentAxis);
+    let mainAlignmentSide = alignmentAxis === "x" ? alignment === (rtl ? "end" : "start") ? "right" : "left" : alignment === "start" ? "bottom" : "top";
+    if (rects.reference[length] > rects.floating[length]) {
+      mainAlignmentSide = getOppositePlacement(mainAlignmentSide);
+    }
+    return [mainAlignmentSide, getOppositePlacement(mainAlignmentSide)];
+  }
+  function getExpandedPlacements(placement) {
+    const oppositePlacement = getOppositePlacement(placement);
+    return [getOppositeAlignmentPlacement(placement), oppositePlacement, getOppositeAlignmentPlacement(oppositePlacement)];
+  }
+  function getOppositeAlignmentPlacement(placement) {
+    return placement.includes("start") ? placement.replace("start", "end") : placement.replace("end", "start");
+  }
+  var lrPlacement = ["left", "right"];
+  var rlPlacement = ["right", "left"];
+  var tbPlacement = ["top", "bottom"];
+  var btPlacement = ["bottom", "top"];
+  function getSideList(side, isStart, rtl) {
+    switch (side) {
+      case "top":
+      case "bottom":
+        if (rtl) return isStart ? rlPlacement : lrPlacement;
+        return isStart ? lrPlacement : rlPlacement;
+      case "left":
+      case "right":
+        return isStart ? tbPlacement : btPlacement;
+      default:
+        return [];
+    }
+  }
+  function getOppositeAxisPlacements(placement, flipAlignment, direction, rtl) {
+    const alignment = getAlignment(placement);
+    let list = getSideList(getSide(placement), direction === "start", rtl);
+    if (alignment) {
+      list = list.map((side) => side + "-" + alignment);
+      if (flipAlignment) {
+        list = list.concat(list.map(getOppositeAlignmentPlacement));
+      }
+    }
+    return list;
+  }
+  function getOppositePlacement(placement) {
+    const side = getSide(placement);
+    return oppositeSideMap[side] + placement.slice(side.length);
+  }
+  function expandPaddingObject(padding) {
+    var _padding$top, _padding$right, _padding$bottom, _padding$left;
+    return {
+      top: (_padding$top = padding.top) != null ? _padding$top : 0,
+      right: (_padding$right = padding.right) != null ? _padding$right : 0,
+      bottom: (_padding$bottom = padding.bottom) != null ? _padding$bottom : 0,
+      left: (_padding$left = padding.left) != null ? _padding$left : 0
+    };
+  }
+  function getPaddingObject(padding) {
+    return typeof padding !== "number" ? expandPaddingObject(padding) : {
+      top: padding,
+      right: padding,
+      bottom: padding,
+      left: padding
+    };
+  }
+  function rectToClientRect(rect) {
+    const {
+      x,
+      y,
+      width,
+      height
+    } = rect;
+    return {
+      width,
+      height,
+      top: y,
+      left: x,
+      right: x + width,
+      bottom: y + height,
+      x,
+      y
+    };
+  }
+
+  // node_modules/@floating-ui/core/dist/floating-ui.core.mjs
+  function computeCoordsFromPlacement(_ref, placement, rtl) {
+    let {
+      reference,
+      floating
+    } = _ref;
+    const sideAxis = getSideAxis(placement);
+    const alignmentAxis = getAlignmentAxis(placement);
+    const alignLength = getAxisLength(alignmentAxis);
+    const side = getSide(placement);
+    const isVertical = sideAxis === "y";
+    const commonX = reference.x + reference.width / 2 - floating.width / 2;
+    const commonY = reference.y + reference.height / 2 - floating.height / 2;
+    const commonAlign = reference[alignLength] / 2 - floating[alignLength] / 2;
+    let coords;
+    switch (side) {
+      case "top":
+        coords = {
+          x: commonX,
+          y: reference.y - floating.height
+        };
+        break;
+      case "bottom":
+        coords = {
+          x: commonX,
+          y: reference.y + reference.height
+        };
+        break;
+      case "right":
+        coords = {
+          x: reference.x + reference.width,
+          y: commonY
+        };
+        break;
+      case "left":
+        coords = {
+          x: reference.x - floating.width,
+          y: commonY
+        };
+        break;
+      default:
+        coords = {
+          x: reference.x,
+          y: reference.y
+        };
+    }
+    const alignment = getAlignment(placement);
+    if (alignment) {
+      coords[alignmentAxis] += commonAlign * (alignment === "end" ? 1 : -1) * (rtl && isVertical ? -1 : 1);
+    }
+    return coords;
+  }
+  async function detectOverflow(state, options) {
+    var _await$platform$isEle;
+    if (options === void 0) {
+      options = {};
+    }
+    const {
+      x,
+      y,
+      platform: platform2,
+      rects,
+      elements,
+      strategy
+    } = state;
+    const {
+      boundary = "clippingAncestors",
+      rootBoundary = "viewport",
+      elementContext = "floating",
+      altBoundary = false,
+      padding = 0
+    } = evaluate(options, state);
+    const paddingObject = getPaddingObject(padding);
+    const altContext = elementContext === "floating" ? "reference" : "floating";
+    const element = elements[altBoundary ? altContext : elementContext];
+    const clippingClientRect = rectToClientRect(await platform2.getClippingRect({
+      element: ((_await$platform$isEle = await (platform2.isElement == null ? void 0 : platform2.isElement(element))) != null ? _await$platform$isEle : true) ? element : element.contextElement || await (platform2.getDocumentElement == null ? void 0 : platform2.getDocumentElement(elements.floating)),
+      boundary,
+      rootBoundary,
+      strategy
+    }));
+    const rect = elementContext === "floating" ? {
+      x,
+      y,
+      width: rects.floating.width,
+      height: rects.floating.height
+    } : rects.reference;
+    const offsetParent = await (platform2.getOffsetParent == null ? void 0 : platform2.getOffsetParent(elements.floating));
+    const offsetScale = await (platform2.isElement == null ? void 0 : platform2.isElement(offsetParent)) && await (platform2.getScale == null ? void 0 : platform2.getScale(offsetParent)) || {
+      x: 1,
+      y: 1
+    };
+    const elementClientRect = rectToClientRect(platform2.convertOffsetParentRelativeRectToViewportRelativeRect ? await platform2.convertOffsetParentRelativeRectToViewportRelativeRect({
+      elements,
+      rect,
+      offsetParent,
+      strategy
+    }) : rect);
+    return {
+      top: (clippingClientRect.top - elementClientRect.top + paddingObject.top) / offsetScale.y,
+      bottom: (elementClientRect.bottom - clippingClientRect.bottom + paddingObject.bottom) / offsetScale.y,
+      left: (clippingClientRect.left - elementClientRect.left + paddingObject.left) / offsetScale.x,
+      right: (elementClientRect.right - clippingClientRect.right + paddingObject.right) / offsetScale.x
+    };
+  }
+  var MAX_RESET_COUNT = 50;
+  var computePosition = async (reference, floating, config) => {
+    const {
+      placement = "bottom",
+      strategy = "absolute",
+      middleware = [],
+      platform: platform2
+    } = config;
+    const platformWithDetectOverflow = platform2.detectOverflow ? platform2 : {
+      ...platform2,
+      detectOverflow
+    };
+    const rtl = await (platform2.isRTL == null ? void 0 : platform2.isRTL(floating));
+    let rects = await platform2.getElementRects({
+      reference,
+      floating,
+      strategy
+    });
+    let {
+      x,
+      y
+    } = computeCoordsFromPlacement(rects, placement, rtl);
+    let statefulPlacement = placement;
+    let resetCount = 0;
+    const middlewareData = {};
+    for (let i = 0; i < middleware.length; i++) {
+      const currentMiddleware = middleware[i];
+      if (!currentMiddleware) {
+        continue;
+      }
+      const {
+        name,
+        fn
+      } = currentMiddleware;
+      const {
+        x: nextX,
+        y: nextY,
+        data,
+        reset
+      } = await fn({
+        x,
+        y,
+        initialPlacement: placement,
+        placement: statefulPlacement,
+        strategy,
+        middlewareData,
+        rects,
+        platform: platformWithDetectOverflow,
+        elements: {
+          reference,
+          floating
+        }
+      });
+      x = nextX != null ? nextX : x;
+      y = nextY != null ? nextY : y;
+      middlewareData[name] = {
+        ...middlewareData[name],
+        ...data
+      };
+      if (reset && resetCount < MAX_RESET_COUNT) {
+        resetCount++;
+        if (typeof reset === "object") {
+          if (reset.placement) {
+            statefulPlacement = reset.placement;
+          }
+          if (reset.rects) {
+            rects = reset.rects === true ? await platform2.getElementRects({
+              reference,
+              floating,
+              strategy
+            }) : reset.rects;
+          }
+          ({
+            x,
+            y
+          } = computeCoordsFromPlacement(rects, statefulPlacement, rtl));
+        }
+        i = -1;
+      }
+    }
+    return {
+      x,
+      y,
+      placement: statefulPlacement,
+      strategy,
+      middlewareData
+    };
+  };
+  var arrow = (options) => ({
+    name: "arrow",
+    options,
+    async fn(state) {
+      const {
+        x,
+        y,
+        placement,
+        rects,
+        platform: platform2,
+        elements,
+        middlewareData
+      } = state;
+      const {
+        element,
+        padding = 0
+      } = evaluate(options, state) || {};
+      if (element == null) {
+        return {};
+      }
+      const paddingObject = getPaddingObject(padding);
+      const coords = {
+        x,
+        y
+      };
+      const axis = getAlignmentAxis(placement);
+      const length = getAxisLength(axis);
+      const arrowDimensions = await platform2.getDimensions(element);
+      const isYAxis = axis === "y";
+      const minProp = isYAxis ? "top" : "left";
+      const maxProp = isYAxis ? "bottom" : "right";
+      const clientProp = isYAxis ? "clientHeight" : "clientWidth";
+      const endDiff = rects.reference[length] + rects.reference[axis] - coords[axis] - rects.floating[length];
+      const startDiff = coords[axis] - rects.reference[axis];
+      const arrowOffsetParent = await (platform2.getOffsetParent == null ? void 0 : platform2.getOffsetParent(element));
+      let clientSize = arrowOffsetParent ? arrowOffsetParent[clientProp] : 0;
+      if (!clientSize || !await (platform2.isElement == null ? void 0 : platform2.isElement(arrowOffsetParent))) {
+        clientSize = elements.floating[clientProp] || rects.floating[length];
+      }
+      const centerToReference = endDiff / 2 - startDiff / 2;
+      const largestPossiblePadding = clientSize / 2 - arrowDimensions[length] / 2 - 1;
+      const minPadding = min(paddingObject[minProp], largestPossiblePadding);
+      const maxPadding = min(paddingObject[maxProp], largestPossiblePadding);
+      const max2 = clientSize - arrowDimensions[length] - maxPadding;
+      const center = clientSize / 2 - arrowDimensions[length] / 2 + centerToReference;
+      const offset4 = clamp(minPadding, center, max2);
+      const shouldAddOffset = !middlewareData.arrow && getAlignment(placement) != null && center !== offset4 && rects.reference[length] / 2 - (center < minPadding ? minPadding : maxPadding) - arrowDimensions[length] / 2 < 0;
+      const alignmentOffset = shouldAddOffset ? center < minPadding ? center - minPadding : center - max2 : 0;
+      return {
+        [axis]: coords[axis] + alignmentOffset,
+        data: {
+          [axis]: offset4,
+          centerOffset: center - offset4 - alignmentOffset,
+          ...shouldAddOffset && {
+            alignmentOffset
+          }
+        },
+        reset: shouldAddOffset
+      };
+    }
+  });
+  var flip = function(options) {
+    if (options === void 0) {
+      options = {};
+    }
+    return {
+      name: "flip",
+      options,
+      async fn(state) {
+        var _middlewareData$arrow, _middlewareData$flip;
+        const {
+          placement,
+          middlewareData,
+          rects,
+          initialPlacement,
+          platform: platform2,
+          elements
+        } = state;
+        const {
+          mainAxis: checkMainAxis = true,
+          crossAxis: checkCrossAxis = true,
+          fallbackPlacements: specifiedFallbackPlacements,
+          fallbackStrategy = "bestFit",
+          fallbackAxisSideDirection = "none",
+          flipAlignment = true,
+          ...detectOverflowOptions
+        } = evaluate(options, state);
+        if ((_middlewareData$arrow = middlewareData.arrow) != null && _middlewareData$arrow.alignmentOffset) {
+          return {};
+        }
+        const side = getSide(placement);
+        const initialSideAxis = getSideAxis(initialPlacement);
+        const isBasePlacement = getSide(initialPlacement) === initialPlacement;
+        const rtl = await (platform2.isRTL == null ? void 0 : platform2.isRTL(elements.floating));
+        const fallbackPlacements = specifiedFallbackPlacements || (isBasePlacement || !flipAlignment ? [getOppositePlacement(initialPlacement)] : getExpandedPlacements(initialPlacement));
+        const hasFallbackAxisSideDirection = fallbackAxisSideDirection !== "none";
+        if (!specifiedFallbackPlacements && hasFallbackAxisSideDirection) {
+          fallbackPlacements.push(...getOppositeAxisPlacements(initialPlacement, flipAlignment, fallbackAxisSideDirection, rtl));
+        }
+        const placements2 = [initialPlacement, ...fallbackPlacements];
+        const overflow = await platform2.detectOverflow(state, detectOverflowOptions);
+        const overflows = [];
+        let overflowsData = ((_middlewareData$flip = middlewareData.flip) == null ? void 0 : _middlewareData$flip.overflows) || [];
+        if (checkMainAxis) {
+          overflows.push(overflow[side]);
+        }
+        if (checkCrossAxis) {
+          const sides2 = getAlignmentSides(placement, rects, rtl);
+          overflows.push(overflow[sides2[0]], overflow[sides2[1]]);
+        }
+        overflowsData = [...overflowsData, {
+          placement,
+          overflows
+        }];
+        if (!overflows.every((side2) => side2 <= 0)) {
+          var _middlewareData$flip2, _overflowsData$filter;
+          const nextIndex = (((_middlewareData$flip2 = middlewareData.flip) == null ? void 0 : _middlewareData$flip2.index) || 0) + 1;
+          const nextPlacement = placements2[nextIndex];
+          if (nextPlacement) {
+            const ignoreCrossAxisOverflow = checkCrossAxis === "alignment" ? initialSideAxis !== getSideAxis(nextPlacement) : false;
+            if (!ignoreCrossAxisOverflow || // We leave the current main axis only if every placement on that axis
+            // overflows the main axis.
+            overflowsData.every((d) => getSideAxis(d.placement) === initialSideAxis ? d.overflows[0] > 0 : true)) {
+              return {
+                data: {
+                  index: nextIndex,
+                  overflows: overflowsData
+                },
+                reset: {
+                  placement: nextPlacement
+                }
+              };
+            }
+          }
+          let resetPlacement = (_overflowsData$filter = overflowsData.filter((d) => d.overflows[0] <= 0).sort((a, b) => a.overflows[1] - b.overflows[1])[0]) == null ? void 0 : _overflowsData$filter.placement;
+          if (!resetPlacement) {
+            switch (fallbackStrategy) {
+              case "bestFit": {
+                var _overflowsData$filter2;
+                const placement2 = (_overflowsData$filter2 = overflowsData.filter((d) => {
+                  if (hasFallbackAxisSideDirection) {
+                    const currentSideAxis = getSideAxis(d.placement);
+                    return currentSideAxis === initialSideAxis || // Create a bias to the `y` side axis due to horizontal
+                    // reading directions favoring greater width.
+                    currentSideAxis === "y";
+                  }
+                  return true;
+                }).map((d) => [d.placement, d.overflows.filter((overflow2) => overflow2 > 0).reduce((acc, overflow2) => acc + overflow2, 0)]).sort((a, b) => a[1] - b[1])[0]) == null ? void 0 : _overflowsData$filter2[0];
+                if (placement2) {
+                  resetPlacement = placement2;
+                }
+                break;
+              }
+              case "initialPlacement":
+                resetPlacement = initialPlacement;
+                break;
+            }
+          }
+          if (placement !== resetPlacement) {
+            return {
+              reset: {
+                placement: resetPlacement
+              }
+            };
+          }
+        }
+        return {};
+      }
+    };
+  };
+  function getSideOffsets(overflow, rect) {
+    return {
+      top: overflow.top - rect.height,
+      right: overflow.right - rect.width,
+      bottom: overflow.bottom - rect.height,
+      left: overflow.left - rect.width
+    };
+  }
+  function isAnySideFullyClipped(overflow) {
+    return sides.some((side) => overflow[side] >= 0);
+  }
+  var hide = function(options) {
+    if (options === void 0) {
+      options = {};
+    }
+    return {
+      name: "hide",
+      options,
+      async fn(state) {
+        const {
+          rects,
+          platform: platform2
+        } = state;
+        const {
+          strategy = "referenceHidden",
+          ...detectOverflowOptions
+        } = evaluate(options, state);
+        switch (strategy) {
+          case "referenceHidden": {
+            const overflow = await platform2.detectOverflow(state, {
+              ...detectOverflowOptions,
+              elementContext: "reference"
+            });
+            const offsets = getSideOffsets(overflow, rects.reference);
+            return {
+              data: {
+                referenceHiddenOffsets: offsets,
+                referenceHidden: isAnySideFullyClipped(offsets)
+              }
+            };
+          }
+          case "escaped": {
+            const overflow = await platform2.detectOverflow(state, {
+              ...detectOverflowOptions,
+              altBoundary: true
+            });
+            const offsets = getSideOffsets(overflow, rects.floating);
+            return {
+              data: {
+                escapedOffsets: offsets,
+                escaped: isAnySideFullyClipped(offsets)
+              }
+            };
+          }
+          default: {
+            return {};
+          }
+        }
+      }
+    };
+  };
+  var originSides = /* @__PURE__ */ new Set(["left", "top"]);
+  async function convertValueToCoords(state, options) {
+    const {
+      placement,
+      platform: platform2,
+      elements
+    } = state;
+    const rtl = await (platform2.isRTL == null ? void 0 : platform2.isRTL(elements.floating));
+    const side = getSide(placement);
+    const alignment = getAlignment(placement);
+    const isVertical = getSideAxis(placement) === "y";
+    const mainAxisMulti = originSides.has(side) ? -1 : 1;
+    const crossAxisMulti = rtl && isVertical ? -1 : 1;
+    const rawValue = evaluate(options, state);
+    let {
+      mainAxis,
+      crossAxis,
+      alignmentAxis
+    } = typeof rawValue === "number" ? {
+      mainAxis: rawValue,
+      crossAxis: 0,
+      alignmentAxis: null
+    } : {
+      mainAxis: rawValue.mainAxis || 0,
+      crossAxis: rawValue.crossAxis || 0,
+      alignmentAxis: rawValue.alignmentAxis
+    };
+    if (alignment && typeof alignmentAxis === "number") {
+      crossAxis = alignment === "end" ? alignmentAxis * -1 : alignmentAxis;
+    }
+    return isVertical ? {
+      x: crossAxis * crossAxisMulti,
+      y: mainAxis * mainAxisMulti
+    } : {
+      x: mainAxis * mainAxisMulti,
+      y: crossAxis * crossAxisMulti
+    };
+  }
+  var offset = function(options) {
+    if (options === void 0) {
+      options = 0;
+    }
+    return {
+      name: "offset",
+      options,
+      async fn(state) {
+        var _middlewareData$offse, _middlewareData$arrow;
+        const {
+          x,
+          y,
+          placement,
+          middlewareData
+        } = state;
+        const diffCoords = await convertValueToCoords(state, options);
+        if (placement === ((_middlewareData$offse = middlewareData.offset) == null ? void 0 : _middlewareData$offse.placement) && (_middlewareData$arrow = middlewareData.arrow) != null && _middlewareData$arrow.alignmentOffset) {
+          return {};
+        }
+        return {
+          x: x + diffCoords.x,
+          y: y + diffCoords.y,
+          data: {
+            ...diffCoords,
+            placement
+          }
+        };
+      }
+    };
+  };
+  var shift2 = function(options) {
+    if (options === void 0) {
+      options = {};
+    }
+    return {
+      name: "shift",
+      options,
+      async fn(state) {
+        const {
+          x,
+          y,
+          placement,
+          platform: platform2
+        } = state;
+        const {
+          mainAxis: checkMainAxis = true,
+          crossAxis: checkCrossAxis = false,
+          limiter = {
+            fn: (_ref) => {
+              let {
+                x: x2,
+                y: y2
+              } = _ref;
+              return {
+                x: x2,
+                y: y2
+              };
+            }
+          },
+          ...detectOverflowOptions
+        } = evaluate(options, state);
+        const coords = {
+          x,
+          y
+        };
+        const overflow = await platform2.detectOverflow(state, detectOverflowOptions);
+        const crossAxis = getSideAxis(placement);
+        const mainAxis = getOppositeAxis(crossAxis);
+        let mainAxisCoord = coords[mainAxis];
+        let crossAxisCoord = coords[crossAxis];
+        const clampCoord = (axis, coord) => clamp(coord + overflow[axis === "y" ? "top" : "left"], coord, coord - overflow[axis === "y" ? "bottom" : "right"]);
+        if (checkMainAxis) {
+          mainAxisCoord = clampCoord(mainAxis, mainAxisCoord);
+        }
+        if (checkCrossAxis) {
+          crossAxisCoord = clampCoord(crossAxis, crossAxisCoord);
+        }
+        const limitedCoords = limiter.fn({
+          ...state,
+          [mainAxis]: mainAxisCoord,
+          [crossAxis]: crossAxisCoord
+        });
+        return {
+          ...limitedCoords,
+          data: {
+            x: limitedCoords.x - x,
+            y: limitedCoords.y - y,
+            enabled: {
+              [mainAxis]: checkMainAxis,
+              [crossAxis]: checkCrossAxis
+            }
+          }
+        };
+      }
+    };
+  };
+  var limitShift = function(options) {
+    if (options === void 0) {
+      options = {};
+    }
+    return {
+      options,
+      fn(state) {
+        var _rawOffset$mainAxis, _rawOffset$crossAxis;
+        const {
+          x,
+          y,
+          placement,
+          rects,
+          middlewareData
+        } = state;
+        const {
+          offset: offset4 = 0,
+          mainAxis: checkMainAxis = true,
+          crossAxis: checkCrossAxis = true
+        } = evaluate(options, state);
+        const coords = {
+          x,
+          y
+        };
+        const crossAxis = getSideAxis(placement);
+        const mainAxis = getOppositeAxis(crossAxis);
+        let mainAxisCoord = coords[mainAxis];
+        let crossAxisCoord = coords[crossAxis];
+        const rawOffset = evaluate(offset4, state);
+        const computedOffset = typeof rawOffset === "number" ? {
+          mainAxis: rawOffset,
+          crossAxis: 0
+        } : {
+          mainAxis: (_rawOffset$mainAxis = rawOffset.mainAxis) != null ? _rawOffset$mainAxis : 0,
+          crossAxis: (_rawOffset$crossAxis = rawOffset.crossAxis) != null ? _rawOffset$crossAxis : 0
+        };
+        if (checkMainAxis) {
+          const len = mainAxis === "y" ? "height" : "width";
+          const limitMin = rects.reference[mainAxis] - rects.floating[len] + computedOffset.mainAxis;
+          const limitMax = rects.reference[mainAxis] + rects.reference[len] - computedOffset.mainAxis;
+          if (mainAxisCoord < limitMin) {
+            mainAxisCoord = limitMin;
+          } else if (mainAxisCoord > limitMax) {
+            mainAxisCoord = limitMax;
+          }
+        }
+        if (checkCrossAxis) {
+          var _middlewareData$offse, _middlewareData$offse2;
+          const len = mainAxis === "y" ? "width" : "height";
+          const isOriginSide = originSides.has(getSide(placement));
+          const limitMin = rects.reference[crossAxis] - rects.floating[len] + (isOriginSide ? ((_middlewareData$offse = middlewareData.offset) == null ? void 0 : _middlewareData$offse[crossAxis]) || 0 : 0) + (isOriginSide ? 0 : computedOffset.crossAxis);
+          const limitMax = rects.reference[crossAxis] + rects.reference[len] + (isOriginSide ? 0 : ((_middlewareData$offse2 = middlewareData.offset) == null ? void 0 : _middlewareData$offse2[crossAxis]) || 0) - (isOriginSide ? computedOffset.crossAxis : 0);
+          if (crossAxisCoord < limitMin) {
+            crossAxisCoord = limitMin;
+          } else if (crossAxisCoord > limitMax) {
+            crossAxisCoord = limitMax;
+          }
+        }
+        return {
+          [mainAxis]: mainAxisCoord,
+          [crossAxis]: crossAxisCoord
+        };
+      }
+    };
+  };
+  var size = function(options) {
+    if (options === void 0) {
+      options = {};
+    }
+    return {
+      name: "size",
+      options,
+      async fn(state) {
+        const {
+          placement,
+          rects,
+          platform: platform2,
+          elements
+        } = state;
+        const {
+          apply = () => {
+          },
+          ...detectOverflowOptions
+        } = evaluate(options, state);
+        const overflow = await platform2.detectOverflow(state, detectOverflowOptions);
+        const side = getSide(placement);
+        const alignment = getAlignment(placement);
+        const isYAxis = getSideAxis(placement) === "y";
+        const {
+          width,
+          height
+        } = rects.floating;
+        let heightSide;
+        let widthSide;
+        if (side === "top" || side === "bottom") {
+          heightSide = side;
+          widthSide = alignment === (await (platform2.isRTL == null ? void 0 : platform2.isRTL(elements.floating)) ? "start" : "end") ? "left" : "right";
+        } else {
+          widthSide = side;
+          heightSide = alignment === "end" ? "top" : "bottom";
+        }
+        const maximumClippingHeight = height - overflow.top - overflow.bottom;
+        const maximumClippingWidth = width - overflow.left - overflow.right;
+        const overflowAvailableHeight = min(height - overflow[heightSide], maximumClippingHeight);
+        const overflowAvailableWidth = min(width - overflow[widthSide], maximumClippingWidth);
+        const shiftData = state.middlewareData.shift;
+        const noShift = !shiftData;
+        let availableHeight = overflowAvailableHeight;
+        let availableWidth = overflowAvailableWidth;
+        if (shiftData != null && shiftData.enabled.x) {
+          availableWidth = maximumClippingWidth;
+        }
+        if (shiftData != null && shiftData.enabled.y) {
+          availableHeight = maximumClippingHeight;
+        }
+        if (noShift && !alignment) {
+          if (isYAxis) {
+            availableWidth = width - 2 * max(overflow.left, overflow.right);
+          } else {
+            availableHeight = height - 2 * max(overflow.top, overflow.bottom);
+          }
+        }
+        await apply({
+          ...state,
+          availableWidth,
+          availableHeight
+        });
+        const nextDimensions = await platform2.getDimensions(elements.floating);
+        if (width !== nextDimensions.width || height !== nextDimensions.height) {
+          return {
+            reset: {
+              rects: true
+            }
+          };
+        }
+        return {};
+      }
+    };
+  };
+
+  // node_modules/@floating-ui/utils/dist/floating-ui.utils.dom.mjs
+  init_ds_inject_react();
+  function hasWindow() {
+    return typeof window !== "undefined";
+  }
+  function getNodeName(node) {
+    if (isNode(node)) {
+      return (node.nodeName || "").toLowerCase();
+    }
+    return "#document";
+  }
+  function getWindow(node) {
+    var _node$ownerDocument;
+    return (node == null || (_node$ownerDocument = node.ownerDocument) == null ? void 0 : _node$ownerDocument.defaultView) || window;
+  }
+  function getDocumentElement(node) {
+    var _ref;
+    return (_ref = (isNode(node) ? node.ownerDocument : node.document) || window.document) == null ? void 0 : _ref.documentElement;
+  }
+  function isNode(value) {
+    if (!hasWindow()) {
+      return false;
+    }
+    return value instanceof Node || value instanceof getWindow(value).Node;
+  }
+  function isElement(value) {
+    if (!hasWindow()) {
+      return false;
+    }
+    return value instanceof Element || value instanceof getWindow(value).Element;
+  }
+  function isHTMLElement(value) {
+    if (!hasWindow()) {
+      return false;
+    }
+    return value instanceof HTMLElement || value instanceof getWindow(value).HTMLElement;
+  }
+  function isShadowRoot(value) {
+    if (!hasWindow() || typeof ShadowRoot === "undefined") {
+      return false;
+    }
+    return value instanceof ShadowRoot || value instanceof getWindow(value).ShadowRoot;
+  }
+  function isOverflowElement(element) {
+    const {
+      overflow,
+      overflowX,
+      overflowY,
+      display
+    } = getComputedStyle2(element);
+    return /auto|scroll|overlay|hidden|clip/.test(overflow + overflowY + overflowX) && display !== "inline" && display !== "contents";
+  }
+  function isTableElement(element) {
+    return /^(table|td|th)$/.test(getNodeName(element));
+  }
+  function isTopLayer(element) {
+    try {
+      if (element.matches(":popover-open")) {
+        return true;
+      }
+    } catch (_e) {
+    }
+    try {
+      return element.matches(":modal");
+    } catch (_e) {
+      return false;
+    }
+  }
+  var willChangeRe = /transform|translate|scale|rotate|perspective|filter/;
+  var containRe = /paint|layout|strict|content/;
+  var isNotNone = (value) => !!value && value !== "none";
+  var isWebKitValue;
+  function isContainingBlock(elementOrCss) {
+    const css = isElement(elementOrCss) ? getComputedStyle2(elementOrCss) : elementOrCss;
+    return isNotNone(css.transform) || isNotNone(css.translate) || isNotNone(css.scale) || isNotNone(css.rotate) || isNotNone(css.perspective) || !isWebKit() && (isNotNone(css.backdropFilter) || isNotNone(css.filter)) || willChangeRe.test(css.willChange || "") || containRe.test(css.contain || "");
+  }
+  function getContainingBlock(element) {
+    let currentNode = getParentNode(element);
+    while (isHTMLElement(currentNode) && !isLastTraversableNode(currentNode)) {
+      if (isContainingBlock(currentNode)) {
+        return currentNode;
+      } else if (isTopLayer(currentNode)) {
+        return null;
+      }
+      currentNode = getParentNode(currentNode);
+    }
+    return null;
+  }
+  function isWebKit() {
+    if (isWebKitValue == null) {
+      isWebKitValue = typeof CSS !== "undefined" && CSS.supports && CSS.supports("-webkit-backdrop-filter", "none");
+    }
+    return isWebKitValue;
+  }
+  function isLastTraversableNode(node) {
+    return /^(html|body|#document)$/.test(getNodeName(node));
+  }
+  function getComputedStyle2(element) {
+    return getWindow(element).getComputedStyle(element);
+  }
+  function getNodeScroll(element) {
+    if (isElement(element)) {
+      return {
+        scrollLeft: element.scrollLeft,
+        scrollTop: element.scrollTop
+      };
+    }
+    return {
+      scrollLeft: element.scrollX,
+      scrollTop: element.scrollY
+    };
+  }
+  function getParentNode(node) {
+    if (getNodeName(node) === "html") {
+      return node;
+    }
+    const result = (
+      // Step into the shadow DOM of the parent of a slotted node.
+      node.assignedSlot || // DOM Element detected.
+      node.parentNode || // ShadowRoot detected.
+      isShadowRoot(node) && node.host || // Fallback.
+      getDocumentElement(node)
+    );
+    return isShadowRoot(result) ? result.host : result;
+  }
+  function getNearestOverflowAncestor(node) {
+    const parentNode = getParentNode(node);
+    if (isLastTraversableNode(parentNode)) {
+      return (node.ownerDocument || node).body;
+    }
+    if (isHTMLElement(parentNode) && isOverflowElement(parentNode)) {
+      return parentNode;
+    }
+    return getNearestOverflowAncestor(parentNode);
+  }
+  function getOverflowAncestors(node, list, traverseIframes) {
+    var _node$ownerDocument2;
+    if (list === void 0) {
+      list = [];
+    }
+    if (traverseIframes === void 0) {
+      traverseIframes = true;
+    }
+    const scrollableAncestor = getNearestOverflowAncestor(node);
+    const isBody = scrollableAncestor === ((_node$ownerDocument2 = node.ownerDocument) == null ? void 0 : _node$ownerDocument2.body);
+    const win = getWindow(scrollableAncestor);
+    if (isBody) {
+      const frameElement = getFrameElement(win);
+      return list.concat(win, win.visualViewport || [], isOverflowElement(scrollableAncestor) ? scrollableAncestor : [], frameElement && traverseIframes ? getOverflowAncestors(frameElement) : []);
+    } else {
+      return list.concat(scrollableAncestor, getOverflowAncestors(scrollableAncestor, [], traverseIframes));
+    }
+  }
+  function getFrameElement(win) {
+    return win.parent && Object.getPrototypeOf(win.parent) ? win.frameElement : null;
+  }
+
+  // node_modules/@floating-ui/dom/dist/floating-ui.dom.mjs
+  function getCssDimensions(element) {
+    const css = getComputedStyle2(element);
+    let width = parseFloat(css.width) || 0;
+    let height = parseFloat(css.height) || 0;
+    const hasOffset = isHTMLElement(element);
+    const offsetWidth = hasOffset ? element.offsetWidth : width;
+    const offsetHeight = hasOffset ? element.offsetHeight : height;
+    const shouldFallback = round(width) !== offsetWidth || round(height) !== offsetHeight;
+    if (shouldFallback) {
+      width = offsetWidth;
+      height = offsetHeight;
+    }
+    return {
+      width,
+      height,
+      $: shouldFallback
+    };
+  }
+  function unwrapElement(element) {
+    return !isElement(element) ? element.contextElement : element;
+  }
+  function getScale(element) {
+    const domElement = unwrapElement(element);
+    if (!isHTMLElement(domElement)) {
+      return createCoords(1);
+    }
+    const rect = domElement.getBoundingClientRect();
+    const {
+      width,
+      height,
+      $
+    } = getCssDimensions(domElement);
+    let x = ($ ? round(rect.width) : rect.width) / width;
+    let y = ($ ? round(rect.height) : rect.height) / height;
+    if (!x || !Number.isFinite(x)) {
+      x = 1;
+    }
+    if (!y || !Number.isFinite(y)) {
+      y = 1;
+    }
+    return {
+      x,
+      y
+    };
+  }
+  var noOffsets = /* @__PURE__ */ createCoords(0);
+  function getVisualOffsets(element) {
+    const win = getWindow(element);
+    if (!isWebKit() || !win.visualViewport) {
+      return noOffsets;
+    }
+    return {
+      x: win.visualViewport.offsetLeft,
+      y: win.visualViewport.offsetTop
+    };
+  }
+  function shouldAddVisualOffsets(element, isFixed, floatingOffsetParent) {
+    if (isFixed === void 0) {
+      isFixed = false;
+    }
+    return !!floatingOffsetParent && isFixed && floatingOffsetParent === getWindow(element);
+  }
+  function getBoundingClientRect(element, includeScale, isFixedStrategy, offsetParent) {
+    if (includeScale === void 0) {
+      includeScale = false;
+    }
+    if (isFixedStrategy === void 0) {
+      isFixedStrategy = false;
+    }
+    const clientRect = element.getBoundingClientRect();
+    const domElement = unwrapElement(element);
+    let scale = createCoords(1);
+    if (includeScale) {
+      if (offsetParent) {
+        if (isElement(offsetParent)) {
+          scale = getScale(offsetParent);
+        }
+      } else {
+        scale = getScale(element);
+      }
+    }
+    const visualOffsets = shouldAddVisualOffsets(domElement, isFixedStrategy, offsetParent) ? getVisualOffsets(domElement) : createCoords(0);
+    let x = (clientRect.left + visualOffsets.x) / scale.x;
+    let y = (clientRect.top + visualOffsets.y) / scale.y;
+    let width = clientRect.width / scale.x;
+    let height = clientRect.height / scale.y;
+    if (domElement && offsetParent) {
+      const win = getWindow(domElement);
+      const offsetWin = isElement(offsetParent) ? getWindow(offsetParent) : offsetParent;
+      let currentWin = win;
+      let currentIFrame = getFrameElement(currentWin);
+      while (currentIFrame && offsetWin !== currentWin) {
+        const iframeScale = getScale(currentIFrame);
+        const iframeRect = currentIFrame.getBoundingClientRect();
+        const css = getComputedStyle2(currentIFrame);
+        const left = iframeRect.left + (currentIFrame.clientLeft + parseFloat(css.paddingLeft)) * iframeScale.x;
+        const top = iframeRect.top + (currentIFrame.clientTop + parseFloat(css.paddingTop)) * iframeScale.y;
+        x *= iframeScale.x;
+        y *= iframeScale.y;
+        width *= iframeScale.x;
+        height *= iframeScale.y;
+        x += left;
+        y += top;
+        currentWin = getWindow(currentIFrame);
+        currentIFrame = getFrameElement(currentWin);
+      }
+    }
+    return rectToClientRect({
+      width,
+      height,
+      x,
+      y
+    });
+  }
+  function getWindowScrollBarX(element, rect) {
+    const leftScroll = getNodeScroll(element).scrollLeft;
+    if (!rect) {
+      return getBoundingClientRect(getDocumentElement(element)).left + leftScroll;
+    }
+    return rect.left + leftScroll;
+  }
+  function getHTMLOffset(documentElement, scroll) {
+    const htmlRect = documentElement.getBoundingClientRect();
+    const x = htmlRect.left + scroll.scrollLeft - getWindowScrollBarX(documentElement, htmlRect);
+    const y = htmlRect.top + scroll.scrollTop;
+    return {
+      x,
+      y
+    };
+  }
+  function convertOffsetParentRelativeRectToViewportRelativeRect(_ref) {
+    let {
+      elements,
+      rect,
+      offsetParent,
+      strategy
+    } = _ref;
+    const isFixed = strategy === "fixed";
+    const documentElement = getDocumentElement(offsetParent);
+    const topLayer = elements ? isTopLayer(elements.floating) : false;
+    if (offsetParent === documentElement || topLayer && isFixed) {
+      return rect;
+    }
+    let scroll = {
+      scrollLeft: 0,
+      scrollTop: 0
+    };
+    let scale = createCoords(1);
+    const offsets = createCoords(0);
+    const isOffsetParentAnElement = isHTMLElement(offsetParent);
+    if (isOffsetParentAnElement || !isFixed) {
+      if (getNodeName(offsetParent) !== "body" || isOverflowElement(documentElement)) {
+        scroll = getNodeScroll(offsetParent);
+      }
+      if (isOffsetParentAnElement) {
+        const offsetRect = getBoundingClientRect(offsetParent);
+        scale = getScale(offsetParent);
+        offsets.x = offsetRect.x + offsetParent.clientLeft;
+        offsets.y = offsetRect.y + offsetParent.clientTop;
+      }
+    }
+    const htmlOffset = documentElement && !isOffsetParentAnElement && !isFixed ? getHTMLOffset(documentElement, scroll) : createCoords(0);
+    return {
+      width: rect.width * scale.x,
+      height: rect.height * scale.y,
+      x: rect.x * scale.x - scroll.scrollLeft * scale.x + offsets.x + htmlOffset.x,
+      y: rect.y * scale.y - scroll.scrollTop * scale.y + offsets.y + htmlOffset.y
+    };
+  }
+  function getClientRects(element) {
+    return element.getClientRects ? Array.from(element.getClientRects()) : [];
+  }
+  function getDocumentRect(html) {
+    const scroll = getNodeScroll(html);
+    const body = html.ownerDocument.body;
+    const width = max(html.scrollWidth, html.clientWidth, body.scrollWidth, body.clientWidth);
+    const height = max(html.scrollHeight, html.clientHeight, body.scrollHeight, body.clientHeight);
+    let x = -scroll.scrollLeft + getWindowScrollBarX(html);
+    const y = -scroll.scrollTop;
+    if (getComputedStyle2(body).direction === "rtl") {
+      x += max(html.clientWidth, body.clientWidth) - width;
+    }
+    return {
+      width,
+      height,
+      x,
+      y
+    };
+  }
+  var SCROLLBAR_MAX = 25;
+  function getViewportRect(element, strategy, rootBoundary) {
+    if (rootBoundary === void 0) {
+      rootBoundary = "viewport";
+    }
+    const isLayoutViewport = rootBoundary === "layoutViewport";
+    const win = getWindow(element);
+    const html = getDocumentElement(element);
+    const visualViewport = win.visualViewport;
+    let width = html.clientWidth;
+    let height = html.clientHeight;
+    let x = 0;
+    let y = 0;
+    if (visualViewport) {
+      const layoutRelativeClientCoords = !isWebKit() || strategy === "fixed";
+      if (isLayoutViewport) {
+        if (!layoutRelativeClientCoords) {
+          x = -visualViewport.offsetLeft;
+          y = -visualViewport.offsetTop;
+        }
+      } else {
+        width = visualViewport.width;
+        height = visualViewport.height;
+        if (layoutRelativeClientCoords) {
+          x = visualViewport.offsetLeft;
+          y = visualViewport.offsetTop;
+        }
+      }
+    }
+    const windowScrollbarX = getWindowScrollBarX(html);
+    if (windowScrollbarX <= 0) {
+      const doc = html.ownerDocument;
+      const body = doc.body;
+      const bodyStyles = getComputedStyle(body);
+      const bodyMarginInline = doc.compatMode === "CSS1Compat" ? parseFloat(bodyStyles.marginLeft) + parseFloat(bodyStyles.marginRight) || 0 : 0;
+      const reservedWidth = Math.abs(html.clientWidth - body.clientWidth - bodyMarginInline);
+      const gutter = getComputedStyle(html).scrollbarGutter === "stable both-edges" ? reservedWidth / 2 : reservedWidth;
+      if (gutter <= SCROLLBAR_MAX) {
+        width -= gutter;
+      }
+    }
+    return {
+      width,
+      height,
+      x,
+      y
+    };
+  }
+  function getInnerBoundingClientRect(element, strategy) {
+    const clientRect = getBoundingClientRect(element, true, strategy === "fixed");
+    const top = clientRect.top + element.clientTop;
+    const left = clientRect.left + element.clientLeft;
+    const scale = getScale(element);
+    const width = element.clientWidth * scale.x;
+    const height = element.clientHeight * scale.y;
+    const x = left * scale.x;
+    const y = top * scale.y;
+    return {
+      width,
+      height,
+      x,
+      y
+    };
+  }
+  function getClientRectFromClippingAncestor(element, clippingAncestor, strategy) {
+    let rect;
+    if (clippingAncestor === "viewport" || clippingAncestor === "layoutViewport") {
+      rect = getViewportRect(element, strategy, clippingAncestor);
+    } else if (clippingAncestor === "document") {
+      rect = getDocumentRect(getDocumentElement(element));
+    } else if (isElement(clippingAncestor)) {
+      rect = getInnerBoundingClientRect(clippingAncestor, strategy);
+    } else {
+      const visualOffsets = getVisualOffsets(element);
+      rect = {
+        x: clippingAncestor.x - visualOffsets.x,
+        y: clippingAncestor.y - visualOffsets.y,
+        width: clippingAncestor.width,
+        height: clippingAncestor.height
+      };
+    }
+    return rectToClientRect(rect);
+  }
+  function getClippingElementAncestors(element, cache) {
+    const cachedResult = cache.get(element);
+    if (cachedResult) {
+      return cachedResult;
+    }
+    let result = getOverflowAncestors(element, [], false).filter((el) => isElement(el) && getNodeName(el) !== "body");
+    let lastKeptComputedStyle = null;
+    const elementIsFixed = getComputedStyle2(element).position === "fixed";
+    let currentNode = elementIsFixed ? getParentNode(element) : element;
+    while (isElement(currentNode) && !isLastTraversableNode(currentNode)) {
+      const computedStyle = getComputedStyle2(currentNode);
+      const currentNodeIsContaining = isContainingBlock(currentNode);
+      const lastPosition = lastKeptComputedStyle ? lastKeptComputedStyle.position : elementIsFixed ? "fixed" : "";
+      const shouldDropCurrentNode = !currentNodeIsContaining && (lastPosition === "fixed" || lastPosition === "absolute" && computedStyle.position === "static");
+      if (shouldDropCurrentNode) {
+        result = result.filter((ancestor) => ancestor !== currentNode);
+      } else {
+        lastKeptComputedStyle = computedStyle;
+      }
+      currentNode = getParentNode(currentNode);
+    }
+    cache.set(element, result);
+    return result;
+  }
+  function getClippingRect(_ref) {
+    let {
+      element,
+      boundary,
+      rootBoundary,
+      strategy
+    } = _ref;
+    const elementClippingAncestors = boundary === "clippingAncestors" ? isTopLayer(element) ? [] : getClippingElementAncestors(element, this._c) : [].concat(boundary);
+    const clippingAncestors = [...elementClippingAncestors, rootBoundary];
+    const firstRect = getClientRectFromClippingAncestor(element, clippingAncestors[0], strategy);
+    let top = firstRect.top;
+    let right = firstRect.right;
+    let bottom = firstRect.bottom;
+    let left = firstRect.left;
+    for (let i = 1; i < clippingAncestors.length; i++) {
+      const rect = getClientRectFromClippingAncestor(element, clippingAncestors[i], strategy);
+      top = max(rect.top, top);
+      right = min(rect.right, right);
+      bottom = min(rect.bottom, bottom);
+      left = max(rect.left, left);
+    }
+    return {
+      width: right - left,
+      height: bottom - top,
+      x: left,
+      y: top
+    };
+  }
+  function getDimensions(element) {
+    const {
+      width,
+      height
+    } = getCssDimensions(element);
+    return {
+      width,
+      height
+    };
+  }
+  function getRectRelativeToOffsetParent(element, offsetParent, strategy) {
+    const isOffsetParentAnElement = isHTMLElement(offsetParent);
+    const documentElement = getDocumentElement(offsetParent);
+    const isFixed = strategy === "fixed";
+    const rect = getBoundingClientRect(element, true, isFixed, offsetParent);
+    let scroll = {
+      scrollLeft: 0,
+      scrollTop: 0
+    };
+    const offsets = createCoords(0);
+    if (isOffsetParentAnElement || !isFixed) {
+      if (getNodeName(offsetParent) !== "body" || isOverflowElement(documentElement)) {
+        scroll = getNodeScroll(offsetParent);
+      }
+      if (isOffsetParentAnElement) {
+        const offsetRect = getBoundingClientRect(offsetParent, true, isFixed, offsetParent);
+        offsets.x = offsetRect.x + offsetParent.clientLeft;
+        offsets.y = offsetRect.y + offsetParent.clientTop;
+      }
+    }
+    if (!isOffsetParentAnElement && documentElement) {
+      offsets.x = getWindowScrollBarX(documentElement);
+    }
+    const htmlOffset = documentElement && !isOffsetParentAnElement && !isFixed ? getHTMLOffset(documentElement, scroll) : createCoords(0);
+    const x = rect.left + scroll.scrollLeft - offsets.x - htmlOffset.x;
+    const y = rect.top + scroll.scrollTop - offsets.y - htmlOffset.y;
+    return {
+      x,
+      y,
+      width: rect.width,
+      height: rect.height
+    };
+  }
+  function isStaticPositioned(element) {
+    return getComputedStyle2(element).position === "static";
+  }
+  function getTrueOffsetParent(element, polyfill) {
+    if (!isHTMLElement(element) || getComputedStyle2(element).position === "fixed") {
+      return null;
+    }
+    if (polyfill) {
+      return polyfill(element);
+    }
+    let rawOffsetParent = element.offsetParent;
+    if (getDocumentElement(element) === rawOffsetParent) {
+      rawOffsetParent = rawOffsetParent.ownerDocument.body;
+    }
+    return rawOffsetParent;
+  }
+  function getOffsetParent(element, polyfill) {
+    const win = getWindow(element);
+    if (isTopLayer(element)) {
+      return win;
+    }
+    if (!isHTMLElement(element)) {
+      let svgOffsetParent = getParentNode(element);
+      while (svgOffsetParent && !isLastTraversableNode(svgOffsetParent)) {
+        if (isElement(svgOffsetParent) && !isStaticPositioned(svgOffsetParent)) {
+          return svgOffsetParent;
+        }
+        svgOffsetParent = getParentNode(svgOffsetParent);
+      }
+      return win;
+    }
+    let offsetParent = getTrueOffsetParent(element, polyfill);
+    while (offsetParent && isTableElement(offsetParent) && isStaticPositioned(offsetParent)) {
+      offsetParent = getTrueOffsetParent(offsetParent, polyfill);
+    }
+    if (offsetParent && isLastTraversableNode(offsetParent) && isStaticPositioned(offsetParent) && !isContainingBlock(offsetParent)) {
+      return win;
+    }
+    return offsetParent || getContainingBlock(element) || win;
+  }
+  var getElementRects = async function(data) {
+    const getOffsetParentFn = this.getOffsetParent || getOffsetParent;
+    const getDimensionsFn = this.getDimensions;
+    const floatingDimensions = await getDimensionsFn(data.floating);
+    return {
+      reference: getRectRelativeToOffsetParent(data.reference, await getOffsetParentFn(data.floating), data.strategy),
+      floating: {
+        x: 0,
+        y: 0,
+        width: floatingDimensions.width,
+        height: floatingDimensions.height
+      }
+    };
+  };
+  function isRTL(element) {
+    return getComputedStyle2(element).direction === "rtl";
+  }
+  var platform = {
+    convertOffsetParentRelativeRectToViewportRelativeRect,
+    getDocumentElement,
+    getClippingRect,
+    getOffsetParent,
+    getElementRects,
+    getClientRects,
+    getDimensions,
+    getScale,
+    isElement,
+    isRTL
+  };
+  function rectsAreEqual(a, b) {
+    return a.x === b.x && a.y === b.y && a.width === b.width && a.height === b.height;
+  }
+  function observeMove(element, onMove, ancestorResize) {
+    let io = null;
+    let timeoutId;
+    const root = getDocumentElement(element);
+    function cleanup() {
+      var _io;
+      clearTimeout(timeoutId);
+      (_io = io) == null || _io.disconnect();
+      io = null;
+    }
+    function refresh(skip, threshold) {
+      if (skip === void 0) {
+        skip = false;
+      }
+      if (threshold === void 0) {
+        threshold = 1;
+      }
+      cleanup();
+      const elementRectForRootMargin = element.getBoundingClientRect();
+      const {
+        left,
+        top,
+        width,
+        height
+      } = elementRectForRootMargin;
+      if (!skip) {
+        onMove();
+      }
+      if (!width || !height) {
+        return;
+      }
+      const insetTop = floor(top);
+      const insetRight = floor(root.clientWidth - (left + width));
+      const insetBottom = floor(root.clientHeight - (top + height));
+      const insetLeft = floor(left);
+      const rootMargin = -insetTop + "px " + -insetRight + "px " + -insetBottom + "px " + -insetLeft + "px";
+      const options = {
+        rootMargin,
+        threshold: max(0, min(1, threshold)) || 1
+      };
+      let isFirstUpdate = true;
+      function handleObserve(entries) {
+        const ratio = entries[0].intersectionRatio;
+        if (!rectsAreEqual(elementRectForRootMargin, element.getBoundingClientRect())) {
+          return refresh();
+        }
+        if (ratio !== threshold) {
+          if (!isFirstUpdate) {
+            return refresh();
+          }
+          if (!ratio) {
+            timeoutId = setTimeout(() => {
+              refresh(false, 1e-7);
+            }, 1e3);
+          } else {
+            refresh(false, ratio);
+          }
+        }
+        isFirstUpdate = false;
+      }
+      try {
+        io = new IntersectionObserver(handleObserve, {
+          ...options,
+          // Handle <iframe>s
+          root: root.ownerDocument
+        });
+      } catch (_e) {
+        io = new IntersectionObserver(handleObserve, options);
+      }
+      io.observe(element);
+    }
+    const win = getWindow(element);
+    const handleResize = () => refresh(ancestorResize);
+    win.addEventListener("resize", handleResize);
+    refresh(true);
+    return () => {
+      win.removeEventListener("resize", handleResize);
+      cleanup();
+    };
+  }
+  function autoUpdate(reference, floating, update, options) {
+    if (options === void 0) {
+      options = {};
+    }
+    const {
+      ancestorScroll = true,
+      ancestorResize = true,
+      elementResize = typeof ResizeObserver === "function",
+      layoutShift = typeof IntersectionObserver === "function",
+      animationFrame = false
+    } = options;
+    const referenceEl = unwrapElement(reference);
+    const ancestors = ancestorScroll || ancestorResize ? [...referenceEl ? getOverflowAncestors(referenceEl) : [], ...floating ? getOverflowAncestors(floating) : []] : [];
+    ancestors.forEach((ancestor) => {
+      ancestorScroll && ancestor.addEventListener("scroll", update);
+      ancestorResize && ancestor.addEventListener("resize", update);
+    });
+    const cleanupIo = referenceEl && layoutShift ? observeMove(referenceEl, update, ancestorResize) : null;
+    let reobserveFrame = -1;
+    let resizeObserver = null;
+    if (elementResize) {
+      resizeObserver = new ResizeObserver((_ref) => {
+        let [firstEntry] = _ref;
+        if (firstEntry && firstEntry.target === referenceEl && resizeObserver && floating) {
+          resizeObserver.unobserve(floating);
+          cancelAnimationFrame(reobserveFrame);
+          reobserveFrame = requestAnimationFrame(() => {
+            var _resizeObserver;
+            (_resizeObserver = resizeObserver) == null || _resizeObserver.observe(floating);
+          });
+        }
+        update();
+      });
+      if (referenceEl && !animationFrame) {
+        resizeObserver.observe(referenceEl);
+      }
+      if (floating) {
+        resizeObserver.observe(floating);
+      }
+    }
+    let frameId;
+    let prevRefRect = animationFrame ? getBoundingClientRect(reference) : null;
+    if (animationFrame) {
+      frameLoop();
+    }
+    function frameLoop() {
+      const nextRefRect = getBoundingClientRect(reference);
+      if (prevRefRect && !rectsAreEqual(prevRefRect, nextRefRect)) {
+        update();
+      }
+      prevRefRect = nextRefRect;
+      frameId = requestAnimationFrame(frameLoop);
+    }
+    update();
+    return () => {
+      var _resizeObserver2;
+      ancestors.forEach((ancestor) => {
+        ancestorScroll && ancestor.removeEventListener("scroll", update);
+        ancestorResize && ancestor.removeEventListener("resize", update);
+      });
+      cleanupIo == null || cleanupIo();
+      (_resizeObserver2 = resizeObserver) == null || _resizeObserver2.disconnect();
+      resizeObserver = null;
+      if (animationFrame) {
+        cancelAnimationFrame(frameId);
+      }
+    };
+  }
+  var offset2 = offset;
+  var shift3 = shift2;
+  var flip2 = flip;
+  var size2 = size;
+  var hide2 = hide;
+  var arrow2 = arrow;
+  var limitShift2 = limitShift;
+  var computePosition2 = (reference, floating, options) => {
+    const cache = /* @__PURE__ */ new Map();
+    const mergedOptions = options != null ? options : {};
+    const platformWithCache = {
+      ...platform,
+      ...mergedOptions.platform,
+      _c: cache
+    };
+    return computePosition(reference, floating, {
+      ...mergedOptions,
+      platform: platformWithCache
+    });
+  };
+
+  // node_modules/@floating-ui/react-dom/dist/floating-ui.react-dom.mjs
+  var React50 = __toESM(require_ds_react(), 1);
+  var import_react2 = __toESM(require_ds_react(), 1);
+  var ReactDOM3 = __toESM(require_ds_react_dom(), 1);
+  var isClient = typeof document !== "undefined";
+  var noop = function noop2() {
+  };
+  var index = isClient ? import_react2.useLayoutEffect : noop;
+  function deepEqual(a, b) {
+    if (a === b) {
+      return true;
+    }
+    if (typeof a !== typeof b) {
+      return false;
+    }
+    if (typeof a === "function" && a.toString() === b.toString()) {
+      return true;
+    }
+    let length;
+    let i;
+    let keys;
+    if (a && b && typeof a === "object") {
+      if (Array.isArray(a)) {
+        length = a.length;
+        if (length !== b.length) return false;
+        for (i = length; i-- !== 0; ) {
+          if (!deepEqual(a[i], b[i])) {
+            return false;
+          }
+        }
+        return true;
+      }
+      keys = Object.keys(a);
+      length = keys.length;
+      if (length !== Object.keys(b).length) {
+        return false;
+      }
+      for (i = length; i-- !== 0; ) {
+        if (!{}.hasOwnProperty.call(b, keys[i])) {
+          return false;
+        }
+      }
+      for (i = length; i-- !== 0; ) {
+        const key = keys[i];
+        if (key === "_owner" && a.$$typeof) {
+          continue;
+        }
+        if (!deepEqual(a[key], b[key])) {
+          return false;
+        }
+      }
+      return true;
+    }
+    return a !== a && b !== b;
+  }
+  function getDPR(element) {
+    if (typeof window === "undefined") {
+      return 1;
+    }
+    const win = element.ownerDocument.defaultView || window;
+    return win.devicePixelRatio || 1;
+  }
+  function roundByDPR(element, value) {
+    const dpr = getDPR(element);
+    return Math.round(value * dpr) / dpr;
+  }
+  function useLatestRef(value) {
+    const ref = React50.useRef(value);
+    index(() => {
+      ref.current = value;
+    });
+    return ref;
+  }
+  function useFloating(options) {
+    if (options === void 0) {
+      options = {};
+    }
+    const {
+      placement = "bottom",
+      strategy = "absolute",
+      middleware = [],
+      platform: platform2,
+      elements: {
+        reference: externalReference,
+        floating: externalFloating
+      } = {},
+      transform = true,
+      whileElementsMounted,
+      open
+    } = options;
+    const [data, setData] = React50.useState({
+      x: 0,
+      y: 0,
+      strategy,
+      placement,
+      middlewareData: {},
+      isPositioned: false
+    });
+    const [latestMiddleware, setLatestMiddleware] = React50.useState(middleware);
+    if (!deepEqual(latestMiddleware, middleware)) {
+      setLatestMiddleware(middleware);
+    }
+    const [_reference, _setReference] = React50.useState(null);
+    const [_floating, _setFloating] = React50.useState(null);
+    const setReference = React50.useCallback((node) => {
+      if (node !== referenceRef.current) {
+        referenceRef.current = node;
+        _setReference(node);
+      }
+    }, []);
+    const setFloating = React50.useCallback((node) => {
+      if (node !== floatingRef.current) {
+        floatingRef.current = node;
+        _setFloating(node);
+      }
+    }, []);
+    const referenceEl = externalReference || _reference;
+    const floatingEl = externalFloating || _floating;
+    const referenceRef = React50.useRef(null);
+    const floatingRef = React50.useRef(null);
+    const dataRef = React50.useRef(data);
+    const hasWhileElementsMounted = whileElementsMounted != null;
+    const whileElementsMountedRef = useLatestRef(whileElementsMounted);
+    const platformRef = useLatestRef(platform2);
+    const openRef = useLatestRef(open);
+    const update = React50.useCallback(() => {
+      if (!referenceRef.current || !floatingRef.current) {
+        return;
+      }
+      const config = {
+        placement,
+        strategy,
+        middleware: latestMiddleware
+      };
+      if (platformRef.current) {
+        config.platform = platformRef.current;
+      }
+      computePosition2(referenceRef.current, floatingRef.current, config).then((data2) => {
+        const fullData = {
+          ...data2,
+          // The floating element's position may be recomputed while it's closed
+          // but still mounted (such as when transitioning out). To ensure
+          // `isPositioned` will be `false` initially on the next open, avoid
+          // setting it to `true` when `open === false` (must be specified).
+          isPositioned: openRef.current !== false
+        };
+        if (isMountedRef.current && !deepEqual(dataRef.current, fullData)) {
+          dataRef.current = fullData;
+          ReactDOM3.flushSync(() => {
+            setData(fullData);
+          });
+        }
+      });
+    }, [latestMiddleware, placement, strategy, platformRef, openRef]);
+    index(() => {
+      if (open === false && dataRef.current.isPositioned) {
+        dataRef.current.isPositioned = false;
+        setData((data2) => ({
+          ...data2,
+          isPositioned: false
+        }));
+      }
+    }, [open]);
+    const isMountedRef = React50.useRef(false);
+    index(() => {
+      isMountedRef.current = true;
+      return () => {
+        isMountedRef.current = false;
+      };
+    }, []);
+    index(() => {
+      if (referenceEl) referenceRef.current = referenceEl;
+      if (floatingEl) floatingRef.current = floatingEl;
+      if (referenceEl && floatingEl) {
+        if (whileElementsMountedRef.current) {
+          return whileElementsMountedRef.current(referenceEl, floatingEl, update);
+        }
+        update();
+      }
+    }, [referenceEl, floatingEl, update, whileElementsMountedRef, hasWhileElementsMounted]);
+    const refs = React50.useMemo(() => ({
+      reference: referenceRef,
+      floating: floatingRef,
+      setReference,
+      setFloating
+    }), [setReference, setFloating]);
+    const elements = React50.useMemo(() => ({
+      reference: referenceEl,
+      floating: floatingEl
+    }), [referenceEl, floatingEl]);
+    const floatingStyles = React50.useMemo(() => {
+      const initialStyles = {
+        position: strategy,
+        left: 0,
+        top: 0
+      };
+      if (!elements.floating) {
+        return initialStyles;
+      }
+      const x = roundByDPR(elements.floating, data.x);
+      const y = roundByDPR(elements.floating, data.y);
+      if (transform) {
+        return {
+          ...initialStyles,
+          transform: "translate(" + x + "px, " + y + "px)",
+          ...getDPR(elements.floating) >= 1.5 && {
+            willChange: "transform"
+          }
+        };
+      }
+      return {
+        position: strategy,
+        left: x,
+        top: y
+      };
+    }, [strategy, transform, elements.floating, data.x, data.y]);
+    return React50.useMemo(() => ({
+      ...data,
+      update,
+      refs,
+      elements,
+      floatingStyles
+    }), [data, update, refs, elements, floatingStyles]);
+  }
+  var arrow$1 = (options) => {
+    function isRef(value) {
+      return {}.hasOwnProperty.call(value, "current");
+    }
+    return {
+      name: "arrow",
+      options,
+      fn(state) {
+        const {
+          element,
+          padding
+        } = typeof options === "function" ? options(state) : options;
+        if (element && isRef(element)) {
+          if (element.current != null) {
+            return arrow2({
+              element: element.current,
+              padding
+            }).fn(state);
+          }
+          return {};
+        }
+        if (element) {
+          return arrow2({
+            element,
+            padding
+          }).fn(state);
+        }
+        return {};
+      }
+    };
+  };
+  var offset3 = (options, deps) => {
+    const result = offset2(options);
+    return {
+      name: result.name,
+      fn: result.fn,
+      options: [options, deps]
+    };
+  };
+  var shift4 = (options, deps) => {
+    const result = shift3(options);
+    return {
+      name: result.name,
+      fn: result.fn,
+      options: [options, deps]
+    };
+  };
+  var limitShift3 = (options, deps) => {
+    const result = limitShift2(options);
+    return {
+      fn: result.fn,
+      options: [options, deps]
+    };
+  };
+  var flip3 = (options, deps) => {
+    const result = flip2(options);
+    return {
+      name: result.name,
+      fn: result.fn,
+      options: [options, deps]
+    };
+  };
+  var size3 = (options, deps) => {
+    const result = size2(options);
+    return {
+      name: result.name,
+      fn: result.fn,
+      options: [options, deps]
+    };
+  };
+  var hide3 = (options, deps) => {
+    const result = hide2(options);
+    return {
+      name: result.name,
+      fn: result.fn,
+      options: [options, deps]
+    };
+  };
+  var arrow3 = (options, deps) => {
+    const result = arrow$1(options);
+    return {
+      name: result.name,
+      fn: result.fn,
+      options: [options, deps]
+    };
+  };
+
+  // node_modules/@radix-ui/react-arrow/dist/index.mjs
+  init_ds_inject_react();
+  var React51 = __toESM(require_ds_react(), 1);
+  var import_jsx_runtime6 = __toESM(require_ds_jsx_runtime(), 1);
+  var __defProp16 = Object.defineProperty;
+  var __name15 = (target, value) => __defProp16(target, "name", { value, configurable: true });
+  var Arrow = /* @__PURE__ */ React51.forwardRef(
+    /* @__PURE__ */ __name15(function Arrow2(props, forwardedRef) {
+      const { children, width = 10, height = 5, ...arrowProps } = props;
+      return /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+        Primitive.svg,
+        {
+          ...arrowProps,
+          ref: forwardedRef,
+          width,
+          height,
+          viewBox: "0 0 30 10",
+          preserveAspectRatio: "none",
+          children: props.asChild ? children : /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("polygon", { points: "0,0 30,0 15,10" })
+        }
+      );
+    }, "Arrow")
+  );
+  var Root2 = Arrow;
+
+  // node_modules/@radix-ui/react-popper/dist/index.mjs
+  var import_jsx_runtime7 = __toESM(require_ds_jsx_runtime(), 1);
+  var __defProp17 = Object.defineProperty;
+  var __name16 = (target, value) => __defProp17(target, "name", { value, configurable: true });
+  var POPPER_NAME = "Popper";
+  var [createPopperContext, createPopperScope] = createContextScope(POPPER_NAME);
+  var [PopperProvider, usePopperContext] = createPopperContext(POPPER_NAME);
+  var Popper = /* @__PURE__ */ __name16((props) => {
+    const { __scopePopper, children } = props;
+    const [anchor, setAnchor] = React52.useState(null);
+    const [placementState, setPlacementState] = React52.useState(void 0);
+    return /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+      PopperProvider,
+      {
+        scope: __scopePopper,
+        anchor,
+        onAnchorChange: setAnchor,
+        placementState,
+        setPlacementState,
+        children
+      }
+    );
+  }, "Popper");
+  var ANCHOR_NAME = "PopperAnchor";
+  var PopperAnchor = /* @__PURE__ */ React52.forwardRef(
+    /* @__PURE__ */ __name16(function PopperAnchor2(props, forwardedRef) {
+      const { __scopePopper, virtualRef, ...anchorProps } = props;
+      const context = usePopperContext(ANCHOR_NAME, __scopePopper);
+      const ref = React52.useRef(null);
+      const onAnchorChange = context.onAnchorChange;
+      const callbackRef = React52.useCallback(
+        (node) => {
+          ref.current = node;
+          if (node) {
+            onAnchorChange(node);
+          }
+        },
+        [onAnchorChange]
+      );
+      const composedRefs = useComposedRefs(forwardedRef, callbackRef);
+      const anchorRef = React52.useRef(null);
+      React52.useEffect(() => {
+        if (!virtualRef) {
+          return;
+        }
+        const previousAnchor = anchorRef.current;
+        anchorRef.current = virtualRef.current;
+        if (previousAnchor !== anchorRef.current) {
+          onAnchorChange(anchorRef.current);
+        }
+      });
+      const sideAndAlign = context.placementState && getSideAndAlignFromPlacement(context.placementState);
+      const placedSide = sideAndAlign?.[0];
+      const placedAlign = sideAndAlign?.[1];
+      return virtualRef ? null : /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+        Primitive.div,
+        {
+          "data-radix-popper-side": placedSide,
+          "data-radix-popper-align": placedAlign,
+          ...anchorProps,
+          ref: composedRefs
+        }
+      );
+    }, "PopperAnchor")
+  );
+  var CONTENT_NAME = "PopperContent";
+  var [PopperContentProvider, useContentContext] = createPopperContext(CONTENT_NAME);
+  var PopperContent = /* @__PURE__ */ React52.forwardRef(
+    /* @__PURE__ */ __name16(function PopperContent2(props, forwardedRef) {
+      const {
+        __scopePopper,
+        side = "bottom",
+        sideOffset = 0,
+        align = "center",
+        alignOffset = 0,
+        arrowPadding = 0,
+        avoidCollisions = true,
+        collisionBoundary = [],
+        collisionPadding: collisionPaddingProp = 0,
+        sticky = "partial",
+        hideWhenDetached = false,
+        updatePositionStrategy = "optimized",
+        onPlaced,
+        ...contentProps
+      } = props;
+      const context = usePopperContext(CONTENT_NAME, __scopePopper);
+      const [content, setContent] = React52.useState(null);
+      const composedRefs = useComposedRefs(forwardedRef, setContent);
+      const [arrow4, setArrow] = React52.useState(null);
+      const arrowSize = useSize(arrow4);
+      const arrowWidth = arrowSize?.width ?? 0;
+      const arrowHeight = arrowSize?.height ?? 0;
+      const desiredPlacement = side + (align !== "center" ? "-" + align : "");
+      const collisionPadding = typeof collisionPaddingProp === "number" ? collisionPaddingProp : { top: 0, right: 0, bottom: 0, left: 0, ...collisionPaddingProp };
+      const boundary = Array.isArray(collisionBoundary) ? collisionBoundary : [collisionBoundary];
+      const hasExplicitBoundaries = boundary.length > 0;
+      const detectOverflowOptions = {
+        padding: collisionPadding,
+        boundary: boundary.filter(isNotNull),
+        // with `strategy: 'fixed'`, this is the only way to get it to respect boundaries
+        altBoundary: hasExplicitBoundaries
+      };
+      const { refs, floatingStyles, placement, isPositioned, middlewareData } = useFloating({
+        // default to `fixed` strategy so users don't have to pick and we also avoid focus scroll issues
+        strategy: "fixed",
+        placement: desiredPlacement,
+        whileElementsMounted: /* @__PURE__ */ __name16((...args) => {
+          const cleanup = autoUpdate(...args, {
+            animationFrame: updatePositionStrategy === "always"
+          });
+          return cleanup;
+        }, "whileElementsMounted"),
+        elements: {
+          reference: context.anchor
+        },
+        middleware: [
+          offset3({ mainAxis: sideOffset + arrowHeight, alignmentAxis: alignOffset }),
+          avoidCollisions && shift4({
+            mainAxis: true,
+            crossAxis: false,
+            limiter: sticky === "partial" ? limitShift3() : void 0,
+            ...detectOverflowOptions
+          }),
+          avoidCollisions && flip3({ ...detectOverflowOptions }),
+          size3({
+            ...detectOverflowOptions,
+            apply: /* @__PURE__ */ __name16(({ elements, rects, availableWidth, availableHeight }) => {
+              const { width: anchorWidth, height: anchorHeight } = rects.reference;
+              const contentStyle = elements.floating.style;
+              contentStyle.setProperty("--radix-popper-available-width", `${availableWidth}px`);
+              contentStyle.setProperty("--radix-popper-available-height", `${availableHeight}px`);
+              contentStyle.setProperty("--radix-popper-anchor-width", `${anchorWidth}px`);
+              contentStyle.setProperty("--radix-popper-anchor-height", `${anchorHeight}px`);
+            }, "apply")
+          }),
+          arrow4 && arrow3({ element: arrow4, padding: arrowPadding }),
+          transformOrigin({ arrowWidth, arrowHeight }),
+          hideWhenDetached && hide3({
+            strategy: "referenceHidden",
+            ...detectOverflowOptions,
+            // `hide` detects whether the anchor (reference) is clipped, so when
+            // no explicit `collisionBoundary` is set we fall back to Floating
+            // UI's default clipping ancestors (e.g. a scrollable menu). This
+            // lets an occluded submenu hide once its anchor scrolls out of view
+            // (#3237). The collision/size middlewares deliberately keep the
+            // viewport-based default to avoid clamping content rendered inside
+            // transformed or overflow-clipping portal containers.
+            boundary: hasExplicitBoundaries ? detectOverflowOptions.boundary : void 0
+          })
+        ]
+      });
+      const setPlacementState = context.setPlacementState;
+      useLayoutEffect2(() => {
+        setPlacementState(placement);
+        return () => {
+          setPlacementState(void 0);
+        };
+      }, [placement, setPlacementState]);
+      const [placedSide, placedAlign] = getSideAndAlignFromPlacement(placement);
+      const handlePlaced = useCallbackRef(onPlaced);
+      useLayoutEffect2(() => {
+        if (isPositioned) {
+          handlePlaced?.();
+        }
+      }, [isPositioned, handlePlaced]);
+      const arrowX = middlewareData.arrow?.x;
+      const arrowY = middlewareData.arrow?.y;
+      const cannotCenterArrow = middlewareData.arrow?.centerOffset !== 0;
+      const [contentZIndex, setContentZIndex] = React52.useState();
+      useLayoutEffect2(() => {
+        if (content) setContentZIndex(window.getComputedStyle(content).zIndex);
+      }, [content]);
+      return /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+        "div",
+        {
+          ref: refs.setFloating,
+          "data-radix-popper-content-wrapper": "",
+          style: {
+            ...floatingStyles,
+            transform: isPositioned ? floatingStyles.transform : "translate(0, -200%)",
+            // keep off the page when measuring
+            minWidth: "max-content",
+            zIndex: contentZIndex,
+            "--radix-popper-transform-origin": [
+              middlewareData.transformOrigin?.x,
+              middlewareData.transformOrigin?.y
+            ].join(" "),
+            // hide the content if using the hide middleware and should be hidden
+            // set visibility to hidden and disable pointer events so the UI behaves
+            // as if the PopperContent isn't there at all
+            ...middlewareData.hide?.referenceHidden && {
+              visibility: "hidden",
+              pointerEvents: "none"
+            }
+          },
+          dir: props.dir,
+          children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+            PopperContentProvider,
+            {
+              scope: __scopePopper,
+              placedSide,
+              placedAlign,
+              onArrowChange: setArrow,
+              arrowX,
+              arrowY,
+              shouldHideArrow: cannotCenterArrow,
+              children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+                Primitive.div,
+                {
+                  "data-side": placedSide,
+                  "data-align": placedAlign,
+                  ...contentProps,
+                  ref: composedRefs,
+                  style: {
+                    ...contentProps.style,
+                    // if the PopperContent hasn't been placed yet (not all
+                    // measurements done) we prevent animations so that users'
+                    // animations don't kick in too early from the wrong sides.
+                    animation: !isPositioned ? "none" : contentProps.style?.animation
+                  }
+                }
+              )
+            }
+          )
+        }
+      );
+    }, "PopperContent")
+  );
+  var ARROW_NAME = "PopperArrow";
+  var OPPOSITE_SIDE = {
+    top: "bottom",
+    right: "left",
+    bottom: "top",
+    left: "right"
+  };
+  var PopperArrow = /* @__PURE__ */ React52.forwardRef(
+    /* @__PURE__ */ __name16(function PopperArrow2(props, forwardedRef) {
+      const { __scopePopper, ...arrowProps } = props;
+      const contentContext = useContentContext(ARROW_NAME, __scopePopper);
+      const baseSide = OPPOSITE_SIDE[contentContext.placedSide];
+      return (
+        // we have to use an extra wrapper because `ResizeObserver` (used by `useSize`)
+        // doesn't report size as we'd expect on SVG elements.
+        // it reports their bounding box which is effectively the largest path inside the SVG.
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+          "span",
+          {
+            ref: contentContext.onArrowChange,
+            style: {
+              position: "absolute",
+              left: contentContext.arrowX,
+              top: contentContext.arrowY,
+              [baseSide]: 0,
+              transformOrigin: {
+                top: "",
+                right: "0 0",
+                bottom: "center 0",
+                left: "100% 0"
+              }[contentContext.placedSide],
+              transform: {
+                top: "translateY(100%)",
+                right: "translateY(50%) rotate(90deg) translateX(-50%)",
+                bottom: `rotate(180deg)`,
+                left: "translateY(50%) rotate(-90deg) translateX(50%)"
+              }[contentContext.placedSide],
+              visibility: contentContext.shouldHideArrow ? "hidden" : void 0
+            },
+            children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+              Root2,
+              {
+                ...arrowProps,
+                ref: forwardedRef,
+                style: {
+                  ...arrowProps.style,
+                  // ensures the element can be measured correctly (mostly for if SVG)
+                  display: "block"
+                }
+              }
+            )
+          }
+        )
+      );
+    }, "PopperArrow")
+  );
+  function isNotNull(value) {
+    return value !== null;
+  }
+  __name16(isNotNull, "isNotNull");
+  var transformOrigin = /* @__PURE__ */ __name16((options) => ({
+    name: "transformOrigin",
+    options,
+    fn(data) {
+      const { placement, rects, middlewareData } = data;
+      const cannotCenterArrow = middlewareData.arrow?.centerOffset !== 0;
+      const isArrowHidden = cannotCenterArrow;
+      const arrowWidth = isArrowHidden ? 0 : options.arrowWidth;
+      const arrowHeight = isArrowHidden ? 0 : options.arrowHeight;
+      const [placedSide, placedAlign] = getSideAndAlignFromPlacement(placement);
+      const noArrowAlign = { start: "0%", center: "50%", end: "100%" }[placedAlign];
+      const arrowXCenter = (middlewareData.arrow?.x ?? 0) + arrowWidth / 2;
+      const arrowYCenter = (middlewareData.arrow?.y ?? 0) + arrowHeight / 2;
+      let x = "";
+      let y = "";
+      if (placedSide === "bottom") {
+        x = isArrowHidden ? noArrowAlign : `${arrowXCenter}px`;
+        y = `${-arrowHeight}px`;
+      } else if (placedSide === "top") {
+        x = isArrowHidden ? noArrowAlign : `${arrowXCenter}px`;
+        y = `${rects.floating.height + arrowHeight}px`;
+      } else if (placedSide === "right") {
+        x = `${-arrowHeight}px`;
+        y = isArrowHidden ? noArrowAlign : `${arrowYCenter}px`;
+      } else if (placedSide === "left") {
+        x = `${rects.floating.width + arrowHeight}px`;
+        y = isArrowHidden ? noArrowAlign : `${arrowYCenter}px`;
+      }
+      return { data: { x, y } };
+    }
+  }), "transformOrigin");
+  function getSideAndAlignFromPlacement(placement) {
+    const [side, align = "center"] = placement.split("-");
+    return [side, align];
+  }
+  __name16(getSideAndAlignFromPlacement, "getSideAndAlignFromPlacement");
+  var Root22 = Popper;
+  var Anchor = PopperAnchor;
+  var Content = PopperContent;
+  var Arrow3 = PopperArrow;
+
+  // node_modules/@radix-ui/react-tooltip/dist/index.mjs
+  var dist_exports2 = {};
+  __export(dist_exports2, {
+    Arrow: () => Arrow22,
+    Content: () => Content2,
+    Portal: () => Portal3,
+    Provider: () => Provider,
+    Root: () => Root3,
+    Tooltip: () => Tooltip2,
+    TooltipArrow: () => TooltipArrow,
+    TooltipContent: () => TooltipContent,
+    TooltipPortal: () => TooltipPortal,
+    TooltipProvider: () => TooltipProvider,
+    TooltipTrigger: () => TooltipTrigger,
+    Trigger: () => Trigger,
+    createTooltipScope: () => createTooltipScope
+  });
+  init_ds_inject_react();
+  var React53 = __toESM(require_ds_react(), 1);
+  var import_jsx_runtime8 = __toESM(require_ds_jsx_runtime(), 1);
+  var __defProp18 = Object.defineProperty;
+  var __name17 = (target, value) => __defProp18(target, "name", { value, configurable: true });
+  var [createTooltipContext, createTooltipScope] = createContextScope("Tooltip", [
+    createPopperScope
+  ]);
+  var usePopperScope = createPopperScope();
+  var PROVIDER_NAME = "TooltipProvider";
+  var DEFAULT_DELAY_DURATION = 700;
+  var TOOLTIP_OPEN = "tooltip.open";
+  var [TooltipProviderContextProvider, useTooltipProviderContext] = createTooltipContext(PROVIDER_NAME);
+  var TooltipProvider = /* @__PURE__ */ __name17((props) => {
+    const {
+      __scopeTooltip,
+      delayDuration = DEFAULT_DELAY_DURATION,
+      skipDelayDuration = 300,
+      disableHoverableContent = false,
+      children
+    } = props;
+    const isOpenDelayedRef = React53.useRef(true);
+    const isPointerInTransitRef = React53.useRef(false);
+    const skipDelayTimerRef = React53.useRef(0);
+    React53.useEffect(() => {
+      const skipDelayTimer = skipDelayTimerRef.current;
+      return () => window.clearTimeout(skipDelayTimer);
+    }, []);
+    return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+      TooltipProviderContextProvider,
+      {
+        scope: __scopeTooltip,
+        isOpenDelayedRef,
+        delayDuration,
+        onOpen: React53.useCallback(() => {
+          if (skipDelayDuration <= 0) return;
+          window.clearTimeout(skipDelayTimerRef.current);
+          isOpenDelayedRef.current = false;
+        }, [skipDelayDuration]),
+        onClose: React53.useCallback(() => {
+          if (skipDelayDuration <= 0) return;
+          window.clearTimeout(skipDelayTimerRef.current);
+          skipDelayTimerRef.current = window.setTimeout(
+            () => isOpenDelayedRef.current = true,
+            skipDelayDuration
+          );
+        }, [skipDelayDuration]),
+        isPointerInTransitRef,
+        onPointerInTransitChange: React53.useCallback((inTransit) => {
+          isPointerInTransitRef.current = inTransit;
+        }, []),
+        disableHoverableContent,
+        children
+      }
+    );
+  }, "TooltipProvider");
+  var TOOLTIP_NAME = "Tooltip";
+  var [TooltipContextProvider, useTooltipContext] = createTooltipContext(TOOLTIP_NAME);
+  var Tooltip2 = /* @__PURE__ */ __name17((props) => {
+    const {
+      __scopeTooltip,
+      children,
+      open: openProp,
+      defaultOpen,
+      onOpenChange,
+      disableHoverableContent: disableHoverableContentProp,
+      delayDuration: delayDurationProp
+    } = props;
+    const providerContext = useTooltipProviderContext(TOOLTIP_NAME, props.__scopeTooltip);
+    const popperScope = usePopperScope(__scopeTooltip);
+    const [trigger, setTrigger] = React53.useState(null);
+    const [contentIdState, setContentId] = React53.useState(void 0);
+    const generatedContentId = useId10();
+    const openTimerRef = React53.useRef(0);
+    const disableHoverableContent = disableHoverableContentProp ?? providerContext.disableHoverableContent;
+    const delayDuration = delayDurationProp ?? providerContext.delayDuration;
+    const wasOpenDelayedRef = React53.useRef(false);
+    const [open, setOpen] = useControllableState({
+      prop: openProp,
+      defaultProp: defaultOpen ?? false,
+      onChange: /* @__PURE__ */ __name17((open2) => {
+        if (open2) {
+          providerContext.onOpen();
+          document.dispatchEvent(new CustomEvent(TOOLTIP_OPEN));
+        } else {
+          providerContext.onClose();
+        }
+        onOpenChange?.(open2);
+      }, "onChange"),
+      caller: TOOLTIP_NAME
+    });
+    const stateAttribute = React53.useMemo(() => {
+      return open ? wasOpenDelayedRef.current ? "delayed-open" : "instant-open" : "closed";
+    }, [open]);
+    const handleOpen = React53.useCallback(() => {
+      window.clearTimeout(openTimerRef.current);
+      openTimerRef.current = 0;
+      wasOpenDelayedRef.current = false;
+      setOpen(true);
+    }, [setOpen]);
+    const handleClose = React53.useCallback(() => {
+      window.clearTimeout(openTimerRef.current);
+      openTimerRef.current = 0;
+      setOpen(false);
+    }, [setOpen]);
+    const handleDelayedOpen = React53.useCallback(() => {
+      window.clearTimeout(openTimerRef.current);
+      openTimerRef.current = window.setTimeout(() => {
+        wasOpenDelayedRef.current = true;
+        setOpen(true);
+        openTimerRef.current = 0;
+      }, delayDuration);
+    }, [delayDuration, setOpen]);
+    React53.useEffect(() => {
+      return () => {
+        if (openTimerRef.current) {
+          window.clearTimeout(openTimerRef.current);
+          openTimerRef.current = 0;
+        }
+      };
+    }, []);
+    const contentId = contentIdState ?? generatedContentId;
+    return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Root22, { ...popperScope, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+      TooltipContextProvider,
+      {
+        scope: __scopeTooltip,
+        contentId,
+        setContentId,
+        open,
+        stateAttribute,
+        trigger,
+        onTriggerChange: setTrigger,
+        onTriggerEnter: React53.useCallback(() => {
+          if (providerContext.isOpenDelayedRef.current) handleDelayedOpen();
+          else handleOpen();
+        }, [providerContext.isOpenDelayedRef, handleDelayedOpen, handleOpen]),
+        onTriggerLeave: React53.useCallback(() => {
+          if (disableHoverableContent) {
+            handleClose();
+          } else {
+            window.clearTimeout(openTimerRef.current);
+            openTimerRef.current = 0;
+          }
+        }, [handleClose, disableHoverableContent]),
+        onOpen: handleOpen,
+        onClose: handleClose,
+        disableHoverableContent,
+        children
+      }
+    ) });
+  }, "Tooltip");
+  var TRIGGER_NAME = "TooltipTrigger";
+  var TooltipTrigger = /* @__PURE__ */ React53.forwardRef(
+    /* @__PURE__ */ __name17(function TooltipTrigger2(props, forwardedRef) {
+      const { __scopeTooltip, ...triggerProps } = props;
+      const context = useTooltipContext(TRIGGER_NAME, __scopeTooltip);
+      const providerContext = useTooltipProviderContext(TRIGGER_NAME, __scopeTooltip);
+      const popperScope = usePopperScope(__scopeTooltip);
+      const ref = React53.useRef(null);
+      const composedRefs = useComposedRefs(forwardedRef, ref, context.onTriggerChange);
+      const isPointerDownRef = React53.useRef(false);
+      const hasPointerMoveOpenedRef = React53.useRef(false);
+      const handlePointerUp = React53.useCallback(() => isPointerDownRef.current = false, []);
+      React53.useEffect(() => {
+        return () => document.removeEventListener("pointerup", handlePointerUp);
+      }, [handlePointerUp]);
+      return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Anchor, { asChild: true, ...popperScope, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+        Primitive.button,
+        {
+          "aria-describedby": context.open ? context.contentId : void 0,
+          "data-state": context.stateAttribute,
+          ...triggerProps,
+          ref: composedRefs,
+          onPointerMove: composeEventHandlers(props.onPointerMove, (event) => {
+            if (event.pointerType === "touch") return;
+            if (!hasPointerMoveOpenedRef.current && !providerContext.isPointerInTransitRef.current) {
+              context.onTriggerEnter();
+              hasPointerMoveOpenedRef.current = true;
+            }
+          }),
+          onPointerLeave: composeEventHandlers(props.onPointerLeave, () => {
+            context.onTriggerLeave();
+            hasPointerMoveOpenedRef.current = false;
+          }),
+          onPointerDown: composeEventHandlers(props.onPointerDown, () => {
+            if (context.open) {
+              context.onClose();
+            }
+            isPointerDownRef.current = true;
+            document.addEventListener("pointerup", handlePointerUp, { once: true });
+          }),
+          onFocus: composeEventHandlers(props.onFocus, () => {
+            if (!isPointerDownRef.current) context.onOpen();
+          }),
+          onBlur: composeEventHandlers(props.onBlur, context.onClose),
+          onClick: composeEventHandlers(props.onClick, context.onClose)
+        }
+      ) });
+    }, "TooltipTrigger")
+  );
+  var PORTAL_NAME = "TooltipPortal";
+  var [PortalProvider, usePortalContext] = createTooltipContext(PORTAL_NAME, {
+    forceMount: void 0
+  });
+  var TooltipPortal = /* @__PURE__ */ __name17((props) => {
+    const { __scopeTooltip, forceMount, children, container } = props;
+    const context = useTooltipContext(PORTAL_NAME, __scopeTooltip);
+    return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(PortalProvider, { scope: __scopeTooltip, forceMount, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Presence, { present: forceMount || context.open, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Portal, { asChild: true, container, children }) }) });
+  }, "TooltipPortal");
+  var CONTENT_NAME2 = "TooltipContent";
+  var TooltipContent = /* @__PURE__ */ React53.forwardRef(
+    /* @__PURE__ */ __name17(function TooltipContent2(props, forwardedRef) {
+      const portalContext = usePortalContext(CONTENT_NAME2, props.__scopeTooltip);
+      const { forceMount = portalContext.forceMount, side = "top", ...contentProps } = props;
+      const context = useTooltipContext(CONTENT_NAME2, props.__scopeTooltip);
+      return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Presence, { present: forceMount || context.open, children: context.disableHoverableContent ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(TooltipContentImpl, { side, ...contentProps, ref: forwardedRef }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(TooltipContentHoverable, { side, ...contentProps, ref: forwardedRef }) });
+    }, "TooltipContent")
+  );
+  var TooltipContentHoverable = /* @__PURE__ */ React53.forwardRef(/* @__PURE__ */ __name17(function TooltipContentHoverable2(props, forwardedRef) {
+    const context = useTooltipContext(CONTENT_NAME2, props.__scopeTooltip);
+    const providerContext = useTooltipProviderContext(CONTENT_NAME2, props.__scopeTooltip);
+    const ref = React53.useRef(null);
+    const composedRefs = useComposedRefs(forwardedRef, ref);
+    const [pointerGraceArea, setPointerGraceArea] = React53.useState(null);
+    const { trigger, onClose } = context;
+    const content = ref.current;
+    const { onPointerInTransitChange } = providerContext;
+    const handleRemoveGraceArea = React53.useCallback(() => {
+      setPointerGraceArea(null);
+      onPointerInTransitChange(false);
+    }, [onPointerInTransitChange]);
+    const handleCreateGraceArea = React53.useCallback(
+      (event, hoverTarget) => {
+        const currentTarget = event.currentTarget;
+        const exitPoint = { x: event.clientX, y: event.clientY };
+        const exitSide = getExitSideFromRect(exitPoint, currentTarget.getBoundingClientRect());
+        const paddedExitPoints = getPaddedExitPoints(exitPoint, exitSide);
+        const hoverTargetPoints = getPointsFromRect(hoverTarget.getBoundingClientRect());
+        const graceArea = getHull([...paddedExitPoints, ...hoverTargetPoints]);
+        setPointerGraceArea(graceArea);
+        onPointerInTransitChange(true);
+      },
+      [onPointerInTransitChange]
+    );
+    React53.useEffect(() => {
+      return () => handleRemoveGraceArea();
+    }, [handleRemoveGraceArea]);
+    React53.useEffect(() => {
+      if (trigger && content) {
+        const handleTriggerLeave = /* @__PURE__ */ __name17((event) => handleCreateGraceArea(event, content), "handleTriggerLeave");
+        const handleContentLeave = /* @__PURE__ */ __name17((event) => handleCreateGraceArea(event, trigger), "handleContentLeave");
+        trigger.addEventListener("pointerleave", handleTriggerLeave);
+        content.addEventListener("pointerleave", handleContentLeave);
+        return () => {
+          trigger.removeEventListener("pointerleave", handleTriggerLeave);
+          content.removeEventListener("pointerleave", handleContentLeave);
+        };
+      }
+    }, [trigger, content, handleCreateGraceArea, handleRemoveGraceArea]);
+    React53.useEffect(() => {
+      if (pointerGraceArea) {
+        const handleTrackPointerGrace = /* @__PURE__ */ __name17((event) => {
+          const target = event.target;
+          const pointerPosition = { x: event.clientX, y: event.clientY };
+          const hasEnteredTarget = trigger?.contains(target) || content?.contains(target);
+          const isPointerOutsideGraceArea = !isPointInPolygon(pointerPosition, pointerGraceArea);
+          if (hasEnteredTarget) {
+            handleRemoveGraceArea();
+          } else if (isPointerOutsideGraceArea) {
+            handleRemoveGraceArea();
+            onClose();
+          }
+        }, "handleTrackPointerGrace");
+        document.addEventListener("pointermove", handleTrackPointerGrace);
+        return () => document.removeEventListener("pointermove", handleTrackPointerGrace);
+      }
+    }, [trigger, content, pointerGraceArea, onClose, handleRemoveGraceArea]);
+    return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(TooltipContentImpl, { ...props, ref: composedRefs });
+  }, "TooltipContentHoverable"));
+  var Slottable = createSlottable("TooltipContent");
+  var TooltipContentImpl = /* @__PURE__ */ React53.forwardRef(
+    // blank line to reduce diff noise
+    /* @__PURE__ */ __name17(function TooltipContentImpl2(props, forwardedRef) {
+      const {
+        __scopeTooltip,
+        children,
+        "aria-label": ariaLabel,
+        id: idProp,
+        onEscapeKeyDown,
+        onPointerDownOutside,
+        ...contentProps
+      } = props;
+      const context = useTooltipContext(CONTENT_NAME2, __scopeTooltip);
+      const popperScope = usePopperScope(__scopeTooltip);
+      const { onClose } = context;
+      React53.useEffect(() => {
+        document.addEventListener(TOOLTIP_OPEN, onClose);
+        return () => document.removeEventListener(TOOLTIP_OPEN, onClose);
+      }, [onClose]);
+      React53.useEffect(() => {
+        if (context.trigger) {
+          const handleScroll = /* @__PURE__ */ __name17((event) => {
+            if (event.target instanceof Node && event.target.contains(context.trigger)) {
+              onClose();
+            }
+          }, "handleScroll");
+          window.addEventListener("scroll", handleScroll, { capture: true });
+          return () => window.removeEventListener("scroll", handleScroll, { capture: true });
+        }
+      }, [context.trigger, onClose]);
+      const { setContentId } = context;
+      useLayoutEffect2(() => {
+        setContentId(idProp);
+        return () => {
+          setContentId(void 0);
+        };
+      }, [idProp, setContentId]);
+      return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+        DismissableLayer,
+        {
+          asChild: true,
+          disableOutsidePointerEvents: false,
+          onEscapeKeyDown,
+          onPointerDownOutside,
+          onFocusOutside: (event) => event.preventDefault(),
+          onDismiss: onClose,
+          children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+            Content,
+            {
+              "data-state": context.stateAttribute,
+              role: ariaLabel ? void 0 : "tooltip",
+              id: ariaLabel ? void 0 : context.contentId,
+              ...popperScope,
+              ...contentProps,
+              ref: forwardedRef,
+              style: {
+                ...contentProps.style,
+                // re-namespace exposed content custom properties
+                ...{
+                  "--radix-tooltip-content-transform-origin": "var(--radix-popper-transform-origin)",
+                  "--radix-tooltip-content-available-width": "var(--radix-popper-available-width)",
+                  "--radix-tooltip-content-available-height": "var(--radix-popper-available-height)",
+                  "--radix-tooltip-trigger-width": "var(--radix-popper-anchor-width)",
+                  "--radix-tooltip-trigger-height": "var(--radix-popper-anchor-height)"
+                }
+              },
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Slottable, { children }),
+                ariaLabel ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Root, { id: context.contentId, role: "tooltip", children: ariaLabel }) : null
+              ]
+            }
+          )
+        }
+      );
+    }, "TooltipContentImpl")
+  );
+  var TooltipArrow = /* @__PURE__ */ React53.forwardRef(
+    /* @__PURE__ */ __name17(function TooltipArrow2(props, forwardedRef) {
+      const { __scopeTooltip, ...arrowProps } = props;
+      const popperScope = usePopperScope(__scopeTooltip);
+      return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Arrow3, { ...popperScope, ...arrowProps, ref: forwardedRef });
+    }, "TooltipArrow")
+  );
+  function getExitSideFromRect(point, rect) {
+    const top = Math.abs(rect.top - point.y);
+    const bottom = Math.abs(rect.bottom - point.y);
+    const right = Math.abs(rect.right - point.x);
+    const left = Math.abs(rect.left - point.x);
+    switch (Math.min(top, bottom, right, left)) {
+      case left:
+        return "left";
+      case right:
+        return "right";
+      case top:
+        return "top";
+      case bottom:
+        return "bottom";
+      default:
+        throw new Error("unreachable");
+    }
+  }
+  __name17(getExitSideFromRect, "getExitSideFromRect");
+  function getPaddedExitPoints(exitPoint, exitSide, padding = 5) {
+    const paddedExitPoints = [];
+    switch (exitSide) {
+      case "top":
+        paddedExitPoints.push(
+          { x: exitPoint.x - padding, y: exitPoint.y + padding },
+          { x: exitPoint.x + padding, y: exitPoint.y + padding }
+        );
+        break;
+      case "bottom":
+        paddedExitPoints.push(
+          { x: exitPoint.x - padding, y: exitPoint.y - padding },
+          { x: exitPoint.x + padding, y: exitPoint.y - padding }
+        );
+        break;
+      case "left":
+        paddedExitPoints.push(
+          { x: exitPoint.x + padding, y: exitPoint.y - padding },
+          { x: exitPoint.x + padding, y: exitPoint.y + padding }
+        );
+        break;
+      case "right":
+        paddedExitPoints.push(
+          { x: exitPoint.x - padding, y: exitPoint.y - padding },
+          { x: exitPoint.x - padding, y: exitPoint.y + padding }
+        );
+        break;
+    }
+    return paddedExitPoints;
+  }
+  __name17(getPaddedExitPoints, "getPaddedExitPoints");
+  function getPointsFromRect(rect) {
+    const { top, right, bottom, left } = rect;
+    return [
+      { x: left, y: top },
+      { x: right, y: top },
+      { x: right, y: bottom },
+      { x: left, y: bottom }
+    ];
+  }
+  __name17(getPointsFromRect, "getPointsFromRect");
+  function isPointInPolygon(point, polygon) {
+    const { x, y } = point;
+    let inside = false;
+    for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+      const ii = polygon[i];
+      const jj = polygon[j];
+      const xi = ii.x;
+      const yi = ii.y;
+      const xj = jj.x;
+      const yj = jj.y;
+      const intersect = yi > y !== yj > y && x < (xj - xi) * (y - yi) / (yj - yi) + xi;
+      if (intersect) inside = !inside;
+    }
+    return inside;
+  }
+  __name17(isPointInPolygon, "isPointInPolygon");
+  function getHull(points) {
+    const newPoints = points.slice();
+    newPoints.sort((a, b) => {
+      if (a.x < b.x) return -1;
+      else if (a.x > b.x) return 1;
+      else if (a.y < b.y) return -1;
+      else if (a.y > b.y) return 1;
+      else return 0;
+    });
+    return getHullPresorted(newPoints);
+  }
+  __name17(getHull, "getHull");
+  function getHullPresorted(points) {
+    if (points.length <= 1) return points.slice();
+    const upperHull = [];
+    for (let i = 0; i < points.length; i++) {
+      const p = points[i];
+      while (upperHull.length >= 2) {
+        const q = upperHull[upperHull.length - 1];
+        const r = upperHull[upperHull.length - 2];
+        if ((q.x - r.x) * (p.y - r.y) >= (q.y - r.y) * (p.x - r.x)) upperHull.pop();
+        else break;
+      }
+      upperHull.push(p);
+    }
+    upperHull.pop();
+    const lowerHull = [];
+    for (let i = points.length - 1; i >= 0; i--) {
+      const p = points[i];
+      while (lowerHull.length >= 2) {
+        const q = lowerHull[lowerHull.length - 1];
+        const r = lowerHull[lowerHull.length - 2];
+        if ((q.x - r.x) * (p.y - r.y) >= (q.y - r.y) * (p.x - r.x)) lowerHull.pop();
+        else break;
+      }
+      lowerHull.push(p);
+    }
+    lowerHull.pop();
+    if (upperHull.length === 1 && lowerHull.length === 1 && upperHull[0].x === lowerHull[0].x && upperHull[0].y === lowerHull[0].y) {
+      return upperHull;
+    } else {
+      return upperHull.concat(lowerHull);
+    }
+  }
+  __name17(getHullPresorted, "getHullPresorted");
+  var Provider = TooltipProvider;
+  var Root3 = Tooltip2;
+  var Trigger = TooltipTrigger;
+  var Portal3 = TooltipPortal;
+  var Content2 = TooltipContent;
+  var Arrow22 = TooltipArrow;
+
+  // components/overlays/_layer.js
+  init_ds_inject_react();
+  var React54 = __toESM(require_ds_react(), 1);
+  var cx64 = (...a) => a.filter(Boolean).join(" ");
+  var LayerContext = React54.createContext(null);
+  var SCOPE_SELECTOR = ".dark, [data-theme], .lw-band-dark, .lw-band-light, [data-band]";
+  function mirrorScope(fromEl) {
+    const out = { className: void 0, "data-theme": void 0, "data-band": void 0 };
+    const el = fromEl && typeof fromEl.closest === "function" ? fromEl.closest(SCOPE_SELECTOR) : null;
+    if (!el) return out;
+    const classes = [];
+    if (el.classList.contains("dark")) classes.push("dark");
+    for (const c of el.classList) if (/^lw-band-/.test(c)) classes.push(c);
+    if (classes.length) out.className = classes.join(" ");
+    const theme = el.getAttribute("data-theme");
+    if (theme) out["data-theme"] = theme;
+    const band = el.getAttribute("data-band");
+    if (band) out["data-band"] = band;
+    return out;
+  }
+  function Layer({ modal = false, from = null, children, className, ...rest }) {
+    const ref = React54.useRef(null);
+    const [container, setContainer] = React54.useState(null);
+    const mirrored = mirrorScope(from);
+    const value = React54.useMemo(() => ({ container }), [container]);
+    const setRef3 = React54.useCallback((node) => {
+      ref.current = node;
+      setContainer(node);
+    }, []);
+    return React54.createElement(
+      "div",
+      {
+        ref: setRef3,
+        className: cx64("lw-layer", modal && "lw-layer-modal", mirrored.className, className),
+        "data-theme": mirrored["data-theme"],
+        "data-band": mirrored["data-band"],
+        "data-modal": modal || void 0,
+        ...rest
+      },
+      React54.createElement(LayerContext.Provider, { value }, children)
+    );
+  }
+
+  // components/overlays/OverlayProvider.jsx
+  var TOOLTIP_DELAY_MS = 300;
+  var TOOLTIP_SKIP_DELAY_MS = 500;
+  function OverlayProvider({ container, children }) {
+    const [own, setOwn] = React55.useState(null);
+    const node = container || own;
+    const value = React55.useMemo(() => ({ container: node }), [node]);
+    return /* @__PURE__ */ React55.createElement(LayerContext.Provider, { value }, /* @__PURE__ */ React55.createElement(dist_exports2.Provider, { delayDuration: TOOLTIP_DELAY_MS, skipDelayDuration: TOOLTIP_SKIP_DELAY_MS }, children, !container && /* @__PURE__ */ React55.createElement("div", { className: "lw-layer-root", ref: setOwn })));
   }
 
   // components/ai/PromptInput.jsx
   init_ds_inject_react();
-  var cx64 = (...a) => a.filter(Boolean).join(" ");
+  var cx65 = (...a) => a.filter(Boolean).join(" ");
   function PromptInput({ value, onChange, onSubmit, placeholder = "Ask anything about your documents…", hint = "⏎ to send · ⇧⏎ newline", label = "Prompt", tools, action, disabled, className, children, ...rest }) {
     const onKeyDown = (e) => {
       if (disabled) return;
@@ -3168,7 +7245,7 @@
         onSubmit && onSubmit();
       }
     };
-    return /* @__PURE__ */ React.createElement("div", { className: cx64("lw-prompt", className), ...rest }, /* @__PURE__ */ React.createElement(
+    return /* @__PURE__ */ React.createElement("div", { className: cx65("lw-prompt", className), ...rest }, /* @__PURE__ */ React.createElement(
       "textarea",
       {
         value,
@@ -3184,16 +7261,16 @@
 
   // components/ai/Message.jsx
   init_ds_inject_react();
-  var cx65 = (...a) => a.filter(Boolean).join(" ");
+  var cx66 = (...a) => a.filter(Boolean).join(" ");
   function Message({ role = "ai", who, avatar, streaming = false, footer, className, children, ...rest }) {
     const name = who || (role === "ai" ? "LeanWise" : "You");
     const glyph = avatar || /* @__PURE__ */ React.createElement(Icon, { name: role === "ai" ? "spark" : "user", size: role === "ai" ? 19 : 16 });
-    return /* @__PURE__ */ React.createElement("div", { className: cx65("lw-msg", role, className), "data-streaming": streaming ? "true" : void 0, ...rest }, /* @__PURE__ */ React.createElement("span", { className: "lw-msg-avatar", "aria-hidden": "true" }, glyph), /* @__PURE__ */ React.createElement("div", { className: "lw-msg-main" }, /* @__PURE__ */ React.createElement("span", { className: "who" }, name), /* @__PURE__ */ React.createElement("div", { className: "body" }, children, footer)));
+    return /* @__PURE__ */ React.createElement("div", { className: cx66("lw-msg", role, className), "data-streaming": streaming ? "true" : void 0, ...rest }, /* @__PURE__ */ React.createElement("span", { className: "lw-msg-avatar", "aria-hidden": "true" }, glyph), /* @__PURE__ */ React.createElement("div", { className: "lw-msg-main" }, /* @__PURE__ */ React.createElement("span", { className: "who" }, name), /* @__PURE__ */ React.createElement("div", { className: "body" }, children, footer)));
   }
 
   // components/ai/SourceChip.jsx
   init_ds_inject_react();
-  var cx66 = (...a) => a.filter(Boolean).join(" ");
+  var cx67 = (...a) => a.filter(Boolean).join(" ");
   function SourceChip({
     n,
     title,
@@ -3206,7 +7283,7 @@
     return /* @__PURE__ */ React.createElement(
       Tag,
       {
-        className: cx66("lw-source", className),
+        className: cx67("lw-source", className),
         type: Tag === "button" ? "button" : void 0,
         "aria-label": formatLabel(n, title),
         ...rest
@@ -3217,9 +7294,9 @@
 
   // components/ai/SourceList.jsx
   init_ds_inject_react();
-  var cx67 = (...a) => a.filter(Boolean).join(" ");
+  var cx68 = (...a) => a.filter(Boolean).join(" ");
   function SourceList({ sources = [], linkAs = "a", className, ...rest }) {
-    return /* @__PURE__ */ React.createElement("div", { className: cx67("lw-source-list", className), ...rest }, sources.map((s, i) => {
+    return /* @__PURE__ */ React.createElement("div", { className: cx68("lw-source-list", className), ...rest }, sources.map((s, i) => {
       const Tag = s.href ? linkAs : "button";
       return /* @__PURE__ */ React.createElement(
         Tag,
@@ -3238,13 +7315,13 @@
 
   // components/ai/ConfidenceMeter.jsx
   init_ds_inject_react();
-  var cx68 = (...a) => a.filter(Boolean).join(" ");
+  var cx69 = (...a) => a.filter(Boolean).join(" ");
   function ConfidenceMeter({ value = 0, label = "match", className, style, ...rest }) {
     const pct = Math.max(0, Math.min(100, Math.round(value)));
     return /* @__PURE__ */ React.createElement(
       "span",
       {
-        className: cx68("lw-confidence", pct < 60 && "low", className),
+        className: cx69("lw-confidence", pct < 60 && "low", className),
         style: { "--lw-confidence": pct + "%", ...style },
         role: "meter",
         "aria-valuenow": pct,
@@ -3260,15 +7337,15 @@
 
   // components/ai/AgentTrace.jsx
   init_ds_inject_react();
-  var cx69 = (...a) => a.filter(Boolean).join(" ");
+  var cx70 = (...a) => a.filter(Boolean).join(" ");
   function AgentTrace({ steps = [], className, ...rest }) {
-    return /* @__PURE__ */ React.createElement("ol", { className: cx69("lw-trace", className), ...rest }, steps.map((s, i) => /* @__PURE__ */ React.createElement("li", { key: i, "data-state": s.state || "pending" }, /* @__PURE__ */ React.createElement("span", { className: "step" }, s.label), s.meta && /* @__PURE__ */ React.createElement("span", { className: "meta" }, s.meta))));
+    return /* @__PURE__ */ React.createElement("ol", { className: cx70("lw-trace", className), ...rest }, steps.map((s, i) => /* @__PURE__ */ React.createElement("li", { key: i, "data-state": s.state || "pending" }, /* @__PURE__ */ React.createElement("span", { className: "step" }, s.label), s.meta && /* @__PURE__ */ React.createElement("span", { className: "meta" }, s.meta))));
   }
 
   // components/ai/ToolCall.jsx
   init_ds_inject_react();
-  var React35 = __toESM(require_ds_react(), 1);
-  var cx70 = (...a) => a.filter(Boolean).join(" ");
+  var React56 = __toESM(require_ds_react(), 1);
+  var cx71 = (...a) => a.filter(Boolean).join(" ");
   var fmt = (v) => typeof v === "string" ? v : JSON.stringify(v, null, 2);
   function ToolCall({
     name,
@@ -3287,15 +7364,15 @@
     className,
     ...rest
   }) {
-    const [open, setOpen] = React35.useState(!!defaultOpen);
-    const uid = React35.useId();
+    const [open, setOpen] = React56.useState(!!defaultOpen);
+    const uid = React56.useId();
     const st = error ? "error" : state;
-    return /* @__PURE__ */ React35.createElement("div", { className: cx70("lw-tool", className), "data-state": st, ...rest }, /* @__PURE__ */ React35.createElement("button", { type: "button", className: "lw-tool-head", "aria-expanded": open, "aria-controls": uid, onClick: () => setOpen((o) => !o) }, /* @__PURE__ */ React35.createElement(Icon, { name: open ? "chevron-down" : "chevron-right", size: 14 }), /* @__PURE__ */ React35.createElement("span", { className: "lw-tool-dot", "aria-hidden": "true" }), /* @__PURE__ */ React35.createElement("span", { className: "lw-tool-name" }, name), /* @__PURE__ */ React35.createElement("span", { className: "lw-tool-sum" }, summary), duration != null && /* @__PURE__ */ React35.createElement("span", { className: "lw-tool-dur" }, formatDuration(duration)), /* @__PURE__ */ React35.createElement("span", { className: "lw-sr-only" }, stateLabels[st] ?? stateLabels.ok)), open && /* @__PURE__ */ React35.createElement("div", { className: "lw-tool-body", id: uid }, args != null && /* @__PURE__ */ React35.createElement(React35.Fragment, null, /* @__PURE__ */ React35.createElement("span", { className: "k" }, argsLabel), /* @__PURE__ */ React35.createElement("pre", null, fmt(args))), error ? /* @__PURE__ */ React35.createElement(React35.Fragment, null, /* @__PURE__ */ React35.createElement("span", { className: "k" }, errorLabel), /* @__PURE__ */ React35.createElement("pre", { className: "err" }, fmt(error))) : result != null && /* @__PURE__ */ React35.createElement(React35.Fragment, null, /* @__PURE__ */ React35.createElement("span", { className: "k" }, resultLabel), /* @__PURE__ */ React35.createElement("pre", null, fmt(result)))));
+    return /* @__PURE__ */ React56.createElement("div", { className: cx71("lw-tool", className), "data-state": st, ...rest }, /* @__PURE__ */ React56.createElement("button", { type: "button", className: "lw-tool-head", "aria-expanded": open, "aria-controls": uid, onClick: () => setOpen((o) => !o) }, /* @__PURE__ */ React56.createElement(Icon, { name: open ? "chevron-down" : "chevron-right", size: 14 }), /* @__PURE__ */ React56.createElement("span", { className: "lw-tool-dot", "aria-hidden": "true" }), /* @__PURE__ */ React56.createElement("span", { className: "lw-tool-name" }, name), /* @__PURE__ */ React56.createElement("span", { className: "lw-tool-sum" }, summary), duration != null && /* @__PURE__ */ React56.createElement("span", { className: "lw-tool-dur" }, formatDuration(duration)), /* @__PURE__ */ React56.createElement("span", { className: "lw-sr-only" }, stateLabels[st] ?? stateLabels.ok)), open && /* @__PURE__ */ React56.createElement("div", { className: "lw-tool-body", id: uid }, args != null && /* @__PURE__ */ React56.createElement(React56.Fragment, null, /* @__PURE__ */ React56.createElement("span", { className: "k" }, argsLabel), /* @__PURE__ */ React56.createElement("pre", null, fmt(args))), error ? /* @__PURE__ */ React56.createElement(React56.Fragment, null, /* @__PURE__ */ React56.createElement("span", { className: "k" }, errorLabel), /* @__PURE__ */ React56.createElement("pre", { className: "err" }, fmt(error))) : result != null && /* @__PURE__ */ React56.createElement(React56.Fragment, null, /* @__PURE__ */ React56.createElement("span", { className: "k" }, resultLabel), /* @__PURE__ */ React56.createElement("pre", null, fmt(result)))));
   }
 
   // components/ai/DiffReview.jsx
   init_ds_inject_react();
-  var cx71 = (...a) => a.filter(Boolean).join(" ");
+  var cx72 = (...a) => a.filter(Boolean).join(" ");
   var SIGN = { add: "+", del: "−", mod: "~" };
   function DiffReview({
     hunks = [],
@@ -3317,7 +7394,7 @@
     ...rest
   }) {
     const pending = hunks.filter((h) => !decisions[h.id]).length;
-    return /* @__PURE__ */ React.createElement("div", { className: cx71("lw-diff", className), role: "group", "aria-label": label, ...rest }, hunks.map((h) => {
+    return /* @__PURE__ */ React.createElement("div", { className: cx72("lw-diff", className), role: "group", "aria-label": label, ...rest }, hunks.map((h) => {
       const d = decisions[h.id];
       return /* @__PURE__ */ React.createElement("div", { key: h.id, className: "lw-diff-hunk", "data-decision": d }, /* @__PURE__ */ React.createElement("div", { className: "lw-diff-head" }, /* @__PURE__ */ React.createElement(Icon, { name: "file", size: 14, className: "lw-diff-ic" }), /* @__PURE__ */ React.createElement("span", { className: "lw-diff-file" }, h.file, h.range ? " · " + h.range : "")), /* @__PURE__ */ React.createElement("div", { className: "lw-diff-lines" }, h.lines.map((l, i) => /* @__PURE__ */ React.createElement("div", { key: i, className: "lw-diff-line", "data-kind": l.kind }, /* @__PURE__ */ React.createElement("span", { className: "n" }, l.n ?? ""), /* @__PURE__ */ React.createElement("span", { className: "s", "aria-hidden": "true" }, SIGN[l.kind] || ""), /* @__PURE__ */ React.createElement("span", { className: "t" }, l.kind && /* @__PURE__ */ React.createElement("span", { className: "lw-sr-only" }, kindLabels[l.kind] ?? kindLabels.mod), l.text)))), /* @__PURE__ */ React.createElement("div", { className: "lw-diff-foot" }, /* @__PURE__ */ React.createElement("span", { className: "lw-diff-state" }, d === "accepted" ? acceptedLabel : d === "rejected" ? rejectedLabel : h.note || ""), d ? /* @__PURE__ */ React.createElement(Button, { size: "sm", variant: "ghost", onClick: () => onDecide && onDecide(h.id, null) }, /* @__PURE__ */ React.createElement(Icon, { name: "undo", size: 14 }), undoLabel) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(Button, { size: "sm", variant: "ghost", onClick: () => onDecide && onDecide(h.id, "rejected") }, rejectLabel), /* @__PURE__ */ React.createElement(Button, { size: "sm", onClick: () => onDecide && onDecide(h.id, "accepted") }, acceptLabel))));
     }), hunks.length > 1 && /* @__PURE__ */ React.createElement("div", { className: "lw-diff-foot" }, /* @__PURE__ */ React.createElement("span", { className: "lw-diff-state", "aria-live": "polite" }, formatProgress(pending, hunks.length)), /* @__PURE__ */ React.createElement(Button, { size: "sm", variant: "ghost", onClick: onRejectAll, disabled: !pending }, rejectAllLabel), /* @__PURE__ */ React.createElement(Button, { size: "sm", onClick: onAcceptAll, disabled: !pending }, acceptAllLabel)));
@@ -3325,7 +7402,7 @@
 
   // components/ai/Artifact.jsx
   init_ds_inject_react();
-  var cx72 = (...a) => a.filter(Boolean).join(" ");
+  var cx73 = (...a) => a.filter(Boolean).join(" ");
   function Artifact({
     title,
     version,
@@ -3345,13 +7422,13 @@
   }) {
     const canPrev = version > 1;
     const canNext = versionCount != null && version < versionCount;
-    return /* @__PURE__ */ React.createElement("div", { className: cx72("lw-artifact", className), ...rest }, /* @__PURE__ */ React.createElement("div", { className: "lw-artifact-head" }, /* @__PURE__ */ React.createElement(Icon, { name: "file", size: 15, className: "lw-artifact-ic" }), /* @__PURE__ */ React.createElement("span", { className: "lw-artifact-title" }, title), version != null && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": prevVersionLabel, disabled: !canPrev, onClick: onPrevVersion }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron-left", size: 15 })), /* @__PURE__ */ React.createElement("span", { className: "lw-artifact-ver" }, "v", version, versionCount ? " / " + versionCount : ""), /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": nextVersionLabel, disabled: !canNext, onClick: onNextVersion }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron-right", size: 15 })))), /* @__PURE__ */ React.createElement("div", { className: "lw-artifact-body" }, children), (onRevert || onEdit || actions) && /* @__PURE__ */ React.createElement("div", { className: "lw-artifact-foot" }, onEdit && /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-btn lw-btn-ghost lw-btn-sm", onClick: onEdit }, /* @__PURE__ */ React.createElement(Icon, { name: "edit", size: 14 }), editLabel), onRevert && /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-btn lw-btn-ghost lw-btn-sm", onClick: onRevert }, /* @__PURE__ */ React.createElement(Icon, { name: "undo", size: 14 }), revertLabel), /* @__PURE__ */ React.createElement("span", { className: "lw-spacer" }), actions));
+    return /* @__PURE__ */ React.createElement("div", { className: cx73("lw-artifact", className), ...rest }, /* @__PURE__ */ React.createElement("div", { className: "lw-artifact-head" }, /* @__PURE__ */ React.createElement(Icon, { name: "file", size: 15, className: "lw-artifact-ic" }), /* @__PURE__ */ React.createElement("span", { className: "lw-artifact-title" }, title), version != null && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": prevVersionLabel, disabled: !canPrev, onClick: onPrevVersion }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron-left", size: 15 })), /* @__PURE__ */ React.createElement("span", { className: "lw-artifact-ver" }, "v", version, versionCount ? " / " + versionCount : ""), /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": nextVersionLabel, disabled: !canNext, onClick: onNextVersion }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron-right", size: 15 })))), /* @__PURE__ */ React.createElement("div", { className: "lw-artifact-body" }, children), (onRevert || onEdit || actions) && /* @__PURE__ */ React.createElement("div", { className: "lw-artifact-foot" }, onEdit && /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-btn lw-btn-ghost lw-btn-sm", onClick: onEdit }, /* @__PURE__ */ React.createElement(Icon, { name: "edit", size: 14 }), editLabel), onRevert && /* @__PURE__ */ React.createElement("button", { type: "button", className: "lw-btn lw-btn-ghost lw-btn-sm", onClick: onRevert }, /* @__PURE__ */ React.createElement(Icon, { name: "undo", size: 14 }), revertLabel), /* @__PURE__ */ React.createElement("span", { className: "lw-spacer" }), actions));
   }
 
   // components/ai/Feedback.jsx
   init_ds_inject_react();
-  var React36 = __toESM(require_ds_react(), 1);
-  var cx73 = (...a) => a.filter(Boolean).join(" ");
+  var React57 = __toESM(require_ds_react(), 1);
+  var cx74 = (...a) => a.filter(Boolean).join(" ");
   function Feedback({
     value,
     onChange,
@@ -3365,14 +7442,14 @@
     className,
     ...rest
   }) {
-    const [open, setOpen] = React36.useState(false);
-    const [text, setText] = React36.useState("");
+    const [open, setOpen] = React57.useState(false);
+    const [text, setText] = React57.useState("");
     const set = (v) => {
       const next = value === v ? null : v;
       onChange && onChange(next);
       if (next === "down" && onComment) setOpen(true);
     };
-    return /* @__PURE__ */ React36.createElement("div", { className: cx73(className), ...rest }, /* @__PURE__ */ React36.createElement("div", { className: "lw-feedback" }, /* @__PURE__ */ React36.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": upLabel, "aria-pressed": value === "up", onClick: () => set("up") }, /* @__PURE__ */ React36.createElement(Icon, { name: "thumbs-up", size: 15 })), /* @__PURE__ */ React36.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": downLabel, "aria-pressed": value === "down", onClick: () => set("down") }, /* @__PURE__ */ React36.createElement(Icon, { name: "thumbs-down", size: 15 })), note && /* @__PURE__ */ React36.createElement("span", { className: "lw-feedback-note" }, note)), open && onComment && /* @__PURE__ */ React36.createElement(
+    return /* @__PURE__ */ React57.createElement("div", { className: cx74(className), ...rest }, /* @__PURE__ */ React57.createElement("div", { className: "lw-feedback" }, /* @__PURE__ */ React57.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": upLabel, "aria-pressed": value === "up", onClick: () => set("up") }, /* @__PURE__ */ React57.createElement(Icon, { name: "thumbs-up", size: 15 })), /* @__PURE__ */ React57.createElement("button", { type: "button", className: "lw-icon-btn", "aria-label": downLabel, "aria-pressed": value === "down", onClick: () => set("down") }, /* @__PURE__ */ React57.createElement(Icon, { name: "thumbs-down", size: 15 })), note && /* @__PURE__ */ React57.createElement("span", { className: "lw-feedback-note" }, note)), open && onComment && /* @__PURE__ */ React57.createElement(
       "form",
       {
         className: "lw-feedback-form",
@@ -3383,7 +7460,7 @@
           setText("");
         }
       },
-      /* @__PURE__ */ React36.createElement(
+      /* @__PURE__ */ React57.createElement(
         "textarea",
         {
           className: "lw-textarea",
@@ -3395,53 +7472,53 @@
           onChange: (e) => setText(e.target.value)
         }
       ),
-      /* @__PURE__ */ React36.createElement("div", { className: "lw-feedback-actions" }, /* @__PURE__ */ React36.createElement("button", { type: "button", className: "lw-btn lw-btn-ghost lw-btn-sm", onClick: () => setOpen(false) }, cancelLabel), /* @__PURE__ */ React36.createElement("button", { type: "submit", className: "lw-btn lw-btn-sm", disabled: !text.trim() }, sendLabel))
+      /* @__PURE__ */ React57.createElement("div", { className: "lw-feedback-actions" }, /* @__PURE__ */ React57.createElement("button", { type: "button", className: "lw-btn lw-btn-ghost lw-btn-sm", onClick: () => setOpen(false) }, cancelLabel), /* @__PURE__ */ React57.createElement("button", { type: "submit", className: "lw-btn lw-btn-sm", disabled: !text.trim() }, sendLabel))
     ));
   }
 
   // components/marketing/Hero.jsx
   init_ds_inject_react();
-  var cx74 = (...a) => a.filter(Boolean).join(" ");
+  var cx75 = (...a) => a.filter(Boolean).join(" ");
   function Hero({ eyebrow, title, lead, actions, aside, className, children, ...rest }) {
-    return /* @__PURE__ */ React.createElement("section", { className: cx74("lw-hero-dark", className), ...rest }, /* @__PURE__ */ React.createElement("div", { className: "lw-container" }, eyebrow && /* @__PURE__ */ React.createElement("p", { className: "lw-eyebrow" }, eyebrow), title && /* @__PURE__ */ React.createElement("h1", { className: "lw-h1" }, title), lead && /* @__PURE__ */ React.createElement("p", { className: "lw-lead" }, lead), actions && /* @__PURE__ */ React.createElement("div", { className: "lw-cluster lw-cluster-12 lw-hero-actions" }, actions), aside, children));
+    return /* @__PURE__ */ React.createElement("section", { className: cx75("lw-hero-dark", className), ...rest }, /* @__PURE__ */ React.createElement("div", { className: "lw-container" }, eyebrow && /* @__PURE__ */ React.createElement("p", { className: "lw-eyebrow" }, eyebrow), title && /* @__PURE__ */ React.createElement("h1", { className: "lw-h1" }, title), lead && /* @__PURE__ */ React.createElement("p", { className: "lw-lead" }, lead), actions && /* @__PURE__ */ React.createElement("div", { className: "lw-cluster lw-cluster-12 lw-hero-actions" }, actions), aside, children));
   }
 
   // components/marketing/FeatureGrid.jsx
   init_ds_inject_react();
-  var cx75 = (...a) => a.filter(Boolean).join(" ");
+  var cx76 = (...a) => a.filter(Boolean).join(" ");
   function FeatureGrid({ features = [], linkAs = "a", className, ...rest }) {
-    return /* @__PURE__ */ React.createElement("div", { className: cx75("lw-features", className), ...rest }, features.map((f, i) => {
+    return /* @__PURE__ */ React.createElement("div", { className: cx76("lw-features", className), ...rest }, features.map((f, i) => {
       const Tag = f.href ? linkAs : "div";
-      return /* @__PURE__ */ React.createElement(Tag, { key: i, className: cx75("lw-feature", f.href && "lw-feature-interactive"), href: f.href }, /* @__PURE__ */ React.createElement("span", { className: "num" }, String(i + 1).padStart(2, "0")), /* @__PURE__ */ React.createElement("h3", null, f.title), /* @__PURE__ */ React.createElement("p", null, f.body), f.href && /* @__PURE__ */ React.createElement("span", { className: "lw-feature-more" }, f.more || "Learn more", /* @__PURE__ */ React.createElement(Icon, { name: "arrow-right", size: 14, className: "arrow" })));
+      return /* @__PURE__ */ React.createElement(Tag, { key: i, className: cx76("lw-feature", f.href && "lw-feature-interactive"), href: f.href }, /* @__PURE__ */ React.createElement("span", { className: "num" }, String(i + 1).padStart(2, "0")), /* @__PURE__ */ React.createElement("h3", null, f.title), /* @__PURE__ */ React.createElement("p", null, f.body), f.href && /* @__PURE__ */ React.createElement("span", { className: "lw-feature-more" }, f.more || "Learn more", /* @__PURE__ */ React.createElement(Icon, { name: "arrow-right", size: 14, className: "arrow" })));
     }));
   }
 
   // components/marketing/StoryCard.jsx
   init_ds_inject_react();
-  var cx76 = (...a) => a.filter(Boolean).join(" ");
+  var cx77 = (...a) => a.filter(Boolean).join(" ");
   function StoryCard({ logo, title, body, result, quote, person, role, href, linkAs = "a", className, ...rest }) {
     const Tag = href ? linkAs : "div";
     const showQuote = Boolean(quote && person && role);
     const initials = String(title || "").trim().split(/\s+/).slice(0, 2).map((w) => w[0] || "").join("").toUpperCase();
-    return /* @__PURE__ */ React.createElement(Tag, { className: cx76("lw-story", href && "lw-story-interactive", className), href, ...rest }, logo ? /* @__PURE__ */ React.createElement("span", { className: "logo" }, logo) : /* @__PURE__ */ React.createElement("span", { className: "logo lw-monogram" }, initials), /* @__PURE__ */ React.createElement("div", null, title && /* @__PURE__ */ React.createElement("h3", null, title), body && /* @__PURE__ */ React.createElement("p", null, body), showQuote && /* @__PURE__ */ React.createElement("blockquote", { className: "lw-story-quote" }, quote, /* @__PURE__ */ React.createElement("cite", null, person, " · ", role)), result && /* @__PURE__ */ React.createElement("div", { className: "meta" }, /* @__PURE__ */ React.createElement("span", { className: "lw-story-result" }, /* @__PURE__ */ React.createElement("b", null, result)))));
+    return /* @__PURE__ */ React.createElement(Tag, { className: cx77("lw-story", href && "lw-story-interactive", className), href, ...rest }, logo ? /* @__PURE__ */ React.createElement("span", { className: "logo" }, logo) : /* @__PURE__ */ React.createElement("span", { className: "logo lw-monogram" }, initials), /* @__PURE__ */ React.createElement("div", null, title && /* @__PURE__ */ React.createElement("h3", null, title), body && /* @__PURE__ */ React.createElement("p", null, body), showQuote && /* @__PURE__ */ React.createElement("blockquote", { className: "lw-story-quote" }, quote, /* @__PURE__ */ React.createElement("cite", null, person, " · ", role)), result && /* @__PURE__ */ React.createElement("div", { className: "meta" }, /* @__PURE__ */ React.createElement("span", { className: "lw-story-result" }, /* @__PURE__ */ React.createElement("b", null, result)))));
   }
 
   // components/marketing/LogoRail.jsx
   init_ds_inject_react();
-  var cx77 = (...a) => a.filter(Boolean).join(" ");
+  var cx78 = (...a) => a.filter(Boolean).join(" ");
   function LogoRail({ logos = [], marquee = false, className, ...rest }) {
     const cells = logos.map(
       (l, i) => l.src ? /* @__PURE__ */ React.createElement("span", { key: i, className: "lw-logo-item", style: { "--lw-logo-src": `url("${l.src}")` }, role: "img", "aria-label": l.name }) : /* @__PURE__ */ React.createElement("span", { key: i, className: "lw-logo-item is-text" }, l.name)
     );
-    return /* @__PURE__ */ React.createElement("div", { className: cx77("lw-logo-rail", marquee && "marquee", className), ...rest }, marquee ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "lw-logo-track" }, cells), /* @__PURE__ */ React.createElement("div", { className: "lw-logo-track", "aria-hidden": "true" }, cells)) : cells);
+    return /* @__PURE__ */ React.createElement("div", { className: cx78("lw-logo-rail", marquee && "marquee", className), ...rest }, marquee ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "lw-logo-track" }, cells), /* @__PURE__ */ React.createElement("div", { className: "lw-logo-track", "aria-hidden": "true" }, cells)) : cells);
   }
 
   // components/marketing/SiteFooter.jsx
   init_ds_inject_react();
-  var cx78 = (...a) => a.filter(Boolean).join(" ");
+  var cx79 = (...a) => a.filter(Boolean).join(" ");
   function SiteFooter({ brand, desc, columns = [], legal, bottom, dark = false, linkAs = "a", className, children, ...rest }) {
     const Link = linkAs;
-    return /* @__PURE__ */ React.createElement("footer", { className: cx78("lw-footer", className), "data-band": dark ? "dark" : void 0, ...rest }, /* @__PURE__ */ React.createElement("div", { className: "lw-container" }, /* @__PURE__ */ React.createElement("div", { className: "lw-footer-grid" }, /* @__PURE__ */ React.createElement("div", { className: "lw-footer-brand" }, brand, desc && /* @__PURE__ */ React.createElement("p", { className: "lw-footer-desc" }, desc)), columns.map((col, i) => (
+    return /* @__PURE__ */ React.createElement("footer", { className: cx79("lw-footer", className), "data-band": dark ? "dark" : void 0, ...rest }, /* @__PURE__ */ React.createElement("div", { className: "lw-container" }, /* @__PURE__ */ React.createElement("div", { className: "lw-footer-grid" }, /* @__PURE__ */ React.createElement("div", { className: "lw-footer-brand" }, brand, desc && /* @__PURE__ */ React.createElement("p", { className: "lw-footer-desc" }, desc)), columns.map((col, i) => (
       /* Keyed by index, not heading: two columns may legitimately share a
          heading (or have none), and React treats duplicate keys as
          unsupported. Same reasoning as TopBar and Sidebar. */
@@ -3465,29 +7542,29 @@
 
   // components/marketing/Steps.jsx
   init_ds_inject_react();
-  var cx79 = (...a) => a.filter(Boolean).join(" ");
+  var cx80 = (...a) => a.filter(Boolean).join(" ");
   function Steps({ items = [], orientation = "vertical", linkAs = "a", className, ...rest }) {
     const Link = linkAs;
-    return /* @__PURE__ */ React.createElement("ol", { className: cx79("lw-steps", orientation === "horizontal" && "lw-steps-horizontal", className), ...rest }, items.map((it, i) => /* @__PURE__ */ React.createElement("li", { className: "lw-step", key: i }, /* @__PURE__ */ React.createElement("span", { className: "lw-step-marker" }, it.label ?? String(i + 1).padStart(2, "0")), /* @__PURE__ */ React.createElement("div", null, it.meta && /* @__PURE__ */ React.createElement("span", { className: "lw-step-meta" }, it.meta), /* @__PURE__ */ React.createElement("h3", { className: "lw-step-title" }, it.title), it.body && /* @__PURE__ */ React.createElement("p", { className: "lw-step-body" }, it.body), it.href && /* @__PURE__ */ React.createElement("p", { className: "lw-step-body" }, /* @__PURE__ */ React.createElement(Link, { href: it.href }, it.more || "Learn more"))))));
+    return /* @__PURE__ */ React.createElement("ol", { className: cx80("lw-steps", orientation === "horizontal" && "lw-steps-horizontal", className), ...rest }, items.map((it, i) => /* @__PURE__ */ React.createElement("li", { className: "lw-step", key: i }, /* @__PURE__ */ React.createElement("span", { className: "lw-step-marker" }, it.label ?? String(i + 1).padStart(2, "0")), /* @__PURE__ */ React.createElement("div", null, it.meta && /* @__PURE__ */ React.createElement("span", { className: "lw-step-meta" }, it.meta), /* @__PURE__ */ React.createElement("h3", { className: "lw-step-title" }, it.title), it.body && /* @__PURE__ */ React.createElement("p", { className: "lw-step-body" }, it.body), it.href && /* @__PURE__ */ React.createElement("p", { className: "lw-step-body" }, /* @__PURE__ */ React.createElement(Link, { href: it.href }, it.more || "Learn more"))))));
   }
 
   // components/marketing/Quote.jsx
   init_ds_inject_react();
-  var cx80 = (...a) => a.filter(Boolean).join(" ");
+  var cx81 = (...a) => a.filter(Boolean).join(" ");
   function Quote({ children, name, role, className, ...rest }) {
-    return /* @__PURE__ */ React.createElement("blockquote", { className: cx80("lw-quote", className), ...rest }, children, name && /* @__PURE__ */ React.createElement("cite", { className: "lw-quote-attrib" }, /* @__PURE__ */ React.createElement("span", { className: "name" }, name), role ? " · " + role : ""));
+    return /* @__PURE__ */ React.createElement("blockquote", { className: cx81("lw-quote", className), ...rest }, children, name && /* @__PURE__ */ React.createElement("cite", { className: "lw-quote-attrib" }, /* @__PURE__ */ React.createElement("span", { className: "name" }, name), role ? " · " + role : ""));
   }
 
   // components/marketing/Byline.jsx
   init_ds_inject_react();
-  var cx81 = (...a) => a.filter(Boolean).join(" ");
-  function Byline({ name, role, date, dateTime, src, size = "md", className, children, ...rest }) {
-    return /* @__PURE__ */ React.createElement("div", { className: cx81("lw-byline", className), ...rest }, name && /* @__PURE__ */ React.createElement(Avatar, { name, src, size }), name && /* @__PURE__ */ React.createElement("span", { className: "name" }, name), role && /* @__PURE__ */ React.createElement("span", { className: "role" }, role), date && /* @__PURE__ */ React.createElement("time", { className: "date", dateTime }, date), children);
+  var cx82 = (...a) => a.filter(Boolean).join(" ");
+  function Byline({ name, role, date, dateTime, src, size: size4 = "md", className, children, ...rest }) {
+    return /* @__PURE__ */ React.createElement("div", { className: cx82("lw-byline", className), ...rest }, name && /* @__PURE__ */ React.createElement(Avatar, { name, src, size: size4 }), name && /* @__PURE__ */ React.createElement("span", { className: "name" }, name), role && /* @__PURE__ */ React.createElement("span", { className: "role" }, role), date && /* @__PURE__ */ React.createElement("time", { className: "date", dateTime }, date), children);
   }
 
   // components/marketing/ArticleCard.jsx
   init_ds_inject_react();
-  var cx82 = (...a) => a.filter(Boolean).join(" ");
+  var cx83 = (...a) => a.filter(Boolean).join(" ");
   function ArticleCard({
     title,
     dek,
@@ -3518,7 +7595,7 @@
         as: href ? linkAs : "div",
         interactive: Boolean(href),
         href,
-        className: cx82(className),
+        className: cx83(className),
         ...rest
       },
       cover && /* @__PURE__ */ React.createElement("span", { className: "lw-card-media" }, cover),
@@ -3532,12 +7609,12 @@
 
   // components/marketing/AnnounceBar.jsx
   init_ds_inject_react();
-  var React37 = __toESM(require_ds_react(), 1);
-  var cx83 = (...a) => a.filter(Boolean).join(" ");
+  var React58 = __toESM(require_ds_react(), 1);
+  var cx84 = (...a) => a.filter(Boolean).join(" ");
   function AnnounceBar({ children, onDismiss, dismissLabel = "Dismiss announcement", className, ...rest }) {
-    const [gone, setGone] = React37.useState(false);
+    const [gone, setGone] = React58.useState(false);
     if (gone) return null;
-    return /* @__PURE__ */ React37.createElement("div", { className: cx83("lw-announce", className), role: "status", ...rest }, children, onDismiss && /* @__PURE__ */ React37.createElement(
+    return /* @__PURE__ */ React58.createElement("div", { className: cx84("lw-announce", className), role: "status", ...rest }, children, onDismiss && /* @__PURE__ */ React58.createElement(
       "button",
       {
         type: "button",
@@ -3548,13 +7625,13 @@
           onDismiss();
         }
       },
-      /* @__PURE__ */ React37.createElement(Icon, { name: "close", size: 14 })
+      /* @__PURE__ */ React58.createElement(Icon, { name: "close", size: 14 })
     ));
   }
 
   // components/marketing/PlanCard.jsx
   init_ds_inject_react();
-  var cx84 = (...a) => a.filter(Boolean).join(" ");
+  var cx85 = (...a) => a.filter(Boolean).join(" ");
   function PlanCard({
     name,
     tagline,
@@ -3574,7 +7651,7 @@
   }) {
     const Link = linkAs;
     const ctaObject = cta && typeof cta === "object" && !cta.$$typeof && cta.label;
-    return /* @__PURE__ */ React.createElement("div", { className: cx84("lw-card", "lw-plan", featured && "lw-plan-featured", className), ...rest }, ribbon && /* @__PURE__ */ React.createElement("span", { className: "lw-pill lw-plan-ribbon" }, ribbon), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h3", { className: "lw-plan-name" }, name), tagline && /* @__PURE__ */ React.createElement("span", { className: "lw-plan-tagline" }, tagline)), price != null && /* @__PURE__ */ React.createElement("p", { className: "lw-plan-price" }, /* @__PURE__ */ React.createElement("span", { className: "price" }, price), unit && /* @__PURE__ */ React.createElement("span", { className: "unit" }, unit), period && /* @__PURE__ */ React.createElement("span", { className: "period" }, period)), desc && /* @__PURE__ */ React.createElement("p", { className: "lw-plan-desc" }, desc), features.length > 0 && /* @__PURE__ */ React.createElement("ul", { className: "lw-plan-features" }, features.map((f, i) => {
+    return /* @__PURE__ */ React.createElement("div", { className: cx85("lw-card", "lw-plan", featured && "lw-plan-featured", className), ...rest }, ribbon && /* @__PURE__ */ React.createElement("span", { className: "lw-pill lw-plan-ribbon" }, ribbon), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h3", { className: "lw-plan-name" }, name), tagline && /* @__PURE__ */ React.createElement("span", { className: "lw-plan-tagline" }, tagline)), price != null && /* @__PURE__ */ React.createElement("p", { className: "lw-plan-price" }, /* @__PURE__ */ React.createElement("span", { className: "price" }, price), unit && /* @__PURE__ */ React.createElement("span", { className: "unit" }, unit), period && /* @__PURE__ */ React.createElement("span", { className: "period" }, period)), desc && /* @__PURE__ */ React.createElement("p", { className: "lw-plan-desc" }, desc), features.length > 0 && /* @__PURE__ */ React.createElement("ul", { className: "lw-plan-features" }, features.map((f, i) => {
       const included = f.included !== false;
       return (
         // The glyph is aria-hidden, so WITHOUT this word an included and
@@ -3584,12 +7661,12 @@
         // is not a flex item and takes no gap.
         /* @__PURE__ */ React.createElement("li", { className: "lw-plan-feature", key: i, "data-included": included ? "true" : "false" }, /* @__PURE__ */ React.createElement("span", { className: "lw-sr-only" }, included ? includedLabel : excludedLabel, ": "), /* @__PURE__ */ React.createElement(Icon, { name: included ? "check" : "minus", size: 16 }), /* @__PURE__ */ React.createElement("span", null, f.label))
       );
-    })), cta && /* @__PURE__ */ React.createElement("div", { className: "lw-plan-foot" }, ctaObject ? /* @__PURE__ */ React.createElement(Link, { className: cx84("lw-btn", featured ? "lw-btn-brand" : "lw-btn-ghost"), href: cta.href }, cta.label) : cta));
+    })), cta && /* @__PURE__ */ React.createElement("div", { className: "lw-plan-foot" }, ctaObject ? /* @__PURE__ */ React.createElement(Link, { className: cx85("lw-btn", featured ? "lw-btn-brand" : "lw-btn-ghost"), href: cta.href }, cta.label) : cta));
   }
 
   // components/marketing/CompareTable.jsx
   init_ds_inject_react();
-  var cx85 = (...a) => a.filter(Boolean).join(" ");
+  var cx86 = (...a) => a.filter(Boolean).join(" ");
   function CompareTable({
     columns = [],
     groups = [],
@@ -3616,7 +7693,7 @@
         role: "region",
         "aria-label": typeof caption === "string" ? caption : void 0
       },
-      /* @__PURE__ */ React.createElement("table", { className: cx85("lw-compare", className), ...rest }, caption && /* @__PURE__ */ React.createElement("caption", null, caption), /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("td", { className: "lw-compare-corner" }), columns.map((c) => /* @__PURE__ */ React.createElement("th", { key: c.key, scope: "col", "data-featured": c.featured || void 0 }, c.label)))), groups.map((g, gi) => /* @__PURE__ */ React.createElement("tbody", { key: gi }, g.label && /* @__PURE__ */ React.createElement("tr", { className: "lw-compare-group" }, /* @__PURE__ */ React.createElement("th", { scope: "colgroup", colSpan: columns.length + 1 }, g.label)), g.rows.map((r, ri) => /* @__PURE__ */ React.createElement("tr", { key: ri }, /* @__PURE__ */ React.createElement("th", { scope: "row" }, r.label), columns.map((c, ci) => /* @__PURE__ */ React.createElement("td", { key: c.key, "data-featured": c.featured || void 0 }, cell(r.values[ci]))))))))
+      /* @__PURE__ */ React.createElement("table", { className: cx86("lw-compare", className), ...rest }, caption && /* @__PURE__ */ React.createElement("caption", null, caption), /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("td", { className: "lw-compare-corner" }), columns.map((c) => /* @__PURE__ */ React.createElement("th", { key: c.key, scope: "col", "data-featured": c.featured || void 0 }, c.label)))), groups.map((g, gi) => /* @__PURE__ */ React.createElement("tbody", { key: gi }, g.label && /* @__PURE__ */ React.createElement("tr", { className: "lw-compare-group" }, /* @__PURE__ */ React.createElement("th", { scope: "colgroup", colSpan: columns.length + 1 }, g.label)), g.rows.map((r, ri) => /* @__PURE__ */ React.createElement("tr", { key: ri }, /* @__PURE__ */ React.createElement("th", { scope: "row" }, r.label), columns.map((c, ci) => /* @__PURE__ */ React.createElement("td", { key: c.key, "data-featured": c.featured || void 0 }, cell(r.values[ci]))))))))
     );
   }
 
@@ -3639,7 +7716,7 @@
     return out.join(" ");
   }
   function assignColumns(nodes, forward) {
-    const index = new Map(nodes.map((n, i) => [n.id, i]));
+    const index2 = new Map(nodes.map((n, i) => [n.id, i]));
     const column = new Map(nodes.map((n) => [n.id, 0]));
     const incoming = new Map(nodes.map((n) => [n.id, []]));
     for (const e of forward) incoming.get(e.to)?.push(e.from);
@@ -3658,13 +7735,13 @@
     }
     for (const n of nodes) {
       if (typeof n.column === "number") {
-        const floor = Math.max(0, ...(incoming.get(n.id) ?? []).map((p) => (column.get(p) ?? 0) + 1));
-        column.set(n.id, Math.max(n.column, floor));
+        const floor2 = Math.max(0, ...(incoming.get(n.id) ?? []).map((p) => (column.get(p) ?? 0) + 1));
+        column.set(n.id, Math.max(n.column, floor2));
       }
     }
     const lanes = /* @__PURE__ */ new Map();
     const lane = /* @__PURE__ */ new Map();
-    for (const n of [...nodes].sort((a, b) => index.get(a.id) - index.get(b.id))) {
+    for (const n of [...nodes].sort((a, b) => index2.get(a.id) - index2.get(b.id))) {
       const c = column.get(n.id);
       const next = lanes.get(c) ?? 0;
       lane.set(n.id, typeof n.lane === "number" ? n.lane : next);
@@ -3777,17 +7854,17 @@
   }
   function isChain(nodes, edges) {
     if (!edges) return true;
-    const index = new Map(nodes.map((n, i) => [n.id, i]));
+    const index2 = new Map(nodes.map((n, i) => [n.id, i]));
     return edges.every((e) => {
       const pair = Array.isArray(e) ? e : [e.from, e.to];
-      const a = index.get(pair[0]);
-      const b = index.get(pair[1]);
+      const a = index2.get(pair[0]);
+      const b = index2.get(pair[1]);
       return a !== void 0 && b !== void 0 && b === a + 1;
     });
   }
 
   // components/marketing/Flow.jsx
-  var cx86 = (...a) => a.filter(Boolean).join(" ");
+  var cx87 = (...a) => a.filter(Boolean).join(" ");
   function Flow({
     nodes = [],
     edges,
@@ -3840,17 +7917,17 @@
         )
       );
     });
-    return /* @__PURE__ */ React.createElement(Tag, { className: cx86("lw-flow", orientation === "vertical" && "lw-flow-vertical", className), ...rest }, children);
+    return /* @__PURE__ */ React.createElement(Tag, { className: cx87("lw-flow", orientation === "vertical" && "lw-flow-vertical", className), ...rest }, children);
   }
   function FlowGraph({ graph, label, tableLabels, className, ...rest }) {
-    const index = new Map(graph.order.map((n, i) => [n.id, i]));
-    const num = (id) => String(index.get(id) + 1).padStart(2, "0");
+    const index2 = new Map(graph.order.map((n, i) => [n.id, i]));
+    const num = (id) => String(index2.get(id) + 1).padStart(2, "0");
     warnOnce(!label, "Flow: a branching flow needs `label` — it names the diagram and captions its successors table.");
     warnOnce(
       !tableLabels,
       "Flow: a branching flow needs `tableLabels` — the successors table's headers are the consumer's words, in the consumer's locale, never a literal in this package."
     );
-    return /* @__PURE__ */ React.createElement("div", { className: cx86("lw-flow-wrap", className), ...rest }, /* @__PURE__ */ React.createElement("table", { className: "lw-sr-only" }, label && /* @__PURE__ */ React.createElement("caption", null, label), tableLabels && /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", { scope: "col" }, tableLabels.step), /* @__PURE__ */ React.createElement("th", { scope: "col" }, tableLabels.leadsTo))), /* @__PURE__ */ React.createElement("tbody", null, graph.order.map((n) => {
+    return /* @__PURE__ */ React.createElement("div", { className: cx87("lw-flow-wrap", className), ...rest }, /* @__PURE__ */ React.createElement("table", { className: "lw-sr-only" }, label && /* @__PURE__ */ React.createElement("caption", null, label), tableLabels && /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", { scope: "col" }, tableLabels.step), /* @__PURE__ */ React.createElement("th", { scope: "col" }, tableLabels.leadsTo))), /* @__PURE__ */ React.createElement("tbody", null, graph.order.map((n) => {
       const next = graph.successors.get(n.id) ?? [];
       return /* @__PURE__ */ React.createElement("tr", { key: n.id }, /* @__PURE__ */ React.createElement("th", { scope: "row" }, num(n.id), " ", n.label), /* @__PURE__ */ React.createElement("td", null, next.length ? next.map((e) => `${num(e.to)} ${nodeLabel(graph, e.to)}${e.label ? ` (${e.label})` : ""}`).join("; ") : (
         /* Never an empty cell: a screen reader skips one, so a
@@ -3999,9 +8076,12 @@
     THEME_LABELS,
     ThemeToggle,
     TopBar,
+    Layer,
+    LayerContext,
     Dialog,
     Drawer,
     Menu,
+    OverlayProvider,
     Popover,
     Toast,
     ToastRegion,

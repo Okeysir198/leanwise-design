@@ -58,8 +58,13 @@
  * - **`brand.js` and `tailwind-preset.cjs` are no longer inputs.** Neither is reachable from the
  *   barrel and neither exposed anything; the old header hashed them anyway. Every *exposed* name
  *   is byte-identical in provenance.
- * - **`inlinedExternals` is `[]` and means it.** Nothing external is inlined — see the React note
- *   above.
+ * - **`inlinedExternals` names exactly one thing: `radix-ui`.** React is NOT inlined (see the
+ *   note above); Radix IS, because the cards load a plain <script> and cannot resolve a bare
+ *   specifier. The entry records the version read from `node_modules/radix-ui/package.json`, so
+ *   `--check` fails the moment the installed Radix moves without a rebuild. Radix's own modules
+ *   are excluded from `sourceHashes` (they are pinned by version, not authored here) and from
+ *   the namespace: a `Root` / `Trigger` / `Content` from `node_modules/` must never reach the
+ *   card namespace nor the two-modules-one-name rule.
  * - **Ordering is `(sourcePath, name)`**, not the design project's dependency order, so the JSON
  *   header diffs cleanly.
  *
@@ -79,6 +84,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import esbuild from "esbuild";
 import { generated } from "./_generated.mjs";
+import { JSX_RUNTIME_SHIM_SOURCE } from "./_jsx-shim.mjs";
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, "..");
@@ -94,6 +100,7 @@ const NS = "ds-shim";
 const SHIM_REACT = "ds:react";
 const SHIM_REACT_DOM = "ds:react-dom";
 const SHIM_JSX_RUNTIME = "ds:jsx-runtime";
+const SHIM_JSX_DEV_RUNTIME = "ds:jsx-dev-runtime";
 const SHIM_INJECT = "ds:inject-react";
 const ENTRY_NAME = "ds-entry.js"; // the synthetic entry, as it appears in the metafile
 
@@ -103,10 +110,13 @@ const ENTRY_NAME = "ds-entry.js"; // the synthetic entry, as it appears in the m
 const SHIM_SOURCE = {
   [SHIM_REACT]: `module.exports = globalThis.React;\n`,
   [SHIM_REACT_DOM]: `module.exports = globalThis.ReactDOM;\n`,
-  /* Unused while the classic transform is on (esbuild emits React.createElement, never a
-     jsx-runtime import). Mapped anyway so a future `jsx: "automatic"` does not silently bundle
-     a second React. */
-  [SHIM_JSX_RUNTIME]: `module.exports = globalThis.React;\n`,
+  /* A REAL automatic runtime over `React.createElement` (tools/_jsx-shim.mjs). First-party
+     .jsx never reaches it (the classic transform is on), but Radix's dist is pre-compiled
+     against `react/jsx-runtime` and calls `jsx()` / `jsxs()`. This used to be
+     `module.exports = globalThis.React`, which has no `jsx` — the v1.2–v1.3 blank-card bug,
+     waiting to come back the moment anything automatic-compiled was bundled. */
+  [SHIM_JSX_RUNTIME]: JSX_RUNTIME_SHIM_SOURCE,
+  [SHIM_JSX_DEV_RUNTIME]: JSX_RUNTIME_SHIM_SOURCE,
   /* Injected into every input so the 45 components that never `import * as React` still get a
      bound `React` for the JSX factory, instead of leaning on the ambient <script> global. */
   [SHIM_INJECT]: `export var React = globalThis.React;\n`,
@@ -119,8 +129,9 @@ function shimPlugin() {
       build.onResolve({ filter: /^ds:/ }, (a) => ({ path: a.path, namespace: NS }));
       build.onResolve({ filter: /^react$/ }, () => ({ path: SHIM_REACT, namespace: NS }));
       build.onResolve({ filter: /^react-dom(\/.*)?$/ }, () => ({ path: SHIM_REACT_DOM, namespace: NS }));
-      build.onResolve({ filter: /^react\/jsx-(dev-)?runtime$/ }, () => ({
-        path: SHIM_JSX_RUNTIME,
+      build.onResolve({ filter: /^react\/jsx-runtime$/ }, () => ({ path: SHIM_JSX_RUNTIME, namespace: NS }));
+      build.onResolve({ filter: /^react\/jsx-dev-runtime$/ }, () => ({
+        path: SHIM_JSX_DEV_RUNTIME,
         namespace: NS,
       }));
       build.onLoad({ filter: /.*/, namespace: NS }, (a) => {
@@ -162,6 +173,17 @@ const JSX = {
   tsconfigRaw: { compilerOptions: {} },
 };
 
+/* Radix's dist files open with `"use client"`. Measured with esbuild 0.27: it emits NO warning
+   for the directive in an IIFE build, so there is deliberately no `logOverride` here — a
+   silenced message id nobody has seen is the blanket rule waiting to happen. */
+const isVendored = (p) => p.includes("node_modules/");
+
+/** `{ name, version }` for the one external the bundle inlines. */
+async function radixVersion() {
+  const pkg = JSON.parse(await readFile(path.join(ROOT, "node_modules/radix-ui/package.json"), "utf8"));
+  return { name: "radix-ui", version: pkg.version };
+}
+
 /* ---- step 1: what does the barrel pull in, and what does each of those export? ----------- */
 
 /** Transitive first-party inputs of the barrel, plus the barrel's own export list. */
@@ -177,7 +199,9 @@ async function readGraph() {
     plugins: [shimPlugin()],
     ...JSX,
   });
-  const inputs = Object.keys(probe.metafile.inputs).filter((p) => !p.startsWith(`${NS}:`));
+  /* Vendored inputs are dropped here, so Radix's exports never reach readExports() and the
+     namespace partition only ever sees first-party modules. */
+  const inputs = Object.keys(probe.metafile.inputs).filter((p) => !p.startsWith(`${NS}:`) && !isVendored(p));
   const barrelExports = Object.values(probe.metafile.outputs)[0].exports;
   return { inputs, barrelExports: new Set(barrelExports) };
 }
@@ -377,8 +401,9 @@ async function generate() {
      `--check` fails the moment one of them moves. Keys are repo-relative; the synthetic entry and
      the shims are excluded because they are derived, not authored. */
   const bundled = Object.keys(built.metafile.inputs)
-    .filter((p) => !p.startsWith(`${NS}:`) && p !== ENTRY_NAME)
+    .filter((p) => !p.startsWith(`${NS}:`) && p !== ENTRY_NAME && !isVendored(p))
     .sort();
+  const vendored = Object.keys(built.metafile.inputs).filter(isVendored).length;
   const sourceHashes = {};
   for (const rel of bundled) sourceHashes[rel] = shortHash(await readFile(path.join(ROOT, rel)));
 
@@ -389,13 +414,14 @@ async function generate() {
     esbuild: esbuild.version,
     components: exposed.map(({ name, sourcePath }) => ({ name, sourcePath })),
     sourceHashes,
-    /* Nothing external is inlined: react / react-dom resolve to the page globals. */
-    inlinedExternals: [],
+    /* react / react-dom resolve to the page globals; radix-ui is inlined and pinned by version,
+       so a `npm install` that moves it makes the committed bundle stale. */
+    inlinedExternals: [await radixVersion()],
     unexposedExports: unexposed,
   };
 
   const text = `/* @ds-bundle: ${JSON.stringify(meta)} */\n${built.outputFiles[0].text}`;
-  return { text, exposed, unexposed, bundled, cardNames };
+  return { text, exposed, unexposed, bundled, vendored, cardNames };
 }
 
 /* ---- cli ----------------------------------------------------------------------------------- */
@@ -403,7 +429,7 @@ async function generate() {
 const check = process.argv.includes("--check");
 
 try {
-  const { text, exposed, unexposed, bundled, cardNames } = await generate();
+  const { text, exposed, unexposed, bundled, vendored, cardNames } = await generate();
   const rel = path.relative(ROOT, OUT_PATH);
 
   const stale = await generated({
@@ -422,7 +448,8 @@ try {
   } else {
     console.log(
       `  ${(text.length / 1024).toFixed(0)} KB, ${exposed.length} exports on ` +
-        `${NAMESPACE}, ${unexposed.length} internal exports withheld, ${bundled.length} sources.`,
+        `${NAMESPACE}, ${unexposed.length} internal exports withheld, ${bundled.length} sources, ` +
+        `${vendored} vendored module(s) inlined.`,
     );
   }
 } catch (err) {

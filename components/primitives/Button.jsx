@@ -1,4 +1,5 @@
 "use client";
+import * as React from "react";
 const cx = (...a) => a.filter(Boolean).join(" ");
 
 /**
@@ -6,8 +7,12 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  * own — so the React and vanilla consumers can never drift apart.
  *
  * `cta` is the amber. One per view; the token lint enforces it.
+ *
+ * forwardRef since v2.0.0: a Radix `Trigger asChild` clones its child and
+ * needs the DOM node for positioning and focus return, so a Button that
+ * swallowed its ref could not anchor a Popover, a Menu or a Tooltip.
  */
-export function Button({
+export const Button = React.forwardRef(function Button({
   variant = "brand",
   size = "md",
   iconOnly = false,
@@ -19,10 +24,11 @@ export function Button({
   onClick,
   children,
   ...rest
-}) {
+}, ref) {
   const Tag = as || (rest.href ? "a" : "button");
   return (
     <Tag
+      ref={ref}
       className={cx(
         "lw-btn",
         `lw-btn-${variant}`,
@@ -56,4 +62,5 @@ export function Button({
       {children}
     </Tag>
   );
-}
+});
+Button.displayName = "Button";

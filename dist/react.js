@@ -62,6 +62,7 @@ import { Tooltip } from "./components/overlays/Tooltip.js";
 import { Popover } from "./components/overlays/Popover.js";
 import { Menu } from "./components/overlays/Menu.js";
 import { Drawer } from "./components/overlays/Drawer.js";
+import { OverlayProvider } from "./components/overlays/OverlayProvider.js";
 import { PromptInput } from "./components/ai/PromptInput.js";
 import { Message } from "./components/ai/Message.js";
 import { SourceChip } from "./components/ai/SourceChip.js";
@@ -143,6 +144,7 @@ export {
   NavMenu,
   NavToggle,
   OtpInput,
+  OverlayProvider,
   Page,
   Pagination,
   PasswordInput,

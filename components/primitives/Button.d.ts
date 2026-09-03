@@ -37,4 +37,8 @@ export interface ButtonProps extends React.HTMLAttributes<HTMLElement> {
   type?: "button" | "submit" | "reset";
 }
 
-export declare function Button(props: ButtonProps): React.JSX.Element;
+/** Forwards its ref to the rendered element (a `<button>`, an `<a>`, or
+ *  whatever `as` names), so a Radix `Trigger asChild` can anchor to it. */
+export declare const Button: React.ForwardRefExoticComponent<
+  ButtonProps & React.RefAttributes<HTMLElement>
+>;

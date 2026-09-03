@@ -84,6 +84,7 @@ export { Tooltip } from "./components/overlays/Tooltip.jsx";
 export { Popover } from "./components/overlays/Popover.jsx";
 export { Menu } from "./components/overlays/Menu.jsx";
 export { Drawer } from "./components/overlays/Drawer.jsx";
+export { OverlayProvider } from "./components/overlays/OverlayProvider.jsx";
 
 /* ai */
 export { PromptInput } from "./components/ai/PromptInput.jsx";
