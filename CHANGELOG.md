@@ -22,6 +22,27 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 ## [Unreleased]
 
+## [1.9.1] — 2026-09-03
+
+### Fixed — `lw-token-lint` shipped without its executable bit
+
+`tools/lw-token-lint.mjs` was committed **100644** while the other three `bin`
+entries were **100755**. It carries a correct shebang, npm links it, and the link
+points at a file the shell may not execute — so a consumer's `npm run lw-token-lint`
+dies with `Permission denied`.
+
+It hid because npm chmods a bin target when it CREATES the symlink. A first install
+therefore works; the failure appears on an **upgrade**, where the link already exists,
+npm replaces the file with the tarball's 644 copy and never re-chmods. Found upgrading
+`leanwise-inspect` from v1.8.0 to v1.9.0 — the same install path every consumer takes.
+
+`lw-pack-check` already runs the bin and would have caught it, but it lives in
+`check:ci` rather than `npm run check`, and CI runs neither. The mode is the fix; where
+that gate belongs is a separate question.
+
+**Consumers:** on upgrade, if `npm run lw-token-lint` reports `Permission denied`, this
+is it — reinstalling on 1.9.1 restores the bit.
+
 ## [1.9.0] — 2026-09-03
 
 ### Changed — one tone vocabulary, and a gate so it cannot drift again
