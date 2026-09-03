@@ -24,6 +24,8 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 ## [Unreleased]
 
+## [2.0.0] — 2026-09-04
+
 ### 2.0.0 — the overlays move to Radix, and everything 1.13 warned about is removed
 
 The first major since the v1.1.0 replacement. Every floating and modal surface now rides a
