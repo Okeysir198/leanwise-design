@@ -6,8 +6,11 @@ const cx = (...a) => a.filter(Boolean).join(" ");
 const PasswordInput = React.forwardRef(function PasswordInput2({
   size,
   invalid,
-  revealLabel = "Show password",
-  hideLabel = "Hide password",
+  /* These NAME THE CURRENT STATE, per the note above — "the password is
+     hidden", not "show the password". The first version of this shipped the
+     actions as defaults and contradicted its own contract two lines up. */
+  revealLabel = "Password hidden",
+  hideLabel = "Password visible",
   capsLockLabel = "Caps Lock is on",
   onCapsLockChange,
   className,

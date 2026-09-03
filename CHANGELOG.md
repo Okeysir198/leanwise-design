@@ -22,6 +22,42 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 ## [Unreleased]
 
+## [1.10.3] — 2026-09-03
+
+### Fixed — `.lw-hit` never anchored itself, so its tap target escaped the control
+
+`.lw-hit` grows a small control to the 44px touch floor with an absolutely
+positioned `::after`. An absolutely positioned box resolves against the nearest
+POSITIONED ancestor — and `.lw-hit` was never given `position: relative`. The fix
+was applied to the package's own five controls (`.lw-theme-compact`,
+`.lw-topbar .brand`, and three more) and never to the class itself.
+
+The note beside `.lw-theme-compact` has described this exact failure since
+v1.3.4: *"without this the touch target silently escapes to whatever box above it
+happens to be positioned."* Every consumer that reached for `.lw-hit` got it.
+
+Found in `leanwise-inspect`'s login: a `PasswordInput` reveal button inside a
+`.lw-card` took **the whole card** as its tap target, so `elementFromPoint` at
+the centre of the Sign in button returned the reveal toggle — **the sign-in
+button was untappable on every touch device**. `.lw-hit` is opt-in, so anchoring
+it cannot move anything that was not already asking for a containing block.
+
+### Fixed — `Field` erased an `invalid` set on the control
+
+v1.10.0 taught `Field` to wire a plain child, and it passed `aria-invalid:
+undefined` when it had no error of its own. That is not a no-op: cloned props are
+applied AFTER the child's, so a component setting the attribute from its own prop
+— `<Input invalid />`, which spreads `...rest` last — had it overwritten with
+undefined. A `Field` with no error was actively erasing an invalid state marked
+on the control inside it. Only props that have a value are cloned in now.
+
+### Fixed — `PasswordInput`'s default labels contradicted its own contract
+
+The component documents that the reveal label names the CURRENT state, so a
+screen-reader user can tell whether the password is on screen. Its defaults were
+`"Show password"` / `"Hide password"` — actions, which is the thing the note says
+not to do.
+
 ## [1.10.2] — 2026-09-03
 
 ### Fixed — a `KpiTile` note could not wrap, and pushed the page sideways

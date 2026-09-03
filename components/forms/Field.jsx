@@ -46,14 +46,17 @@ export function Field({
   const describedBy = (error || help)
     ? [single?.props?.["aria-describedby"], msgId].filter(Boolean).join(" ")
     : single?.props?.["aria-describedby"];
-  const wired = single
-    ? React.cloneElement(single, {
-        id,
-        "aria-describedby": describedBy,
-        "aria-invalid": single.props["aria-invalid"] ?? (error ? "true" : undefined),
-        required: single.props.required ?? (required || undefined),
-      })
-    : children;
+  /* ⚠️ ONLY PROPS THAT HAVE A VALUE ARE CLONED IN. Passing `aria-invalid:
+     undefined` looks like a no-op and is not: the clone's props are applied
+     AFTER the child's own, so a component that sets its own attribute from its
+     own prop — `<Input invalid />` does exactly this, spreading `...rest` last —
+     had it overwritten with undefined and lost the state. A Field with no error
+     was actively erasing an invalid marked on the control. */
+  const cloned = { id };
+  if (describedBy) cloned["aria-describedby"] = describedBy;
+  if (error) cloned["aria-invalid"] = "true";
+  if (required && single?.props?.required === undefined) cloned.required = true;
+  const wired = single ? React.cloneElement(single, cloned) : children;
   return (
     <div className={cx("lw-field", className)} {...rest}>
       {label && (

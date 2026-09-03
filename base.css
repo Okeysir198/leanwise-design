@@ -1375,6 +1375,22 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
   /* The anchor the ::after resolves against. Without it the box escapes to
      whatever ancestor happens to be positioned and the target lands somewhere
      else on the page — silently, since nothing is painted. */
+  /* ⚠️ `.lw-hit` ANCHORS ITSELF. Its 44px target is an absolutely positioned
+     ::after, which resolves against the nearest POSITIONED ancestor — so without
+     this the target silently escapes to whatever box above it happens to have a
+     position, and grows to that box's size.
+
+     The note beside `.lw-theme-compact` has said so since v1.3.4, and the fix
+     was applied to the package's own five controls and never to the class
+     itself. Every consumer that reached for `.lw-hit` therefore got the bug the
+     comment describes: a `PasswordInput` reveal button inside a `.lw-card` took
+     the WHOLE CARD as its tap target, and `elementFromPoint` at the centre of
+     the Sign in button returned the reveal toggle — the sign-in button was
+     untappable on every touch device. Found in leanwise-inspect's login.
+
+     `.lw-hit` is opt-in, so establishing a containing block on it cannot move
+     anything that was not already asking for one. */
+  .lw-hit { position: relative; }
   .lw-topbar .brand, .lw-topbar nav > a, .lw-navmenu > summary, .lw-segmented button, .lw-pill-link { position: relative; }
   /* REAL width for a short nav label, because the ::after cannot supply it here.
      A locale switch is two 39px links side by side: grown to 44px each, their
