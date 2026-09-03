@@ -109,7 +109,7 @@ export const Combobox = React.forwardRef(function Combobox({
       {selectedOpts.map(o => (
         <span key={o.value} className="lw-combo-token">
           <span>{o.label}</span>
-          <button type="button" aria-label={formatRemoveLabel(o.label)}
+          <button type="button" aria-label={formatRemoveLabel(o.label)} disabled={disabled}
             onMouseDown={(e) => e.preventDefault()} onClick={() => remove(o.value)}>
             <Icon name="close" size={11} />
           </button>

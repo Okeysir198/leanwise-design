@@ -29,10 +29,13 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  */
 export function Dialog({
   open, onOpenChange, onClose, trigger, title, label, description, footer, width,
-  closeLabel = "Close", className, children, ...rest
+  closeLabel = "Close", className, children, onCloseAutoFocus: userCloseAutoFocus, ...rest
 }) {
   const layer = useLayer();
   const [fromEl, setFromEl] = React.useState(null);
+  // The opener, kept until the NEXT open: state is cleared on close, but Radix asks
+  // where to send focus only when the content unmounts, after that.
+  const openerRef = React.useRef(null);
   // A bare number OR a numeric string means px. HTML has no numbers — an
   // attribute always arrives as text — and a unitless length makes the width
   // declaration invalid, which silently drops it and shrink-wraps the dialog.
@@ -42,9 +45,19 @@ export function Dialog({
   // from a passive effect; a layout effect runs first), so `fromEl` is the
   // control that opened us and the layer mirrors ITS theme scope.
   React.useLayoutEffect(() => {
-    if (open) setFromEl(typeof document !== "undefined" ? document.activeElement : null);
+    if (open) { const el = typeof document !== "undefined" ? document.activeElement : null; openerRef.current = el; setFromEl(el); }
     else setFromEl(null);
   }, [open]);
+  // Radix Dialog returns focus to ITS Trigger on close — which a controlled panel
+  // (`open` + `onClose`, no `trigger`) never has, so focus fell to <body> and a
+  // keyboard user lost their place on every close. Send it back to the element
+  // that was focused when we opened; a caller's own `onCloseAutoFocus` wins.
+  const onCloseAutoFocus = (e) => {
+    if (userCloseAutoFocus) userCloseAutoFocus(e);
+    if (e.defaultPrevented) return;
+    const el = openerRef.current;
+    if (el && typeof el.focus === "function" && el.isConnected) { e.preventDefault(); el.focus(); }
+  };
   const handleOpenChange = (next) => {
     onOpenChange && onOpenChange(next);
     if (!next && onClose) onClose();
@@ -60,7 +73,7 @@ export function Dialog({
         <div>
           <Layer modal from={fromEl}>
             <RD.Overlay className="lw-backdrop" />
-            <RD.Content className={cx("lw-dialog", className)} tabIndex={-1}
+            <RD.Content className={cx("lw-dialog", className)} tabIndex={-1} onCloseAutoFocus={onCloseAutoFocus}
               style={w ? { "--lw-dialog-w": w } : undefined} {...rest}>
               {title ? (
                 <div className="lw-dialog-head">
@@ -68,7 +81,7 @@ export function Dialog({
                   {/* Two classes since v1.3.0: `.lw-icon-btn` (base.css) is the
                       face, `.lw-dialog-close` (product.css) the optical margin. */}
                   <RD.Close asChild>
-                    <button type="button" className="lw-icon-btn lw-dialog-close" aria-label={closeLabel} title={closeLabel}>
+                    <button type="button" className="lw-icon-btn lw-dialog-close lw-hit" aria-label={closeLabel} title={closeLabel}>
                       <Icon name="close" size={17} />
                     </button>
                   </RD.Close>

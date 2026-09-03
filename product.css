@@ -260,6 +260,10 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 .lw-nav-item .ic { width: 20px; height: 20px; flex: none; display: inline-flex; align-items: center; justify-content: center; font-size: 17px; opacity: 0.9; }
 .lw-nav-item .lw-nav-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .lw-nav-item .badge { margin-inline-start: auto; font-family: var(--lw-font-mono); font-size: 10px; color: var(--lw-fg-muted); }
+@media (pointer: coarse) {
+  /* 37px rows on a touch tablet; the floor is the density token, like every control. */
+  .lw-nav-item { min-height: var(--lw-control-h-sm); }
+}
 .lw-nav-item:hover { background: var(--lw-bg-muted); color: var(--lw-fg); }
 .lw-nav-item:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
 /* Active is a tint plus brand ink — not a left accent bar, which is the one

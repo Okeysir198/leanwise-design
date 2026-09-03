@@ -19,15 +19,29 @@ function Drawer({
   closeLabel = "Close",
   className,
   children,
+  onCloseAutoFocus: userCloseAutoFocus,
   ...rest
 }) {
   const layer = useLayer();
   const [fromEl, setFromEl] = React.useState(null);
+  const openerRef = React.useRef(null);
   const w = width == null || width === "" ? null : /^\d+(\.\d+)?$/.test(String(width)) ? String(width) + "px" : String(width);
   React.useLayoutEffect(() => {
-    if (open) setFromEl(typeof document !== "undefined" ? document.activeElement : null);
-    else setFromEl(null);
+    if (open) {
+      const el = typeof document !== "undefined" ? document.activeElement : null;
+      openerRef.current = el;
+      setFromEl(el);
+    } else setFromEl(null);
   }, [open]);
+  const onCloseAutoFocus = (e) => {
+    if (userCloseAutoFocus) userCloseAutoFocus(e);
+    if (e.defaultPrevented) return;
+    const el = openerRef.current;
+    if (el && typeof el.focus === "function" && el.isConnected) {
+      e.preventDefault();
+      el.focus();
+    }
+  };
   const handleOpenChange = (next) => {
     onOpenChange && onOpenChange(next);
     if (!next && onClose) onClose();
@@ -40,6 +54,7 @@ function Drawer({
         RD.Content,
         {
           className: cx("lw-drawer", className),
+          onCloseAutoFocus,
           "data-side": side,
           tabIndex: -1,
           style: w ? { "--lw-drawer-w": w } : void 0,
@@ -47,7 +62,7 @@ function Drawer({
           children: [
             title ? /* @__PURE__ */ jsxs("div", { className: "lw-drawer-head", children: [
               /* @__PURE__ */ jsx(RD.Title, { className: "lw-drawer-title", children: title }),
-              /* @__PURE__ */ jsx(RD.Close, { asChild: true, children: /* @__PURE__ */ jsx("button", { type: "button", className: "lw-icon-btn", "aria-label": closeLabel, title: closeLabel, children: /* @__PURE__ */ jsx(Icon, { name: "close", size: 17 }) }) })
+              /* @__PURE__ */ jsx(RD.Close, { asChild: true, children: /* @__PURE__ */ jsx("button", { type: "button", className: "lw-icon-btn lw-hit", "aria-label": closeLabel, title: closeLabel, children: /* @__PURE__ */ jsx(Icon, { name: "close", size: 17 }) }) })
             ] }) : label != null && /* @__PURE__ */ jsx(RD.Title, { className: "lw-sr-only", children: label }),
             /* @__PURE__ */ jsxs("div", { className: "lw-drawer-body", children: [
               description && /* @__PURE__ */ jsx(RD.Description, { asChild: true, children: /* @__PURE__ */ jsx("div", { children: description }) }),

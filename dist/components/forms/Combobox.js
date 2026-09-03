@@ -106,6 +106,7 @@ const Combobox = React.forwardRef(function Combobox2({
             {
               type: "button",
               "aria-label": formatRemoveLabel(o.label),
+              disabled,
               onMouseDown: (e) => e.preventDefault(),
               onClick: () => remove(o.value),
               children: /* @__PURE__ */ jsx(Icon, { name: "close", size: 11 })

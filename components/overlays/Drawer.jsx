@@ -18,18 +18,31 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  */
 export function Drawer({
   open, onOpenChange, onClose, trigger, title, label, description, footer, side = "end", width,
-  closeLabel = "Close", className, children, ...rest
+  closeLabel = "Close", className, children, onCloseAutoFocus: userCloseAutoFocus, ...rest
 }) {
   const layer = useLayer();
   const [fromEl, setFromEl] = React.useState(null);
+  // The opener, kept until the NEXT open: state is cleared on close, but Radix asks
+  // where to send focus only when the content unmounts, after that.
+  const openerRef = React.useRef(null);
   // A unitless length makes the declaration invalid, which drops it silently and
   // shrink-wraps the panel — so a bare number, or a numeric string, means px.
   const w = width == null || width === "" ? null
     : /^\d+(\.\d+)?$/.test(String(width)) ? String(width) + "px" : String(width);
   React.useLayoutEffect(() => {
-    if (open) setFromEl(typeof document !== "undefined" ? document.activeElement : null);
+    if (open) { const el = typeof document !== "undefined" ? document.activeElement : null; openerRef.current = el; setFromEl(el); }
     else setFromEl(null);
   }, [open]);
+  // Radix Dialog returns focus to ITS Trigger on close — which a controlled panel
+  // (`open` + `onClose`, no `trigger`) never has, so focus fell to <body> and a
+  // keyboard user lost their place on every close. Send it back to the element
+  // that was focused when we opened; a caller's own `onCloseAutoFocus` wins.
+  const onCloseAutoFocus = (e) => {
+    if (userCloseAutoFocus) userCloseAutoFocus(e);
+    if (e.defaultPrevented) return;
+    const el = openerRef.current;
+    if (el && typeof el.focus === "function" && el.isConnected) { e.preventDefault(); el.focus(); }
+  };
   const handleOpenChange = (next) => {
     onOpenChange && onOpenChange(next);
     if (!next && onClose) onClose();
@@ -42,13 +55,13 @@ export function Drawer({
         <div>
           <Layer modal from={fromEl}>
             <RD.Overlay className="lw-backdrop" />
-            <RD.Content className={cx("lw-drawer", className)} data-side={side} tabIndex={-1}
+            <RD.Content className={cx("lw-drawer", className)} onCloseAutoFocus={onCloseAutoFocus} data-side={side} tabIndex={-1}
               style={w ? { "--lw-drawer-w": w } : undefined} {...rest}>
               {title ? (
                 <div className="lw-drawer-head">
                   <RD.Title className="lw-drawer-title">{title}</RD.Title>
                   <RD.Close asChild>
-                    <button type="button" className="lw-icon-btn" aria-label={closeLabel} title={closeLabel}>
+                    <button type="button" className="lw-icon-btn lw-hit" aria-label={closeLabel} title={closeLabel}>
                       <Icon name="close" size={17} />
                     </button>
                   </RD.Close>

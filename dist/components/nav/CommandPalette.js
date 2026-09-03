@@ -29,6 +29,7 @@ function CommandPalette({
   label = "Command palette",
   hints = ["\u2191\u2193 navigate", "\u21B5 run", "esc close"],
   className,
+  onCloseAutoFocus: userCloseAutoFocus,
   ...rest
 }) {
   const layer = useLayer();
@@ -36,17 +37,29 @@ function CommandPalette({
   const [q, setQ] = React.useState("");
   const [active, setActive] = React.useState(0);
   const [fromEl, setFromEl] = React.useState(null);
+  const openerRef = React.useRef(null);
   const uid = React.useId();
   React.useLayoutEffect(() => {
     if (open) {
       setQ("");
       setActive(0);
-      setFromEl(typeof document !== "undefined" ? document.activeElement : null);
+      const el = typeof document !== "undefined" ? document.activeElement : null;
+      openerRef.current = el;
+      setFromEl(el);
     } else setFromEl(null);
   }, [open]);
   const onOpenAutoFocus = (e) => {
     e.preventDefault();
     inputRef.current && inputRef.current.focus({ preventScroll: true });
+  };
+  const onCloseAutoFocus = (e) => {
+    if (userCloseAutoFocus) userCloseAutoFocus(e);
+    if (e.defaultPrevented) return;
+    const el = openerRef.current;
+    if (el && typeof el.focus === "function" && el.isConnected) {
+      e.preventDefault();
+      el.focus();
+    }
   };
   const handleOpenChange = (next) => {
     if (!next && onClose) onClose();
@@ -75,7 +88,7 @@ function CommandPalette({
   let lastGroup = null;
   return /* @__PURE__ */ jsx(RD.Root, { open: !!open, onOpenChange: handleOpenChange, modal: true, children: /* @__PURE__ */ jsx(RD.Portal, { container: layer ? layer.container : void 0, children: /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsxs(Layer, { modal: true, from: fromEl, children: [
     /* @__PURE__ */ jsx(RD.Overlay, { className: "lw-backdrop" }),
-    /* @__PURE__ */ jsxs(RD.Content, { className: cx("lw-cmdk", className), tabIndex: -1, onOpenAutoFocus, onKeyDown, ...rest, children: [
+    /* @__PURE__ */ jsxs(RD.Content, { className: cx("lw-cmdk", className), tabIndex: -1, onOpenAutoFocus, onCloseAutoFocus, onKeyDown, ...rest, children: [
       /* @__PURE__ */ jsx(RD.Title, { className: "lw-sr-only", children: label }),
       /* @__PURE__ */ jsxs("div", { className: "lw-cmdk-input", children: [
         /* @__PURE__ */ jsx(Icon, { name: "search", size: 17 }),

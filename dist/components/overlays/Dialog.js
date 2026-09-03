@@ -18,15 +18,29 @@ function Dialog({
   closeLabel = "Close",
   className,
   children,
+  onCloseAutoFocus: userCloseAutoFocus,
   ...rest
 }) {
   const layer = useLayer();
   const [fromEl, setFromEl] = React.useState(null);
+  const openerRef = React.useRef(null);
   const w = width == null || width === "" ? null : /^\d+(\.\d+)?$/.test(String(width)) ? String(width) + "px" : String(width);
   React.useLayoutEffect(() => {
-    if (open) setFromEl(typeof document !== "undefined" ? document.activeElement : null);
-    else setFromEl(null);
+    if (open) {
+      const el = typeof document !== "undefined" ? document.activeElement : null;
+      openerRef.current = el;
+      setFromEl(el);
+    } else setFromEl(null);
   }, [open]);
+  const onCloseAutoFocus = (e) => {
+    if (userCloseAutoFocus) userCloseAutoFocus(e);
+    if (e.defaultPrevented) return;
+    const el = openerRef.current;
+    if (el && typeof el.focus === "function" && el.isConnected) {
+      e.preventDefault();
+      el.focus();
+    }
+  };
   const handleOpenChange = (next) => {
     onOpenChange && onOpenChange(next);
     if (!next && onClose) onClose();
@@ -40,12 +54,13 @@ function Dialog({
         {
           className: cx("lw-dialog", className),
           tabIndex: -1,
+          onCloseAutoFocus,
           style: w ? { "--lw-dialog-w": w } : void 0,
           ...rest,
           children: [
             title ? /* @__PURE__ */ jsxs("div", { className: "lw-dialog-head", children: [
               /* @__PURE__ */ jsx(RD.Title, { className: "lw-dialog-title", children: title }),
-              /* @__PURE__ */ jsx(RD.Close, { asChild: true, children: /* @__PURE__ */ jsx("button", { type: "button", className: "lw-icon-btn lw-dialog-close", "aria-label": closeLabel, title: closeLabel, children: /* @__PURE__ */ jsx(Icon, { name: "close", size: 17 }) }) })
+              /* @__PURE__ */ jsx(RD.Close, { asChild: true, children: /* @__PURE__ */ jsx("button", { type: "button", className: "lw-icon-btn lw-dialog-close lw-hit", "aria-label": closeLabel, title: closeLabel, children: /* @__PURE__ */ jsx(Icon, { name: "close", size: 17 }) }) })
             ] }) : (
               /* Radix names the dialog from its Title and logs an error when
                  there is none — a nameless dialog is the defect, not the

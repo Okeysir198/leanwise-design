@@ -36,26 +36,39 @@ export function CommandPalette({
   open, onClose, commands = [], onRun, placeholder = "Type a command or search…",
   emptyText = "No matches", label = "Command palette",
   hints = ["\u2191\u2193 navigate", "\u21b5 run", "esc close"],
-  className, ...rest
+  className, onCloseAutoFocus: userCloseAutoFocus, ...rest
 }) {
   const layer = useLayer();
   const inputRef = React.useRef(null);
   const [q, setQ] = React.useState("");
   const [active, setActive] = React.useState(0);
   const [fromEl, setFromEl] = React.useState(null);
+  // The opener, kept until the NEXT open: state is cleared on close, but Radix asks
+  // where to send focus only when the content unmounts, after that.
+  const openerRef = React.useRef(null);
   const uid = React.useId();
 
   // The query resets on every open, so a palette never reopens on a stale
   // filter — the reader's intent is new each time they reach for it. `fromEl`
   // (the control that had focus) is what the layer mirrors its theme from.
   React.useLayoutEffect(() => {
-    if (open) { setQ(""); setActive(0); setFromEl(typeof document !== "undefined" ? document.activeElement : null); }
+    if (open) { setQ(""); setActive(0); const el = typeof document !== "undefined" ? document.activeElement : null; openerRef.current = el; setFromEl(el); }
     else setFromEl(null);
   }, [open]);
 
   // Radix would focus the first tabbable on open, which is the input anyway;
   // stated explicitly so a future icon button ahead of it cannot steal it.
   const onOpenAutoFocus = (e) => { e.preventDefault(); inputRef.current && inputRef.current.focus({ preventScroll: true }); };
+  // Radix Dialog returns focus to ITS Trigger on close — which a controlled panel
+  // (`open` + `onClose`, no `trigger`) never has, so focus fell to <body> and a
+  // keyboard user lost their place on every close. Send it back to the element
+  // that was focused when we opened; a caller's own `onCloseAutoFocus` wins.
+  const onCloseAutoFocus = (e) => {
+    if (userCloseAutoFocus) userCloseAutoFocus(e);
+    if (e.defaultPrevented) return;
+    const el = openerRef.current;
+    if (el && typeof el.focus === "function" && el.isConnected) { e.preventDefault(); el.focus(); }
+  };
   const handleOpenChange = (next) => { if (!next && onClose) onClose(); };
 
   /* No empty-query special case: score() returns 0 for one, so every visible row
@@ -87,7 +100,7 @@ export function CommandPalette({
         <div>
           <Layer modal from={fromEl}>
             <RD.Overlay className="lw-backdrop" />
-            <RD.Content className={cx("lw-cmdk", className)} tabIndex={-1} onOpenAutoFocus={onOpenAutoFocus} onKeyDown={onKeyDown} {...rest}>
+            <RD.Content className={cx("lw-cmdk", className)} tabIndex={-1} onOpenAutoFocus={onOpenAutoFocus} onCloseAutoFocus={onCloseAutoFocus} onKeyDown={onKeyDown} {...rest}>
       {/* The dialog's accessible name; the input carries the same label. */}
       <RD.Title className="lw-sr-only">{label}</RD.Title>
       <div className="lw-cmdk-input">

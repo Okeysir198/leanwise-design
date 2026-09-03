@@ -1207,6 +1207,7 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
      height written on the control would outrank the token the touch block already
      lifted. Only what has no token left stays. */
   .lw-segmented button { padding: 10px 14px; min-height: var(--lw-control-h-sm); }
+  .lw-tabs [role="tab"] { min-height: var(--lw-control-h-sm); } /* measured 43px: 1px under the floor */
   /* ^ the token is 44px under a coarse pointer; a 12.5px label with 10px padding is
      33px, and the first v2 consumer measured its language toggles at 29px. */
 }

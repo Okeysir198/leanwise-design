@@ -24,6 +24,23 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 ## [Unreleased]
 
+## [2.1.3] — 2026-09-04
+
+### Fixed
+
+- **Dialog, Drawer and CommandPalette return focus to their opener on close.** Radix
+  Dialog sends focus to its own `Trigger`, which a controlled panel (`open` + `onClose`,
+  no `trigger`) never has — so focus fell to `<body>` on every Escape and every close
+  button, and a keyboard user lost their place each time. The element focused at open,
+  already captured for the theme mirror, now receives focus back; a caller's own
+  `onCloseAutoFocus` still wins. Found by the first v2 consumer's QA pass on every
+  console dialog.
+- **Overlay close buttons carry `.lw-hit`**, so they meet the 44px floor on touch.
+- **`.lw-tabs [role="tab"]` and `.lw-nav-item` reach the coarse-pointer floor** (43px and
+  37px measured on a tablet).
+- **A disabled `Combobox` disables its token-remove buttons** — they were focusable,
+  16×16, and did nothing.
+
 ## [2.1.2] — 2026-09-04
 
 ### Fixed
