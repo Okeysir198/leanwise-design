@@ -59,7 +59,16 @@ for (const m of js.matchAll(/export\s*\{([^}]*)\}\s*from\s*"([^"]+)"/g)) {
   for (const n of names) if (!have.has(n)) problems.push(`${spec.replace(/\.jsx$/, "")}.d.ts does not declare ${n}`);
   // Re-export the Props types alongside their component: a consumer typing a
   // wrapper needs ButtonProps, and it is free to carry here.
-  const props = names.map((n) => n + "Props").filter((p) => have.has(p));
+  //
+  // And the ITEM shapes, which matter more. A consumer does not merely type a
+  // wrapper — it CONSTRUCTS the array these components take, and `SidebarItem`,
+  // `MenuItem`, `Crumb`, `Step` and the rest were declared, used in the props,
+  // and reachable from nowhere. So `items={[...]}` could not be annotated, hoisted
+  // into a helper, or built in a function with a return type — the exact places
+  // an app puts its navigation. Found adopting `Sidebar` in leanwise-inspect.
+  const items = names.flatMap((n) => [n + "Item", n === "Breadcrumbs" ? "Crumb" : null])
+    .filter((x) => x && have.has(x));
+  const props = [...names.map((n) => n + "Props").filter((p) => have.has(p)), ...items];
   groups.push({ names, props, path: spec.replace(/\.jsx$/, "") });
 }
 

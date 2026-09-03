@@ -22,6 +22,22 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 ## [Unreleased]
 
+## [1.10.1] — 2026-09-03
+
+### Fixed — the item shapes were declared, used, and exported from nowhere
+
+`react.d.ts` re-exported every `*Props` type and none of the ITEM types. But a
+consumer does not merely type a wrapper — it CONSTRUCTS the arrays these
+components take. `SidebarItem`, `MenuItem`, `BottomNavItem`, `Crumb`, `Step` and
+the rest were declared in their own `.d.ts`, named in the props, and reachable
+from the barrel by nothing.
+
+So `items={[...]}` could not be annotated, hoisted into a constant, or built by a
+function with a return type — which is exactly what an app does with its
+navigation, and exactly where the types would have earned their keep. Found
+adopting `Sidebar` in `leanwise-inspect`: the first line of the adoption was
+`import type { SidebarItem }` and it did not resolve.
+
 ## [1.10.0] — 2026-09-03
 
 ### Added — the auth screen this package had only ever DRAWN
