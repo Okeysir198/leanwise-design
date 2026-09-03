@@ -17,6 +17,18 @@ export interface DialogProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 
   /** The raw Radix signal, both directions. `onClose` is `onOpenChange(false)`. */
   onOpenChange?: (open: boolean) => void;
   /**
+   * Radix's focus and dismissal hooks, passed through to the panel. Each receives the
+   * primitive's event; `event.preventDefault()` cancels the default. `onOpenAutoFocus`:
+   * the panel is about to focus its first focusable — cancel it to put focus on a
+   * search box instead. `onCloseAutoFocus`: focus is about to return to the trigger —
+   * cancel it when the caller moves focus itself (a picked value, a next step).
+   * `onInteractOutside` / `onEscapeKeyDown`: cancel to keep the panel open.
+   */
+  onOpenAutoFocus?: (event: Event) => void;
+  onCloseAutoFocus?: (event: Event) => void;
+  onEscapeKeyDown?: (event: KeyboardEvent) => void;
+  onInteractOutside?: (event: Event) => void;
+  /**
    * An optional opener, cloned with the trigger wiring (`aria-haspopup`,
    * `aria-expanded`, `aria-controls`, the click). Must forward its ref —
    * every system Button does. Leave it out and drive `open` yourself.

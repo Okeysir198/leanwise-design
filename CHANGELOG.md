@@ -24,6 +24,16 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 ## [Unreleased]
 
+## [2.1.1] — 2026-09-04
+
+### Fixed
+
+- **`Dialog` and `Drawer` now declare Radix's `onOpenAutoFocus`, `onCloseAutoFocus`,
+  `onEscapeKeyDown` and `onInteractOutside`.** The runtime always passed them through
+  (`...rest` lands on the panel), but the types did not say so, and a consumer whose
+  search sheet must focus its input on open had no typed way to cancel Radix's default —
+  the first v2 consumer (leanwise-inspect) hit it on day one.
+
 ## [2.1.0] — 2026-09-04
 
 ### Added
