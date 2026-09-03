@@ -3,8 +3,8 @@
 All notable changes to `@leanwise/design`. The format is
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); the versioning is semver.
 
-**Deprecation policy.** A component, class or token that is going away is warned for one
-MINOR and removed in the next MAJOR. Nothing is deleted outright — **v1.1.0** removed
+**Deprecation policy: warned one minor, removed the next major.** A component, prop, class
+or token that is going away is warned for at least one MINOR and removed in the next MAJOR. Nothing is deleted outright — **v1.1.0** removed
 `.lw-theme-toggle` and `.lw-code-tabs` without a cycle, which was survivable at one consumer
 and would not be at five. (The CSS comments say "deleted in v1.0"; that is the design
 project's own numbering. No `v1.0.x` tag exists in this repository — the tag list goes
@@ -23,6 +23,185 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 `package.json` that reports the wrong version.
 
 ## [Unreleased]
+
+### 2.0.0 — the overlays move to Radix, and everything 1.13 warned about is removed
+
+The first major since the v1.1.0 replacement. Every floating and modal surface now rides a
+Radix primitive behind the same `.lw-*` CSS; the shims, aliases and tokens deprecated in
+1.13.0 are gone; two long-standing REVIEW items (the `Button` submit default, the band-dark
+ink override) are resolved the way they said they would be. No consumer is on a pin this
+release touches yet — the migration notes below are what a bump reads.
+
+### Breaking
+
+- **`radix-ui` is a dependency.** The unified `radix-ui@^1.6` package (one install, tree-shaken
+  by the consumer's bundler); `react`/`react-dom` stay peers. A consumer that vendors its own
+  `@radix-ui/react-*` copies keeps them — the two do not collide.
+- **The DOM of every overlay changed.** Each surface renders through a portal into
+  `.lw-layer` / `.lw-layer-modal` instead of the native top layer. Selectors a consumer may
+  have written against the old markup, verbatim old → new:
+  - `.lw-dialog[open]` → `.lw-dialog[data-state="open"]`
+  - `.lw-dialog::backdrop` → `.lw-backdrop` (a real element, a sibling of the dialog inside the
+    portal layer)
+  - `.lw-popover:popover-open` → `.lw-popover[data-state="open"]`
+  - `.lw-menu-item[data-checked]` → `.lw-menu-item[data-state="checked"]`
+  - `.lw-drawer[open]` → `.lw-drawer[data-state="open"]`
+  - the top layer → a portal at `--lw-z-modal` (110) for modals, `--lw-z-overlay` for the rest.
+    **A consumer z-index above 110 now paints over an open modal**; the native top layer beat
+    every z-index, so nothing in a consumer has had to respect the scale until now.
+- **Modals lock scroll and close on outside click.** `Dialog`, `Drawer` and `CommandPalette`
+  lock the body while open (with scrollbar-gutter compensation) and dismiss on a click outside
+  as well as on Escape. Through v1.x `showModal()` left the page scrollable behind the scrim and
+  outside click did nothing.
+- **`Tooltip` children must forward refs.** Radix anchors to the child's DOM node, so
+  `<Tooltip tip="…"><MyIconButton/></Tooltip>` needs `MyIconButton` to be a `forwardRef`
+  component (`Button` and `Layer` are, since the foundation commit). A plain function component
+  child renders the tooltip on nothing. Tooltip also needs an `OverlayProvider` above it.
+- **`Drawer` and `CommandPalette` rest props are `HTMLAttributes<HTMLDivElement>`** (they were
+  typed against `HTMLDialogElement`): the element is a `<div role="dialog">` now. `Dialog`
+  likewise. `onClose` still fires; `onOpenChange` is the two-way form.
+- **`Button` defaults to `type="button"`** (REVIEW open 9; the house rule `Card`, `SourceChip`
+  and `NavItem` already followed). A `<form onSubmit>` whose submit control is a `<Button>` must
+  say `type="submit"`, or Enter still submits but the click does nothing. Migration grep below.
+- **Removed** — the whole 1.13.0 Deprecated list and the shims (see Removed).
+- **Ambient motion is paused by default.** `--lw-ambient-play: paused` at `:root`;
+  `data-ambient="on"` on any ancestor runs the loops, `data-ambient="off"` still parks a subtree.
+  Frame 0 is the resting frame of every loop, so a page that never opted in paints exactly what
+  it painted at t=0 — 0 px of drift expected in `check:visual`. `MarketingLanding` dropped its
+  now-redundant `data-ambient="off"`.
+- **Dark-band ink is the token band's `--lw-fg`** (REVIEW open 10). `product.css` no longer
+  writes `.lw-band-dark, [data-band="dark"] { color: var(--lw-on-dark-2) }`, so a dark band
+  renders the same ink whether or not the app layer is loaded: **9.42:1 → 15.78:1** on every
+  `.lw-band-dark` / `[data-band="dark"]` in an app. Intended, visual, and the entire remaining
+  delta REVIEW measured on `site-chrome.card` in 1.3.1.
+- **`.lw-btn-lg` reads `--lw-text-body`** (16px) now that `--lw-text-base` (15px) is gone — a 1px
+  change on the large button's label.
+
+### Added
+
+- **`OverlayProvider`** — the portal root every Radix-backed overlay renders into, plus the shared
+  tooltip delay budget. One per app or per themed island, INSIDE the element carrying
+  `brandVars()` / `.dark`; the portal layer mirrors the opener's theme and band scope onto
+  itself (`components/overlays/_layer.js`), so a dialog opened from a `.lw-band-dark` card is
+  dark.
+- **`Dialog`**: `trigger` (a `forwardRef` element, `asChild`), `onOpenChange`, `label`
+  (the accessible name when there is no visible `title` — `check:a11y` now runs axe's
+  `aria-dialog-name` rule, and an unnamed dialog is a failure).
+- **`Popover`**: `anchor` (the trigger owns its own ARIA — replaces `triggerAria={false}`),
+  `autoFocus`, `container`. Collision handling flips and shifts on every side; the 190-line
+  `place()` engine is deleted.
+- **`Tooltip`**: `side`, `open` / `defaultOpen` / `onOpenChange`, `delayDuration`; a real
+  `role="tooltip"` wired through `aria-describedby`, Escape-dismissable, on touch.
+- **`Menu`**: `open` / `defaultOpen` / `onOpenChange`; typeahead, roving focus and
+  `menuitemcheckbox` rows by Radix DropdownMenu.
+- **Four open-state specimen cards** — `Dialog-open`, `Menu-open`, `Tooltip` and the overlays
+  composition — so the browser gates measure an OPEN overlay for the first time.
+- **`check:a11y` runs `aria-dialog-name`** on top of the WCAG tag set.
+- **`check:registry` asserts every `lw-*` class a registry wrapper names exists** in
+  `base.css` + `product.css`; `dialog`, `tabs` and `switch` are thin wrappers over the DS CSS.
+- **`forwardRef` on `Button` and `Layer`.**
+- **`check:bundle` pins the vendored Radix version** in the bundle header (`inlinedExternals`)
+  and fails when `node_modules/radix-ui` moves; `tools/_jsx-shim.mjs` is a real
+  createElement-backed `jsx`/`jsxs`/`jsxDEV` (unit-tested — the old one-liner made every Radix
+  component throw). `check:rsc` treats a `radix-ui` import as a client signal.
+
+### Kept native, and why
+
+`Select`, `Switch`, `Checkbox`, `Segmented`, `Toast`, `NavToggle`, `Disclosure` and `NavMenu`
+stay on the platform element. A native `<select>` is the right control on every phone, the
+form controls submit and validate without JavaScript, `Toast` is a live region (not a
+floating surface — nothing to position or trap), and the two nav disclosures are
+`<details>`/`<button aria-expanded>` so a server-rendered header works with scripts off.
+Radix earns its place where the platform has no answer: positioning, focus management,
+scroll lock and a described tooltip.
+
+### Deprecated — removed in v3.0.0
+
+- `.lw-tip` / `[data-tip]` CSS in `product.css` — the vanilla tooltip whose text assistive
+  technology never heard. `Tooltip` no longer renders it.
+- `.lw-popover-anchor` — a no-op tombstone; the React Popover no longer wraps its trigger.
+- `Popover.triggerAria` — ignored, warns once; pass `anchor`.
+- **Twenty-six components no consumer imports** are marked `@deprecated` in their `.d.ts`
+  (no runtime warning): `CardFoot`, `Page`, `InputGroup`, `PasswordMeter`, `Calendar`,
+  `DatePicker`, `Stepper`, `RichText`, `CodeBlock`, `FilterBar`, `Toolbar`, `BarChart`,
+  `LineChart`, `NavItem`, `CommandPalette`, `PromptInput`, `Message`, `SourceChip`,
+  `SourceList`, `ConfidenceMeter`, `AgentTrace`, `ToolCall`, `DiffReview`, `Artifact`,
+  `Feedback`, `AnnounceBar`. Measured by grepping the eight consumer trees at v1.13.0; they
+  are candidates for removal in v3.0, and adopting one is a matter of saying so in an issue.
+  README §Components marks the rows.
+
+### Removed
+
+- `lw.css` and `app.css`, the `@import` shims for the pre-1.2 two-layer names, with their
+  `exports` / `files` entries; `lw-templates` rule (b), which existed only to catch them.
+- The `./counter` export alias (`animateCounter` lives in `./hooks`).
+- Tokens: `--lw-duration-fast` / `--lw-duration` / `--lw-duration-slow`; `--lw-fg-ghost`;
+  `--lw-mobile-bar-h`; `--lw-text-base`; and the twenty-one bespoke `--lw-dur-<effect>` names.
+  Every use in the layers now reads a tier — the re-point, with the value each effect had and
+  has:
+
+  | old name | now reads | was → is |
+  |---|---|---|
+  | `-press` | `--lw-dur-xs` | 60ms → 100ms |
+  | `-vt-old` | `--lw-dur-sm` | 160 → 180ms |
+  | `-vt-new` | `--lw-dur-md` | 220 → 300ms |
+  | `-shine`, `-spin` | `--lw-dur-xl` | 700 → 800ms |
+  | `-caret`, `-caret-stream`, `-dash` | `--lw-dur-loop-fast` | 1.1s / 1s / 1.2s → 1.1s |
+  | `-shimmer`, `-tool`, `-trace`, `-pulse` | `--lw-dur-loop` | 1.4 / 1.4 / 1.6 / 1.8s → 1.5s |
+  | `-spin-slow` | `--lw-dur-loop-slow` | 2.4s → 2.4s |
+  | `-breathe`, `-ground`, `-aurora-a` | `--lw-dur-ambient` | 24 / 26 / 26s → 24s |
+  | `-sheen` | `calc(var(--lw-dur-ambient) * .8)` | 19s → 19.2s |
+  | `-comb` | `calc(var(--lw-dur-ambient) / 2)` | 14s → 12s |
+  | `-wash`, `-aurora-b` | `calc(var(--lw-dur-ambient) * 1.25)` | 32s → 30s |
+  | `-marquee` | `--lw-dur-ambient-slow` | 40s → 40s |
+
+  Every one of these is a tempo, not a frame: no still render changes, and the ambient rows
+  are paused by default anyway. `check:tokens`'s `raw-duration` rule strips `var(…)` before it
+  looks for a literal, so the `calc()` forms pass as token-built.
+- `ArticleCard.readMinutes` (deprecated 1.3.1; pass `readTime`).
+- The `.lw-band-dark` / `[data-band="dark"]` `color` override in `product.css` (see Breaking).
+- `.lw-editor-body`'s duplicated type rules: `RichText` emits `className="lw-prose
+  lw-editor-body"` and the class keeps only its editor delta — box, caret, placeholder, and
+  `--lw-prose-max: none` so the surface fills its frame (REVIEW open 5, done in one commit with
+  the bundle). Visible on the `RichText` specimen: h2 at the h2 step, block rhythm on
+  `--lw-space-20`, line-height `--lw-lh-relaxed`.
+
+### Fixed
+
+- `Tabs` overrides `aria-controls` so a tab without a panel does not point at a phantom id — an
+  axe critical, provoked by the open-state cards and fixed.
+- `Tooltip` is read by assistive technology (advisory `tooltip-invisible-to-assistive-tech`);
+  `Popover` flips on the inline axis (`popover-no-horizontal-flip`); modals lock scroll
+  (`modal-no-scroll-lock`). All three `fixedIn: 2.0.0`, counts derived by `lw-doctor`.
+
+### Migration — per consumer, what to grep
+
+Measured on 2026-09-04 against every tree on the box (the eight pins: `leanwise-ai` 1.7.1,
+`leanwise-inspect` 1.12.0, `4DXs_plan` 1.7.1, `P20251121-tss-app` ×2 1.7.1, `P20260806-sop`
+1.7.1, `P20260707-vss` 0.2.3, `P20260706-rag-service` 0.2.2). Exclude `node_modules`, `dist`,
+`.next`, `.open-next`, `build`.
+
+1. **Submit buttons** — `grep -rn -E '<form[^>]*onSubmit' -A40 src | grep -E '<Button' | grep -v 'type='`,
+   then read each form. Found today: **1** — `leanwise-ai/src/components/contact-form.tsx:212`
+   `<Button variant="cta" loading={sending}>` needs `type="submit"`. `leanwise-inspect` (four
+   forms, all typed) and `4DXs_plan` (submit lives outside the `<form>`) are clean.
+2. **Tooltip from this package** — `grep -rn -E '<Tooltip[ >]'` cross-checked against the import:
+   **0 sites** in every consumer (tss-app's 55 are its own shadcn copy). Any new adoption needs
+   an `OverlayProvider` and a ref-forwarding child.
+3. **Shims and the alias** — `grep -rn -E '@leanwise/design/(lw\.css|app\.css|counter)'`:
+   **0 in every consumer.**
+4. **Removed tokens** — `grep -rn -E -- '--lw-duration|--lw-fg-ghost|--lw-mobile-bar-h|--lw-text-base|--lw-dur-(press|vt-old|vt-new|shine|spin|spin-slow|caret|caret-stream|dash|shimmer|tool|trace|pulse|breathe|ground|aurora-a|aurora-b|sheen|comb|wash|marquee)\b'`:
+   **0** CSS uses. One Tailwind class, `duration-fast`, in `P20260707-vss/.../Chat.tsx:241` —
+   still registered (it reads `--lw-dur-xs` now), so nothing to do.
+5. **Overlay selectors** — `grep -rn -E '\.lw-dialog\[open\]|::backdrop|:popover-open|\[data-checked\]|\.lw-drawer\[open\]|data-tip|\.lw-tip|\.lw-popover-anchor|triggerAria'`:
+   **0 in every consumer.** `leanwise-ai`'s 31 `readMinutes` hits are its own blog field, already
+   formatted into `readTime`.
+6. **Overlay consumers** — `Dialog` (leanwise-ai ×2, leanwise-inspect ×12, 4DXs_plan ×1),
+   `Drawer` (inspect ×3, 4DXs ×1), `Menu` (inspect ×1), `Tabs` (leanwise-ai ×1, 4DXs ×1): each
+   needs an `OverlayProvider` near the app root, and a z-index audit for anything above 110.
+7. **Ambient** — a marketing page that wants the ground to drift writes `data-ambient="on"`
+   on `<html>` or the page ground. `leanwise-ai` and `4DXs_plan` load `marketing.css`.
+
 
 ## [1.13.0] — 2026-09-04
 

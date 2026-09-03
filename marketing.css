@@ -133,8 +133,11 @@
 
 /* Ground motion (v0.6.0). Ambient by exception, same terms as the rest of this
    file's motion: it is the BACKGROUND only, nothing under the reader's eye
-   moves, and all of it stands down under prefers-reduced-motion — or under
-   `data-ambient="off"` on any ancestor, which pauses every loop at frame 0.
+   moves, and all of it stands down under prefers-reduced-motion. Since v2.0.0
+   it is OFF by default: `--lw-ambient-play` is `paused` at :root, and
+   `data-ambient="on"` on any ancestor runs the loops; `data-ambient="off"`
+   parks a subtree again. Frame 0 is the resting frame of every loop, so a
+   paused ground paints exactly what a running one paints at t=0.
 
    Three layers, and every one animates ONLY transform or opacity, so none of
    them repaints — they run on the compositor:
@@ -178,7 +181,7 @@
     radial-gradient(52rem 30rem at 84% -3rem, var(--lw-ground-glow-1), transparent 66%),
     radial-gradient(76rem 48rem at 20% -4rem, var(--lw-ground-glow-2), transparent 72%),
     radial-gradient(40rem 40rem at -6% 46%, var(--lw-ground-glow-3), transparent 70%);
-  animation: lwGroundDrift var(--lw-dur-ground) var(--lw-ease-in-out) infinite alternate;
+  animation: lwGroundDrift var(--lw-dur-ambient) var(--lw-ease-in-out) infinite alternate;
   animation-play-state: var(--lw-ambient-play);
 }
 :is(.lw-page-dark, .lw-page-light, .lw-page-ground)::after {
@@ -188,7 +191,7 @@
   background-size: 132px 76.2px;
   mask-image: radial-gradient(50rem 38rem at 2% 4%, #000 6%, transparent 80%);
   opacity: var(--lw-ground-alpha);
-  animation: var(--lw-ground-comb) var(--lw-dur-comb) var(--lw-ease-in-out) infinite alternate;
+  animation: var(--lw-ground-comb) calc(var(--lw-dur-ambient) / 2) var(--lw-ease-in-out) infinite alternate;
   animation-play-state: var(--lw-ambient-play);
 }
 .lw-page-light::after, .lw-page-ground::after { background-image: url("assets/hex-lattice-ink.svg"); }
@@ -211,7 +214,7 @@
   border-radius: 50%;
   filter: blur(40px);
   background: radial-gradient(closest-side, var(--lw-ground-sheen), transparent 100%);
-  animation: lwSheen var(--lw-dur-sheen) var(--lw-ease-in-out) infinite alternate;
+  animation: lwSheen calc(var(--lw-dur-ambient) * .8) var(--lw-ease-in-out) infinite alternate;
   animation-play-state: var(--lw-ambient-play);
 }
 :is(.lw-page-dark, .lw-page-light, .lw-page-ground) .lw-hero-dark::after {
@@ -228,7 +231,7 @@
   /* Opacity high enough that the mark's navy->cyan run is actually legible as
      a gradient — below ~0.45 on either ground it flattens to one wash. */
   opacity: var(--lw-ground-mark-alpha);
-  animation: lwMarkBreathe var(--lw-dur-breathe) var(--lw-ease-in-out) infinite alternate;
+  animation: lwMarkBreathe var(--lw-dur-ambient) var(--lw-ease-in-out) infinite alternate;
   animation-play-state: var(--lw-ambient-play);
 }
 /* The mark's gradient is re-ranged per ground: hero-mark.svg lifts the stops so
@@ -266,6 +269,10 @@
   :is(.lw-page-dark, .lw-page-light, .lw-page-ground) .lw-hero-dark::after { animation: none; }
   :is(.lw-page-dark, .lw-page-light, .lw-page-ground) .lw-hero-dark::before { display: none; }
 }
+/* The ambient switch (v1.13.0; default flipped to paused in v2.0.0). Both
+   arms declare ONE custom property and no paint, so neither can beat a
+   utility — they are on lw-presence's LAYER_PURITY_EXEMPT list by name. */
+[data-ambient="on"] { --lw-ambient-play: running; }
 [data-ambient="off"] { --lw-ambient-play: paused; }
 [data-ambient="off"] :is(.lw-page-dark, .lw-page-light, .lw-page-ground) .lw-hero-dark::before { display: none; }
 
@@ -540,7 +547,7 @@
   flex: 0 0 auto;
   gap: var(--lw-space-48);
   padding-inline-end: var(--lw-space-48);
-  animation: lwMarquee var(--lw-dur-marquee) linear infinite;
+  animation: lwMarquee var(--lw-dur-ambient-slow) linear infinite;
 }
 @keyframes lwMarquee {
   from { transform: translateX(0); }
@@ -695,7 +702,8 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 
 /* Animated count-up stat (v0.3.0). Extends the .lw-stat number look. The
    CONTRACT: markup ships the FINAL value (SSR-safe, JS-free correct); the
-   `animateCounter` helper (@leanwise/design/counter) reads data-target and
+   `animateCounter` helper (@leanwise/design/hooks; the `./counter` alias was
+   removed in v2.0.0) reads data-target and
    animates from 0 only when invoked and reduced motion is not requested. */
 .lw-counter {
   font-family: var(--lw-font-mono);
@@ -850,7 +858,7 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
   pointer-events: none;
 }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .lw-shine:hover::after { animation: lwShine var(--lw-dur-shine) var(--lw-ease-out); }
+  .lw-shine:hover::after { animation: lwShine var(--lw-dur-xl) var(--lw-ease-out); }
 }
 @keyframes lwShine { to { left: 120%; } }
 
@@ -878,8 +886,8 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 }
 .lw-aurora > * { position: relative; z-index: var(--lw-z-raised); }
 @media (prefers-reduced-motion: no-preference) {
-  .lw-aurora::before { animation: lwAuroraA var(--lw-dur-aurora-a) ease-in-out infinite alternate; animation-play-state: var(--lw-ambient-play); }
-  .lw-aurora::after { animation: lwAuroraB var(--lw-dur-aurora-b) ease-in-out infinite alternate; animation-play-state: var(--lw-ambient-play); }
+  .lw-aurora::before { animation: lwAuroraA var(--lw-dur-ambient) ease-in-out infinite alternate; animation-play-state: var(--lw-ambient-play); }
+  .lw-aurora::after { animation: lwAuroraB calc(var(--lw-dur-ambient) * 1.25) ease-in-out infinite alternate; animation-play-state: var(--lw-ambient-play); }
 }
 @keyframes lwAuroraA {
   from { transform: translate3d(0, 0, 0) scale(1); }
@@ -908,8 +916,8 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 /* Cross-document/page fade for the View Transitions API. The consumer opts the
    router in; this only shapes the default snapshot animation. */
 @media (prefers-reduced-motion: no-preference) {
-  ::view-transition-old(root) { animation-duration: var(--lw-dur-vt-old); }
-  ::view-transition-new(root) { animation-duration: var(--lw-dur-vt-new); }
+  ::view-transition-old(root) { animation-duration: var(--lw-dur-sm); }
+  ::view-transition-new(root) { animation-duration: var(--lw-dur-md); }
 }
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-old(root),

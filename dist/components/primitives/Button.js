@@ -9,7 +9,7 @@ const Button = React.forwardRef(function Button2({
   loading = false,
   disabled = false,
   as,
-  type,
+  type = "button",
   className,
   onClick,
   children,

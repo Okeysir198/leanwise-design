@@ -1,7 +1,6 @@
 import { jsx, jsxs } from "react/jsx-runtime";
 import { Card, CardHead, CardTitle, CardBody, CardFoot } from "../primitives/Card.js";
 import { Byline } from "./Byline.js";
-import { deprecate } from "../_deprecate.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
 function ArticleCard({
   title,
@@ -15,18 +14,12 @@ function ArticleCard({
   dateTime,
   avatar,
   readTime,
-  readMinutes,
   cover,
   linkAs = "a",
   className,
   ...rest
 }) {
-  if (readMinutes != null) deprecate(
-    "ArticleCard",
-    "readMinutes",
-    "`readMinutes` is deprecated \u2014 pass `readTime` as a pre-formatted node (e.g. `${n} min read`, or its translation), because a component library cannot hold display text. `readMinutes` is removed in v2.0.0."
-  );
-  const read = readTime != null ? readTime : readMinutes != null ? readMinutes + " min read" : null;
+  const read = readTime != null ? readTime : null;
   return /* @__PURE__ */ jsxs(
     Card,
     {

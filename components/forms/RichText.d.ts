@@ -39,8 +39,11 @@ export interface RichTextProps extends Omit<React.HTMLAttributes<HTMLDivElement>
  * engine is `contenteditable` + `execCommand`, which is a demonstrable shim,
  * not the plan: swap the surface and the toolbar does not change.
  */
-/** forwardRef since v1.2 — the ref reaches the contenteditable surface, so react-hook-form's
- *  register(), a Controller's field.ref and .focus()-on-error all work. */
+/**
+ * forwardRef since v1.2 — the ref reaches the contenteditable surface, so react-hook-form's
+ * register(), a Controller's field.ref and .focus()-on-error all work.
+ * @deprecated Unused by any consumer as of v2.0; candidate for removal in v3.0 — say so in an issue if you adopt it.
+ */
 export declare const RichText: React.ForwardRefExoticComponent<
   RichTextProps & React.RefAttributes<HTMLDivElement>
 >;

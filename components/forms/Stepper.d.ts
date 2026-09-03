@@ -19,5 +19,8 @@ export interface StepperProps extends React.HTMLAttributes<HTMLDivElement> {
   /** The `.lw-sr-only` state word per step — the marker's shape is the sighted half. */
   stateLabels?: Partial<Record<"done" | "current" | "upcoming" | "error", string>>;
 }
-/** Wizard progress. The marker carries the state, so it survives greyscale. */
+/**
+ * Wizard progress. The marker carries the state, so it survives greyscale.
+ * @deprecated Unused by any consumer as of v2.0; candidate for removal in v3.0 — say so in an issue if you adopt it.
+ */
 export declare function Stepper(props: StepperProps): React.JSX.Element;

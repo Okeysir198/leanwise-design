@@ -188,7 +188,7 @@ class Component extends DCLogic {
         icon: failed ? "x-circle" : done ? "check" : running ? "retry" : "clock",
         tone: failed ? "danger" : done ? "success" : running ? "brand" : "neutral",
         statusLabel: failed ? "Failed" : done ? "Ready" : running ? "Running" : "Queued",
-        // No colours here: the row carries data-status and app.css owns the tints,
+        // No colours here: the row carries data-status and product.css owns the tints,
         // so they re-point on the dark ground without this class knowing about it.
         // A failure states the row and the reason. "Export failed" sends the user
         // back to rebuild a request they cannot see was fine.

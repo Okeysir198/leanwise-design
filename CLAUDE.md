@@ -90,8 +90,6 @@ marketing.css     grounds + hero + site chrome (footer, announce, plans, matrix,
 reset.css         the nine bare-element rules. Vanilla consumers want it; Tailwind apps
                     must NOT import it (preflight covers the useful half; the rest is the
                     half that beats every utility).
-lw.css / app.css  @import SHIMS kept for one major. Do NOT load them alongside the real
-                    layers — you get the rules twice.
 email.css         literal hex + table layout on purpose: mail clients have no custom properties.
                     That makes it a SECOND HOME for palette values, so the contrast gate
                     asserts its literals against tokens.css — six had drifted, including the
@@ -103,6 +101,14 @@ brand.js hooks.js runtime per-tenant theming; the hooks the components share.
 tailwind-preset.cjs  registers cta/success/warning/brand/navy as REAL utilities so nobody
                     reaches for the bg-[hsl(var(--x))] escape hatch.
 components/       ai data forms layout marketing nav overlays primitives —
+                    overlays/ is Radix-backed since v2.0.0: Dialog, Drawer, Popover, Menu,
+                    Tooltip (and nav/CommandPalette, nav/Tabs) import from the unified
+                    `radix-ui` package and render through `_layer.js` — a portal layer
+                    (`.lw-layer` / `.lw-layer-modal` + `.lw-backdrop`, product.css) that
+                    MIRRORS the opener's theme and band scope onto itself. `OverlayProvider`
+                    is the public root; one per app or per branded island, INSIDE the
+                    element carrying `.dark` / `brandVars()`. Styling still lives in the CSS
+                    layer; Radix supplies positioning, focus, scroll lock and ARIA only.
                     .jsx + .d.ts pairs, plus *.card.html preview cards. A card's script is
                     the <name>.card.jsx beside it, compiled by `npm run cards` (lw-cards.mjs)
                     to a committed <name>.card.js; `check:cards` fails when stale. That is
@@ -214,6 +220,12 @@ so `check:themes` fails when `tokens.json` does not match what `tokens.css` woul
   exists to demonstrate a failure (the neutrals card prints text-4's sub-AA ratio as the
   point of the row). Never exempt a whole card or a whole rule; the attribute is greppable
   so the exemptions stay countable. There is exactly one today.
+  **Since v2.0.0 it also runs axe's `aria-dialog-name` best-practice rule** — the one non-WCAG
+  rule enabled — because a Radix Dialog with neither `title` nor `label` is a `role="dialog"`
+  with no name, and the `incomplete` blind spot above is closed for DIALOGS ONLY: the four
+  open-state cards (`Dialog-open`, `Menu-open`, `Tooltip`, `overlays`) render each surface OPEN,
+  so axe scores the real portalled DOM rather than a closed trigger. A closed overlay is still
+  invisible to it; a card that mounts one closed measures nothing about it.
 
   **Its render guard was decoration until v1.3.0, and that cost two releases.** The guard
   was `document.body.innerText.trim().length > 0` — which every card satisfies from the
@@ -257,6 +269,16 @@ so `check:themes` fails when `tokens.json` does not match what `tokens.css` woul
   not a function` on every component, i.e. **every React specimen card blank from v1.2.0 to
   v1.3.0, with both browser gates green throughout.** If you touch that object, open a card
   in a browser and confirm a component paints — a green gate is not the check.
+
+  **Since v2.0.0 three more things are load-bearing here.** (1) `react/jsx-runtime` resolves to
+  `tools/_jsx-shim.mjs`, a createElement-backed `jsx`/`jsxs`/`jsxDEV` over `globalThis.React`
+  — the previous one-liner made every Radix component throw "jsx is not a function", and it is
+  unit-tested in `test/bundle-shim.test.mjs`. (2) `radix-ui` is INLINED into the bundle (it is
+  the one entry in `inlinedExternals`) and the header records the version read from
+  `node_modules/radix-ui/package.json`, so `check:bundle` fails when the lockfile moves Radix
+  without a rebuild; `node_modules` is kept out of the namespace partition, so no Radix export
+  can collide with a barrel name. (3) `lw-rsc` treats any `from "radix-ui"` import as a client
+  signal — every overlay is `"use client"` by that rule, not by a hand-kept list.
 - **`_cards.mjs`** — not a gate, but the list BOTH browser gates enumerate. They used to walk
   for `.html` files whose first 200 bytes contain `@dsCard`, which had two silent-pass holes:
   an empty result is a pass (`Promise.all([])` resolves, and the a11y gate prints "0 cards —
@@ -269,8 +291,8 @@ so `check:themes` fails when `tokens.json` does not match what `tokens.css` woul
   `templates/_shared/` — through v1.12 they were twelve byte-identical copies, "never hand-edit
   one copy" was undetectable, and the gate reported the ODD ONE OUT; since v1.13.0 there is one
   copy and the gate fails on any sibling a re-pull puts back; (b) no template loads the `lw.css`/`app.css` shims alongside the real layers
-  (it strips comments and script bodies first — three templates DISCUSS `app.css` in prose, and
-  a substring match that flags prose gets muted, which is worse than no gate); (c) `lang`, a
+  (REMOVED in v2.0.0 with the shims themselves — a `<link>` to a file that no longer exists is
+  a 404 the browser gates see; the lettering is kept so older entries still read); (c) `lang`, a
   main landmark, and a skip link whose target actually exists. It found four real gaps the
   moment it ran: `ai-app-shell` and `docs-page` had a `<main>` with no `id` and no skip link —
   missed by the v1.1.5 sweep — and `email`/`pitch-deck` had no landmark at all. **A sweep with
@@ -355,12 +377,29 @@ so `check:themes` fails when `tokens.json` does not match what `tokens.css` woul
   `.lw-h2` and `.lw-prose h2` read it. A consumer pointing it at a serif should re-check
   `--lw-tracking-tighter`, which was measured for Geist. The measures are tokens too:
   `--lw-measure-prose` 68ch, `--lw-measure` 60ch, `--lw-measure-sm` 46ch.
-- **Ambient motion has one switch.** `--lw-ambient-play` is the play-state of every decorative
-  loop; `data-ambient="off"` on any ancestor pauses them all at frame 0. Default `running` for
-  this major; **v2.0 flips it to paused** and `data-ambient="on"` restores. Loops read the
-  loop/ambient tiers (`--lw-dur-loop-fast/loop/loop-slow`, `--lw-dur-ambient/-slow`); the
-  bespoke `--lw-dur-<effect>` names and `--lw-duration*` are `@deprecated` in tokens.css and
-  `$deprecated` in tokens.json, removed in v2.0. `check:tokens` fails a `--lw-duration*` use.
+- **Ambient motion has one switch, and it is OFF by default (v2.0.0).** `--lw-ambient-play`
+  is the play-state of every decorative loop, `paused` at `:root`; `data-ambient="on"` on any
+  ancestor runs them, `data-ambient="off"` parks a subtree. Both selectors declare one custom
+  property and no paint, and are on `lw-presence`'s `LAYER_PURITY_EXEMPT` list by name. Frame 0
+  is every loop's resting frame, so paused and running paint the same still. Loops read the
+  loop/ambient tiers (`--lw-dur-loop-fast/loop/loop-slow`, `--lw-dur-ambient/-slow`) or a
+  `calc()` ratio of one; the bespoke `--lw-dur-<effect>` names and `--lw-duration*` were removed
+  in v2.0.0. `check:tokens` fails a `--lw-duration*` use and strips `var()` before hunting a raw
+  duration, so the `calc(var(--lw-dur-ambient) * .8)` form is token-built to it.
+- **A portal inherits from its CONTAINER, not its trigger — so the layer mirrors the scope.**
+  A Radix portal renders under `OverlayProvider`'s container (or `<body>`), outside the `.dark`
+  / `.lw-band-dark` / `brandVars()` subtree the trigger sat in. `_layer.js` reads the opener's
+  theme and band classes and restates them on `.lw-layer`, which is why a dialog opened from a
+  dark card is dark. Put the provider INSIDE the themed element, never above it, and never
+  inside `.lw-topbar` — its `backdrop-filter` becomes the containing block for `position:
+  fixed` and the layer scrolls with the bar.
+- **Why `Select`, `Switch`, `Checkbox` and `Toast` stay native.** A `<select>` is the right
+  control on every phone and the form controls submit and validate with scripts off; Radix would
+  cost a portal, a scroll lock and ~10 KB for a listbox the platform already ships. `Toast` is a
+  live region, not a floating surface — nothing to position, trap or dismiss-on-outside-click —
+  and a portalled toast would leave the `aria-live` region it was announced from. Radix earns
+  its place only where the platform has no answer: positioning, focus management, scroll lock
+  and a described tooltip.
 - **The re-derive block is a gated list, not a convention.** A new band member or a new derived
   role goes into the `:where(...)` list at the foot of tokens.css, and `check:contrast` now says
   so by name when it does not (see the contrast gate above).
@@ -553,7 +592,10 @@ for d in /srv/share/01_project-dev/*/ /srv/share/01_project-dev/*/frontend/ /srv
 done | sort -u
 ```
 
-Real drift today is **VSS alone** (`#v0.2.3`) and **rag-service** (`#v0.2.2`).
+Real drift today is **VSS alone** (`#v0.2.3`) and **rag-service** (`#v0.2.2`). **No pin moved in
+v2.0.0** — every migration note in the CHANGELOG is written for the bump that has not happened
+yet, and the greps there were run against all seven trees (plus a stale mirror of tss-app under
+`/home/nthanhtrung/Documents/04_Work-prod/`) on 2026-09-04.
 
 **rag-service is NOT install-drifted.** This was recorded as drift for several releases and it is
 wrong, which cost a diagnosis: `git show v0.2.2:package.json` says `"version": "0.2.1"` — the bump
@@ -569,9 +611,11 @@ actually pin past that break is `#v1.1.1`.
 **VSS and rag-service are pre-1.1.0 and neither can be bumped in one jump.** The replacement
 restructured the CSS layers, moved the CLIs under `templates/_tooling` (moved again to `tools/`
 in v1.2), dropped `dist/` (restored in v1.2 — see below), and pointed
-`main` at a flat `./react.js`. Diffing the tags says where the risk actually is: **zero `--lw-*`
-tokens were dropped** (the new `tokens.css` is a strict superset, legacy `--lw-duration-*` aliases
-included) and the Tailwind preset kept every utility family, so the CSS surface is close to safe.
+`main` at a flat `./react.js`. (v2.0.0 then removed the `lw.css`/`app.css` shims, the `./counter`
+alias and the 1.13-deprecated tokens, `--lw-duration-*` among them; a pre-1.1 consumer reaching
+any of those needs the two-step bump below.) Diffing v0.9.0 → v1.1.1 says where the risk
+actually is: **zero `--lw-*` tokens were dropped** (that `tokens.css` was a strict superset,
+legacy `--lw-duration-*` aliases included) and the Tailwind preset kept every utility family, so the CSS surface is close to safe.
 **The break is in the JS entry points** — `./counter` was deleted (leanwise-ai imports it; restored
 only at v1.1.5), `./react` lost its `require` condition and moved off `dist/` to ESM `.jsx` source,
 `tailwind-preset.js` became `.cjs`, the eleven named icon exports (`Check`, `Sun`, …) gave way to
@@ -593,7 +637,7 @@ Sequence pin bump -> layer migration, so breakage is attributable to one or the 
 
 - Don't edit a derived color line — edit the `-c` triple. The triple is what Tailwind composes and
   what `brandVars()` synthesizes tints from.
-- Don't load `lw.css`/`app.css` alongside `base.css` + `marketing.css`/`product.css`.
+- Don't put `OverlayProvider` above the themed element, or inside `.lw-topbar` (see Facts).
 - Don't hand-edit `ds-base.js` or `support.js` in one template — twelve copies, all generated.
 - Don't hand-patch `_ds_bundle.js` to make a card render (v1.1.3 did, for two ARIA fixes). Fix the
   `.jsx` and run `npm run bundle`; a hand-patch makes the browser gates pass against something no

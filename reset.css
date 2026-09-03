@@ -15,8 +15,8 @@
 
      @import "@leanwise/design/base.css" layer(components);
 
-   A vanilla (non-Tailwind) consumer wants this file, and gets it automatically
-   through lw.css. A Tailwind consumer almost certainly does NOT: Tailwind's own
+   A vanilla (non-Tailwind) consumer wants this file, and loads it first,
+   before base.css. A Tailwind consumer almost certainly does NOT: Tailwind's own
    preflight already covers the box-sizing, the margin zeroing and the image
    defaults, and the opinionated `button` and `body` rules here are the ones that
    do the damage. If you want the LeanWise typography defaults in a Tailwind app,

@@ -1,6 +1,5 @@
 import { Card, CardHead, CardTitle, CardBody, CardFoot } from "../primitives/Card.jsx";
 import { Byline } from "./Byline.jsx";
-import { deprecate } from "../_deprecate.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
 
 
@@ -28,20 +27,14 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  * `readTime` is a pre-formatted NODE, not a number. It replaced `readMinutes`
  * in v1.3.1, which rendered the literal `"N min read"` — a component library
  * cannot hold display text, and the flagship consumer serves the same component
- * tree in English and Vietnamese. `readMinutes` still works, warns once, and is
- * removed in v2.0.0; the deprecation cycle is `Table`'s, in `_columns.js`.
+ * tree in English and Vietnamese. `readMinutes` warned through v1.x and was
+ * removed in v2.0.0.
  */
 export function ArticleCard({
   title, dek, href, category, tags = [], author, role, date, dateTime, avatar,
-  readTime, readMinutes, cover, linkAs = "a", className, ...rest
+  readTime, cover, linkAs = "a", className, ...rest
 }) {
-  /* Deduped per component per prop by `_deprecate.js`, and silent in
-     production — the same cycle `Table`'s column rename uses. */
-  if (readMinutes != null) deprecate("ArticleCard", "readMinutes",
-    "`readMinutes` is deprecated — pass `readTime` as a pre-formatted node " +
-    "(e.g. `${n} min read`, or its translation), because a component library " +
-    "cannot hold display text. `readMinutes` is removed in v2.0.0.");
-  const read = readTime != null ? readTime : readMinutes != null ? readMinutes + " min read" : null;
+  const read = readTime != null ? readTime : null;
   return (
     <Card as={href ? linkAs : "div"} interactive={Boolean(href)} href={href}
       className={cx(className)} {...rest}>

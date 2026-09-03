@@ -10,11 +10,11 @@
 <style>
   .tiles{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
   .tile{display:grid;gap:6px;justify-items:center}
-  .tile>div{width:100%;height:56px;background:var(--lw-brand-500);position:relative;cursor:pointer;transition:transform var(--lw-duration) var(--lw-ease-out),background var(--lw-duration) var(--lw-ease-out),box-shadow var(--lw-duration) var(--lw-ease-out)}
+  .tile>div{width:100%;height:56px;background:var(--lw-brand-500);position:relative;cursor:pointer;transition:transform var(--lw-dur-sm) var(--lw-ease-out),background var(--lw-dur-sm) var(--lw-ease-out),box-shadow var(--lw-dur-sm) var(--lw-ease-out)}
   .tile>div:hover{transform:translateY(-3px);background:var(--lw-brand-600);box-shadow:var(--lw-shadow-md)}
   .tile>div:focus-visible{outline:none;box-shadow:var(--lw-focus-ring)}
   .tiles:hover .tile>div:not(:hover){opacity:.42}
-  .tile>div{opacity:1;transition:opacity var(--lw-duration) var(--lw-ease-out),transform var(--lw-duration) var(--lw-ease-out),background var(--lw-duration) var(--lw-ease-out),box-shadow var(--lw-duration) var(--lw-ease-out)}
+  .tile>div{opacity:1;transition:opacity var(--lw-dur-sm) var(--lw-ease-out),transform var(--lw-dur-sm) var(--lw-ease-out),background var(--lw-dur-sm) var(--lw-ease-out),box-shadow var(--lw-dur-sm) var(--lw-ease-out)}
   .tile:hover>span{color:var(--lw-brand-text)}
   @media (prefers-reduced-motion: reduce){.tile>div:hover{transform:none}}
   .tile>div::after{content:"";position:absolute;inset:6px;border:1px dashed hsl(0 0% 100% / .35);border-radius:inherit}

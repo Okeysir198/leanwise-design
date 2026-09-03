@@ -53,6 +53,7 @@ export interface SidebarProps extends React.HTMLAttributes<HTMLElement> {
   linkAs?: React.ElementType;
 }
 export declare function Sidebar(props: SidebarProps): React.JSX.Element;
+/** @deprecated Unused by any consumer as of v2.0; candidate for removal in v3.0 — say so in an issue if you adopt it. */
 export declare function NavItem(props: SidebarItem & {
   collapsed?: boolean;
   linkAs?: React.ElementType;

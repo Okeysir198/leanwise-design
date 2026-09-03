@@ -121,7 +121,7 @@ export const RichText = React.forwardRef(function RichText({
           ))}
       </div>
       {children || (
-        <div ref={setBodyRef} id={bodyId} className="lw-editor-body" contentEditable={!readOnly} suppressContentEditableWarning
+        <div ref={setBodyRef} id={bodyId} className="lw-prose lw-editor-body" contentEditable={!readOnly} suppressContentEditableWarning
           role="textbox" aria-multiline="true" aria-label={label} data-placeholder={placeholder}
           onInput={() => { syncLen(); onChange && onChange(ref.current.innerHTML); }}
           onKeyUp={syncActive} onMouseUp={syncActive} />

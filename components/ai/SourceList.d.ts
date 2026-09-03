@@ -21,4 +21,5 @@ export interface SourceListProps extends React.HTMLAttributes<HTMLDivElement> {
    */
   linkAs?: React.ElementType;
 }
+/** @deprecated Unused by any consumer as of v2.0; candidate for removal in v3.0 — say so in an issue if you adopt it. */
 export declare function SourceList(props: SourceListProps): React.JSX.Element;

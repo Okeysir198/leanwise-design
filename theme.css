@@ -37,7 +37,7 @@
    BLOCK A — @theme.  Constants: never re-pointed by a theme scope.
 
    Verified against tokens.css: --lw-radius-*, --lw-text-*, --lw-lh-*,
-   --lw-tracking-*, --lw-ease-*, --lw-duration*, --lw-font-* and --lw-space-* are
+   --lw-tracking-*, --lw-ease-*, --lw-dur-*, --lw-font-* and --lw-space-* are
    each declared exactly once, in the base :root. Nothing below them moves with
    the theme, so resolving them once on :root is correct and cheaper.
    ============================================================================= */
@@ -126,9 +126,9 @@
      @theme to be emitted alongside the utility that references them. */
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
-  --animate-rise: fade-up var(--lw-duration-slow) var(--lw-ease-out) both;
-  --animate-fade-in: fade-in var(--lw-duration-slow) var(--lw-ease-out) both;
-  --animate-scale-in: scale-in var(--lw-duration-slow) var(--lw-ease-out) both;
+  --animate-rise: fade-up var(--lw-dur-lg) var(--lw-ease-out) both;
+  --animate-fade-in: fade-in var(--lw-dur-lg) var(--lw-ease-out) both;
+  --animate-scale-in: scale-in var(--lw-dur-lg) var(--lw-ease-out) both;
   --animate-marquee: marquee 40s linear infinite;
 
   @keyframes accordion-down {
@@ -374,13 +374,13 @@
    `duration` with no suffix is intentionally absent: v4 has no DEFAULT arm for a
    utility that also takes numbers, and `duration-200` covers the common case. */
 @utility duration-fast {
-  transition-duration: var(--lw-duration-fast);
+  transition-duration: var(--lw-dur-xs);
 }
 @utility duration-slow {
-  transition-duration: var(--lw-duration-slow);
+  transition-duration: var(--lw-dur-lg);
 }
 @utility duration-base {
-  transition-duration: var(--lw-duration);
+  transition-duration: var(--lw-dur-sm);
 }
 
 /* v3's `theme.container = { center, padding, screens: { 2xl: --lw-col-page } }`.

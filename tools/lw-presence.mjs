@@ -297,9 +297,13 @@ const LAYER_PURITY_EXEMPT = new Map([
    "same contract — a child opts into being dropped when the rail collapses"],
   ['[data-collapsed="true"] [data-collapse-center]',
    "same contract — a child opts into becoming a centred icon slot"],
+  ['[data-ambient="on"]',
+   "documented opt-in (v2.0, when the default flipped to paused): runs every ambient " +
+   "loop by setting ONE custom property, --lw-ambient-play. It declares no paint, so " +
+   "it cannot beat a utility"],
   ['[data-ambient="off"]',
-   "documented opt-out (v1.13): pauses every ambient loop by setting ONE custom " +
-   "property, --lw-ambient-play. It declares no paint, so it cannot beat a utility"],
+   "documented opt-out (v1.13): pauses every ambient loop the same way — one custom " +
+   "property, no paint"],
 ]);
 
 const COMPONENT_LAYERS = ["base.css", "marketing.css", "product.css"];

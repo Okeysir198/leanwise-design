@@ -19,7 +19,7 @@ export const Button = React.forwardRef(function Button({
   loading = false,
   disabled = false,
   as,
-  type,
+  type = "button",
   className,
   onClick,
   children,
@@ -45,11 +45,11 @@ export const Button = React.forwardRef(function Button({
       // `type` is destructured out of `rest` and re-applied ONLY on a real
       // <button>, for the same reason `disabled` is: on an <a> or a router Link
       // it is either meaningless or a link MIME hint, and it used to ride
-      // `{...rest}` onto whichever element `as` named. The default stays
-      // undefined — i.e. HTML's `submit` — because flipping it would silently
-      // stop `<form onSubmit>` + `<Button>Save</Button>` from submitting, and a
-      // silent no-op is a worse patch-release failure than the one it fixes.
-      // Pass `type="button"` on a Cancel/Delete control; it now compiles.
+      // `{...rest}` onto whichever element `as` named. The DEFAULT is "button"
+      // since v2.0.0 (REVIEW open item 9): HTML's `submit` default meant every
+      // Cancel, Delete and toolbar Button inside a <form> submitted it. The
+      // form's submit control says `type="submit"` explicitly — the one that
+      // was not obvious in v1 and the one the v2.0 migration note greps for.
       type={Tag === "button" ? type : undefined}
       // aria-disabled keeps the ring but not the guard: an <a> or a loading
       // button still fires without this, which is how a double-submit ships.

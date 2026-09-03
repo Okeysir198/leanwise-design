@@ -25,5 +25,8 @@ export interface ArtifactProps extends Omit<React.HTMLAttributes<HTMLDivElement>
   editLabel?: React.ReactNode;
   revertLabel?: React.ReactNode;
 }
-/** The versioned side surface for generated output. */
+/**
+ * The versioned side surface for generated output.
+ * @deprecated Unused by any consumer as of v2.0; candidate for removal in v3.0 — say so in an issue if you adopt it.
+ */
 export declare function Artifact(props: ArtifactProps): React.JSX.Element;

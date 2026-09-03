@@ -24,11 +24,6 @@ export interface ArticleCardProps extends Omit<React.HTMLAttributes<HTMLElement>
    * and so was wrong on every page of a bilingual site.
    */
   readTime?: React.ReactNode;
-  /**
-   * @deprecated Renders the hardcoded English `"{n} min read"`. Pass `readTime`
-   * instead. Warns once per component; removed in v2.0.0.
-   */
-  readMinutes?: number;
   /** An `<img>` (or any node) for `.lw-card-media` — the card's bleed-to-edge top slot. */
   cover?: React.ReactNode;
   /**

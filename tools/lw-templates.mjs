@@ -19,9 +19,10 @@
  *     stale duplicates that nothing loads would sit there silently forever, so
  *     a copy inside a template directory is a hard failure, not a warning.
  *
- *  2. A template must not load `lw.css` / `app.css` (the one-major shims)
- *     alongside the real layers — you get every rule twice, and specificity
- *     ties resolve by source order rather than by intent.
+ *  2. (Removed in v2.0.0.) Through v1.x this rule caught a template loading the
+ *     `lw.css` / `app.css` @import shims alongside the real layers. The shims
+ *     are gone, and a `<link>` to a file that does not exist is a 404 the
+ *     browser gates see; there is nothing left for a static rule to catch.
  *
  *  3. Landmarks. v1.1.5 swept `lang`, a main landmark and a skip link through
  *     the templates, and MISSED TWO (`ai-app-shell` and `docs-page` had a
@@ -88,21 +89,9 @@ for (const d of dirs) {
     const src = readFileSync(join(TEMPLATES, d, name), "utf8");
     const where = `${d}/${name}`;
 
-    /* Strip comments and script bodies before looking for a shim load. Three
-       templates DISCUSS app.css in a code comment ("the colours stay in
-       app.css"), and a substring match called all three a violation — a gate
-       that cries wolf on prose gets muted, which is worse than not having it. */
-    const markup = src
-      .replace(/<!--[\s\S]*?-->/g, "")
-      .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "")
-      .replace(/\/\*[\s\S]*?\*\//g, "");
-    for (const m of markup.matchAll(/(?:href|src)\s*=\s*["']([^"']*\/(?:lw|app)\.css)["']/gi)) {
-      note(`${where} loads the shim ${m[1]} — it @imports the real layers, so every rule lands twice`);
-    }
-
     /* Order matters: support.js defines the helpers ds-base.js calls at load.
-       Scanned over the comment-stripped SOURCE, not `markup` — that one has the
-       script tags removed, which is exactly what this rule needs to see. */
+       Scanned over the comment-stripped SOURCE, with the script tags kept —
+       they are exactly what this rule needs to see. */
     const loads = [...src.replace(/<!--[\s\S]*?-->/g, "").matchAll(/<script\b[^>]*\ssrc\s*=\s*["']([^"']*(?:support|ds-base)\.js)["']/gi)].map((m) => m[1]);
     const wantLoads = SHARED.map((f) => `../${SHARED_DIR}/${f}`);
     if (loads.join(" ") !== wantLoads.join(" ")) {

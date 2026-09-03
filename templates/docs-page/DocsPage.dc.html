@@ -180,14 +180,14 @@ class Component extends DCLogic {
     const theme = this.state.theme || this.props.theme || "light";
     // Reading position is a live runtime value — it cannot exist at parse time —
     // which is the one style hole the compiler sanctions. It is also the only way
-    // these rows reliably take colour: an author `color` on `.lw-toc a` in app.css
+    // these rows reliably take colour: an author `color` on `.lw-toc a` in base.css
     // does not reach them in this runtime (an anchor in the rail, from the same
     // stylesheet, does), and even an `!important` rule failed to win. Inline is
     // the known-good path; `aria-current` still ships for assistive tech.
     // Box, padding, radius and transition DO apply from `.lw-toc`, so only the
     // three colour-bearing properties are held here.
     // Only the STATE travels — never appearance. `.lw-toc a[aria-current]` in
-    // app.css paints the row, so the panel is fully styled the moment markup
+    // base.css paints the row, so the panel is fully styled the moment markup
     // lands, one attribute serves both CSS and assistive tech, and the template
     // carries no style hole. An interpolated inline `style` was tried and is
     // worse than it looks: it applies once and does NOT re-apply on re-render, so

@@ -165,8 +165,9 @@ process.exit(report("lw-token-lint", {
  * { rule, hit, selector, msg } objects; the caller prints and exits.
  */
 function cssSelfCheck() {
-  // The three real layers, post-split. lw.css and app.css are @import shims with
-  // no rules of their own — checking only lw.css (as through v1.1) checked nothing.
+  // The three real layers, post-split. (Through v1.x lw.css and app.css were
+  // @import shims with no rules of their own — checking only lw.css, as through
+  // v1.1, checked nothing. The shims were removed in v2.0.0.)
   const LAYERS = ["base.css", "marketing.css", "product.css"];
   const all = [];
   for (const name of LAYERS) {

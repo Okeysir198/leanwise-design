@@ -22,5 +22,8 @@ export interface ToolCallProps extends React.HTMLAttributes<HTMLDivElement> {
   resultLabel?: React.ReactNode;
   formatDuration?(ms: number): React.ReactNode;
 }
-/** One tool invocation — the evidence behind an `AgentTrace` step. */
+/**
+ * One tool invocation — the evidence behind an `AgentTrace` step.
+ * @deprecated Unused by any consumer as of v2.0; candidate for removal in v3.0 — say so in an issue if you adopt it.
+ */
 export declare function ToolCall(props: ToolCallProps): React.JSX.Element;

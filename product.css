@@ -161,7 +161,7 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 .lw-skeleton.text { height: 0.75em; margin: 0.2em 0; border-radius: var(--lw-radius-xs); }
 .lw-skeleton.circle { border-radius: 50%; }
 @media (prefers-reduced-motion: no-preference) {
-  .lw-skeleton::after { content: ""; position: absolute; inset: 0; transform: translateX(-100%); background: linear-gradient(90deg, transparent, hsl(var(--lw-fg-c) / 0.06), transparent); animation: lwShimmer var(--lw-dur-shimmer) var(--lw-ease-in-out) infinite; }
+  .lw-skeleton::after { content: ""; position: absolute; inset: 0; transform: translateX(-100%); background: linear-gradient(90deg, transparent, hsl(var(--lw-fg-c) / 0.06), transparent); animation: lwShimmer var(--lw-dur-loop) var(--lw-ease-in-out) infinite; }
 }
 @keyframes lwShimmer { to { transform: translateX(100%); } }
 
@@ -457,7 +457,7 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 .lw-msg[data-streaming="true"] .body:not(:has(p))::after { content: "\258B"; margin-inline-start: 2px; color: var(--lw-brand-text); }
 @media (prefers-reduced-motion: no-preference) {
   .lw-msg[data-streaming="true"] .body > p:last-of-type::after,
-  .lw-msg[data-streaming="true"] .body:not(:has(p))::after { animation: lwCaret var(--lw-dur-caret-stream) steps(1) infinite; }
+  .lw-msg[data-streaming="true"] .body:not(:has(p))::after { animation: lwCaret var(--lw-dur-loop-fast) steps(1) infinite; }
 }
 @keyframes lwCaret { 50% { opacity: 0; } }
 
@@ -497,7 +497,7 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 .lw-trace li[data-state="done"]::after { background: var(--lw-success-on); border-color: var(--lw-success-on); }
 .lw-trace li[data-state="active"]::after { background: var(--lw-brand-500); border-color: var(--lw-brand-500); }
 .lw-trace li[data-state="error"]::after { background: var(--lw-danger-on); border-color: var(--lw-danger-on); }
-@media (prefers-reduced-motion: no-preference) { .lw-trace li[data-state="active"]::after { animation: lwTracePulse var(--lw-dur-trace) var(--lw-ease-in-out) infinite; } }
+@media (prefers-reduced-motion: no-preference) { .lw-trace li[data-state="active"]::after { animation: lwTracePulse var(--lw-dur-loop) var(--lw-ease-in-out) infinite; } }
 @keyframes lwTracePulse { 50% { box-shadow: 0 0 0 4px hsl(var(--lw-brand-500-c) / 0.18); } }
 .lw-trace .step { font-size: var(--lw-text-sm); color: var(--lw-fg); line-height: 1.4; }
 .lw-trace .meta { font-family: var(--lw-font-mono); font-size: 10.5px; color: var(--lw-fg-subtle); line-height: 1.5; overflow-wrap: anywhere; }
@@ -547,8 +547,10 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 :is(.dark, [data-band="dark"], .lw-band-dark) .lw-prompt:focus-within,
 :is(.dark, [data-band="dark"], .lw-band-dark) [data-focus-demo] { border-color: var(--lw-brand-400); box-shadow: var(--lw-focus-ring); }
 
-/* A dark band inside a light page has no --lw-bg of its own to lean on. */
-.lw-band-dark, [data-band="dark"] { color: var(--lw-on-dark-2); }
+/* (v2.0.0) There is no `color` rule for the band itself any more. Through
+   v1.x this read `color: var(--lw-on-dark-2)` — a 9.42:1 ink written before
+   tokens.css re-derived `--lw-fg` inside every band member. The token band's
+   `--lw-fg` (15.78:1) is the ink now; the override only ever lowered it. */
 .lw-band-dark .lw-kpi, [data-band="dark"] .lw-kpi,
 .lw-band-dark .lw-source-item, [data-band="dark"] .lw-source-item { background: var(--lw-on-dark-wash); border-color: var(--lw-on-dark-line); }
 .lw-band-dark .lw-kpi .v, [data-band="dark"] .lw-kpi .v { color: var(--lw-on-dark-1); }
@@ -592,8 +594,9 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 .lw-popover[data-match-width] { min-width: var(--radix-popover-trigger-width, var(--radix-dropdown-menu-trigger-width)); }
 /* A plain content popover wants the card's padding, not the menu's gutter. */
 .lw-popover-pad { padding: var(--lw-space-16); }
-/* Tombstone (v2.0.0): the React Popover no longer wraps its trigger; kept as a
-   no-op for vanilla markup that still carries the class. */
+/* DEPRECATED v2.0.0 — removed in v3.0. The React Popover no longer wraps its
+   trigger (Radix anchors to the trigger node itself); kept as a no-op for
+   vanilla markup that still carries the class, so a pin bump moves nothing. */
 .lw-popover-anchor { display: contents; }
 @media (prefers-reduced-motion: no-preference) {
   .lw-popover[data-state="open"] { animation: lwPopIn var(--lw-dur-xs) var(--lw-ease-out); }
@@ -1107,7 +1110,7 @@ a.lw-feed-item:hover, button.lw-feed-item:hover { background: var(--lw-bg-subtle
 .lw-tool[data-state="ok"] .lw-tool-dot { background: var(--lw-success-on); }
 .lw-tool[data-state="error"] .lw-tool-dot { background: var(--lw-danger-on); }
 @media (prefers-reduced-motion: no-preference) {
-  .lw-tool[data-state="running"] .lw-tool-dot { animation: lwToolPulse var(--lw-dur-tool) var(--lw-ease-out) infinite; }
+  .lw-tool[data-state="running"] .lw-tool-dot { animation: lwToolPulse var(--lw-dur-loop) var(--lw-ease-out) infinite; }
   @keyframes lwToolPulse { 50% { opacity: .35; } }
 }
 .lw-tool-body { padding: 0 var(--lw-space-12) var(--lw-space-12); display: grid; gap: var(--lw-space-8); }
@@ -1280,18 +1283,20 @@ a.lw-feed-item:hover, button.lw-feed-item:hover { background: var(--lw-bg-subtle
 .lw-editor-bar { flex: none; display: flex; align-items: center; gap: 2px; flex-wrap: wrap; padding: var(--lw-space-4) var(--lw-space-4); border-bottom: 1px solid var(--lw-line); background: var(--lw-bg-subtle); }
 .lw-editor-bar .sep { width: 1px; height: 18px; margin: 0 var(--lw-space-4); background: var(--lw-line); }
 .lw-editor-bar .lw-icon-btn[aria-pressed="true"] { background: var(--lw-brand-soft); color: var(--lw-brand-on); }
+/* The body IS `.lw-prose` (v2.0.0): RichText emits `lw-prose lw-editor-body`,
+   so the type, the rhythm, the headings, lists, quotes, code and links are the
+   read surface's rules in base.css — one home. Through v1.x this block carried
+   a second, slightly different copy of all of it (REVIEW open item 5). What is
+   left here is the EDITOR delta only: the box, the caret and the placeholder.
+   The prose measure is lifted because an editor fills its frame. */
 .lw-editor-body {
+  --lw-prose-max: none;
   padding: var(--lw-space-16); min-height: 160px; max-height: 420px; overflow: auto;
-  font-size: var(--lw-text-body); line-height: 1.65; color: var(--lw-fg); outline: none;
+  outline: none; caret-color: var(--lw-brand-500);
 }
-.lw-editor-body > * + * { margin-top: 0.7em; }
-.lw-editor-body h2 { font-size: var(--lw-text-h3); font-weight: var(--lw-fw-semibold); letter-spacing: var(--lw-tracking-tight); line-height: 1.25; }
-.lw-editor-body h3 { font-size: var(--lw-text-body); font-weight: var(--lw-fw-semibold); }
-.lw-editor-body ul, .lw-editor-body ol { padding-inline-start: 1.4em; }
-.lw-editor-body li + li { margin-top: 0.3em; }
-.lw-editor-body blockquote { padding-inline-start: var(--lw-space-16); border-inline-start: 2px solid var(--lw-brand-line); color: var(--lw-fg-muted); }
-.lw-editor-body code { font-family: var(--lw-font-mono); font-size: 0.9em; background: var(--lw-bg-inset); padding: 1px 4px; border-radius: var(--lw-radius-xs); }
-.lw-editor-body a { color: var(--lw-brand-text); }
+/* Prose puts 40px above every heading, first child included — right for an
+   article under a title, wrong for a box whose first line IS the heading. */
+.lw-editor-body > :first-child { margin-block-start: 0; }
 .lw-editor-body:empty::before { content: attr(data-placeholder); color: var(--lw-fg-subtle); }
 .lw-editor-foot { flex: none; display: flex; align-items: center; gap: var(--lw-space-12); padding: var(--lw-space-4) var(--lw-space-12); border-top: 1px solid var(--lw-line); font-family: var(--lw-font-mono); font-size: 10.5px; color: var(--lw-fg-subtle); }
 

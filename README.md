@@ -17,8 +17,6 @@ base.css          the SHARED layer — layout, type, buttons, the ICON and the i
 marketing.css     the MARKETING layer (grounds, hero, features, stories, ambient motion)
 product.css       the PRODUCT layer (data, overlays, app shell/rails, AI, mobile bars)
 email.css         the EMAIL layer — literal values, tables, no var(). See Email below
-lw.css app.css    SHIMS for the old two-layer names. Kept one major; do not mix
-                  them with the files above, or the same rules apply twice
 components/       the React layer — components + their specimen cards, thin
                   wrappers over the CSS above (no styling of their own)
 templates/        twelve starting points (see Templates)
@@ -74,9 +72,9 @@ stopped the cards loading `product.css`. That is the argument for making a speci
 exactly what its recipe loads, and it generalises past this release.
 
 **A marketing page therefore needs `tokens.css` + `base.css` + `marketing.css` and nothing
-else** — see [Marketing recipes](#marketing-recipes). `lw.css` and `app.css` remain as shims
-for one full major; **do not load a shim alongside the real files**, or the same rules apply
-twice and the cascade between the two layers reorders.
+else** — see [Marketing recipes](#marketing-recipes). (The `lw.css` / `app.css` @import shims
+that carried the pre-1.2 two-layer names were removed in v2.0.0; a vanilla consumer loads
+`reset.css` itself, first.)
 
 One rule that follows from the split, and that cost four serious axe failures to learn:
 **a property carrying a COLOUR is `base.css`'s to state.** `.lw-btn` declared neither
@@ -124,6 +122,11 @@ what is still open. `CONTRIBUTING.md` points back here — the checklist lives i
 @import "@leanwise/design/base.css" layer(components);     /* shared controls */
 @import "@leanwise/design/product.css" layer(components);  /* app surfaces */
 ```
+
+**`radix-ui` arrives as a dependency (v2.0.0)** — the unified package, one install, tree-shaken by
+your bundler; `react` / `react-dom` stay peers. Every overlay imports from it, so a consumer of
+`./react` gets it transitively; a CSS-only consumer never loads it. Your own vendored
+`@radix-ui/react-*` copies are unaffected — the two do not collide.
 
 `theme.css` is the v4 half of `tailwind-preset.cjs` — it registers the tokens as real
 utilities (`bg-cta`, `text-h1`, `shadow-focus`). Without it a v4 app has to hand-write the
@@ -260,6 +263,11 @@ state axis.
 
 Every component is a thin wrapper over the `.lw-*` CSS in `base.css` / `marketing.css` / `product.css` —
 they add no styling of their own, so the React and vanilla consumers cannot drift apart.
+
+**Rows whose name carries ⚠ are `@deprecated` in their `.d.ts` as of v2.0.0: no consumer imports them**
+(measured by grepping every consumer tree at v1.13.0 — three of eight consume the React layer at
+all). They still work and are still gated; they are candidates for removal in v3.0, and adopting
+one is a matter of saying so in an issue so the mark comes off.
 Every interactive component ships `:hover`, `:focus-visible`, `:disabled` and a dark-ground
 rule; every transform stands down under `prefers-reduced-motion`.
 
@@ -267,12 +275,12 @@ rule; every transform stands down under `prefers-reduced-motion`.
 
 | Component | Purpose |
 |---|---|
-| `Button` | `variant`: brand · cta · ink · ghost · danger · link. `size`: sm/md/lg. `iconOnly`, `loading` |
+| `Button` | `variant`: brand · cta · ink · ghost · danger · link. `size`: sm/md/lg. `iconOnly`, `loading`. **`type` defaults to `"button"` since v2.0.0** — the submit control of a `<form>` says `type="submit"`. Forwards its ref |
 | `Card` | The surface. `interactive` makes it a real control, not a div with a click handler |
 | `CardHead` | The card's header row — title on the left, controls on the right |
 | `CardTitle` | The card's heading. `as` picks the heading level; the size does not change with it |
 | `CardBody` | The card's copy, on the body scale |
-| `CardFoot` | The card's action row — where the buttons go, so every card puts them in the same place |
+| `CardFoot` ⚠ | The card's action row — where the buttons go, so every card puts them in the same place |
 | `Chip` | Status atom. `tone`: brand · success · warning · danger · neutral |
 | `Eyebrow` | The signature mono/uppercase label, tipped with a hexagon node |
 | `Avatar` | Initials by default; an image only when there is one |
@@ -286,7 +294,7 @@ rule; every transform stands down under `prefers-reduced-motion`.
 
 | Component | Purpose |
 |---|---|
-| `Page` | The 1400px app-shell width |
+| `Page` ⚠ | The 1400px app-shell width |
 | `Container` | The 1200px reading column |
 | `Stack` | Vertical rhythm. `gap` = a spacing token |
 | `Cluster` | A wrapping row. `justify`, `align` |
@@ -300,20 +308,20 @@ rule; every transform stands down under `prefers-reduced-motion`.
 |---|---|
 | `Field` | **The unit.** Wires `htmlFor`, `aria-describedby`, `aria-invalid`. `label` `help` `error` `required` `optional` |
 | `Input` | `size`, `invalid` |
-| `InputGroup` | An input with a `prefix` / `suffix` inside one focus ring |
+| `InputGroup` ⚠ | An input with a `prefix` / `suffix` inside one focus ring |
 | `PasswordInput` | A password that can be read back. Reveal toggle with `aria-pressed`, and a Caps Lock warning — the commonest cause of "the password is right and it says it is wrong", invisible on every keyboard |
-| `PasswordMeter` | Four segments and **a word**. Emits the `.lw-pwmeter` CSS that shipped in v1.2 with nothing rendering it. It scores nothing — `level` is yours, from whatever the server actually enforces |
+| `PasswordMeter` ⚠ | Four segments and **a word**. Emits the `.lw-pwmeter` CSS that shipped in v1.2 with nothing rendering it. It scores nothing — `level` is yours, from whatever the server actually enforces |
 | `OtpInput` | A one-time code as ONE field, not six boxes. Six inputs break `autoComplete="one-time-code"` (the platform fills only the first), make six tab stops, and turn a pasted "123 456" into one digit. The segmented LOOK is letter-spacing |
 | `Textarea` | |
 | `Select` | `options` as strings or `{value,label}`. CSS chevron |
 | `Switch` | For a setting that applies immediately |
 | `Checkbox` | `radio` for the round variant |
 | `Segmented` | 2–4 mutually exclusive views |
-| `Calendar` | The date grid. Real buttons with a roving tabindex, so Tab enters and leaves once instead of walking 42 days; month and weekday names come from `Intl` |
-| `DatePicker` | The date field, on `Popover`. `range` adds the preset rail — "Last 7 days" is what a user wants nine times out of ten, and building it from two grid clicks is a chore |
+| `Calendar` ⚠ | The date grid. Real buttons with a roving tabindex, so Tab enters and leaves once instead of walking 42 days; month and weekday names come from `Intl` |
+| `DatePicker` ⚠ | The date field, on `Popover`. `range` adds the preset rail — "Last 7 days" is what a user wants nine times out of ten, and building it from two grid clicks is a chore |
 | `FileUpload` | Dropzone + file list. The zone is a `<label>` around a real file input, so click, keyboard and the a11y name are the platform's. Rejects by name, with the limit stated |
-| `RichText` | Editor **chrome** — toolbar plus a prose surface on the type scale. The engine is deliberately not the system's; pass `children` and you keep the chrome with your own surface: `<RichText tools={["bold","italic","ul"]}><EditorContent editor={editor} /></RichText>`. The default surface is `contenteditable` + `execCommand` — a demonstrable shim, fine for a comment box, **swap it before shipping a document editor** |
-| `Stepper` | Wizard progress. The marker carries the state — the number becomes a check — so it survives greyscale. Only done and error steps are clickable |
+| `RichText` ⚠ | Editor **chrome** — toolbar plus a prose surface on the type scale. The engine is deliberately not the system's; pass `children` and you keep the chrome with your own surface: `<RichText tools={["bold","italic","ul"]}><EditorContent editor={editor} /></RichText>`. The default surface is `contenteditable` + `execCommand` — a demonstrable shim, fine for a comment box, **swap it before shipping a document editor** |
+| `Stepper` ⚠ | Wizard progress. The marker carries the state — the number becomes a check — so it survives greyscale. Only done and error steps are clickable |
 | `Combobox` | Single and multi-select with filtering, on `Popover`. Focus stays in the input and `aria-activedescendant` names the active row — the ARIA 1.2 pattern, and the opposite of `Menu`. `onSearch` hands filtering to the caller: the options passed ARE the result |
 
 ### Data — `components/data/`
@@ -326,14 +334,14 @@ rule; every transform stands down under `prefers-reduced-motion`.
 | `EmptyState` | `icon` (a glyph name) `title` `description` `action` — exactly one action |
 | `StateView` | **The five states as one set**: empty · loading · error · offline · denied. Shipping only `empty` is how the other four get invented per product. `error`/`offline` announce with `role="alert"`; `loading` uses `role="status"` + `aria-busy` |
 | `Console` | `lines[].cells` renders aligned subgrid columns (`num` right-aligns); `text` stays free-running and spans the stream. Never pad mono text with runs of spaces |
-| `CodeBlock` | Server-highlighted `html`, or raw `code`. Copy control on by default with `code`, confirming in place |
+| `CodeBlock` ⚠ | Server-highlighted `html`, or raw `code`. Copy control on by default with `code`, confirming in place |
 | `DataGrid` | **Not an extension of `Table`.** Sticky header, resizable and pinnable columns, bulk selection, optional windowing. Reach for `Table` first — a static list should not pay for grid machinery |
 | `Progress` | Determinate only, with real `role="progressbar"` values. Indeterminate work is a `Skeleton` — a bar that moves without knowing its extent reports a number it does not have |
 | `Pagination` | Page navigation AND the result count, because the count is the control's feedback. `cursor` mode is prev/next only, for an API that cannot count |
-| `FilterBar` | Applied filters as removable chips. A filter you cannot see is one you forget you set, and then the empty result looks like a broken product |
-| `Toolbar` | The row above a list: search, filters, actions. `.lw-toolbar-grow` on the child that should take the slack |
-| `BarChart` | A thin tokenised layer, not a charting engine. Series come from `--lw-chart-1..8`; every chart renders its numbers as a hidden table |
-| `LineChart` | The line and area chart, on the same tokenised layer as `BarChart`. Legend swatches are painted from CSS via `--lw-swatch`, so a series colour has one home |
+| `FilterBar` ⚠ | Applied filters as removable chips. A filter you cannot see is one you forget you set, and then the empty result looks like a broken product |
+| `Toolbar` ⚠ | The row above a list: search, filters, actions. `.lw-toolbar-grow` on the child that should take the slack |
+| `BarChart` ⚠ | A thin tokenised layer, not a charting engine. Series come from `--lw-chart-1..8`; every chart renders its numbers as a hidden table |
+| `LineChart` ⚠ | The line and area chart, on the same tokenised layer as `BarChart`. Legend swatches are painted from CSS via `--lw-swatch`, so a series colour has one home |
 | `ActivityFeed` | Notifications and activity — the same list with a different verb. Day-bucketed; unread is a dot plus weight, never a tint alone |
 
 **`Table` and `DataGrid` share one column contract.** A column is
@@ -366,11 +374,11 @@ a design system whose API moves under a consumer's feet is a reason to vendor it
 | `TopBar` | Sticky app chrome. `brand` `links` `actions` |
 | `AppBar` | **Use this, not a hand-written bar.** Brand + breadcrumbs + actions on `TopBar`, with an optional rail toggle. The lead holder is `flex: 0 1 auto` because TopBar already ships a `flex: 1` spacer — a second claimant splits the slack and ellipsises the breadcrumbs with a third of the row empty, which is exactly what five hand-written copies did |
 | `Sidebar` | The product rail. `collapsed` → 60px icon rail. `linkAs` swaps the anchor for a router Link |
-| `NavItem` | One row of the rail — an `<a>` when it has an `href`, a `<button>` when it does not. Exported so a rail can be composed by hand |
+| `NavItem` ⚠ | One row of the rail — an `<a>` when it has an `href`, a `<button>` when it does not. Exported so a rail can be composed by hand |
 | `NavMenu` | The site-header dropdown that teaches a taxonomy: named groups, one line of prose per destination. A native `<details>`, so it is server-safe and works with JavaScript off — **not** built on `Menu`/`Popover`, whose CSS lives in the layer a marketing page drops. Put it FIRST in the bar's nav. Escape-to-close and close-on-route-change are the consumer's |
 | `Tabs` | Roving tabindex: arrow keys, Home/End — selection AND focus move together |
 | `Breadcrumbs` | Mono, so it reads as a path |
-| `CommandPalette` | ⌘K, on the native `<dialog>` — modal, so the page behind it is inert. **It does not bind the shortcut**; a component that installs a global key handler cannot be turned off on the screen where ⌘K means something else. Scored subsequence match, so "opdb" finds "Open database" |
+| `CommandPalette` ⚠ | ⌘K, on the native `<dialog>` — modal, so the page behind it is inert. **It does not bind the shortcut**; a component that installs a global key handler cannot be turned off on the screen where ⌘K means something else. Scored subsequence match, so "opdb" finds "Open database" |
 | `BottomNav` | The touch answer to `Sidebar`. Three to five DESTINATIONS, never actions (warns past five). Reserves the home indicator from `--lw-safe-bottom`, and takes its 44px target from the bar height rather than padding |
 | `NavToggle` | The narrow-bar nav for `TopBar` — a toggle in the bar and a panel under it, rendered as `TopBar` children. **Not `Drawer`:** a drawer is a modal `<dialog>` in the top layer that makes the page inert, so it needs a focus trap and a scrim; this hangs under the bar, leaves the page interactive, and needs neither. Appears at `--lw-bp-md`, the same breakpoint at which the bar's own links drop. `aria-expanded` + `aria-controls`, Escape closes and returns focus |
 | `LocaleSwitcher` | Which language the interface is in. `Segmented` when there is room; `compact` opens a **menu**, not a cycle — a reader who cannot read the current language cannot predict what the next press gives them. Ships no language names: a list of endonyms is a claim about which languages exist and how they are spelt |
@@ -380,29 +388,43 @@ a design system whose API moves under a consumer's feet is a reason to vendor it
 
 | Component | Purpose |
 |---|---|
-| `Dialog` | The native `<dialog>`. Focus trap, Esc and inertness are the platform's |
+| `Dialog` | Radix Dialog since v2.0.0, behind the same `.lw-dialog` CSS: portal, `.lw-backdrop`, focus trap, Esc, outside-click and a scroll lock. `trigger` (a `forwardRef` element), `open` / `onOpenChange`, `title` or `label` — an unnamed dialog fails `check:a11y` |
 | `Toast` | `tone`: info · ok · warn · err. Errors use `role="alert"`. `onClose` adds a dismiss control |
 | `ToastRegion` | The live region toasts mount into — one per page. `urgent` raises it to `assertive`; `label` names it |
-| `Tooltip` | Hints only. Does not exist on touch |
-| `Popover` | **The one floating surface.** Menu, Combobox, DatePicker and every filter panel are this plus contents. Top-layer, so it escapes an ancestor's `overflow: hidden` without a portal. `placement` flips only when the preferred side does not fit; dismissal is explicit, because `popover="auto"`'s light-dismiss cannot tell the trigger from the outside world |
-| `Drawer` | The side sheet — a modal that enters from an edge, so it is the same native `<dialog>`. `side`: start · end · bottom (the touch answer to a centred dialog) |
+| `Tooltip` | Radix Tooltip since v2.0.0 — a real `role="tooltip"` wired through `aria-describedby`, Escape-dismissable, on touch. `side`, `open`, `delayDuration`. The child MUST forward its ref (`Button` does). Hints only: never the sole name of a control |
+| `Popover` | **The one floating surface.** Menu, Combobox, DatePicker and every filter panel are this plus contents. Radix Popover since v2.0.0: portalled, so it escapes an ancestor's `overflow: hidden`; `placement` flips and shifts on every side when the preferred one does not fit. `anchor` when the trigger owns its own ARIA (a Combobox input), `autoFocus`, `container` |
+| `Drawer` | The side sheet — a modal that enters from an edge, so it is `Dialog` with a `side`: start · end · bottom (the touch answer to a centred dialog). Same portal, backdrop and scroll lock |
 | `OverlayProvider` | The portal root every Radix-backed overlay renders into, plus the shared tooltip delay budget. One per app or per themed island, placed INSIDE the element carrying `brandVars()` / `.dark` — a portal inherits theme from its container, not its trigger. Never inside `.lw-topbar` (its `backdrop-filter` becomes the containing block for `position: fixed`) |
-| `Menu` | The action menu, on `Popover`. Arrows, Home/End, typeahead, Esc-returns-focus. `items` take `icon` (a glyph name), `kbd`, `checked` (→ `menuitemcheckbox`), `danger`, `separator` and `label` rows |
+| `Menu` | The action menu, on Radix DropdownMenu. Arrows, Home/End, typeahead, Esc-returns-focus; `open` / `onOpenChange`. `items` take `icon` (a glyph name), `kbd`, `checked` (→ `menuitemcheckbox`, styled by `[data-state="checked"]`), `danger`, `separator` and `label` rows |
+
+**The overlay recipe (v2.0.0).** Mount one `OverlayProvider` inside the element that carries the
+theme — `<html class="dark">` → `<body>` → `<OverlayProvider>` — or one per branded island
+(`brandVars()`); every Dialog, Drawer, Popover, Menu, Tooltip and CommandPalette below it renders
+into that provider's layer, and the layer mirrors the opener's `.dark` / `.lw-band-*` scope onto
+itself so a dialog opened from a dark card is dark. Load `base.css` + `product.css` (`.lw-layer`,
+`.lw-backdrop` and every overlay class live in the app layer). **z-index:** the layer sits at
+`--lw-z-modal` (110) for modals and `--lw-z-overlay` for the rest, not the native top layer — so a
+consumer z-index above 110 paints over an open modal; keep app chrome on the `--lw-z-*` scale.
+State selectors are Radix's: `[data-state="open"]` on the dialog, drawer and popover,
+`[data-state="checked"]` on a menu row; `.lw-backdrop` is an element, not `::backdrop`.
+**Kept native on purpose:** `Select`, `Switch`, `Checkbox`, `Segmented`, `Toast`, `NavToggle`,
+`Disclosure`, `NavMenu` — the platform control is the right one on a phone, submits without
+JavaScript, or is a disclosure rather than a floating surface.
 
 ### AI — `components/ai/`
 
 | Component | Purpose |
 |---|---|
-| `PromptInput` | The primary input. Enter sends, Shift+Enter newlines. `tools` `action`, or children to own the whole footer row |
-| `Message` | One turn. `role` ai/user (user mirrors right in a bubble), `avatar`, `streaming` shows the caret |
-| `SourceChip` | The citation atom — a numbered mono chip |
-| `SourceList` | The provenance panel |
-| `ConfidenceMeter` | Number **and** bar. Neutral ink below 60% |
-| `AgentTrace` | `steps` with `pending`/`active`/`done`/`error` |
-| `ToolCall` | One invocation — args in, result out, duration. `AgentTrace` says a step RAN; this says what it did. Collapsed by default, because an argument blob is evidence a user opens when the answer looks wrong |
-| `DiffReview` | Accept or reject the model's edits per hunk. The gutter carries `+`/`−`/`~` as well as the ground, so it reads in greyscale — and the diff tokens are GROUNDS, the text on top stays `--lw-fg` |
-| `Artifact` | The versioned side surface for generated output. `onEdit` is not decoration: it is where "an AI surface is never the only path to an outcome" is enforced |
-| `Feedback` | Thumbs plus a correction path. A rating with nowhere to say what was wrong collects a number nobody can act on |
+| `PromptInput` ⚠ | The primary input. Enter sends, Shift+Enter newlines. `tools` `action`, or children to own the whole footer row |
+| `Message` ⚠ | One turn. `role` ai/user (user mirrors right in a bubble), `avatar`, `streaming` shows the caret |
+| `SourceChip` ⚠ | The citation atom — a numbered mono chip |
+| `SourceList` ⚠ | The provenance panel |
+| `ConfidenceMeter` ⚠ | Number **and** bar. Neutral ink below 60% |
+| `AgentTrace` ⚠ | `steps` with `pending`/`active`/`done`/`error` |
+| `ToolCall` ⚠ | One invocation — args in, result out, duration. `AgentTrace` says a step RAN; this says what it did. Collapsed by default, because an argument blob is evidence a user opens when the answer looks wrong |
+| `DiffReview` ⚠ | Accept or reject the model's edits per hunk. The gutter carries `+`/`−`/`~` as well as the ground, so it reads in greyscale — and the diff tokens are GROUNDS, the text on top stays `--lw-fg` |
+| `Artifact` ⚠ | The versioned side surface for generated output. `onEdit` is not decoration: it is where "an AI surface is never the only path to an outcome" is enforced |
+| `Feedback` ⚠ | Thumbs plus a correction path. A rating with nowhere to say what was wrong collects a number nobody can act on |
 
 ### Marketing — `components/marketing/`
 
@@ -417,7 +439,7 @@ a design system whose API moves under a consumer's feet is a reason to vendor it
 | `Quote` | The standalone pull quote. Shares its brand spine with `StoryCard`'s quote through **one** declaration block, so the drawing has one owner |
 | `Byline` | Author, role, date on the existing `Avatar`. The date is a real `<time>` |
 | `ArticleCard` | The index entry — a composition of `Card` + `CardHead`/`CardBody`/`CardFoot` + `.lw-card-media` + `Byline` + `.lw-pill`. There is deliberately no `.lw-post` class, and no `.lw-article` grid: the article page is a `Split` |
-| `AnnounceBar` | The sticky strip above the header. It exists upstream for one rule — `.lw-announce + .lw-topbar` offsets the header by `var(--lw-announce-h, 36px)`, which only this package can state because `.lw-topbar` is its own |
+| `AnnounceBar` ⚠ | The sticky strip above the header. It exists upstream for one rule — `.lw-announce + .lw-topbar` offsets the header by `var(--lw-announce-h, 36px)`, which only this package can state because `.lw-topbar` is its own |
 | `PlanCard` | A pricing plan. Composes `.lw-card` and adds four declarations. **`price` is optional and a card without one is a FINISHED card** — nothing reserves the slot, so it closes up. `featured` adds a brand edge and `--lw-brand-glow` and *nothing else*; a dark featured plan is `data-band="dark"`, never a hard-coded navy tier. An excluded feature is a `minus` glyph plus an `.lw-sr-only` word, never a greyed check |
 | `CompareTable` | The feature matrix. Distinct from `Table` **by meaning**: `Table` is a data table (records, values, sorting); this never sorts and has one repeated cell type. Sticky on both axes via `--lw-z-local-1/2/3`; every cell is two glyphs and a word, and `--lw-success-on` (the text variant), never `--lw-success` (a fill) |
 | `Flow` | The animated flow diagram — pipeline, onboarding sequence, roadmap. **The static state is the COMPLETE diagram**; all motion is double-gated behind `@supports (animation-timeline: view())` *and* `prefers-reduced-motion: no-preference`, and scroll only replays it. An inactive node is **never** dimmed with `opacity`; the active one is marked positively via real `aria-current`. Server-safe — no state, no effects, no `"use client"`; a node that expands is the consumer composing `Disclosure` into `detail`. **Two forms since v1.6.0**: a chain, and a *graph* — selected automatically by any edge joining non-consecutive nodes — which lays the nodes on a routing lattice so a fan-in, a fan-out and a loop all draw, in CSS borders rather than SVG. The graph form also emits an `.lw-sr-only` successors table, because a lattice of bordered cells states "01 leads to 02 *and* 03" in pixels alone; that is why `label` and `tableLabels` are required there |
@@ -821,20 +843,22 @@ skeleton shimmer, the streaming caret, the active trace dot — and each has a s
 tilt, marquee), double-gated behind `@supports (animation-timeline: …)` and
 `prefers-reduced-motion: no-preference`; the static state is always complete.
 
-Durations: `--lw-dur-xs` 100 · `sm` 180 · `md` 240 · `lg` 400 · `xl` 800.
+Durations: `--lw-dur-xs` 100 · `sm` 180 · `md` 300 · `lg` 500 · `xl` 800.
 House curve: `--lw-ease-out: cubic-bezier(.22,1,.36,1)`.
 
 **Two more tiers for the things that loop (v1.13.0).** `--lw-dur-loop-fast` 1.1s (the caret),
 `--lw-dur-loop` 1.5s (pulse, shimmer, trace, the tool dot), `--lw-dur-loop-slow` 2.4s (the
 reduced-motion spinner); and for the decorative drifts `--lw-dur-ambient` 24s and
-`--lw-dur-ambient-slow` 40s. Every bespoke `--lw-dur-<effect>` name those replace is deprecated
-and gone in v2.0, as are `--lw-duration-fast` / `--lw-duration` / `--lw-duration-slow` (use
-`--lw-dur-xs` / `sm` / `lg`); `tokens.json` marks each with `$deprecated`.
+`--lw-dur-ambient-slow` 40s. The bespoke `--lw-dur-<effect>` names those replaced, and
+`--lw-duration-fast` / `--lw-duration` / `--lw-duration-slow` (now `--lw-dur-xs` / `sm` / `lg`),
+were removed in v2.0.0. An effect that sits between two tiers reads a ratio of one —
+`calc(var(--lw-dur-ambient) * .8)` — not a number of its own.
 
-**One switch for every ambient loop.** `--lw-ambient-play` is the `animation-play-state` of every
-decorative drift, and `data-ambient="off"` on any ancestor pauses them all at frame 0 — a page
-that wants a still ground says so once. The default is `running` for this major; **v2.0 flips it
-to paused** and `data-ambient="on"` opts back in.
+**One switch for every ambient loop, off by default.** `--lw-ambient-play` is the
+`animation-play-state` of every decorative drift; it is `paused` at `:root` since v2.0.0.
+`data-ambient="on"` on any ancestor runs the loops — a page that wants the ground to drift says
+so once — and `data-ambient="off"` parks a subtree inside an opted-in page. Frame 0 is the resting
+frame of every loop, so a page that never opts in paints exactly what it painted at t=0.
 
 ## Accessibility
 
@@ -932,10 +956,9 @@ and **34 source files had drifted** by the time the generator landed. Edit a `.j
 `npm run bundle`, commit both.
 
 **`check:templates` is the only gate that opens a `.dc.html`.** It asserts the twelve
-`ds-base.js` and twelve `support.js` are byte-identical (they are generated; "never hand-edit
-one copy" was previously undetectable), that no template loads the `lw.css`/`app.css` shims
-alongside the real layers, and that `lang`, a main landmark and a resolvable skip link are all
-present. It found four real gaps the first time it ran, two of them missed by the sweep that
+`ds-base.js` and `support.js` exist only in `templates/_shared/` and are loaded in order by every
+template, and that `lang`, a main landmark and a resolvable skip link are all present. (Through
+v1.x it also caught a template loading the `lw.css`/`app.css` shims; the shims are gone.) It found four real gaps the first time it ran, two of them missed by the sweep that
 was supposed to have fixed exactly that.
 
 **`check:dts` exists because the barrel had two homes for one fact.** `react.js` is the

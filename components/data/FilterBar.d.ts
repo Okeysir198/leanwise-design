@@ -20,9 +20,15 @@ export interface FilterBarProps extends React.HTMLAttributes<HTMLDivElement> {
   clearAllLabel?: React.ReactNode;
   formatRemoveLabel?(filterName: string): string;
 }
-/** Applied filters as removable chips. Renders nothing when there are none. */
+/**
+ * Applied filters as removable chips. Renders nothing when there are none.
+ * @deprecated Unused by any consumer as of v2.0; candidate for removal in v3.0 — say so in an issue if you adopt it.
+ */
 export declare function FilterBar(props: FilterBarProps): React.JSX.Element;
 export interface ToolbarProps extends React.HTMLAttributes<HTMLDivElement> {}
 /** The row above a list: search, filters, actions. `.lw-toolbar-grow` on the
- *  child that should take the slack. */
+/**
+ * child that should take the slack.
+ * @deprecated Unused by any consumer as of v2.0; candidate for removal in v3.0 — say so in an issue if you adopt it.
+ */
 export declare function Toolbar(props: ToolbarProps): React.JSX.Element;

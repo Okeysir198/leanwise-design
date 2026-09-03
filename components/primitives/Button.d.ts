@@ -28,11 +28,9 @@ export interface ButtonProps extends React.HTMLAttributes<HTMLElement> {
    * the form. The flagship consumer's admin console worked around it with a raw
    * `<button className="lw-btn">`, which defeats the component.
    *
-   * The DEFAULT is deliberately still undefined (so: `submit`), matching the
-   * platform. Flipping it would silently stop `<form onSubmit>` +
-   * `<Button>Save</Button>` from submitting — a no-op is a worse failure than a
-   * wrong-op, and a default change is not a patch-release move. Recorded as a
-   * v2.0.0 candidate in REVIEW.md.
+   * **Default `"button"` since v2.0.0** (it was undefined, i.e. HTML's `submit`,
+   * through v1.x). A `<form onSubmit>` whose submit control is a `<Button>` must
+   * say `type="submit"` — the migration note in the CHANGELOG lists the grep.
    */
   type?: "button" | "submit" | "reset";
 }

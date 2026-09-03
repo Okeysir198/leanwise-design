@@ -27,5 +27,6 @@ export interface LineChartProps extends ChartProps { area?: boolean   /**
  * engine. Series colours come from `--lw-chart-1..8`, which lift a tier on the
  * dark ground; every chart renders its numbers as a visually hidden table,
  * because a picture of data is not readable and a summary is not the data.
+ * @deprecated Unused by any consumer as of v2.0; candidate for removal in v3.0 — say so in an issue if you adopt it.
  */
 export declare function BarChart(props: BarChartProps): React.JSX.Element;

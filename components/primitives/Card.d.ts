@@ -30,4 +30,5 @@ export declare function Card(props: CardProps): React.JSX.Element;
 export declare function CardHead(props: React.HTMLAttributes<HTMLDivElement>): React.JSX.Element;
 export declare function CardTitle(props: React.HTMLAttributes<HTMLElement> & { as?: string }): React.JSX.Element;
 export declare function CardBody(props: React.HTMLAttributes<HTMLParagraphElement>): React.JSX.Element;
+/** @deprecated Unused by any consumer as of v2.0; candidate for removal in v3.0 — say so in an issue if you adopt it. */
 export declare function CardFoot(props: React.HTMLAttributes<HTMLDivElement>): React.JSX.Element;

@@ -96,7 +96,7 @@ const RichText = React.forwardRef(function RichText2({
       {
         ref: setBodyRef,
         id: bodyId,
-        className: "lw-editor-body",
+        className: "lw-prose lw-editor-body",
         contentEditable: !readOnly,
         suppressContentEditableWarning: true,
         role: "textbox",

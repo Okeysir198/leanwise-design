@@ -248,7 +248,7 @@ class Component extends DCLogic {
 
       fullName: s.fullName,
       setFullName: (e) => this.setState({ fullName: e.target.value }),
-      // The LEVEL goes to the template; the colours stay in app.css, so they
+      // The LEVEL goes to the template; the colours stay in product.css, so they
       // re-point on the dark ground without this class knowing about themes.
       strengthLevel: s.password ? String(st) : "0",
       strengthLabel: s.password ? STRENGTH[st] : "At least 12 characters.",

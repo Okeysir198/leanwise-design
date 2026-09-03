@@ -11,7 +11,7 @@ document is a second home that goes stale, and this line has proved it twice: it
 exports … 5 gates" when the barrel exported 82 and there were six, and then "442 tokens, eight
 theme scopes" against an actual 283 across twelve.
 
-**Last pass:** v1.13.0. It found a `:root[data-theme="dark"]` block that was value-identical to
+**Last pass:** v2.0.0 — see the verdict below. **Previous pass:** v1.13.0. It found a `:root[data-theme="dark"]` block that was value-identical to
 `.dark, [data-theme=dark]` and had been maintained in parallel for the life of the package; 25
 derived roles that stayed on the PAGE theme inside `.lw-page-dark` because that ground joined
 the band list in v1.4.0 and never joined the re-derive list (the demo writes `class="dark
@@ -27,6 +27,24 @@ too: a rule that states the invariant (`rederiveCompleteness`, the root-block re
 ---
 
 ## Verdict
+
+**v2.0.0 is the pass where the platform stopped being the answer for overlays, and the record
+caught up with the code.** Every floating and modal surface now rides a Radix primitive behind
+the same `.lw-*` CSS — the hand-rolled `place()` engine that only flipped on the block axis, the
+`showModal()` that never locked scroll, and the `data-tip` tooltip no screen reader could hear
+are gone, and each is an advisory whose count `lw-doctor` derives to zero. What the pass did NOT
+change is the thesis: styling still lives in the CSS layer and the React and vanilla consumers
+still render the same rules; Radix supplies positioning, focus, scroll lock and ARIA, nothing
+visual. Three open items closed the way they said they would (5, 9, 10, below), everything 1.13
+warned about is removed, and twenty-six components no consumer imports are marked rather than
+deleted. The gates gained the one thing a Radix overlay needs measured — an OPEN state: four
+open-state cards, and axe's `aria-dialog-name` rule. The blind spot this file has recorded
+since v1.3.1 — axe files what it cannot resolve as `incomplete` — is therefore **closed for
+dialogs only**: a dialog now renders open under axe, with a name or a failure. A closed overlay
+still measures nothing, and the grounds' pseudo-element surfaces are as invisible as before.
+The shape to watch next is the one every major invites: a consumer pinned to v1 reading the
+v2 README. The migration section of the CHANGELOG was written from greps over all seven trees,
+not from memory, and CLAUDE.md §Consumers says no pin has moved.
 
 **v1.13.0 is the pass where the second homes were found by a script rather than by a reader.**
 The redundant root block, the missing re-derive members, the CI list, the counts in prose and
@@ -155,7 +173,14 @@ local fix is lost silently. Leave it. *(An earlier revision of this file claimed
 twelve copies, and the `apps/web` repo it names is not on this box, so the pairing cannot be
 checked here at all.)*
 
-### 5. `.lw-editor-body` is still a second treatment of `.lw-prose` — de-dup SKIPPED, deliberately
+### 5. `.lw-editor-body` is still a second treatment of `.lw-prose` — CLOSED in v2.0.0
+
+Done as the entry below prescribed: one commit, `RichText.jsx` emits `lw-prose lw-editor-body`,
+`.lw-editor-body` keeps the box, the caret, the placeholder and `--lw-prose-max: none`, and the
+bundle was regenerated in the same change. The visual delta on the `RichText` specimen is the
+one listed — h2 step, `--lw-space-20` rhythm, `--lw-lh-relaxed` — and is recorded in the
+CHANGELOG as intended. The original entry is kept for the reasoning.
+
 
 `product.css`'s `.lw-editor-body` (the `RichText` surface) and the new `.lw-prose` are two
 treatments of one thing: a block of authored rich text sized on the type scale. The v1.3.0 plan
@@ -236,7 +261,12 @@ dropped. Also: **rag-service was never install-drifted** — the `v0.2.2` tag's 
 says `0.2.1`, so the pin resolves correctly to a tree reporting the older number, and no
 reinstall changes that. Bump it to `#v0.2.3`.
 
-### 9. `Button`'s `type` default is still HTML's `submit` — a v2.0.0 candidate
+### 9. `Button`'s `type` default is still HTML's `submit` — CLOSED in v2.0.0
+
+Flipped to `"button"` at the major, together with the `readMinutes` removal, exactly as below.
+One consumer site needed `type="submit"` (`leanwise-ai/src/components/contact-form.tsx:212`);
+the CHANGELOG migration note lists the grep and the finding.
+
 
 `Card`, `SourceChip` and `NavItem` all default to `type="button"`; `Button` defaults to
 nothing, i.e. `submit`. That inconsistency is the house rule being applied everywhere except
@@ -245,7 +275,12 @@ would silently stop `<form onSubmit>` + `<Button>Save</Button>` from submitting,
 no-op is a worse patch-release failure than the wrong-op it replaces. Change it at the next
 major, together with the `readMinutes` removal.
 
-### 10. `product.css` overrides the token band's default ink, and the two disagree
+### 10. `product.css` overrides the token band's default ink — CLOSED in v2.0.0
+
+The `product.css` rule is deleted and the role wins: dark-band ink is `--lw-fg` in both load
+orders, 9.42:1 → 15.78:1 in an app, recorded as an intended visual change. The entry below is
+the measurement that justified it.
+
 
 `product.css` carries `.lw-band-dark, [data-band="dark"] { color: var(--lw-on-dark-2) }`, which
 outranks `tokens.css`'s band block (`:where(…) { color: var(--lw-fg) }`, specificity 0). So the
@@ -326,6 +361,6 @@ npm run check:ci     # the above plus axe and visual regression
 npm run build        # rollup-plugin-dts resolution — what check:dts only approximates
 ```
 
-No gate can see the *Carried forward* section, or Open 2, 3, 4, 5 and 8 — architecture, vendoring,
+No gate can see the *Carried forward* section, or Open 2, 3, 4 and 8 — architecture, vendoring,
 API shape and release planning are judgement. That is why this file exists and why the audit is
 worth repeating by hand each release.

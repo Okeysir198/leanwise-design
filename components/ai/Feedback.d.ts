@@ -18,5 +18,8 @@ export interface FeedbackProps extends Omit<React.HTMLAttributes<HTMLDivElement>
   cancelLabel?: React.ReactNode;
   sendLabel?: React.ReactNode;
 }
-/** Thumbs plus a correction path — what makes evals possible later. */
+/**
+ * Thumbs plus a correction path — what makes evals possible later.
+ * @deprecated Unused by any consumer as of v2.0; candidate for removal in v3.0 — say so in an issue if you adopt it.
+ */
 export declare function Feedback(props: FeedbackProps): React.JSX.Element;

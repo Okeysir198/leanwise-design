@@ -7,9 +7,6 @@
 // nothing can drop it. marketing.css is grounds, heroes and feature grids: a
 // product app drops that one. product.css is layout, forms, data and overlays: a
 // marketing page drops that one. These templates mix both, so they load all four.
-//
-// (lw.css and app.css still exist as shims for one full major. Do not load them
-// alongside these: the same rules would apply twice and reorder the cascade.)
 (() => {
   const base = '../..';
   // Load each asset AT MOST ONCE per document. A host runtime may already have

@@ -51,18 +51,21 @@
       <tr><td class="mono">dur-loop-slow</td><td>the reduced-motion spinner, a logo marquee</td></tr>
       <tr><td class="mono">dur-ambient</td><td>the ground's comb pulse and sheen — a loop nobody is meant to notice</td></tr>
       <tr><td class="mono">dur-ambient-slow</td><td>the glow drift, the mark's breathe, the aurora and wash</td></tr>
-      <tr><td class="mono">data-ambient="off"</td><td>on any ancestor: every ambient loop parks at frame 0 (<span class="mono">--lw-ambient-play: paused</span>) and the sheen hides</td></tr>
+      <tr><td class="mono">data-ambient="on"</td><td>on any ancestor: runs every ambient loop (<span class="mono">--lw-ambient-play: running</span>). Since v2.0 the default is <b>paused</b>; a page that wants the drifts says so once</td></tr>
+      <tr><td class="mono">data-ambient="off"</td><td>on any ancestor: every ambient loop parks at frame 0 (<span class="mono">--lw-ambient-play: paused</span>) and the sheen hides — for a still subtree inside an opted-in page</td></tr>
     </tbody>
   </table>
-  <p class="sub">Ambient loops are on a scale of their own (v1.13.0): the bespoke names — <span class="mono">--lw-dur-marquee</span>,
-  <span class="mono">-wash</span>, <span class="mono">-aurora-a/b</span>, <span class="mono">-ground</span>, <span class="mono">-comb</span>,
-  <span class="mono">-breathe</span>, <span class="mono">-sheen</span>, <span class="mono">-caret</span> and the rest — still resolve, but are
-  <b>deprecated for v2.0</b>. Their feel is calibrated to the effect, not to an interaction, which is why they are not on the
-  interaction scale above. A page that wants to be still without asking the reader to set a preference (a screenshot, a
-  print view, a template) sets <span class="mono">data-ambient="off"</span>; the frame it parks on is the same frame the
-  loop starts from, so the static render is identical.</p>
-  <p class="sub">The legacy <span class="mono">--lw-duration-*</span> names still resolve, as aliases
-  onto this scale. <b>Do not remove them</b> — consumers reference them by name.</p>
+  <p class="sub">Ambient loops are on a scale of their own (v1.13.0). The twenty-one bespoke names that preceded it —
+  <span class="mono">--lw-dur-marquee</span>, <span class="mono">-wash</span>, <span class="mono">-aurora-a/b</span>,
+  <span class="mono">-ground</span>, <span class="mono">-comb</span>, <span class="mono">-breathe</span>, <span class="mono">-sheen</span>,
+  <span class="mono">-caret</span> and the rest — were <b>removed in v2.0</b>; every loop reads a tier, and an effect that
+  sits between two tiers reads a ratio of one (<span class="mono">calc(var(--lw-dur-ambient) * .8)</span>), not a number
+  of its own. Their feel is calibrated to the effect, not to an interaction, which is why they are not on the interaction
+  scale above. The loops are <b>paused by default</b>: a page that wants the drifts writes
+  <span class="mono">data-ambient="on"</span> once; the frame a paused loop rests on is the frame it starts from, so the
+  still render is identical.</p>
+  <p class="sub">The legacy <span class="mono">--lw-duration-*</span> aliases were removed in v2.0 — a consumer reads
+  <span class="mono">--lw-dur-xs</span> / <span class="mono">-sm</span> / <span class="mono">-lg</span> directly.</p>
   <p class="sub">Every animation is wrapped in <code class="mono">@media (prefers-reduced-motion: reduce)</code>,
   including the bars above — set that preference and they render complete and still. Motion is an
   enhancement; nothing may depend on it to convey state.</p>

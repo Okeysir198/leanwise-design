@@ -12,5 +12,6 @@ export interface AnnounceBarProps extends React.HTMLAttributes<HTMLDivElement> {
  * `var(--lw-announce-h, 36px)`, which is the whole reason the component belongs
  * upstream — a sticky header under a sticky announcement otherwise scrolls up
  * underneath it. Set `--lw-announce-h` if your strip is taller than 36px.
+ * @deprecated Unused by any consumer as of v2.0; candidate for removal in v3.0 — say so in an issue if you adopt it.
  */
 export declare function AnnounceBar(props: AnnounceBarProps): React.JSX.Element | null;

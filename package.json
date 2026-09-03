@@ -31,11 +31,6 @@
       "source": "./hooks.js",
       "default": "./dist/hooks.js"
     },
-    "./counter": {
-      "types": "./hooks.d.ts",
-      "source": "./hooks.js",
-      "default": "./dist/hooks.js"
-    },
     "./tailwind-preset": {
       "types": "./tailwind-preset.d.cts",
       "require": "./tailwind-preset.cjs",
@@ -49,8 +44,6 @@
     "./base.css": "./base.css",
     "./marketing.css": "./marketing.css",
     "./product.css": "./product.css",
-    "./lw.css": "./lw.css",
-    "./app.css": "./app.css",
     "./email.css": "./email.css",
     "./tokens.json": "./tokens.json",
     "./assets/*": "./assets/*",
@@ -83,8 +76,6 @@
     "base.css",
     "marketing.css",
     "product.css",
-    "lw.css",
-    "app.css",
     "email.css",
     "tokens.json",
     "dist",

@@ -34,6 +34,7 @@ export interface CommandPaletteProps extends React.HTMLAttributes<HTMLDivElement
  * scorer. It does NOT bind ⌘K — a component that installs a global key handler
  * fights the host app for it and cannot be turned off on the one screen where
  * ⌘K means something else. Bind it where you mount it.
+ * @deprecated Unused by any consumer as of v2.0; candidate for removal in v3.0 — say so in an issue if you adopt it.
  */
 export declare function CommandPalette(props: CommandPaletteProps): React.JSX.Element;
 /** The subsequence scorer, exported so a caller can rank its own list the same way. */

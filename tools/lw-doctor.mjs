@@ -54,6 +54,21 @@ const satisfies = (version, range) => {
   return { "<": c < 0, "<=": c <= 0, ">": c > 0, ">=": c >= 0 }[m[1]];
 };
 
+
+/** Occurrences of `re` across every .jsx under components/<sub>, specimen cards excluded. */
+function countInComponents(re, sub = "") {
+  let n = 0;
+  (function walk(d) {
+    for (const e of fs.readdirSync(d)) {
+      const p = path.join(d, e);
+      if (fs.statSync(p).isDirectory()) { walk(p); continue; }
+      if (!p.endsWith(".jsx") || p.endsWith(".card.jsx")) continue;
+      n += (fs.readFileSync(p, "utf8").match(re) ?? []).length;
+    }
+  })(path.join(ROOT, "components", sub));
+  return n;
+}
+
 /* ---- self-check: are the advisories still true of THIS tree? -------------- */
 
 if (SELF) {
@@ -232,6 +247,16 @@ if (SELF) {
        `rederiveCompleteness()` in lw-contrast-check.mjs, kept regex-light so this
        stays headless; the count is (missing members) x (derived roles), so it is 0
        in the fixed tree and 25 again the moment `.lw-page-dark` drops off the list. */
+    /* The three v2.0.0 advisories each count a DEFECT that is now gone, so each
+       derives 0 in this tree. All three walk components/ for a literal the old
+       implementation could not exist without: the tooltip's `data-tip=`
+       attribute, the popover's `function place(` engine, the modal's
+       `.showModal()` call. A re-pull from the design project that brings any
+       of them back turns the number non-zero by name. */
+    "tooltip-invisible-to-assistive-tech": () => countInComponents(/\bdata-tip=/g),
+    "popover-no-horizontal-flip": () => countInComponents(/\bfunction place\(/g, "overlays"),
+    "modal-no-scroll-lock": () => countInComponents(/\.showModal\(\)/g),
+
     "page-dark-derived-roles": () => {
       const css = fs.readFileSync(path.join(ROOT, "tokens.css"), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
       const blocks = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map((m) => ({ sel: m[1].trim(), body: m[2] }));

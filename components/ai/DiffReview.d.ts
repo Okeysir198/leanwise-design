@@ -39,5 +39,8 @@ export interface DiffReviewProps extends React.HTMLAttributes<HTMLDivElement> {
   /** The `aria-live` progress summary. */
   formatProgress?(pending: number, total: number): React.ReactNode;
 }
-/** Per-hunk accept/reject. The gutter carries the sign, not just the ground. */
+/**
+ * Per-hunk accept/reject. The gutter carries the sign, not just the ground.
+ * @deprecated Unused by any consumer as of v2.0; candidate for removal in v3.0 — say so in an issue if you adopt it.
+ */
 export declare function DiffReview(props: DiffReviewProps): React.JSX.Element;

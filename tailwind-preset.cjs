@@ -259,7 +259,7 @@ module.exports = {
         emphasis: "var(--lw-ease-emphasis)",
         spring: "var(--lw-ease-spring)",
       },
-      transitionDuration: { fast: "var(--lw-duration-fast)", DEFAULT: "var(--lw-duration)", slow: "var(--lw-duration-slow)" },
+      transitionDuration: { fast: "var(--lw-dur-xs)", DEFAULT: "var(--lw-dur-sm)", slow: "var(--lw-dur-lg)" },
 
       backgroundImage: {
         // The hero/brand panel gradient (navy → cyan, following the mark).
@@ -297,9 +297,9 @@ module.exports = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         // `animate-rise` is the one to reach for on a hero block or a chat message.
-        rise: "fade-up var(--lw-duration-slow) var(--lw-ease-out) both",
-        "fade-in": "fade-in var(--lw-duration-slow) var(--lw-ease-out) both",
-        "scale-in": "scale-in var(--lw-duration-slow) var(--lw-ease-out) both",
+        rise: "fade-up var(--lw-dur-lg) var(--lw-ease-out) both",
+        "fade-in": "fade-in var(--lw-dur-lg) var(--lw-ease-out) both",
+        "scale-in": "scale-in var(--lw-dur-lg) var(--lw-ease-out) both",
         marquee: "marquee 40s linear infinite",
       },
     },

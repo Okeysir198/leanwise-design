@@ -211,7 +211,7 @@ const MANIFEST = [
   { group: "compare / plan", fg: "brand-text", bg: "bg",        scope: "both",  label: "plan card INCLUDED glyph (role: --lw-brand-text on the card ground)" },
 
   // ── G. Always-dark navy-deep ground — the full-bleed dark hero AND the .lw-code
-  //    mono surface (lw.css verifies .lw-code sits on this same navy-deep). Every
+  //    mono surface (product.css verifies .lw-code sits on this same navy-deep). Every
   //    row below is a .lw-code token span. The --lw-on-dark* family is rgba; the
   //    resolver composites the alpha over navy-deep before measuring contrast, so
   //    .tok-comment (white 0.48) is checked at its real rendered value (~4.8).

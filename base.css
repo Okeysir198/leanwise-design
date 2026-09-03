@@ -42,8 +42,9 @@
    the README told to import it. This layer is now `.lw-*`-only and safe to load
    as `@import "@leanwise/design/base.css" layer(components);`.
 
-   Vanilla consumers get the reset automatically through lw.css. Nothing else
-   changed: same rules, same order, same values. */
+   Vanilla consumers load reset.css themselves, first (the lw.css shim that used
+   to do it was removed in v2.0.0). Nothing else changed: same rules, same order,
+   same values. */
 
 /* One screen-reader-only utility, under two names. `.visually-hidden` lived here
    and `.lw-sr-only` lived in product.css with a different clip technique — the
@@ -464,7 +465,7 @@ table.visually-hidden > caption,
 
 /* Pressed. Every variant lifts on hover, so every variant must land again on press —
    otherwise the button stays raised while the pointer is down and feels stuck. */
-.lw-btn:active { transform: translateY(0); transition-duration: var(--lw-dur-press); }
+.lw-btn:active { transform: translateY(0); transition-duration: var(--lw-dur-xs); }
 
 .lw-btn-link {
   padding: 0;
@@ -483,7 +484,7 @@ table.visually-hidden > caption,
 /* Sizes. Every one clears a 44px target except -sm, which is for dense toolbars
    and table rows where the row itself carries the hit area. */
 .lw-btn-sm { height: var(--lw-control-h-sm); padding: 0 var(--lw-btn-pad-x-sm); font-size: var(--lw-text-xs, 12px); border-radius: var(--lw-radius-sm); gap: 6px; }
-.lw-btn-lg { height: var(--lw-control-h-lg); padding: 0 var(--lw-btn-pad-x-lg); font-size: var(--lw-text-base, 15px); border-radius: var(--lw-radius-lg); gap: 10px; }
+.lw-btn-lg { height: var(--lw-control-h-lg); padding: 0 var(--lw-btn-pad-x-lg); font-size: var(--lw-text-body); border-radius: var(--lw-radius-lg); gap: 10px; }
 /* Icon-only is a SQUARE of the same height — never a separate size scale, or icon and
    text buttons stop lining up in a toolbar. aria-label is required; there is no text. */
 .lw-btn-icon { width: var(--lw-control-h-md); padding: 0; }
@@ -530,12 +531,12 @@ table.visually-hidden > caption,
 .lw-btn[data-loading="true"]::after {
   content: ""; position: absolute; width: 15px; height: 15px; border-radius: 999px;
   border: 2px solid var(--lw-btn-spin-ink); border-top-color: transparent; opacity: .9;
-  animation: lwBtnSpin var(--lw-dur-spin) linear infinite;
+  animation: lwBtnSpin var(--lw-dur-xl) linear infinite;
 }
 @keyframes lwBtnSpin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) {
   .lw-btn:hover { transform: none; }
-  .lw-btn[data-loading="true"]::after { animation-duration: var(--lw-dur-spin-slow); }
+  .lw-btn[data-loading="true"]::after { animation-duration: var(--lw-dur-loop-slow); }
 }
 
 /* ---- Icon ---------------------------------------------------------------- */
@@ -606,7 +607,7 @@ table.visually-hidden > caption,
   box-shadow: 0 0 0 3px hsl(var(--lw-success-c) / 0.20);
 }
 .lw-pill.live { border-color: hsl(var(--lw-success-c) / 0.40); color: hsl(var(--lw-success-on-c)); }
-.lw-pill.live .dot { animation: lwPulse var(--lw-dur-pulse) ease-in-out infinite; }
+.lw-pill.live .dot { animation: lwPulse var(--lw-dur-loop) ease-in-out infinite; }
 .lw-pill.rd { color: var(--lw-fg-subtle); }
 .lw-pill.rd .dot {
   background: var(--lw-fg-faint);
@@ -648,7 +649,7 @@ table.visually-hidden > caption,
   box-shadow: var(--lw-shadow-md);
   transform: translateY(-2px);
 }
-.lw-card-interactive:active { transform: translateY(0); box-shadow: var(--lw-shadow-sm); transition-duration: var(--lw-dur-press); }
+.lw-card-interactive:active { transform: translateY(0); box-shadow: var(--lw-shadow-sm); transition-duration: var(--lw-dur-xs); }
 .lw-card-interactive:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); border-color: var(--lw-brand-500); }
 :is(.dark, [data-band="dark"], .lw-band-dark) .lw-card-interactive:focus-visible { box-shadow: var(--lw-focus-ring); border-color: var(--lw-brand-400); }
 @media (prefers-reduced-motion: reduce) {
@@ -1235,7 +1236,7 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
 .lw-console-caret::after {
   content: "▋";
   color: var(--lw-brand-text);
-  animation: lwCaretBlink var(--lw-dur-caret) steps(1) infinite;
+  animation: lwCaretBlink var(--lw-dur-loop-fast) steps(1) infinite;
 }
 @media (prefers-reduced-motion: reduce) {
   .lw-console-caret::after { animation: none; }
@@ -1340,7 +1341,7 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
    consumer). The dash drift reads as data moving along the line. */
 .lw-flow-line { stroke-dasharray: 6 6; }
 @media (prefers-reduced-motion: no-preference) {
-  .lw-flow-line { animation: lwDashFlow var(--lw-dur-dash) linear infinite; }
+  .lw-flow-line { animation: lwDashFlow var(--lw-dur-loop-fast) linear infinite; }
 }
 @keyframes lwDashFlow { to { stroke-dashoffset: -12; } }
 
@@ -1359,7 +1360,7 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
 @media (prefers-reduced-motion: no-preference) {
   /* AMBIENT loop: `--lw-ambient-play` can pause it (a signal loop — skeleton,
      caret, spinner — never reads this token; those stay unconditional). */
-  .lw-wash::before { animation: lwDrift var(--lw-dur-wash) ease-in-out infinite alternate; animation-play-state: var(--lw-ambient-play); }
+  .lw-wash::before { animation: lwDrift calc(var(--lw-dur-ambient) * 1.25) ease-in-out infinite alternate; animation-play-state: var(--lw-ambient-play); }
 }
 @keyframes lwDrift {
   from { transform: translate3d(-4%, -3%, 0) scale(1); }

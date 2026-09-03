@@ -14,4 +14,5 @@ export interface PasswordMeterProps extends React.HTMLAttributes<HTMLDivElement>
   /** Or a lookup by level, when the word follows the score. */
   labels?: Record<number, React.ReactNode>;
 }
+/** @deprecated Unused by any consumer as of v2.0; candidate for removal in v3.0 — say so in an issue if you adopt it. */
 export declare function PasswordMeter(props: PasswordMeterProps): React.JSX.Element;
