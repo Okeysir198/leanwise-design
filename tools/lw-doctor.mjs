@@ -225,6 +225,33 @@ if (SELF) {
       }
       return Math.max(0, announce + bar - clearance);
     },
+    /* The 25 roles that stayed on the PAGE theme inside `.lw-page-dark`: every
+       channel the dark band re-points whose :root line is `hsl(var(--lw-<role>-c) …)`
+       is a derived role, and a band member absent from the re-derive `:where()`
+       list leaves all of them inheriting the document's colour. Same reading as
+       `rederiveCompleteness()` in lw-contrast-check.mjs, kept regex-light so this
+       stays headless; the count is (missing members) x (derived roles), so it is 0
+       in the fixed tree and 25 again the moment `.lw-page-dark` drops off the list. */
+    "page-dark-derived-roles": () => {
+      const css = fs.readFileSync(path.join(ROOT, "tokens.css"), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+      const blocks = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map((m) => ({ sel: m[1].trim(), body: m[2] }));
+      const members = (sel) => sel.match(/^:where\(([\s\S]*)\)$/)?.[1].split(",").map((m) => m.trim()).filter(Boolean);
+      const decls = (body) => Object.fromEntries([...body.matchAll(/(--lw-[\w-]+)\s*:\s*([^;]+);/g)].map((m) => [m[1], m[2].trim()]));
+      const root = decls(blocks.filter((b) => b.sel === ":root").map((b) => b.body).join("\n"));
+      const where = blocks.map((b) => ({ ...b, ms: members(b.sel) })).filter((b) => b.ms);
+      const dark = where.find((b) => b.ms.includes(".lw-band-dark") && !b.ms.includes(".lw-band-light"));
+      const light = where.find((b) => b.ms.includes(".lw-band-light") && !b.ms.includes(".lw-band-dark"));
+      const rederive = where.find((b) => b.ms.includes(".lw-band-dark") && b.ms.includes(".lw-band-light"));
+      if (!dark || !light || !rederive) throw new Error("tokens.css band or re-derive block not found");
+      let roles = 0;
+      for (const k of Object.keys(decls(dark.body))) {
+        if (!k.endsWith("-c")) continue;
+        const role = k.slice(0, -2);
+        if (new RegExp(`^hsl\\(\\s*var\\(${role}-c\\)`).test(root[role] ?? "")) roles++;
+      }
+      const missing = [...dark.ms, ...light.ms].filter((m) => !rederive.ms.includes(m)).length;
+      return missing * roles;
+    },
   };
 
   // For a defect that is now FIXED, the derived count should be 0 (the defect is

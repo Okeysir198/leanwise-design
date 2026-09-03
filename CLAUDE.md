@@ -7,8 +7,9 @@ Guidance for Claude Code when working in this repository.
 **`@leanwise/design`** — the LeanWise design system. (**`package.json` is the authority for the
 version.** This line named one and was four releases stale; the consumer's CLAUDE.md made the
 same mistake three times running. A version repeated in prose is a version that disagrees.) Tokens, five CSS layers, a Tailwind
-preset, ~77 React components across eight categories, twelve page templates, and the **gates**
-that turn the style guide into build failures.
+preset, the React components in eight categories (README §Components is the index — a count
+here is what the `doc-count` lint rule exists to refuse), twelve page templates, and the
+**gates** that turn the style guide into build failures.
 
 The repo is the **working copy of a Claude Design project** (`f2d90781-f891-45e3-bc88-ddb55e6f9444`,
 "LeanWise Design"). The design project is the authoring surface; this repo is what consumers
@@ -22,25 +23,35 @@ layers.** This file is the *maintainer* doc: the things none of those say.
 
 ```bash
 npm install
-npm run check          # the twelve browserless gates, in order: presence, rsc, build,
-                       #   types, registry, advisories, contrast, tokens, themes, dts,
-                       #   bundle, templates.
-npm run check:ci       # the above plus a11y + visual (both need a browser)
+npm test               # node --test over test/ — the helpers the gates share (_css, _color,
+                       #   _png, _report, _generated). First step of `npm run check`.
+npm run check          # every gate that needs no browser. package.json#scripts.check IS the
+                       #   list — do not restate it here; it has been wrong every time it was.
+npm run check:ci       # the above plus check:pack, a11y and visual (the last two need a browser)
 npm run check:a11y     # axe over every @dsCard — needs `npx playwright install chromium`
 npm run check:visual   # every card x light/dark x comfortable/compact. --self-test checks the
                        #   PNG comparator itself; --record/--compare are what CI drives.
+                       #   Baselines land in `.visual/` — ~37 MB locally, gitignored.
 npm run tokens         # regenerate tokens.json (DTCG). GENERATED and COMMITTED — see below.
 npm run dts            # regenerate react.d.ts from react.js. Also generated and committed.
 npm run bundle         # regenerate _ds_bundle.js from the .jsx sources. Ditto — run it after ANY .jsx edit.
+npm run cards          # compile every <name>.card.jsx to its committed <name>.card.js
+npm run assets         # regenerate the on-dark artwork from the -ink SVGs
 npm run build          # esbuild, per file, tools/lw-build.mjs -> dist/ (COMMITTED)
 ```
 
-**CI runs them all** (`.github/workflows/ci.yml`, every push/PR). Local `npm run check` is
-deliberately the six that need no browser.
+**CI runs `npm run check`, then `check:pack`, then the two browser gates**
+(`.github/workflows/ci.yml`, every push/PR). Until v1.13.0 the workflow kept its own list of
+gate names and ran six of them; `package.json#scripts.check` is the one list now, and the
+workflow calls it. Local `npm run check` is deliberately everything that needs no browser.
 
-`npm run check:tokens` runs the **self-check** (`--css`) — the raw-duration and
-raw-z-index rules over `base.css` / `marketing.css` / `product.css`, plus the
-missing-React-import rule over `components/**/*.jsx`. The TSX rules (raw hex,
+`npm run check:tokens` runs the **self-check** (`--css`) — the raw-duration, raw-z-index and
+legacy-duration (`--lw-duration*`) rules over the layers, keyframe uniqueness and `/^lw[A-Z]/`
+naming, breakpoint spelling (`.98` max-width form), the missing-React-import rule over
+`components/**/*.jsx`, `doc-count` (a number before "gates", "components" or "CSS layers" in
+README/CLAUDE/CONTRIBUTING fails — a count in prose is a second home), `readme-coverage`
+(every barrel export has a row in README §Components) and `stale-install-pin` (the README's
+`#vX.Y.Z` must equal `package.json#version`, so a release bumps both). The TSX rules (raw hex,
 palette escape, arbitrary `var()`, one-CTA-per-view) only fire against *consumer* source:
 point it at one by hand before any pin bump — `node tools/lw-token-lint.mjs
 <consumer>/src`. A green CI here proves contrast, theme parity and CSS discipline, **not**
@@ -62,39 +73,20 @@ marketing.css     grounds + hero + site chrome (footer, announce, plans, matrix,
                     editorial). product.css    app surfaces (data, overlays, the
                     app shell and rails, AI, the mobile bars).
                     Load order: tokens -> base -> marketing and/or product.
-                    **v1.3.0 promoted layout, the form controls and `.lw-topbar` out of
-                    product.css into base.css** — the same correction that put `.lw-btn`
-                    in base.css, in the other direction. A marketing site that correctly
-                    dropped product.css had correct buttons, cards and heroes and an
-                    unstyled page with an unstyled header. `.lw-topbar` was the proof:
-                    `.lw-topbar .brand-mark` was already in base.css while the rest of
-                    the component was not. Tombstones mark each vacated site.
-                    **fb2d3ad left the `:is(.dark, …)` patches behind and that was the
-                    bug**: they outrank the promoted rules wherever they sit, so their
-                    POSITION is not load-bearing — but a base-only page never loads the
-                    file at all. Position is not load-bearing; PRESENCE is. v1.3.0 moved
-                    them, plus `.lw-icon-btn` (split from `.lw-dialog-close`, which
-                    stayed — Dialog.jsx now emits both classes) and `.lw-eyebrow`'s dark
-                    hexagon patch. A marketing page now needs base + marketing, nothing
-                    more.
-                    **v1.3.1 promoted five more** — `.lw-avatar`, `.lw-empty` (with its
-                    dark patches), `.lw-tabs` (with all six `.lw-code .lw-tabs` rules),
-                    `.lw-pagination`/`.lw-pag-*` and `.lw-icon`. `Byline` renders an
-                    `Avatar` and `ArticleCard` renders a `Byline`, so two MARKETING
-                    components depended on the app layer; `.lw-icon` is the whole layout
-                    contract for the icon set, reached by ten marketing components.
-                    **The reason none of it was visible is the lesson: `marketing.card.html`
-                    and `site-chrome.card.html` were loading `product.css`.** A specimen
-                    that loads more than its documented recipe cannot measure the recipe.
-                    They load base + marketing only now — do not add it back; that one
-                    `<link>` is what found `.lw-icon`.
-                    **A property carrying a COLOUR is base.css's to state.** `.lw-btn`
-                    declared no `background` and no `border`, leaning on reset.css's
-                    `button { background: none; border: 0 }` — which v1.2.0 split out.
-                    So a base-only page painted the UA bevel on every button and the UA
-                    buttonface behind `.lw-btn-link`: 2.28:1 on dark. Geometry may lean
-                    on the reset (it fails visibly); colour may not (the contrast gate
-                    cannot see a colour base.css does not state).
+                    A marketing page needs base + marketing and nothing more; anything a
+                    marketing component reaches (`.lw-topbar`, the form controls, `.lw-icon`,
+                    `.lw-avatar`, `.lw-tabs`, `.lw-toc`…) lives in base.css. Three rules
+                    fell out of getting there, and each has a CHANGELOG entry that carries
+                    the story: **position is not load-bearing, PRESENCE is** (1.3.0 — the
+                    `:is(.dark, …)` patches left behind in product.css); **a specimen must
+                    load exactly its documented recipe** (1.3.1 — the marketing cards were
+                    loading product.css, which hid five stranded components); **a property
+                    carrying a COLOUR is base.css's to state** (1.3.0 — `.lw-btn` leaned on
+                    reset.css and painted the UA buttonface at 2.28:1 on a base-only page).
+                    Since v1.13.0 the three page grounds are ONE parameterised rule set
+                    driven by `--lw-ground-*` knobs; `url()` stays in explicit selector rules
+                    because Firefox resolves a `url()` inside a custom property against the
+                    document, not the stylesheet.
 reset.css         the nine bare-element rules. Vanilla consumers want it; Tailwind apps
                     must NOT import it (preflight covers the useful half; the rest is the
                     half that beats every utility).
@@ -111,20 +103,26 @@ brand.js hooks.js runtime per-tenant theming; the hooks the components share.
 tailwind-preset.cjs  registers cta/success/warning/brand/navy as REAL utilities so nobody
                     reaches for the bg-[hsl(var(--x))] escape hatch.
 components/       ai data forms layout marketing nav overlays primitives —
-                    .jsx + .d.ts pairs, plus *.card.html preview cards.
+                    .jsx + .d.ts pairs, plus *.card.html preview cards. A card's script is
+                    the <name>.card.jsx beside it, compiled by `npm run cards` (lw-cards.mjs)
+                    to a committed <name>.card.js; `check:cards` fails when stale. That is
+                    what let preview/_vendor drop @babel/standalone (−3.1 MB).
                     Ships .jsx SOURCE deliberately: the consumer's bundler does the transform.
                     Styling lives in the CSS layer, never in a .jsx.
-templates/        twelve page templates, each *.dc.html + ds-base.js + support.js + .thumbnail.
-                    ds-base.js and support.js are GENERATED and byte-identical across all
-                    twelve — never hand-edit one copy.
-tools/            the gates + _css.mjs (the shared CSS reader). ROOT is ONE level up.
+templates/        twelve page templates, each *.dc.html + .thumbnail. The two scripts they
+                    share — ds-base.js and support.js — live ONCE in templates/_shared/
+                    (v1.13.0; twelve byte-identical copies before that, −784 KB). There is
+                    no generator for them here; `check:templates` fails if a re-pull puts a
+                    sibling copy back beside a template.
+tools/            the gates + the shared helpers (_css, _color, _png, _report, _generated —
+                    each under test/ via `npm test`). ROOT is ONE level up.
                     MOVED here from templates/_tooling in v1.2: the old location needed a
                     `"!templates/_tooling"` + re-include pair in `files`, which packs under npm
                     and NOT under pnpm — so the `bin` was missing in a pnpm consumer and the
                     token lint silently stopped running there.
-preview/          thirteen foundation cards + _card.css/_card.js + _vendor/.
-                    _vendor/ holds React, ReactDOM and @babel/standalone as PINNED, hashed
-                    UMD copies (see its README). The cards used to load them from unpkg, which
+preview/          the foundation cards + _card.css/_card.js + _vendor/.
+                    _vendor/ holds React and ReactDOM as PINNED, hashed UMD copies (see its
+                    README; ~1.2 MB, dev builds on purpose). The cards used to load them from unpkg, which
                     made both browser gates network-dependent and unrunnable air-gapped.
                     _fonts.css was DELETED in v1.1.7: 140 KB of base64 mirroring fonts/ with no
                     generator. _card.css @imports ../tokens.css -> fonts.css -> fonts/*.woff2,
@@ -167,6 +165,14 @@ so `check:themes` fails when `tokens.json` does not match what `tokens.css` woul
   are correct and the SCOPE is wrong. Nor could `check:a11y`: the hero has decorative
   pseudo-elements, so axe files the finding as `incomplete` — which that gate does not read.
   Exemptions are named in `BAND_SCOPE_EXEMPT`, greppable and countable.
+  **v1.13.0 added a RE-DERIVE COMPLETENESS rule** (`rederiveCompleteness()`): the re-derive
+  `:where()` list at the foot of tokens.css must be a superset of BOTH band lists, and must
+  restate every derived role the dark band re-points. It found `.lw-page-dark` and
+  `.lw-page-light .lw-hero-dark` missing — 25 derived roles on the page theme inside a dark
+  ground for nine minors (advisory `page-dark-derived-roles`). The same release deleted the
+  `:root[data-theme="dark"]` block, value-identical to `.dark, [data-theme=dark]`, and the
+  gate refuses its return. Theme-block matching is member-based — the old `[^)]*` selector
+  regex that could not see a nested paren is gone.
 
   It also carries a **non-text group (WCAG 1.4.11, 3:1)** for control boundaries and focus
   indicators — until v1.1.5 every pair was a TEXT pair, `AA_LARGE` was dead code, and control
@@ -256,10 +262,10 @@ so `check:themes` fails when `tokens.json` does not match what `tokens.css` woul
   errors on disagreement in either direction.
 - **`lw-templates.mjs`** — the only gate that opens a `.dc.html`. Three of the others read CSS,
   one reads the barrel, two drive a browser; every rule this file states about `templates/**`
-  was enforced by memory alone. It asserts (a) `ds-base.js` and `support.js` are byte-identical
-  across all twelve — "never hand-edit one copy" was previously undetectable, and it reports the
-  ODD ONE OUT rather than just "they differ", because with twelve copies the useful answer is
-  which to revert; (b) no template loads the `lw.css`/`app.css` shims alongside the real layers
+  was enforced by memory alone. It asserts (a) `ds-base.js` and `support.js` exist ONLY in
+  `templates/_shared/` — through v1.12 they were twelve byte-identical copies, "never hand-edit
+  one copy" was undetectable, and the gate reported the ODD ONE OUT; since v1.13.0 there is one
+  copy and the gate fails on any sibling a re-pull puts back; (b) no template loads the `lw.css`/`app.css` shims alongside the real layers
   (it strips comments and script bodies first — three templates DISCUSS `app.css` in prose, and
   a substring match that flags prose gets muted, which is worse than no gate); (c) `lang`, a
   main landmark, and a skip link whose target actually exists. It found four real gaps the
@@ -302,6 +308,10 @@ so `check:themes` fails when `tokens.json` does not match what `tokens.css` woul
     awkward and greppable (`git log --grep`), the same property that keeps `data-a11y-expect`
     honest. The diff artifact uploads on `if: always()`, because the overridden run is exactly
     the one worth looking at.
+  - **A ground card exists since v1.13.0** — `components/marketing/ground.card.html` puts
+    `.lw-page-light`, `.lw-page-dark` and `.lw-page-ground` side by side, each stage under
+    `contain: paint` in `_card.css` so the grounds' `position: fixed` layers stay inside
+    their stage. That is what let the three grounds be measured at all.
 
 ## Facts worth not re-deriving
 
@@ -327,8 +337,30 @@ so `check:themes` fails when `tokens.json` does not match what `tokens.css` woul
   element — which is why it survived: the case everyone demos is the one that cannot fail.
   The `:where(...)` block at the foot of `tokens.css` is where a new role goes.
 - **A keyframe name is GLOBAL and last-wins.** `lwPulse` was defined in `base.css` and again
-  in `product.css`; product's won for every consumer in the supported load order, and no gate
-  can see a name collision. Prefix new animations distinctly.
+  in `product.css`; product's won for every consumer in the supported load order. Since
+  v1.13.0 `check:tokens` fails a duplicate keyframe name across the layers and a name that
+  does not match `/^lw[A-Z]/`.
+- **The two themes share the INK hue, not the paper hue.** Light `--lw-surface-1..3` and
+  `--lw-border-1/2` sit on hue 45 (warm paper, v1.13.0); the page stays white; every text tier,
+  `--lw-line-control` and every dark value are unchanged; the one shadow ink is
+  `--lw-shadow-ink-c` (30 10% 10% light, 0 0% 0% dark). `email.css`'s literals moved with the
+  surfaces — move a token, move the literal. The dark theme's roles point at named navy
+  primitives (`--lw-navy-paper/raised/inset-c`, `--lw-on-navy-1..4-c`,
+  `--lw-navy-line-1/2/control-c`) rather than at inline triples — a pixel no-op that gives the
+  dark palette names to reason about.
+- **`--lw-font-display` is the display face; it defaults to Geist.** `.lw-display`, `.lw-h1`,
+  `.lw-h2` and `.lw-prose h2` read it. A consumer pointing it at a serif should re-check
+  `--lw-tracking-tighter`, which was measured for Geist. The measures are tokens too:
+  `--lw-measure-prose` 68ch, `--lw-measure` 60ch, `--lw-measure-sm` 46ch.
+- **Ambient motion has one switch.** `--lw-ambient-play` is the play-state of every decorative
+  loop; `data-ambient="off"` on any ancestor pauses them all at frame 0. Default `running` for
+  this major; **v2.0 flips it to paused** and `data-ambient="on"` restores. Loops read the
+  loop/ambient tiers (`--lw-dur-loop-fast/loop/loop-slow`, `--lw-dur-ambient/-slow`); the
+  bespoke `--lw-dur-<effect>` names and `--lw-duration*` are `@deprecated` in tokens.css and
+  `$deprecated` in tokens.json, removed in v2.0. `check:tokens` fails a `--lw-duration*` use.
+- **The re-derive block is a gated list, not a convention.** A new band member or a new derived
+  role goes into the `:where(...)` list at the foot of tokens.css, and `check:contrast` now says
+  so by name when it does not (see the contrast gate above).
 - **A TIER is theme-invariant; a ROLE re-points.** `--lw-text-3` / `--lw-surface-2` are the
   same value in both themes on purpose. Paint a tier and your card renders light-mode ink on
   navy — 3.5:1. In anything that can be seen on both grounds, reach for the role
@@ -368,10 +400,13 @@ so `check:themes` fails when `tokens.json` does not match what `tokens.css` woul
   commit to one appearance. It resolves off `[data-theme]` on `<html>` rather than from a class the
   consumer picks, because a theme class in the HTML makes the document cookie-dependent and a page
   served with `s-maxage` and no `Vary` is then cached on URL alone.
-  ⚠ It is implemented as ~30 hand-written twins of the adjacent `.lw-page-light` selectors, and the
-  twinning has **already missed once** (`lwMarkBreathe`, v1.5.1 — the ground had a reduced-motion
-  rule disabling an animation it never had). The durable fix is to parameterise the three grounds:
-  which SVG, which alpha, which glow stops are all that differ.
+  ⚠ Until v1.13.0 it was ~30 hand-written twins of the adjacent `.lw-page-light` selectors, and
+  the twinning missed once (`lwMarkBreathe`, v1.5.1 — a reduced-motion rule disabling an animation
+  the ground never had). The three grounds are now ONE parameterised rule set (37 → 15 blocks):
+  which SVG, which alpha, which glow stops are `--lw-ground-*` knobs. The `url()`s stay in
+  explicit selector rules on purpose — Firefox resolves a `url()` inside a custom property
+  against the DOCUMENT, so a knob carrying one breaks the moment the page and the stylesheet are
+  not siblings.
 - **`.lw-page-dark` joined the dark band list** (v1.4.0). It painted navy and declared nothing, so
   every role token inside a dark ground resolved LIGHT. It survived a release because
   `MarketingLanding.dc.html` writes `class="dark lw-page-dark"` — the demo arrives with the scope
@@ -384,8 +419,9 @@ so `check:themes` fails when `tokens.json` does not match what `tokens.css` woul
   the light band list and inverted the bug in dark mode: **the band block sets the property ON the
   hero, and an element's own declaration beats one inherited from `<html>` however the selectors
   weigh.** Specificity is not what decides it.
-  ⚠ And it cannot be scoped there: `lw-tokens-dtcg` matches theme-block selectors with `[^)]*`, so
-  a nested paren — or a wrapped line — fails `check:themes` with "theme block not found".
+  (An earlier revision of this note said the DTCG tool's `[^)]*` selector regex forbade scoping
+  it there. That regex was the CONTRAST gate's, never the DTCG tool's, and it is gone: theme
+  blocks are matched by member since v1.13.0, so a nested paren or a wrapped line is fine.)
 - **`.lw-toc` and `.lw-crumbs` promoted `product.css` → `base.css`** (v1.4.0). Both components live
   in `components/nav/`, both had their `a` rule already on base.css's pointer-affordance list, and
   marketing.css had claimed since v1.3.0 that the contents-panel layout is `.lw-split` while half
@@ -406,9 +442,11 @@ so `check:themes` fails when `tokens.json` does not match what `tokens.css` woul
   `<summary>` then dropped it from those rules entirely — `.lw-navmenu > summary` had to be added
   back to all three (v1.5.2).
 
-**The gap all of this keeps re-opening: `check:visual` renders no card that uses a page ground.**
-Three of the defects above would have been caught by one. It needs its own card, because the
-ground's layers are `position: fixed` and would repaint any shot they joined.
+**The gap all of this kept re-opening — no card rendered a page ground — closed in v1.13.0.**
+Three of the defects above would have been caught by one, and the fourth (the 25 roles behind
+`.lw-page-dark`) was found the release the card landed. `components/marketing/ground.card.html`
+renders all three grounds; each stage is `contain: paint` so the grounds' `position: fixed`
+layers stay inside their stage instead of repainting every shot they join.
 
 ## The design-project round-trip
 
@@ -447,7 +485,7 @@ To release `vX.Y.Z`:
    invisible — the file still looked maintained.
 3. **Re-point any `advisories.json` entry whose `fixedIn` names the release you are about to
    cut**, and check that every `fixedIn` in the file names a tag that will exist:
-   `node -e "…"` against `git tag -l`, or simply eyeball it — there are eleven.
+   `node -e "…"` against `git tag -l`, or simply eyeball it — count them, the file is short.
 4. Bump `package.json#version` **in the same commit** as 1–3.
 5. `git tag vX.Y.Z` on that commit, `git push && git push --tags`.
 6. Bump the pin in each consumer and refresh its lockfile. Enumerate them — see §Consumers.
@@ -478,22 +516,25 @@ is not "on the new version."
 
 ## Consumers
 
-Verified 2026-09-03 by enumeration (the command below), not by memory.
+Verified 2026-09-04 by enumeration (the command below), not by memory.
 
 | Consumer | Pin | Consumes | Package manager |
 |---|---|---|---|
-| `leanwise-ai` | `#v1.7.1` | `tokens.css` `fonts.css` `reset.css` `base.css` `marketing.css` `product.css` + `./react` | pnpm |
-| `P20251121-tss-app/frontend` | `#v1.7.1` | `tokens.css` `fonts.css` `shadcn.css` `theme.css` `base.css` `email.css` | npm |
-| `4DXs_plan/app` | `#v1.7.1` | `tokens.css` `fonts.css` `reset.css` `base.css` `marketing.css` `product.css` + `./react` | npm |
-| `leanwise-inspect/frontend` | `#v1.8.0` | `tokens.css` `fonts.css` `shadcn.css` `theme.css` `base.css` `product.css` + `./react` | npm |
-| `P20260707-vss/frontend` | `#v0.2.3` | `tokens.css` `fonts.css` `shadcn.css` + preset + `./brand` | pnpm |
-| `P20260706-rag-service/frontend` | `#v0.2.2` (reports **0.2.1** — see below) | `tokens.css` `fonts.css`, vanilla | npm |
+| `leanwise-ai` | `#v1.7.1` | `tokens` `fonts` `reset` `base` `marketing` `product` + `./react` `./hooks` | pnpm |
+| `leanwise-inspect/frontend` | `#v1.12.0` | `tokens` `fonts` `shadcn` `theme` `base` `product` + `./react` `./hooks` `./components` | npm |
+| `P20251121-tss-app/frontend` | `#v1.7.1` | `tokens` `fonts` `shadcn` `theme` `base` | npm |
+| `4DXs_plan/app` | `#v1.7.1` | `tokens` `fonts` `reset` `base` `marketing` `product` + `./react` | npm |
+| `P20260806-sop/apps/web` | `#v1.7.1` | `tokens` `fonts` `shadcn` `theme` `base` `product` | npm |
+| `P20260707-vss/frontend` | `#v0.2.3` | `tokens` `fonts` `shadcn` + `./brand` | pnpm |
+| `P20260706-rag-service/frontend` | `#v0.2.2` (reports **0.2.1** — see below) | `tokens` `fonts`, vanilla | npm |
 
-**This table is hand-maintained, and it has now been wrong twice, in both directions.** It read
-`#v0.8.1` for `leanwise-ai` until 2026-07-31, when the real pin was `#v1.1.8` — eighteen tags of
-drift that did not exist. Then on 2026-09-03 an audit found it listing **three** consumers when
-there were **six**: `tss-app`, `leanwise-inspect` and `4DXs_plan` were absent, and `tss-app` is
-discussed by name elsewhere in this very file. The cost is not cosmetic — this table is what
+**This table is hand-maintained, and it has now been wrong three times.** It read `#v0.8.1`
+for `leanwise-ai` until 2026-07-31, when the real pin was `#v1.1.8` — eighteen tags of drift
+that did not exist. On 2026-09-03 an audit found it listing **three** consumers when there
+were **six**: `tss-app`, `leanwise-inspect` and `4DXs_plan` were absent, and `tss-app` is
+discussed by name elsewhere in this very file. On 2026-09-04 the loop below missed a
+**seventh**, `P20260806-sop/apps/web`, because it only looked one directory deep — the
+`*/apps/web/` glob was added that day. The cost is not cosmetic — this table is what
 anyone reasons from when deciding whether a change is safe to ship, and a missing row reads as
 "nobody depends on that".
 
@@ -503,7 +544,7 @@ consumer exists. So enumerate rather than remember. This finds every consumer on
 real pin, and is what should be run before trusting a row:
 
 ```bash
-for d in /srv/share/01_project-dev/*/ /srv/share/01_project-dev/*/frontend/ /srv/share/01_project-dev/*/app/; do
+for d in /srv/share/01_project-dev/*/ /srv/share/01_project-dev/*/frontend/ /srv/share/01_project-dev/*/app/ /srv/share/01_project-dev/*/apps/web/; do
   pin=$(grep -o '"@leanwise/design": *"[^"]*"' "$d/package.json" 2>/dev/null | sed 's/.*: *"//;s/"$//')
   [ -n "$pin" ] && printf '%-46s %s\n' "${d#/srv/share/01_project-dev/}" "$pin"
 done | sort -u
@@ -522,7 +563,7 @@ release section below exists to prevent, caught from the other end.
 the *design project's* number for the wholesale replacement; the first version a consumer can
 actually pin past that break is `#v1.1.1`.
 
-**All three are many versions behind and none can be bumped in one jump.** The replacement
+**VSS and rag-service are pre-1.1.0 and neither can be bumped in one jump.** The replacement
 restructured the CSS layers, moved the CLIs under `templates/_tooling` (moved again to `tools/`
 in v1.2), dropped `dist/` (restored in v1.2 — see below), and pointed
 `main` at a flat `./react.js`. Diffing the tags says where the risk actually is: **zero `--lw-*`

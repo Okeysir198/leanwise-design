@@ -143,6 +143,18 @@
       "count": 28,
       "countMeans": "px by which the DECLARED sticky chrome (--lw-announce-h 36 + .lw-topbar height 56 = 92) exceeds the .lw-prose heading clearance (--lw-space-64 = 64). A real render measured 27, the announcement box being 35px rather than its 36px offset token; the declared numbers are the ones a headless check can re-derive, so they are the ones recorded here.",
       "verifiedAgainst": "v1.7.1"
+    },
+    {
+      "id": "page-dark-derived-roles",
+      "fixedIn": "1.13.0",
+      "affects": ">=1.4.0 <1.13.0",
+      "severity": "high",
+      "title": "Inside .lw-page-dark every derived role token kept the PAGE theme's colour \u2014 a dark ground on a light document painted light ink, light lines and light surfaces",
+      "detail": "`--lw-fg: hsl(var(--lw-fg-c))` is substituted where it is DECLARED, at :root, so a scope that re-points only the channel inherits the document theme's colour. tokens.css closes that with a re-derive `:where()` block that restates every derived role for every band member \u2014 and `.lw-page-dark` joined the dark band list in v1.4.0 without joining that block. So on a `.lw-page-dark` ground whose document was not itself `.dark`, the channels went navy and the 25 roles built on them \u2014 `--lw-bg`, `--lw-fg`, `--lw-line`, the status `-on`/`-soft` pairs, the chart chrome \u2014 stayed on the light palette: a card with light ink on a navy page, a hairline drawn for white paper. `.lw-page-light .lw-hero-dark` was missing the same way. It survived nine minors because the package's own demo writes `class=\"dark lw-page-dark\"` and carried the re-derive from the second class \u2014 the case everyone demos is the one that cannot fail. No token pair can express it (both tokens in every pair are correct; the scope is what is wrong), and `check:a11y` files the ground's pseudo-element surfaces as `incomplete`. Fixed by adding both selectors to the re-derive list; a RE-DERIVE COMPLETENESS rule in `check:contrast` now asserts that the list is a superset of both band lists and that every derived role the dark band re-points is restated. If you are pinned in the affected range and use `.lw-page-dark` on a page that is not also `.dark`, every role token inside it is wrong; adding `class=\"dark\"` beside it is the one-line workaround.",
+      "measuredBy": "check:contrast (rederiveCompleteness)",
+      "count": 25,
+      "countMeans": "derived roles that inherited the page theme inside .lw-page-dark \u2014 every channel the dark band re-points whose :root line is hsl(var(--lw-<role>-c)), times the band members missing from the re-derive list",
+      "verifiedAgainst": "v1.12.0"
     }
   ]
 }

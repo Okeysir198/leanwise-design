@@ -11,8 +11,10 @@ project's own numbering. No `v1.0.x` tag exists in this repository — the tag l
 `v0.9.0` → `v1.1.1` — so the deletion reached consumers in v1.1.0.)
 
 **Reading this file across the v1.1.0 break.** Every tag from `v0.1.0` to `v0.9.0` is
-documented below. Two of the three consumers are still pinned inside that range; `leanwise-ai` has since moved to 1.1.8 (this line said `#v0.8.1` until 2026-07-31, and was wrong) — `leanwise-ai`
-`#v1.1.8`, `P20260707-vss` `#v0.2.3`, `P20260706-rag-service` `#v0.2.2`. The v0.x entries are
+documented below. Two consumers are still pinned inside that range — `P20260707-vss` `#v0.2.3`
+and `P20260706-rag-service` `#v0.2.2`; the rest sit between `#v1.7.1` and `#v1.12.0`, and
+CLAUDE.md §Consumers is the enumerated table (this paragraph named pins itself until 2026-09-04,
+and was wrong twice). The v0.x entries are
 carried forward from the changelog that shipped in the pre-1.1.0 tree (`git show
 v0.9.0:CHANGELOG.md`), which v1.1.0's wholesale replacement overwrote; the per-version
 **Consumers** notes and the breaking markers were added afterwards by diffing the tags. Six
@@ -21,6 +23,164 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 `package.json` that reports the wrong version.
 
 ## [Unreleased]
+
+### Added — warm paper, one dark palette, and the names the tokens were missing
+
+- **Warm paper under navy ink.** The light surfaces `--lw-surface-1..3` and the borders
+  `--lw-border-1/2` move to hue 45 — `#FAF9F7` `#F5F4F1` `#EFEEEA` `#EAE9E6` `#D9D8D3`. The page
+  (`--lw-surface-0`) stays white; every text tier, `--lw-line-control` and every dark value are
+  unchanged. The principle, so it is not re-argued: **the two themes share the INK hue, not the
+  paper hue.** Navy ink on a cool grey reads as a spreadsheet; on warm paper it reads as a page.
+  Every pair the move touches was re-measured and went up — `--lw-text-3` on `--lw-surface-3`
+  4.51 → 4.61, `--lw-line-control` on `--lw-surface-1` 3.10 → 3.13, brand-500 on `--lw-surface-1`
+  5.35 → 5.41. `email.css`'s literals moved with the surfaces, and the contrast gate's literal
+  check is what would have caught them not moving.
+- **`--lw-shadow-ink-c`**, the one shadow ink: `30 10% 10%` on light, `0 0% 0%` on dark. Every
+  shadow token reads it; a shadow tinted from a colour that is not the ink is a shadow from a
+  different light.
+- **Named dark primitives** — `--lw-navy-paper/raised/inset-c`, `--lw-on-navy-1..4-c`,
+  `--lw-navy-line-1/2/control-c`. The dark roles point at them instead of at inline triples. A
+  pixel no-op, and the reason it is worth an entry is that the dark palette now has names to
+  reason about: "on-navy-2 on navy-raised" is a sentence, `210 22% 78%` on `216 28% 12%` is not.
+- **Loop and ambient duration tiers.** `--lw-dur-loop-fast` 1.1s (the caret), `--lw-dur-loop`
+  1.5s (pulse, shimmer, trace, the tool dot), `--lw-dur-loop-slow` 2.4s (the reduced-motion
+  spinner), `--lw-dur-ambient` 24s and `--lw-dur-ambient-slow` 40s (ground drift, breathe, sheen,
+  wash, marquee, aurora). Twenty-one bespoke `--lw-dur-<effect>` names had grown one per
+  animation, each a number nobody could compare to its neighbour; five tiers is the whole
+  vocabulary and every loop in the layers reads one.
+- **`--lw-ambient-play`** — the `animation-play-state` of every decorative loop, and
+  `data-ambient="off"` on any ancestor pauses them all at frame 0. One switch, because a page that
+  wants a still ground should say so once and not per effect. The default is `running` for this
+  major; **v2.0 flips it to paused** and `data-ambient="on"` opts back in — the deprecation of the
+  ambient-on default is recorded below so nobody is surprised.
+- **`--lw-font-display`** (defaults to `--lw-font-sans`), read by `.lw-display`, `.lw-h1`,
+  `.lw-h2` and `.lw-prose h2`. A consumer pointing it at a serif should re-check
+  `--lw-tracking-tighter`, which was measured for Geist's counters. **`.lw-display`** is new
+  alongside it — one notch above h1 at weight 500, mirroring the preset's `text-display`, which
+  until now had a utility and no class.
+- **Measure tokens** — `--lw-measure-prose` 68ch, `--lw-measure` 60ch, `--lw-measure-sm` 46ch —
+  and **`--lw-bp-xs`** 360px, the floor the layers already assumed and never named. Five
+  artwork-only **`--lw-art-*`** tokens hold the stops the generated SVGs are cut from; no UI rule
+  may consume them, same rule as `--lw-logo-cyan`.
+- **A ground specimen card.** `components/marketing/ground.card.html` renders `.lw-page-light`,
+  `.lw-page-dark` and `.lw-page-ground` side by side; each stage is `contain: paint` in
+  `_card.css` so the grounds' `position: fixed` layers stay inside their stage. REVIEW.md had
+  said for three releases that this card was the gap every ground defect kept re-opening. It is
+  the fixture that let the three grounds be measured for the first time, and the re-derive
+  finding below arrived the same release.
+- **`npm test`** — `node --test` over `test/`, covering the helpers the gates share
+  (`tools/_css.mjs`, `_color.mjs`, `_png.mjs`, `_report.mjs`, `_generated.mjs`). It is the first
+  step of `npm run check`. The PNG decoder, the WCAG maths and the CSS reader had been verified
+  only by the gates that use them agreeing with themselves.
+- **Lint rules** in `check:tokens`: `legacy-duration` (any `--lw-duration*` use), keyframe
+  uniqueness across the layers plus `/^lw[A-Z]/` naming (a keyframe name is global and last-wins,
+  and `lwPulse` had two homes), breakpoint spelling (max-width queries in the `.98` form),
+  **`doc-count`** (a number before "gates", "components" or "CSS layers" in README, CLAUDE.md or
+  CONTRIBUTING fails — "the six fast gates" was written when there were six and still read as
+  maintained at fourteen) and **`readme-coverage`** (every barrel export has a row in README
+  §Components; nine did not, `NavMenu` among them).
+- **`check:contrast` RE-DERIVE COMPLETENESS.** The re-derive `:where()` list at the foot of
+  `tokens.css` must be a superset of both band lists and must restate every derived role the
+  dark band re-points. See Fixed.
+- **`npm run cards` / `check:cards`** — every card's JSX is a `<name>.card.jsx` beside its
+  `.card.html`, compiled by `tools/lw-cards.mjs` to a committed `<name>.card.js`. **`npm run
+  assets` / `check:assets`** — `hex-lattice.svg`, `hero-mark.svg` and `logo-lockup-ondark.svg`
+  are generated from their `-ink` sources by `tools/lw-assets.mjs`; the on-dark lockup regained
+  the `role="img"` a hand edit had dropped. **`npm run inline`** for single-file artifacts.
+- **DTCG generator**: a `/* @deprecated */` comment becomes `$deprecated`, `/* @tier */`
+  becomes `$extensions`, the type-scale tokens are `$type: dimension` (they were `color`), and
+  `--lw-lh-*` are `number`.
+
+### Changed
+
+- **The three page grounds are one rule set.** `.lw-page-light`, `.lw-page-dark` and
+  `.lw-page-ground` were ~30 hand-written twins each, and the twinning had already missed once
+  (`lwMarkBreathe`, v1.5.1). They are now 15 blocks instead of 37, parameterised on
+  `--lw-ground-*` knobs — which SVG, which alpha, which glow stops. The `url()`s stay in explicit
+  selector rules on purpose: Firefox resolves a `url()` inside a custom property against the
+  DOCUMENT, so a knob carrying one breaks the moment the page and the stylesheet are not
+  siblings.
+- **Line-heights are tokens.** `.lw-h3` reads `--lw-lh-snug` (1.2, was a literal 1.18) and
+  `.lw-lead` reads `--lw-lh-normal` (1.55, was 1.6). Visually: the lead is 4px shorter, an h3 is
+  1px taller.
+- **The chart legend swatch is painted from CSS** via `--lw-swatch`: the JSX sets the custom
+  property and the layer owns the `background`, so the swatch and the series share one rule.
+- **The `:root[data-theme="dark"]` block is gone from `tokens.css`.** It was value-identical to
+  `.dark, [data-theme=dark]` and had been maintained in parallel for the life of the package.
+  The contrast gate refuses its return. Theme-block matching in that gate is member-based now —
+  the `[^)]*` selector regex that could not see a nested paren is gone with it (CLAUDE.md had
+  attributed that regex to the DTCG tool; it was never there).
+- **`-webkit-mask` prefixes dropped** (Safari ≥ 15.4 has the unprefixed property). Every
+  max-width breakpoint uses the `.98` form. `lwBtnSpin` is the button spinner's own keyframe.
+  The duplicate `.lw-eyebrow` dark patch left in `product.css` is removed; `product.css`'s
+  short tombstones are merged into one header block.
+- **`templates/_shared/`** holds the one copy of `ds-base.js` and `support.js` (−784 KB; twelve
+  byte-identical copies before). `check:templates` now fails if a re-pull puts a sibling copy
+  back beside a template — there is no generator for those two files here, so the gate is the
+  only thing that knows.
+- **`preview/_vendor/` is ~1.2 MB, was 4.3 MB.** `babel.min.js` is deleted (−3.1 MB) — the cards
+  compile ahead of time now — and the React development builds stay, on purpose, for the
+  warnings a specimen exists to surface. `_adherence.oxlintrc.json` is removed (zero readers).
+- **CI runs `npm run check` and `check:pack`** instead of a hand-kept list of gate names. The
+  workflow's list had six of the gates `npm run check` runs; `package.json#scripts.check` is the
+  one list, and the workflow calls it.
+- **Visual accounting against `main`: 34 of 160 shots moved**, all intended — new rows on
+  `colors-neutrals`, `motion` and `type-scale`, the prose specimen on `spacing-shadows`, the lead
+  at −4px and `.lw-h3` at +1px, and a 0.045% soft tint on `data.card` from the warm surfaces.
+  **No dark shot changed colour.** The release commit needs `[visual-ok]`.
+- Docs: README gained rows for `CardHead`/`CardTitle`/`CardBody`/`CardFoot`, `LineChart`,
+  `NavItem`, `NavMenu`, `ToastRegion` and `Toolbar`, a §Type, the paper/ink principle and the
+  loop/ambient tiers; CLAUDE.md's consumer table is re-enumerated (seven consumers — the loop
+  had missed `P20260806-sop/apps/web`), its v1.3.x layer-promotion narrative is three lines
+  with CHANGELOG anchors, and no count of gates or components appears in prose anywhere — the
+  `doc-count` rule is what keeps it that way. REVIEW.md's "last pass" is this one; its three
+  "Closed in" sections are gone, their substance being in the entries they cited.
+
+### Deprecated — removed in v2.0.0
+
+Each carries `/* @deprecated */` in `tokens.css` and `$deprecated` in `tokens.json`.
+
+- `--lw-duration-fast` / `--lw-duration` / `--lw-duration-slow` → `--lw-dur-xs` / `sm` / `lg`.
+  `check:tokens` already fails a use in the layers.
+- The twenty-one bespoke ambient names — `--lw-dur-pulse`, `-caret`, `-dash`, `-shine`,
+  `-marquee`, `-wash`, `-aurora-a/b`, `-vt-old/new`, `-press`, `-spin`, `-spin-slow`, `-ground`,
+  `-comb`, `-breathe`, `-sheen`, `-shimmer`, `-caret-stream`, `-trace`, `-tool` — each tagged
+  with the loop/ambient tier that replaces it. Values are unchanged this major.
+- `--lw-fg-ghost` → `--lw-fg-faint`. `--lw-mobile-bar-h`. `--lw-text-base` → `--lw-text-body`.
+- `assets/logo-icon.png` and `assets/logo-leanwise.png`, the two raster fallbacks.
+- **The ambient-on default.** v2.0 sets `--lw-ambient-play: paused` and `data-ambient="on"`
+  restores the loops; a page that wants the drifts should start writing the attribute now.
+
+### Removed
+
+- `:root[data-theme="dark"]` from `tokens.css` (redundant — see Changed).
+- Eleven copies each of `templates/*/ds-base.js` and `support.js`; `preview/_vendor/babel.min.js`;
+  `_adherence.oxlintrc.json`; the inline `<script type="text/babel">` bodies in every card.
+
+### Fixed — 25 derived roles kept the page theme inside `.lw-page-dark`
+
+`--lw-fg: hsl(var(--lw-fg-c))` is substituted where it is DECLARED, so a scope that re-points
+only the channel inherits the document theme's colour. `tokens.css` closes that with the
+re-derive `:where()` block that restates every derived role for every band member — and
+`.lw-page-dark` joined the dark band list in v1.4.0 without joining that block.
+`.lw-page-light .lw-hero-dark` was missing the same way. So on a `.lw-page-dark` ground whose
+document was not itself `.dark`, the channels went navy and the 25 roles built on them —
+`--lw-bg`, `--lw-fg`, `--lw-line`, every status `-on`/`-soft` pair, the chart chrome — stayed on
+the light palette. Light ink on a navy page; a hairline drawn for white paper.
+
+It survived nine minors because the package's own demo, `MarketingLanding`, writes
+`class="dark lw-page-dark"` and carried the re-derive from the second class. No token pair can
+express it — both tokens in every pair are correct, the SCOPE is wrong — and `check:a11y` files
+the ground's pseudo-element surfaces as `incomplete`. It is the fifth instance here of *the case
+everyone demos is the one that cannot fail*, and the second on this exact selector (v1.4.0
+fixed its band membership the same way, for the same reason).
+
+Both selectors are in the list now, and the new `rederiveCompleteness()` rule in
+`check:contrast` asserts the list is a superset of both band lists and names the next omission.
+Advisory `page-dark-derived-roles` (high, `>=1.4.0 <1.13.0`) carries the count, re-derived by
+`lw-doctor --self-check` — it reads 25 the moment `.lw-page-dark` drops off the list, which was
+watched. A pinned consumer using `.lw-page-dark` on a page that is not also `.dark` should add
+`class="dark"` beside it until it bumps.
 
 ## [1.12.0] — 2026-09-03
 

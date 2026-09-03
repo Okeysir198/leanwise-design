@@ -8,7 +8,7 @@ someone builds a page that does.
 
 ## The checklist
 
-The eleven-step checklist lives in **README §"Adding a component"** and is not duplicated
+The checklist lives in **README §"Adding a component"** and is not duplicated
 here on purpose: a checklist in two files is a checklist that disagrees with itself within a
 release. Read it there, in order. A component that skips a step is the one that drifts.
 
@@ -17,19 +17,16 @@ Use it as the PR template verbatim.
 ## Before you open the PR
 
 ```bash
-npm run check     # the four fast gates. The only path to remember.
-                  #   check:contrast  every token pair >= WCAG AA, plus the
-                  #                   non-text 3:1 boundaries and focus rings
-                  #   check:tokens    raw hex/colour, palette escapes, raw
-                  #                   durations and z-indexes, missing React import
-                  #   check:themes    every themable channel re-pointed in every
-                  #                   theme scope; tokens.json not stale
-                  #   check:dts       react.d.ts covers every runtime export
+npm run check     # every gate that needs no browser. The only path to remember;
+                  #   package.json#scripts.check is the list, starting with `npm test`.
+                  #   README §Enforcement says what each one measures.
 npm run dts       # after adding or removing a barrel export
 npm run tokens    # after changing any token — commit tokens.json with it
+npm run bundle    # after ANY .jsx edit — the cards render from _ds_bundle.js
+npm run cards     # after editing a <name>.card.jsx
 ```
 
-All four must pass. `check:dts` is the one whose failure mode is a broken
+`npm run check` must pass. `check:dts` is the one whose failure mode is a broken
 `npm run build`: add the export to `react.js` AND the declaration to the component's own
 `.d.ts`, then regenerate. The lint is the load-bearing part of this package — a shared token file
 does not make products consistent on its own, and nothing else stops a dev writing

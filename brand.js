@@ -89,7 +89,7 @@ const triple = ([h, s, l]) => `${round(h)} ${round(s)}% ${round(l)}%`;
    navy ink, whichever clears by more; identical rule to the token core. */
 const WHITE = [255, 255, 255], NAVY = [11, 18, 32];
 
-/** The 51-component brand ramp, synthesized from one clamped anchor. */
+/** The eight-tier brand ramp, synthesized from one clamped anchor. */
 export function brandRamp(hex) {
   const rgb = parseHex(hex);
   if (!rgb) return null;

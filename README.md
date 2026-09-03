@@ -1,6 +1,6 @@
 # @leanwise/design — LeanWise Design System
 
-The brand foundation for every LeanWiseAI product: one token core, three CSS layers, the
+The brand foundation for every LeanWiseAI product: one token core, five CSS layers, the
 React component layer, and twelve starting templates. **Depend on it; never copy it.**
 
 ```
@@ -154,7 +154,7 @@ check:presence` fails the build if they ever stop agreeing.
 
 ### Components — the shadcn registry
 
-Both shadcn consumers use **zero** of this package's 82 React components: they vendor
+Both shadcn consumers use **zero** of this package's React components (§Components): they vendor
 shadcn's and hand-align them to the `.lw-*` spec, which is how one app came to re-type
 `padding: 0 18px`, the control heights, the focus rule and the table-header treatment from
 scratch. The registry is how that stops being re-typed per app — and the consumer still
@@ -230,6 +230,14 @@ Cyan and navy are the logo's own two gradient stops — the palette is derived f
 not picked from a swatch book. Amber sits ~144° from the cyan so it can never read as a
 second brand colour.
 
+**The two themes share the INK hue, not the paper hue.** Light paper is warm (`--lw-surface-1..3`
+and `--lw-border-1/2` sit on hue 45 since v1.13.0 — `#FAF9F7`, `#F5F4F1`, `#EFEEEA`); the page
+itself stays white, and the dark theme's paper is navy. What both share is the ink: text tiers,
+heading ink and the one shadow ink (`--lw-shadow-ink-c`) are navy on both grounds. A warm surface
+under navy ink reads as paper; a cool grey under it reads as a spreadsheet. Every text-on-surface
+pair was re-measured at the move and every one went up (`--lw-text-3` on `--lw-surface-3` 4.51 →
+4.61).
+
 ---
 
 ## Components
@@ -252,7 +260,11 @@ rule; every transform stands down under `prefers-reduced-motion`.
 | Component | Purpose |
 |---|---|
 | `Button` | `variant`: brand · cta · ink · ghost · danger · link. `size`: sm/md/lg. `iconOnly`, `loading` |
-| `Card` + `CardHead` `CardTitle` `CardBody` `CardFoot` | The surface. `interactive` makes it a real control, not a div with a click handler |
+| `Card` | The surface. `interactive` makes it a real control, not a div with a click handler |
+| `CardHead` | The card's header row — title on the left, controls on the right |
+| `CardTitle` | The card's heading. `as` picks the heading level; the size does not change with it |
+| `CardBody` | The card's copy, on the body scale |
+| `CardFoot` | The card's action row — where the buttons go, so every card puts them in the same place |
 | `Chip` | Status atom. `tone`: brand · success · warning · danger · neutral |
 | `Eyebrow` | The signature mono/uppercase label, tipped with a hexagon node |
 | `Avatar` | Initials by default; an image only when there is one |
@@ -310,8 +322,10 @@ rule; every transform stands down under `prefers-reduced-motion`.
 | `DataGrid` | **Not an extension of `Table`.** Sticky header, resizable and pinnable columns, bulk selection, optional windowing. Reach for `Table` first — a static list should not pay for grid machinery |
 | `Progress` | Determinate only, with real `role="progressbar"` values. Indeterminate work is a `Skeleton` — a bar that moves without knowing its extent reports a number it does not have |
 | `Pagination` | Page navigation AND the result count, because the count is the control's feedback. `cursor` mode is prev/next only, for an API that cannot count |
-| `FilterBar` + `Toolbar` | Applied filters as removable chips. A filter you cannot see is one you forget you set, and then the empty result looks like a broken product |
-| `BarChart` `LineChart` | A thin tokenised layer, not a charting engine. Series come from `--lw-chart-1..8`; every chart renders its numbers as a hidden table |
+| `FilterBar` | Applied filters as removable chips. A filter you cannot see is one you forget you set, and then the empty result looks like a broken product |
+| `Toolbar` | The row above a list: search, filters, actions. `.lw-toolbar-grow` on the child that should take the slack |
+| `BarChart` | A thin tokenised layer, not a charting engine. Series come from `--lw-chart-1..8`; every chart renders its numbers as a hidden table |
+| `LineChart` | The line and area chart, on the same tokenised layer as `BarChart`. Legend swatches are painted from CSS via `--lw-swatch`, so a series colour has one home |
 | `ActivityFeed` | Notifications and activity — the same list with a different verb. Day-bucketed; unread is a dot plus weight, never a tint alone |
 
 **`Table` and `DataGrid` share one column contract.** A column is
@@ -343,7 +357,9 @@ a design system whose API moves under a consumer's feet is a reason to vendor it
 |---|---|
 | `TopBar` | Sticky app chrome. `brand` `links` `actions` |
 | `AppBar` | **Use this, not a hand-written bar.** Brand + breadcrumbs + actions on `TopBar`, with an optional rail toggle. The lead holder is `flex: 0 1 auto` because TopBar already ships a `flex: 1` spacer — a second claimant splits the slack and ellipsises the breadcrumbs with a third of the row empty, which is exactly what five hand-written copies did |
-| `Sidebar` + `NavItem` | The product rail. `collapsed` → 60px icon rail |
+| `Sidebar` | The product rail. `collapsed` → 60px icon rail. `linkAs` swaps the anchor for a router Link |
+| `NavItem` | One row of the rail — an `<a>` when it has an `href`, a `<button>` when it does not. Exported so a rail can be composed by hand |
+| `NavMenu` | The site-header dropdown that teaches a taxonomy: named groups, one line of prose per destination. A native `<details>`, so it is server-safe and works with JavaScript off — **not** built on `Menu`/`Popover`, whose CSS lives in the layer a marketing page drops. Put it FIRST in the bar's nav. Escape-to-close and close-on-route-change are the consumer's |
 | `Tabs` | Roving tabindex: arrow keys, Home/End — selection AND focus move together |
 | `Breadcrumbs` | Mono, so it reads as a path |
 | `CommandPalette` | ⌘K, on the native `<dialog>` — modal, so the page behind it is inert. **It does not bind the shortcut**; a component that installs a global key handler cannot be turned off on the screen where ⌘K means something else. Scored subsequence match, so "opdb" finds "Open database" |
@@ -357,7 +373,8 @@ a design system whose API moves under a consumer's feet is a reason to vendor it
 | Component | Purpose |
 |---|---|
 | `Dialog` | The native `<dialog>`. Focus trap, Esc and inertness are the platform's |
-| `Toast` + `ToastRegion` | `tone`: info · ok · warn · err. Errors use `role="alert"`. `onClose` adds a dismiss control |
+| `Toast` | `tone`: info · ok · warn · err. Errors use `role="alert"`. `onClose` adds a dismiss control |
+| `ToastRegion` | The live region toasts mount into — one per page. `urgent` raises it to `assertive`; `label` names it |
 | `Tooltip` | Hints only. Does not exist on touch |
 | `Popover` | **The one floating surface.** Menu, Combobox, DatePicker and every filter panel are this plus contents. Top-layer, so it escapes an ancestor's `overflow: hidden` without a portal. `placement` flips only when the preferred side does not fit; dismissal is explicit, because `popover="auto"`'s light-dismiss cannot tell the trigger from the outside world |
 | `Drawer` | The side sheet — a modal that enters from an edge, so it is the same native `<dialog>`. `side`: start · end · bottom (the touch answer to a centred dialog) |
@@ -525,8 +542,10 @@ place, that is `Disclosure` — a native `<details>`, complete with zero JavaScr
 
 ## Templates
 
-Twelve starting points under `templates/`. Each is one `.dc.html` entry plus a `ds-base.js`
-whose single `base` line points at this package.
+Twelve starting points under `templates/`. Each is one `.dc.html` entry; the two scripts they
+all share — `ds-base.js` (whose single `base` line points at this package) and `support.js` —
+live once, in `templates/_shared/`, and `check:templates` fails if a re-pull puts a sibling copy
+back beside a template.
 
 | Template | What it starts |
 |---|---|
@@ -711,7 +730,7 @@ here needs a second touch rule.
 **12. An AI surface is never the ONLY path to an outcome.** Every generated artifact has a
 manual editor; every agent action has a manual equivalent. That is why `Artifact` takes
 `onEdit` and why it is documented as required-in-spirit rather than optional — much cheaper to
-assert once than to retrofit into seven components later.
+assert once than to retrofit surface by surface later.
 
 ---
 
@@ -770,6 +789,20 @@ zoom, mixed axes or stacked-and-grouped. **The trigger to adopt a real charting 
 third chart type, not a feature request on the first two.** Say no to the scatter plot rather
 than growing these two files into a library nobody chose.
 
+## Type
+
+Geist for everything, Geist Mono for the eyebrow and code. Since v1.13.0 the display faces read
+`--lw-font-display` (default: `--lw-font-sans`), so a consumer can put a serif on `.lw-display`,
+`.lw-h1`, `.lw-h2` and `.lw-prose h2` with one line and leave the body alone. A display face
+that is not Geist should re-check `--lw-tracking-tighter`: the negative tracking was measured for
+Geist's counters and can close a serif's. `.lw-display` is the step above `.lw-h1`, for the one
+line on a page that is allowed to be that big.
+
+Line-heights are tokens too — `.lw-h3` reads `--lw-lh-snug` and `.lw-lead` reads
+`--lw-lh-normal` rather than carrying a literal. Measures: `--lw-measure-prose` 68ch (the
+article), `--lw-measure` 60ch (a lead, a card's copy), `--lw-measure-sm` 46ch (a caption, a
+narrow rail). `Prose`'s `measure` prop is a spelling of the first and third.
+
 ## Motion
 
 Restrained by policy: 100–200ms on state change, no entrance choreography, and nothing that
@@ -781,6 +814,18 @@ tilt, marquee), double-gated behind `@supports (animation-timeline: …)` and
 
 Durations: `--lw-dur-xs` 100 · `sm` 180 · `md` 240 · `lg` 400 · `xl` 800.
 House curve: `--lw-ease-out: cubic-bezier(.22,1,.36,1)`.
+
+**Two more tiers for the things that loop (v1.13.0).** `--lw-dur-loop-fast` 1.1s (the caret),
+`--lw-dur-loop` 1.5s (pulse, shimmer, trace, the tool dot), `--lw-dur-loop-slow` 2.4s (the
+reduced-motion spinner); and for the decorative drifts `--lw-dur-ambient` 24s and
+`--lw-dur-ambient-slow` 40s. Every bespoke `--lw-dur-<effect>` name those replace is deprecated
+and gone in v2.0, as are `--lw-duration-fast` / `--lw-duration` / `--lw-duration-slow` (use
+`--lw-dur-xs` / `sm` / `lg`); `tokens.json` marks each with `$deprecated`.
+
+**One switch for every ambient loop.** `--lw-ambient-play` is the `animation-play-state` of every
+decorative drift, and `data-ambient="off"` on any ancestor pauses them all at frame 0 — a page
+that wants a still ground says so once. The default is `running` for this major; **v2.0 flips it
+to paused** and `data-ambient="on"` opts back in.
 
 ## Accessibility
 
@@ -828,15 +873,17 @@ announced as a control.
 ## Enforcement
 
 ```bash
-npm run check        # the six fast gates — what a contributor runs
-npm run check:ci     # the above plus the two that need a browser
+npm test             # node --test over tools/ — the helpers the gates are built on
+npm run check        # every gate that needs no browser, in order — what a contributor runs.
+                     #   package.json#scripts.check is the list; it starts with `npm test`
+npm run check:ci     # the above plus check:pack and the two that need a browser
 
 npm run check:contrast   # every token pair ≥ WCAG AA in three canonical scopes, plus band scope
 npm run check:tokens     # raw hex, palette escapes, arbitrary-value access, >1 CTA
 npm run check:themes     # every themable CHANNEL re-pointed in every theme scope
 npm run check:dts        # react.d.ts covers every runtime export of react.js
 npm run check:bundle     # _ds_bundle.js matches the .jsx sources it is built from
-npm run check:templates  # the twelve generated files are identical; landmarks present
+npm run check:templates  # templates/_shared is the only home of ds-base.js/support.js; landmarks present
 npm run check:a11y       # axe over every card, both grounds (serious/critical fail)
 npm run check:visual     # every card × light/dark × comfortable/compact
 npm run tokens           # tokens.css → tokens.json (DTCG, for Tokens Studio)
@@ -884,7 +931,7 @@ was supposed to have fixed exactly that.
 
 **`check:dts` exists because the barrel had two homes for one fact.** `react.js` is the
 runtime export list; `react.d.ts` was hand-written beside it and drifted — four re-exports
-named a sibling's file, which broke `npm run build` outright, and thirty-one components had
+named a sibling's file, which broke `npm run build` outright, and dozens of components had
 no types at all, which broke only the consumer. The generator joins `react.js` to each
 component's own `.d.ts` so neither can drift from the other again.
 
@@ -943,7 +990,9 @@ The checklist, in order. A component that skips a step is the one that drifts.
    HTML with those classes and no JavaScript at all.
 3. **Add `Name.jsx` + `Name.d.ts`** side by side in the right folder. The JSX is a thin wrapper
    that emits those classes and holds no styling of its own, so the React and vanilla consumers
-   cannot drift apart.
+   cannot drift apart. **Thin is the target, not a tolerance:** a component that only emits a
+   className should be about ten lines (`CardBody` is one). Logic that exists to reproduce a
+   CSS rule in JavaScript is the CSS rule in the wrong file.
 4. **Name an icon, never draw one.** `import { Icon } from "../primitives/Icon.jsx"` and pass a
    name. If the glyph does not exist, add it to `Icon.jsx` and to the `IconName` union — once.
 5. **Both grounds.** Check it on light and on `.lw-band-dark`. A component that only works on one
@@ -977,7 +1026,7 @@ The checklist, in order. A component that skips a step is the one that drifts.
     fails on a new name, and fails again if a value you advertise has no CSS rule behind it.
 
     This was the one load-bearing rule in the package left to memory instead of a script, and it
-    is the one that rotted: seven components spelled five judgements six different ways —
+    is the one that rotted: the tone-carrying components spelled five judgements six different ways —
     "warning" three ways, "danger" three, "success" three — while every one of them resolved to
     `--lw-warning-on` / `--lw-danger-on` / `--lw-success-on` underneath. The tokens were never
     drifted. Only the props were.
@@ -999,9 +1048,13 @@ assets/logo-lockup.svg      mark + LEANWISE AI wordmark
 assets/logo-lockup-ondark.svg  the lockup with the wordmark in white — dark grounds
 assets/logo-favicon.svg     the mark, squared and self-switching — the browser tab
 assets/logo-icon.png        raster fallback of the mark (apple-touch-icon, and any
-                            surface that cannot take an SVG)
-assets/logo-leanwise.png    raster fallback of the lockup (JSON-LD, crawlers)
+                            surface that cannot take an SVG) — DEPRECATED, removed in v2.0
+assets/logo-leanwise.png    raster fallback of the lockup (JSON-LD, crawlers) — DEPRECATED, v2.0
 ```
+
+`hex-lattice.svg`, `hero-mark.svg` and `logo-lockup-ondark.svg` are **generated** from their
+`-ink` sources by `npm run assets` (`check:assets` fails when stale) — the on-dark stops come
+from the artwork-only `--lw-art-*` tokens, so the ink and on-dark artwork cannot drift apart.
 
 **The favicon is generated, not drawn** — `npx lw-favicon` (and `--check`, which runs inside
 `npm run check`). It is derived from `logo-mark.svg` and differs in exactly two ways, both of

@@ -1,6 +1,6 @@
 # `preview/_vendor/` — the two UMD builds the component cards run on
 
-27 `components/**/*.card.html` cards mount real React demos. They used to pull React,
+The `components/**/*.card.html` cards mount real React demos. They used to pull React,
 ReactDOM and Babel from `unpkg.com` at page load, which made `check:a11y` and
 `check:visual` **network-dependent**: a CDN hiccup is a nondeterministic build failure,
 and the gates could not run air-gapped at all. These are the same React files, on disk.
@@ -47,7 +47,7 @@ curl -sSLo react-dom.development.js https://unpkg.com/react-dom@18.3.1/umd/react
 sha256sum *.js            # then update the table above
 ```
 
-Bumping React means bumping it in **both** filenames and in all 27 cards
+Bumping React means bumping it in **both** filenames and in every card
 (`grep -rl _vendor components/`), and re-running `npm run check:a11y`.
 
 The bundle the cards actually render (`_ds_bundle.js`) is built **here** by
