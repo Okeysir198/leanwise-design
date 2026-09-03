@@ -1,4 +1,4 @@
-<!-- @dsCard group="Navigation" name="Navigation" subtitle="TopBar, Sidebar, Tabs, Breadcrumbs, ThemeToggle — arrow-key tabs, collapsible rail" viewport="1060x700" -->
+<!-- @dsCard group="Navigation" name="Navigation" subtitle="TopBar, Sidebar, Tabs, Breadcrumbs, ThemeToggle, LocaleSwitcher — arrow-key tabs, collapsible rail" viewport="1060x700" -->
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><title>Navigation</title>
 <link rel="stylesheet" href="../../preview/_card.css">
@@ -56,11 +56,12 @@ same nav model appears on every app surface with only <span class="mono">current
 <script type="text/babel">
 const LW = window.LeanWiseDesign_f2d907;
 
-const { TopBar, Sidebar, Tabs, Breadcrumbs, ThemeToggle, Button, Avatar, Icon, Stack, Cluster } = LW;
+const { TopBar, Sidebar, Tabs, Breadcrumbs, ThemeToggle, LocaleSwitcher, Button, Avatar, Icon, Stack, Cluster } = LW;
 function Demo() {
   const [tab, setTab] = React.useState("sources");
   const [collapsed, setCollapsed] = React.useState(false);
   const [theme, setTheme] = React.useState("light");
+  const [loc, setLoc] = React.useState("en");
   // The same nav model the app-shell and dashboard templates declare. Only
   // `current` differs between screens — one product, one rail.
   const items = [
@@ -117,6 +118,11 @@ function Demo() {
           <Button size="sm" title="Start a new session"><Icon name="plus" size={17} /><span>New chat</span></Button>
           {/* Two modes, because every LeanWise app surface is authored light and dark. */}
           <ThemeToggle modes={["light","dark"]} value={theme} onChange={setTheme} />
+          {/* Endonyms, always — a reader looking for their own language looks for
+              its name in that language. `compact` opens a menu rather than
+              cycling: a language you cannot read is one you cannot predict. */}
+          <LocaleSwitcher compact value={loc} onChange={setLoc}
+            locales={["en","vi"]} localeLabels={{en:"English", vi:"Tiếng Việt"}} />
         </TopBar>
         <div style={{flex:1,minHeight:0,overflow:"auto",padding:20,display:"grid",gap:14,alignContent:"start"}} className="lw-scroll">
           <Tabs label="Source detail" value={tab} onChange={setTab} tabs={[

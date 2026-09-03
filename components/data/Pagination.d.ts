@@ -32,6 +32,15 @@ export interface PaginationProps extends React.HTMLAttributes<HTMLElement> {
   formatCursor?(page: number): React.ReactNode;
   formatPageLabel?(page: number): string;
   formatPageSize?(size: number): React.ReactNode;
+  /**
+   * BCP-47 tag for `Intl`. Omit to follow the browser.
+   *
+   * ⚠️ Until v1.10.0 this was not offered and `Intl` was constructed with no
+   * locale, so an app that switched its UI language kept the browser's number
+   * and date formatting in the same view — the switch appeared to half-work,
+   * which is worse than not offering one.
+   */
+  locale?: string;
 }
 /** Page navigation AND the result count — the count is the control's feedback. */
 export declare function Pagination(props: PaginationProps): React.JSX.Element;

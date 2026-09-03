@@ -1,7 +1,9 @@
-import { cx, SERIES, nf, DataTable, Legend, frame, Grid } from "./chart-parts.jsx";
+import { cx, SERIES, numberFormat, DataTable, Legend, frame, Grid } from "./chart-parts.jsx";
 
 /** The line and area chart. Same tokenised layer as BarChart. */
-export function LineChart({ labels = [], series = [], height = 200, area, label, className, ...rest }) {
+export function LineChart({ labels = [], series = [], height = 200, area, label, locale, className, ...rest }) {
+  /* Follows the app's language when given one; the browser's otherwise. */
+  const nf = numberFormat(locale);
   const max = Math.max(1, ...series.flatMap(s => s.data));
   const f = frame(max, height);
   const { w, pad, top, iw, ih, y } = f;

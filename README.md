@@ -110,7 +110,7 @@ what is still open. `CONTRIBUTING.md` points back here — the checklist lives i
 ## Install
 
 ```jsonc
-"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v1.9.1" }
+"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v1.10.0" }
 ```
 
 ```css
@@ -281,6 +281,9 @@ rule; every transform stands down under `prefers-reduced-motion`.
 | `Field` | **The unit.** Wires `htmlFor`, `aria-describedby`, `aria-invalid`. `label` `help` `error` `required` `optional` |
 | `Input` | `size`, `invalid` |
 | `InputGroup` | An input with a `prefix` / `suffix` inside one focus ring |
+| `PasswordInput` | A password that can be read back. Reveal toggle with `aria-pressed`, and a Caps Lock warning — the commonest cause of "the password is right and it says it is wrong", invisible on every keyboard |
+| `PasswordMeter` | Four segments and **a word**. Emits the `.lw-pwmeter` CSS that shipped in v1.2 with nothing rendering it. It scores nothing — `level` is yours, from whatever the server actually enforces |
+| `OtpInput` | A one-time code as ONE field, not six boxes. Six inputs break `autoComplete="one-time-code"` (the platform fills only the first), make six tab stops, and turn a pasted "123 456" into one digit. The segmented LOOK is letter-spacing |
 | `Textarea` | |
 | `Select` | `options` as strings or `{value,label}`. CSS chevron |
 | `Switch` | For a setting that applies immediately |
@@ -346,6 +349,7 @@ a design system whose API moves under a consumer's feet is a reason to vendor it
 | `CommandPalette` | ⌘K, on the native `<dialog>` — modal, so the page behind it is inert. **It does not bind the shortcut**; a component that installs a global key handler cannot be turned off on the screen where ⌘K means something else. Scored subsequence match, so "opdb" finds "Open database" |
 | `BottomNav` | The touch answer to `Sidebar`. Three to five DESTINATIONS, never actions (warns past five). Reserves the home indicator from `--lw-safe-bottom`, and takes its 44px target from the bar height rather than padding |
 | `NavToggle` | The narrow-bar nav for `TopBar` — a toggle in the bar and a panel under it, rendered as `TopBar` children. **Not `Drawer`:** a drawer is a modal `<dialog>` in the top layer that makes the page inert, so it needs a focus trap and a scrim; this hangs under the bar, leaves the page interactive, and needs neither. Appears at `--lw-bp-md`, the same breakpoint at which the bar's own links drop. `aria-expanded` + `aria-controls`, Escape closes and returns focus |
+| `LocaleSwitcher` | Which language the interface is in. `Segmented` when there is room; `compact` opens a **menu**, not a cycle — a reader who cannot read the current language cannot predict what the next press gives them. Ships no language names: a list of endonyms is a claim about which languages exist and how they are spelt |
 | `ThemeToggle` | Light / dark by default (`modes` adds `"system"` where a product honours it). Driven by `value`/`onChange` — never uncontrolled beside a themed wrapper, which paints half a theme |
 
 ### Overlays — `components/overlays/`

@@ -717,6 +717,32 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
 
    No dark patch: every value here is a ROLE (`--lw-brand-soft` / `--lw-brand-on`),
    so a dark band re-points the whole atom with nothing to move. */
+/* AUTH — the one screen every product has and this package only ever DREW.
+   `templates/auth/Auth.dc.html` has shipped a five-screen sign-in design since
+   v1.4 built entirely from inline `style=` attributes, so the one thing a
+   consumer could not do was use it. These are those measurements, named.
+
+   Not vertically centred, and that is the whole point of `.lw-auth`: a phone
+   keyboard covers the lower half of the viewport, and a centred card puts its
+   submit button underneath the keyboard the moment the first field is focused.
+   Top-aligned with generous space above reads as centred on a desktop and stays
+   reachable on a phone. */
+.lw-auth { display: flex; flex-direction: column; align-items: center; min-height: 100dvh; padding: clamp(24px, 8vh, 96px) var(--lw-pad-x) var(--lw-space-48); }
+.lw-auth-panel { width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: var(--lw-space-20); }
+.lw-auth-panel-wide { max-width: 460px; }
+/* The head sits OUTSIDE the card: a product name inside the card competes with
+   the form's own label hierarchy, and on a narrow screen it is the first thing
+   to be mistaken for a field label. */
+.lw-auth-head { display: flex; flex-direction: column; gap: var(--lw-space-4); }
+/* The row under the form — a locale switcher, a support link. Muted and
+   separated, because it is not part of the form and must not read as another
+   control the user is expected to fill in. */
+.lw-auth-foot { display: flex; align-items: center; justify-content: center; gap: var(--lw-space-12); flex-wrap: wrap; padding-block-start: var(--lw-space-4); }
+/* "or" between a password form and an SSO button. Hand-written as three spans
+   in five places before it was a rule. */
+.lw-auth-or { display: flex; align-items: center; gap: var(--lw-space-12); color: var(--lw-fg-subtle); font-size: var(--lw-text-xs); }
+.lw-auth-or::before, .lw-auth-or::after { content: ""; flex: 1; height: 1px; background: var(--lw-line); }
+
 .lw-avatar { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; flex: none; border-radius: 50%; background: var(--lw-brand-soft); color: var(--lw-brand-on); font-size: 12px; font-weight: var(--lw-fw-medium); letter-spacing: 0.01em; overflow: hidden; user-select: none; }
 .lw-avatar img { width: 100%; height: 100%; object-fit: cover; }
 .lw-avatar-sm { width: 24px; height: 24px; font-size: 10px; }

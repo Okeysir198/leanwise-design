@@ -42,6 +42,15 @@ export interface ActivityFeedProps extends React.HTMLAttributes<HTMLDivElement> 
   /** Replaces the whole relative-time string. Receives the item's `when` and "now". */
   formatTimeAgo?(when: Date | number | string, now: number): React.ReactNode;
   unreadLabel?: React.ReactNode;
+  /**
+   * BCP-47 tag for `Intl`. Omit to follow the browser.
+   *
+   * ⚠️ Until v1.10.0 this was not offered and `Intl` was constructed with no
+   * locale, so an app that switched its UI language kept the browser's number
+   * and date formatting in the same view — the switch appeared to half-work,
+   * which is worse than not offering one.
+   */
+  locale?: string;
 }
 /** Notifications and activity — the same list with a different verb. */
 export declare function ActivityFeed(props: ActivityFeedProps): React.JSX.Element;

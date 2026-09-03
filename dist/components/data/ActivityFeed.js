@@ -5,17 +5,17 @@ import { Icon } from "../primitives/Icon.js";
 import { normTone } from "../_tone.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
 const ms = (when) => when instanceof Date ? when.getTime() : new Date(when).getTime();
-const stamp = (when) => new Intl.DateTimeFormat(void 0, { day: "numeric", month: "short" }).format(ms(when));
+const stamp = (when, locale) => new Intl.DateTimeFormat(locale || void 0, { day: "numeric", month: "short" }).format(ms(when));
 const RELATIVE_LABELS = { now: "just now", minutes: "m ago", hours: "h ago", days: "d ago" };
 const BUCKET_LABELS = { today: "Today", yesterday: "Yesterday", week: "This week", earlier: "Earlier" };
-function timeAgo(when, now = Date.now(), labels = RELATIVE_LABELS) {
+function timeAgo(when, now = Date.now(), labels = RELATIVE_LABELS, locale) {
   const t = ms(when);
   const s = Math.max(0, (now - t) / 1e3);
   if (s < 60) return labels.now;
   if (s < 3600) return Math.floor(s / 60) + labels.minutes;
   if (s < 86400) return Math.floor(s / 3600) + labels.hours;
   if (s < 86400 * 3) return Math.floor(s / 86400) + labels.days;
-  return stamp(when);
+  return stamp(when, locale);
 }
 const bucketKey = (when, now) => {
   const d = new Date(when), n = new Date(now);
@@ -32,6 +32,7 @@ function ActivityFeed({
   bucketLabels = BUCKET_LABELS,
   formatTimeAgo = timeAgo,
   unreadLabel = "Unread",
+  locale,
   className,
   ...rest
 }) {
@@ -68,7 +69,7 @@ function ActivityFeed({
               /* @__PURE__ */ jsxs("span", { className: "lw-feed-main", children: [
                 /* @__PURE__ */ jsx("span", { className: "lw-feed-title", children: it.title }),
                 /* @__PURE__ */ jsxs("span", { className: "lw-feed-meta", children: [
-                  it.when ? at != null ? formatTimeAgo(it.when, at) : stamp(it.when) : null,
+                  it.when ? at != null ? formatTimeAgo(it.when, at, RELATIVE_LABELS, locale) : stamp(it.when, locale) : null,
                   it.meta ? (it.when ? " \xB7 " : "") + it.meta : ""
                 ] })
               ] }),

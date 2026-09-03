@@ -1,4 +1,4 @@
-<!-- @dsCard group="Forms" name="Form controls" subtitle="Field, Input, Select, Textarea, Switch, Checkbox, Segmented — one control face, one focus treatment" viewport="1000x820" -->
+<!-- @dsCard group="Forms" name="Form controls" subtitle="Field, Input, Password, OTP, Select, Textarea, Switch, Checkbox, Segmented — one control face, one focus treatment" viewport="1000x820" -->
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><title>Forms</title>
 <link rel="stylesheet" href="../../preview/_card.css">
@@ -23,7 +23,8 @@ ring reads as "already fixed" the moment it is focused.</p></header>
 <script type="text/babel">
 const LW = window.LeanWiseDesign_f2d907;
 
-const { Field, Input, InputGroup, Textarea, Select, Switch, Checkbox, Segmented, Button, Stack, Cluster, Icon } = LW;
+const { Field, Input, InputGroup, Textarea, Select, Switch, Checkbox, Segmented, Button, Stack, Cluster, Icon,
+        PasswordInput, PasswordMeter, OtpInput } = LW;
 function Demo({ns}) {
   const [seg, setSeg] = React.useState("semantic");
   return (
@@ -42,6 +43,14 @@ function Demo({ns}) {
       </Field>
       <Field label="System prompt" htmlFor={ns+"-e"} optional>
         <Textarea id={ns+"-e"} placeholder="Answer only from the retrieved passages…" />
+      </Field>
+      <span className="lbl-eyebrow">password · one-time code</span>
+      <Field label="Password" htmlFor={ns+"-pw"} help="At least 12 characters.">
+        <PasswordInput id={ns+"-pw"} defaultValue="correct horse battery" autoComplete="new-password" />
+      </Field>
+      <PasswordMeter level={3} label="Strong" />
+      <Field label="Six-digit code" htmlFor={ns+"-otp"}>
+        <OtpInput id={ns+"-otp"} defaultValue="184" />
       </Field>
       <span className="lbl-eyebrow">switch · checkbox · radio · segmented</span>
       <Stack gap={12}>

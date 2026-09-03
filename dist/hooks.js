@@ -55,6 +55,26 @@ function useTheme() {
   }, []);
   return { mode, resolved, setMode: choose, isDark: resolved === "dark" };
 }
+const RAIL_KEY = "lw-rail-collapsed";
+function useRailCollapsed(initial = false) {
+  const [collapsed, setCollapsed] = useState(initial);
+  useEffect(() => {
+    try {
+      const v = localStorage.getItem(RAIL_KEY);
+      if (v != null) setCollapsed(v === "1");
+    } catch {
+    }
+  }, []);
+  const set = useCallback((next) => {
+    setCollapsed(next);
+    try {
+      localStorage.setItem(RAIL_KEY, next ? "1" : "0");
+    } catch {
+    }
+  }, []);
+  const toggle = useCallback(() => set(!collapsed), [collapsed, set]);
+  return { collapsed, setCollapsed: set, toggle };
+}
 function useReveal({ threshold = 0.15, rootMargin = "0px 0px -10% 0px" } = {}) {
   const ref = useRef(null);
   const [shown, setShown] = useState(false);
@@ -149,12 +169,14 @@ function animateCounter(el, to, { from = 0, duration = 900, decimals = 0, format
   };
 }
 export {
+  RAIL_KEY,
   THEME_EVENT,
   THEME_KEY,
   animateCounter,
   paint,
   persist,
   useDeterministicCascade,
+  useRailCollapsed,
   useReducedMotion,
   useReveal,
   useSpotlight,

@@ -1,7 +1,11 @@
 export const cx = (...a) => a.filter(Boolean).join(" ");
 
 export const SERIES = (i) => "var(--lw-chart-" + ((i % 8) + 1) + ")";
+/* The browser-locale default, kept as a named export because both charts and
+   several specimens import it directly. `numberFormat(locale)` is the way to
+   get a formatter that follows the APP's language instead — see BarChart. */
 export const nf = new Intl.NumberFormat();
+export const numberFormat = (locale) => (locale ? new Intl.NumberFormat(locale) : nf);
 
 /* Keys come from the INDEX, never from a series name or an axis label. A chart
    is routinely handed repeated labels — "Jan" twice across a two-year range is

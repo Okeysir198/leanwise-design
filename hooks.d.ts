@@ -28,3 +28,18 @@ export function useSpotlight(): RefObject<any>;
 export function useDeterministicCascade(opts?: { step?: number; max?: number; base?: number }): (i: number) => string;
 export function useReducedMotion(): boolean;
 export function animateCounter(el: HTMLElement | null, to: number, opts?: { from?: number; duration?: number; decimals?: number; format?: (n: number) => string }): () => void;
+
+/** localStorage key for the product rail's collapsed state. */
+export declare const RAIL_KEY: string;
+/**
+ * The product rail's collapsed state, persisted to localStorage.
+ *
+ * A hook rather than state inside `Sidebar`, because the control that toggles
+ * the rail lives in the `AppBar` — a sibling, not a child. Read on mount, so a
+ * server render does not guess and flash the wrong width.
+ */
+export declare function useRailCollapsed(initial?: boolean): {
+  collapsed: boolean;
+  setCollapsed: (next: boolean) => void;
+  toggle: () => void;
+};

@@ -7,7 +7,7 @@ const cx = (...a) => a.filter(Boolean).join(" ");
 const ms = (when) => (when instanceof Date ? when.getTime() : new Date(when).getTime());
 /* The absolute form, and the fallback while "now" is unknown: it depends only on
    the item, so a server render and the client's hydration agree on it. */
-const stamp = (when) => new Intl.DateTimeFormat(undefined, { day: "numeric", month: "short" }).format(ms(when));
+const stamp = (when, locale) => new Intl.DateTimeFormat(locale || undefined, { day: "numeric", month: "short" }).format(ms(when));
 
 /* Relative until it stops being useful. "3 days ago" is worse than a date the
    moment the user needs to correlate it with anything else.
@@ -20,14 +20,14 @@ const stamp = (when) => new Intl.DateTimeFormat(undefined, { day: "numeric", mon
 export const RELATIVE_LABELS = { now: "just now", minutes: "m ago", hours: "h ago", days: "d ago" };
 export const BUCKET_LABELS = { today: "Today", yesterday: "Yesterday", week: "This week", earlier: "Earlier" };
 
-export function timeAgo(when, now = Date.now(), labels = RELATIVE_LABELS) {
+export function timeAgo(when, now = Date.now(), labels = RELATIVE_LABELS, locale) {
   const t = ms(when);
   const s = Math.max(0, (now - t) / 1000);
   if (s < 60) return labels.now;
   if (s < 3600) return Math.floor(s / 60) + labels.minutes;
   if (s < 86400) return Math.floor(s / 3600) + labels.hours;
   if (s < 86400 * 3) return Math.floor(s / 86400) + labels.days;
-  return stamp(when);
+  return stamp(when, locale);
 }
 
 const bucketKey = (when, now) => {
@@ -54,6 +54,7 @@ export function ActivityFeed({
   bucketLabels = BUCKET_LABELS,
   formatTimeAgo = timeAgo,
   unreadLabel = "Unread",
+  locale,
   className, ...rest
 }) {
   /* `now` is resolved in an EFFECT, not defaulted during render — the same fix
@@ -99,7 +100,7 @@ export function ActivityFeed({
                 <span className="lw-feed-main">
                   <span className="lw-feed-title">{it.title}</span>
                   <span className="lw-feed-meta">
-                    {it.when ? (at != null ? formatTimeAgo(it.when, at) : stamp(it.when)) : null}{it.meta ? (it.when ? " · " : "") + it.meta : ""}
+                    {it.when ? (at != null ? formatTimeAgo(it.when, at, RELATIVE_LABELS, locale) : stamp(it.when, locale)) : null}{it.meta ? (it.when ? " · " : "") + it.meta : ""}
                   </span>
                 </span>
                 {it.unread && <span className="lw-sr-only">{unreadLabel}</span>}

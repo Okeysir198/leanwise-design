@@ -1,7 +1,16 @@
 import * as React from "react";
 import type { Crumb } from "./Breadcrumbs";
+import type { TopBarLink } from "./TopBar";
 
 export interface AppBarProps extends React.HTMLAttributes<HTMLElement> {
+  /**
+   * Forwarded to `TopBar`. AppBar's own row is brand + breadcrumbs + actions,
+   * so a link nav is unusual here — but `...rest` has always reached TopBar and
+   * these two worked at runtime while failing to compile, which is the worst of
+   * both. Declared so the behaviour and the type agree.
+   */
+  links?: TopBarLink[];
+  logo?: boolean;
   /** Live text beside the mark, never the combined lockup artwork. */
   brand?: React.ReactNode;
   /** Omit or pass "" to render the brand as a span rather than a link. */

@@ -1,6 +1,7 @@
 import { jsx, jsxs } from "react/jsx-runtime";
-import { cx, SERIES, nf, DataTable, Legend, frame, Grid } from "./chart-parts.js";
-function BarChart({ labels = [], series = [], height = 200, stacked, label, className, ...rest }) {
+import { cx, SERIES, numberFormat, DataTable, Legend, frame, Grid } from "./chart-parts.js";
+function BarChart({ labels = [], series = [], height = 200, stacked, label, locale, className, ...rest }) {
+  const nf = numberFormat(locale);
   const max = Math.max(1, ...series.flatMap((s) => stacked ? [] : s.data), ...stacked ? labels.map((_, i) => series.reduce((a, s) => a + s.data[i], 0)) : []);
   const f = frame(max, height);
   const { w, pad, top, iw, ih, y } = f;

@@ -14,7 +14,14 @@ export interface ChartProps extends React.HTMLAttributes<HTMLDivElement> {
   label: string;
 }
 export interface BarChartProps extends ChartProps { stacked?: boolean }
-export interface LineChartProps extends ChartProps { area?: boolean }
+export interface LineChartProps extends ChartProps { area?: boolean   /**
+   * BCP-47 tag for `Intl` number formatting in the point tooltips. Omit to
+   * follow the browser. Added in v1.10.0 — the formatter was a module-level
+   * singleton with no locale, so a chart in a Vietnamese view still grouped
+   * its numbers the browser's way.
+   */
+  locale?: string;
+}
 /**
  * A thin tokenised layer over the two shapes a dashboard needs, not a charting
  * engine. Series colours come from `--lw-chart-1..8`, which lift a tier on the

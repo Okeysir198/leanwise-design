@@ -16,8 +16,16 @@ function Field({
   ...rest
 }) {
   const auto = React.useId();
-  const id = htmlFor || auto;
+  const single = React.Children.count(children) === 1 && React.isValidElement(children) ? children : null;
+  const id = htmlFor || single?.props?.id || auto;
   const msgId = id + "-msg";
+  const describedBy = error || help ? [single?.props?.["aria-describedby"], msgId].filter(Boolean).join(" ") : single?.props?.["aria-describedby"];
+  const wired = single ? React.cloneElement(single, {
+    id,
+    "aria-describedby": describedBy,
+    "aria-invalid": single.props["aria-invalid"] ?? (error ? "true" : void 0),
+    required: single.props.required ?? (required || void 0)
+  }) : children;
   return /* @__PURE__ */ jsxs("div", { className: cx("lw-field", className), ...rest, children: [
     label && /* @__PURE__ */ jsxs("label", { className: "lw-label", htmlFor: id, children: [
       label,
@@ -27,7 +35,7 @@ function Field({
       ] }),
       optional && /* @__PURE__ */ jsx("span", { className: "opt", children: optionalLabel })
     ] }),
-    typeof children === "function" ? children({ id, "aria-describedby": error || help ? msgId : void 0, "aria-invalid": error ? "true" : void 0, required }) : children,
+    typeof children === "function" ? children({ id, "aria-describedby": error || help ? msgId : void 0, "aria-invalid": error ? "true" : void 0, required }) : wired,
     error ? /* @__PURE__ */ jsx("span", { className: "lw-error", id: msgId, role: "alert", children: error }) : help ? /* @__PURE__ */ jsx("span", { className: "lw-help", id: msgId, children: help }) : null
   ] });
 }

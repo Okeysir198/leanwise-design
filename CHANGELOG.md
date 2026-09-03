@@ -22,6 +22,90 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 ## [Unreleased]
 
+## [1.10.0] — 2026-09-03
+
+### Added — the auth screen this package had only ever DRAWN
+
+`templates/auth/Auth.dc.html` has shipped a five-screen sign-in design since v1.4, built
+entirely from inline `style=` attributes. So the one thing a consumer could not do with it
+was use it — and the product that needed it shipped a password field with **no reveal at
+all**, on a phone, for people typing a password in a factory with gloves on.
+
+- **`PasswordInput`** — reveal toggle with `aria-pressed`, and a **Caps Lock warning**.
+  Caps Lock is the commonest cause of "the password is right and it says it is wrong", it
+  is invisible on every keyboard, and `getModifierState` appeared nowhere in this package.
+  The label names the CURRENT state, not the next one: a control labelled with its
+  destination reads as a label, and leaves a screen-reader user unable to tell whether the
+  password is on screen right now.
+- **`OtpInput`** — one field, not six boxes. Six inputs are six tab stops, six unlabelled
+  fields to a screen reader, and they **break `autoComplete="one-time-code"`**, which fills
+  only the first — so the control built to look most like the platform's own affordance is
+  the one that stops it working. A pasted "123 456" lands in one box. The segmented *look*
+  is letter-spacing; non-digits are stripped as typed, including that space.
+- **`PasswordMeter`** — emits `.lw-pwmeter`, which has been in `product.css` since v1.2
+  with nothing rendering it. It scores nothing: `level` is the consumer's, because a design
+  system shipping its own estimator would be making a security claim it cannot support and
+  would disagree with the server that enforces the rule.
+- **`.lw-auth-*`** — the layout, named. Deliberately **not vertically centred**: a phone
+  keyboard covers the lower half of the viewport, and a centred card puts its submit button
+  under the keyboard the moment the first field is focused.
+
+### Added — `LocaleSwitcher`, and the locale plumbing that makes it true
+
+There was no locale switcher, no `globe` glyph, and no `log-out` glyph — while `base.css`
+had already *reasoned about* a locale switcher, having hit-tested that two 39px links
+overlap when grown to 44px and "a tap near the seam opens the wrong language."
+
+Shaped on `ThemeToggle`, with one deliberate difference: **`compact` opens a menu, not a
+cycle.** A theme is guessable and a wrong guess costs one press. A language is not — a
+reader who does not read the current language cannot predict what the next press gives
+them, and overshooting means cycling through languages they cannot read to get back.
+
+It ships **no language names**. A list of endonyms is a claim about which languages exist
+and how they are spelt, and that is not this package's to make.
+
+**And the plumbing, because otherwise the control would lie.** `ActivityFeed`, `Pagination`,
+`BarChart` and `LineChart` all constructed `Intl` with **no locale** — one of them a
+module-level singleton. An app switching its UI to Vietnamese kept British dates and
+English number grouping in the same view. All four now take `locale`.
+
+### Fixed — `Field` never wired a plain child, which is the usage it documents
+
+`<Field error="…"><Input/></Field>` — the form `Input.d.ts` recommends and by far the most
+common one — rendered a `<label for>` and an `id`'d error message that pointed at
+**nothing**. No `aria-describedby` tied the message to the control and no `aria-invalid`
+marked the control at all, so a screen-reader user tabbing back through a failed form found
+no indication which field had failed. Only the render-prop form was ever wired.
+
+Now cloned: a caller's own `id` wins and the label follows it, an existing
+`aria-describedby` is appended to rather than replaced, and with several children the old
+behaviour stands because there is no way to know which child is the control.
+
+### Fixed — smaller, all found while making the above usable
+
+- **`Avatar`** had no image-error fallback: a 404 `src` rendered the browser's broken-image
+  glyph while the initials it had already computed sat unused. An avatar URL is the most
+  expirable thing in a session, so this is the common path, not the edge.
+- **`SidebarProps` omitted `label`** — and `React.HTMLAttributes` has no `label`, so
+  `<Sidebar label="Navigation">` was a **type error** against a prop the component has
+  always defaulted and used. `SidebarItem` omitted `id`, which the JSX reads for keying.
+  `AppBarProps` omitted `links`/`logo`, which `...rest` has always forwarded.
+- **A collapsed rail row with no `icon` was an invisible clickable strip.** The collapsed
+  rail hides the label and the badge, so such a row shrank to its padding: clickable,
+  nameless on touch, and indistinguishable from rail padding in review. It now keeps a
+  `min-height` floor, and the prop says why an icon is required in practice.
+- **`Sidebar` had no responsive story at all** — no `@media` rule in any stylesheet, and
+  `flex: none`, so a 236px rail is 63% of a 375px viewport and every consumer hand-wrote the
+  same hide. `data-responsive="hide"` is offered, opt-in so no existing layout moves. There
+  is deliberately no `"collapse"` value: a collapsed rail leans on the native `title`, and
+  `title` does not exist on touch.
+- **`useRailCollapsed`** persists the rail state. A hook rather than state inside `Sidebar`,
+  because the control that toggles the rail lives in the `AppBar` — a sibling, not a child.
+
+**Consumers:** additive. The one behavioural change is `Field`, which now sets `aria-invalid`
+and `aria-describedby` on controls that previously received neither — visual regression is
+clean across all 160 shots, and axe reports no violations on 40 cards × 2 grounds.
+
 ## [1.9.1] — 2026-09-03
 
 ### Fixed — `lw-token-lint` shipped without its executable bit

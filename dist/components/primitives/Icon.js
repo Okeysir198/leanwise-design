@@ -121,7 +121,21 @@ const ICONS = {
   signature: ["M4 15.5c2.5 0 3-8 5-8s1.5 8 3.5 8c1.4 0 2-2.5 3.5-2.5 1.1 0 1.5 1 2.5 1", "M4 19.5h16"],
   /* A location on a map. `pin` is a thumbtack — the drawing-pin that holds
      paper to a board — and the two are not interchangeable at 16px. */
-  "map-pin": ["M12 21s6.5-5.6 6.5-10.5a6.5 6.5 0 1 0-13 0C5.5 15.4 12 21 12 21z", "M12 13a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"]
+  "map-pin": ["M12 21s6.5-5.6 6.5-10.5a6.5 6.5 0 1 0-13 0C5.5 15.4 12 21 12 21z", "M12 13a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"],
+  /* ── Chrome glyphs (v1.10.0) ─────────────────────────────────────────────
+     Both were asked for by name and neither existed, so consumers reached for
+     the nearest thing: `key` or `external` for signing out, and nothing at all
+     for a language control — which is why the one locale switcher this package
+     has ever reasoned about (base.css, the coarse-pointer block) is two bare
+     text links. */
+  /* Sign out. The door and the arrow LEAVING it — the arrow is what makes it
+     an exit rather than `external`, which points out of a box and means "opens
+     elsewhere". Drawn leaving on the inline-end side, matching every platform. */
+  "log-out": ["M9.5 4.5H6a1.5 1.5 0 0 0-1.5 1.5v12A1.5 1.5 0 0 0 6 19.5h3.5", "M15.5 15.5 19 12l-3.5-3.5", "M19 12h-9"],
+  /* A language control. The globe reads as "language" everywhere and as
+     "region" nowhere else in this set; the two arcs are a meridian and the
+     equator, which is what stops it reading as a plain circle at 16px. */
+  globe: ["M12 3.5a8.5 8.5 0 1 0 0 17 8.5 8.5 0 0 0 0-17", "M3.5 12h17", "M12 3.5c2.2 2.3 3.4 5.3 3.4 8.5s-1.2 6.2-3.4 8.5c-2.2-2.3-3.4-5.3-3.4-8.5S9.8 5.8 12 3.5z"]
 };
 const UNKNOWN = ["M5.5 5.5h13v13h-13z", "M9.4 9.4l5.2 5.2", "M14.6 9.4l-5.2 5.2"];
 const warned = /* @__PURE__ */ new Set();

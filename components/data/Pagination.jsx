@@ -1,4 +1,5 @@
 "use client";
+import * as React from "react";
 import { Icon } from "../primitives/Icon.jsx";
 const cx = (...a) => a.filter(Boolean).join(" ");
 
@@ -32,12 +33,13 @@ export function Pagination({
   formatCursor = (p) => "Page " + p,
   formatPageLabel = (p) => "Page " + p,
   formatPageSize = (s) => s + " / page",
+  locale,
   className, ...rest
 }) {
   const count = total != null ? Math.max(1, Math.ceil(total / pageSize)) : 1;
   const from = total ? (page - 1) * pageSize + 1 : 0;
   const to = total ? Math.min(page * pageSize, total) : 0;
-  const nf = new Intl.NumberFormat();
+  const nf = React.useMemo(() => new Intl.NumberFormat(locale || undefined), [locale]);
   const go = (p) => onPageChange && onPageChange(Math.min(Math.max(1, p), count));
 
   return (

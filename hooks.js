@@ -118,6 +118,38 @@ export function useTheme() {
  *   const [ref, shown] = useReveal();
  *   <div ref={ref} data-shown={shown} />
  */
+/** localStorage key for the rail's collapsed state. */
+export const RAIL_KEY = "lw-rail-collapsed";
+
+/**
+ * The product rail's collapsed state, persisted.
+ *
+ * A hook rather than state inside `Sidebar`, because the control that toggles
+ * the rail is almost never inside it — it lives in the `AppBar`, which is a
+ * sibling. A `Sidebar` that owned this could not tell the button about it, so
+ * every consumer re-implemented the same `localStorage` read, the same
+ * try/catch for Safari private mode, and the same `aria-pressed`.
+ *
+ * Read on MOUNT, not during render: the server has no localStorage, and
+ * guessing there is what produces a one-frame flash of the wrong width — the
+ * same reason `useTheme` does it this way.
+ */
+export function useRailCollapsed(initial = false) {
+  const [collapsed, setCollapsed] = useState(initial);
+  useEffect(() => {
+    try {
+      const v = localStorage.getItem(RAIL_KEY);
+      if (v != null) setCollapsed(v === "1");
+    } catch { /* private mode: the rail simply starts where it started */ }
+  }, []);
+  const set = useCallback((next) => {
+    setCollapsed(next);
+    try { localStorage.setItem(RAIL_KEY, next ? "1" : "0"); } catch { /* as above */ }
+  }, []);
+  const toggle = useCallback(() => set(!collapsed), [collapsed, set]);
+  return { collapsed, setCollapsed: set, toggle };
+}
+
 export function useReveal({ threshold = 0.15, rootMargin = "0px 0px -10% 0px" } = {}) {
   const ref = useRef(null);
   const [shown, setShown] = useState(false);

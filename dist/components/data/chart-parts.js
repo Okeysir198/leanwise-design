@@ -2,6 +2,7 @@ import { Fragment, jsx, jsxs } from "react/jsx-runtime";
 const cx = (...a) => a.filter(Boolean).join(" ");
 const SERIES = (i) => "var(--lw-chart-" + (i % 8 + 1) + ")";
 const nf = new Intl.NumberFormat();
+const numberFormat = (locale) => locale ? new Intl.NumberFormat(locale) : nf;
 function DataTable({ labels, series, caption, categoryHeader = "Category" }) {
   return /* @__PURE__ */ jsxs("table", { className: "lw-sr-only", children: [
     /* @__PURE__ */ jsx("caption", { children: caption }),
@@ -52,5 +53,6 @@ export {
   cx,
   frame,
   nf,
+  numberFormat,
   ticks
 };

@@ -211,12 +211,32 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
    the moment the nav is short enough to leave slack between every item. */
 .lw-sidebar-foot { margin-block-start: auto; }
 .lw-sidebar[data-collapsed="true"] { --lw-sidebar-w: 60px; }
+/* THE RAIL HAD NO RESPONSIVE STORY AT ALL, and `flex: none` means it never
+   yields — a 236px rail is 63% of a 375px viewport. Every consumer hand-wrote
+   the same `max-md:hidden`, so it is offered here, OPT-IN via an attribute so
+   no existing layout moves.
+
+   `hide`, deliberately not "collapse to icons". A collapsed rail leans on the
+   native `title` for its labels, and `title` does not exist on touch — so
+   auto-collapsing at the mobile breakpoint produces a column of unnamed glyphs
+   on exactly the devices that cannot read them. The mobile answer is a Drawer
+   (or BottomNav), which is the consumer's to place. */
+@media (max-width: 767.98px) {
+  .lw-sidebar[data-responsive="hide"] { display: none; }
+}
 /* When an app frame owns the rail — its own width, header and footer rows — the
    nav fills that frame and drops its own edge and ground. Two width owners never
    agree, and the visible symptom is a nav inset from the rail it lives in. */
 .lw-sidebar[data-embedded="true"] { width: 100%; padding-top: var(--lw-space-12); background: none; border-inline-end: 0; min-height: 0; overflow: auto; }
 .lw-sidebar[data-collapsed="true"] .lw-nav-item .lw-nav-text, .lw-sidebar[data-collapsed="true"] .lw-nav-group, .lw-sidebar[data-collapsed="true"] .lw-nav-item .badge { display: none; }
-.lw-sidebar[data-collapsed="true"] .lw-nav-item { justify-content: center; padding-inline: 0; }
+.lw-sidebar[data-collapsed="true"] .lw-nav-item { justify-content: center; padding-inline: 0; min-height: var(--lw-control-h-sm); }
+/* THE MIN-HEIGHT IS THE POINT, not the centring. A collapsed rail hides
+   `.lw-nav-text` and `.badge`, so a row given no `icon` had nothing left in it
+   and shrank to its padding — a ~16px blank strip that is still clickable, has
+   no name on touch (the label survives only as a native `title`), and in review
+   looks exactly like rail padding. It cannot be made to say anything the rail
+   was never given, but it can be made to have a real target and be visible as a
+   gap. Give every row an icon; this is the floor when someone does not. */
 /* Symmetric inset so the icon column lands on the rail's centre line, not 2px
    left of it — the rail's own padding is asymmetric to the item's tint. */
 .lw-sidebar[data-collapsed="true"] { padding-inline: 6px; }
@@ -1160,6 +1180,21 @@ a.lw-feed-item:hover, button.lw-feed-item:hover { background: var(--lw-bg-subtle
 /* ---- Password strength ---------------------------------------------------------
    Four segments filled from a data attribute. Never colour alone: the label beside
    it says the word, because "three green bars" means nothing without a scale. */
+/* ONE-TIME CODE — one input that LOOKS segmented. See OtpInput.jsx for why it
+   is not six boxes. The tracking is what does the work; `ch` so the spacing
+   follows the mono figure width rather than a guessed pixel value, and the
+   inline-start padding cancels the trailing space the last character carries so
+   the string still reads centred. */
+.lw-otp { width: 100%; height: var(--lw-control-h-lg); padding: 0 var(--lw-field-pad-x); padding-inline-start: calc(var(--lw-field-pad-x) + 0.34ch); background: var(--lw-bg); border: 1px solid var(--lw-line-control); border-radius: var(--lw-radius-sm); font-family: var(--lw-font-mono); font-size: var(--lw-text-h3); letter-spacing: 0.34ch; text-align: center; color: var(--lw-fg); transition: border-color var(--lw-dur-xs) var(--lw-ease-out), box-shadow var(--lw-dur-xs) var(--lw-ease-out); }
+.lw-otp:focus-visible { outline: none; border-color: var(--lw-brand-500); box-shadow: var(--lw-focus-ring); }
+.lw-otp[aria-invalid="true"] { border-color: var(--lw-danger-on); }
+.lw-otp[aria-invalid="true"]:focus-visible { box-shadow: var(--lw-focus-ring-danger); }
+
+/* PASSWORD — the reveal sits inside the group, so the group owns the ring. */
+.lw-pw-caps { min-height: 1lh; color: var(--lw-warning-on); }
+.lw-pw-caps:not([data-on]) { visibility: hidden; }
+.lw-pw-strength { display: flex; flex-direction: column; gap: var(--lw-space-4); }
+.lw-pw-strength .lw-help { display: flex; align-items: center; gap: 6px; }
 .lw-pwmeter { display: flex; gap: 4px; }
 .lw-pwmeter span { flex: 1; height: 3px; border-radius: var(--lw-radius-pill); background: var(--lw-bg-inset); }
 .lw-pwmeter[data-level="1"] span:nth-child(-n+1) { background: var(--lw-danger); }

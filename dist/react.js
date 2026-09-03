@@ -17,6 +17,9 @@ import { Section } from "./components/layout/Section.js";
 import { Field } from "./components/forms/Field.js";
 import { Input } from "./components/forms/Input.js";
 import { InputGroup } from "./components/forms/InputGroup.js";
+import { PasswordInput } from "./components/forms/PasswordInput.js";
+import { PasswordMeter } from "./components/forms/PasswordMeter.js";
+import { OtpInput } from "./components/forms/OtpInput.js";
 import { Textarea } from "./components/forms/Textarea.js";
 import { Select } from "./components/forms/Select.js";
 import { Switch } from "./components/forms/Switch.js";
@@ -49,6 +52,7 @@ import { Sidebar, NavItem } from "./components/nav/Sidebar.js";
 import { Tabs } from "./components/nav/Tabs.js";
 import { Breadcrumbs } from "./components/nav/Breadcrumbs.js";
 import { ThemeToggle } from "./components/nav/ThemeToggle.js";
+import { LocaleSwitcher } from "./components/nav/LocaleSwitcher.js";
 import { CommandPalette, score } from "./components/nav/CommandPalette.js";
 import { BottomNav } from "./components/nav/BottomNav.js";
 import { NavToggle } from "./components/nav/NavToggle.js";
@@ -131,14 +135,18 @@ export {
   InputGroup,
   KpiTile,
   LineChart,
+  LocaleSwitcher,
   LogoRail,
   Menu,
   Message,
   NavItem,
   NavMenu,
   NavToggle,
+  OtpInput,
   Page,
   Pagination,
+  PasswordInput,
+  PasswordMeter,
   PlanCard,
   Popover,
   Progress,

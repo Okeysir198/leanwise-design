@@ -33,6 +33,7 @@ export function NavItem({ href, label, icon, badge, current, collapsed, linkAs =
   // Only a string label can become a title. String(node) yields
   // "[object Object]", which is what a collapsed rail would then show on hover.
   const tip = collapsed && typeof label === "string" ? label : undefined;
+
   return (
     <Tag className={cx("lw-nav-item", className)} href={href} type={href ? undefined : "button"}
       aria-current={current ? "page" : undefined} title={tip} {...rest}>
