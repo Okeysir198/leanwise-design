@@ -201,7 +201,7 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
    instead of split across the layer boundary. */
 
 /* TOP BAR — MOVED to base.css in v1.3.0, verbatim: `.lw-topbar`, every descendant
-   and state rule, and BOTH `@media (max-width: 768px)` blocks. It now sits directly
+   and state rule, and BOTH `@media (max-width: 767.98px)` blocks. It now sits directly
    above the `.lw-topbar .brand-mark` rules that were already in base.css — the
    component had been split across two layers, so a marketing site that dropped this
    one got a correct brand mark inside an unstyled site header. */
@@ -727,7 +727,7 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
   @keyframes lwDrawerInStart { from { transform: translateX(calc(-100% * var(--lw-dir, 1))); } }
   @keyframes lwDrawerInBottom { from { transform: translateY(100%); } }
 }
-@media (max-width: 480px) { /* --lw-bp-sm */
+@media (max-width: 479.98px) { /* --lw-bp-sm */
   .lw-drawer:not([data-side="bottom"]) { width: min(var(--lw-drawer-w, 420px), 92vw); }
 }
 

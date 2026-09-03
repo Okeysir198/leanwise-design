@@ -997,7 +997,7 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 }
 /* --lw-bp-lg (1024px) — the same collapse point as Split, so a features band
    and the layout around it never reflow one breakpoint apart. */
-@media (max-width: 1024px) { .lw-features { grid-template-columns: 1fr; } }
+@media (max-width: 1023.98px) { .lw-features { grid-template-columns: 1fr; } }
 .lw-feature {
   position: relative;
   background: var(--lw-bg);
@@ -1192,7 +1192,7 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 /* --lw-bp-md (768px). The brand column spans the full width and the link
    columns flow under it — at this width 220px of brand beside 140px of links
    leaves both too narrow to read. */
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   .lw-footer-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
   .lw-footer-brand { grid-column: 1 / -1; }
 }
@@ -1380,7 +1380,7 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 /* --lw-bp-md (768px) — four steps across a phone is four one-word columns, so
    the row reverts to the stack. One media query, and it restores the vertical
    geometry wholesale rather than unsetting it property by property. */
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   .lw-steps-horizontal { grid-auto-flow: row; }
   .lw-steps-horizontal .lw-step {
     grid-template-columns: var(--lw-steps-marker, 40px) minmax(0, 1fr);
@@ -1842,7 +1842,7 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 }
 /* --lw-bp-md (768px). A four-node chain across a phone is four one-word
    columns; below the breakpoint every flow is the stack. */
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   .lw-flow {
     --lw-flow-flow: row;
     --lw-flow-edge-i: 1px;
@@ -2064,7 +2064,7 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
    because an uncapped `depth * step` is exactly the shrink-to-fit shape that has
    escaped this system's viewport four times. Connectivity beyond depth is
    carried by the successors table, which is in the DOM at every width. */
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   .lw-flow-graph {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: none;

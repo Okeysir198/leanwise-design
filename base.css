@@ -215,7 +215,7 @@ table.visually-hidden > caption,
 .lw-split { display: grid; gap: var(--lw-space-24); grid-template-columns: minmax(0, 1fr) var(--lw-split-rail, 320px); align-items: start; }
 .lw-split-start { grid-template-columns: var(--lw-split-rail, 280px) minmax(0, 1fr); }
 /* --lw-bp-lg (1024px) — the rail has no room beside the main column below it. */
-@media (max-width: 1024px) { .lw-split, .lw-split-start { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 1023.98px) { .lw-split, .lw-split-start { grid-template-columns: minmax(0, 1fr); } }
 
 /* Utility: a scroll area that does not leak its scroll to the page. */
 .lw-scroll { overflow: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: var(--lw-line-strong) transparent; }

@@ -588,6 +588,7 @@
      though @media cannot read a custom property — every hand-written query in
      lw.css/app.css uses one of these five numbers and nothing else. Container
      queries take the same numbers, and CAN read them. */
+  --lw-bp-xs: 360px; /* @kind other */   /* small phone; the 359.98 floor in base.css */
   --lw-bp-sm: 480px; /* @kind other */   /* phone */
   --lw-bp-md: 768px; /* @kind other */   /* tablet portrait */
   --lw-bp-lg: 1024px; /* @kind other */  /* tablet landscape / small laptop */
