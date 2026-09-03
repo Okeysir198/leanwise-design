@@ -10,7 +10,7 @@ const norm = (o) => (typeof o === "string" || typeof o === "number" ? { value: o
 /**
  * The single- and multi-select combobox — the control that gets rebuilt in every
  * product because a native <select> cannot filter and a listbox is 200 lines of
- * ARIA. Built on Popover, so it shares one floating surface with Menu.
+ * ARIA. Built on Popover (as an anchor), so it shares one floating surface with Menu.
  *
  * Focus stays in the INPUT and the active option is named by
  * `aria-activedescendant`. That is the ARIA 1.2 combobox pattern: moving real
@@ -136,8 +136,13 @@ export const Combobox = React.forwardRef(function Combobox({
   );
 
   return (
-    <Popover trigger={field} open={open && !disabled} onOpenChange={setOpen} role="listbox"
-      triggerAria={false} matchWidth placement="bottom-start" label={label} {...rest}>
+    /* `anchor`: the input owns role="combobox", aria-expanded and aria-controls;
+       the panel is a positioning anchor only. `autoFocus={false}`: focus STAYS in
+       the input — aria-activedescendant names the row. `role="presentation"`:
+       the ul below is the listbox; a second listbox around it would nest one in
+       the other. */
+    <Popover anchor autoFocus={false} trigger={field} open={open && !disabled} onOpenChange={setOpen}
+      role="presentation" matchWidth placement="bottom-start" {...rest}>
       {loading ? <div id={listId} role="listbox" aria-busy="true" className="lw-listbox-empty">{loadingText}</div>
         : !shown.length ? <div id={listId} role="listbox" className="lw-listbox-empty">{emptyText}</div>
         : (

@@ -1,6 +1,8 @@
 "use client";
 import * as React from "react";
+import { Dialog as RD } from "radix-ui";
 import { Icon } from "../primitives/Icon.jsx";
+import { Layer, useLayer } from "../overlays/_layer.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
 
 /* Subsequence match, not substring: "opdb" should find "Open database". Scored
@@ -21,8 +23,10 @@ export function score(query, text) {
 
 /**
  * The command palette. A DIALOG, not a popover: it is modal, it takes the whole
- * keyboard, and the page behind it should be inert — so it is the native
- * element, with the platform's focus trap, for the same reason Dialog is.
+ * keyboard, and the page behind it should be inert — so it is the same Radix
+ * `Dialog` shell as Dialog and Drawer (v2.0.0; see Dialog.jsx for why the
+ * native element was retired), in the same overlay layer. The listbox, the
+ * scoring and the keyboard model inside it are the system's own.
  *
  * The component does NOT bind ⌘K. A palette that installs a global key handler
  * fights the host app for it and cannot be turned off on the one screen where
@@ -34,22 +38,25 @@ export function CommandPalette({
   hints = ["\u2191\u2193 navigate", "\u21b5 run", "esc close"],
   className, ...rest
 }) {
-  const ref = React.useRef(null);
+  const layer = useLayer();
   const inputRef = React.useRef(null);
   const [q, setQ] = React.useState("");
   const [active, setActive] = React.useState(0);
+  const [fromEl, setFromEl] = React.useState(null);
   const uid = React.useId();
 
-  React.useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    if (open && !el.open) { el.showModal(); setQ(""); setActive(0); }
-    if (!open && el.open) el.close();
+  // The query resets on every open, so a palette never reopens on a stale
+  // filter — the reader's intent is new each time they reach for it. `fromEl`
+  // (the control that had focus) is what the layer mirrors its theme from.
+  React.useLayoutEffect(() => {
+    if (open) { setQ(""); setActive(0); setFromEl(typeof document !== "undefined" ? document.activeElement : null); }
+    else setFromEl(null);
   }, [open]);
 
-  // The input is focused from an effect rather than autoFocus: autoFocus only
-  // fires on mount, and this dialog is mounted long before it is opened.
-  React.useEffect(() => { if (open && inputRef.current) inputRef.current.focus({ preventScroll: true }); }, [open]);
+  // Radix would focus the first tabbable on open, which is the input anyway;
+  // stated explicitly so a future icon button ahead of it cannot steal it.
+  const onOpenAutoFocus = (e) => { e.preventDefault(); inputRef.current && inputRef.current.focus({ preventScroll: true }); };
+  const handleOpenChange = (next) => { if (!next && onClose) onClose(); };
 
   /* No empty-query special case: score() returns 0 for one, so every visible row
      clears `s >= 0` and the sort is stable — the general path already IS the
@@ -74,8 +81,15 @@ export function CommandPalette({
 
   let lastGroup = null;
   return (
-    <dialog ref={ref} className={cx("lw-cmdk", className)} aria-label={label}
-      onClose={onClose} onCancel={(e) => { e.preventDefault(); onClose && onClose(e); }} onKeyDown={onKeyDown} {...rest}>
+    <RD.Root open={!!open} onOpenChange={handleOpenChange} modal>
+      <RD.Portal container={layer ? layer.container : undefined}>
+        {/* Plain wrapper, not `Layer`: see Dialog.jsx. */}
+        <div>
+          <Layer modal from={fromEl}>
+            <RD.Overlay className="lw-backdrop" />
+            <RD.Content className={cx("lw-cmdk", className)} tabIndex={-1} onOpenAutoFocus={onOpenAutoFocus} onKeyDown={onKeyDown} {...rest}>
+      {/* The dialog's accessible name; the input carries the same label. */}
+      <RD.Title className="lw-sr-only">{label}</RD.Title>
       <div className="lw-cmdk-input">
         <Icon name="search" size={17} />
         <input ref={inputRef} type="text" role="combobox" aria-expanded="true" aria-controls={uid}
@@ -102,6 +116,10 @@ export function CommandPalette({
         })}
       </ul>
       <div className="lw-cmdk-foot">{hints.map((h, i) => <span key={i}>{h}</span>)}</div>
-    </dialog>
+            </RD.Content>
+          </Layer>
+        </div>
+      </RD.Portal>
+    </RD.Root>
   );
 }

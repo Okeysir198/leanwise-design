@@ -3,9 +3,9 @@
   "name": "tabs",
   "type": "registry:ui",
   "title": "Tabs",
-  "description": "An underline strip, not a pill tray.",
+  "description": "The design system's own .lw-tabs on a Radix Tabs list — an underline strip, not a pill tray; the trigger is styled by [role=tab][aria-selected]. Needs base.css.",
   "dependencies": [
-    "@radix-ui/react-tabs"
+    "radix-ui"
   ],
   "registryDependencies": [
     "utils"
@@ -15,7 +15,7 @@
       "path": "ui/tabs.tsx",
       "type": "registry:ui",
       "target": "components/ui/tabs.tsx",
-      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport * as TabsPrimitive from \"@radix-ui/react-tabs\"\n\nimport { cn } from \"@/lib/utils\"\n\nconst Tabs = TabsPrimitive.Root\n\nconst TabsList = React.forwardRef<\n  React.ElementRef<typeof TabsPrimitive.List>,\n  React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>\n>(({ className, ...props }, ref) => (\n  <TabsPrimitive.List\n    data-slot=\"tabs\"\n    ref={ref}\n    className={cn(\n      // .lw-tabs — an underline strip. The design system does not use the pill-in-a-tray\n// form shadcn ships: the row is a 1px rule, the selected tab carries a 2px brand\n// underline that sits ON that rule (hence the -1px margin), and the gap is\n// --lw-space-24 rather than a container padding.\n\"inline-flex items-center justify-start gap-6 overflow-x-auto border-b text-muted-foreground scrollbar-none\",\n      className\n    )}\n    {...props}\n  />\n))\nTabsList.displayName = TabsPrimitive.List.displayName\n\nconst TabsTrigger = React.forwardRef<\n  React.ElementRef<typeof TabsPrimitive.Trigger>,\n  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>\n>(({ className, ...props }, ref) => (\n  <TabsPrimitive.Trigger\n    ref={ref}\n    className={cn(\n      \"inline-flex items-center justify-center whitespace-nowrap border-b-2 border-transparent -mb-px px-0 py-2.5 text-sm font-medium text-muted-foreground transition-colors cursor-pointer hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:rounded-xs disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 data-[state=active]:border-primary data-[state=active]:text-brand\",\n      className\n    )}\n    {...props}\n  />\n))\nTabsTrigger.displayName = TabsPrimitive.Trigger.displayName\n\nconst TabsContent = React.forwardRef<\n  React.ElementRef<typeof TabsPrimitive.Content>,\n  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content>\n>(({ className, ...props }, ref) => (\n  <TabsPrimitive.Content\n    ref={ref}\n    className={cn(\n      \"mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2\",\n      className\n    )}\n    {...props}\n  />\n))\nTabsContent.displayName = TabsPrimitive.Content.displayName\n\nexport { Tabs, TabsList, TabsTrigger, TabsContent }\n"
+      "content": "\"use client\"\n\n// A THIN WRAPPER over `.lw-tabs` in base.css — the underline strip, not\n// shadcn's pill tray. Only the List carries a class: base.css keys the trigger\n// off `[role=\"tab\"][aria-selected=\"true\"]`, which Radix sets, so the Trigger\n// needs nothing and Content is unstyled. Needs base.css loaded.\n\nimport * as React from \"react\"\nimport { Tabs as TabsPrimitive } from \"radix-ui\"\n\nimport { cn } from \"@/lib/utils\"\n\nconst Tabs = TabsPrimitive.Root\n\nconst TabsList = React.forwardRef<\n  React.ElementRef<typeof TabsPrimitive.List>,\n  React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>\n>(({ className, ...props }, ref) => (\n  <TabsPrimitive.List\n    data-slot=\"tabs\"\n    ref={ref}\n    className={cn(\"lw-tabs\", className)}\n    {...props}\n  />\n))\nTabsList.displayName = TabsPrimitive.List.displayName\n\nconst TabsTrigger = TabsPrimitive.Trigger\n\nconst TabsContent = TabsPrimitive.Content\n\nexport { Tabs, TabsList, TabsTrigger, TabsContent }\n"
     }
   ]
 }

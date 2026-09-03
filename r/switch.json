@@ -3,9 +3,9 @@
   "name": "switch",
   "type": "registry:ui",
   "title": "Switch",
-  "description": "38x22 with a 16px thumb at a 2px inset — the travel is (w - thumb - 2*inset), so the three values are one decision and all three are tokens.",
+  "description": "The design system's own .lw-switch (38x22, 16px thumb at a 2px inset — three tokens, one decision) on a Radix Switch root; state keys off data-state. Needs base.css.",
   "dependencies": [
-    "@radix-ui/react-switch"
+    "radix-ui"
   ],
   "registryDependencies": [
     "utils"
@@ -15,7 +15,7 @@
       "path": "ui/switch.tsx",
       "type": "registry:ui",
       "target": "components/ui/switch.tsx",
-      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport * as SwitchPrimitives from \"@radix-ui/react-switch\"\n\nimport { cn } from \"@/lib/utils\"\n\nconst Switch = React.forwardRef<\n  React.ElementRef<typeof SwitchPrimitives.Root>,\n  React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root>\n>(({ className, ...props }, ref) => (\n  <SwitchPrimitives.Root\n    data-slot=\"switch\"\n    className={cn(\n      \"peer inline-flex h-[22px] w-[38px] shrink-0 cursor-pointer items-center rounded-full border border-input shadow-sm transition-colors focus-visible:outline-2 focus-visible:outline-brand focus-visible:outline-offset-2 data-[state=checked]:border-primary disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input\",\n      className\n    )}\n    {...props}\n    ref={ref}\n  >\n    <SwitchPrimitives.Thumb\n      className={cn(\n        \"pointer-events-none block h-4 w-4 rounded-full bg-background shadow-sm ring-0 transition-transform data-[state=checked]:translate-x-4 data-[state=unchecked]:translate-x-0.5\"\n      )}\n    />\n  </SwitchPrimitives.Root>\n))\nSwitch.displayName = SwitchPrimitives.Root.displayName\n\nexport { Switch }\n"
+      "content": "\"use client\"\n\n// A THIN WRAPPER over `.lw-switch` in base.css. The vanilla DOM is\n// `label.lw-switch > input[type=checkbox] + span.track`, with the thumb as\n// `.track::after` driven by `input:checked`. Radix renders\n// `button[role=switch][data-state] > span[data-state]` — no input, so the\n// sibling selectors cannot fire. The wrapper keeps the same child structure\n// (`.track` + `.thumb`) and base.css keys the state off `[data-state]` on the\n// root, so the two DOMs paint identically. Needs base.css loaded.\n\nimport * as React from \"react\"\nimport { Switch as SwitchPrimitive } from \"radix-ui\"\n\nimport { cn } from \"@/lib/utils\"\n\nconst Switch = React.forwardRef<\n  React.ElementRef<typeof SwitchPrimitive.Root>,\n  React.ComponentPropsWithoutRef<typeof SwitchPrimitive.Root>\n>(({ className, ...props }, ref) => (\n  <SwitchPrimitive.Root\n    data-slot=\"switch\"\n    className={cn(\"lw-switch\", className)}\n    {...props}\n    ref={ref}\n  >\n    <span className=\"track\">\n      <SwitchPrimitive.Thumb className=\"thumb\" />\n    </span>\n  </SwitchPrimitive.Root>\n))\nSwitch.displayName = SwitchPrimitive.Root.displayName\n\nexport { Switch }\n"
     }
   ]
 }

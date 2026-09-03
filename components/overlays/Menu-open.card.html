@@ -1,0 +1,26 @@
+<!-- @dsCard group="Overlays" name="Menu, open" subtitle="An open menu and an open popover, side by side — the dark pane's panel paints dark because the layer mirrors the trigger's scope" viewport="1000x640" -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Menu, open</title>
+<link rel="stylesheet" href="../../preview/_card.css">
+<link rel="stylesheet" href="../../base.css">
+<link rel="stylesheet" href="../../marketing.css">
+<link rel="stylesheet" href="../../product.css">
+<script src="../../preview/_vendor/react.development.js"></script>
+<script src="../../preview/_vendor/react-dom.development.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>/* Only the height is this card's: both panels open INSIDE their pane's room. */
+.pane{min-height:340px}
+</style>
+</head><body><div class="card">
+<header><h1>Menu, open</h1>
+<p class="sub"><b>Both panels are open on load</b> (<code>defaultOpen</code>), which is what lets the browser gates
+measure them at all — a closed overlay is invisible to axe and to a screenshot. They coexist because both are
+<b>non-modal</b>: a modal menu would make the rest of the page inert and swallow the other trigger's click.</p>
+<p class="sub"><b>The dark pane is the proof.</b> Its trigger sits in <code>.dark.lw-band-dark</code>, the panel portals
+to <code>document.body</code> (there is no <code>OverlayProvider</code> on this card), and it still paints on the
+dark surface — the <code>.lw-layer</code> it mounts in mirrors the trigger's scope. Drop that mirror and this panel
+renders light on navy.</p></header>
+<div class="panes"><div class="pane" id="light"></div><div class="pane dark lw-band-dark" id="dark"></div></div>
+</div>
+<script src="./Menu-open.card.js"></script>
+</body></html>

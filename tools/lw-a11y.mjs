@@ -146,7 +146,11 @@ async function scanCard(page, card) {
     await page.evaluate(() => new Promise((r) => setTimeout(() => requestAnimationFrame(() => r()), 0)));
     const res = await page.evaluate(async () => {
       const r = await window.axe.run(document, {
+        // WCAG tags plus ONE best-practice rule: `aria-dialog-name`. axe files a
+        // nameless role=dialog under best-practice, not WCAG, so with tags alone
+        // the v2.0 Dialog-open card passed with its Title removed (watched).
         runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"] },
+        rules: { "aria-dialog-name": { enabled: true } },
       });
       // Resolve each node's target back to its element while still in the page,
       // and record whether it opted out of THIS rule. Node objects do not carry

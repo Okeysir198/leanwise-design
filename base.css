@@ -982,6 +982,17 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
 }
 .lw-switch input:disabled + .track { opacity: 0.5; cursor: not-allowed; }
 .lw-switch .lw-switch-text { font-size: var(--lw-text-sm); color: var(--lw-fg); }
+/* Radix-shaped switch (v2.0, the shadcn registry's switch.tsx): a `button[role=switch]`
+   carrying `data-state`, no `<input>`, so the sibling selectors above never fire. Same
+   track, same pseudo thumb, keyed off the attribute instead. `.thumb` is Radix's own
+   Thumb element; the pseudo draws the thumb, so it stays hidden — one thumb, not two. */
+.lw-switch[role="switch"] { appearance: none; border: 0; background: none; padding: 0; font: inherit; }
+.lw-switch[role="switch"] .thumb { display: none; }
+.lw-switch[data-state="checked"] .track { background: var(--lw-brand-500); border-color: var(--lw-brand-500); }
+.lw-switch[data-state="checked"] .track::after { transform: translateX(16px); }
+.lw-switch[role="switch"]:focus-visible { outline: none; }
+.lw-switch[role="switch"]:focus-visible .track { outline: 2px solid var(--lw-brand-500); outline-offset: 2px; box-shadow: none; }
+.lw-switch[role="switch"]:disabled .track { opacity: 0.5; cursor: not-allowed; }
 
 /* CHECKBOX / RADIO — same 18px box, different radius. The check is a border
    trick rather than an SVG so it inherits ink and needs no asset.
@@ -1689,12 +1700,18 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
    lines above, so the six dark-code-surface rules sit downstream of the surface
    they patch exactly as they did in product.css; and the consolidated
    pointer-affordance list at the FOOT of this file names `.lw-tabs [role="tab"]`,
-   so it still comes last. */
+   so it still comes last.
+
+   v2.0: `Tabs` renders Radix Tabs (Root asChild merged into List, so the DOM
+   is unchanged: div.lw-tabs[role="tablist"] > button[role="tab"]). Radix marks
+   the selected trigger with BOTH `aria-selected="true"` and
+   `data-state="active"`; the selected-tab rules match either, so a vanilla
+   consumer that writes only the ARIA attribute still paints. */
 .lw-tabs { display: flex; gap: var(--lw-space-24); border-bottom: 1px solid var(--lw-line); overflow-x: auto; scrollbar-width: none; }
 .lw-tabs::-webkit-scrollbar { display: none; }
 .lw-tabs [role="tab"] { appearance: none; border: 0; background: none; font: inherit; font-size: var(--lw-text-sm); font-weight: var(--lw-fw-medium); color: var(--lw-fg-subtle); padding: 10px 0; cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color var(--lw-dur-xs) var(--lw-ease-out), border-color var(--lw-dur-xs) var(--lw-ease-out); }
 .lw-tabs [role="tab"]:hover { color: var(--lw-fg); }
-.lw-tabs [role="tab"][aria-selected="true"] { color: var(--lw-brand-text); border-bottom-color: var(--lw-brand-500); }
+.lw-tabs [role="tab"]:is([aria-selected="true"], [data-state="active"]) { color: var(--lw-brand-text); border-bottom-color: var(--lw-brand-500); }
 .lw-tabs [role="tab"]:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); border-radius: var(--lw-radius-xs); }
 .lw-tabs [role="tab"] .count { font-family: var(--lw-font-mono); font-size: 11px; color: var(--lw-fg-subtle); margin-inline-start: 6px; }
 
@@ -1703,7 +1720,7 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
 .lw-code .lw-tabs { padding: 0 var(--lw-space-16); border-bottom-color: var(--lw-on-dark-line); }
 .lw-code .lw-tabs [role="tab"] { color: var(--lw-on-dark-3); padding: 10px 0; }
 .lw-code .lw-tabs [role="tab"]:hover { color: var(--lw-on-dark-1); }
-.lw-code .lw-tabs [role="tab"][aria-selected="true"] { color: var(--lw-brand-300); border-bottom-color: var(--lw-brand-400); }
+.lw-code .lw-tabs [role="tab"]:is([aria-selected="true"], [data-state="active"]) { color: var(--lw-brand-300); border-bottom-color: var(--lw-brand-400); }
 .lw-code .lw-tabs [role="tab"]:focus-visible { box-shadow: 0 0 0 2px var(--lw-brand-400); }
 .lw-code:has(.lw-tabs) { padding: 0; }
 .lw-code:has(.lw-tabs) pre { margin: 0; padding: var(--lw-space-16); }
@@ -2188,6 +2205,7 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
 .dark .lw-switch input[data-focus-demo] + .track, [data-band="dark"] .lw-switch input[data-focus-demo] + .track, .lw-band-dark .lw-switch input[data-focus-demo] + .track,
 .dark .lw-check input:focus-visible + .box, [data-band="dark"] .lw-check input:focus-visible + .box, .lw-band-dark .lw-check input:focus-visible + .box,
 .dark .lw-check input[data-focus-demo] + .box, [data-band="dark"] .lw-check input[data-focus-demo] + .box, .lw-band-dark .lw-check input[data-focus-demo] + .box { outline-color: var(--lw-brand-400); }
+.dark .lw-switch[role="switch"]:focus-visible .track, [data-band="dark"] .lw-switch[role="switch"]:focus-visible .track, .lw-band-dark .lw-switch[role="switch"]:focus-visible .track { outline-color: var(--lw-brand-400); }
 
 /* The knob's travel is the promoted control's only motion, so its reduced-motion
    stand-down comes with it. The rest of that rule (`.lw-sidebar`,

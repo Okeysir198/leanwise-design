@@ -1,30 +1,33 @@
 "use client"
 
+// A THIN WRAPPER over `.lw-switch` in base.css. The vanilla DOM is
+// `label.lw-switch > input[type=checkbox] + span.track`, with the thumb as
+// `.track::after` driven by `input:checked`. Radix renders
+// `button[role=switch][data-state] > span[data-state]` — no input, so the
+// sibling selectors cannot fire. The wrapper keeps the same child structure
+// (`.track` + `.thumb`) and base.css keys the state off `[data-state]` on the
+// root, so the two DOMs paint identically. Needs base.css loaded.
+
 import * as React from "react"
-import * as SwitchPrimitives from "@radix-ui/react-switch"
+import { Switch as SwitchPrimitive } from "radix-ui"
 
 import { cn } from "@/lib/utils"
 
 const Switch = React.forwardRef<
-  React.ElementRef<typeof SwitchPrimitives.Root>,
-  React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root>
+  React.ElementRef<typeof SwitchPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof SwitchPrimitive.Root>
 >(({ className, ...props }, ref) => (
-  <SwitchPrimitives.Root
+  <SwitchPrimitive.Root
     data-slot="switch"
-    className={cn(
-      "peer inline-flex h-[22px] w-[38px] shrink-0 cursor-pointer items-center rounded-full border border-input shadow-sm transition-colors focus-visible:outline-2 focus-visible:outline-brand focus-visible:outline-offset-2 data-[state=checked]:border-primary disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input",
-      className
-    )}
+    className={cn("lw-switch", className)}
     {...props}
     ref={ref}
   >
-    <SwitchPrimitives.Thumb
-      className={cn(
-        "pointer-events-none block h-4 w-4 rounded-full bg-background shadow-sm ring-0 transition-transform data-[state=checked]:translate-x-4 data-[state=unchecked]:translate-x-0.5"
-      )}
-    />
-  </SwitchPrimitives.Root>
+    <span className="track">
+      <SwitchPrimitive.Thumb className="thumb" />
+    </span>
+  </SwitchPrimitive.Root>
 ))
-Switch.displayName = SwitchPrimitives.Root.displayName
+Switch.displayName = SwitchPrimitive.Root.displayName
 
 export { Switch }

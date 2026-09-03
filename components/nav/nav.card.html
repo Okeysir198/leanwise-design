@@ -20,8 +20,10 @@
 .mainc{flex:1;min-width:0;display:flex;flex-direction:column;min-height:0}</style>
 </head><body><div class="card">
 <header><h1>Navigation</h1>
-<p class="sub"><b>Tabs implement roving tabindex.</b> Arrow keys move between tabs, Home/End jump to the ends, and only
-the selected tab is in the tab order — the part every hand-rolled tab strip skips and the part a keyboard user needs.</p>
+<p class="sub"><b>Tabs are Radix Tabs under the DS contract.</b> Arrow keys move between tabs, Home/End jump to the ends, and only
+the selected tab is in the tab order — roving tabindex and RTL come from the primitive. Selection follows focus
+(<span class="mono">activationMode="automatic"</span>), and <span class="mono">aria-controls</span> is emitted only when a tab names its panel: Radix's own points at a
+<span class="mono">TabsContent</span> nobody rendered, which axe scores as a serious dangling reference.</p>
 <p class="sub"><b>Active nav is a tint plus brand ink</b>, never a left accent bar. The rail collapses via
 <span class="mono">data-collapsed</span> — a state on the element rather than a second class, so the width and the
 label visibility have one source.</p>

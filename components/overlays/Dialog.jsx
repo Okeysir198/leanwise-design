@@ -1,51 +1,93 @@
 "use client";
 import * as React from "react";
+import { Dialog as RD } from "radix-ui";
 import { Icon } from "../primitives/Icon.jsx";
+import { Layer, useLayer } from "./_layer.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
 
-
 /**
- * The native <dialog>. Focus trap, Esc-to-close and background inertness are
- * the platform's job here rather than 200 lines of ours — and the platform's
- * version is the one screen readers already understand.
+ * The modal dialog, on Radix `Dialog` since v2.0.0. The focus trap, Esc,
+ * outside-click dismissal, the scroll lock and `aria-hidden` on the rest of
+ * the page are Radix's; what is ours is the layer it portals into.
+ *
+ * WHY NOT THE NATIVE <dialog> ANY MORE. `showModal()` puts the element in the
+ * browser's TOP LAYER, above every stacking context — which is also above the
+ * `OverlayProvider` root, so a native dialog could never inherit a tenant's
+ * `brandVars()` or a `.dark` island from its container, and a Menu opened from
+ * inside it (a portal, not in the top layer) landed UNDER the dialog's own
+ * backdrop. A portal-rendered dialog stacks the ordinary way: it rides
+ * `--lw-z-modal` on `.lw-layer-modal`, and a nested overlay portals into that
+ * same layer and stacks above it.
+ *
+ * The cost, stated so nobody rediscovers it: the top layer is gone, so a
+ * consumer element with `z-index` above `--lw-z-modal` (110) can now cover a
+ * modal. Keep page furniture under `--lw-z-nav`.
+ *
+ * `from` on the Layer is the element that had focus when the dialog opened —
+ * the trigger, in practice — so a dialog opened from a dark band on a light
+ * page paints dark (see _layer.js).
  */
-export function Dialog({ open, onClose, title, description, footer, width, closeLabel = "Close", className, children, ...rest }) {
-  const ref = React.useRef(null);
-  // Ids are generated, not literal. Two dialogs in one document with the same
-  // hardcoded id give every one of them the FIRST dialog's title as its name.
-  const uid = React.useId();
-  const titleId = title ? uid + "-t" : undefined;
-  const descId = description ? uid + "-d" : undefined;
+export function Dialog({
+  open, onOpenChange, onClose, trigger, title, label, description, footer, width,
+  closeLabel = "Close", className, children, ...rest
+}) {
+  const layer = useLayer();
+  const [fromEl, setFromEl] = React.useState(null);
   // A bare number OR a numeric string means px. HTML has no numbers — an
   // attribute always arrives as text — and a unitless length makes the width
   // declaration invalid, which silently drops it and shrink-wraps the dialog.
   const w = width == null || width === "" ? null
     : /^\d+(\.\d+)?$/.test(String(width)) ? String(width) + "px" : String(width);
-  React.useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    if (open && !el.open) el.showModal();
-    if (!open && el.open) el.close();
+  // Captured BEFORE Radix moves focus into the content (its FocusScope focuses
+  // from a passive effect; a layout effect runs first), so `fromEl` is the
+  // control that opened us and the layer mirrors ITS theme scope.
+  React.useLayoutEffect(() => {
+    if (open) setFromEl(typeof document !== "undefined" ? document.activeElement : null);
+    else setFromEl(null);
   }, [open]);
+  const handleOpenChange = (next) => {
+    onOpenChange && onOpenChange(next);
+    if (!next && onClose) onClose();
+  };
   return (
-    <dialog ref={ref} className={cx("lw-dialog", className)}
-      style={w ? { "--lw-dialog-w": w } : undefined}
-      onClose={onClose} onCancel={(e) => { e.preventDefault(); onClose && onClose(e); }} aria-labelledby={titleId} aria-describedby={descId} {...rest}>
-      {title && (
-        <div className="lw-dialog-head">
-          <h2 className="lw-dialog-title" id={titleId}>{title}</h2>
-          {/* Two classes since v1.3.0: `.lw-icon-btn` (base.css) is the face,
-              `.lw-dialog-close` (product.css) is the optical margin. They used
-              to be one selector list in product.css, i.e. one face written
-              twice; the icon button was promoted so a marketing page can have
-              one, and the close control kept only its delta. */}
-          <button type="button" className="lw-icon-btn lw-dialog-close" aria-label={closeLabel} title={closeLabel} onClick={onClose}>
-            <Icon name="close" size={17} />
-          </button>
+    <RD.Root open={!!open} onOpenChange={handleOpenChange} modal>
+      {trigger && <RD.Trigger asChild>{trigger}</RD.Trigger>}
+      <RD.Portal container={layer ? layer.container : undefined}>
+        {/* A plain wrapper, NOT `Layer` directly: Radix's Portal is `asChild`
+            and Presence hands it a ref, which would land in Layer's `...rest`
+            and (under React 19, where `ref` is a prop) replace the callback
+            ref that publishes the container to nested portals. */}
+        <div>
+          <Layer modal from={fromEl}>
+            <RD.Overlay className="lw-backdrop" />
+            <RD.Content className={cx("lw-dialog", className)} tabIndex={-1}
+              style={w ? { "--lw-dialog-w": w } : undefined} {...rest}>
+              {title ? (
+                <div className="lw-dialog-head">
+                  <RD.Title className="lw-dialog-title">{title}</RD.Title>
+                  {/* Two classes since v1.3.0: `.lw-icon-btn` (base.css) is the
+                      face, `.lw-dialog-close` (product.css) the optical margin. */}
+                  <RD.Close asChild>
+                    <button type="button" className="lw-icon-btn lw-dialog-close" aria-label={closeLabel} title={closeLabel}>
+                      <Icon name="close" size={17} />
+                    </button>
+                  </RD.Close>
+                </div>
+              ) : (
+                /* Radix names the dialog from its Title and logs an error when
+                   there is none — a nameless dialog is the defect, not the
+                   warning. `label` is the sr-only name for a title-less one. */
+                label != null && <RD.Title className="lw-sr-only">{label}</RD.Title>
+              )}
+              <div className="lw-dialog-body">
+                {description && <RD.Description asChild><div>{description}</div></RD.Description>}
+                {children}
+              </div>
+              {footer && <div className="lw-dialog-foot">{footer}</div>}
+            </RD.Content>
+          </Layer>
         </div>
-      )}
-      <div className="lw-dialog-body">{description && <div id={descId}>{description}</div>}{children}</div>
-      {footer && <div className="lw-dialog-foot">{footer}</div>}
-    </dialog>
+      </RD.Portal>
+    </RD.Root>
   );
 }

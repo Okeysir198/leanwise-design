@@ -14,7 +14,7 @@ export interface Command {
   hidden?: boolean;
   run?(command: Command): void;
 }
-export interface CommandPaletteProps extends React.HTMLAttributes<HTMLDialogElement> {
+export interface CommandPaletteProps extends React.HTMLAttributes<HTMLDivElement> {
   open?: boolean;
   onClose?(): void;
   commands: Command[];
@@ -23,14 +23,17 @@ export interface CommandPaletteProps extends React.HTMLAttributes<HTMLDialogElem
   /* --- Display text. Every user-visible string this component renders is a
      prop, because a component library cannot hold display text (v1.3.1). --- */
   emptyText?: string;
+  /** The dialog's accessible name and the input's label. Rendered sr-only. */
   label?: string;
   /** The footer hint row. Default `["↑↓ navigate", "↵ run", "esc close"]`. */
   hints?: React.ReactNode[];
 }
 /**
- * The command palette, on the native `<dialog>`. It does NOT bind ⌘K — a
- * component that installs a global key handler fights the host app for it and
- * cannot be turned off on the one screen where ⌘K means something else.
+ * The command palette — the same modal shell as `Dialog` (Radix `Dialog` since
+ * v2.0.0, in the `OverlayProvider` layer) around the system's own listbox and
+ * scorer. It does NOT bind ⌘K — a component that installs a global key handler
+ * fights the host app for it and cannot be turned off on the one screen where
+ * ⌘K means something else. Bind it where you mount it.
  */
 export declare function CommandPalette(props: CommandPaletteProps): React.JSX.Element;
 /** The subsequence scorer, exported so a caller can rank its own list the same way. */

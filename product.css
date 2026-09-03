@@ -280,13 +280,18 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
    a mirrored `.dark` / `.lw-band-dark` class (tokens.css re-derives every role
    on that element) — a portal on document.body has no ancestor to inherit ink
    from. Modal layers ride `--lw-z-modal`; non-modal `--lw-z-overlay`. */
-.lw-layer { position: fixed; inset: 0; pointer-events: none; z-index: var(--lw-z-overlay); isolation: isolate; color: var(--lw-fg); }
+.lw-layer { position: fixed; inset: 0; pointer-events: none; z-index: var(--lw-z-overlay); isolation: isolate; color: var(--lw-fg);
+  /* The layer carries the trigger's mirrored band class, and tokens.css's band block
+     paints `background: var(--lw-bg)` on whatever carries it — on a fixed, inset-0 layer
+     that is the whole viewport. The band re-points the CHANNELS for the descendants;
+     the paint is not wanted here. (0,1,0) beats the :where() band rule's zero. */
+  background: transparent;
+}
 .lw-layer-modal { z-index: var(--lw-z-modal); }
 .lw-layer > * { pointer-events: auto; }
 /* The scrim, as an ELEMENT rather than `::backdrop`: a portal-rendered dialog
-   is not a top-layer <dialog>, so the UA pseudo does not exist for it. Same
-   scrim token and blur as the `::backdrop` rules it replaces — keep the three
-   in step until the retirement below lands. */
+   is not a top-layer <dialog>, so the UA pseudo does not exist for it. This is
+   the ONE scrim — Dialog, Drawer and CommandPalette all render it. */
 .lw-backdrop { position: fixed; inset: 0; z-index: var(--lw-z-local-1); background: var(--lw-scrim); backdrop-filter: blur(2px); }
 /* Rendered by OverlayProvider: no box of its own, so it can sit anywhere in
    the branded subtree without moving a pixel. */
@@ -295,20 +300,22 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
   .lw-backdrop[data-state="open"] { animation: lwFadeIn var(--lw-dur-sm) var(--lw-ease-out) both; }
 }
 
-/* TOMBSTONE (v2.0.0, in flight): `.lw-dialog::backdrop`, `.lw-drawer::backdrop`
-   and `.lw-cmdk::backdrop` below are retired when those components move to
-   Radix `Dialog` and render `.lw-backdrop` instead. Until then both forms
-   share `--lw-scrim` + `blur(2px)`; move one, move the other. */
+/* TOMBSTONE (v2.0.0): `.lw-dialog::backdrop`, `.lw-drawer::backdrop` and
+   `.lw-cmdk::backdrop` are RETIRED, with the `[open]`-scoped display and
+   animation rules beside them. The three components render Radix `Dialog`
+   into `.lw-layer-modal` and paint `.lw-backdrop` above; the UA pseudo does
+   not exist for a portal-rendered panel, and `[open]` is a <dialog> attribute
+   no longer set — `data-state="open"` is the Radix equivalent. */
 
-/* DIALOG — the native <dialog>, so focus trap, Esc and inertness are the
-   platform's job rather than 200 lines of ours.
+/* DIALOG — Radix `Dialog.Content` (v2.0.0), portal-rendered inside
+   `.lw-layer-modal`, so focus trap, Esc, outside-click and the scroll lock are
+   Radix's. Centred by `inset: 0; margin: auto` against the fixed layer rather
+   than a transform, so lwDialogIn's transform does not fight the placement.
+   `z-index` is LOCAL to the isolated layer: local-2 sits over the backdrop's
+   local-1 and never competes with page furniture.
    A column with a bounded height: the head and foot stay put and only the body
    scrolls, so a long list cannot push the close control off-screen. */
-.lw-dialog { width: min(calc(100vw - 32px), var(--lw-dialog-w, 480px)); max-height: calc(100dvh - 64px); overflow: hidden; padding: 0; border: 1px solid var(--lw-line); border-radius: var(--lw-radius-xl); background: var(--lw-bg); color: var(--lw-fg); box-shadow: var(--lw-shadow-xl); }
-/* Scoped to [open]: a bare `display` on the base selector outranks the UA's
-   `dialog:not([open]) { display: none }` and paints closed dialogs in flow. */
-.lw-dialog[open] { display: flex; flex-direction: column; }
-.lw-dialog::backdrop { background: var(--lw-scrim); backdrop-filter: blur(2px); }
+.lw-dialog { position: fixed; inset: 0; margin: auto; height: fit-content; z-index: var(--lw-z-local-2); display: flex; flex-direction: column; width: min(calc(100vw - 32px), var(--lw-dialog-w, 480px)); max-height: calc(100dvh - 64px); overflow: hidden; padding: 0; border: 1px solid var(--lw-line); border-radius: var(--lw-radius-xl); background: var(--lw-bg); color: var(--lw-fg); box-shadow: var(--lw-shadow-xl); }
 .lw-dialog-head { flex: none; display: flex; align-items: flex-start; justify-content: space-between; gap: var(--lw-space-16); padding: var(--lw-space-20) var(--lw-space-24) var(--lw-space-12); }
 .lw-dialog-title { font-size: var(--lw-text-h3); font-weight: var(--lw-fw-semibold); letter-spacing: var(--lw-tracking-tight); line-height: 1.25; margin: 0; }
 /* Bare glyph, like every other dismiss in the system — a boxed close competes
@@ -326,8 +333,7 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 .lw-dialog-body * { min-width: 0; overflow-wrap: anywhere; }
 .lw-dialog-foot { flex: none; display: flex; align-items: center; justify-content: flex-end; gap: var(--lw-space-8); padding: var(--lw-space-16) var(--lw-space-24); border-top: 1px solid var(--lw-line); background: var(--lw-bg-subtle); border-radius: 0 0 var(--lw-radius-xl) var(--lw-radius-xl); }
 @media (prefers-reduced-motion: no-preference) {
-  .lw-dialog[open] { animation: lwDialogIn var(--lw-dur-sm) var(--lw-ease-out); }
-  .lw-dialog[open]::backdrop { animation: lwFadeIn var(--lw-dur-sm) var(--lw-ease-out); }
+  .lw-dialog[data-state="open"] { animation: lwDialogIn var(--lw-dur-sm) var(--lw-ease-out); }
 }
 @keyframes lwDialogIn { from { opacity: 0; transform: translateY(6px) scale(0.99); } }
 @keyframes lwFadeIn { from { opacity: 0; } }
@@ -360,8 +366,30 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 @media (prefers-reduced-motion: no-preference) { .lw-toast { animation: lwToastIn var(--lw-dur-sm) var(--lw-ease-out); } }
 @keyframes lwToastIn { from { opacity: 0; transform: translateY(8px); } }
 
-/* TOOLTIP — CSS-only, on a wrapper. For hints, never for content a user needs:
-   it does not exist on touch. */
+/* TOOLTIP — Radix Tooltip content since v2.0, portalled into a `.lw-layer`.
+   For hints, never for content a user needs: it does not exist on touch.
+   Navy-900 + --lw-on-dark are both TIERS (theme-invariant), so the surface is
+   the same 15.75:1 white-on-navy in every scope, including a dark band — the
+   pair the contrast gate measures as "navy-deep ground / on-dark". */
+.lw-tooltip {
+  padding: 5px 9px; border-radius: var(--lw-radius-sm);
+  background: var(--lw-navy-900); color: var(--lw-on-dark);
+  font-size: var(--lw-text-xs); line-height: 1.35; white-space: nowrap; max-width: 28ch;
+  z-index: var(--lw-z-overlay);
+  transform-origin: var(--radix-tooltip-content-transform-origin);
+}
+@media (prefers-reduced-motion: no-preference) {
+  /* Radix states: closed | delayed-open | instant-open. Own keyframe name: a
+     keyframe is global and last-wins, so this does not borrow the popover's. */
+  .lw-tooltip[data-state="delayed-open"], .lw-tooltip[data-state="instant-open"] {
+    animation: lwTooltipIn var(--lw-dur-xs) var(--lw-ease-out) both;
+  }
+  @keyframes lwTooltipIn { from { opacity: 0; transform: translateY(-2px); } }
+}
+
+/* DEPRECATED v2.0 — vanilla consumers; removed in v3. The CSS-only wrapper
+   (`.lw-tip[data-tip]`, painted by ::after): the text is invisible to assistive
+   technology, which is why the React Tooltip no longer renders it. */
 .lw-tip { position: relative; display: inline-flex; }
 .lw-tip::after {
   content: attr(data-tip);
@@ -537,34 +565,42 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
    picker, filter panel, column chooser. ONE surface, so those five cannot each
    invent a radius and a shadow (README rule 9).
 
-   It is promoted to the TOP LAYER with the popover attribute, which is the only
-   way a floating panel escapes an ancestor's overflow:hidden and stacking
-   context without a portal. `manual` rather than `auto`: auto's light-dismiss
-   fires on pointerdown OUTSIDE, which includes the trigger — so a click on an
-   open trigger closes it and the trigger's own handler immediately reopens it.
-   Dismissal is ours, and it knows about the trigger. */
+   Since v2.0.0 the panel is Radix Popover / DropdownMenu content, portalled
+   into the nearest OverlayProvider layer (or body) and positioned by Radix —
+   no `position: fixed` here: Radix's popper wrapper carries the position and
+   COPIES this rule's computed z-index onto itself, so `--lw-z-overlay` still
+   decides the stack. The theme/band scope of the trigger is mirrored onto the
+   `.lw-layer` around it, which is what keeps a popover on a dark band dark.
+   `[data-state]` is Radix's; `--radix-*` are the vars it sets on the content
+   (the popover family for Popover, the dropdown-menu family for Menu — the
+   fallback chain reads whichever exists). */
 .lw-popover {
-  position: fixed; inset: auto; margin: 0;
+  margin: 0;
   z-index: var(--lw-z-overlay);
   min-width: 180px; max-width: min(92vw, 360px);
-  max-height: min(70vh, 480px); overflow: auto; overscroll-behavior: contain;
+  max-height: min(var(--radix-popover-content-available-height, var(--radix-dropdown-menu-content-available-height, 70vh)), 480px);
+  overflow: auto; overscroll-behavior: contain;
   padding: var(--lw-space-8);
   background: var(--lw-bg); color: var(--lw-fg);
   border: 1px solid var(--lw-line);
   border-radius: var(--lw-radius-lg);
   box-shadow: var(--lw-shadow-lg);
+  transform-origin: var(--radix-popover-content-transform-origin, var(--radix-dropdown-menu-content-transform-origin));
 }
 .lw-popover:focus-visible { outline: none; box-shadow: var(--lw-shadow-lg), var(--lw-focus-ring); }
-.lw-popover::backdrop { background: none; }
+/* Floor the panel to the anchor: comboboxes and selects. */
+.lw-popover[data-match-width] { min-width: var(--radix-popover-trigger-width, var(--radix-dropdown-menu-trigger-width)); }
 /* A plain content popover wants the card's padding, not the menu's gutter. */
 .lw-popover-pad { padding: var(--lw-space-16); }
+/* Tombstone (v2.0.0): the React Popover no longer wraps its trigger; kept as a
+   no-op for vanilla markup that still carries the class. */
 .lw-popover-anchor { display: contents; }
 @media (prefers-reduced-motion: no-preference) {
-  .lw-popover:popover-open { animation: lwPopIn var(--lw-dur-xs) var(--lw-ease-out); }
+  .lw-popover[data-state="open"] { animation: lwPopIn var(--lw-dur-xs) var(--lw-ease-out); }
   @keyframes lwPopIn { from { opacity: 0; transform: translateY(-2px); } }
 }
 
-/* ---- Menu -------------------------------------------------------------------
+/* ---- Menu (inside .lw-popover) ---------------------------------------------
    Lives inside .lw-popover; it owns rows, never the surface. Row height comes
    from the density scale, so a menu in a compact workbench is compact with it. */
 .lw-menu { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
@@ -579,20 +615,25 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
   cursor: pointer;
   transition: background var(--lw-dur-xs) var(--lw-ease-out), color var(--lw-dur-xs) var(--lw-ease-out);
 }
-.lw-menu-item:hover { background: var(--lw-bg-subtle); }
+.lw-menu-item:hover, .lw-menu-item[data-highlighted] { background: var(--lw-bg-subtle); }
 .lw-menu-item:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
 .lw-menu-item .lw-menu-lead { flex: none; display: inline-flex; width: 16px; justify-content: center; color: var(--lw-fg-subtle); }
 .lw-menu-item .lw-menu-text { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 /* The shortcut is mono so it reads as keys, and subtle so it never competes with
    the label it belongs to. */
 .lw-menu-item .lw-menu-kbd { flex: none; font-family: var(--lw-font-mono); font-size: var(--lw-text-xs); color: var(--lw-fg-subtle); font-variant-numeric: tabular-nums; }
-.lw-menu-item[data-checked="true"] .lw-menu-lead { color: var(--lw-brand-text); }
+.lw-menu-item[data-state="checked"] .lw-menu-lead { color: var(--lw-brand-text); }
 /* Destructive rows take the danger ROLE ink, which re-points per theme — not the
    raw tier, which would freeze to the light value on the dark ground. */
 .lw-menu-item.danger { color: var(--lw-danger-on); }
-.lw-menu-item.danger:hover { background: var(--lw-danger-soft); }
+.lw-menu-item.danger:hover, .lw-menu-item.danger[data-highlighted] { background: var(--lw-danger-soft); }
 .lw-menu-item.danger .lw-menu-lead { color: currentColor; }
-.lw-menu-item[aria-disabled="true"] { color: var(--lw-fg-faint); cursor: not-allowed; pointer-events: none; }
+.lw-menu-item[aria-disabled="true"], .lw-menu-item[data-disabled] { color: var(--lw-fg-faint); cursor: not-allowed; pointer-events: none; }
+/* Radix keeps focus ON the row, so :focus-visible paints the ring; the highlight
+   itself is a background, which forced colours erase — give it an edge. */
+@media (forced-colors: active) {
+  .lw-menu-item[data-highlighted] { outline: 1px solid Highlight; outline-offset: -1px; }
+}
 .lw-menu-sep { height: 1px; margin: var(--lw-space-4) calc(var(--lw-space-8) * -1); background: var(--lw-line); border: 0; }
 .lw-menu-label {
   padding: var(--lw-space-8) var(--lw-space-8) var(--lw-space-4);
@@ -666,10 +707,9 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 .lw-listbox-empty { padding: var(--lw-space-12) var(--lw-space-8); font-size: var(--lw-text-sm); color: var(--lw-fg-subtle); }
 
 /* ---- Drawer ------------------------------------------------------------------
-   The native <dialog> again, for the same reason Dialog is: focus trap, Esc and
-   background inertness are the platform's, and the platform's version is the one
-   screen readers already understand. A drawer is a modal that enters from an
-   edge, not a different kind of thing. */
+   The same Radix `Dialog.Content` as `.lw-dialog` (v2.0.0), in the same layer
+   with the same `.lw-backdrop`; a drawer is a modal that enters from an edge,
+   not a different kind of thing, so only the geometry below differs. */
 /* `data-side="start"/"end"` is a LOGICAL api, so it is implemented logically.
    It was left/right underneath, which meant an RTL consumer asked for a drawer
    on the start edge and got it on the end one — the API name was the only thing
@@ -677,6 +717,7 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
    translate cannot mirror itself the way inset-inline can. */
 .lw-drawer {
   position: fixed; inset-block: 0; inset-inline: auto 0; margin: 0; max-width: 100vw; max-height: 100vh;
+  z-index: var(--lw-z-local-2); display: flex; flex-direction: column;
   width: var(--lw-drawer-w, 420px); height: 100%;
   padding: 0; border: 0; border-inline-start: 1px solid var(--lw-line);
   background: var(--lw-bg); color: var(--lw-fg);
@@ -684,10 +725,6 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
   --lw-dir: 1;
 }
 [dir="rtl"] .lw-drawer { --lw-dir: -1; }
-/* Same trap as .lw-dialog: the UA hides a closed <dialog> with
-   `dialog:not([open]) { display: none }`, and an unconditional display on the
-   class outranks it and paints closed drawers in flow. */
-.lw-drawer[open] { display: flex; flex-direction: column; }
 .lw-drawer[data-side="start"] { inset-block: 0; inset-inline: 0 auto; border-inline-start: 0; border-inline-end: 1px solid var(--lw-line); }
 .lw-drawer[data-side="bottom"] {
   inset-block: auto 0; inset-inline: 0; width: 100%; height: auto;
@@ -695,7 +732,6 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
   border-start-start-radius: var(--lw-radius-xl); border-start-end-radius: var(--lw-radius-xl);
   border-end-start-radius: 0; border-end-end-radius: 0;
 }
-.lw-drawer::backdrop { background: var(--lw-scrim); backdrop-filter: blur(2px); }
 .lw-drawer-head {
   flex: none; display: flex; align-items: flex-start; gap: var(--lw-space-12);
   padding: var(--lw-card-pad); border-bottom: 1px solid var(--lw-line);
@@ -711,9 +747,9 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 }
 .lw-drawer[data-side="bottom"] .lw-drawer-head { position: relative; padding-top: calc(var(--lw-card-pad) + 6px); }
 @media (prefers-reduced-motion: no-preference) {
-  .lw-drawer[open] { animation: lwDrawerIn var(--lw-dur-md) var(--lw-ease-out); }
-  .lw-drawer[open][data-side="start"] { animation-name: lwDrawerInStart; }
-  .lw-drawer[open][data-side="bottom"] { animation-name: lwDrawerInBottom; }
+  .lw-drawer[data-state="open"] { animation: lwDrawerIn var(--lw-dur-md) var(--lw-ease-out); }
+  .lw-drawer[data-state="open"][data-side="start"] { animation-name: lwDrawerInStart; }
+  .lw-drawer[data-state="open"][data-side="bottom"] { animation-name: lwDrawerInBottom; }
   @keyframes lwDrawerIn { from { transform: translateX(calc(100% * var(--lw-dir, 1))); } }
   @keyframes lwDrawerInStart { from { transform: translateX(calc(-100% * var(--lw-dir, 1))); } }
   @keyframes lwDrawerInBottom { from { transform: translateY(100%); } }
@@ -1038,10 +1074,13 @@ a.lw-feed-item:hover, button.lw-feed-item:hover { background: var(--lw-bg-subtle
 
 /* ---- Command palette ---------------------------------------------------------
    A dialog, not a popover: it is modal, it takes the whole keyboard, and it
-   should make the page behind it inert. Same native element, same trap. */
-.lw-cmdk { width: min(560px, 92vw); max-height: 60vh; padding: 0; border: 0; border-radius: var(--lw-radius-xl); background: var(--lw-bg); box-shadow: var(--lw-shadow-xl); overflow: hidden; }
-.lw-cmdk[open] { display: flex; flex-direction: column; }
-.lw-cmdk::backdrop { background: var(--lw-scrim); backdrop-filter: blur(2px); }
+   should make the page behind it inert. Same Radix `Dialog` shell and layer as
+   `.lw-dialog` (v2.0.0); it hangs from the top of the viewport rather than
+   centring, so the list grows downward as the query narrows it. */
+.lw-cmdk { position: fixed; top: 12vh; inset-inline: 0; margin-inline: auto; z-index: var(--lw-z-local-2); display: flex; flex-direction: column; width: min(560px, 92vw); max-height: 60vh; padding: 0; border: 0; border-radius: var(--lw-radius-xl); background: var(--lw-bg); box-shadow: var(--lw-shadow-xl); overflow: hidden; }
+@media (prefers-reduced-motion: no-preference) {
+  .lw-cmdk[data-state="open"] { animation: lwDialogIn var(--lw-dur-sm) var(--lw-ease-out); }
+}
 .lw-cmdk-input { flex: none; display: flex; align-items: center; gap: var(--lw-space-12); padding: 0 var(--lw-space-16); height: 52px; border-bottom: 1px solid var(--lw-line); color: var(--lw-fg-subtle); }
 .lw-cmdk-input input { flex: 1; border: 0; background: none; outline: none; font: inherit; font-size: var(--lw-text-body); color: var(--lw-fg); }
 .lw-cmdk-input input::placeholder { color: var(--lw-fg-subtle); }

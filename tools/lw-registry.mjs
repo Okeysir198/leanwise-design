@@ -30,6 +30,13 @@
  *      unpadded — the exact v4 failure mode this release is about.
  *   3. The token lint's TSX rules run over registry/ — the first time those rules
  *      have ever run inside this repo.
+ *   4. (v2.0.0) Every `lw-*` class literal in a registry component is a class
+ *      some selector in base.css or product.css actually names. The three
+ *      Radix-backed items (dialog, tabs, switch) became THIN WRAPPERS over the
+ *      design system's own CSS, so probe 2 matches nothing in them and would
+ *      pass vacuously — the exact shape lw-tone refuses. An item that imports
+ *      `radix-ui` and yields NO `lw-*` class is therefore a failure, not a pass:
+ *      a wrapper with no class is a wrapper over nothing.
  */
 
 import fs from "node:fs";
@@ -37,12 +44,13 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { compileProbe } from "./_tw-probe.mjs";
 import { generated } from "./_generated.mjs";
+import { splitRules, splitSelectorList, stripComments } from "./_css.mjs";
+import { report } from "./_report.mjs";
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, "..");
 const CHECK = process.argv.includes("--check");
 const red = (s) => `\x1b[31m${s}\x1b[0m`;
-const green = (s) => `\x1b[32m${s}\x1b[0m`;
 
 const SRC = path.join(ROOT, "registry");
 const OUT = path.join(ROOT, "r");
@@ -142,17 +150,52 @@ for (const c of classes) {
   }
 }
 
-/* ---- report --------------------------------------------------------------- */
+/* ---- do the .lw-* classes exist in the CSS layers? ----------------------- */
 
-if (problems.length) {
-  console.error(red(`\nlw-registry: ${problems.length} problem(s).\n`));
-  for (const p of problems) console.error(`  - ${p}`);
-  console.error("");
-  process.exit(1);
+const LAYERS = ["base.css", "product.css"];
+const cssClasses = new Set();
+for (const layer of LAYERS) {
+  for (const rule of splitRules(stripComments(fs.readFileSync(path.join(ROOT, layer), "utf8")))) {
+    if (rule.selector.startsWith("@")) continue;
+    for (const sel of splitSelectorList(rule.selector)) {
+      for (const m of sel.matchAll(/\.(lw-[a-z0-9-]+)/g)) cssClasses.add(m[1]);
+    }
+  }
+}
+if (cssClasses.size < 100) {
+  console.error(red(`lw-registry: read only ${cssClasses.size} .lw-* classes from ${LAYERS.join("+")} — the CSS reader is broken, not the registry.`));
+  process.exit(2);
 }
 
-console.log(green(
-  CHECK
-    ? `lw-registry: OK — ${built.size} item(s) current, ${classes.size} design-system class(es) verified against the compiler.`
-    : `lw-registry: ${built.size} item(s) in r/; ${classes.size} design-system class(es) verified against the compiler.`,
-));
+let lwChecked = 0;
+for (const item of manifest.items) {
+  for (const f of item.files) {
+    if (!f.path.endsWith(".tsx")) continue;
+    const src = fs.readFileSync(path.join(SRC, f.path), "utf8")
+      .replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
+    const used = new Set([...src.matchAll(/\blw-[a-z0-9-]+/g)].map((m) => m[0]));
+    const isWrapper = /from\s+["']radix-ui["']/.test(src);
+    if (isWrapper && used.size === 0) {
+      lwChecked++; // the empty-set rule IS a check — count it so its message outranks the vacuity guard
+      problems.push(`${f.path} imports radix-ui but names NO lw-* class — a wrapper over nothing; the classes are the whole item`);
+      continue;
+    }
+    for (const c of used) {
+      lwChecked++;
+      if (!cssClasses.has(c)) {
+        problems.push(`\`${c}\` in ${f.path} is not a class in any selector of ${LAYERS.join(" or ")} — it renders unstyled`);
+      }
+    }
+  }
+}
+
+/* ---- report --------------------------------------------------------------- */
+
+process.exit(report("lw-registry", {
+  problems,
+  checked: lwChecked,
+  minChecked: 3, // one per Radix-backed item; the per-item empty-set rule above is the sharper guard
+  summary: CHECK
+    ? `lw-registry: OK — ${built.size} item(s) current, ${classes.size} design-system class(es) verified against the compiler, ${lwChecked} lw-* class(es) verified against ${LAYERS.join("+")}.`
+    : `lw-registry: ${built.size} item(s) in r/; ${classes.size} design-system class(es) verified against the compiler, ${lwChecked} lw-* class(es) verified against ${LAYERS.join("+")}.`,
+}));

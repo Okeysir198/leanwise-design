@@ -143,42 +143,49 @@ const Combobox = React.forwardRef(function Combobox2({
       ]
     }
   );
-  return /* @__PURE__ */ jsx(
-    Popover,
-    {
-      trigger: field,
-      open: open && !disabled,
-      onOpenChange: setOpen,
-      role: "listbox",
-      triggerAria: false,
-      matchWidth: true,
-      placement: "bottom-start",
-      label,
-      ...rest,
-      children: loading ? /* @__PURE__ */ jsx("div", { id: listId, role: "listbox", "aria-busy": "true", className: "lw-listbox-empty", children: loadingText }) : !shown.length ? /* @__PURE__ */ jsx("div", { id: listId, role: "listbox", className: "lw-listbox-empty", children: emptyText }) : /* @__PURE__ */ jsx("ul", { ref: listRef, className: "lw-listbox", id: listId, role: "listbox", "aria-multiselectable": multiple || void 0, children: shown.map((o, i) => {
-        const isSel = multiple ? selected.includes(o.value) : o.value === value;
-        return /* @__PURE__ */ jsxs(
-          "li",
-          {
-            id: listId + "-" + i,
-            className: "lw-option",
-            role: "option",
-            "aria-selected": isSel,
-            "aria-disabled": o.disabled ? "true" : void 0,
-            "data-active": i === active ? "true" : void 0,
-            onMouseEnter: () => setActive(i),
-            onMouseDown: (e) => e.preventDefault(),
-            onClick: () => commit(o),
-            children: [
-              /* @__PURE__ */ jsx("span", { className: "lw-option-lead", children: isSel && /* @__PURE__ */ jsx(Icon, { name: "checkmark", size: 14 }) }),
-              /* @__PURE__ */ jsx("span", { className: "lw-option-text", children: o.label }),
-              o.meta && /* @__PURE__ */ jsx("span", { className: "lw-option-meta", children: o.meta })
-            ]
-          },
-          o.value
-        );
-      }) })
-    }
+  return (
+    /* `anchor`: the input owns role="combobox", aria-expanded and aria-controls;
+       the panel is a positioning anchor only. `autoFocus={false}`: focus STAYS in
+       the input — aria-activedescendant names the row. `role="presentation"`:
+       the ul below is the listbox; a second listbox around it would nest one in
+       the other. */
+    /* @__PURE__ */ jsx(
+      Popover,
+      {
+        anchor: true,
+        autoFocus: false,
+        trigger: field,
+        open: open && !disabled,
+        onOpenChange: setOpen,
+        role: "presentation",
+        matchWidth: true,
+        placement: "bottom-start",
+        ...rest,
+        children: loading ? /* @__PURE__ */ jsx("div", { id: listId, role: "listbox", "aria-busy": "true", className: "lw-listbox-empty", children: loadingText }) : !shown.length ? /* @__PURE__ */ jsx("div", { id: listId, role: "listbox", className: "lw-listbox-empty", children: emptyText }) : /* @__PURE__ */ jsx("ul", { ref: listRef, className: "lw-listbox", id: listId, role: "listbox", "aria-multiselectable": multiple || void 0, children: shown.map((o, i) => {
+          const isSel = multiple ? selected.includes(o.value) : o.value === value;
+          return /* @__PURE__ */ jsxs(
+            "li",
+            {
+              id: listId + "-" + i,
+              className: "lw-option",
+              role: "option",
+              "aria-selected": isSel,
+              "aria-disabled": o.disabled ? "true" : void 0,
+              "data-active": i === active ? "true" : void 0,
+              onMouseEnter: () => setActive(i),
+              onMouseDown: (e) => e.preventDefault(),
+              onClick: () => commit(o),
+              children: [
+                /* @__PURE__ */ jsx("span", { className: "lw-option-lead", children: isSel && /* @__PURE__ */ jsx(Icon, { name: "checkmark", size: 14 }) }),
+                /* @__PURE__ */ jsx("span", { className: "lw-option-text", children: o.label }),
+                o.meta && /* @__PURE__ */ jsx("span", { className: "lw-option-meta", children: o.meta })
+              ]
+            },
+            o.value
+          );
+        }) })
+      }
+    )
   );
 });
 export {

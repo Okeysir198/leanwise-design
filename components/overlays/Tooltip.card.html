@@ -1,0 +1,26 @@
+<!-- @dsCard group="Overlays" name="Tooltip" subtitle="Radix Tooltip — role=tooltip and aria-describedby; the hint is read, not only seen" viewport="1000x560" -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Tooltip</title>
+<link rel="stylesheet" href="../../preview/_card.css">
+<link rel="stylesheet" href="../../base.css">
+<link rel="stylesheet" href="../../marketing.css">
+<link rel="stylesheet" href="../../product.css">
+<script src="../../preview/_vendor/react.development.js"></script>
+<script src="../../preview/_vendor/react-dom.development.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>/* Room above the first row: the forced-open tooltip sits above its trigger. */
+.pane{min-height:200px;padding-top:56px}
+</style>
+</head><body><div class="card">
+<header><h1>Tooltip</h1>
+<p class="sub"><b>Hints only.</b> A tooltip does not exist on touch, so anything a user <em>needs</em> — a label, an
+error, an instruction — must not live here. It is for the shortcut key next to a button that already has a name.</p>
+<p class="sub"><b>Since v2.0 it is read, not only seen.</b> Until now the hint was a <code>data-tip</code> attribute
+painted by <code>::after</code>: visible to a sighted mouse user and to nobody else. The Radix content carries
+<code>role="tooltip"</code> and the trigger gains <code>aria-describedby</code>, so a screen reader announces the hint
+with the button. It portals into the <code>OverlayProvider</code>'s layer and mirrors the trigger's band scope, so a
+tooltip opened from a dark band paints the same navy-on-white pair it does everywhere — both are tiers, not roles.</p></header>
+<div class="panes"><div class="pane" id="light"></div><div class="pane dark lw-band-dark" id="dark"></div></div>
+</div>
+<script src="./Tooltip.card.js"></script>
+</body></html>

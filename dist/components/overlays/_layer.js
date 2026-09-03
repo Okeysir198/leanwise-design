@@ -20,7 +20,7 @@ function mirrorScope(fromEl) {
   if (band) out["data-band"] = band;
   return out;
 }
-function Layer({ modal = false, from = null, children, className, ...rest }) {
+const Layer = React.forwardRef(function Layer2({ modal = false, from = null, children, className, ...rest }, forwardedRef) {
   const ref = React.useRef(null);
   const [container, setContainer] = React.useState(null);
   const mirrored = mirrorScope(from);
@@ -28,7 +28,9 @@ function Layer({ modal = false, from = null, children, className, ...rest }) {
   const setRef = React.useCallback((node) => {
     ref.current = node;
     setContainer(node);
-  }, []);
+    if (typeof forwardedRef === "function") forwardedRef(node);
+    else if (forwardedRef) forwardedRef.current = node;
+  }, [forwardedRef]);
   return React.createElement(
     "div",
     {
@@ -41,7 +43,8 @@ function Layer({ modal = false, from = null, children, className, ...rest }) {
     },
     React.createElement(LayerContext.Provider, { value }, children)
   );
-}
+});
+Layer.displayName = "Layer";
 export {
   Layer,
   LayerContext,

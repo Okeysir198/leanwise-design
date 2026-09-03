@@ -54,8 +54,8 @@
       "name": "switch",
       "type": "registry:ui",
       "title": "Switch",
-      "description": "38x22 with a 16px thumb at a 2px inset — the travel is (w - thumb - 2*inset), so the three values are one decision and all three are tokens.",
-      "dependencies": ["@radix-ui/react-switch"],
+      "description": "The design system's own .lw-switch (38x22, 16px thumb at a 2px inset — three tokens, one decision) on a Radix Switch root; state keys off data-state. Needs base.css.",
+      "dependencies": ["radix-ui"],
       "registryDependencies": ["utils"],
       "files": [{ "path": "ui/switch.tsx", "type": "registry:ui", "target": "components/ui/switch.tsx" }]
     },
@@ -63,8 +63,8 @@
       "name": "tabs",
       "type": "registry:ui",
       "title": "Tabs",
-      "description": "An underline strip, not a pill tray.",
-      "dependencies": ["@radix-ui/react-tabs"],
+      "description": "The design system's own .lw-tabs on a Radix Tabs list — an underline strip, not a pill tray; the trigger is styled by [role=tab][aria-selected]. Needs base.css.",
+      "dependencies": ["radix-ui"],
       "registryDependencies": ["utils"],
       "files": [{ "path": "ui/tabs.tsx", "type": "registry:ui", "target": "components/ui/tabs.tsx" }]
     },
@@ -72,8 +72,8 @@
       "name": "dialog",
       "type": "registry:ui",
       "title": "Dialog",
-      "description": "radius-xl on a --lw-scrim backdrop with a blur.",
-      "dependencies": ["@radix-ui/react-dialog"],
+      "description": "The design system's own .lw-dialog on Radix Dialog parts: .lw-backdrop scrim, head/title/body/foot, and a .lw-icon-btn close. Needs base.css + product.css.",
+      "dependencies": ["radix-ui", "lucide-react"],
       "registryDependencies": ["utils"],
       "files": [{ "path": "ui/dialog.tsx", "type": "registry:ui", "target": "components/ui/dialog.tsx" }]
     }

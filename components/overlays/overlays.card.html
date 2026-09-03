@@ -1,4 +1,4 @@
-<!-- @dsCard group="Overlays" name="Dialog, Drawer, Toast, Tooltip" subtitle="Native <dialog> — the platform owns focus trap, Esc and inertness" viewport="1000x620" -->
+<!-- @dsCard group="Overlays" name="Dialog, Drawer, Toast, Tooltip" subtitle="Radix Dialog in the overlay layer — focus trap, Esc, scroll lock and a click-to-close scrim" viewport="1000x620" -->
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><title>Overlays</title>
 <link rel="stylesheet" href="../../preview/_card.css">
@@ -10,12 +10,16 @@
 <script src="../../_ds_bundle.js"></script>
 </head><body><div class="card">
 <header><h1>Overlays</h1>
-<p class="sub"><b>Dialog is the native <span class="mono">&lt;dialog&gt;</span>.</b> Focus trap, Esc-to-close and
-background inertness are the platform's job here rather than two hundred lines of ours — and the platform's version is
-the one screen readers already understand. Nothing else in this system re-implements a browser primitive.</p>
+<p class="sub"><b>Dialog is Radix <span class="mono">Dialog</span>, portal-rendered into the overlay layer.</b> The focus
+trap, Esc, the scroll lock, a click on the scrim and <span class="mono">aria-hidden</span> on the rest of the page are
+Radix's; what is ours is <em>where</em> it lands: an <span class="mono">.lw-layer-modal</span> inside the nearest
+<span class="mono">OverlayProvider</span> — or <span class="mono">document.body</span>, mirroring the opener's theme
+scope, which is why the panel opened from the dark pane paints dark. The native
+<span class="mono">&lt;dialog&gt;</span> it replaces lived in the browser's top layer, above every container, so it
+could not inherit a tenant's brand and a Menu opened inside it landed under its own backdrop.</p>
 <p class="sub"><b>A drawer is a modal that enters from an edge</b>, not a different kind of thing — so it is the same
-native element, with the same trap: the UA hides a closed <span class="mono">&lt;dialog&gt;</span>, and an
-unconditional <span class="mono">display</span> on the class outranks that and paints closed panels in flow.</p>
+shell, the same layer and the same scrim (<span class="mono">.lw-backdrop</span>, one rule for all three), with only
+the panel's geometry to itself. <span class="mono">data-side</span> is logical: start, end, bottom.</p>
 <p class="sub"><b>Toast carries a mono status word, not only coloured ink</b>, and errors use
 <span class="mono">role="alert"</span> while everything else uses <span class="mono">role="status"</span>: an error
 should interrupt, a confirmation should not. Tooltip is for hints only — it does not exist on touch.</p></header>

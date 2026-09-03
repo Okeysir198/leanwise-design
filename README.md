@@ -169,11 +169,19 @@ No static host is needed — `r/` is committed for the same reason `tokens.json`
 `react.d.ts` are: every consumer installs from a git tag, where a publish-time artifact does
 not exist. If a docs site appears later it serves this same folder.
 
-They render against the v1.2 geometry tokens (`px-btn-x`, `h-control-md`, `text-th`,
-`tracking-th`, `size-switch-w`), so a registry `<Button>` and a `.lw-btn` cannot drift apart
-by hand. `npm run check:registry` compiles every design-system class they use and fails if one
-emits nothing — a registry that drifts from the CSS is worse than no registry, because it
-looks authoritative.
+The five form primitives — `button`, `badge`, `input`, `card`, `table` — stay Tailwind items
+the consumer owns, rendering against the v1.2 geometry tokens (`px-btn-x`, `h-control-md`,
+`text-th`, `tracking-th`), so a registry `<Button>` and a `.lw-btn` cannot drift apart by hand.
+Since v2.0.0 the three Radix-backed items — `dialog`, `tabs`, `switch` — are **thin wrappers
+over the design system's own CSS** (`.lw-dialog*`, `.lw-backdrop`, `.lw-tabs`, `.lw-switch`):
+one source of styling, shared with the vanilla and React consumers, and no utility strings to
+re-align. They require the named layers loaded — `dialog` needs `base.css` + `product.css`,
+`tabs` and `switch` need `base.css` — and depend on the unified `radix-ui` package.
+`npm run check:registry` compiles every design-system utility the Tailwind items use and
+fails if one emits nothing, and asserts every `lw-*` literal in a wrapper is a class some
+selector in `base.css`/`product.css` names — a wrapper that names none is a failure, not a
+pass. A registry that drifts from the CSS is worse than no registry, because it looks
+authoritative.
 
 ### Am I missing anything?
 

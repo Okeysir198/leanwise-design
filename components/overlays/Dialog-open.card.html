@@ -1,0 +1,23 @@
+<!-- @dsCard group="Overlays" name="Dialog (open)" subtitle="An open Dialog, measured — centred in the layer, over its own backdrop, focus inside" viewport="1000x620" -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Dialog, open</title>
+<link rel="stylesheet" href="../../preview/_card.css">
+<link rel="stylesheet" href="../../base.css">
+<link rel="stylesheet" href="../../marketing.css">
+<link rel="stylesheet" href="../../product.css">
+<script src="../../preview/_vendor/react.development.js"></script>
+<script src="../../preview/_vendor/react-dom.development.js"></script>
+<script src="../../_ds_bundle.js"></script>
+</head><body><div class="card">
+<header><h1>Dialog, open</h1>
+<p class="sub"><b>The overlays card can only show a closed dialog</b> — the gates shoot what is on the page, and a
+panel that needs a click is never on it. This card mounts one <span class="mono">Dialog</span> already open, inside an
+<span class="mono">OverlayProvider</span> whose root is the pane, so what the a11y and visual gates measure IS the
+open state: centred in the fixed layer, over the <span class="mono">.lw-backdrop</span> scrim, with focus inside.</p>
+<p class="sub"><b>One root, and nothing focusable outside the dialog</b>, on purpose. A modal sets
+<span class="mono">aria-hidden</span> on every sibling of its portal; a second pane with its own buttons — or a
+second open modal — would fail <span class="mono">aria-hidden-focus</span> here, and be right to.</p></header>
+<div class="pane" id="root" style="min-height:360px"></div>
+</div>
+<script src="./Dialog-open.card.js"></script>
+</body></html>

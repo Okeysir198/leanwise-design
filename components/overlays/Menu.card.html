@@ -15,12 +15,12 @@
 <header><h1>Popover &amp; Menu</h1>
 <p class="sub"><b>One floating surface.</b> Menu, Combobox, DatePicker and every filter panel are <code>Popover</code>
 plus contents — so there is one shadow, one radius and one dismissal behaviour in the system rather than five that
-drift apart. It is promoted to the <b>top layer</b>, which is the only way a panel escapes an ancestor's
-<code>overflow: hidden</code> without a portal.</p>
-<p class="sub"><b>Dismissal is ours, not <code>popover="auto"</code>'s.</b> Auto light-dismisses on pointerdown
-anywhere outside — including the trigger, so a click on an open trigger closes the panel and the trigger's own handler
-immediately reopens it. Ours knows about the trigger. <b>Focus moves with the highlight:</b> arrows, Home/End and
-typeahead move real DOM focus, because a highlight without focus tells a screen reader nothing changed.</p></header>
+drift apart. Since v2.0.0 the surface is <b>Radix Popover / DropdownMenu</b> (non-modal): positioning, collision
+flipping, outside-press, Escape and focus return are Radix's, not ours.</p>
+<p class="sub"><b>What stays ours is the scope.</b> The panel portals into the nearest <code>OverlayProvider</code> layer
+and mounts a <code>.lw-layer</code> that mirrors the trigger's theme and band class — open the dark pane's menu and it
+paints dark, on a light page, with no class on <code>&lt;html&gt;</code>. <b>Focus moves with the highlight:</b> arrows,
+Home/End and typeahead move real DOM focus, because a highlight without focus tells a screen reader nothing changed.</p></header>
 <div class="panes"><div class="pane" id="light"></div><div class="pane dark lw-band-dark" id="dark"></div></div>
 </div>
 <script src="./Menu.card.js"></script>

@@ -1,7 +1,14 @@
 "use client"
 
+// A THIN WRAPPER over the design system's own `.lw-dialog*` CSS — one source
+// of styling, shared with the vanilla and React consumers. Needs base.css
+// (`.lw-icon-btn`) + product.css (`.lw-backdrop`, `.lw-dialog*`) loaded; a
+// Tailwind consumer imports them the same way it imports tokens.css. The
+// Radix parts supply focus trap, Esc, inertness and the portal; the classes
+// supply everything the eye sees. No utility strings here on purpose.
+
 import * as React from "react"
-import * as DialogPrimitive from "@radix-ui/react-dialog"
+import { Dialog as DialogPrimitive } from "radix-ui"
 import { XIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -37,10 +44,7 @@ function DialogOverlay({
   return (
     <DialogPrimitive.Overlay
       data-slot="dialog-overlay"
-      className={cn(
-        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-[10001] bg-scrim backdrop-blur-[2px] pointer-events-auto",
-        className
-      )}
+      className={cn("lw-backdrop", className)}
       {...props}
     />
   )
@@ -61,20 +65,17 @@ function DialogContent({
       {showOverlay && <DialogOverlay />}
       <DialogPrimitive.Content
         data-slot="dialog-content"
-        className={cn(
-          "bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-[10001] grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-xl border p-6 shadow-xl duration-200 sm:max-w-lg",
-          className
-        )}
+        className={cn("lw-dialog", className)}
         {...props}
       >
         {children}
         {showCloseButton && (
           <DialogPrimitive.Close
             data-slot="dialog-close"
-            className="ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none cursor-pointer [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
+            className="lw-icon-btn lw-dialog-close"
+            aria-label="Close"
           >
-            <XIcon />
-            <span className="sr-only">Close</span>
+            <XIcon aria-hidden="true" />
           </DialogPrimitive.Close>
         )}
       </DialogPrimitive.Content>
@@ -86,7 +87,17 @@ function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="dialog-header"
-      className={cn("flex flex-col gap-2 text-center sm:text-left", className)}
+      className={cn("lw-dialog-head", className)}
+      {...props}
+    />
+  )
+}
+
+function DialogBody({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="dialog-body"
+      className={cn("lw-dialog-body", className)}
       {...props}
     />
   )
@@ -96,10 +107,7 @@ function DialogFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="dialog-footer"
-      className={cn(
-        "flex flex-col-reverse gap-2 sm:flex-row sm:justify-end",
-        className
-      )}
+      className={cn("lw-dialog-foot", className)}
       {...props}
     />
   )
@@ -112,27 +120,21 @@ function DialogTitle({
   return (
     <DialogPrimitive.Title
       data-slot="dialog-title"
-      className={cn("text-lg leading-none font-semibold", className)}
+      className={cn("lw-dialog-title", className)}
       {...props}
     />
   )
 }
 
 function DialogDescription({
-  className,
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Description>) {
-  return (
-    <DialogPrimitive.Description
-      data-slot="dialog-description"
-      className={cn("text-muted-foreground text-sm", className)}
-      {...props}
-    />
-  )
+  return <DialogPrimitive.Description data-slot="dialog-description" {...props} />
 }
 
 export {
   Dialog,
+  DialogBody,
   DialogClose,
   DialogContent,
   DialogDescription,

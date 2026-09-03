@@ -62,7 +62,12 @@ export function mirrorScope(fromEl) {
  * portal renders into. `from` is the element whose scope to mirror (the
  * trigger); `modal` lifts it from `--lw-z-overlay` to `--lw-z-modal`.
  */
-export function Layer({ modal = false, from = null, children, className, ...rest }) {
+// forwardRef: every Radix `Portal` is `asChild`, so its Slot clones the Layer
+// with a ref (Presence needs the node). A plain function component would drop
+// it — a warning under React 18, a lost node either way — and the streams that
+// hit this had to wrap the Layer in a bare <div>. Merging the forwarded ref
+// with the local one keeps a single element.
+export const Layer = React.forwardRef(function Layer({ modal = false, from = null, children, className, ...rest }, forwardedRef) {
   const ref = React.useRef(null);
   // The container is offered through STATE, not `ref.current`: a ref is null
   // on the first render, and a child Portal that read it then would fall back
@@ -70,7 +75,11 @@ export function Layer({ modal = false, from = null, children, className, ...rest
   const [container, setContainer] = React.useState(null);
   const mirrored = mirrorScope(from);
   const value = React.useMemo(() => ({ container }), [container]);
-  const setRef = React.useCallback((node) => { ref.current = node; setContainer(node); }, []);
+  const setRef = React.useCallback((node) => {
+    ref.current = node; setContainer(node);
+    if (typeof forwardedRef === "function") forwardedRef(node);
+    else if (forwardedRef) forwardedRef.current = node;
+  }, [forwardedRef]);
   // createElement, not JSX: this is a `.js` (private, like _merge-refs.js) and
   // neither lw-build nor a consumer's bundler transforms JSX in a `.js`.
   return React.createElement(
@@ -85,4 +94,5 @@ export function Layer({ modal = false, from = null, children, className, ...rest
     },
     React.createElement(LayerContext.Provider, { value }, children),
   );
-}
+});
+Layer.displayName = "Layer";
