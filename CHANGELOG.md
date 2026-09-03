@@ -22,6 +22,20 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 ## [Unreleased]
 
+## [1.10.2] — 2026-09-03
+
+### Fixed — a `KpiTile` note could not wrap, and pushed the page sideways
+
+`.lw-kpi .d > span { white-space: nowrap }` exists so a delta like "0.4 pt" never
+breaks across lines. It also caught the `note`, which is prose — so a
+one-sentence note could not wrap and overflowed its own tile, taking the document
+into horizontal scroll. Measured at 1440px in `leanwise-inspect`, where the
+dashboard's stale-device hint did exactly that.
+
+The note now wraps; the delta still does not. `note` is also documented for the
+first time: it belongs in the delta row, so keep it to a few words — a sentence
+belongs under the tile.
+
 ## [1.10.1] — 2026-09-03
 
 ### Fixed — the item shapes were declared, used, and exported from nowhere

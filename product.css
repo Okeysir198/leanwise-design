@@ -120,7 +120,11 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
    improvement red. Tone defaults to direction; pass `tone` to override.
    And direction is never colour alone — the arrow icon carries it too. */
 .lw-kpi .d .lw-icon, .lw-stat-delta .lw-icon { align-self: center; flex: none; }
-.lw-kpi .d .w { color: var(--lw-fg-subtle); }
+/* The NOTE wraps; the delta does not. `.d > span { white-space: nowrap }` above
+   exists so a figure like "0.4 pt" never breaks across lines — and it caught the
+   note too, which is prose. A one-sentence note then could not wrap and pushed
+   its own tile past the viewport. Measured at 1440px in leanwise-inspect. */
+.lw-kpi .d .w { color: var(--lw-fg-subtle); white-space: normal; }
 .lw-kpi .d.pos { color: var(--lw-success-on); }
 .lw-kpi .d.neg { color: var(--lw-danger-on); }
 /* CANONICAL TONE SPELLINGS. The abbreviated selectors above are kept because raw
