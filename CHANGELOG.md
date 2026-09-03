@@ -24,6 +24,13 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 ## [Unreleased]
 
+## [2.1.5] — 2026-09-04
+
+### Fixed
+
+- **A `Disclosure` that is a `Card`'s last child drops its bottom rule** — it sat 20px
+  above the card's edge and a closed panel read as a card with an empty body.
+
 ## [2.1.4] — 2026-09-04
 
 ### Fixed

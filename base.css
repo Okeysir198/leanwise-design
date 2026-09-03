@@ -662,6 +662,10 @@ table.visually-hidden > caption,
 /* Flex column, not grid: `margin-top:auto` on the footer only pushes the footer to
    the bottom inside a flex container, which is what aligns footers across a row. */
 .lw-card { padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+/* A Disclosure as the card's LAST child: its own bottom rule sat 20px above the
+   card's edge, so a closed panel read as a card with an empty body (measured on
+   an approval page). The card's edge is the boundary there; the rule steps aside. */
+.lw-card > .lw-disclosure:last-child { border-block-end: 0; }
 /* An interactive card IS a <button>, and a button centres its text: without this
    the body copy sat centred while the title read left. Any surface that can
    become a button inherits page text alignment, not the control default. */
