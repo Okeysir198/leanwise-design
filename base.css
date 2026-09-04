@@ -666,6 +666,11 @@ table.visually-hidden > caption,
    card's edge, so a closed panel read as a card with an empty body (measured on
    an approval page). The card's edge is the boundary there; the rule steps aside. */
 .lw-card > .lw-disclosure:last-child { border-block-end: 0; }
+/* A Disclosure that IS a card (`lw-disclosure lw-card`): the card's 20px padding and
+   its 12px flex gap both wrapped a 56px summary, measured at 110px closed with 36px
+   above the title and 48px below — five of them stacked on an approval page. The
+   summary carries its own vertical rhythm, so the card's collapses to the horizontal. */
+.lw-disclosure.lw-card { gap: 0; padding-block: var(--lw-space-4); }
 /* An interactive card IS a <button>, and a button centres its text: without this
    the body copy sat centred while the title read left. Any surface that can
    become a button inherits page text alignment, not the control default. */
@@ -1216,6 +1221,12 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
   .lw-segmented button { padding: 10px 14px; min-height: var(--lw-control-h-sm); }
   .lw-tabs [role="tab"] { min-height: var(--lw-control-h-sm); } /* measured 43px: 1px under the floor */
   .lw-skip { min-height: var(--lw-control-h-sm); display: inline-flex; align-items: center; } /* 41px measured */
+  /* REAL size, not the ::after overlay, for two controls the overlay cannot serve:
+     the AppBar menu button sits in `.lw-appbar-lead`, whose `overflow: hidden`
+     (needed so the brand truncates) CLIPS the pseudo-element to 36×28 with no
+     symptom; and the compact locale toggle sits 16px from the account button,
+     so two overlays overlap and the later one in the DOM takes the tap. */
+  .lw-appbar-lead > .lw-icon-btn, .lw-locale-compact { width: var(--lw-control-h-sm); height: var(--lw-control-h-sm); }
   /* ^ the token is 44px under a coarse pointer; a 12.5px label with 10px padding is
      33px, and the first v2 consumer measured its language toggles at 29px. */
 }

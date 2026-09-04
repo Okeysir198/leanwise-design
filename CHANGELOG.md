@@ -24,6 +24,17 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 ## [Unreleased]
 
+## [2.1.6] — 2026-09-04
+
+### Fixed
+
+- **The AppBar menu button and the compact locale toggle take REAL 44px size under a
+  coarse pointer.** `.lw-hit`'s overlay was clipped by `.lw-appbar-lead`'s
+  `overflow: hidden` (36×28 measured, no symptom) and, on the locale toggle, overlapped
+  by the account button's own overlay 16px away — the later one in the DOM took the tap.
+- **A Disclosure that is also a Card** (`lw-disclosure lw-card`) no longer stacks the
+  card's padding and gap around a closed summary (110px for a 56px row).
+
 ## [2.1.5] — 2026-09-04
 
 ### Fixed
