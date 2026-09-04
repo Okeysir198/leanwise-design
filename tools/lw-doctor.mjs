@@ -40,19 +40,7 @@ const bold = (s) => `\x1b[1m${s}\x1b[0m`;
 
 const REMOTE = "https://raw.githubusercontent.com/Okeysir198/leanwise-design/main/advisories.json";
 
-/** Naive semver compare — enough for "1.2.0" style tags. */
-const cmp = (a, b) => {
-  const pa = String(a).replace(/^v/, "").split(".").map(Number);
-  const pb = String(b).replace(/^v/, "").split(".").map(Number);
-  for (let i = 0; i < 3; i++) if ((pa[i] ?? 0) !== (pb[i] ?? 0)) return (pa[i] ?? 0) - (pb[i] ?? 0);
-  return 0;
-};
-const satisfies = (version, range) => {
-  const m = range.match(/^([<>]=?)\s*(.+)$/);
-  if (!m) return version === range;
-  const c = cmp(version, m[2]);
-  return { "<": c < 0, "<=": c <= 0, ">": c > 0, ">=": c >= 0 }[m[1]];
-};
+import { cmp, satisfies } from "./_semver.mjs";
 
 
 /** Occurrences of `re` across every .jsx under components/<sub>, specimen cards excluded. */

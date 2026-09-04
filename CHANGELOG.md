@@ -24,6 +24,19 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 ## [Unreleased]
 
+## [2.2.1] — 2026-09-04
+
+### Fixed
+
+- **`lw-doctor` read only the first comparator of a two-sided `affects` range.** For
+  `">=1.4.0 <1.13.0"` the rest of the string rode along inside the version being
+  compared, so the comparison ran against `NaN` and matched EVERY installed version —
+  the first consumer to reach 2.x was told a 1.13.0 advisory still applied to it, by
+  the tool whose entire purpose is saying which release fixes what. `cmp`/`satisfies`
+  now live in `tools/_semver.mjs` (the doctor runs on import, so they could not be
+  unit-tested in place) and every comparator in a range must hold;
+  `test/semver.test.mjs` pins the 2.2.0-against-`<1.13.0` case.
+
 ## [2.2.0] — 2026-09-04
 
 ### Added
