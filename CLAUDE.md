@@ -229,6 +229,10 @@ so their `position: fixed` layers stay inside their stage. Without it the ground
 
 ### Layers, grounds, scope
 
+- **`.lw-media-plate` (v2.3.0) is the mat under a raster whose own background is fixed** — a
+  screenshot that cannot be re-pointed at the page's theme. It lives in `base.css` beside the media
+  rules; `--lw-media-plate-pad` is the one knob.
+
 - **A keyframe name is GLOBAL and last-wins**, so `check:tokens` gates uniqueness and `/^lw[A-Z]/`.
   **`Section`'s `rule` is a hairline owning the boundary *above* it** — one owner per boundary.
 - **The three page grounds are ONE parameterised rule set** — which SVG, which alpha, which glow stops are
@@ -318,7 +322,7 @@ so their `position: fixed` layers stay inside their stage. Without it the ground
 `DesignSync` reads AND writes the project (`f2d90781-f891-45e3-bc88-ddb55e6f9444`), so the two are
 kept in step by pushing, not by hand-mirroring. **Pushed in full on 2026-09-04**, when the project
 was found at **v1.1.8** — fifteen releases behind, still carrying `templates/_tooling`, `lw.css`,
-`app.css` and twelve `ds-base.js`/`support.js` pairs — while the repo was at v2.2.2. Everything from
+`app.css` and twelve `ds-base.js`/`support.js` pairs — while the repo was at v2.3.0. Everything from
 v1.13.0 onward existed only in git, and the project is the surface a wholesale re-pull would have
 restored from.
 
@@ -381,15 +385,17 @@ Verified 2026-09-04 by enumeration (below), not by memory.
 
 | Consumer | Pin | Consumes | PM |
 |---|---|---|---|
-| `leanwise-ai` | `#v2.2.2` | `tokens` `fonts` `reset` `base` `marketing` `product` + `./react` `./hooks` | pnpm |
-| `leanwise-inspect/frontend` | `#v2.1.6` | `tokens` `fonts` `shadcn` `theme` `base` `product` + `./react` `./hooks` `./components` | npm |
+| `leanwise-ai` | `#v2.3.0` | `tokens` `fonts` `reset` `base` `marketing` `product` + `./react` `./hooks` | pnpm |
+| `leanwise-inspect/frontend` | `#v2.2.2` | `tokens` `fonts` `shadcn` `theme` `base` `product` + `./react` `./hooks` `./components` | npm |
 | `P20251121-tss-app/frontend` | `#v1.7.1` | `tokens` `fonts` `shadcn` `theme` `base` | npm |
 | `4DXs_plan/app` | `#v1.7.1` | `tokens` `fonts` `reset` `base` `marketing` `product` + `./react` | npm |
 | `P20260806-sop/apps/web` | `#v1.7.1` | `tokens` `fonts` `shadcn` `theme` `base` `product` | npm |
 | `P20260707-vss/frontend` | `#v0.2.3` | `tokens` `fonts` `shadcn` + preset + `./brand` | pnpm |
 | `P20260706-rag-service/frontend` | `#v0.2.2` (reports **0.2.1**) | `tokens` `fonts`, vanilla | npm |
 
-**Drift today.** `leanwise-ai` is current, `leanwise-inspect` one release behind. **Three sit on `#v1.7.1`**
+**Drift today.** `leanwise-ai` is current; `leanwise-inspect` is one release behind. ⚠ This table
+went stale TWICE in one morning because releases landed from another session between writing it and
+committing it — **run the loop below, do not hand-edit a row.** **Three sit on `#v1.7.1`**
 (tss-app, 4DXs_plan, sop) and must cross v2.0.0 — CHANGELOG 2.0.0 **§Migration — per consumer, what to
 grep** lists the removals against every tree. **VSS (`#v0.2.3`) and rag-service (`#v0.2.2`) are pre-1.1**
 and cannot be bumped in one jump: v1.1.0 broke the **JS entry points**, not the CSS surface. Sequence pin
