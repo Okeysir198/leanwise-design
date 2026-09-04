@@ -24,6 +24,17 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 ## [Unreleased]
 
+### Fixed
+
+- **`Flow.jsx` was a binary file, and nothing said so.** Its edge-lookup key joins two node
+  ids with a NUL — correct, because a NUL cannot occur in an id, so no pair of ids can forge
+  another pair's key. But the separator was written as a RAW NUL BYTE in the source, three
+  times. A single control byte is enough to make the whole file binary to everything that
+  reads it: `git diff` prints "Binary files differ" instead of the change, `file` reports
+  `data`, and an upload to the Claude Design project is refused as invalid UTF-8 — which is
+  how this was finally noticed, months after it shipped. The escape `\u0000` is the same
+  value at runtime and leaves the file as text. No behaviour change.
+
 ## [2.3.0] — 2026-09-04
 
 ### Added
