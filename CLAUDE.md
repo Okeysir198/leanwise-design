@@ -4,657 +4,436 @@ Guidance for Claude Code when working in this repository.
 
 ## What this is
 
-**`@leanwise/design`** — the LeanWise design system. (**`package.json` is the authority for the
-version.** This line named one and was four releases stale; the consumer's CLAUDE.md made the
-same mistake three times running. A version repeated in prose is a version that disagrees.) Tokens, five CSS layers, a Tailwind
-preset, the React components in eight categories (README §Components is the index — a count
-here is what the `doc-count` lint rule exists to refuse), twelve page templates, and the
-**gates** that turn the style guide into build failures.
+**`@leanwise/design`** — the LeanWise design system: tokens, the CSS layers, a Tailwind preset, the React
+components in eight categories, twelve page templates, and the **gates** that turn the style guide into
+build failures. (**`package.json` is the authority for the version**, and README §Components for the
+component list — a version or a count repeated in prose is one that disagrees, which is what the
+`doc-count` and `stale-install-pin` lint rules refuse.) The repo is the working copy of a Claude Design
+project (`f2d90781-f891-45e3-bc88-ddb55e6f9444`): that project is the authoring surface, this repo is what
+consumers install, and edits here do **not** flow back.
 
-The repo is the **working copy of a Claude Design project** (`f2d90781-f891-45e3-bc88-ddb55e6f9444`,
-"LeanWise Design"). The design project is the authoring surface; this repo is what consumers
-install. Edits made here do **not** flow back — see "The design-project round-trip" below.
-
-`README.md` is the user-facing doc and the component index. `CONTRIBUTING.md` is the PR
-checklist. `REVIEW.md` is the standing audit — **read its finding 1 before touching the CSS
-layers.** This file is the *maintainer* doc: the things none of those say.
+`README.md` is the user-facing doc and component index; `CONTRIBUTING.md` the PR checklist; `REVIEW.md` the
+standing audit (**read its finding 1 before touching the CSS layers**); `CHANGELOG.md` the incident record.
+**This file states the RULE; the CHANGELOG entry it names carries the story, and each tool's own header
+carries its full rationale.**
 
 ### Commands
 
 ```bash
 npm install
-npm test               # node --test over test/ — the helpers the gates share (_css, _color,
-                       #   _png, _report, _generated). First step of `npm run check`.
-npm run check          # every gate that needs no browser. package.json#scripts.check IS the
-                       #   list — do not restate it here; it has been wrong every time it was.
+npm test               # node --test over test/. Helpers with tests today: tools/_css, _png, _semver,
+                       #   _jsx-shim, brand.js — plus repo.test.mjs, which asserts every gate is reachable
+                       #   from an npm script and that CI runs the scripts.
+npm run check          # every gate that needs no browser. package.json#scripts.check IS the list — do
+                       #   not restate it here; it has been wrong every time it was.
 npm run check:ci       # the above plus check:pack, a11y and visual (the last two need a browser)
 npm run check:a11y     # axe over every @dsCard — needs `npx playwright install chromium`
-npm run check:visual   # every card x light/dark x comfortable/compact. --self-test checks the
-                       #   PNG comparator itself; --record/--compare are what CI drives.
-                       #   Baselines land in `.visual/` — ~37 MB locally, gitignored.
-npm run tokens         # regenerate tokens.json (DTCG). GENERATED and COMMITTED — see below.
-npm run dts            # regenerate react.d.ts from react.js. Also generated and committed.
-npm run bundle         # regenerate _ds_bundle.js from the .jsx sources. Ditto — run it after ANY .jsx edit.
-npm run cards          # compile every <name>.card.jsx to its committed <name>.card.js
-npm run assets         # regenerate the on-dark artwork from the -ink SVGs
-npm run build          # esbuild, per file, tools/lw-build.mjs -> dist/ (COMMITTED)
+npm run check:visual   # every card x light/dark x comfortable/compact. --self-test checks the PNG
+                       #   comparator itself. Baselines: `.visual/`, ~63 MB, gitignored.
+npm run tokens         # -> tokens.json (DTCG)     npm run cards    # *.card.jsx -> *.card.js
+npm run dts            # -> react.d.ts             npm run assets   # on-dark art <- the -ink SVGs
+npm run bundle         # -> _ds_bundle.js          npm run registry # -> r/*.json
+npm run build          # -> dist/, per file        npm run favicon  # -> assets/logo-favicon.svg
 ```
 
-**CI runs `npm run check`, then `check:pack`, then the two browser gates**
-(`.github/workflows/ci.yml`, every push/PR). Until v1.13.0 the workflow kept its own list of
-gate names and ran six of them; `package.json#scripts.check` is the one list now, and the
-workflow calls it. Local `npm run check` is deliberately everything that needs no browser.
-
-`npm run check:tokens` runs the **self-check** (`--css`) — the raw-duration, raw-z-index and
-legacy-duration (`--lw-duration*`) rules over the layers, keyframe uniqueness and `/^lw[A-Z]/`
-naming, breakpoint spelling (`.98` max-width form), the missing-React-import rule over
-`components/**/*.jsx`, `doc-count` (a number before "gates", "components" or "CSS layers" in
-README/CLAUDE/CONTRIBUTING fails — a count in prose is a second home), `readme-coverage`
-(every barrel export has a row in README §Components) and `stale-install-pin` (the README's
-`#vX.Y.Z` must equal `package.json#version`, so a release bumps both). The TSX rules (raw hex,
-palette escape, arbitrary `var()`, one-CTA-per-view) only fire against *consumer* source:
-point it at one by hand before any pin bump — `node tools/lw-token-lint.mjs
-<consumer>/src`. A green CI here proves contrast, theme parity and CSS discipline, **not**
-token discipline downstream.
+CI runs `npm run check`, then `check:pack`, then the two browser gates (`.github/workflows/ci.yml`, every
+push/PR); `package.json#scripts.check` is the one list of gate names and `test/repo.test.mjs` keeps it so.
+Shared helpers in `tools/`: `_cards` `_color` `_css` `_generated` `_jsx-shim` `_png` `_report` `_semver`
+`_tw-probe`. `_generated` is the one generated-and-staleness-checked harness; `_report` is the one report
+shape, and carries the rule that **a gate must refuse to pass vacuously** — reading zero of the thing it
+measures is a failure, not a clean run.
 
 ## Layout
 
 ```
-tokens.css        THE source of truth — HSL channel triples + derived colors, all theme scopes.
-                    Authored once as a triple; the derived line is generated. Edit the triple;
-                    NEVER the derived line; never a hex in a consumer.
-base.css          shared controls — the layer every surface needs. Layout primitives,
-                    type, buttons, the ICON and the ICON BUTTON, pills/cards/chips, the
-                    AVATAR, the EMPTY STATE, the FORM field + control face and their dark
-                    patches, the console + code surfaces, TABS, PAGINATION, the TOP BAR
-                    + its mobile nav, prose, disclosure, and the pointer-affordance list
-                    (which must stay LAST in the file).
-marketing.css     grounds + hero + site chrome (footer, announce, plans, matrix, flow,
-                    editorial). product.css    app surfaces (data, overlays, the
-                    app shell and rails, AI, the mobile bars).
-                    Load order: tokens -> base -> marketing and/or product.
-                    A marketing page needs base + marketing and nothing more; anything a
-                    marketing component reaches (`.lw-topbar`, the form controls, `.lw-icon`,
-                    `.lw-avatar`, `.lw-tabs`, `.lw-toc`…) lives in base.css. Three rules
-                    fell out of getting there, and each has a CHANGELOG entry that carries
-                    the story: **position is not load-bearing, PRESENCE is** (1.3.0 — the
-                    `:is(.dark, …)` patches left behind in product.css); **a specimen must
-                    load exactly its documented recipe** (1.3.1 — the marketing cards were
-                    loading product.css, which hid five stranded components); **a property
-                    carrying a COLOUR is base.css's to state** (1.3.0 — `.lw-btn` leaned on
-                    reset.css and painted the UA buttonface at 2.28:1 on a base-only page).
-                    Since v1.13.0 the three page grounds are ONE parameterised rule set
-                    driven by `--lw-ground-*` knobs; `url()` stays in explicit selector rules
-                    because Firefox resolves a `url()` inside a custom property against the
-                    document, not the stylesheet.
-reset.css         the nine bare-element rules. Vanilla consumers want it; Tailwind apps
-                    must NOT import it (preflight covers the useful half; the rest is the
-                    half that beats every utility).
-email.css         literal hex + table layout on purpose: mail clients have no custom properties.
-                    That makes it a SECOND HOME for palette values, so the contrast gate
-                    asserts its literals against tokens.css — six had drifted, including the
-                    v1.1.3 muted floor. Move a token, move the literal with it.
-shadcn.css        maps --primary/--background/--accent onto tokens (no values of its own).
-fonts.css+fonts/  Geist + Geist Mono, self-hosted, incl. Vietnamese subsets.
-react.js/.d.ts    the barrel — re-exports every components/<cat>/*.jsx.
-brand.js hooks.js runtime per-tenant theming; the hooks the components share.
-tailwind-preset.cjs  registers cta/success/warning/brand/navy as REAL utilities so nobody
-                    reaches for the bg-[hsl(var(--x))] escape hatch.
-components/       ai data forms layout marketing nav overlays primitives —
-                    overlays/ is Radix-backed since v2.0.0: Dialog, Drawer, Popover, Menu,
-                    Tooltip (and nav/CommandPalette, nav/Tabs) import from the unified
-                    `radix-ui` package and render through `_layer.js` — a portal layer
-                    (`.lw-layer` / `.lw-layer-modal` + `.lw-backdrop`, product.css) that
-                    MIRRORS the opener's theme and band scope onto itself. `OverlayProvider`
-                    is the public root; one per app or per branded island, INSIDE the
-                    element carrying `.dark` / `brandVars()`. Styling still lives in the CSS
-                    layer; Radix supplies positioning, focus, scroll lock and ARIA only.
-                    .jsx + .d.ts pairs, plus *.card.html preview cards. A card's script is
-                    the <name>.card.jsx beside it, compiled by `npm run cards` (lw-cards.mjs)
-                    to a committed <name>.card.js; `check:cards` fails when stale. That is
-                    what let preview/_vendor drop @babel/standalone (−3.1 MB).
-                    Ships .jsx SOURCE deliberately: the consumer's bundler does the transform.
-                    Styling lives in the CSS layer, never in a .jsx.
-templates/        twelve page templates, each *.dc.html + .thumbnail. The two scripts they
-                    share — ds-base.js and support.js — live ONCE in templates/_shared/
-                    (v1.13.0; twelve byte-identical copies before that, −784 KB). There is
-                    no generator for them here; `check:templates` fails if a re-pull puts a
-                    sibling copy back beside a template.
-tools/            the gates + the shared helpers (_css, _color, _png, _report, _generated —
-                    each under test/ via `npm test`). ROOT is ONE level up.
-                    MOVED here from templates/_tooling in v1.2: the old location needed a
-                    `"!templates/_tooling"` + re-include pair in `files`, which packs under npm
-                    and NOT under pnpm — so the `bin` was missing in a pnpm consumer and the
-                    token lint silently stopped running there.
-preview/          the foundation cards + _card.css/_card.js + _vendor/.
-                    _vendor/ holds React and ReactDOM as PINNED, hashed UMD copies (see its
-                    README; ~1.2 MB, dev builds on purpose). The cards used to load them from unpkg, which
-                    made both browser gates network-dependent and unrunnable air-gapped.
-                    _fonts.css was DELETED in v1.1.7: 140 KB of base64 mirroring fonts/ with no
-                    generator. _card.css @imports ../tokens.css -> fonts.css -> fonts/*.woff2,
-                    and those URLs resolve relative to fonts.css, so they are correct from any
-                    card depth — measured over file://, identical glyph metrics without it.
-                    A wholesale re-pull would reintroduce it; it is redundant HERE, not there.
-_ds_bundle.js     compiled browser bundle, namespace `LeanWiseDesign_f2d907`. The cards render
-                    from THIS, not from components/*.jsx. GENERATED by `npm run bundle`
-                    (esbuild, `lw-bundle.mjs`) and COMMITTED — until v1.1.6 it was built in the
-                    design project with no generator here, so a .jsx fix was invisible to
-                    check:a11y and check:visual until the next wholesale sync; 34 sources had
-                    drifted by the time the generator landed, and v1.1.3 had mirrored two ARIA
-                    fixes in by hand. `check:bundle` now fails when it is stale.
-                    **Edit a .jsx, run `npm run bundle`, commit both.**
-                    Since v2.0 it also inlines `radix-ui` (pinned by version in the header):
-                    `npm ci` now fetches it, so `check:pack` needs the registry and is no
-                    longer air-gapped.
-_ds_manifest.json   A card declares itself with a first-line `<!-- @dsCard group="..." -->`
-                    marker; the a11y and visual gates enumerate cards from that marker.
-tokens.json       GENERATED by `npm run tokens`, and COMMITTED. See below.
-react.d.ts        GENERATED by `npm run dts` from react.js, and COMMITTED. Never hand-edit.
+tokens.css     THE source of truth — HSL channel triples + derived colors, every theme scope.
+base.css       shared controls, the layer every surface needs: layout, type, buttons, icon + icon button,
+     pills/cards/chips, avatar, empty state, form field + control face, console + code, tabs, pagination,
+     the TABLE and its wrap, top bar + mobile nav, .lw-toc/.lw-crumbs, prose, disclosure, and the
+     pointer-affordance list (which must stay LAST in the file).
+marketing.css  grounds + hero + site chrome (footer, announce, plans, matrix, flow, editorial)
+product.css    app surfaces: data grid, overlays + the portal layer, app shell and rails, AI, mobile bars
+reset.css      the nine bare-element rules. Vanilla consumers want it; Tailwind apps must NOT import it.
+email.css      literal hex + table layout on purpose — a SECOND HOME for palette values, so
+     check:contrast asserts its literals. Move a token, move the literal.
+shadcn.css     maps --primary/--background/--accent onto tokens (no values of its own).
+theme.css      the v4 spelling of the vocabulary tailwind-preset.cjs states for v3 — the preset registers
+     cta/success/warning/brand/navy as REAL utilities so nobody reaches for bg-[hsl(var(--x))].
+fonts.css+fonts/   Geist + Geist Mono, self-hosted, incl. Vietnamese subsets.
+react.js/.d.ts     the barrel — re-exports every components/<cat>/*.jsx.
+brand.js hooks.js  runtime per-tenant theming; the hooks the components share.
+components/    ai data forms layout marketing nav overlays primitives — .jsx + .d.ts pairs + *.card.html
+     previews (script: the <name>.card.jsx beside them). overlays/ is Radix-backed since v2.0.0 and
+     renders through overlays/_layer.js, the portal layer (.lw-layer/.lw-layer-modal + .lw-backdrop).
+       _overflow.js    useOverflow() sets data-overflow="true" on a scroller with content past its inline
+           end. THE CONTRACT IS THE ATTRIBUTE, not the hook.
+       _merge-refs.js  one node into a local + a forwarded ref — NOT useImperativeHandle(..., []), which
+           binds whatever node existed at mount.
+       _radio-group.js the one-of-N keyboard contract (role=radiogroup/radio + aria-checked + arrows) for
+           Segmented/ThemeToggle; aria-pressed describes N INDEPENDENT toggles.
+       _tone.js/.d.ts  the ONE tone vocabulary + its legacy aliases; check:tone gates it.
+       _deprecate.js   one-time console notices, deduped by component+prop, silent in production.
+templates/     twelve page templates, each *.dc.html + .thumbnail; ds-base.js and support.js live ONCE in
+     templates/_shared/.
+tools/         the gates + the shared helpers; ROOT is ONE level up.
+preview/       foundation cards + _card.css/_card.js + _vendor/ (React + ReactDOM as PINNED, hashed UMD
+     copies — a CDN made both browser gates network-dependent). Do not restore _fonts.css.
+_ds_bundle.js  the browser bundle, namespace LeanWiseDesign_f2d907. The cards render from THIS.
+_ds_manifest.json  a card declares itself with a first-line <!-- @dsCard group="..." --> marker; both
+     browser gates enumerate cards from that marker.
+tokens.json react.d.ts dist/ r/ assets/*  — all GENERATED and COMMITTED.
 ```
 
-`tokens.json` is generated, and committed anyway. It is in `package.json#exports`, and every
-consumer installs from a git tag — where a file generated at publish time does not exist, so
-the subpath 404s. The cost of committing a generated file is that it can go stale silently,
-so `check:themes` fails when `tokens.json` does not match what `tokens.css` would generate:
-**change a token, run `npm run tokens`, commit both.**
+**Load order: tokens -> base -> marketing and/or product.** A marketing page needs base + marketing and
+NOTHING more; whatever a marketing component reaches belongs in base.css. Three rules fell out of getting
+there (CHANGELOG 1.3.0 / 1.3.1): **position is not load-bearing, PRESENCE is**; **a specimen must load
+exactly its documented recipe**; **a property carrying a COLOUR is base.css's to state**.
+
+**Ships `.jsx` SOURCE deliberately** — the consumer's bundler does the transform, and styling lives in the
+CSS layer, NEVER in a `.jsx`. **Everything generated here is committed**, because every consumer installs
+from a **git tag**: a git install runs no lifecycle script, `prepublishOnly` never fires, so a file built
+at publish time exists for nobody and an `exports` subpath pointing at one 404s. The cost is silent
+staleness, hence a `--check` per generator in `npm run check` — **change the source, run the generator,
+commit both.** ⚠ `templates/_shared/` has **no generator here** (those two files arrive from the design
+project), so `check:templates` hard-fails any sibling copy a re-pull puts back beside a template.
+
 
 ## The gates — all must stay green
 
-- **`lw-contrast-check.mjs`** — the WCAG AA gate. Parses `tokens.css` per theme block, resolves
-  `var()` chains, evaluates a derived MANIFEST, and **enforces dark-block parity**. It also
-  asserts the **logo SVG gradient stops** (`offset 0` -> navy-700, `offset 1` -> logo-cyan)
-  match `tokens.css` — the gradient stops must be literal hex because custom properties do not
-  cascade into an SVG loaded through `<img>`, so this is the only guard on that second home for
-  a brand value. It asserts **`email.css`'s literals** the same way and for the same reason.
-  **v1.3.1 added a BAND SCOPE rule**: a selector used as an ancestor scope to re-ink
-  descendants from the `--lw-on-dark*` family must appear in tokens.css's dark band list.
-  `.lw-hero-dark` was not, for the life of the package — it painted navy and hand-patched the
-  four elements anyone demos, leaving every other role token inside a hero resolving LIGHT on
-  navy (a `Byline` measured 1.5:1). No pair can express that, because both tokens in the pair
-  are correct and the SCOPE is wrong. Nor could `check:a11y`: the hero has decorative
-  pseudo-elements, so axe files the finding as `incomplete` — which that gate does not read.
-  Exemptions are named in `BAND_SCOPE_EXEMPT`, greppable and countable.
-  **v1.13.0 added a RE-DERIVE COMPLETENESS rule** (`rederiveCompleteness()`): the re-derive
-  `:where()` list at the foot of tokens.css must be a superset of BOTH band lists, and must
-  restate every derived role the dark band re-points. It found `.lw-page-dark` and
-  `.lw-page-light .lw-hero-dark` missing — 25 derived roles on the page theme inside a dark
-  ground for nine minors (advisory `page-dark-derived-roles`). The same release deleted the
-  `:root[data-theme="dark"]` block, value-identical to `.dark, [data-theme=dark]`, and the
-  gate refuses its return. Theme-block matching is member-based — the old `[^)]*` selector
-  regex that could not see a nested paren is gone.
+Every `check:*` in `package.json#scripts`.
 
-  It also carries a **non-text group (WCAG 1.4.11, 3:1)** for control boundaries and focus
-  indicators — until v1.1.5 every pair was a TEXT pair, `AA_LARGE` was dead code, and control
-  borders were shipping at 1.47:1. Run it on every token change.
+| script | asserts | fails on |
+|---|---|---|
+| `check:presence` | v3 preset ⟷ v4 `theme.css` are one vocabulary; every `--x-*: initial` reset ships its bare `--x`; shadcn.css declares every property shadcn's components read; the documented import chain **actually compiles** through real Tailwind | a name in one spelling only, a missing bare key, a missing shadcn property, a registered name that yields no utility |
+| `check:rsc` | `"use client"` is correct **both ways**, per file, in the SOURCE | a client file without the directive **or** a server-safe file with one — asserting only the first makes "put it on everything" the cheap fix, which throws away every server component |
+| `check:build` | `dist/` is what the current `.jsx` produces, per file (per-file so the directive can mean something) | a stale `dist/` |
+| `check:types` | `tsc --noEmit` | any type error |
+| `check:registry` | `r/` is byte-current with `registry/`; every Tailwind class a registry component uses compiles; the TSX token rules run over `registry/`; an item importing `radix-ui` yields at least one `lw-*` class | a stale `r/`, a class emitting nothing, a Radix wrapper wrapping no design-system class |
+| `check:advisories` | `lw-doctor --self-check` re-derives every advisory's `count` from the tree | an advisory gone stale — the hand-maintained fact the tool exists to replace |
+| `check:favicon` | `assets/logo-favicon.svg` is current with `assets/logo-mark.svg` | a stale favicon |
+| `check:contrast` | WCAG AA pairs + the scope rules — see below | see below |
+| `check:tone` | every literal in a `tone`/`accent` union is canonical or a declared `LegacyTone` alias, **and** every advertised value has a CSS selector matching what the component emits | a misspelled tone, a value with no rule, a rule with no value — and reading fewer than twenty values at all |
+| `check:tokens` | the token lint — see below | see below |
+| `check:themes` | `tokens.json` matches what `tokens.css` generates, and every channel is re-pointed in *every* theme scope | a stale `tokens.json`; a token that exists in light and silently inherits in dark |
+| `check:dts` | `react.d.ts` is generated from `react.js` | a stale barrel. Add the export to `react.js` and the declaration to the component's `.d.ts`, then `npm run dts` |
+| `check:bundle` | `_ds_bundle.js` is what the current sources produce — see below | a stale bundle, a Radix version the lockfile moved without a rebuild, a card reading a namespace key that does not exist |
+| `check:templates` | `ds-base.js`/`support.js` exist ONLY in `templates/_shared/`, and every `.dc.html` loads `../_shared/support.js` then `../_shared/ds-base.js` in that order; `lang`, a main landmark, a skip link whose target exists | a sibling copy beside a template, a wrong load order, a missing landmark. `NO_SKIP_LINK` is the greppable exemption list |
+| `check:cards` | every `<name>.card.js` is current with its `.card.jsx`, and no card carries an inline `text/babel` block | a stale compiled card — a browser gate measuring something no source file says |
+| `check:assets` | each on-dark artwork twin is current with its `-ink` source (a token-driven substitution, never a hand-edit) | a stale generated SVG |
+| `check:pack` | `npm pack`, install the tarball into a scratch dir, and USE it — the only gate not run against the working tree | a `files` list that drops something. This is how `dist/` was never built for anyone and how the `lw-token-lint` bin went missing under pnpm |
+| `check:a11y` | axe over every `@dsCard` — see below | serious/critical violations; moderate/minor report only |
+| `check:visual` | every card × light/dark × comfortable/compact — see below | a per-shot pixel diff over threshold |
 
-  **THREE canonical scopes since v1.1.7: light, `.dark`, and `light ⊕ media-dark`.** The third
-  is what a browser computes for a user whose OS prefers dark and whose page sets no class —
-  the default for a plain marketing page, and so the most common deployment of all. It was
-  measured by nothing, and it was broken: `--lw-chart-1..8` and `--lw-diff-*` re-pointed only
-  behind a class selector, so that visitor got the LIGHT diff grounds on a navy page and
-  `.lw-diff-line .t` painted `--lw-fg` #E7ECF3 over #E7F9ED — **1.08:1, a blank diff surface**.
-  The scope is merged in SOURCE ORDER, not as a spread: a `:root` in a media query and a
-  top-level `:root` have identical specificity, so a naive `{...light, ...media}` reports a
-  palette the browser never paints. `darkScopeDivergence()` now compares the two dark scopes
-  token-for-token and fails by name — which is what caught the chart family, since no manifest
-  pair names it.
-- **`lw-token-lint.mjs`** — a **deny-list, not a contract checker**: raw hex, palette escape,
-  arbitrary `var()` inside `[…]`, more than one `variant="cta"` per file. It cannot see a
-  utility the preset no longer registers, so a removed utility compiles, lints green, and
-  renders unstyled. **Grep the consumers before you remove a utility.** Its no-arg SELF-CHECK
-  mode also asserts every `components/**/*.jsx` that references `React.` imports it: the build
-  sets `jsx: "automatic"`, which injects `jsx`/`jsxs` but NOT the `React` binding, so eighteen
-  components shipped a `ReferenceError` that the cards could not see (they get React as a UMD
-  global) and the build did not catch.
-- **`lw-tokens-dtcg.mjs`** — the DTCG generator; `--check` fails when a channel is not
-  re-pointed in *every* theme scope. This is what stops a token existing in light and silently
-  inheriting in dark.
-- **`lw-a11y.mjs`** — axe over every `@dsCard`. serious/critical fail; moderate/minor report.
-  **It reads `violations`, not `incomplete`, and that is a known blind spot with a known
-  shape:** axe cannot resolve a background behind a pseudo-element, so every decorative surface
-  here (the hero, the grounds, the aurora) is invisible to the contrast rule. Four serious
-  incompletes and zero violations is what a 1.5:1 hero looked like. Do not "fix" this by
-  failing on incompletes — they are mostly noise — assert the token SCOPE instead, which is
-  what the contrast gate's band rule now does.
-  A node may opt out of ONE rule with `data-a11y-expect="<rule-id>"` — for a specimen that
-  exists to demonstrate a failure (the neutrals card prints text-4's sub-AA ratio as the
-  point of the row). Never exempt a whole card or a whole rule; the attribute is greppable
-  so the exemptions stay countable. There is exactly one today.
-  **Since v2.0.0 it also runs axe's `aria-dialog-name` best-practice rule** — the one non-WCAG
-  rule enabled — because a Radix Dialog with neither `title` nor `label` is a `role="dialog"`
-  with no name, and the `incomplete` blind spot above is closed for DIALOGS ONLY: the four
-  open-state cards (`Dialog-open`, `Menu-open`, `Tooltip`, `overlays`) render each surface OPEN,
-  so axe scores the real portalled DOM rather than a closed trigger. A closed overlay is still
-  invisible to it; a card that mounts one closed measures nothing about it.
+`_cards.mjs` is not a gate but is the list BOTH browser gates enumerate: it cross-checks
+`_ds_manifest.json` against the filesystem and errors on disagreement in either direction.
+⚠ **Whenever you add or change a gate, sabotage it and watch it go red.** A green gate is not the check;
+several incidents in the CHANGELOG are a gate reporting clean while measuring nothing.
 
-  **Its render guard was decoration until v1.3.0, and that cost two releases.** The guard
-  was `document.body.innerText.trim().length > 0` — which every card satisfies from the
-  explanatory prose wrapped around its React roots, whether or not a single component
-  mounted. From v1.2.0 to v1.3.0 *every* React specimen rendered blank (see `lw-bundle.mjs`)
-  and this gate reported 39 cards clean. Two rules replace it, and neither can see what the
-  other sees: an **uncaught page error** fails the card, and **every container passed to
-  `createRoot`/`hydrateRoot`/`render` must have an element child**. The root recorder is an
-  `addInitScript` that defines a setter for `window.ReactDOM` and stores a `Proxy` over the
-  object the UMD wrapper assigns — `global.ReactDOM = {}` lands before the factory fills it,
-  so wrapping `createRoot` at init time would wrap nothing. **Prose is no longer evidence of
-  anything; keep it that way.**
-- **`lw-dts-barrel.mjs`** — generates `react.d.ts` from `react.js`; `--check` fails when the
-  committed file is stale. The barrel's types were hand-written next to a barrel whose runtime
-  exports are the real list, and drifted: four re-exports pointed at a sibling's file and **31
-  components had no types at all**. The first broke `npm run build` outright (rollup-plugin-dts
-  rejects a re-export the target does not declare), taking `prepublishOnly` with it; the other
-  31 failed quietly, as a type error in the consumer. Add the export to `react.js` and the
-  declaration to the component's `.d.ts`, then `npm run dts`.
-- **`lw-bundle.mjs`** — builds `_ds_bundle.js` with esbuild; `--check` fails when the committed
-  copy is not what the current sources produce. This is what makes the two browser gates test
-  the `.jsx` they claim to: without it a component fix sat unmeasured until the design project
-  re-cut the bundle. React is **not** bundled — `react`/`react-dom` resolve to CommonJS shims
-  over `globalThis.React`/`ReactDOM`, so esbuild's `__toESM` copies the whole runtime object and
-  the shim cannot lag React's API. The namespace surface is the barrel's exports **plus** every
-  uppercase-first export of a module the barrel pulls in (that is what keeps `SERIES`,
-  `DataTable`, `Legend`, `IconNames` reachable from a card); when both a barrel name and a
-  sibling collide — `chart-parts.jsx` exports a chart-axis `Grid`, `layout/Grid.jsx` the layout
-  one — the barrel wins and the loser is listed in the header's `unexposedExports`. Two
-  NON-barrel modules exporting one uppercase name is a hard error, because nothing there can
-  pick a winner. It also greps every card for names read off the namespace and fails on one
-  that is missing, since a card that reads an absent key renders blank and axe scores blank as
-  clean. Full rationale is in the file's own header.
+**`check:contrast`** parses `tokens.css` per theme block, resolves `var()` chains, evaluates a derived
+MANIFEST, enforces **dark-block parity**, carries a **non-text group (WCAG 1.4.11, 3:1)** for control
+boundaries and focus indicators, and asserts the literal hex living outside tokens.css (logo gradient
+stops, artwork strokes, `email.css`) because custom properties reach none of them. Three rules in it are
+load-bearing:
 
-  **`tsconfigRaw: { compilerOptions: {} }` in the shared `JSX` options is load-bearing — do
-  not remove it.** esbuild's `jsx` API option is only a DEFAULT: a `tsconfig.json` reachable
-  from an input file overrides it per file, and v1.2 added one carrying `"jsx": "react-jsx"`
-  (correct for `tsc --noEmit` over the `.d.ts` files, fatal here). Every component therefore
-  emitted `react/jsx-runtime` imports, which resolve through the shim to `globalThis.React` —
-  and React's main export has no `jsx`/`jsxs`. Result: `TypeError: import_jsx_runtimeN.jsx is
-  not a function` on every component, i.e. **every React specimen card blank from v1.2.0 to
-  v1.3.0, with both browser gates green throughout.** If you touch that object, open a card
-  in a browser and confirm a component paints — a green gate is not the check.
+- ⚠ **BAND SCOPE.** A selector used as an ancestor scope to re-ink descendants from the `--lw-on-dark*`
+  family must appear in tokens.css's dark band list. No token PAIR can express that failure — both tokens
+  are correct and the SCOPE is wrong — and `check:a11y` cannot either, because a decorative pseudo-element
+  files it as `incomplete`. Exemptions live in `BAND_SCOPE_EXEMPT`. (History: CHANGELOG 1.3.1, 1.4.0.)
+- ⚠ **RE-DERIVE COMPLETENESS** (`rederiveCompleteness()`). The re-derive `:where()` list at the foot of
+  tokens.css must be a superset of BOTH band lists and restate every derived role the dark band re-points.
+  **It is a gated list, not a convention.** Theme blocks are matched by member, and the gate refuses the
+  return of the `:root[data-theme="dark"]` block deleted in v1.13.0.
+- **Three canonical scopes: light, `.dark`, and `light ⊕ media-dark`** — the third is what a browser
+  computes when the OS prefers dark and the page sets no class, the default for a plain marketing page.
+  ⚠ It merges in SOURCE ORDER, not as a spread: a `:root` in a media query and a top-level `:root` have
+  identical specificity, so a naive `{...light, ...media}` reports a palette the browser never paints.
+  `darkScopeDivergence()` fails by name on a family no manifest pair mentions (CHANGELOG 1.1.7).
 
-  **Since v2.0.0 three more things are load-bearing here.** (1) `react/jsx-runtime` resolves to
-  `tools/_jsx-shim.mjs`, a createElement-backed `jsx`/`jsxs`/`jsxDEV` over `globalThis.React`
-  — the previous one-liner made every Radix component throw "jsx is not a function", and it is
-  unit-tested in `test/bundle-shim.test.mjs`. (2) `radix-ui` is INLINED into the bundle (it is
-  the one entry in `inlinedExternals`) and the header records the version read from
-  `node_modules/radix-ui/package.json`, so `check:bundle` fails when the lockfile moves Radix
-  without a rebuild; `node_modules` is kept out of the namespace partition, so no Radix export
-  can collide with a barrel name. (3) `lw-rsc` treats any `from "radix-ui"` import as a client
-  signal — every overlay is `"use client"` by that rule, not by a hand-kept list.
-- **`_cards.mjs`** — not a gate, but the list BOTH browser gates enumerate. They used to walk
-  for `.html` files whose first 200 bytes contain `@dsCard`, which had two silent-pass holes:
-  an empty result is a pass (`Promise.all([])` resolves, and the a11y gate prints "0 cards —
-  no violations"), and a card whose preamble grew past 200 bytes dropped out of both gates
-  with no diagnostic. It now cross-checks `_ds_manifest.json` against the filesystem and
-  errors on disagreement in either direction.
-- **`lw-templates.mjs`** — the only gate that opens a `.dc.html`. Three of the others read CSS,
-  one reads the barrel, two drive a browser; every rule this file states about `templates/**`
-  was enforced by memory alone. It asserts (a) `ds-base.js` and `support.js` exist ONLY in
-  `templates/_shared/` — through v1.12 they were twelve byte-identical copies, "never hand-edit
-  one copy" was undetectable, and the gate reported the ODD ONE OUT; since v1.13.0 there is one
-  copy and the gate fails on any sibling a re-pull puts back; (b) no template loads the `lw.css`/`app.css` shims alongside the real layers
-  (REMOVED in v2.0.0 with the shims themselves — a `<link>` to a file that no longer exists is
-  a 404 the browser gates see; the lettering is kept so older entries still read); (c) `lang`, a
-  main landmark, and a skip link whose target actually exists. It found four real gaps the
-  moment it ran: `ai-app-shell` and `docs-page` had a `<main>` with no `id` and no skip link —
-  missed by the v1.1.5 sweep — and `email`/`pitch-deck` had no landmark at all. **A sweep with
-  no gate behind it is a one-time event.** `NO_SKIP_LINK` is the greppable exemption list, same
-  discipline as `data-a11y-expect` on the cards.
-- **`lw-visual.mjs`** — every card x light/dark x comfortable/compact. Through v1.1.6 this gate
-  **could not fail in CI and never had**: comparison was a byte-exact PNG match (valid only on
-  the machine that recorded it) and `.visual/` is gitignored, so every run recorded 136 fresh
-  shots and compared nothing. Both halves are fixed:
-  - **A pixel diff**, via a hand-rolled PNG decoder on `node:zlib` (IHDR + inflated IDATs + the
-    five unfilter modes). Deps stay at four. It is verified against **Chromium's own decoder**
-    — same bytes through `<img>` → canvas → `getImageData`, max channel delta 0. That check is
-    the one that matters: a subtly-wrong unfilter passes every self-consistency test you can
-    write, and fails that one. `--self-test` runs it.
-  - **Two per-shot rules**, because neither alone works: soft (channel Δ>8 over **0.02%** of
-    pixels) catches a whole-page tint; strong (Δ>48 over **0.002%**) catches a 1px hairline
-    recoloured along 1200px, which is 0.038% of a shot and invisible to any 0.1% area rule.
-    The thresholds come from a MEASURED noise floor — 816 shots across six runs, 815
-    byte-identical, one moved 0.0002%. **Raise them only with an observed percentage quoted;
-    never round up "to be safe."** Known blind spot, documented rather than tuned away: small
-    area + moderate delta on one card sits under both.
-  - **CI records the BASE REF's baseline on its own runner** (`$RUNNER_TEMP`, since
-    `actions/checkout` runs `git clean -ffdx`), re-checking out HEAD's `tools/` so
-    both sides are scored by the same comparator. Needs `fetch-depth: 0`. No usable base ref
-    (force-push, shallow, first commit) → loud skip at exit 0, never a silent pass.
-  - **An image-decode wait, added v1.3.0.** The matrix flips `data-theme` and shoots in the
-    same task. Fine for colour; wrong for artwork — a per-theme `background-image`
-    (`.brand-mark`) is a fresh request at flip time, and the dark shot raced it: 0.0293%
-    drift measured on a card carrying the logo, against a 0.0002% noise floor. `decoded()`
-    awaits `decode()` on every `<img>` and on every `url()` in a computed `background-image`
-    (including `::before`/`::after` — a CSS background has no load event, so the URL is
-    re-requested through a throwaway `Image()`, hitting the same memory cache), then lets two
-    frames pass. The first fix was to delete the logo from the card, i.e. to edit the
-    specimen to suit the gate; **never do that** — it is how a gate quietly stops measuring.
-  - **`[visual-ok]` in the head commit message** downgrades a failure to a report. This exists
-    because `--update` is meaningless in CI — the baseline dies with the runner — so without it
-    every intentional CSS change would be permanently red and unmergeable. Deliberately
-    awkward and greppable (`git log --grep`), the same property that keeps `data-a11y-expect`
-    honest. The diff artifact uploads on `if: always()`, because the overridden run is exactly
-    the one worth looking at.
-  - **A ground card exists since v1.13.0** — `components/marketing/ground.card.html` puts
-    `.lw-page-light`, `.lw-page-dark` and `.lw-page-ground` side by side, each stage under
-    `contain: paint` in `_card.css` so the grounds' `position: fixed` layers stay inside
-    their stage. That is what let the three grounds be measured at all.
+**`check:tokens`** is a **deny-list, not a contract checker.** Its TSX rules (raw hex, palette escape,
+arbitrary `var()` in `[…]`, >1 `variant="cta"` per file) fire only against *consumer* source — run `node
+tools/lw-token-lint.mjs <consumer>/src` by hand before any pin bump. `--css` self-checks the layers (raw
+duration, raw z-index, `legacy-duration`, `keyframe-name`, `breakpoint-spelling`, `missing-react-import`)
+and the docs (`doc-count`, `readme-coverage`, `stale-install-pin`). ⚠ **It cannot see a utility the preset
+no longer registers** — a removed utility compiles, lints green and renders unstyled, so **grep the
+consumers before you remove one.** ⚠ `raw-hex` matches 3/6 digits only.
+
+**`check:a11y`** — a node may opt out of ONE rule with `data-a11y-expect="<rule-id>"` (never a whole card
+or rule; exactly one today). ⚠ **It reads `violations`, not `incomplete`, a blind spot with a known
+shape:** axe cannot resolve a background behind a pseudo-element, so every decorative surface here is
+invisible to its contrast rule. Do not "fix" it by failing on incompletes — assert the token SCOPE instead.
+**It runs axe's `aria-dialog-name`**, the one non-WCAG rule enabled, because a Radix Dialog with neither
+`title` nor `label` is a `role="dialog"` with no name; that is closed for DIALOGS ONLY, since the
+open-state cards render each surface OPEN — **a closed overlay is still invisible to it.** And **prose is
+not evidence of anything**: an uncaught page error fails the card, and every container passed to
+`createRoot`/`hydrateRoot`/`render` must have an element child. (History: CHANGELOG 1.3.0.)
+
+**`check:bundle`** — React is **not** bundled (CommonJS shims over `globalThis.React`/`ReactDOM`); the
+namespace is the barrel's exports plus every uppercase-first export of a module it pulls in, and every card
+is grepped for the names it reads off it. Mechanics in the file's header.
+⚠ **`tsconfigRaw: { compilerOptions: {} }` in the shared `JSX` options is load-bearing — do not remove
+it.** esbuild's `jsx` API option is only a DEFAULT: a reachable `tsconfig.json` overrides it per file, and
+this repo has one carrying `"jsx": "react-jsx"` (right for `tsc --noEmit`, fatal here). **If you touch that
+object, open a card in a browser and confirm a component paints — a green gate is not the check.** (1.3.0)
+⚠ Since v2.0.0: `react/jsx-runtime` resolves to `tools/_jsx-shim.mjs`, pinned by
+`test/bundle-shim.test.mjs`; `radix-ui` is INLINED with its version in the header, so **`npm ci` fetches it
+and `check:pack` is no longer air-gapped**; and `lw-rsc` reads any `from "radix-ui"` import as a client
+signal, so every overlay is `"use client"` by rule, not by a hand-kept list.
+
+**`check:visual`** diffs pixels with a PNG decoder verified against Chromium's own (max channel delta 0);
+`--self-test` runs that, and the decoder, the CI base-ref recording and the image-decode wait are in the
+file's header. **Two per-shot rules, because neither alone works:** soft (channel Δ>8 over **0.02%** of
+pixels) catches a whole-page tint; strong (Δ>48 over **0.002%**) catches a 1px hairline recoloured along
+1200px — 0.038% of a shot, invisible to any 0.1% area rule. Thresholds come from a MEASURED noise floor:
+816 shots, 815 byte-identical, one moved 0.0002%. **Raise them only with an observed percentage quoted;
+never round up "to be safe."** ⚠ Fix a drifting shot in the CSS or accept it below; **never edit a specimen
+to suit a gate.**
+⚠ **`[visual-ok]` in the head commit message** downgrades a failure to a report. It exists because
+`--update` is meaningless in CI (the baseline dies with the runner), so without it every intentional CSS
+change would be permanently red and unmergeable. Deliberately awkward and greppable (`git log --grep`), the
+property that keeps `data-a11y-expect` honest too. **Account for it**: the CHANGELOG entry says how many
+shots moved and why they all moved.
+`components/marketing/ground.card.html` renders the three page grounds, each stage under `contain: paint`
+so their `position: fixed` layers stay inside their stage. Without it the grounds measured by nothing.
+
+
 
 ## Facts worth not re-deriving
 
-- **Brand.** Cyan `#0C727B` (`--lw-brand-500`, white ink 5.66), navy `#024576` (`--lw-navy-700`),
-  amber `#FCB603` (`--lw-cta-500`, navy ink 10.54). `--lw-logo-cyan` `#0A8799` is **artwork-only**
-  — no UI rule may consume it. The palette was sampled FROM the mark, not picked; if you re-tune
-  it, re-sample the mark and erode the anti-aliased edges first.
-- **Ink follows the FILL's lightness, not the brand.** White on brand teal; navy on the amber CTA
-  and the status fills. Do not "restore" a uniform rule — the contrast gate will fail.
-- **A fill color is usually not a text color.** Hence the three-way `fill` / `text` / `ink` split.
-  Brand is the exception: brand-500 reads on white, so `--lw-brand-text-c` points at the fill on
-  light and at brand-400 on dark.
-- **`brand-text` is the LINK shade; `brand-on` is the ink for the brand TINT.** They are not
-  interchangeable — `brand-text` on `--lw-brand-soft` measures 3.98 over an inset, which is
-  what `.lw-chip` and `.lw-avatar` shipped through v1.1.2. `--lw-brand-on` (added v1.1.3)
-  mirrors `--lw-success-on`: brand-700 on light, brand-300 on dark. Every `background:
-  var(--lw-brand-soft)` rule pairs with `color: var(--lw-brand-on)`.
-- **A derived role must be re-derived in every scope that re-points its channel.**
-  `--lw-fg: hsl(var(--lw-fg-c))` is substituted where it is DECLARED, so a scope that only
-  re-points `--lw-fg-c` inherits the page-theme COLOR. This bit `.dark` (used as a scoped
-  subtree throughout the layers), every `shadcn.css` alias, and the two chart-chrome tokens.
-  At `<html>` it happens to work, because the declaration and the override land on the same
-  element — which is why it survived: the case everyone demos is the one that cannot fail.
-  The `:where(...)` block at the foot of `tokens.css` is where a new role goes.
-- **A keyframe name is GLOBAL and last-wins.** `lwPulse` was defined in `base.css` and again
-  in `product.css`; product's won for every consumer in the supported load order. Since
-  v1.13.0 `check:tokens` fails a duplicate keyframe name across the layers and a name that
-  does not match `/^lw[A-Z]/`.
-- **The two themes share the INK hue, not the paper hue.** Light `--lw-surface-1..3` and
-  `--lw-border-1/2` sit on hue 45 (warm paper, v1.13.0); the page stays white; every text tier,
-  `--lw-line-control` and every dark value are unchanged; the one shadow ink is
-  `--lw-shadow-ink-c` (30 10% 10% light, 0 0% 0% dark). `email.css`'s literals moved with the
-  surfaces — move a token, move the literal. The dark theme's roles point at named navy
-  primitives (`--lw-navy-paper/raised/inset-c`, `--lw-on-navy-1..4-c`,
-  `--lw-navy-line-1/2/control-c`) rather than at inline triples — a pixel no-op that gives the
-  dark palette names to reason about.
-- **`--lw-font-display` is the display face; it defaults to Geist.** `.lw-display`, `.lw-h1`,
-  `.lw-h2` and `.lw-prose h2` read it. A consumer pointing it at a serif should re-check
-  `--lw-tracking-tighter`, which was measured for Geist. The measures are tokens too:
-  `--lw-measure-prose` 68ch, `--lw-measure` 60ch, `--lw-measure-sm` 46ch.
-- **Ambient motion has one switch, and it is OFF by default (v2.0.0).** `--lw-ambient-play`
-  is the play-state of every decorative loop, `paused` at `:root`; `data-ambient="on"` on any
-  ancestor runs them, `data-ambient="off"` parks a subtree. Both selectors declare one custom
-  property and no paint, and are on `lw-presence`'s `LAYER_PURITY_EXEMPT` list by name. Frame 0
-  is every loop's resting frame, so paused and running paint the same still. Loops read the
-  loop/ambient tiers (`--lw-dur-loop-fast/loop/loop-slow`, `--lw-dur-ambient/-slow`) or a
-  `calc()` ratio of one; the bespoke `--lw-dur-<effect>` names and `--lw-duration*` were removed
-  in v2.0.0. `check:tokens` fails a `--lw-duration*` use and strips `var()` before hunting a raw
-  duration, so the `calc(var(--lw-dur-ambient) * .8)` form is token-built to it.
-- **A portal inherits from its CONTAINER, not its trigger — so the layer mirrors the scope.**
-  A Radix portal renders under `OverlayProvider`'s container (or `<body>`), outside the `.dark`
-  / `.lw-band-dark` / `brandVars()` subtree the trigger sat in. `_layer.js` reads the opener's
-  theme and band classes and restates them on `.lw-layer`, which is why a dialog opened from a
-  dark card is dark. Put the provider INSIDE the themed element, never above it, and never
-  inside `.lw-topbar` — its `backdrop-filter` becomes the containing block for `position:
-  fixed` and the layer scrolls with the bar.
-- **Why `Select`, `Switch`, `Checkbox` and `Toast` stay native.** A `<select>` is the right
-  control on every phone and the form controls submit and validate with scripts off; Radix would
-  cost a portal, a scroll lock and ~10 KB for a listbox the platform already ships. `Toast` is a
-  live region, not a floating surface — nothing to position, trap or dismiss-on-outside-click —
-  and a portalled toast would leave the `aria-live` region it was announced from. Radix earns
-  its place only where the platform has no answer: positioning, focus management, scroll lock
-  and a described tooltip.
-- **The re-derive block is a gated list, not a convention.** A new band member or a new derived
-  role goes into the `:where(...)` list at the foot of tokens.css, and `check:contrast` now says
-  so by name when it does not (see the contrast gate above).
-- **A TIER is theme-invariant; a ROLE re-points.** `--lw-text-3` / `--lw-surface-2` are the
-  same value in both themes on purpose. Paint a tier and your card renders light-mode ink on
-  navy — 3.5:1. In anything that can be seen on both grounds, reach for the role
-  (`--lw-fg-subtle`, `--lw-bg-inset`). The specimen cards got this wrong in five places.
-- **A muted token is only as good as the darkest surface it lands on.** `--lw-text-3` was AA
-  against white and 4.07 on `--lw-surface-3`, where `code` and `.lbl` actually sit. When you
-  move a muted tier, check it against surface-3, not the page.
-- **Opacity is not hierarchy.** `opacity: .42` on a masked graphic is fine; the same rule on
-  text is a contrast cut the token system cannot see. Carry the recede in ink and size.
-- **`--primary` is cyan; amber is the `cta` *variant*, one per view.** Shadcn's `--primary` drives
-  the default Button — amber there makes every button a CTA. `--accent` is a ghost-button *hover
-  surface*, not a brand color; per-tenant theming overrides `--primary`/`--ring` only.
-- **Density is scoped, not global.** `--lw-control-h-*`, `--lw-row-h`, `--lw-card-pad`,
-  `--lw-stack-gap` are driven by `data-density`. The 44px coarse-pointer minimum lives on the
-  token, so anything with a height reads a density token or carries a comment saying why not.
-- **The theme choice is written to TWO stores because it has TWO readers.** `localStorage` is
-  for this document; the `lw-theme` **cookie** is the only one of the two a *server* can read,
-  and it is what lets an SSR consumer emit `<html data-theme>` in the first byte instead of
-  flashing the wrong theme. v0.6.5 added it for exactly that; the v1.1.0 wholesale replacement
-  rewrote the hook with `localStorage` only and dropped it. Nothing failed, no gate could see
-  it, and the flash came back for a year. Restored in v1.1.7, with **one writer** —
-  `persist()` in `hooks.js`. `ThemeToggle` had its own copy of the write, which is how it
-  missed the cookie in the first place.
-- **A logical CSS property is a promise about direction; keep it or do not make it.**
-  `data-side="start"` and `data-edge="start"` are logical APIs that were implemented as
-  left/right, so an RTL consumer asked for the start edge and got the end one — the API name
-  was the only correct part. Now on `inset-inline`/`border-inline-*`/logical radii, with
-  `--lw-dir` flipping the drawer keyframes (a `translateX` cannot mirror itself). **Two things
-  are physical on purpose and carry comments saying so:** `.lw-safe-x` (`env(safe-area-inset-*)`
-  describes a notch, which does not swap with writing direction) and `.lw-select`'s
-  `padding-right` (coupled to `background-position`, which has no logical form — convert one
-  without the other and RTL gets the gap opposite the chevron).
+### Colour
 
-## Added in v1.4.0–v1.5.4, and the traps that came with them
+- **Brand.** Cyan `#0C727B` (`--lw-brand-500`, white ink 5.66), navy `#024576` (`--lw-navy-700`), amber
+  `#FCB603` (`--lw-cta-500`, navy ink 10.54). `--lw-logo-cyan` and `--lw-art-*` are **artwork-only**. The
+  palette was sampled FROM the mark; re-tuning means re-sampling it.
+- **Ink follows the FILL's lightness, not the brand** — white on brand teal, navy on the amber CTA and the
+  status fills. Do not "restore" a uniform rule; the contrast gate will fail.
+- **A fill color is usually not a text color**, hence the `fill`/`text`/`ink` split; brand is the exception
+  (`--lw-brand-text-c` is the fill on light, brand-400 on dark). **`brand-text` is the LINK shade,
+  `brand-on` the ink for the brand TINT** — 3.98 over `--lw-brand-soft`, so every
+  `background: var(--lw-brand-soft)` pairs with `color: var(--lw-brand-on)`.
+- ⚠ **A derived role must be re-derived in every scope that re-points its channel.**
+  `--lw-fg: hsl(var(--lw-fg-c))` is substituted where it is DECLARED, so a scope re-pointing only
+  `--lw-fg-c` inherits the page-theme COLOR. At `<html>` it happens to work, because declaration and
+  override land on one element — **the case everyone demos is the one that cannot fail.** The
+  `:where(...)` block at the foot of tokens.css is where a new role goes.
+- **A TIER is theme-invariant; a ROLE re-points.** Paint `--lw-text-3`/`--lw-surface-2` and your card
+  renders light ink on navy, 3.5:1; over both grounds reach for `--lw-fg-subtle`/`--lw-bg-inset`.
+- **A muted token is only as good as the darkest surface it lands on** — check it against `--lw-surface-3`,
+  not the page. And **opacity is not hierarchy**: fine on a masked graphic, but on text it is a contrast
+  cut the token system cannot see. Carry the recede in ink and size.
+- **The two themes share the INK hue, not the paper hue.** Light surfaces and borders sit on hue 45 (warm
+  paper), the page stays white, the one shadow ink is `--lw-shadow-ink-c`; dark roles point at named navy
+  primitives (`--lw-navy-paper/raised/inset-c`, `--lw-on-navy-1..4-c`, `--lw-navy-line-*-c`).
+- **`--primary` is cyan; amber is the `cta` *variant*, one per view** — shadcn's `--primary` drives the
+  default Button, so amber there makes every button a CTA. `--accent` is a ghost-button *hover surface*,
+  not a brand color; per-tenant theming overrides `--primary`/`--ring` only.
 
-- **`.lw-page-ground`** — the THEMED ground, beside `.lw-page-dark` / `.lw-page-light`, which each
-  commit to one appearance. It resolves off `[data-theme]` on `<html>` rather than from a class the
-  consumer picks, because a theme class in the HTML makes the document cookie-dependent and a page
-  served with `s-maxage` and no `Vary` is then cached on URL alone.
-  ⚠ Until v1.13.0 it was ~30 hand-written twins of the adjacent `.lw-page-light` selectors, and
-  the twinning missed once (`lwMarkBreathe`, v1.5.1 — a reduced-motion rule disabling an animation
-  the ground never had). The three grounds are now ONE parameterised rule set (37 → 15 blocks):
-  which SVG, which alpha, which glow stops are `--lw-ground-*` knobs. The `url()`s stay in
-  explicit selector rules on purpose — Firefox resolves a `url()` inside a custom property
-  against the DOCUMENT, so a knob carrying one breaks the moment the page and the stylesheet are
-  not siblings.
-- **`.lw-page-dark` joined the dark band list** (v1.4.0). It painted navy and declared nothing, so
-  every role token inside a dark ground resolved LIGHT. It survived a release because
-  `MarketingLanding.dc.html` writes `class="dark lw-page-dark"` — the demo arrives with the scope
-  by hand, from a second class, enforced by nobody. **The case everyone demos is the one that
-  cannot fail**, and this is the fourth instance of that pattern here.
-- ⚠ **A hero on a themed ground must NOT carry a band scope.** `.lw-hero-dark` is in the dark list
-  because a standalone hero is always navy; inside `.lw-page-ground` that pinned it dark while the
-  ground painted white — **1.09:1, sitewide, at the consumer, for every default-theme visitor**.
-  Fixed by re-pointing its channels to `inherit` in marketing.css. Two earlier attempts added it to
-  the light band list and inverted the bug in dark mode: **the band block sets the property ON the
-  hero, and an element's own declaration beats one inherited from `<html>` however the selectors
-  weigh.** Specificity is not what decides it.
-  (An earlier revision of this note said the DTCG tool's `[^)]*` selector regex forbade scoping
-  it there. That regex was the CONTRAST gate's, never the DTCG tool's, and it is gone: theme
-  blocks are matched by member since v1.13.0, so a nested paren or a wrapped line is fine.)
-- **`.lw-toc` and `.lw-crumbs` promoted `product.css` → `base.css`** (v1.4.0). Both components live
-  in `components/nav/`, both had their `a` rule already on base.css's pointer-affordance list, and
-  marketing.css had claimed since v1.3.0 that the contents-panel layout is `.lw-split` while half
-  that layout sat in the layer a marketing page is told to drop.
-- **`Section` gained `rule`** — a hairline owning the boundary *above* it. One owner per boundary or
-  it is drawn twice. One weight, plus a `--lw-section-rule-w` local knob, so no new token.
-- **`NavMenu`** (v1.5.0) — a native `<details>` nav dropdown that teaches a taxonomy in named groups.
-  Server-safe, works with JavaScript disabled. **Not** built on `Menu`/`Popover`: `.lw-menu` and
-  `.lw-popover` are in `product.css`, so a site header built on them strands its dropdown CSS in the
-  layer marketing drops — the defect v1.4.0 closed twice elsewhere. `role="menu"` is also wrong for
-  site navigation (APG): it is a disclosure containing links.
-  Escape-to-close and close-on-client-side-route-change are the **consumer's**, stated in the
-  `.d.ts` — a hook here would force every consumer's server-rendered header to become a client
-  component. The consumer shipped without both.
-- ⚠ **`.lw-topbar nav a` is now `nav > a`.** Equivalent while `TopBar` renders links as direct
-  children; not equivalent once a panel is nested in that `<nav>`, where the bar's padding and its
-  44px coarse-pointer floor would apply to every dropdown item. Turning the trigger into a
-  `<summary>` then dropped it from those rules entirely — `.lw-navmenu > summary` had to be added
-  back to all three (v1.5.2).
+### Layers, grounds, scope
 
-**The gap all of this kept re-opening — no card rendered a page ground — closed in v1.13.0.**
-Three of the defects above would have been caught by one, and the fourth (the 25 roles behind
-`.lw-page-dark`) was found the release the card landed. `components/marketing/ground.card.html`
-renders all three grounds; each stage is `contain: paint` so the grounds' `position: fixed`
-layers stay inside their stage instead of repainting every shot they join.
+- **A keyframe name is GLOBAL and last-wins**, so `check:tokens` gates uniqueness and `/^lw[A-Z]/`.
+  **`Section`'s `rule` is a hairline owning the boundary *above* it** — one owner per boundary.
+- **The three page grounds are ONE parameterised rule set** — which SVG, which alpha, which glow stops are
+  `--lw-ground-*` knobs. ⚠ The `url()`s stay in explicit selector rules: **Firefox resolves a `url()`
+  inside a custom property against the DOCUMENT**, not the stylesheet. `.lw-page-ground` resolves off
+  `[data-theme]` on `<html>`, not a consumer-picked class, because a theme class in the HTML makes the
+  document cookie-dependent and `s-maxage` with no `Vary` then caches it on URL alone.
+- ⚠ **A hero on a themed ground must NOT carry a band scope.** `.lw-hero-dark` is in the dark band list
+  because a standalone hero is always navy; inside `.lw-page-ground` that pinned it dark while the ground
+  painted white — 1.09:1 sitewide for every default-theme visitor. Fixed by re-pointing its channels to
+  `inherit` in marketing.css. Two earlier attempts put it in the LIGHT band list and inverted the bug in
+  dark mode: **the band block sets the property ON the hero, and an element's own declaration beats one
+  inherited from `<html>` however the selectors weigh.** Specificity is not what decides it.
+- ⚠ **`.lw-topbar nav > a`, not `nav a`** — equivalent only while `TopBar` renders links as direct
+  children; with a panel nested in that `<nav>`, the bar's padding and its 44px floor would hit every
+  dropdown item. A `<summary>` trigger then falls out of those rules, so **`.lw-navmenu > summary` had to
+  be added back to all three.**
+- **`NavMenu` is a native `<details>`, not `Menu`/`Popover`** — those paint on **product.css**, which a
+  marketing site drops, and `role="menu"` is wrong for site navigation (APG): it is a disclosure containing
+  links. Escape-to-close and close-on-route-change are the **consumer's**, stated in the `.d.ts`.
+
+### Overlays, motion, density
+
+- ⚠ **A portal inherits from its CONTAINER, not its trigger — so the layer mirrors the scope.** A Radix
+  portal renders under `OverlayProvider`'s container, outside the `.dark`/`.lw-band-dark`/`brandVars()`
+  subtree the trigger sat in; `_layer.js` restates those classes on `.lw-layer`. Put the provider INSIDE
+  the themed element, never above it, and **never inside `.lw-topbar`** — its `backdrop-filter` becomes the
+  containing block for `position: fixed` and the layer scrolls with the bar.
+- **Dialog, Drawer and CommandPalette return focus to their OPENER on close.** Radix's default is its own
+  `Trigger`, which a controlled panel (`open` + `onClose`, no `trigger`) never has, so focus fell to
+  `<body>` on every Escape. **A caller's own `onCloseAutoFocus` still wins.** Both `Dialog` and `Drawer`
+  also declare `onOpenAutoFocus`, `onCloseAutoFocus`, `onEscapeKeyDown` and `onInteractOutside` — the
+  runtime always passed them through, but untyped there was no way to cancel a Radix default.
+- **Why `Select`, `Switch`, `Checkbox` and `Toast` stay native.** A `<select>` is the right control on every
+  phone and the form controls submit with scripts off; `Toast` is a live region, and a portalled one leaves
+  the `aria-live` region it was announced from. Radix earns its place only for positioning, focus, scroll
+  lock and a described tooltip.
+- **Ambient motion has one switch, OFF by default.** `--lw-ambient-play` is the play-state of every
+  decorative loop, `paused` at `:root`; `data-ambient="on"` runs a subtree, `"off"` parks one. Both
+  selectors declare one custom property and no paint, and are named on `lw-presence`'s
+  `LAYER_PURITY_EXEMPT`. Frame 0 is every loop's resting frame, so paused and running paint the same still.
+- **Density is scoped, not global** — `--lw-control-h-*`, `--lw-row-h`, `--lw-card-pad`, `--lw-stack-gap`
+  read `data-density`, and **the 44px coarse-pointer minimum lives on the token**, so anything with a
+  height reads a density token or carries a comment saying why not.
+- ⚠ **Under a coarse pointer prefer REAL size to a `.lw-hit` overlay wherever an overlay would be clipped
+  or would overlap a neighbour.** The v2.1.x sweep went both ways: sortable `th` buttons,
+  `.lw-input-group > input`, `.lw-segmented`, `.lw-tabs [role=tab]`, `.lw-nav-item` and `.lw-skip` took
+  real height (the space below a header cell belongs to the first data row, and an overlay there steals
+  that row's taps); overlay close buttons took `.lw-hit`; and the AppBar menu button and compact locale
+  toggle needed real size because `.lw-hit` was **clipped by an ancestor's `overflow: hidden`** and
+  **overlapped by a neighbour's own overlay**, where the later one in the DOM took the tap.
+
+### Type, components, theming
+
+- **`--lw-font-display` is the display face and defaults to Geist** — a serif there means re-checking
+  `--lw-tracking-tighter`, measured for Geist. The measures are tokens too (`--lw-measure-prose` 68ch,
+  `--lw-measure` 60ch, `--lw-measure-sm` 46ch), and **`--lw-text-2xs` (12px) is the type FLOOR**: the
+  smallest size any rule in the layers may state. Raise the floor in one place.
+- **`Table collapse="cards"` is a CONTAINER query on `.lw-table-wrap[data-collapse]`, not a media query** —
+  what is too narrow is the table's track, not the screen. **The DOM does not change**: one real `<table>`
+  at every width, re-laid-out by CSS, so nothing is measured and server and client cannot disagree about
+  which form to emit. Hence three rules — explicit `role="table"/"rowgroup"/"row"/"columnheader"/"cell"`
+  **only when `collapse` is set** (block layout drops a table's implicit semantics); the header row hidden
+  and each detail cell printing its column from `data-label` (a visually-hidden header would announce the
+  column twice); and the `<details>` holding the CONTROL, not the cells, because the parser foster-parents
+  a non-cell child of a `<tr>` out of the table. Without `@container` the table scrolls as before.
+  ⚠ Sorting survives the collapse through `Menu`, which paints on **product.css**. ⚠ And a
+  `.lw-table-wrap` inside a grid or flex item needs a **`min-width: 0` ancestor**, or it grows past its
+  pane instead of scrolling and there is nothing for the overflow hint to hint at.
+- **`LogoRail mode="mono"` draws the image under `grayscale()`; the default MASK reads ALPHA and nothing
+  else** — a JPEG, a PNG on a white card, or opaque-white lettering in a filled shape all mask to one blob.
+  The right fix is a re-cut silhouette; `mono` is for a mark you cannot re-cut. ⚠ The mask form is measured
+  by no card: the gates open cards over `file://`, where Chromium refuses a cross-origin mask.
+- **The theme choice is written to TWO stores because it has TWO readers.** `localStorage` is for this
+  document; the `lw-theme` **cookie** is the only one a *server* can read, and is what lets an SSR consumer
+  emit `<html data-theme>` in the first byte. **One writer** — `persist()` in `hooks.js`; a component with
+  its own copy of the write is how the cookie was lost for a year with no gate able to see it.
+- **A logical CSS property is a promise about direction; keep it or do not make it.** `data-side`/
+  `data-edge="start"` are on `inset-inline`/`border-inline-*`/logical radii, with `--lw-dir` flipping the
+  drawer keyframes. **Two things are physical on purpose and carry comments saying so:** `.lw-safe-x` (a
+  notch does not swap with writing direction) and `.lw-select`'s `padding-right` (coupled to
+  `background-position`, which has no logical form).
+
 
 ## The design-project round-trip
 
-The Claude Design project is the authoring surface. This repo was replaced wholesale from it at
-v1.1.0. There is **no sync**: a change made here is invisible to the design project, and the next
-wholesale pull would overwrite it.
-
-- Small, surgical changes (a token, a gate, a bug in one component): make them here, and mirror
-  them into the design project by hand if the project is still being authored against.
-- Anything structural: make it in the design project and re-pull.
-
-Pulling is `DesignSync list_files` / `get_file` against project id
-`f2d90781-f891-45e3-bc88-ddb55e6f9444`. Two things that cost a session to learn:
-**DesignSync is not reachable from subagents** — do the fetches in the main loop — and
-`get_file` caps at 256 KiB and reports `truncated: true` rather than silently clipping.
-
-**Do not re-pull `_ds_bundle.js`.** Since v1.1.6 it is built here by `npm run bundle` from these
-sources, and `check:bundle` asserts it. Overwriting it with the design project's copy reopens the
-exact drift the generator closed — and unlike a stale `.jsx`, the browser gates would go on
-reporting green.
+This repo was replaced wholesale from the design project at v1.1.0 and there is **no sync** — a change made
+here is invisible to it, and the next wholesale pull would overwrite it. Small, surgical changes are made
+here and mirrored by hand; anything structural is made there and re-pulled, via `DesignSync list_files` /
+`get_file` against project id `f2d90781-f891-45e3-bc88-ddb55e6f9444`. Two things that cost a session:
+**DesignSync is not reachable from subagents** — fetch in the main loop — and `get_file` caps at 256 KiB,
+reporting `truncated: true`. ⚠ **Do not re-pull `_ds_bundle.js`**: it is built here and `check:bundle`
+asserts it, so the design project's copy reopens the drift the generator closed — and unlike a stale
+`.jsx`, the browser gates would go on reporting green. Same for `templates/_shared/*`, where a re-pull
+recreates twelve sibling copies.
 
 ## Releasing — the tag invariant (do not get this wrong)
 
-The git tag, `package.json#version`, and the committed content **must all agree.** This bit us
-before: `v0.2.2` was cut without bumping past `0.2.1`, so every installed copy *reported* `0.2.1`
-while containing v0.2.2 content, and any `version >= 0.2.2` check lies. For a package whose thesis
-is "consistency is a dependency, not a discipline," the metadata lie is the defect that most
-directly undercuts the pitch.
+The git tag, `package.json#version`, and the committed content **must all agree.** This bit us before:
+`v0.2.2` was cut without bumping past `0.2.1`, so every installed copy *reported* `0.2.1` while containing
+v0.2.2 content, and any `version >= 0.2.2` check lies. For a package whose thesis is "consistency is a
+dependency, not a discipline," the metadata lie is the defect that most directly undercuts the pitch.
 
 To release `vX.Y.Z`:
 
 1. Make the change. Run `npm run check` green; run the browser gates or let CI.
 2. **Promote `## [Unreleased]` to `## [X.Y.Z] — <date>` in `CHANGELOG.md`, and leave a new empty
    `[Unreleased]` above it.** `CONTRIBUTING.md` already requires every change to land under
-   `[Unreleased]`; nothing promoted it, so this step did not exist and the omission was
-   invisible — the file still looked maintained.
-3. **Re-point any `advisories.json` entry whose `fixedIn` names the release you are about to
-   cut**, and check that every `fixedIn` in the file names a tag that will exist:
-   `node -e "…"` against `git tag -l`, or simply eyeball it — count them, the file is short.
-4. Bump `package.json#version` **in the same commit** as 1–3.
+   `[Unreleased]`; nothing promoted it, so this step did not exist and the omission was invisible — the
+   file still looked maintained.
+3. **Re-point any `advisories.json` entry whose `fixedIn` names the release you are about to cut**, and
+   check that every `fixedIn` in the file names a tag that will exist: `node -e "…"` against `git tag -l`,
+   or simply eyeball it — count them, the file is short.
+4. Bump `package.json#version` **in the same commit** as 1–3. (`stale-install-pin` will also make you move
+   the README's `#vX.Y.Z` install line.)
 5. `git tag vX.Y.Z` on that commit, `git push && git push --tags`.
 6. Bump the pin in each consumer and refresh its lockfile. Enumerate them — see §Consumers.
 
-**Never move a published tag** to fix a missed bump — cut the next version. A re-pointed tag
-breaks reproducibility for anyone who already fetched the tarball, and surfaces as a confusing
-cache error rather than a clean update.
+**Never move a published tag** to fix a missed bump — cut the next version. A re-pointed tag breaks
+reproducibility for anyone who already fetched the tarball, and surfaces as a confusing cache error rather
+than a clean update.
 
-**Steps 2 and 3 were added on 2026-09-03, after both failed at once.** v1.7.2 was written up in
-the CHANGELOG and in an advisory (`announce-breaks-prose-anchors`, `fixedIn: 1.7.2`) and then
-never cut — so `lw-doctor`, the tool whose entire purpose is telling a consumer which release
-fixes their defect, pointed at a tag that does not exist. The fix had shipped; only the label was
-wrong. Then v1.8.0 was cut following steps 1–4 exactly as they were written, and recorded
-nothing, because the procedure did not ask. A four-step procedure that omits the two steps that
-keep the record honest will be followed correctly and still lose the record.
+**Steps 2 and 3 were added on 2026-09-03, after both failed at once.** v1.7.2 was written up in the
+CHANGELOG and in an advisory (`fixedIn: 1.7.2`) and then never cut — so `lw-doctor`, the tool whose entire
+purpose is telling a consumer which release fixes their defect, pointed at a tag that does not exist. Then
+v1.8.0 was cut following steps 1–4 exactly as written, and recorded nothing, because the procedure did not
+ask. **A four-step procedure that omits the two steps that keep the record honest will be followed
+correctly and still lose the record.**
 
 ### The lockfile-no-op gotcha
 
-After moving a consumer's pin, `npm/pnpm install` may say **"up to date"** and keep the *old*
-resolved commit — git deps are cached by hash and the lockfile pins the old one. Verify:
-
-```bash
-grep "leanwise-design" <consumer>/<lockfile>   # resolved commit must be the new tag's SHA
-```
-
-If it did not move: `rm -rf node_modules/@leanwise/design` and reinstall explicitly. "Up to date"
-is not "on the new version."
+After moving a consumer's pin, `npm/pnpm install` may say **"up to date"** and keep the *old* resolved
+commit — git deps are cached by hash and the lockfile pins the old one. Verify with `grep
+"leanwise-design" <consumer>/<lockfile>`; the resolved commit must be the new tag's SHA. If it did not
+move, `rm -rf node_modules/@leanwise/design` and reinstall explicitly. "Up to date" is not "on the new
+version."
 
 ## Consumers
 
-Verified 2026-09-04 by enumeration (the command below), not by memory.
+Verified 2026-09-04 by enumeration (below), not by memory.
 
-| Consumer | Pin | Consumes | Package manager |
+| Consumer | Pin | Consumes | PM |
 |---|---|---|---|
-| `leanwise-ai` | `#v1.7.1` | `tokens` `fonts` `reset` `base` `marketing` `product` + `./react` `./hooks` | pnpm |
-| `leanwise-inspect/frontend` | `#v1.12.0` | `tokens` `fonts` `shadcn` `theme` `base` `product` + `./react` `./hooks` `./components` | npm |
+| `leanwise-ai` | `#v2.2.2` | `tokens` `fonts` `reset` `base` `marketing` `product` + `./react` `./hooks` | pnpm |
+| `leanwise-inspect/frontend` | `#v2.1.6` | `tokens` `fonts` `shadcn` `theme` `base` `product` + `./react` `./hooks` `./components` | npm |
 | `P20251121-tss-app/frontend` | `#v1.7.1` | `tokens` `fonts` `shadcn` `theme` `base` | npm |
 | `4DXs_plan/app` | `#v1.7.1` | `tokens` `fonts` `reset` `base` `marketing` `product` + `./react` | npm |
 | `P20260806-sop/apps/web` | `#v1.7.1` | `tokens` `fonts` `shadcn` `theme` `base` `product` | npm |
-| `P20260707-vss/frontend` | `#v0.2.3` | `tokens` `fonts` `shadcn` + `./brand` | pnpm |
-| `P20260706-rag-service/frontend` | `#v0.2.2` (reports **0.2.1** — see below) | `tokens` `fonts`, vanilla | npm |
+| `P20260707-vss/frontend` | `#v0.2.3` | `tokens` `fonts` `shadcn` + preset + `./brand` | pnpm |
+| `P20260706-rag-service/frontend` | `#v0.2.2` (reports **0.2.1**) | `tokens` `fonts`, vanilla | npm |
 
-**This table is hand-maintained, and it has now been wrong three times.** It read `#v0.8.1`
-for `leanwise-ai` until 2026-07-31, when the real pin was `#v1.1.8` — eighteen tags of drift
-that did not exist. On 2026-09-03 an audit found it listing **three** consumers when there
-were **six**: `tss-app`, `leanwise-inspect` and `4DXs_plan` were absent, and `tss-app` is
-discussed by name elsewhere in this very file. On 2026-09-04 the loop below missed a
-**seventh**, `P20260806-sop/apps/web`, because it only looked one directory deep — the
-`*/apps/web/` glob was added that day. The cost is not cosmetic — this table is what
-anyone reasons from when deciding whether a change is safe to ship, and a missing row reads as
-"nobody depends on that".
+**Drift today.** `leanwise-ai` is current, `leanwise-inspect` one release behind. **Three sit on `#v1.7.1`**
+(tss-app, 4DXs_plan, sop) and must cross v2.0.0 — CHANGELOG 2.0.0 **§Migration — per consumer, what to
+grep** lists the removals against every tree. **VSS (`#v0.2.3`) and rag-service (`#v0.2.2`) are pre-1.1**
+and cannot be bumped in one jump: v1.1.0 broke the **JS entry points**, not the CSS surface. Sequence pin
+bump → layer migration, so breakage is attributable to one or the other. (There is no `v1.1.0` tag and no
+`v1.0.x` at all — the tags go `v0.9.0` → `v1.1.1`.)
 
-`lw-doctor` was built to end exactly this class of error, but it inverts **version** lookup, not
-**consumer enumeration** — it can tell a consumer it is behind and cannot tell this file that a
-consumer exists. So enumerate rather than remember. This finds every consumer on the box and its
-real pin, and is what should be run before trusting a row:
+⚠ **rag-service is NOT install-drifted.** `git show v0.2.2:package.json` says `"version": "0.2.1"` — the
+bump was missed when that tag was cut, so pinning `#v0.2.2` *correctly* resolves a tree reporting `0.2.1`.
+No reinstall changes that; the fix is a pin bump to `#v0.2.3`, the first tag whose version matches itself.
+
+**This table is hand-maintained and has been wrong three times** — by eighteen tags on the flagship
+consumer, by three missing rows, and by a seventh consumer the loop could not see because it looked only
+one directory deep (`*/apps/web/` was added for it). A missing row reads as "nobody depends on that".
+`lw-doctor` inverts **version** lookup, not **consumer enumeration** — it cannot tell this file that a
+consumer exists. So enumerate:
 
 ```bash
-for d in /srv/share/01_project-dev/*/ /srv/share/01_project-dev/*/frontend/ /srv/share/01_project-dev/*/app/ /srv/share/01_project-dev/*/apps/web/; do
+for d in /srv/share/01_project-dev/*/ /srv/share/01_project-dev/*/frontend/ \
+         /srv/share/01_project-dev/*/app/ /srv/share/01_project-dev/*/apps/web/; do
   pin=$(grep -o '"@leanwise/design": *"[^"]*"' "$d/package.json" 2>/dev/null | sed 's/.*: *"//;s/"$//')
   [ -n "$pin" ] && printf '%-46s %s\n' "${d#/srv/share/01_project-dev/}" "$pin"
 done | sort -u
 ```
 
-Real drift today is **VSS alone** (`#v0.2.3`) and **rag-service** (`#v0.2.2`). **No pin moved in
-v2.0.0** — every migration note in the CHANGELOG is written for the bump that has not happened
-yet, and the greps there were run against all seven trees (plus a stale mirror of tss-app under
-`/home/nthanhtrung/Documents/04_Work-prod/`) on 2026-09-04.
-
-**rag-service is NOT install-drifted.** This was recorded as drift for several releases and it is
-wrong, which cost a diagnosis: `git show v0.2.2:package.json` says `"version": "0.2.1"` — the bump
-was missed when that tag was cut, so pinning `#v0.2.2` *correctly* resolves a tree that reports
-`0.2.1`. No reinstall or lockfile refresh can change that. The fix is a pin bump to `#v0.2.3` (the
-first tag whose version matches its own content), not a reinstall. This is the exact failure the
-release section below exists to prevent, caught from the other end.
-
-**There is no `v1.1.0` tag, and no `v1.0.x` at all** — the tags go `v0.9.0` → `v1.1.1`. "v1.1.0" is
-the *design project's* number for the wholesale replacement; the first version a consumer can
-actually pin past that break is `#v1.1.1`.
-
-**VSS and rag-service are pre-1.1.0 and neither can be bumped in one jump.** The replacement
-restructured the CSS layers, moved the CLIs under `templates/_tooling` (moved again to `tools/`
-in v1.2), dropped `dist/` (restored in v1.2 — see below), and pointed
-`main` at a flat `./react.js`. (v2.0.0 then removed the `lw.css`/`app.css` shims, the `./counter`
-alias and the 1.13-deprecated tokens, `--lw-duration-*` among them; a pre-1.1 consumer reaching
-any of those needs the two-step bump below.) Diffing v0.9.0 → v1.1.1 says where the risk
-actually is: **zero `--lw-*` tokens were dropped** (that `tokens.css` was a strict superset,
-legacy `--lw-duration-*` aliases included) and the Tailwind preset kept every utility family, so the CSS surface is close to safe.
-**The break is in the JS entry points** — `./counter` was deleted (leanwise-ai imports it; restored
-only at v1.1.5), `./react` lost its `require` condition and moved off `dist/` to ESM `.jsx` source,
-`tailwind-preset.js` became `.cjs`, the eleven named icon exports (`Check`, `Sun`, …) gave way to
-`<Icon name>`, `useTheme`/`useReveal`/`useSpotlight`/`useDeterministicCascade` moved from `./react`
-to `./hooks`, and the `bin` field went away, so the CLIs are no longer installed binaries.
-
-Before any consumer bump:
-
-1. rag-service hardcodes the brand at `src/routes/admin/w.$slug.tsx:720,728`
-   (`draft.branding?.accent || "#14B8A6"`) — the only real brand hardcode in any consumer. It must
-   move or tenants inherit a stale default.
-2. VSS spreads brand utilities across ~63 sites in *components*, so its QA is component-by-component;
-   rag-service concentrates ~98 in `src/styles/chat.css` + `app.css`.
-3. A pin bump without a rebuild still serves the old palette from `dist/`.
-
-Sequence pin bump -> layer migration, so breakage is attributable to one or the other.
+Before any bump: (1) rag-service hardcodes the brand at `src/routes/admin/w.$slug.tsx:720,728`
+(`draft.branding?.accent || "#14B8A6"`), the only real brand hardcode in any consumer; (2) VSS spreads
+brand utilities across ~63 sites in *components* (QA component-by-component) while rag-service concentrates
+~98 in `src/styles/chat.css` + `app.css`; (3) a pin bump without a rebuild still serves the old palette
+from `dist/`; (4) run `node tools/lw-token-lint.mjs <consumer>/src` — the TSX rules never fire in CI here.
 
 ## What not to do here
 
-- Don't edit a derived color line — edit the `-c` triple. The triple is what Tailwind composes and
-  what `brandVars()` synthesizes tints from.
+- Don't edit a derived color line — edit the `-c` triple. The triple is what Tailwind composes and what
+  `brandVars()` synthesizes tints from.
 - Don't put `OverlayProvider` above the themed element, or inside `.lw-topbar` (see Facts).
-- Don't hand-edit `ds-base.js` or `support.js` in one template — twelve copies, all generated.
-- Don't hand-patch `_ds_bundle.js` to make a card render (v1.1.3 did, for two ARIA fixes). Fix the
-  `.jsx` and run `npm run bundle`; a hand-patch makes the browser gates pass against something no
-  source file says.
-- Don't add a 4/8-digit hex (`#RGBA`, `#RRGGBBAA`) thinking the lint catches it — `raw-hex` only
-  matches 3/6 digits. Keep hex out of `tokens.css` entirely (it is HSL).
-- Don't style inside a `.jsx`. The CSS layer is the single source of styling; that is what keeps
-  the React and vanilla consumers from drifting.
-- Don't ship with a gate red, and don't add a consumer-side escape hatch
-  (`// lw-token-lint-allow`) without a reviewer — it disables the arbitrary-token rule for that
-  line, the rule that exists because of a real `--accent` footgun.
-- Don't grow this into a shadcn replacement. Each consumer still owns its own shadcn copy for
-  `Button`/`Select`/form primitives; this package owns the *contract* those copies render against.
-  A component that needs a token belongs here; one that needs product logic does not.
+- Don't put a copy of `ds-base.js` or `support.js` beside a template. They live ONCE in
+  `templates/_shared/`, there is no generator for them here, and `check:templates` fails a sibling.
+- Don't hand-patch `_ds_bundle.js` or a `.card.js` to make a card render (v1.1.3 did). Fix the source and
+  re-run the generator; a hand-patch makes the browser gates pass against something no source file says.
+- Don't add a 4/8-digit hex (`#RGBA`, `#RRGGBBAA`) thinking the lint catches it — `raw-hex` matches 3/6
+  digits only. Keep hex out of `tokens.css` entirely (it is HSL).
+- Don't style inside a `.jsx`; the CSS layer is the single source of styling, which is what keeps the React
+  and vanilla consumers from drifting. And don't state a sub-12px size in a layer.
+- Don't edit a specimen to suit a gate. That is how a gate quietly stops measuring.
+- Don't ship with a gate red, and don't add a consumer-side escape hatch (`// lw-token-lint-allow`) without
+  a reviewer — it disables the arbitrary-token rule for that line, which exists because of a real
+  `--accent` footgun.
+- Don't grow this into a shadcn replacement. Each consumer owns its own shadcn copy for `Button`/`Select`/
+  form primitives; this package owns the *contract* those copies render against. A component that needs a
+  token belongs here; one that needs product logic does not.
 
 ## Ownership
 
 LeanWise code → personal account **Okeysir198** (never the Vietsol org). The git dep is
-`github:Okeysir198/leanwise-design#<tag>`. See the user's global CLAUDE.md for which account owns
-which project folder.
+`github:Okeysir198/leanwise-design#<tag>`. See the user's global CLAUDE.md for which account owns which
+project folder.
