@@ -315,15 +315,24 @@ so their `position: fixed` layers stay inside their stage. Without it the ground
 
 ## The design-project round-trip
 
-This repo was replaced wholesale from the design project at v1.1.0 and there is **no sync** — a change made
-here is invisible to it, and the next wholesale pull would overwrite it. Small, surgical changes are made
-here and mirrored by hand; anything structural is made there and re-pulled, via `DesignSync list_files` /
-`get_file` against project id `f2d90781-f891-45e3-bc88-ddb55e6f9444`. Two things that cost a session:
-**DesignSync is not reachable from subagents** — fetch in the main loop — and `get_file` caps at 256 KiB,
-reporting `truncated: true`. ⚠ **Do not re-pull `_ds_bundle.js`**: it is built here and `check:bundle`
-asserts it, so the design project's copy reopens the drift the generator closed — and unlike a stale
-`.jsx`, the browser gates would go on reporting green. Same for `templates/_shared/*`, where a re-pull
-recreates twelve sibling copies.
+`DesignSync` reads AND writes the project (`f2d90781-f891-45e3-bc88-ddb55e6f9444`), so the two are
+kept in step by pushing, not by hand-mirroring. **Pushed in full on 2026-09-04**, when the project
+was found at **v1.1.8** — fifteen releases behind, still carrying `templates/_tooling`, `lw.css`,
+`app.css` and twelve `ds-base.js`/`support.js` pairs — while the repo was at v2.2.2. Everything from
+v1.13.0 onward existed only in git, and the project is the surface a wholesale re-pull would have
+restored from.
+
+**To push:** `list_files` for the structural diff, then `finalize_plan` (globs for the writes, exact
+paths for the deletes; the user approves the list), then `write_files` in batches of ≤256 with
+`localPath` so contents never enter the model's context, then `delete_files`. Three things that cost
+a session: **`CLAUDE.md` and `.claude/` are RESERVED** and rejected regardless of the plan (this file
+therefore lives only in git); **`DesignSync` is not reachable from subagents** — call it in the main
+loop; and `get_file` caps at 256 KiB, reporting `truncated: true`.
+
+⚠ Push the generated artifacts too (`_ds_bundle.js`, `dist/`, `tokens.json`, `react.d.ts`, `r/`,
+`*.card.js`) rather than leaving the project's older copies in place. Stale generated files are the
+one thing a re-pull can reintroduce that no gate here would catch: `check:bundle` compares the bundle
+against the sources it finds, so a stale bundle arriving WITH stale sources agrees with itself.
 
 ## Releasing — the tag invariant (do not get this wrong)
 
