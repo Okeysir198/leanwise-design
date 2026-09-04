@@ -1380,6 +1380,11 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 .lw-steps-horizontal .lw-step {
   grid-template-columns: minmax(0, 1fr);
   gap: var(--lw-space-12);
+  /* The row grid stretches every step to the tallest one, and a grid's rows
+     share that extra height by default — so a short step's title floated
+     35px below its pill while the tallest hugged it. Pack the rows at the
+     start and every title sits at one height across the row (v2.2.2). */
+  align-content: start;
 }
 .lw-steps-horizontal .lw-step::before {
   inset-block-start: calc(var(--lw-steps-marker, 40px) / 2);

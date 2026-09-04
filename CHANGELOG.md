@@ -24,6 +24,16 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 ## [Unreleased]
 
+## [2.2.2] — 2026-09-04
+
+### Fixed
+
+- **`Steps orientation="horizontal"`: titles sit at one height across the row.** The
+  row grid stretches every step to the tallest one and a grid's rows share extra height
+  by default, so a shorter step's title floated below its marker while the tallest
+  hugged it — visible on the consumer's four-phase timeline, where one body is twice
+  the length of the others. `align-content: start` on the horizontal step.
+
 ## [2.2.1] — 2026-09-04
 
 ### Fixed
