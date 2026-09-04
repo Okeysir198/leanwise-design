@@ -33,6 +33,13 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     </Grid>
     <div><span className="lbl-eyebrow">logo rail — a card, not a real customer list</span>
       <LogoRail logos={[{name:"Northwind"},{name:"Orbital"},{name:"Kestrel"},{name:"Vantage"},{name:"Meridian"}]} /></div>
+    {/* The `mono` treatment beside the wordmark fallback. The MASK form is
+        deliberately absent: both browser gates open a card over file://, where
+        Chromium refuses a cross-origin mask image, so a masked mark measures
+        as a blank 108x34 box in every shot — the one LogoRail form no card
+        can see. Known and recorded in the 2.2.0 CHANGELOG entry. */}
+    <div><span className="lbl-eyebrow">logo rail — a mode="mono" raster beside the wordmark fallback</span>
+      <LogoRail logos={[{name:"Northwind"},{name:"LeanWise (mono raster)",src:"../../assets/logo-icon.png",mode:"mono"},{name:"Vantage"}]} /></div>
   </Stack>
 );
 
@@ -51,6 +58,18 @@ ReactDOM.createRoot(document.getElementById("editorial")).render(
     <div>
       <span className="lbl-eyebrow">steps — horizontal, same markup, reverts to the stack under --lw-bp-md</span>
       <Steps items={steps} orientation="horizontal" />
+    </div>
+    <div>
+      {/* Phase NAMES as labels — the consumer's company timeline. Through v2.1
+          the marker was a fixed 40px circle and "Built against real paperwork"
+          printed through the heading under it. */}
+      <span className="lbl-eyebrow">steps — horizontal, phase-name labels: the marker is a pill that grows and ellipsises</span>
+      <Steps orientation="horizontal" items={[
+        { label: "On the floor", title: "Years inside the supply base", body: "Working directly with suppliers, where quality, delivery and cost are the standing priorities." },
+        { label: "Built against real paperwork", title: "The first checker", body: "One retailer's document set, one plant, one batch at a time." },
+        { label: "In production", title: "Six plants", body: "Named on the customers page, with the status word beside each." },
+        { label: "Q3", title: "What comes next", body: "Two products that are vision only, and say so." }
+      ]} />
     </div>
     <div>
       <span className="lbl-eyebrow">quote — the standalone pull quote; the spine is shared with StoryCard</span>

@@ -91,7 +91,13 @@
      `--lw-text-body` (16px), the 1px change recorded in the CHANGELOG. */
   --lw-text-sm: 14px;
   --lw-text-xs: 12.5px;
-  --lw-text-eyebrow: 12px;
+  /* THE FLOOR. The smallest size any rule in the layers may state, and the
+     eyebrow sits on it. v2.2.0: five roles computed to 10px on a phone
+     (`.lw-card-eyebrow`, `.lw-toc-h`, `.lw-avatar-sm`, the nav-group and toast
+     keys) and chips/pills to 11px — every literal below 12px in base/marketing/
+     product now reads this token, so the floor moves in one place. */
+  --lw-text-2xs: 12px;
+  --lw-text-eyebrow: var(--lw-text-2xs);
 
   --lw-fw-regular: 400; /* @kind other */
   --lw-fw-medium: 500; /* @kind other */
@@ -481,12 +487,12 @@
   --lw-chip-pad-y: 5px;
   --lw-chip-pad-x: 9px;
   --lw-chip-gap: 5px;
-  --lw-chip-text: 11px;
+  --lw-chip-text: var(--lw-text-2xs);
   --lw-chip-dot: 5px;
 
   /* Table. The mono uppercase micro-header is this system's signature, and it is
      the single thing a hand-written table most often gets wrong. */
-  --lw-th-text: 10.5px;
+  --lw-th-text: var(--lw-text-2xs);
   --lw-th-tracking: 0.12em;
   --lw-cell-pad-x: var(--lw-space-16);
 

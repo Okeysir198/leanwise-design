@@ -127,7 +127,7 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
    row. Stacked, they read as two unrelated figures. The delta wraps beneath
    only when the tile is too narrow to hold both. */
 .lw-kpi-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px var(--lw-space-8); min-width: 0; }
-.lw-kpi .k { min-width: 0; text-wrap: pretty; font-family: var(--lw-font-mono); font-size: 10.5px; letter-spacing: 0.12em; word-spacing: var(--lw-word-spacing-caps); text-transform: uppercase; color: var(--lw-fg-subtle); }
+.lw-kpi .k { min-width: 0; text-wrap: pretty; font-family: var(--lw-font-mono); font-size: var(--lw-text-2xs); letter-spacing: 0.12em; word-spacing: var(--lw-word-spacing-caps); text-transform: uppercase; color: var(--lw-fg-subtle); }
 .lw-kpi .v { font-family: var(--lw-font-mono); font-variant-numeric: tabular-nums; font-size: clamp(26px, 3vw, 34px); font-weight: var(--lw-fw-medium); letter-spacing: var(--lw-tracking-tight); color: var(--lw-fg); line-height: 1.05; }
 /* The delta is an arrow, a number, and the window it is measured against. The
    window may fall to its own line on a narrow tile, but never mid-phrase —
@@ -255,11 +255,11 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 /* An app frame wrapping its own chrome around the rail sets the same state
    attribute and reads the same width var, so collapse has one source. */
 [data-collapsed="true"] { --lw-sidebar-w: 68px; }
-.lw-nav-group { font-family: var(--lw-font-mono); font-size: 10px; letter-spacing: 0.14em; word-spacing: var(--lw-word-spacing-caps); text-transform: uppercase; color: var(--lw-fg-subtle); padding: var(--lw-space-16) 10px 6px; }
+.lw-nav-group { font-family: var(--lw-font-mono); font-size: var(--lw-text-2xs); letter-spacing: 0.14em; word-spacing: var(--lw-word-spacing-caps); text-transform: uppercase; color: var(--lw-fg-subtle); padding: var(--lw-space-16) 10px 6px; }
 .lw-nav-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--lw-radius-sm); font-size: var(--lw-text-sm); color: var(--lw-fg-muted); text-decoration: none; cursor: pointer; border: 0; background: none; font-family: inherit; width: 100%; text-align: start; transition: background var(--lw-dur-xs) var(--lw-ease-out), color var(--lw-dur-xs) var(--lw-ease-out); }
 .lw-nav-item .ic { width: 20px; height: 20px; flex: none; display: inline-flex; align-items: center; justify-content: center; font-size: 17px; opacity: 0.9; }
 .lw-nav-item .lw-nav-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.lw-nav-item .badge { margin-inline-start: auto; font-family: var(--lw-font-mono); font-size: 10px; color: var(--lw-fg-muted); }
+.lw-nav-item .badge { margin-inline-start: auto; font-family: var(--lw-font-mono); font-size: var(--lw-text-2xs); color: var(--lw-fg-muted); }
 @media (pointer: coarse) {
   /* 37px rows on a touch tablet; the floor is the density token, like every control. */
   .lw-nav-item { min-height: var(--lw-control-h-sm); }
@@ -354,7 +354,7 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
    this is layout the app declares about itself, not a role it is inventing. */
 .lw-toast-region[data-above-nav] { bottom: calc(var(--lw-bottom-nav-h) + var(--lw-safe-bottom) + var(--lw-space-12)); }
 .lw-toast { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; background: var(--lw-bg); border: 1px solid var(--lw-line); border-radius: var(--lw-radius-md); box-shadow: var(--lw-shadow-lg); font-size: var(--lw-text-sm); color: var(--lw-fg); }
-.lw-toast .k { font-family: var(--lw-font-mono); font-size: 10px; letter-spacing: 0.12em; word-spacing: var(--lw-word-spacing-caps); text-transform: uppercase; padding-top: 3px; flex: none; color: var(--lw-fg-subtle); }
+.lw-toast .k { font-family: var(--lw-font-mono); font-size: var(--lw-text-2xs); letter-spacing: 0.12em; word-spacing: var(--lw-word-spacing-caps); text-transform: uppercase; padding-top: 3px; flex: none; color: var(--lw-fg-subtle); }
 .lw-toast.ok .k { color: var(--lw-success-on); }
 .lw-toast.warn .k { color: var(--lw-warning-on); }
 .lw-toast.err .k { color: var(--lw-danger-on); }
@@ -424,16 +424,16 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 .lw-prompt textarea::placeholder { color: var(--lw-fg-subtle); }
 .lw-prompt-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .lw-prompt-foot .spacer { flex: 1; }
-.lw-prompt-hint { font-family: var(--lw-font-mono); font-size: 10.5px; color: var(--lw-fg-subtle); letter-spacing: 0.04em; white-space: nowrap; }
+.lw-prompt-hint { font-family: var(--lw-font-mono); font-size: var(--lw-text-2xs); color: var(--lw-fg-subtle); letter-spacing: 0.04em; white-space: nowrap; }
 
 /* MESSAGE — the answer stream. Role is a mono label above the body, not a
    coloured bubble: bubbles cap line length and this product answers in prose. */
 .lw-msg { display: flex; align-items: flex-start; gap: 12px; padding: var(--lw-space-16) 0; }
-.lw-msg .lw-msg-avatar { width: 28px; height: 28px; flex: none; border-radius: var(--lw-radius-sm); display: grid; place-items: center; font-family: var(--lw-font-mono); font-size: 11px; font-weight: var(--lw-fw-semibold); }
+.lw-msg .lw-msg-avatar { width: 28px; height: 28px; flex: none; border-radius: var(--lw-radius-sm); display: grid; place-items: center; font-family: var(--lw-font-mono); font-size: var(--lw-text-2xs); font-weight: var(--lw-fw-semibold); }
 .lw-msg.ai .lw-msg-avatar { background: var(--lw-brand-500); color: var(--lw-on-brand); }
 .lw-msg.user .lw-msg-avatar { background: var(--lw-bg-muted); color: var(--lw-fg-muted); border: 1px solid var(--lw-line); }
 .lw-msg .lw-msg-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
-.lw-msg .who { font-family: var(--lw-font-mono); font-size: 10px; letter-spacing: 0.14em; word-spacing: var(--lw-word-spacing-caps); text-transform: uppercase; color: var(--lw-fg-subtle); }
+.lw-msg .who { font-family: var(--lw-font-mono); font-size: var(--lw-text-2xs); letter-spacing: 0.14em; word-spacing: var(--lw-word-spacing-caps); text-transform: uppercase; color: var(--lw-fg-subtle); }
 .lw-msg.ai .who { color: var(--lw-brand-text); }
 .lw-msg .body { min-width: 0; font-size: var(--lw-text-body); line-height: var(--lw-lh-normal); color: var(--lw-fg); text-wrap: pretty; }
 /* The user's turn mirrors — avatar right, body a bounded bubble. The assistant
@@ -467,25 +467,25 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 
 /* SOURCE — the citation atom. A numbered mono chip so a claim in the answer and
    the document behind it share one identifier. */
-.lw-source { display: inline-flex; align-items: center; gap: 5px; height: 18px; padding: 0 6px; border-radius: var(--lw-radius-xs); background: var(--lw-brand-soft); color: var(--lw-brand-on); font-family: var(--lw-font-mono); font-size: 10.5px; line-height: 1; text-decoration: none; vertical-align: 2px; border: 0; cursor: pointer; transition: background var(--lw-dur-xs) var(--lw-ease-out); }
+.lw-source { display: inline-flex; align-items: center; gap: 5px; height: 18px; padding: 0 6px; border-radius: var(--lw-radius-xs); background: var(--lw-brand-soft); color: var(--lw-brand-on); font-family: var(--lw-font-mono); font-size: var(--lw-text-2xs); line-height: 1; text-decoration: none; vertical-align: 2px; border: 0; cursor: pointer; transition: background var(--lw-dur-xs) var(--lw-ease-out); }
 .lw-source:hover { background: hsl(var(--lw-brand-500-c) / 0.24); }
 .lw-source:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
 .lw-source-list { display: flex; flex-direction: column; gap: var(--lw-space-8); }
 .lw-source-item { display: flex; gap: 10px; padding: 10px 12px; border: 1px solid var(--lw-line); border-radius: var(--lw-radius-md); background: var(--lw-bg); text-decoration: none; color: inherit; transition: border-color var(--lw-dur-xs) var(--lw-ease-out), background var(--lw-dur-xs) var(--lw-ease-out); }
 .lw-source-item:hover { border-color: var(--lw-brand-line); background: var(--lw-bg-subtle); }
 .lw-source-item:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
-.lw-source-item .n { font-family: var(--lw-font-mono); font-size: 10.5px; color: var(--lw-brand-text); padding-top: 2px; flex: none; }
+.lw-source-item .n { font-family: var(--lw-font-mono); font-size: var(--lw-text-2xs); color: var(--lw-brand-text); padding-top: 2px; flex: none; }
 /* The text column needs min-width:0 or the title's ellipsis never fires — a flex
    item's automatic minimum size is its content, so a long title pushes the row
    wider instead of truncating. Named, not `> span:not(.n)`: the row grows a
    trailing affordance sooner or later and a positional rule would land on it. */
 .lw-source-item .lw-source-main { min-width: 0; }
 .lw-source-item .t { display: block; font-size: var(--lw-text-sm); font-weight: var(--lw-fw-medium); color: var(--lw-fg); line-height: 1.35; }
-.lw-source-item .m { display: block; font-family: var(--lw-font-mono); font-size: 10.5px; color: var(--lw-fg-subtle); margin-top: 3px; }
+.lw-source-item .m { display: block; font-family: var(--lw-font-mono); font-size: var(--lw-text-2xs); color: var(--lw-fg-subtle); margin-top: 3px; }
 
 /* CONFIDENCE — a retrieval score. Mono number plus a bar, because a bar alone
    is unquotable and a number alone is unscannable. */
-.lw-confidence { display: flex; align-items: center; gap: 8px; font-family: var(--lw-font-mono); font-size: 10.5px; color: var(--lw-fg-subtle); font-variant-numeric: tabular-nums; }
+.lw-confidence { display: flex; align-items: center; gap: 8px; font-family: var(--lw-font-mono); font-size: var(--lw-text-2xs); color: var(--lw-fg-subtle); font-variant-numeric: tabular-nums; }
 .lw-confidence .rail { width: 48px; height: 4px; border-radius: var(--lw-radius-pill); background: var(--lw-bg-inset); overflow: hidden; flex: none; }
 .lw-confidence .rail > i { display: block; height: 100%; width: var(--lw-confidence, 0%); background: var(--lw-brand-500); border-radius: inherit; transition: width var(--lw-dur-lg) var(--lw-ease-out); }
 .lw-confidence.low .rail > i { background: var(--lw-fg-faint); }
@@ -504,7 +504,7 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 @media (prefers-reduced-motion: no-preference) { .lw-trace li[data-state="active"]::after { animation: lwTracePulse var(--lw-dur-loop) var(--lw-ease-in-out) infinite; } }
 @keyframes lwTracePulse { 50% { box-shadow: 0 0 0 4px hsl(var(--lw-brand-500-c) / 0.18); } }
 .lw-trace .step { font-size: var(--lw-text-sm); color: var(--lw-fg); line-height: 1.4; }
-.lw-trace .meta { font-family: var(--lw-font-mono); font-size: 10.5px; color: var(--lw-fg-subtle); line-height: 1.5; overflow-wrap: anywhere; }
+.lw-trace .meta { font-family: var(--lw-font-mono); font-size: var(--lw-text-2xs); color: var(--lw-fg-subtle); line-height: 1.5; overflow-wrap: anywhere; }
 
 /* CODE BLOCK header. `.lw-code` in base.css is the padded dark surface; a figure
    with a caption needs the padding moved onto the <pre> so the header rule can
@@ -516,7 +516,7 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
    captioned block in a second, redundant scrollbar pair. Clipping also keeps the
    radius cropping the pre's corners. */
 .lw-code:has(.lw-code-head) { padding: 0; overflow: hidden; }
-.lw-code-head { display: flex; align-items: center; justify-content: space-between; gap: var(--lw-space-16); padding: 9px var(--lw-space-16); border-bottom: 1px solid var(--lw-on-dark-line); font-family: var(--lw-font-mono); font-size: 11px; letter-spacing: 0.06em; color: var(--lw-on-dark-3); }
+.lw-code-head { display: flex; align-items: center; justify-content: space-between; gap: var(--lw-space-16); padding: 9px var(--lw-space-16); border-bottom: 1px solid var(--lw-on-dark-line); font-family: var(--lw-font-mono); font-size: var(--lw-text-2xs); letter-spacing: 0.06em; color: var(--lw-on-dark-3); }
 .lw-code-head .fn { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .lw-code-head .end { display: flex; align-items: center; gap: var(--lw-space-12); flex: none; }
 .lw-code-head .lang { text-transform: uppercase; letter-spacing: 0.12em; word-spacing: var(--lw-word-spacing-caps); color: var(--lw-brand-300); flex: none; }
@@ -644,7 +644,7 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 .lw-menu-sep { height: 1px; margin: var(--lw-space-4) calc(var(--lw-space-8) * -1); background: var(--lw-line); border: 0; }
 .lw-menu-label {
   padding: var(--lw-space-8) var(--lw-space-8) var(--lw-space-4);
-  font-family: var(--lw-font-mono); font-size: 10px; letter-spacing: 0.14em;
+  font-family: var(--lw-font-mono); font-size: var(--lw-text-2xs); letter-spacing: 0.14em;
   word-spacing: var(--lw-word-spacing-caps); text-transform: uppercase;
   color: var(--lw-fg-subtle);
 }
@@ -782,7 +782,7 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 .lw-cal-weeks { display: flex; flex-direction: column; gap: 2px; }
 .lw-cal-dow {
   height: 22px; display: grid; place-items: center;
-  font-family: var(--lw-font-mono); font-size: 10px; letter-spacing: 0.08em;
+  font-family: var(--lw-font-mono); font-size: var(--lw-text-2xs); letter-spacing: 0.08em;
   text-transform: uppercase; color: var(--lw-fg-subtle);
 }
 .lw-cal-day {
@@ -1034,7 +1034,7 @@ button.lw-stepper-step:focus-visible .lw-stepper-marker { box-shadow: var(--lw-f
 .lw-chart { display: block; width: 100%; overflow: visible; }
 .lw-chart-wrap { display: flex; flex-direction: column; gap: var(--lw-space-12); }
 .lw-chart .grid line { stroke: var(--lw-chart-grid); stroke-width: 1; }
-.lw-chart .axis { fill: var(--lw-chart-axis); font-family: var(--lw-font-mono); font-size: 10px; }
+.lw-chart .axis { fill: var(--lw-chart-axis); font-family: var(--lw-font-mono); font-size: var(--lw-text-2xs); }
 .lw-chart .bar { transition: opacity var(--lw-dur-xs) var(--lw-ease-out); }
 .lw-chart .bar:hover { opacity: .82; }
 .lw-chart .line { fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
@@ -1049,7 +1049,7 @@ button.lw-stepper-step:focus-visible .lw-stepper-marker { box-shadow: var(--lw-f
    Unread is a DOT plus weight, never a tint alone: a row that is only slightly
    bluer than its neighbour is not a state anyone reads. */
 .lw-feed { display: flex; flex-direction: column; }
-.lw-feed-group { padding: var(--lw-space-12) var(--lw-space-4) var(--lw-space-4); font-family: var(--lw-font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; word-spacing: var(--lw-word-spacing-caps); color: var(--lw-fg-subtle); }
+.lw-feed-group { padding: var(--lw-space-12) var(--lw-space-4) var(--lw-space-4); font-family: var(--lw-font-mono); font-size: var(--lw-text-2xs); letter-spacing: 0.14em; text-transform: uppercase; word-spacing: var(--lw-word-spacing-caps); color: var(--lw-fg-subtle); }
 .lw-feed-item {
   display: flex; align-items: flex-start; gap: var(--lw-space-12);
   width: 100%; padding: var(--lw-space-12) var(--lw-space-8);
@@ -1092,7 +1092,7 @@ a.lw-feed-item:hover, button.lw-feed-item:hover { background: var(--lw-bg-subtle
 .lw-cmdk-input input { flex: 1; border: 0; background: none; outline: none; font: inherit; font-size: var(--lw-text-body); color: var(--lw-fg); }
 .lw-cmdk-input input::placeholder { color: var(--lw-fg-subtle); }
 .lw-cmdk-list { flex: 1; min-height: 0; overflow: auto; overscroll-behavior: contain; padding: var(--lw-space-8); margin: 0; list-style: none; }
-.lw-cmdk-foot { flex: none; display: flex; gap: var(--lw-space-16); padding: var(--lw-space-8) var(--lw-space-16); border-top: 1px solid var(--lw-line); font-family: var(--lw-font-mono); font-size: 10.5px; color: var(--lw-fg-subtle); }
+.lw-cmdk-foot { flex: none; display: flex; gap: var(--lw-space-16); padding: var(--lw-space-8) var(--lw-space-16); border-top: 1px solid var(--lw-line); font-family: var(--lw-font-mono); font-size: var(--lw-text-2xs); color: var(--lw-fg-subtle); }
 
 /* ---- Tool call ----------------------------------------------------------------
    AgentTrace says a step RAN; this says what it did. Collapsed by default,
@@ -1119,7 +1119,7 @@ a.lw-feed-item:hover, button.lw-feed-item:hover { background: var(--lw-bg-subtle
 }
 .lw-tool-body { padding: 0 var(--lw-space-12) var(--lw-space-12); display: grid; gap: var(--lw-space-8); }
 .lw-tool-body pre { margin: 0; padding: var(--lw-space-8) var(--lw-space-12); border-radius: var(--lw-radius-sm); background: var(--lw-bg-inset); font-family: var(--lw-font-mono); font-size: var(--lw-text-xs); line-height: 1.55; overflow-x: auto; color: var(--lw-fg-muted); }
-.lw-tool-body .k { font-family: var(--lw-font-mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--lw-fg-subtle); }
+.lw-tool-body .k { font-family: var(--lw-font-mono); font-size: var(--lw-text-2xs); letter-spacing: .12em; text-transform: uppercase; color: var(--lw-fg-subtle); }
 /* The error body is the ONE pre with an ink of its own. Arguments and results are
    neutral evidence; the error is the finding, and it is what the user opened the
    call to read. --lw-danger-on, not --lw-danger: this is text on the inset
@@ -1262,7 +1262,7 @@ a.lw-feed-item:hover, button.lw-feed-item:hover { background: var(--lw-bg-subtle
      depends on padding shrinks the moment someone tightens the label. */
   min-height: 44px; padding: 0 var(--lw-space-4);
   border: 0; background: none; color: var(--lw-fg-subtle);
-  font: inherit; font-size: 10.5px; font-weight: var(--lw-fw-medium);
+  font: inherit; font-size: var(--lw-text-2xs); font-weight: var(--lw-fw-medium);
   text-decoration: none; cursor: pointer;
 }
 .lw-bottom-nav [aria-current="page"] { color: var(--lw-brand-text); }
@@ -1302,7 +1302,7 @@ a.lw-feed-item:hover, button.lw-feed-item:hover { background: var(--lw-bg-subtle
    article under a title, wrong for a box whose first line IS the heading. */
 .lw-editor-body > :first-child { margin-block-start: 0; }
 .lw-editor-body:empty::before { content: attr(data-placeholder); color: var(--lw-fg-subtle); }
-.lw-editor-foot { flex: none; display: flex; align-items: center; gap: var(--lw-space-12); padding: var(--lw-space-4) var(--lw-space-12); border-top: 1px solid var(--lw-line); font-family: var(--lw-font-mono); font-size: 10.5px; color: var(--lw-fg-subtle); }
+.lw-editor-foot { flex: none; display: flex; align-items: center; gap: var(--lw-space-12); padding: var(--lw-space-4) var(--lw-space-12); border-top: 1px solid var(--lw-line); font-family: var(--lw-font-mono); font-size: var(--lw-text-2xs); color: var(--lw-fg-subtle); }
 
 /* ---- App bar -----------------------------------------------------------------
    The brand + breadcrumb holder, which five templates each hand-wrote and two of

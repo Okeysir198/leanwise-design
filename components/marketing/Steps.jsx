@@ -12,6 +12,10 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  * facts vs. a position in a flow), not by looks, which is what stops the two
  * becoming two treatments of one interaction.
  *
+ * `label` is the MARKER text — "01", "Q3", or a short phase name. It renders as
+ * a pill that grows inline to fit and ellipsises past the column; a sentence
+ * belongs in `meta`, which sits above the title and wraps.
+ *
  * An <ol> because the order carries meaning; the marker text is real content in
  * the markup, never CSS `counter()`. Generated content is not selectable and is
  * announced inconsistently — same reasoning as `FeatureGrid`'s zero-padded
@@ -27,7 +31,13 @@ export function Steps({ items = [], orientation = "vertical", linkAs = "a", clas
     <ol className={cx("lw-steps", orientation === "horizontal" && "lw-steps-horizontal", className)} {...rest}>
       {items.map((it, i) => (
         <li className="lw-step" key={i}>
-          <span className="lw-step-marker">{it.label ?? String(i + 1).padStart(2, "0")}</span>
+          {/* A string label longer than the marker ellipsises in CSS, so the
+              full text rides along as `title` — the one place a tooltip is the
+              right answer, because the words are already in the DOM and a
+              reader with no pointer still gets them from the accessible name. */}
+          <span className="lw-step-marker" title={typeof it.label === "string" && it.label.length > 4 ? it.label : undefined}>
+            {it.label ?? String(i + 1).padStart(2, "0")}
+          </span>
           <div>
             {it.meta && <span className="lw-step-meta">{it.meta}</span>}
             <h3 className="lw-step-title">{it.title}</h3>

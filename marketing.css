@@ -588,6 +588,17 @@
   text-transform: uppercase;
   white-space: nowrap;
 }
+/* `mode="mono"` (v2.2.0): the image itself, desaturated, under the rail's
+   opacity — for a multi-tone raster whose alpha is not its silhouette. Inverted
+   on a dark ground so a dark mark does not vanish into navy; `object-fit`
+   keeps the 108x34 box the masked marks share. */
+.lw-logo-item.is-image {
+  background: none;
+  mask: none;
+  object-fit: contain;
+  filter: grayscale(1);
+}
+:is(.dark, [data-band="dark"], .lw-band-dark) .lw-logo-item.is-image { filter: grayscale(1) invert(1); }
 a.lw-logo-item, .lw-logo-item-interactive { cursor: pointer; }
 a.lw-logo-item:hover, .lw-logo-item-interactive:hover,
 a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
@@ -644,14 +655,14 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 .lw-stat-row { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
 .lw-stat-delta {
   display: inline-flex; align-items: center; gap: 4px;
-  font-family: var(--lw-font-mono); font-size: 11px; font-weight: 500;
+  font-family: var(--lw-font-mono); font-size: var(--lw-text-2xs); font-weight: 500;
   padding: 3px 7px; border-radius: var(--lw-radius-pill);
   background: var(--lw-neutral-soft); color: var(--lw-neutral-on);
 }
 .lw-stat-delta[data-dir="up"] { background: var(--lw-success-soft); color: var(--lw-success-on); }
 .lw-stat-delta[data-dir="down"] { background: var(--lw-danger-soft); color: var(--lw-danger-on); }
 .lw-stat-delta[data-dir="watch"] { background: var(--lw-warning-soft); color: var(--lw-warning-on); }
-.lw-stat-foot { font-size: 11.5px; color: var(--lw-fg-subtle); }
+.lw-stat-foot { font-size: var(--lw-text-2xs); color: var(--lw-fg-subtle); }
 /* Meter fills by semantic role, not by hand-picked hex at the call site. */
 .lw-bar[data-tone="cta"] .fill, .lw-bar[data-tone="cta"]::after { background: var(--lw-cta-500); }
 .lw-bar[data-tone="success"] .fill, .lw-bar[data-tone="success"]::after { background: var(--lw-success); }
@@ -1006,7 +1017,7 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 .lw-feature .num {
   display: flex; align-items: center; gap: 10px;
   font-family: var(--lw-font-mono);
-  font-size: 11px;
+  font-size: var(--lw-text-2xs);
   letter-spacing: 0.14em;
   color: var(--lw-brand-text);
 }
@@ -1079,7 +1090,7 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
   background: var(--lw-bg-muted);
   border: 1px solid var(--lw-line);
   display: grid; place-items: center;
-  font-family: var(--lw-font-mono); font-size: 11px;
+  font-family: var(--lw-font-mono); font-size: var(--lw-text-2xs);
   color: var(--lw-fg-muted);
 }
 .lw-monogram {
@@ -1287,7 +1298,12 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 .lw-step {
   position: relative;
   display: grid;
-  grid-template-columns: var(--lw-steps-marker, 40px) minmax(0, 1fr);
+  /* The marker column is sized by the widest marker, floored at the circle
+     (v2.2.0). A `label` is a PILL that grows inline to fit its text, so a
+     phase name ("On the floor") no longer prints through the title below it;
+     the spine keeps leaving from the pill's start cap, whose centre is at
+     marker/2 whatever the pill's width. */
+  grid-template-columns: minmax(var(--lw-steps-marker, 40px), max-content) minmax(0, 1fr);
   gap: var(--lw-space-16);
   align-items: start;
 }
@@ -1309,10 +1325,25 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
    pairs with `color: var(--lw-brand-on)`. `brand-text` is the LINK shade and
    measures 3.98 on this tint. */
 .lw-step-marker {
-  display: grid;
-  place-items: center;
-  inline-size: var(--lw-steps-marker, 40px);
+  /* A block with `line-height` = the marker, not a grid: `text-overflow` only
+     clips a block container's own line box, and a grid's text sits in an
+     anonymous item it cannot reach. Height is FIXED so every spine offset
+     below stays true; width is fit-content between the circle and the column,
+     and a label longer than the column ellipsises (Steps.jsx puts the full
+     text in `title`). `position: relative` paints the pill over the spine. */
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  inline-size: fit-content;
+  min-inline-size: var(--lw-steps-marker, 40px);
+  max-inline-size: 100%;
   block-size: var(--lw-steps-marker, 40px);
+  line-height: var(--lw-steps-marker, 40px);
+  padding-inline: var(--lw-space-12);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   border-radius: var(--lw-radius-pill);
   background: var(--lw-brand-soft);
   color: var(--lw-brand-on);
@@ -1362,7 +1393,7 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 @media (max-width: 767.98px) {
   .lw-steps-horizontal { grid-auto-flow: row; }
   .lw-steps-horizontal .lw-step {
-    grid-template-columns: var(--lw-steps-marker, 40px) minmax(0, 1fr);
+    grid-template-columns: minmax(var(--lw-steps-marker, 40px), max-content) minmax(0, 1fr);
     gap: var(--lw-space-16);
   }
   .lw-steps-horizontal .lw-step::before {

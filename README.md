@@ -108,7 +108,7 @@ what is still open. `CONTRIBUTING.md` points back here — the checklist lives i
 ## Install
 
 ```jsonc
-"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v2.1.6" }
+"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v2.2.0" }
 ```
 
 ```css
@@ -433,9 +433,9 @@ JavaScript, or is a disclosure rather than a floating surface.
 | `Hero` | The hero band, and **a real dark BAND since v1.3.1**: `.lw-hero-dark` is in `tokens.css`'s band-selector list, so every role token inside it re-points and no consumer has to hand-add `data-band="dark"` any more. On its own: navy ground, honeycomb texture, the mark oversized at the upper right. Inside `.lw-page-dark` it goes transparent and the page owns the background (`assets/hero-mark.svg`, `assets/hero-mark-ink.svg`, `assets/hex-lattice.svg`, `assets/hex-lattice-ink.svg` — copy all four) |
 | `FeatureGrid` | Numbered features; the brand edge draws in on hover |
 | `StoryCard` | The quote renders **only** with quote + person + role |
-| `LogoRail` | Marks are masked to one ink; a mark without `src` degrades to a mono wordmark. `marquee` for a slow loop; static under reduced motion |
+| `LogoRail` | Marks are masked to one ink through the image's ALPHA — supply a transparent single-colour silhouette, or a JPEG / white-card PNG / opaque-white lettering masks to a solid blob. `mode="mono"` (per rail or per logo) draws a multi-tone raster under `grayscale()` instead. A mark without `src` degrades to a mono wordmark. `marquee` for a slow loop; static under reduced motion |
 | `SiteFooter` | Not `Footer` — `CardFoot` exists and the bundle namespace is flat. A dark footer is `dark` → `data-band="dark"`, **never** a hard-coded navy tier: the band re-points every role token, so no child needs a dark variant. A column entry with no `href` is an inert note, not a dead link |
-| `Steps` | A numbered sequence — timeline, roadmap, "how it works". **No state axis on purpose**: `Stepper` owns wizard state; a timeline has none. `orientation="horizontal"` reverts to the stack under `--lw-bp-md` |
+| `Steps` | A numbered sequence — timeline, roadmap, "how it works". **No state axis on purpose**: `Stepper` owns wizard state; a timeline has none. `label` is a pill that grows to fit a short phase name and ellipsises past its column (full text in `title`); a sentence goes in `meta`. `orientation="horizontal"` reverts to the stack under `--lw-bp-md` |
 | `Quote` | The standalone pull quote. Shares its brand spine with `StoryCard`'s quote through **one** declaration block, so the drawing has one owner |
 | `Byline` | Author, role, date on the existing `Avatar`. The date is a real `<time>` |
 | `ArticleCard` | The index entry — a composition of `Card` + `CardHead`/`CardBody`/`CardFoot` + `.lw-card-media` + `Byline` + `.lw-pill`. There is deliberately no `.lw-post` class, and no `.lw-article` grid: the article page is a `Split` |

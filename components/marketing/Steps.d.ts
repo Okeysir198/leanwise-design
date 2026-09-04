@@ -1,7 +1,12 @@
 import * as React from "react";
 
 export interface Step {
-  /** The marker text. Defaults to the zero-padded index, as `FeatureGrid` does. Real markup, never CSS `counter()`. */
+  /**
+   * The marker text. Defaults to the zero-padded index, as `FeatureGrid` does. Real
+   * markup, never CSS `counter()`. A string renders as a pill that grows to fit and
+   * ellipsises past its column (the full text is set as `title`); a sentence belongs
+   * in `meta`, which wraps.
+   */
   label?: React.ReactNode;
   title: React.ReactNode;
   body?: React.ReactNode;

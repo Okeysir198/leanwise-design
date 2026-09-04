@@ -24,6 +24,47 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 ## [Unreleased]
 
+## [2.2.0] — 2026-09-04
+
+### Added
+
+- **A type floor: `--lw-text-2xs` (12px).** The smallest size any rule in the layers may
+  state; `--lw-text-eyebrow`, `--lw-chip-text` and `--lw-th-text` now read it. Thirty-four
+  literals below it — `.lw-card-eyebrow`, `.lw-toc-h`, `.lw-avatar-sm`, `.lw-nav-group`,
+  `.lw-toast .k` and the like at 10px, `.lw-pill`, `.lw-stat-delta`, `.lw-code-head` at
+  11px, the KPI key and the AI-surface metas at 10.5px — were measured on a 390px phone
+  by the flagship consumer and are on the token. `[visual-ok]`: 60 shots move, every one a
+  label growing 1–2px. Raise the floor in one place from now on.
+- **`LogoRail mode="mono"`**, per rail or per `logo.mode`: draws the image itself under
+  `grayscale()` and the rail's opacity (inverted on a dark ground) for a multi-tone
+  raster whose alpha is not its silhouette. **The mask reads ALPHA and nothing else**,
+  which the `.d.ts` and README now say: a JPEG, a PNG on a white card, or opaque-white
+  lettering inside a filled shape all masked to one solid blob — the consumer's TALIMEX
+  mark did, for a month, because its lettering is opaque white inside a filled ellipse.
+  The right fix is still a re-cut silhouette; `mono` is for a mark you cannot re-cut.
+  ⚠ The MASK form is measured by no card: both browser gates open cards over `file://`,
+  where Chromium refuses a cross-origin mask image, so a masked mark shoots as a blank
+  108×34 box. The specimen shows `mono` beside the wordmark fallback for that reason.
+
+### Fixed
+
+- **`Steps`: a `label` no longer prints through the title under it.** The marker was a
+  fixed 40px circle, so a phase name ("Built against real paperwork", the consumer's
+  company timeline at four columns) wrapped to four lines and overlapped the heading in
+  the horizontal form. The marker is now a PILL: fixed height (every spine offset stays
+  true), `fit-content` width floored at the circle and capped at its column, with
+  ellipsis past that and the full text as `title`. The vertical column is
+  `minmax(marker, max-content)`; the spine keeps leaving from the start cap's centre.
+  A numeric marker is pixel-identical. Specimen added to `marketing.card`.
+
+### Verified, no change
+
+- **`Flow` graph nodes are complete without JavaScript.** Asked whether `.lw-flow-graph`
+  nodes sit at `opacity: 0` until an observer fires: there is no `IntersectionObserver`
+  in `Flow`, and the only entrance (`lwFlowPulse`) is scroll-driven and double-gated
+  behind `@supports (animation-timeline: view())` **and** `prefers-reduced-motion:
+  no-preference`. SSR, no-JS, reduced motion and first paint all render the nodes.
+
 ## [2.1.6] — 2026-09-04
 
 ### Fixed
