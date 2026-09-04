@@ -24,6 +24,57 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 ## [Unreleased]
 
+## [2.3.0] — 2026-09-04
+
+### Added
+
+- **`.lw-media-plate` — the mat under a raster whose own background is fixed.** A
+  screenshot is the one thing on a themed page that cannot re-point: every surface the
+  system draws reads a role and follows the ground, but a raster is pixels, so a light
+  product shot stays light while the page goes navy. The flagship consumer publishes
+  exactly one such image — a 990×235 crop with a baked light background — and on the dark
+  theme it landed as a hard white slab with square corners bleeding to the edge of the
+  column, on `/` and `/product`, in both locales. Padding, `--lw-bg-inset`, a hairline and
+  two radii; `--lw-media-plate-pad` is the one knob. It lives in `base.css` beside
+  `.lw-figure`, so a marketing page reaching for it pulls in no app-surface layer.
+
+  **Three things about it are decisions rather than details.** The surface is a **role**,
+  not a `prefers-color-scheme` query — which would be the wrong question in a consumer
+  whose theme is `[data-theme]` on `<html>`, and which would be uncacheable there besides.
+  The **inner** radius on the media is the line that actually kills the slab; a radius on
+  the plate alone leaves the picture's own four square corners sitting inside it, and the
+  child rule is `>` over a named list of media elements rather than `*`, so a plate that
+  also holds a badge does not round that too. And on light the mat sits one step *below*
+  the page while on dark `--lw-navy-inset` is *lighter* than `--lw-navy-paper`, so it sits
+  one step above — lifted on both grounds, rather than a hole in one of them.
+
+  ⚠ **It is deliberately not `.lw-browser-frame`, and README rule 9 ("one control, one
+  class") is not violated by having both**: they make different claims. A toolbar, three
+  dots and an address pill assert that you are looking at a whole application window, and
+  around a CROP that is a small lie told by a decoration — on the page whose whole argument
+  is that nothing is dressed up. The frame is for a full window, the plate for a piece of
+  one, and the plate has no variant that grows chrome.
+
+- **A specimen for the whole figure family — `components/primitives/media.card.html`.**
+  `.lw-figure`, `.lw-figcaption` and now the plate were rendered by **no card at all**,
+  which is why a slab could ship: an image is opaque to `check:a11y` and to
+  `check:contrast` alike, and the only part of it any gate here reads is nothing. The card
+  renders the unplated figure *and* the plated one on both grounds, so the before is
+  measured as well as the after — and the picture is an inline `<svg>` painted from the
+  **tier** tokens, because a tier is theme-invariant by design, which is exactly the
+  property a real screenshot has. Sabotaged once (the plate's surface and border removed)
+  and `check:visual` went red on all four of its shots.
+
+  ⚠ `preview/_card.css` caps every loose `.pane svg` at 110px so a stray logo cannot blow a
+  card open, which rendered the unplated "before" as a thumbnail — a slab that is not
+  slab-shaped is not the before. The unplated copy carries an inline size to out-rank the
+  harness rule, and says so in a comment.
+
+### Consumers
+
+`leanwise-ai` — apply `.lw-media-plate` inside `src/components/product-shot.tsx`; nothing
+else changes. Every other consumer is unaffected: the class is new and nothing was moved.
+
 ## [2.2.2] — 2026-09-04
 
 ### Fixed

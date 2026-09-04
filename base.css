@@ -1499,6 +1499,59 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
   max-inline-size: 76ch;
 }
 
+/* MEDIA PLATE (v2.3.0) — the mat under a raster whose own background is FIXED.
+
+   A screenshot is pixels: its white ground does not re-point when the page
+   theme does. Dropped straight onto a themed ground it is a hard slab with
+   square corners, bleeding to the edge of the column — the single worst
+   artifact a dark page can carry, and no gate here can see it, because an
+   image is opaque to axe and to the contrast gate alike.
+
+   ⚠ This is NOT `.lw-browser-frame`, and the difference is a claim, not a
+   style. Chrome — a toolbar, dots, an address pill — asserts that you are
+   looking at a whole application window. Around a CROP that is a small lie
+   told by a decoration. The plate asserts nothing: it says only "this is a
+   picture", the way a mount says it in a book. So there is no bar, no dots,
+   no glow, and there is deliberately no variant that adds one.
+
+   The surface is a ROLE (`--lw-bg-inset`), so it re-points with the theme and
+   needs no `prefers-color-scheme` query — which would be wrong anyway wherever
+   the theme is chosen by `[data-theme]` on `<html>` rather than by the OS. On
+   light it sits one step below the page; on dark it sits one step ABOVE it
+   (`--lw-navy-inset` is lighter than `--lw-navy-paper`), so the plate reads as
+   lifted on both grounds rather than as a hole in one of them.
+
+   The inner radius is what actually kills the slab: `border-radius` on the
+   plate alone leaves the raster's own four square corners sitting inside it.
+   The child rule is `>` and lists the media elements rather than using `*`,
+   so a plate holding a caption row or a badge does not round it too.
+
+     <figure class="lw-figure">
+       <span class="lw-pill">Sample output</span>
+       <div class="lw-media-plate"><img src="…" alt="…" width="990" height="235"></div>
+       <figcaption class="lw-figcaption">…</figcaption>
+     </figure>
+
+   `--lw-media-plate-pad` is the one knob: a dense app surface can tighten it
+   without re-authoring the rule. It defaults to the same 16px `.lw-figure`
+   uses as its gap, so the mat and the rhythm around it are one number. */
+.lw-media-plate {
+  padding: var(--lw-media-plate-pad, var(--lw-space-16));
+  background: var(--lw-bg-inset);
+  border: 1px solid var(--lw-line);
+  border-radius: var(--lw-radius-lg);
+}
+.lw-media-plate > img,
+.lw-media-plate > svg,
+.lw-media-plate > video,
+.lw-media-plate > picture > img {
+  display: block;
+  block-size: auto;
+  max-inline-size: 100%;
+  margin-inline: auto;
+  border-radius: var(--lw-radius-md);
+}
+
 /* The flexible gap in a row of controls — the thing that pushes what follows to
    the trailing edge. It was written six ways: inline in Artifact's footer, and
    as .lw-dgrid-selbar-spacer, .lw-pag-spacer, .lw-editor-spacer and a bare

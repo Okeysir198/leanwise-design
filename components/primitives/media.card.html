@@ -1,0 +1,43 @@
+<!-- @dsCard group="Primitives" name="Figure & media plate" subtitle="The mat under a screenshot, whose own colours cannot follow the theme" viewport="1120x1120" -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Figure &amp; media plate</title>
+<link rel="stylesheet" href="../../preview/_card.css">
+<link rel="stylesheet" href="../../base.css">
+<script src="../../preview/_vendor/react.development.js"></script>
+<script src="../../preview/_vendor/react-dom.development.js"></script>
+<script src="../../preview/_card.js"></script>
+<script src="../../_ds_bundle.js"></script>
+</head><body><div class="card">
+<header><h1>Figure &amp; media plate</h1>
+<p class="sub"><b>This card loads <span class="mono">base.css</span> and nothing else</b> — the whole
+figure family lives there, so a marketing page that reaches for it pulls in no app-surface layer. Both
+panes render the same markup; the dark one carries <span class="mono">.lw-band-dark</span> and no rule of
+its own.</p></header>
+<div class="panes"><div class="pane" id="light"></div><div class="pane dark lw-band-dark" id="dark"></div></div>
+<div style="display:flex;flex-direction:column;gap:12px;padding-top:20px;margin-top:6px;border-top:1px solid var(--lw-line)">
+<span class="lbl-eyebrow">why it is built this way</span>
+<p class="sub"><b>A screenshot is the one thing on a themed page that cannot re-point.</b> Every other
+surface reads a role and follows the ground; a raster is pixels, so its white stays white while the page
+goes navy. The result is a hard slab with square corners bleeding to the edge of the column — and
+because an image is opaque to axe and to the contrast gate alike, <i>nothing measures it</i>. The plate
+is the answer the token system can actually give: padding, a role surface, a hairline and two radii.</p>
+<p class="sub"><b>The inner radius is the line that does the work.</b> A radius on the plate alone leaves
+the picture's own four square corners sitting inside it, which reads as a slab in a box rather than as a
+picture. The child rule is <span class="mono">&gt;</span> and names the media elements instead of using
+<span class="mono">*</span>, so a plate that also holds a badge or a caption row does not round those.</p>
+<p class="sub"><b>It is not <span class="mono">.lw-browser-frame</span>, and the difference is a claim
+rather than a style.</b> A toolbar, three dots and an address pill assert that you are looking at a whole
+application window. Around a crop that is a small lie told by a decoration, which is why this has no bar,
+no dots, no glow and no variant that adds one. Reach for the browser frame when the image really is a
+full window; reach for the plate when it is a piece of one.</p>
+<p class="sub"><b>The surface is <span class="mono">--lw-bg-inset</span>, a role, so there is no
+<span class="mono">prefers-color-scheme</span> query anywhere near it</b> — which would be the wrong
+question in a consumer whose theme is <span class="mono">[data-theme]</span> on
+<span class="mono">&lt;html&gt;</span>. On light the mat sits one step below the page; on dark
+<span class="mono">--lw-navy-inset</span> is <i>lighter</i> than
+<span class="mono">--lw-navy-paper</span>, so it sits one step above. Lifted on both grounds, rather
+than a hole in one of them.</p>
+</div>
+</div>
+<script src="./media.card.js"></script>
+</body></html>

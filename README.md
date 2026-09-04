@@ -108,7 +108,7 @@ what is still open. `CONTRIBUTING.md` points back here — the checklist lives i
 ## Install
 
 ```jsonc
-"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v2.2.2" }
+"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v2.3.0" }
 ```
 
 ```css
@@ -568,6 +568,37 @@ than a `9999`; **reject is as reachable as accept** because both are the same `B
 same size, which is the accessibility half of the legal requirement; and the whole thing
 re-points on a dark ground with no child overrides. If the category list needs to expand in
 place, that is `Disclosure` — a native `<details>`, complete with zero JavaScript.
+
+### A screenshot on a themed page — `.lw-media-plate`
+
+A screenshot is the one thing on the page whose colours cannot re-point. Every surface the
+system draws reads a role and follows the ground; a raster is pixels, so a light product shot
+stays light while the page goes navy, and it lands as a hard slab with square corners bleeding
+to the edge of the column. **No gate in this repo can see that** — an image is opaque to axe
+and to `check:contrast` alike, which is why it is written down here instead.
+
+```html
+<figure class="lw-figure">
+  <span class="lw-pill">Sample output</span>
+  <div class="lw-media-plate">
+    <img src="/shot.png" alt="…" width="990" height="235">
+  </div>
+  <figcaption class="lw-figcaption">One document, on invented data.</figcaption>
+</figure>
+```
+
+Padding, `--lw-bg-inset`, a hairline and two radii — the outer one on the plate, the inner one
+on the media, which is the line that actually does the work: a radius on the plate alone leaves
+the picture's own four square corners sitting inside it. The surface is a **role**, so there is
+no `prefers-color-scheme` query near it; that would be the wrong question in a consumer whose
+theme is `[data-theme]` on `<html>`. On light the mat sits one step below the page, on dark one
+step above it. `--lw-media-plate-pad` is the one knob.
+
+**It is not `.lw-browser-frame`, and rule 9 below is not violated by having both** — they make
+different claims. A toolbar, three dots and an address pill assert that you are looking at a
+whole application window; around a **crop** that is a small lie told by a decoration. The frame
+is for a full window, the plate for a piece of one, and the plate deliberately has no variant
+that grows chrome.
 
 ---
 
