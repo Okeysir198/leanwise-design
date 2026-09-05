@@ -816,6 +816,18 @@ const EMAIL_LITERALS = [
   { token: "navy-700",  scope: "light" },
   { token: "cta-500",   scope: "light" },
   { token: "fg-muted",  scope: "dark" },
+  /* The `prefers-color-scheme: dark` block, which Apple Mail and Outlook.com
+     honour. Added at v3.0.0 with the inverse rule below, and it found the drift
+     it was written for immediately: the panel was #131C2B against navy-raised's
+     #111A2E, the hairline #222E42 against navy-line-1's #22304D, and the ghost
+     border #33415A against navy-line-2's #2C3E63. Three literals left behind by
+     a token re-tune, in the one file no custom property can reach. */
+  { token: "navy-paper",  scope: "light" },
+  { token: "navy-raised", scope: "light" },
+  { token: "navy-line-1", scope: "light" },
+  { token: "navy-line-2", scope: "light" },
+  { token: "on-navy-1",   scope: "light" },
+  { token: "on-navy-2",   scope: "light" },
 ];
 
 function emailLiterals() {
@@ -827,16 +839,42 @@ function emailLiterals() {
   catch { return ["email.css is missing"]; }
   const present = new Set([...css.matchAll(/#[0-9A-Fa-f]{6}\b/g)].map((m) => m[0].toUpperCase()));
 
+  const accounted = new Set();
   for (const { token, scope } of EMAIL_LITERALS) {
     const rgb = resolveColor(token, scope);
     if (!rgb) { fails.push(`--lw-${token}-c did not resolve in the ${scope} scope`); continue; }
     const want = toHex(rgb);
+    accounted.add(want);
     if (!present.has(want)) {
       fails.push(
         `email.css does not contain ${want} — the ${scope} value of --lw-${token}. ` +
         `If that token moved, move the literal with it; email.css cannot read a custom property.`,
       );
     }
+  }
+
+  /* ⚠ THE INVERSE, and it is the half that was missing until v3.0.0. The loop
+     above asserts every WATCHED token has its literal in the file; it says
+     nothing about a literal in the file that no token accounts for, and there
+     were five. An untracked hex is the exact drift this gate exists to stop —
+     the token moves, the literal does not, and the email keeps painting the old
+     palette with every check green. So every hex must be either a watched
+     token's value or named here with a reason. */
+  const EMAIL_EXEMPT = {
+    "#FFFFFF": "the email body's paper. Not a token: a mail client's dark mode inverts what it likes, and every ink here is chosen against white.",
+  };
+  for (const hex of [...present].sort()) {
+    if (accounted.has(hex)) continue;
+    if (EMAIL_EXEMPT[hex]) continue;
+    fails.push(
+      `email.css contains ${hex}, which is neither a watched token's value nor in EMAIL_EXEMPT. ` +
+      `Add it to EMAIL_LITERALS so it moves when its token moves, or to EMAIL_EXEMPT with the ` +
+      `reason it is deliberately not a token.`,
+    );
+  }
+  const unused = Object.keys(EMAIL_EXEMPT).filter((h) => !present.has(h));
+  if (unused.length) {
+    fails.push(`EMAIL_EXEMPT names ${unused.join(", ")}, which email.css no longer contains — an exemption for a literal that is gone is a rule that has stopped measuring.`);
   }
   return fails;
 }

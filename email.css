@@ -79,8 +79,8 @@ a[x-apple-data-detectors] { color: inherit !important; text-decoration: none !im
   .lw-em-body, .lw-em-shell { background: #0B1220 !important; }
   .lw-em-h1, .lw-em-h2, .lw-em-mono { color: #E7ECF3 !important; }
   .lw-em-p, .lw-em-small, .lw-em-eyebrow { color: #A8B3C7 !important; }
-  .lw-em-panel { background: #131C2B !important; border-color: #222E42 !important; }
-  .lw-em-rule { background: #222E42 !important; }
-  .lw-em-btn-ghost { background: #131C2B !important; border-color: #33415A !important; }
+  .lw-em-panel { background: #111A2E !important; border-color: #22304D !important; }
+  .lw-em-rule { background: #22304D !important; }
+  .lw-em-btn-ghost { background: #111A2E !important; border-color: #2C3E63 !important; }
   .lw-em-btn-ghost a { color: #E7ECF3 !important; }
 }

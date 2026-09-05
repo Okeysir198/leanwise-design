@@ -1140,8 +1140,9 @@ assets/logo-lockup.svg      mark + LEANWISE AI wordmark
 assets/logo-lockup-ondark.svg  the lockup with the wordmark in white — dark grounds
 assets/logo-favicon.svg     the mark, squared and self-switching — the browser tab
 assets/logo-icon.png        raster fallback of the mark (apple-touch-icon, and any
-                            surface that cannot take an SVG) — DEPRECATED, removed in v2.0
-assets/logo-leanwise.png    raster fallback of the lockup (JSON-LD, crawlers) — DEPRECATED, v2.0
+                            surface that cannot take an SVG). Marked deprecated for v2.0
+                            and kept: `marketing.card` renders it as the `mode="mono"`
+                            raster, the one LogoRail form an SVG cannot demonstrate
 ```
 
 `hex-lattice.svg`, `hero-mark.svg` and `logo-lockup-ondark.svg` are **generated** from their
