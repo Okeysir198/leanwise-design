@@ -66,8 +66,12 @@ function Bars({ label, series, height = 170 }) {
             <g key={i}>
               {series.map((s, si) => {
                 const y0 = f.y(acc), y1 = f.y(acc + s.data[i]); acc += s.data[i];
-                return <rect key={si} className="bar" x={PAD.l + i * band + (band - bw) / 2} y={y1}
-                  width={bw} height={Math.max(0, y0 - y1)} fill={SERIES(si)} />;
+                return (
+                  <rect key={si} className="bar" x={PAD.l + i * band + (band - bw) / 2} y={y1}
+                    width={bw} height={Math.max(0, y0 - y1)} rx="2" fill={SERIES(si)}>
+                    <title>{s.name + " · " + l + " · " + nf.format(s.data[i])}</title>
+                  </rect>
+                );
               })}
             </g>
           );
@@ -89,12 +93,25 @@ function Lines({ label, series, height = 170 }) {
     <div className="lw-chart-wrap">
       <svg className="lw-chart" viewBox={`0 0 ${W} ${height}`} role="img" aria-label={label}>
         <Grid f={f} />
-        {series.map((s, si) => (
-          <g key={si}>
-            <path className="line" d={s.data.map((v, i) => (i ? "L" : "M") + x(i) + " " + f.y(v)).join(" ")} stroke={SERIES(si)} />
-            {s.data.map((v, i) => <circle key={i} className="dot" cx={x(i)} cy={f.y(v)} r={3} fill={SERIES(si)} />)}
-          </g>
-        ))}
+        {series.map((s, si) => {
+          const d = s.data.map((v, i) => (i ? "L" : "M") + x(i) + " " + f.y(v)).join(" ");
+          const base = PAD.t + f.ih;
+          return (
+            <g key={si}>
+              {/* The area is a FILL at 0.12, not a second stroke: two lines at
+                  full weight read as four series. It carries no class because
+                  the opacity is the whole treatment. */}
+              <path d={d + " L" + x(s.data.length - 1) + " " + base + " L" + x(0) + " " + base + " Z"}
+                fill={SERIES(si)} opacity="0.12" />
+              <path className="line" d={d} stroke={SERIES(si)} />
+              {s.data.map((v, i) => (
+                <circle key={i} className="dot" cx={x(i)} cy={f.y(v)} r={3} fill={SERIES(si)}>
+                  <title>{s.name + " · " + labels[i] + " · " + nf.format(v)}</title>
+                </circle>
+              ))}
+            </g>
+          );
+        })}
         <g className="axis">{labels.map((l, i) => (
           <text key={i} x={x(i)} y={height - 6} textAnchor="middle">{l}</text>
         ))}</g>

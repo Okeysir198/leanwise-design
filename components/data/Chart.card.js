@@ -37,8 +37,10 @@ function Bars({ label, series, height = 170 }) {
           y: y1,
           width: bw,
           height: Math.max(0, y0 - y1),
+          rx: "2",
           fill: SERIES(si)
-        }
+        },
+        /* @__PURE__ */ React.createElement("title", null, s.name + " \xB7 " + l + " \xB7 " + nf.format(s.data[i]))
       );
     }));
   }), /* @__PURE__ */ React.createElement("g", { className: "axis" }, labels.map((l, i) => /* @__PURE__ */ React.createElement("text", { key: i, x: PAD.l + i * band + band / 2, y: height - 6, textAnchor: "middle" }, l)))), /* @__PURE__ */ React.createElement(Legend, { series }), /* @__PURE__ */ React.createElement(DataTable, { labels, series, caption: label }));
@@ -46,7 +48,18 @@ function Bars({ label, series, height = 170 }) {
 function Lines({ label, series, height = 170 }) {
   const f = frame(Math.max(...series.flatMap((s) => s.data)), height);
   const x = (i) => PAD.l + i / (labels.length - 1) * f.iw;
-  return /* @__PURE__ */ React.createElement("div", { className: "lw-chart-wrap" }, /* @__PURE__ */ React.createElement("svg", { className: "lw-chart", viewBox: `0 0 ${W} ${height}`, role: "img", "aria-label": label }, /* @__PURE__ */ React.createElement(Grid, { f }), series.map((s, si) => /* @__PURE__ */ React.createElement("g", { key: si }, /* @__PURE__ */ React.createElement("path", { className: "line", d: s.data.map((v, i) => (i ? "L" : "M") + x(i) + " " + f.y(v)).join(" "), stroke: SERIES(si) }), s.data.map((v, i) => /* @__PURE__ */ React.createElement("circle", { key: i, className: "dot", cx: x(i), cy: f.y(v), r: 3, fill: SERIES(si) })))), /* @__PURE__ */ React.createElement("g", { className: "axis" }, labels.map((l, i) => /* @__PURE__ */ React.createElement("text", { key: i, x: x(i), y: height - 6, textAnchor: "middle" }, l)))), /* @__PURE__ */ React.createElement(Legend, { series }), /* @__PURE__ */ React.createElement(DataTable, { labels, series, caption: label }));
+  return /* @__PURE__ */ React.createElement("div", { className: "lw-chart-wrap" }, /* @__PURE__ */ React.createElement("svg", { className: "lw-chart", viewBox: `0 0 ${W} ${height}`, role: "img", "aria-label": label }, /* @__PURE__ */ React.createElement(Grid, { f }), series.map((s, si) => {
+    const d = s.data.map((v, i) => (i ? "L" : "M") + x(i) + " " + f.y(v)).join(" ");
+    const base = PAD.t + f.ih;
+    return /* @__PURE__ */ React.createElement("g", { key: si }, /* @__PURE__ */ React.createElement(
+      "path",
+      {
+        d: d + " L" + x(s.data.length - 1) + " " + base + " L" + x(0) + " " + base + " Z",
+        fill: SERIES(si),
+        opacity: "0.12"
+      }
+    ), /* @__PURE__ */ React.createElement("path", { className: "line", d, stroke: SERIES(si) }), s.data.map((v, i) => /* @__PURE__ */ React.createElement("circle", { key: i, className: "dot", cx: x(i), cy: f.y(v), r: 3, fill: SERIES(si) }, /* @__PURE__ */ React.createElement("title", null, s.name + " \xB7 " + labels[i] + " \xB7 " + nf.format(v)))));
+  }), /* @__PURE__ */ React.createElement("g", { className: "axis" }, labels.map((l, i) => /* @__PURE__ */ React.createElement("text", { key: i, x: x(i), y: height - 6, textAnchor: "middle" }, l)))), /* @__PURE__ */ React.createElement(Legend, { series }), /* @__PURE__ */ React.createElement(DataTable, { labels, series, caption: label }));
 }
 function Demo() {
   return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("span", { className: "lbl-eyebrow lbl-above" }, "queries by ground \u2014 stacked"), /* @__PURE__ */ React.createElement(
