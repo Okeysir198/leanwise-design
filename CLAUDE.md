@@ -439,8 +439,12 @@ one-word edits, all of them retired tone spellings. **Two sit on `#v1.7.1`** (ts
 still cross BOTH v2.0.0 and v3.0.0 — each release's **§Migration — per consumer, what to grep** lists
 the removals against every tree.
 
-⚠ **`4DXs_plan` IS NOT A GIT REPOSITORY.** No `.git` anywhere, so there is no revert and no diff.
-Tar the tree before touching it.
+⚠ **`4DXs_plan` had NO version control until 2026-09-05** — it is a git repo now (local, `main`,
+no remote). Its `app/.gitignore` is the authority for everything under `app/` and keeps three secret
+files out: `.dev.vars` (SESSION_SECRET), `.credentials.txt` and `db/set-passwords.sql`. ⚠ **Before
+adding a remote**, note that `app/db/seed.sql` IS committed and carries three real users — names,
+emails and salted SHA-256 hashes. It is load-bearing (`npm run db:seed`), so it was committed
+deliberately; history is forever, so pushing is a decision, not a formality.
 
 ⚠ **The npm consumers hit the lockfile no-op below, so budget for it.** On inspect's bump `npm install`
 reported "up to date", kept the old resolved commit and left the tree reporting `2.2.2` with
