@@ -56,7 +56,7 @@ if (!arg || arg === "--css") {
   const errs = cssSelfCheck().concat(
     jsxSelfCheck(), docPinSelfCheck(),
     legacyDurationSelfCheck(), keyframeNameSelfCheck(), breakpointSelfCheck(),
-    docCountSelfCheck(), readmeCoverageSelfCheck(),
+    docCountSelfCheck(), readmeCoverageSelfCheck(), dynamicClassSelfCheck(),
   );
   process.exit(report("lw-token-lint --css", {
     problems: errs.map((e) => `${e.file || "css"}  [${e.rule}]  ${e.hit}\n      in \`${e.selector}\` — ${e.msg}`),
@@ -529,6 +529,86 @@ function readmeCoverageSelfCheck() {
   for (const n of [...names].sort()) {
     if (!rows.has(n)) errs.push({ rule: "readme-coverage", file: "README.md", hit: n, selector: "README.md §Components",
       msg: "exported from react.js but has no row in README §Components — a consumer cannot find it" });
+  }
+  return errs;
+}
+
+/**
+ * Rule 14: a class built by TEMPLATE LITERAL still needs a rule behind it.
+ *
+ * ⚠️ THIS IS THE ONE NO GREP CAN DO. Four components compose a class from a
+ * prop — `` `lw-btn-${variant}` ``, `` `lw-chip-${tone}` ``,
+ * `` `lw-stack-${gap}` ``, `` `lw-cluster-${gap}` `` — so the string
+ * `.lw-btn-ink` appears nowhere in components/, nowhere in the cards, and
+ * nowhere in any consumer. It appears only in base.css, defining itself.
+ *
+ * The v3.0.0 dead-CSS sweep put `.lw-btn-ink`, `.lw-cluster-16` and
+ * `.lw-cluster-24` on the delete list for exactly that reason, and they are
+ * three values of live public unions: `Button variant="ink"` and
+ * `Cluster gap={16|24}`. A second pass caught it. A rule should have.
+ *
+ * So: read each template's prop union from the sibling `.d.ts` and require a
+ * matching selector in the layers, which fails BOTH ways — a value the CSS
+ * cannot paint (the Tailwind-v4 silent-nothing hazard CLAUDE.md warns about),
+ * and a rule the sweep is about to delete because nothing spells its name.
+ *
+ * `check:tone` does this for `tone`/`accent` specifically, against a fixed
+ * emitter list. This is the general case, discovered from the source.
+ */
+function dynamicClassSelfCheck() {
+  const errs = [];
+  const layers = [...LAYERS3()].map(readLayer).filter(Boolean).join("\n");
+  const files = [];
+  (function walk(d) {
+    for (const e of readdirSync(d, { withFileTypes: true })) {
+      const p = join(d, e.name);
+      if (e.isDirectory()) walk(p);
+      else if (e.name.endsWith(".jsx") && !e.name.endsWith(".card.jsx")) files.push(p);
+    }
+  })(join(PKG_ROOT, "components"));
+
+  let checked = 0;
+  for (const file of files) {
+    const src = readFileSync(file, "utf8");
+    for (const m of src.matchAll(/`(lw-[a-z0-9-]*?)\$\{\s*([A-Za-z_$][\w$]*)\s*\}`/g)) {
+      const [, prefix, prop] = m;
+      /* A DEFAULT value is carried by the base class, and the three components
+         that have one all guard it — `gap !== 16 && \`lw-stack-${gap}\`` — so
+         the modifier is never emitted and no rule needs to exist. Read the
+         guard rather than keeping a list of defaults here, which would be a
+         second home for a fact the source already states. */
+      const guard = new RegExp(`\\b${prop}\\s*!==\\s*(?:"([^"]*)"|(\\d+))\\s*&&\\s*$`)
+        .exec(src.slice(Math.max(0, m.index - 40), m.index));
+      const skip = guard ? (guard[1] ?? guard[2]) : null;
+      const dts = file.replace(/\.jsx$/, ".d.ts");
+      if (!existsSync(dts)) continue;
+      const decl = new RegExp(`^\\s*${prop}\\?:([^;]+);`, "m").exec(readFileSync(dts, "utf8"));
+      if (!decl) continue;
+      const values = [
+        ...[...decl[1].matchAll(/"([a-z0-9-]+)"/g)].map((v) => v[1]),
+        ...[...decl[1].matchAll(/\b(\d+)\b/g)].map((v) => v[1]),
+      ];
+      for (const v of values) {
+        checked++;
+        if (v === skip) continue;
+        if (layers.includes("." + prefix + v)) continue;
+        errs.push({
+          rule: "dynamic-class", file: relative(PKG_ROOT, file), hit: `.${prefix}${v}`,
+          selector: `${prop}: ${JSON.stringify(v)}`,
+          msg: `the component emits \`${prefix}${v}\` for this value and no layer defines it — ` +
+               "the prop compiles and paints nothing",
+        });
+      }
+    }
+  }
+  /* Refuse a vacuous pass: four templates across four components is what the
+     tree has, and reading none of them would look identical to reading them
+     all and finding nothing wrong. */
+  if (checked < 20) {
+    errs.push({
+      rule: "dynamic-class", file: "components/", hit: `${checked} value(s)`, selector: "components/**/*.jsx",
+      msg: "found fewer than twenty template-literal class values — the walk has stopped measuring",
+    });
   }
   return errs;
 }
