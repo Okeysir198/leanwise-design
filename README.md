@@ -108,7 +108,7 @@ what is still open. `CONTRIBUTING.md` points back here — the checklist lives i
 ## Install
 
 ```jsonc
-"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v2.3.0" }
+"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v3.0.0" }
 ```
 
 ```css
@@ -264,10 +264,12 @@ state axis.
 Every component is a thin wrapper over the `.lw-*` CSS in `base.css` / `marketing.css` / `product.css` —
 they add no styling of their own, so the React and vanilla consumers cannot drift apart.
 
-**Rows whose name carries ⚠ are `@deprecated` in their `.d.ts` as of v2.0.0: no consumer imports them**
-(measured by grepping every consumer tree at v1.13.0 — three of eight consume the React layer at
-all). They still work and are still gated; they are candidates for removal in v3.0, and adopting
-one is a matter of saying so in an issue so the mark comes off.
+**The components marked ⚠ here through v2.x were removed in v3.0.0**, as their `@deprecated`
+tags and the v2.0.0 notes said they would be — CHANGELOG 3.0.0 names every one. No consumer imported one, measured
+again the day of the release. **Their CSS did not go with them** — `.lw-msg`, `.lw-cal-*`,
+`.lw-chart`, `.lw-tool`, `.lw-cmdk` and the rest are still shipped rules a vanilla page
+composes, and each keeps a specimen card writing the markup its wrapper used to emit. Adopting
+one back as a React component is a matter of saying so in an issue.
 Every interactive component ships `:hover`, `:focus-visible`, `:disabled` and a dark-ground
 rule; every transform stands down under `prefers-reduced-motion`.
 
@@ -280,7 +282,6 @@ rule; every transform stands down under `prefers-reduced-motion`.
 | `CardHead` | The card's header row — title on the left, controls on the right |
 | `CardTitle` | The card's heading. `as` picks the heading level; the size does not change with it |
 | `CardBody` | The card's copy, on the body scale |
-| `CardFoot` ⚠ | The card's action row — where the buttons go, so every card puts them in the same place |
 | `Chip` | Status atom. `tone`: brand · success · warning · danger · neutral |
 | `Eyebrow` | The signature mono/uppercase label, tipped with a hexagon node |
 | `Avatar` | Initials by default; an image only when there is one |
@@ -294,7 +295,6 @@ rule; every transform stands down under `prefers-reduced-motion`.
 
 | Component | Purpose |
 |---|---|
-| `Page` ⚠ | The 1400px app-shell width |
 | `Container` | The 1200px reading column |
 | `Stack` | Vertical rhythm. `gap` = a spacing token |
 | `Cluster` | A wrapping row. `justify`, `align` |
@@ -308,20 +308,14 @@ rule; every transform stands down under `prefers-reduced-motion`.
 |---|---|
 | `Field` | **The unit.** Wires `htmlFor`, `aria-describedby`, `aria-invalid`. `label` `help` `error` `required` `optional` |
 | `Input` | `size`, `invalid` |
-| `InputGroup` ⚠ | An input with a `prefix` / `suffix` inside one focus ring |
 | `PasswordInput` | A password that can be read back. Reveal toggle with `aria-pressed`, and a Caps Lock warning — the commonest cause of "the password is right and it says it is wrong", invisible on every keyboard |
-| `PasswordMeter` ⚠ | Four segments and **a word**. Emits the `.lw-pwmeter` CSS that shipped in v1.2 with nothing rendering it. It scores nothing — `level` is yours, from whatever the server actually enforces |
 | `OtpInput` | A one-time code as ONE field, not six boxes. Six inputs break `autoComplete="one-time-code"` (the platform fills only the first), make six tab stops, and turn a pasted "123 456" into one digit. The segmented LOOK is letter-spacing |
 | `Textarea` | |
 | `Select` | `options` as strings or `{value,label}`. CSS chevron |
 | `Switch` | For a setting that applies immediately |
 | `Checkbox` | `radio` for the round variant |
 | `Segmented` | 2–4 mutually exclusive views |
-| `Calendar` ⚠ | The date grid. Real buttons with a roving tabindex, so Tab enters and leaves once instead of walking 42 days; month and weekday names come from `Intl` |
-| `DatePicker` ⚠ | The date field, on `Popover`. `range` adds the preset rail — "Last 7 days" is what a user wants nine times out of ten, and building it from two grid clicks is a chore |
 | `FileUpload` | Dropzone + file list. The zone is a `<label>` around a real file input, so click, keyboard and the a11y name are the platform's. Rejects by name, with the limit stated |
-| `RichText` ⚠ | Editor **chrome** — toolbar plus a prose surface on the type scale. The engine is deliberately not the system's; pass `children` and you keep the chrome with your own surface: `<RichText tools={["bold","italic","ul"]}><EditorContent editor={editor} /></RichText>`. The default surface is `contenteditable` + `execCommand` — a demonstrable shim, fine for a comment box, **swap it before shipping a document editor** |
-| `Stepper` ⚠ | Wizard progress. The marker carries the state — the number becomes a check — so it survives greyscale. Only done and error steps are clickable |
 | `Combobox` | Single and multi-select with filtering, on `Popover`. Focus stays in the input and `aria-activedescendant` names the active row — the ARIA 1.2 pattern, and the opposite of `Menu`. `onSearch` hands filtering to the caller: the options passed ARE the result |
 
 ### Data — `components/data/`
@@ -334,14 +328,9 @@ rule; every transform stands down under `prefers-reduced-motion`.
 | `EmptyState` | `icon` (a glyph name) `title` `description` `action` — exactly one action |
 | `StateView` | **The five states as one set**: empty · loading · error · offline · denied. Shipping only `empty` is how the other four get invented per product. `error`/`offline` announce with `role="alert"`; `loading` uses `role="status"` + `aria-busy` |
 | `Console` | `lines[].cells` renders aligned subgrid columns (`num` right-aligns); `text` stays free-running and spans the stream. Never pad mono text with runs of spaces |
-| `CodeBlock` ⚠ | Server-highlighted `html`, or raw `code`. Copy control on by default with `code`, confirming in place |
 | `DataGrid` | **Not an extension of `Table`.** Sticky header, resizable and pinnable columns, bulk selection, optional windowing. Reach for `Table` first — a static list should not pay for grid machinery |
 | `Progress` | Determinate only, with real `role="progressbar"` values. Indeterminate work is a `Skeleton` — a bar that moves without knowing its extent reports a number it does not have |
 | `Pagination` | Page navigation AND the result count, because the count is the control's feedback. `cursor` mode is prev/next only, for an API that cannot count |
-| `FilterBar` ⚠ | Applied filters as removable chips. A filter you cannot see is one you forget you set, and then the empty result looks like a broken product |
-| `Toolbar` ⚠ | The row above a list: search, filters, actions. `.lw-toolbar-grow` on the child that should take the slack |
-| `BarChart` ⚠ | A thin tokenised layer, not a charting engine. Series come from `--lw-chart-1..8`; every chart renders its numbers as a hidden table |
-| `LineChart` ⚠ | The line and area chart, on the same tokenised layer as `BarChart`. Legend swatches are painted from CSS via `--lw-swatch`, so a series colour has one home |
 | `ActivityFeed` | Notifications and activity — the same list with a different verb. Day-bucketed; unread is a dot plus weight, never a tint alone |
 
 **`Table` and `DataGrid` share one column contract.** A column is
@@ -374,11 +363,9 @@ a design system whose API moves under a consumer's feet is a reason to vendor it
 | `TopBar` | Sticky app chrome. `brand` `links` `actions` |
 | `AppBar` | **Use this, not a hand-written bar.** Brand + breadcrumbs + actions on `TopBar`, with an optional rail toggle. The lead holder is `flex: 0 1 auto` because TopBar already ships a `flex: 1` spacer — a second claimant splits the slack and ellipsises the breadcrumbs with a third of the row empty, which is exactly what five hand-written copies did |
 | `Sidebar` | The product rail. `collapsed` → 60px icon rail. `linkAs` swaps the anchor for a router Link |
-| `NavItem` ⚠ | One row of the rail — an `<a>` when it has an `href`, a `<button>` when it does not. Exported so a rail can be composed by hand |
 | `NavMenu` | The site-header dropdown that teaches a taxonomy: named groups, one line of prose per destination. A native `<details>`, so it is server-safe and works with JavaScript off — **not** built on `Menu`/`Popover`, whose CSS lives in the layer a marketing page drops. Put it FIRST in the bar's nav. Escape-to-close and close-on-route-change are the consumer's |
 | `Tabs` | Roving tabindex: arrow keys, Home/End — selection AND focus move together |
 | `Breadcrumbs` | Mono, so it reads as a path |
-| `CommandPalette` ⚠ | ⌘K, on the native `<dialog>` — modal, so the page behind it is inert. **It does not bind the shortcut**; a component that installs a global key handler cannot be turned off on the screen where ⌘K means something else. Scored subsequence match, so "opdb" finds "Open database" |
 | `BottomNav` | The touch answer to `Sidebar`. Three to five DESTINATIONS, never actions (warns past five). Reserves the home indicator from `--lw-safe-bottom`, and takes its 44px target from the bar height rather than padding |
 | `NavToggle` | The narrow-bar nav for `TopBar` — a toggle in the bar and a panel under it, rendered as `TopBar` children. **Not `Drawer`:** a drawer is a modal `<dialog>` in the top layer that makes the page inert, so it needs a focus trap and a scrim; this hangs under the bar, leaves the page interactive, and needs neither. Appears at `--lw-bp-md`, the same breakpoint at which the bar's own links drop. `aria-expanded` + `aria-controls`, Escape closes and returns focus |
 | `LocaleSwitcher` | Which language the interface is in. `Segmented` when there is room; `compact` opens a **menu**, not a cycle — a reader who cannot read the current language cannot predict what the next press gives them. Ships no language names: a list of endonyms is a claim about which languages exist and how they are spelt |
@@ -411,20 +398,19 @@ State selectors are Radix's: `[data-state="open"]` on the dialog, drawer and pop
 `Disclosure`, `NavMenu` — the platform control is the right one on a phone, submits without
 JavaScript, or is a disclosure rather than a floating surface.
 
-### AI — `components/ai/`
+### AI — CSS only since v3.0.0
 
-| Component | Purpose |
-|---|---|
-| `PromptInput` ⚠ | The primary input. Enter sends, Shift+Enter newlines. `tools` `action`, or children to own the whole footer row |
-| `Message` ⚠ | One turn. `role` ai/user (user mirrors right in a bubble), `avatar`, `streaming` shows the caret |
-| `SourceChip` ⚠ | The citation atom — a numbered mono chip |
-| `SourceList` ⚠ | The provenance panel |
-| `ConfidenceMeter` ⚠ | Number **and** bar. Neutral ink below 60% |
-| `AgentTrace` ⚠ | `steps` with `pending`/`active`/`done`/`error` |
-| `ToolCall` ⚠ | One invocation — args in, result out, duration. `AgentTrace` says a step RAN; this says what it did. Collapsed by default, because an argument blob is evidence a user opens when the answer looks wrong |
-| `DiffReview` ⚠ | Accept or reject the model's edits per hunk. The gutter carries `+`/`−`/`~` as well as the ground, so it reads in greyscale — and the diff tokens are GROUNDS, the text on top stays `--lw-fg` |
-| `Artifact` ⚠ | The versioned side surface for generated output. `onEdit` is not decoration: it is where "an AI surface is never the only path to an outcome" is enforced |
-| `Feedback` ⚠ | Thumbs plus a correction path. A rating with nowhere to say what was wrong collects a number nobody can act on |
+This category was the largest block of the v3.0.0 removal: **no consumer had ever imported a
+single one of its components**. What they wrapped is still here, and is the part a design
+system owns — `.lw-msg` (a turn: avatar, mono role label, prose body — never a bubble, because
+a bubble caps line length and this product answers in paragraphs), `.lw-source` and
+`.lw-source-list` (the numbered citation a claim and its passage share), `.lw-confidence`
+(number **and** bar, neutral below 60%), `.lw-trace`, `.lw-prompt`, `.lw-tool`, `.lw-diff`,
+`.lw-artifact` and `.lw-feedback`.
+
+Two specimens render all of it on both grounds — `components/ai/ai.card.html` and
+`components/ai/ToolCall.card.html` — and `templates/ai-app-shell` lays it out as a page. Both
+are how the rules stay under `check:a11y` and `check:visual`, and both are the markup to copy.
 
 ### Marketing — `components/marketing/`
 
@@ -439,7 +425,6 @@ JavaScript, or is a disclosure rather than a floating surface.
 | `Quote` | The standalone pull quote. Shares its brand spine with `StoryCard`'s quote through **one** declaration block, so the drawing has one owner |
 | `Byline` | Author, role, date on the existing `Avatar`. The date is a real `<time>` |
 | `ArticleCard` | The index entry — a composition of `Card` + `CardHead`/`CardBody`/`CardFoot` + `.lw-card-media` + `Byline` + `.lw-pill`. There is deliberately no `.lw-post` class, and no `.lw-article` grid: the article page is a `Split` |
-| `AnnounceBar` ⚠ | The sticky strip above the header. It exists upstream for one rule — `.lw-announce + .lw-topbar` offsets the header by `var(--lw-announce-h, 36px)`, which only this package can state because `.lw-topbar` is its own |
 | `PlanCard` | A pricing plan. Composes `.lw-card` and adds four declarations. **`price` is optional and a card without one is a FINISHED card** — nothing reserves the slot, so it closes up. `featured` adds a brand edge and `--lw-brand-glow` and *nothing else*; a dark featured plan is `data-band="dark"`, never a hard-coded navy tier. An excluded feature is a `minus` glyph plus an `.lw-sr-only` word, never a greyed check |
 | `CompareTable` | The feature matrix. Distinct from `Table` **by meaning**: `Table` is a data table (records, values, sorting); this never sorts and has one repeated cell type. Sticky on both axes via `--lw-z-local-1/2/3`; every cell is two glyphs and a word, and `--lw-success-on` (the text variant), never `--lw-success` (a fill) |
 | `Flow` | The animated flow diagram — pipeline, onboarding sequence, roadmap. **The static state is the COMPLETE diagram**; all motion is double-gated behind `@supports (animation-timeline: view())` *and* `prefers-reduced-motion: no-preference`, and scroll only replays it. An inactive node is **never** dimmed with `opacity`; the active one is marked positively via real `aria-current`. Server-safe — no state, no effects, no `"use client"`; a node that expands is the consumer composing `Disclosure` into `detail`. **Two forms since v1.6.0**: a chain, and a *graph* — selected automatically by any edge joining non-consecutive nodes — which lays the nodes on a routing lattice so a fan-in, a fan-out and a loop all draw, in CSS borders rather than SVG. The graph form also emits an `.lw-sr-only` successors table, because a lattice of bordered cells states "01 leads to 02 *and* 03" in pixels alone; that is why `label` and `tableLabels` are required there |

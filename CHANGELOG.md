@@ -24,7 +24,224 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 ## [Unreleased]
 
-### Fixed
+## [3.0.0] — 2026-09-05
+
+**The major that keeps the promises the deprecation policy already made, and a dead-code
+sweep that found four live defects on its way through.** Nothing here is a new idea. Every
+removal was announced in a CHANGELOG entry or a `@deprecated` tag, some of them for a
+version that has already shipped and gone — and a policy written down and not executed is a
+second home for every fact it touches, which is the shape this repo has paid for more than
+any other.
+
+### Migration — per consumer, what to grep
+
+Measured on 2026-09-05 by grepping all seven trees, not remembered. **The entire break is one
+line.**
+
+```bash
+# every removed export, across every consumer — returns nothing today
+grep -rhoP 'import[^;]*?\{[^}]*\b(CardFoot|Page|InputGroup|PasswordMeter|Calendar|DatePicker|Stepper|RichText|CodeBlock|FilterBar|Toolbar|BarChart|LineChart|NavItem|CommandPalette|PromptInput|Message|SourceChip|SourceList|ConfidenceMeter|AgentTrace|ToolCall|DiffReview|Artifact|Feedback|AnnounceBar|RANGE_PRESETS|score)\b[^}]*\}[^;]*?from\s*"@leanwise/design' <consumer>/src
+
+# the retired tone spellings — ONE hit, and it is the whole migration
+grep -rn 'tone="\(ok\|warn\|err\|pos\|neg\)"\|accent="\(pos\|neg\|warn\)"' <consumer>/src
+
+# the removed props, the removed classes, the removed tokens — all zero today
+grep -rn 'triggerAria\|role="grid"\|columns\[\]\.label' <consumer>/src
+grep -rn 'lw-tip\|data-tip\|lw-popover-anchor\|lw-mb-\|lw-wash\|lw-spotlight\|lw-shine\|lw-tilt' <consumer>/src
+grep -rn -- '--lw-stagger\|--lw-tracking-normal\|--lw-z-sticky\|--lw-on-dark-sheen' <consumer>/src
+```
+
+| Consumer | What breaks |
+|---|---|
+| `leanwise-ai` | **one line** — `src/routes/admin.posts.$id.tsx:602`, `<Toast tone="ok">` → `tone="success"` |
+| every other consumer | nothing |
+
+⚠ **`onSort` is safe, and it was the one worth checking.** Eight sites across
+`leanwise-inspect` pass `list.setSort`, declared `(sort: SortState) => void` — one parameter,
+the canonical object form. The positional `(key, direction)` shape this release removes was
+detected at runtime by handler ARITY, so a two-parameter handler would have silently changed
+meaning rather than failing to compile.
+
+### Removed — announced at v2.0.0
+
+- **The twenty-six components no consumer imports**, marked `@deprecated` in their `.d.ts` at
+  v2.0.0 with "candidates for removal in v3.0" and listed in that release's notes: `CardFoot`,
+  `Page`, `InputGroup`, `PasswordMeter`, `Calendar`, `DatePicker`, `Stepper`, `RichText`,
+  `CodeBlock`, `FilterBar`, `Toolbar`, `BarChart`, `LineChart`, `NavItem`, `CommandPalette`,
+  `PromptInput`, `Message`, `SourceChip`, `SourceList`, `ConfidenceMeter`, `AgentTrace`,
+  `ToolCall`, `DiffReview`, `Artifact`, `Feedback`, `AnnounceBar`. Two helpers go with the
+  files that declared them: `RANGE_PRESETS` (`DatePicker.jsx`) and `score`
+  (`CommandPalette.jsx`). `chart-parts.jsx` follows the two charts it existed for, and with it
+  `CHART_W` and `CHART_PAD`. The barrel goes **100 exports → 72**, the browser bundle 116 → 81,
+  `dist/` 100 files → 76.
+
+  `components/ai/` disappears as a *component* category. `NavItem` and `CardFoot` do not
+  disappear as *code* — `Sidebar` renders the first and `ArticleCard` the second, so both stay
+  as internals and lose only their public export.
+
+- **`.lw-tip` / `[data-tip]`** — the vanilla tooltip whose text assistive technology never
+  heard. **`.lw-popover-anchor`** — a no-op tombstone. **`Popover.triggerAria`** and its
+  `role="grid"` value.
+
+### Removed — announced for a version that has already shipped
+
+These named a removal release, that release came and went, and they stayed. Each is now gone.
+
+- **`columns[].label` and the positional `onSort(key, direction)`** on `Table` and `DataGrid`.
+  Both said "removed in v2.0.0"; v2.0.0, v2.1, v2.2 and v2.3 shipped with them. `header` and
+  `onSort({ key, dir })` are the only shapes. `Table`'s per-column `sort` prop, whose own
+  `@deprecated` also said v2.0.0, goes with them — the top-level `sort={{ key, dir }}` is what
+  `DataGrid` takes and now the only home for that state.
+- **The five legacy tone spellings** — `ok`, `warn`, `err`, `pos`, `neg`. `components/_tone.js`
+  said "accepted for one MINOR and removed at the next MAJOR"; the next major was v2.0.0.
+  `normTone`/`normToneMap` and the `LegacyTone` type go with them, and the nine call sites now
+  pass the value straight through — **`_tone.js` is the vocabulary and nothing else**, which
+  `tools/lw-tone.mjs` now IMPORTS rather than restating for the eleventh release.
+- **`assets/logo-leanwise.png`** (79 KB), whose README row said "DEPRECATED, v2.0" and which no
+  CSS, JSX, HTML or tool has loaded. `logo-icon.png` carried the same mark and is **not** going:
+  `marketing.card` renders it as the `mode="mono"` raster, the one `LogoRail` form an SVG cannot
+  demonstrate, so its row now says that instead of promising a removal that must not happen.
+
+### Removed — unreachable, found by the sweep
+
+**The rule held was that a SCALE is one unit and a FAMILY is one unit.** `.lw-mb-*` goes
+because no rung is used anywhere; `.lw-mt-*` stays because `leanwise-ai` uses two of five, and
+a scale with holes is a worse API than a complete one. `.lw-auth-or` and
+`.lw-topbar-panel-actions` stay because a vanilla page composes them beside siblings that
+consumers do use. What goes is the speculative half — a decorative effect no component emits,
+no card demonstrates, no template lays out and no consumer has ever written:
+
+- `base.css`: `.lw-console-caret`, `.lw-file-tree`, `.lw-flow-line`, `.lw-italic-brand`,
+  `.lw-wash`, `.lw-mb-2/3/4/5/6/8`, `.lw-grid-2/3/4`, `.lw-pag-spacer`
+- `marketing.css`: the whole **Scroll-driven motion** section (`.lw-scroll-fade`,
+  `.lw-scroll-progress`, `.lw-draw` and their three keyframes), the **Run controls** section,
+  `.lw-spotlight`, `.lw-shine`, `.lw-tilt`/`.lw-tilt-scene`, `.lw-counter`, `.lw-accent`
+- `product.css`: `.lw-dgrid-selbar-spacer` and `.lw-editor-spacer`, the last two
+  component-scoped aliases of `.lw-spacer` — the collapse `base.css`'s own comment asked for
+- the abbreviated tone selectors that were reachable ONLY through `normTone`: `.lw-toast.ok`,
+  `.lw-console-line.err`, `[data-tone="warn"]`, `.lw-kpi .d.pos` and their siblings
+- tokens: `--lw-stagger` (a per-sibling delay the one place it would apply documents itself as
+  not using), `--lw-tracking-normal` (`0`), `--lw-z-sticky` (the only unread rung of nine), and
+  `--lw-on-dark-sheen`, which `.lw-shine` was the sole reader of
+
+### Fixed — four live defects the sweep walked into
+
+- **Eight calendar cells per month fail AA, in every consumer.**
+  `.lw-cal-day[data-outside="true"]` paints an adjacent-month day in `--lw-fg-faint`, which
+  tokens.css documents as "decorative only, fails AA as body text" and which `check:contrast`
+  excuses only behind a `:disabled` / `aria-disabled` selector. An outside-month day is
+  neither — it is a real, clickable date. 2.28:1, serious, both grounds. Nothing could see it
+  because the old specimen rendered a **closed** Popover, so the grid never entered the DOM:
+  the blind spot CLAUDE.md names as "a closed overlay is still invisible to axe", found the
+  first time a card painted the panel open. Now `--lw-fg-subtle`.
+- **The forced-colors block was hiding two classes that do not exist.**
+  `@media (forced-colors: active)` set `display: none` on `.lw-ground` and `.lw-sheen`. Neither
+  is a rule anywhere in the package — the page ground is `.lw-page-ground` — so every
+  decorative ground stayed painted under forced colours, which is the one mode where the point
+  is to stand down.
+- **email.css had drifted from three tokens.** `check:contrast` asserted one direction only:
+  every watched token's hex is present in the file. It said nothing about a hex in the file
+  that no token accounts for, and there were five. The dark-mode panel was `#131C2B` against
+  `--lw-navy-raised`'s `#111A2E`, the hairline `#222E42` against `--lw-navy-line-1`'s
+  `#22304D`, the ghost border `#33415A` against `--lw-navy-line-2`'s `#2C3E63` — three
+  literals left behind by a token re-tune, in the one file no custom property can reach. All
+  six dark literals are watched now; `#FFFFFF` is the one exemption and carries its reason.
+- **`npm run build` could not make `check:build` green.** esbuild writes the files it is given
+  and leaves the rest, so deleting a component left its build behind — 24 orphans no rebuild
+  would clear. The writer clears `dist/` first now. A generator whose output cannot satisfy its
+  own gate for a whole category of change is a gate that is only green by luck.
+
+### Fixed — the published package
+
+- **The cards in the tarball have never rendered, for anyone.** REVIEW.md open item 3, open
+  since v1.2. All 33 `*.card.html` ship inside `components/`, and every one loads
+  `../../preview/_card.css`, `../../preview/_vendor/react*.js` and `../../_ds_bundle.js`;
+  `files` carried none of them. 296 KB of specimens that could not paint, for eight releases.
+  Neither `MUST_PACK` nor the `exports` walk could see it — both check what a consumer
+  **imports**, and a card is loaded by a browser.
+
+  `files` now carries `preview` and `_ds_bundle.js`, and **`check:pack` gained the rule that
+  keeps them**: resolve every relative `href`/`src` in every packed card against the installed
+  tree, refusing to pass having read fewer than 100 of them. 264 references across 33 cards.
+
+- **`preview/_vendor/` is the production React pair now, not the development pair.** −1.19 MB
+  from the clone and from every card load both browser gates make; ~45 KB gz in the tarball
+  instead of ~255 KB. It reverses a decision this repo made deliberately (a specimen is where
+  you want the warnings) and it is safe, because **no gate reads a React warning** —
+  `lw-a11y.mjs` listens on `pageerror` and the production build still throws. Verified: axe
+  clean, and the visual run moves the same 20 shots as before the swap and not one more. Still
+  React 18.3.1, because React 19 ships no UMD build and a card is a `file://` page with three
+  `<script src>` tags. `preview/_vendor/README.md` records the reversal and how to get the
+  warnings back by hand.
+
+  Tarball: 913 KB → 0.98 MB gz, 476 → 422 files, and the specimens work.
+
+### Changed — the fixtures, which is what made the removals safe
+
+The CSS layer did **not** go with the components. It is a separate surface with its own
+consumers, its removal was never announced, and three gates read it — so every removed
+component keeps a fixture, and all twelve templates survive.
+
+- **Six cards lose their entire subject and are rewritten as the markup their wrapper emitted**
+  — `ai`, `ToolCall`, `Chart`, `DatePicker`, `RichText`, `CommandPalette`. They are still React
+  cards (so `Icon` still renders); what changed is that they write `<div className="lw-msg ai">`
+  instead of `<Message role="ai">`. **Seven more lose one element each** — `primitives`,
+  `forms`, `forms-states`, `data`, `DataGrid`, `TopBarMobile`, `site-chrome`.
+- **Eight templates trade an `<x-import>` for the `.lw-*` markup behind it** — `ai-app-shell`,
+  `auth`, `dashboard`, `docs-page`, `export-report`, `list-detail`, `onboarding-wizard`,
+  `search-results`. Three of them gained a view-model field the wrapper used to compute, and
+  each is the accessible half: the stepper's spoken state word, the filter chip's remove label,
+  the date field's formatted text. That is the half a rewrite most easily loses.
+- Two specimens are **better** than what they replace. The calendar is now STATIC — every state
+  the CSS can paint is pinned on a chosen cell instead of depending on what `new Date()`
+  returns, so the visual gate shoots the same 42 cells forever; the old today marker moved every
+  midnight. And `RichText` gained the over-limit count state, which no product had ever demoed.
+
+⚠ **VISUAL ACCOUNTING — 20 shots move**, 5 cards × light/dark × comfortable/compact, every one
+a card this release deliberately rewrote: `ToolCall` 1172→1316px, `DatePicker` 915→1482px (the
+panel painted open, twice), `RichText` 900→1131px, `CommandPalette` 900→988px, `data` 2465→2451px.
+**The other 15 rewritten cards did not move a pixel** — that is the evidence the inlined markup
+is what the wrappers emitted, and it is worth more than the review. Hence `[visual-ok]` on the
+head commit.
+
+### Added — two gates, both watched failing
+
+- **`dynamic-class`** (rule 14 in `lw-token-lint --css`) — ⚠ **the class no grep can find.**
+  Four components compose a class from a prop (`` `lw-btn-${variant}` ``, `` `lw-chip-${tone}` ``,
+  `` `lw-stack-${gap}` ``, `` `lw-cluster-${gap}` ``), so `.lw-btn-ink` appears nowhere in
+  `components/`, nowhere in the cards, and nowhere in any consumer — only in base.css, defining
+  itself. **This sweep put `.lw-btn-ink`, `.lw-cluster-16` and `.lw-cluster-24` on the delete
+  list for exactly that reason**, and all three are live public API. A second pass caught it; a
+  rule should have. The rule reads each prop's union from the sibling `.d.ts` and requires a
+  matching selector, failing both ways — a value the CSS cannot paint, and a rule the next sweep
+  is about to delete. It reads the DEFAULT guard (`gap !== 16 && …`) rather than keeping a list
+  of defaults, which would be a second home for what the source already says.
+- **The inverse email-literal rule**, above, which found the drift it was written for
+  immediately.
+
+### Changed — `_ds_manifest.json` stops being a second home
+
+REVIEW.md open items **1 and 6** close. The manifest carried four facts two other generators
+already compute, and nothing read its copies at runtime — so they were inert, hand-maintained
+and wrong in all four: `components` said 94 against 89 sources (item 6 records it going twelve
+entries stale once and being refreshed *by hand*); `tokens` said 442 against 323; and `themes`
+listed `[data-band="dark"])`, a stray paren from splitting a `:where(...)` list on commas, next
+to `:root[data-theme="dark"]` — a block v1.13.0 **deleted** and which `check:contrast`'s
+`rederiveCompleteness` now refuses to let back in. The manifest was asserting a scope another
+gate exists to forbid.
+
+`tools/_manifest.mjs` lets each generator patch only its own keys onto what is on disk, so
+`lw-bundle` and `lw-tokens-dtcg` never clobber each other — verified in both orders. It refuses
+a key the manifest does not already have, so a generator corrects an existing fact rather than
+inventing one, and key order is preserved because the design project reads this file on a
+re-pull.
+
+### Removed — dead tooling code
+
+`rgbToHex` (`tools/_color.mjs`, imported by nothing) and `relpathOf`'s `export`
+(`tools/_generated.mjs`, used only inside its own file).
+
+### Fixed — carried from the unreleased tree
 
 - **`Flow.jsx` was a binary file, and nothing said so.** Its edge-lookup key joins two node
   ids with a NUL — correct, because a NUL cannot occur in an id, so no pair of ids can forge

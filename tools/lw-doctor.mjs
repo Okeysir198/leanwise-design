@@ -41,6 +41,7 @@ const bold = (s) => `\x1b[1m${s}\x1b[0m`;
 const REMOTE = "https://raw.githubusercontent.com/Okeysir198/leanwise-design/main/advisories.json";
 
 import { cmp, satisfies } from "./_semver.mjs";
+import { hslToRgb } from "./_color.mjs";
 
 
 /** Occurrences of `re` across every .jsx under components/<sub>, specimen cards excluded. */
@@ -244,6 +245,70 @@ if (SELF) {
     "tooltip-invisible-to-assistive-tech": () => countInComponents(/\bdata-tip=/g),
     "popover-no-horizontal-flip": () => countInComponents(/\bfunction place\(/g, "overlays"),
     "modal-no-scroll-lock": () => countInComponents(/\.showModal\(\)/g),
+
+    /* v3.0.0. Each counts the DEFECT, so a fixed tree derives 0 — the stronger
+       shape, because the number goes to zero when the thing is gone rather than
+       describing the repair. */
+
+    /* An outside-month day painting the faint tier. The rule is one line; the
+       count is how many such lines still read `--lw-fg-faint`. */
+    "calendar-outside-days-fail-aa": () => {
+      const css = fs.readFileSync(path.join(ROOT, "product.css"), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+      return [...css.matchAll(/\.lw-cal-day\[data-outside[^{]*\{([^}]*)\}/g)]
+        .filter((m) => /--lw-fg-faint/.test(m[1])).length;
+    },
+
+    /* Names in the forced-colors hide list that no layer defines. A selector
+       matching nothing costs nothing and reports nothing, which is exactly why
+       the two phantoms survived — so the derivation is "is this class defined
+       anywhere", asked of the list itself. */
+    "forced-colors-grounds-not-hidden": () => {
+      const layers = ["base.css", "marketing.css", "product.css", "tokens.css"]
+        .map((f) => fs.readFileSync(path.join(ROOT, f), "utf8").replace(/\/\*[\s\S]*?\*\//g, "")).join("\n");
+      const base = layers;
+      const block = /@media\s*\(forced-colors:\s*active\)/.exec(base);
+      if (!block) throw new Error("base.css has no forced-colors block");
+      const hide = /\n\s*(\.lw-[^{}]*?)\{\s*display:\s*none;\s*\}/g;
+      let n = 0;
+      for (const m of base.slice(block.index).matchAll(hide)) {
+        for (const sel of m[1].split(",").map((x) => x.trim())) {
+          if (!/^\.lw-[a-z0-9-]+$/.test(sel)) continue;
+          /* Defined = the class heads a selector somewhere other than this list. */
+          const defined = new RegExp(`\\${sel}(?![a-z0-9-])`, "g");
+          if ([...base.matchAll(defined)].length <= 1) n++;
+        }
+        break; // the first display:none list inside the block is the decorative one
+      }
+      return n;
+    },
+
+    /* Hexes in email.css that no watched token resolves to and no exemption
+       names. Re-derived here from the two lists in lw-contrast-check.mjs rather
+       than re-resolving the palette — this file stays headless and regex-light,
+       and the gate itself does the colour maths. */
+    "email-css-drifted-from-tokens": () => {
+      const gate = fs.readFileSync(path.join(ROOT, "tools/lw-contrast-check.mjs"), "utf8");
+      const email = fs.readFileSync(path.join(ROOT, "email.css"), "utf8");
+      const tokens = fs.readFileSync(path.join(ROOT, "tokens.css"), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+      const present = new Set([...email.matchAll(/#[0-9A-Fa-f]{6}\b/g)].map((m) => m[0].toUpperCase()));
+      const watched = [...(/const EMAIL_LITERALS = \[([\s\S]*?)\n\];/.exec(gate)?.[1] ?? "")
+        .matchAll(/token:\s*"([a-z0-9-]+)"/g)].map((m) => m[1]);
+      const exempt = new Set([...(/const EMAIL_EXEMPT = \{([\s\S]*?)\n  \};/.exec(gate)?.[1] ?? "")
+        .matchAll(/"(#[0-9A-Fa-f]{6})"/g)].map((m) => m[1].toUpperCase()));
+      if (!watched.length) throw new Error("could not read EMAIL_LITERALS from lw-contrast-check.mjs");
+      /* Resolve each watched token the way the gate does — one `--lw-<t>-c` HSL
+         triple, through the shared colour maths — rather than trusting a hex to
+         appear in a tokens.css comment, which is how the first draft of this
+         derivation read 1 in a clean tree. */
+      const accounted = new Set(exempt);
+      for (const t of watched) {
+        const hsl = new RegExp(`--lw-${t}-c:\\s*([0-9.]+)\\s+([0-9.]+)%\\s+([0-9.]+)%`).exec(tokens);
+        if (!hsl) continue; // a role, not a primitive — the gate resolves the chain, this does not
+        const { r, g, b } = hslToRgb(+hsl[1], +hsl[2], +hsl[3]);
+        accounted.add("#" + [r, g, b].map((v) => Math.round(v * 255).toString(16).padStart(2, "0")).join("").toUpperCase());
+      }
+      return [...present].filter((h) => !accounted.has(h)).length;
+    },
 
     "page-dark-derived-roles": () => {
       const css = fs.readFileSync(path.join(ROOT, "tokens.css"), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");

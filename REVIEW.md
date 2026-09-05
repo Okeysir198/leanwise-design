@@ -6,12 +6,16 @@ still open, and why. Re-read it before touching the CSS layers or the gates.
 **Scope:** the token core and five CSS layers, the React barrel and its components, the gates,
 packaging, the twelve templates and the specimen cards.
 
+⚠ **Read items 12 and 13 before deleting any CSS.** The v3.0.0 sweep nearly deleted three live
+public classes, and the three rules that stopped it are written down in 13 — they are not obvious
+and they are not derivable from a grep.
+
 Counts are deliberately not restated in prose — `npm run check` prints them all. A number in a
 document is a second home that goes stale, and this line has proved it twice: it read "83
 exports … 5 gates" when the barrel exported 82 and there were six, and then "442 tokens, eight
 theme scopes" against an actual 283 across twelve.
 
-**Last pass:** v2.0.0 — see the verdict below. **Previous pass:** v1.13.0. It found a `:root[data-theme="dark"]` block that was value-identical to
+**Last pass:** v3.0.0 — see the verdict below. **Previous passes:** v2.0.0, v1.13.0. It found a `:root[data-theme="dark"]` block that was value-identical to
 `.dark, [data-theme=dark]` and had been maintained in parallel for the life of the package; 25
 derived roles that stayed on the PAGE theme inside `.lw-page-dark` because that ground joined
 the band list in v1.4.0 and never joined the re-derive list (the demo writes `class="dark
@@ -27,6 +31,50 @@ too: a rule that states the invariant (`rederiveCompleteness`, the root-block re
 ---
 
 ## Verdict
+
+**v3.0.0 is the pass where the deprecation policy was executed rather than described, and where
+executing it found four live defects.** Nothing in it is a new idea: every removal was announced in a
+CHANGELOG entry or a `@deprecated` tag, and four of them named a version — v2.0.0 — that had already
+shipped and gone. That is the shape to name, because it is not the one this file has been watching.
+The recurring failure below is *a fact held in two places*; this is **a fact held in one place and not
+acted on**. A policy written down and not executed is worse than no policy, because everything that
+touches it — a `.d.ts` tag, a README ⚠, a CSS comment, an advisory's `fixedIn` — becomes a second home
+for a promise, and every one of them was wrong.
+
+What the removals uncovered is the more interesting half, and every one is the same shape: **a
+specimen that did not exist, or existed in the wrong state.**
+
+- **Eight calendar cells per month have been failing AA in every consumer.**
+  `.lw-cal-day[data-outside="true"]` painted `--lw-fg-faint`, documented "decorative only, fails AA as
+  body text" and excused by `check:contrast` only behind a `:disabled`/`aria-disabled` selector. An
+  adjacent-month day is a real, clickable date. It surfaced on the FIRST a11y run after a specimen
+  painted the panel OPEN — the old card demoed a closed Popover, so the grid never entered the DOM.
+  This is the blind spot this file has recorded since v1.3.1 ("a closed overlay is still invisible to
+  it"), and it was closed for dialogs only. **It is now closed for the date panel too, and the lesson
+  generalises: an overlay's CLOSED specimen measures the trigger, not the surface.**
+- **The forced-colors block hid two classes that do not exist** — `.lw-ground` and `.lw-sheen`, where
+  the real name is `.lw-page-ground`. So every decorative ground kept painting in the one mode whose
+  entire point is that decoration stands down. **No gate here asserts that a selector in a layer names
+  a class the package defines**, and a selector matching nothing costs nothing and reports nothing.
+  That is a gate-shaped hole and it is still open — see item 12.
+- **email.css had drifted from three tokens.** The contrast gate asserted one direction only; adding
+  the inverse found the drift immediately. A second home is safe only while something compares the two
+  **in both directions**, and half a comparison reads exactly like a whole one.
+- **`npm run build` could not make `check:build` green.** esbuild leaves what it was not handed, so
+  deleting a component left its build behind. A generator whose output cannot satisfy its own gate for
+  a whole category of change — deletion — is a gate that is green by luck.
+
+And one near-miss worth more than the four, because it is about this audit's own method. **The
+dead-CSS sweep put `.lw-btn-ink`, `.lw-cluster-16` and `.lw-cluster-24` on its delete list.** All three
+are live public API. They are invisible because the class is composed from a prop
+(`` `lw-btn-${variant}` ``), so the string exists nowhere but base.css defining itself — and *every
+technique this repo uses to decide whether a rule is reachable is a grep*. A second pass caught it. A
+rule should have, and now does (`dynamic-class`). **The reachability question cannot be answered by
+search alone, and this file should stop implying that it can.**
+
+Three open items close: 1 and 6 (the manifest's second homes, now written by the generators that
+compute them) and 3 (the packed cards, which had never rendered for anyone). Items 2, 4, 5, 7–11
+stand.
 
 **v2.0.0 is the pass where the platform stopped being the answer for overlays, and the record
 caught up with the code.** Every floating and modal surface now rides a Radix primitive behind
@@ -127,6 +175,18 @@ because it will recur again:
   that uses it, `MarketingLanding`, writes `class="dark lw-page-dark"` — the second class
   carried the re-derive, so the one demo of the ground was the one ground that could not fail.
 
+- **The `DatePicker` specimen rendered a CLOSED Popover** (v3.0.0). The calendar grid never
+  entered the DOM, so axe scored a card that contained no calendar and eight cells per month sat
+  at 2.28:1 in every consumer. The demo state (closed) and the failure state (open) are different
+  DOMs, and only one of them was ever measured.
+
+- **`.lw-ground` and `.lw-sheen` in the forced-colors block** (v3.0.0). Neither class exists. A
+  selector that matches nothing looks exactly like a selector that matches and finds nothing wrong.
+
+- **The email literal check ran one way** (v3.0.0). Every watched token's hex was present, so it
+  was green; three hexes in the file that no token accounted for had drifted. **Half a comparison
+  reads exactly like a whole one.**
+
 In every case the demo path (a class on `<html>`, a light-mode screenshot, a fresh checkout,
 a card with prose in it, a filled button) worked perfectly. **Test the path nobody demos.**
 
@@ -136,7 +196,7 @@ a card with prose in it, a filled button) worked perfectly. **Test the path nobo
 
 Nothing here is known to be broken. These are judgement calls and second homes.
 
-### 1. `_ds_manifest.json` duplicates the bundle header
+### 1. `_ds_manifest.json` duplicates the bundle header — CLOSED in v3.0.0
 
 It carries its own `namespace` and `components` list, which `lw-bundle.mjs` also computes and
 writes into the bundle's `@ds-bundle` header. Nothing reads the manifest's copy at runtime — the
@@ -145,13 +205,22 @@ it is a generated fact with a hand-maintained second copy, which is the exact sh
 `tokens.json` and `react.d.ts` both needed a gate for. **Still open at v1.13.0**: the bundle
 generator does not write `_ds_manifest.json`, so the array is still edited by hand. Fold it in.
 
+**Done in v3.0.0, and it took two generators rather than one.** `tools/_manifest.mjs` lets each
+patch only its own keys onto what is on disk — `lw-bundle` writes `namespace` and `components`,
+`lw-tokens-dtcg` writes `tokens` and `themes` — so they never clobber each other, verified by
+running them in both orders. It refuses a key the manifest does not already have, so a generator
+corrects an existing fact rather than inventing one, and key order is preserved because the design
+project reads this file on a re-pull. All four were wrong when the generators first ran: 94
+components against 89 sources, 442 tokens against 323, and a `themes` list carrying both a stray
+paren and a scope `check:contrast` refuses to allow back.
+
 ### 2. The `.dc.html` templates are not rendered by any gate
 
 `lw-templates.mjs` reads them as text. The cards get axe and pixel diffs; the twelve templates —
 the thing a person actually looks at — get neither, because they need the `<x-dc>` runtime to
 render. Whether that runtime can be driven headless here is unknown and worth half a day.
 
-### 3. `preview/_vendor/` is ~1.2 MB in the clone (was 4.3 MB)
+### 3. `preview/_vendor/` is ~1.2 MB in the clone — CLOSED in v3.0.0
 
 v1.13.0 removed `@babel/standalone` (3.1 MB) by compiling each card's `<name>.card.jsx` ahead
 of time; what remains is the two React development builds, kept on purpose for the warnings.
@@ -161,6 +230,18 @@ never reaches the tarball. Note that the shipped `components/**/*.card.html` alr
 `../../preview/_card.css` and `../../_ds_bundle.js`, neither of which ships — **the cards in the
 published package have always been non-functional.** Either exclude them from `files` or ship
 what they need; today it is neither.
+
+**v3.0.0 ships what they need, and swapped the vendor pair to make that affordable.** The
+development builds were 1.19 MB; the production pair is 142 KB, so the clone drops ~1.05 MB and the
+tarball carries ~45 KB gz instead of ~255 KB. That reverses the "development builds, deliberately"
+decision recorded above, and the justification is narrow and checkable: **no gate reads a React
+warning.** `lw-a11y.mjs` listens on `pageerror`, the production build still throws, and the visual
+run after the swap moved the same 20 shots as before it and not one more.
+
+⚠ **The part worth keeping is the assertion, not the fix.** `check:pack` now resolves every
+relative `href`/`src` in every packed card against the installed tree, refusing to pass having read
+fewer than 100 of them. Neither `MUST_PACK` nor the `exports` walk could ever have caught this:
+both check what a consumer **imports**, and a card is loaded by a browser. Eight releases.
 
 ### 4. `deck-stage.js` is vendored, and must not be gated
 
@@ -200,7 +281,7 @@ Do it in one commit, with the bundle regenerated in the same commit, and read th
 card's diff rather than the gate summary. Until then the duplication is known, bounded and
 recorded here, which is better than a half-verified merge.
 
-### 6. `_ds_manifest.json`'s `components` array had gone 12 entries stale
+### 6. `_ds_manifest.json`'s `components` array had gone 12 entries stale — CLOSED in v3.0.0
 
 Found while verifying the manifest against the filesystem for v1.3.0. The `cards` array — the
 load-bearing half, since both browser gates enumerate from it and `_cards.mjs` cross-checks it
@@ -210,7 +291,8 @@ here, which is exactly the treatment open item 1 says it should stop needing. Tw
 names (`CHART_W`, `CHART_PAD`) and `chart-parts.jsx`'s losing `Grid` are still absent by
 design — the array describes the namespace surface, and `lw-bundle.mjs` already computes that
 list. **Fold it into the bundle generator and this item and item 1 both close.** Not done at
-v1.13.0; checked, the generator still writes only the bundle header.
+v1.13.0; checked, the generator still writes only the bundle header. **Done in v3.0.0 — see item 1.**
+`CHART_W` and `CHART_PAD` are moot: `chart-parts.jsx` went with the two charts it existed for.
 
 ### 7. Smaller
 
@@ -306,6 +388,38 @@ three self-consistency runs of the working tree agree to 0.0001%. So the residua
 roughly **one bad shot per 312 recordings** on this box, and it lands on the one element whose
 image is swapped by the theme flip. Not worth a fix on this evidence; worth recording, because
 the next unexplained 0.03% on a card carrying the mark is probably this and not a regression.
+
+### 12. Nothing asserts that a selector in a layer names a class the package defines
+
+Found by the forced-colors bug in v3.0.0: `@media (forced-colors: active)` hid `.lw-ground` and
+`.lw-sheen`, and neither is a rule anywhere — the ground is `.lw-page-ground` and `.lw-sheen` was
+never defined at all. **A selector that matches nothing costs nothing and reports nothing**, so it
+can sit in a layer for years being read as protection. `check:tokens` lints what a declaration
+*says*; `check:presence` asserts a registered utility *compiles*; `dynamic-class` asserts a prop
+value *has* a rule. None of them asks the inverse of the last one: does this compound selector name
+something that exists?
+
+The rule is cheap — collect every `.lw-*` token from every selector, and fail on one that heads no
+rule anywhere in the layers — and the reason it was not written with the fix is that the exemption
+list is the hard part: `.lw-page-ground` legitimately appears in `base.css` while being defined in
+`marketing.css`, a consumer-authored class may legitimately be styled here, and a hover/state
+compound naming a live class is fine. Write it when a second instance appears; one known subject is
+hard to keep honest (the same reasoning as the reset-leak sweep in item 7).
+
+### 13. The sweep's own method has a hole this pass only half-closed
+
+`dynamic-class` (v3.0.0) covers the case where a component composes a class from a typed prop. It
+does not cover a class a **consumer** composes, a class named only in a `.dc.html` template's
+runtime expression, or a class a vanilla page authors that this repo has never seen. Every
+"is this rule reachable" question in the v3.0.0 sweep was ultimately answered by grepping seven
+trees plus this one, and that is a lower bound, not an answer. The three rules the sweep actually
+held — **a scale is one unit, a family is one unit, a documented recipe is one unit** — are what
+kept it safe, not the greps. Record them here because the next sweep will want them:
+
+- a scale (`.lw-mt-*`) survives if ANY rung is used; delete a scale only when no rung is
+- a family (`.lw-auth-*`) survives if any sibling is used, because a vanilla page composes members
+- a standalone decorative effect no component emits, no card demonstrates, no template lays out and
+  no consumer writes is the only safe category, and it is where all 33 deletions came from
 
 ---
 

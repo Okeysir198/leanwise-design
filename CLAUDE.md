@@ -5,10 +5,13 @@ Guidance for Claude Code when working in this repository.
 ## What this is
 
 **`@leanwise/design`** — the LeanWise design system: tokens, the CSS layers, a Tailwind preset, the React
-components in eight categories, twelve page templates, and the **gates** that turn the style guide into
-build failures. (**`package.json` is the authority for the version**, and README §Components for the
-component list — a version or a count repeated in prose is one that disagrees, which is what the
-`doc-count` and `stale-install-pin` lint rules refuse.) The repo is the working copy of a Claude Design
+components, twelve page templates, and the **gates** that turn the style guide into build failures.
+(**`package.json` is the authority for the version**, and README §Components for the component list —
+a version or a count repeated in prose is one that disagrees, which is what the `doc-count` and
+`stale-install-pin` lint rules refuse.) ⚠ **`components/ai/` is CSS-only since v3.0.0** — its React
+wrappers were the largest block of that release's announced removals and no consumer had ever
+imported one; the rules, two specimen cards and `templates/ai-app-shell` are what remain, and they
+are the surface a consumer copies. The repo is the working copy of a Claude Design
 project (`f2d90781-f891-45e3-bc88-ddb55e6f9444`): that project is the authoring surface, this repo is what
 consumers install, and edits here do **not** flow back.
 
@@ -63,25 +66,36 @@ fonts.css+fonts/   Geist + Geist Mono, self-hosted, incl. Vietnamese subsets.
 react.js/.d.ts     the barrel — re-exports every components/<cat>/*.jsx.
 brand.js hooks.js  runtime per-tenant theming; the hooks the components share.
 components/    ai data forms layout marketing nav overlays primitives — .jsx + .d.ts pairs + *.card.html
-     previews (script: the <name>.card.jsx beside them). overlays/ is Radix-backed since v2.0.0 and
-     renders through overlays/_layer.js, the portal layer (.lw-layer/.lw-layer-modal + .lw-backdrop).
+     previews (script: the <name>.card.jsx beside them). ai/ holds ONLY cards: v3.0.0 removed its
+     components and kept its CSS, so those two cards are the only thing measuring those rules.
+     overlays/ is Radix-backed since v2.0.0 and renders through overlays/_layer.js, the portal
+     layer (.lw-layer/.lw-layer-modal + .lw-backdrop).
        _overflow.js    useOverflow() sets data-overflow="true" on a scroller with content past its inline
            end. THE CONTRACT IS THE ATTRIBUTE, not the hook.
        _merge-refs.js  one node into a local + a forwarded ref — NOT useImperativeHandle(..., []), which
            binds whatever node existed at mount.
        _radio-group.js the one-of-N keyboard contract (role=radiogroup/radio + aria-checked + arrows) for
            Segmented/ThemeToggle; aria-pressed describes N INDEPENDENT toggles.
-       _tone.js/.d.ts  the ONE tone vocabulary + its legacy aliases; check:tone gates it.
+       _tone.js/.d.ts  the ONE tone vocabulary — and NOTHING else since v3.0.0, which retired the
+           five legacy spellings and with them normTone/normToneMap. check:tone IMPORTS TONES from
+           here rather than restating it, which it did for eleven releases.
        _deprecate.js   one-time console notices, deduped by component+prop, silent in production.
 templates/     twelve page templates, each *.dc.html + .thumbnail; ds-base.js and support.js live ONCE in
      templates/_shared/.
 tools/         the gates + the shared helpers; ROOT is ONE level up.
 preview/       foundation cards + _card.css/_card.js + _vendor/ (React + ReactDOM as PINNED, hashed UMD
-     copies — a CDN made both browser gates network-dependent). Do not restore _fonts.css.
+     copies — a CDN made both browser gates network-dependent). PRODUCTION builds since v3.0.0, and
+     preview/ SHIPS: every card.html loads three things from here, none of which used to be in
+     `files`, so no published card had ever rendered. Do not restore _fonts.css.
 _ds_bundle.js  the browser bundle, namespace LeanWiseDesign_f2d907. The cards render from THIS.
 _ds_manifest.json  a card declares itself with a first-line <!-- @dsCard group="..." --> marker; both
-     browser gates enumerate cards from that marker.
+     browser gates enumerate cards from that marker. Its `namespace`+`components` are written by
+     lw-bundle and its `tokens`+`themes` by lw-tokens-dtcg (tools/_manifest.mjs) — hand-editing any
+     of the four fails a --check. `cards` and `templates` are still authored here.
 tokens.json react.d.ts dist/ r/ assets/*  — all GENERATED and COMMITTED.
+thumbnail.html + .thumbnail  the package's own thumbnail and the markup it was rasterised from. No
+     tool here reads or writes either; the design project does. Keep them, and do not re-file
+     thumbnail.html as dead — the v3.0.0 sweep flagged it, and it is not.
 ```
 
 **Load order: tokens -> base -> marketing and/or product.** A marketing page needs base + marketing and
@@ -112,7 +126,7 @@ Every `check:*` in `package.json#scripts`.
 | `check:advisories` | `lw-doctor --self-check` re-derives every advisory's `count` from the tree | an advisory gone stale — the hand-maintained fact the tool exists to replace |
 | `check:favicon` | `assets/logo-favicon.svg` is current with `assets/logo-mark.svg` | a stale favicon |
 | `check:contrast` | WCAG AA pairs + the scope rules — see below | see below |
-| `check:tone` | every literal in a `tone`/`accent` union is canonical or a declared `LegacyTone` alias, **and** every advertised value has a CSS selector matching what the component emits | a misspelled tone, a value with no rule, a rule with no value — and reading fewer than twenty values at all |
+| `check:tone` | every literal in a `tone`/`accent` union is canonical, **and** every advertised value has a CSS selector matching what the component emits. Reads `TONES` from `components/_tone.js` rather than restating it | a misspelled tone, one of the five spellings retired at v3.0.0, a value with no rule, a rule with no value — and reading fewer than twenty values at all |
 | `check:tokens` | the token lint — see below | see below |
 | `check:themes` | `tokens.json` matches what `tokens.css` generates, and every channel is re-pointed in *every* theme scope | a stale `tokens.json`; a token that exists in light and silently inherits in dark |
 | `check:dts` | `react.d.ts` is generated from `react.js` | a stale barrel. Add the export to `react.js` and the declaration to the component's `.d.ts`, then `npm run dts` |
@@ -120,7 +134,7 @@ Every `check:*` in `package.json#scripts`.
 | `check:templates` | `ds-base.js`/`support.js` exist ONLY in `templates/_shared/`, and every `.dc.html` loads `../_shared/support.js` then `../_shared/ds-base.js` in that order; `lang`, a main landmark, a skip link whose target exists | a sibling copy beside a template, a wrong load order, a missing landmark. `NO_SKIP_LINK` is the greppable exemption list |
 | `check:cards` | every `<name>.card.js` is current with its `.card.jsx`, and no card carries an inline `text/babel` block | a stale compiled card — a browser gate measuring something no source file says |
 | `check:assets` | each on-dark artwork twin is current with its `-ink` source (a token-driven substitution, never a hand-edit) | a stale generated SVG |
-| `check:pack` | `npm pack`, install the tarball into a scratch dir, and USE it — the only gate not run against the working tree | a `files` list that drops something. This is how `dist/` was never built for anyone and how the `lw-token-lint` bin went missing under pnpm |
+| `check:pack` | `npm pack`, install the tarball into a scratch dir, and USE it — the only gate not run against the working tree; since v3.0.0 it also resolves every relative `href`/`src` in every packed `*.card.html` | a `files` list that drops something. This is how `dist/` was never built for anyone, how the `lw-token-lint` bin went missing under pnpm, and how every shipped card loaded three files the tarball did not carry for eight releases |
 | `check:a11y` | axe over every `@dsCard` — see below | serious/critical violations; moderate/minor report only |
 | `check:visual` | every card × light/dark × comfortable/compact — see below | a per-shot pixel diff over threshold |
 
@@ -132,7 +146,11 @@ several incidents in the CHANGELOG are a gate reporting clean while measuring no
 **`check:contrast`** parses `tokens.css` per theme block, resolves `var()` chains, evaluates a derived
 MANIFEST, enforces **dark-block parity**, carries a **non-text group (WCAG 1.4.11, 3:1)** for control
 boundaries and focus indicators, and asserts the literal hex living outside tokens.css (logo gradient
-stops, artwork strokes, `email.css`) because custom properties reach none of them. Three rules in it are
+stops, artwork strokes, `email.css`) because custom properties reach none of them. ⚠ **The email
+assertion runs BOTH ways since v3.0.0**: every watched token's hex must be in `email.css`, *and* every
+hex in `email.css` must be a watched token's value or a named `EMAIL_EXEMPT` entry. The first half alone
+was green while three literals sat on values a token re-tune had moved away from — a second home is only
+safe while something compares the two, in both directions. Three rules in it are
 load-bearing:
 
 - ⚠ **BAND SCOPE.** A selector used as an ancestor scope to re-ink descendants from the `--lw-on-dark*`
@@ -152,10 +170,20 @@ load-bearing:
 **`check:tokens`** is a **deny-list, not a contract checker.** Its TSX rules (raw hex, palette escape,
 arbitrary `var()` in `[…]`, >1 `variant="cta"` per file) fire only against *consumer* source — run `node
 tools/lw-token-lint.mjs <consumer>/src` by hand before any pin bump. `--css` self-checks the layers (raw
-duration, raw z-index, `legacy-duration`, `keyframe-name`, `breakpoint-spelling`, `missing-react-import`)
-and the docs (`doc-count`, `readme-coverage`, `stale-install-pin`). ⚠ **It cannot see a utility the preset
-no longer registers** — a removed utility compiles, lints green and renders unstyled, so **grep the
-consumers before you remove one.** ⚠ `raw-hex` matches 3/6 digits only.
+duration, raw z-index, `legacy-duration`, `keyframe-name`, `breakpoint-spelling`, `missing-react-import`,
+`dynamic-class`) and the docs (`doc-count`, `readme-coverage`, `stale-install-pin`). ⚠ **It cannot see a
+utility the preset no longer registers** — a removed utility compiles, lints green and renders unstyled,
+so **grep the consumers before you remove one.** ⚠ `raw-hex` matches 3/6 digits only.
+
+⚠ **`dynamic-class` (v3.0.0) is the rule for the class NO grep can find.** Several components compose the
+class from a prop — `` `lw-btn-${variant}` ``, `` `lw-chip-${tone}` ``, `` `lw-stack-${gap}` ``,
+`` `lw-cluster-${gap}` `` — so `.lw-btn-ink` appears nowhere except base.css defining itself: not in
+`components/`, not in a card, not in a consumer. **The v3.0.0 dead-CSS sweep put `.lw-btn-ink`,
+`.lw-cluster-16` and `.lw-cluster-24` on its delete list for exactly that reason**, and all three are
+live public API. The rule reads each prop's union from the sibling `.d.ts` and requires a matching
+selector, so it fails both ways — a union value the CSS cannot paint, and a rule the next sweep is about
+to delete. It reads the DEFAULT guard (`gap !== 16 && …`) instead of keeping a list of defaults.
+**Before deleting any `.lw-*` rule, check whether a template literal builds its name.**
 
 **`check:a11y`** — a node may opt out of ONE rule with `data-a11y-expect="<rule-id>"` (never a whole card
 or rule; exactly one today). ⚠ **It reads `violations`, not `incomplete`, a blind spot with a known
@@ -393,11 +421,13 @@ Verified 2026-09-04 by enumeration (below), not by memory.
 | `P20260707-vss/frontend` | `#v0.2.3` | `tokens` `fonts` `shadcn` + preset + `./brand` | pnpm |
 | `P20260706-rag-service/frontend` | `#v0.2.2` (reports **0.2.1**) | `tokens` `fonts`, vanilla | npm |
 
-**Drift today.** `leanwise-ai` is current; `leanwise-inspect` is one release behind. ⚠ This table
-went stale TWICE in one morning because releases landed from another session between writing it and
-committing it — **run the loop below, do not hand-edit a row.** **Three sit on `#v1.7.1`**
-(tss-app, 4DXs_plan, sop) and must cross v2.0.0 — CHANGELOG 2.0.0 **§Migration — per consumer, what to
-grep** lists the removals against every tree. **VSS (`#v0.2.3`) and rag-service (`#v0.2.2`) are pre-1.1**
+**Drift today (2026-09-05, by the loop).** **Every consumer is now behind**: v3.0.0 is cut and no pin
+has moved — deliberately, because a two-major jump is its own piece of work. `leanwise-ai` `#v2.3.0` and
+`leanwise-inspect` `#v2.2.2` are one major back; ⚠ this table went stale TWICE in one morning because
+releases landed from another session between writing it and committing it — **run the loop below, do not
+hand-edit a row.** **Three sit on `#v1.7.1`** (tss-app, 4DXs_plan, sop) and must cross BOTH v2.0.0 and
+v3.0.0 — each release's **§Migration — per consumer, what to grep** lists the removals against every
+tree, and v3.0.0's is one line (`leanwise-ai/src/routes/admin.posts.$id.tsx:602`, `<Toast tone="ok">`). **VSS (`#v0.2.3`) and rag-service (`#v0.2.2`) are pre-1.1**
 and cannot be bumped in one jump: v1.1.0 broke the **JS entry points**, not the CSS surface. Sequence pin
 bump → layer migration, so breakage is attributable to one or the other. (There is no `v1.1.0` tag and no
 `v1.0.x` at all — the tags go `v0.9.0` → `v1.1.1`.)
