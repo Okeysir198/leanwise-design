@@ -84,6 +84,8 @@
     "fonts",
     "tools",
     "README.md",
+    "preview",
+    "_ds_bundle.js",
     "tsconfig.json",
     "r",
     "registry",

@@ -10,26 +10,46 @@ and the gates could not run air-gapped at all. These are the same React files, o
 file beside it, compiled ahead of time by `tools/lw-cards.mjs` (esbuild, classic
 `React.createElement` transform) into a committed `<name>.card.js`, checked for
 staleness by `npm run check:cards`. That removed 3.1 MB of `@babel/standalone` from
-the repo and from every one of the 108 card loads the visual gate makes per run —
+the repo and from every one of the card loads the visual gate makes per run —
 a compiler the browser parsed and ran to transpile a few kilobytes that never changed.
-
-Nothing here is published, imported by the package, or reachable from `react.js` — the
-cards are a fixture set, and this is their runtime.
 
 ## What is pinned
 
-Fetched from `https://unpkg.com/<spec>` at the versions the cards already referenced.
-Verify with `sha256sum -c` against this table (`cd` here first).
+Fetched from `https://unpkg.com/<spec>`. Verify with `sha256sum -c` against this table
+(`cd` here first).
 
 | File | Spec | Bytes | SHA-256 |
 |---|---|---|---|
-| `react.development.js` | `react@18.3.1/umd/react.development.js` | 109,931 | `28348fef6cb0ed8b2ceeb22deaf824428fd13875d84c73d38f77dd216fc24e7f` |
-| `react-dom.development.js` | `react-dom@18.3.1/umd/react-dom.development.js` | 1,080,227 | `f9044a5e9c39db8bb1a204dff924e526ec0a621e695bb69de1035811be8709e4` |
+| `react.production.min.js` | `react@18.3.1/umd/react.production.min.js` | 10,751 | `d949f1c3687aedadcedac85261865f29b17cd273997e7f6b2bfc53b2f9d4c4dd` |
+| `react-dom.production.min.js` | `react-dom@18.3.1/umd/react-dom.production.min.js` | 131,835 | `35f4f974f4b2bcd44da73963347f8952e341f83909e4498227d4e26b98f66f0d` |
 
-**Development builds, deliberately.** A specimen card is where you *want* the key
-warnings, the `act()` complaints and the component stack in a violation — the production
-build strips exactly the diagnostics that make a card worth loading by hand. The size
-difference (~1.1 MB) is paid by a local `file://` read, not by a consumer.
+**React 18, not 19, and that is forced.** React 19 ships no UMD build, and a card is a
+plain `file://` page with three `<script src>` tags and no bundler. The package's
+`peerDependencies` range (`>=18`) is what governs consumers; this pin governs only what
+the fixtures render on.
+
+## Production builds since v3.0.0 — the reversal, and why
+
+Through v2.3.0 these were the **development** builds, deliberately: a specimen card is
+where you *want* the key warnings, the `act()` complaints and the component stack in a
+violation. Two things changed that.
+
+1. **`package.json#files` now carries `preview/`.** Every `*.card.html` had always
+   shipped in the tarball while the three things it loads — `preview/_card.css`,
+   `preview/_vendor/react*.js` and `_ds_bundle.js` — did not, so **the cards in the
+   published package had never once rendered** (REVIEW.md open item 3). Shipping what
+   they need is the fix; shipping 1.19 MB of development React to do it is not.
+2. **No gate reads a React warning.** `lw-a11y.mjs` listens on `pageerror` and nothing
+   else, and the production build still throws — so the render guard, the page-error
+   check and axe all behave identically. The warnings were for a human opening a card
+   by hand, which is a real loss and a small one.
+
+Net: **−1.19 MB from the clone** and from every card load both browser gates make, and
+~45 KB gzipped in the tarball instead of ~255 KB.
+
+If you are debugging a card by hand and want the warnings back, drop the two
+development builds in beside these and re-point the two `<script src>` tags in the one
+card you are looking at. Do not commit that.
 
 ## Why the `integrity` / `crossorigin` attributes went away
 
@@ -42,8 +62,8 @@ replacement, and they are checkable without a browser.
 
 ```bash
 cd preview/_vendor
-curl -sSLo react.development.js     https://unpkg.com/react@18.3.1/umd/react.development.js
-curl -sSLo react-dom.development.js https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js
+curl -sSLo react.production.min.js     https://unpkg.com/react@18.3.1/umd/react.production.min.js
+curl -sSLo react-dom.production.min.js https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js
 sha256sum *.js            # then update the table above
 ```
 

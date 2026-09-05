@@ -79,15 +79,49 @@ try {
   }
 
   /* ---- 2b. what must NOT ship --------------------------------------------
-     `templates/` is 1.4 MB — 816 KB of it twelve BYTE-IDENTICAL copies of
-     support.js — and it shipped BROKEN anyway: every ds-base.js in it loads
-     `_ds_bundle.js`, which `files` has never carried, so a consumer who opened a
-     packed template got a blank page. They are authoring artifacts, the same
-     verdict REVIEW.md §3 reached for the preview cards. Dropped in v1.2; this
-     assertion is what stops them drifting back in. */
-  for (const f of ["templates", "preview", "_ds_bundle.js", "node_modules", "tsup.config.js"]) {
+     `templates/` stays out. It is 612 KB, and a packed template would need the
+     `<x-dc>` authoring runtime that only the design project has — a consumer who
+     opened one would get markup with no renderer. That is a different verdict
+     from the one the cards got below, and it turns on whether the thing can run
+     from the tarball at all. */
+  for (const f of ["templates", "node_modules", "tsup.config.js"]) {
     if (has(f)) problems.push(`\`${f}\` IS in the tarball and should not be — it is an authoring artifact`);
   }
+
+  /* ---- 2c. every shipped card can resolve what it LOADS -------------------
+     This is the assertion that would have caught the defect REVIEW.md open item
+     3 recorded and nobody fixed for eight releases: all 33 `*.card.html` shipped
+     inside `components/`, and every one of them loads `../../preview/_card.css`,
+     `../../preview/_vendor/react*.js` and `../../_ds_bundle.js` — none of which
+     `files` carried. **The cards in the published package had never rendered,
+     once, for anyone.** Neither MUST_PACK nor the exports walk could see it:
+     both check what a consumer IMPORTS, and a card is loaded by a browser.
+
+     v3.0.0 ships `preview/` and `_ds_bundle.js` so they work. This rule is what
+     keeps them working — resolve every relative `href`/`src` in every packed
+     card against the installed tree, which fails whether the fix regresses by
+     `files` losing an entry OR by a card learning to load something new. */
+  const cardDirs = [];
+  (function walk(d) {
+    for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+      const p = path.join(d, e.name);
+      if (e.isDirectory()) walk(p);
+      else if (e.name.endsWith(".card.html")) cardDirs.push(p);
+    }
+  })(path.join(pkgDir, "components"));
+  if (!cardDirs.length) problems.push("no `*.card.html` found in the tarball — this rule just stopped measuring anything");
+  let refs = 0;
+  for (const card of cardDirs) {
+    const html = fs.readFileSync(card, "utf8");
+    for (const m of html.matchAll(/(?:href|src)="(\.[^"]+)"/g)) {
+      refs++;
+      const target = path.resolve(path.dirname(card), m[1]);
+      if (!fs.existsSync(target)) {
+        problems.push(`${path.relative(pkgDir, card)} loads \`${m[1]}\`, which is not in the tarball`);
+      }
+    }
+  }
+  if (refs < 100) problems.push(`only ${refs} card asset reference(s) checked — expected well over 100; the walk is not reading the cards`);
 
   /* ---- 3. the "use client" directives survived packing -------------------- */
   const dialog = path.join(pkgDir, "dist/components/overlays/Dialog.js");
@@ -137,6 +171,7 @@ try {
 
   console.log(green(
     `lw-pack-check: OK — ${(bytes / 1024 / 1024).toFixed(2)} MB tarball; every export resolves, ` +
+    `${refs} card asset reference(s) across ${cardDirs.length} packed card(s) resolve, ` +
     `the "use client" directives survived, the bin runs, and the barrel imports.`,
   ));
 } finally {
