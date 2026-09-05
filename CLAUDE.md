@@ -424,7 +424,7 @@ Verified 2026-09-04 by enumeration (below), not by memory.
 | `leanwise-ai` | `#v3.0.1` | `tokens` `fonts` `reset` `base` `marketing` `product` + `./react` `./hooks` | pnpm |
 | `leanwise-inspect/frontend` | `#v3.0.1` | `tokens` `fonts` `shadcn` `theme` `base` `product` + `./react` `./hooks` | npm |
 | `P20251121-tss-app/frontend` | `#v1.7.1` | `tokens` `fonts` `shadcn` `theme` `base` | npm |
-| `4DXs_plan/app` | `#v1.7.1` | `tokens` `fonts` `reset` `base` `marketing` `product` + `./react` | npm |
+| `4DXs_plan/app` | `#v3.0.1` | `tokens` `fonts` `reset` `base` `marketing` `product` + `./react` | npm ⚠ no VCS |
 | `P20260806-sop/apps/web` | `#v1.7.1` | `tokens` `fonts` `shadcn` `theme` `base` `product` | npm |
 | `P20260707-vss/frontend` | `#v0.2.3` | `tokens` `fonts` `shadcn` + preset + `./brand` | pnpm |
 | `P20260706-rag-service/frontend` | `#v0.2.2` (reports **0.2.1**) | `tokens` `fonts`, vanilla | npm |
@@ -434,9 +434,13 @@ bumped the day v3 was cut. Between them they are the worked example for the othe
 headline is how small it was: `leanwise-ai` needed **one line** (`<Toast tone="ok">` → `tone="success"`)
 and `leanwise-inspect` needed **none at all**, across two minors and a major. ⚠ This table went stale
 TWICE in one morning because releases landed from another session between writing it and committing it
-— **run the loop below, do not hand-edit a row.** **Three sit on `#v1.7.1`** (tss-app, 4DXs_plan, sop)
-and must cross BOTH v2.0.0 and v3.0.0 — each release's **§Migration — per consumer, what to grep** lists
+— **run the loop below, do not hand-edit a row.** **`4DXs_plan` also crossed both majors** from `#v1.7.1` and needed three
+one-word edits, all of them retired tone spellings. **Two sit on `#v1.7.1`** (tss-app, sop) and must
+still cross BOTH v2.0.0 and v3.0.0 — each release's **§Migration — per consumer, what to grep** lists
 the removals against every tree.
+
+⚠ **`4DXs_plan` IS NOT A GIT REPOSITORY.** No `.git` anywhere, so there is no revert and no diff.
+Tar the tree before touching it.
 
 ⚠ **The npm consumers hit the lockfile no-op below, so budget for it.** On inspect's bump `npm install`
 reported "up to date", kept the old resolved commit and left the tree reporting `2.2.2` with
@@ -447,7 +451,19 @@ plain `npm install` would have. `rm -rf node_modules/@leanwise/design` then inst
 every `.lw-*` candidate in `src/` against the real compiled chain — 179 of them, which is the only thing
 that can see the Tailwind-v4 silent-nothing hazard after a CSS layer changes under you. And a tone value
 can be COMPUTED (`verdictTone()`, `toneOf()`), so a grep for `tone="ok"` is a lower bound; check the
-return types. **VSS (`#v0.2.3`) and rag-service (`#v0.2.2`) are pre-1.1**
+return types.
+
+⚠ **A retired tone in RAW MARKUP fails silently, and `tsc` cannot see it.** 4DXs_plan wrote
+`data-accent={AREA_ACCENT[i]}` with `AREA_ACCENT = ["brand", "pos", "warn"]`. The typed `KpiTile`
+props failed the build — good — but the raw attribute would have compiled, shipped, and simply lost
+its tint, because v3 removed `[data-accent="pos"]`. **Grep `data-tone=` and `data-accent=` as well as
+the props**, and trace what the expression returns.
+
+⚠ **`OverlayProvider` is NOT required when the theme lives on `<html>`.** Verified in a browser on
+4DXs_plan, which mounts none: Dialog and Drawer portal to `document.body`, `mirrorScope()` copies the
+`dark` class onto `.lw-layer`, and both paint `#0B1220` on `#E7ECF3` — correct. The provider earns its
+place for `brandVars()` or a theme scope BELOW `<html>`, which is the case CLAUDE.md's warning is
+about. Do not add it reflexively during a bump. **VSS (`#v0.2.3`) and rag-service (`#v0.2.2`) are pre-1.1**
 and cannot be bumped in one jump: v1.1.0 broke the **JS entry points**, not the CSS surface. Sequence pin
 bump → layer migration, so breakage is attributable to one or the other. (There is no `v1.1.0` tag and no
 `v1.0.x` at all — the tags go `v0.9.0` → `v1.1.1`.)
