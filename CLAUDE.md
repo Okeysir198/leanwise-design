@@ -413,7 +413,7 @@ Verified 2026-09-04 by enumeration (below), not by memory.
 
 | Consumer | Pin | Consumes | PM |
 |---|---|---|---|
-| `leanwise-ai` | `#v2.3.0` | `tokens` `fonts` `reset` `base` `marketing` `product` + `./react` `./hooks` | pnpm |
+| `leanwise-ai` | `#v3.0.0` | `tokens` `fonts` `reset` `base` `marketing` `product` + `./react` `./hooks` | pnpm |
 | `leanwise-inspect/frontend` | `#v2.2.2` | `tokens` `fonts` `shadcn` `theme` `base` `product` + `./react` `./hooks` `./components` | npm |
 | `P20251121-tss-app/frontend` | `#v1.7.1` | `tokens` `fonts` `shadcn` `theme` `base` | npm |
 | `4DXs_plan/app` | `#v1.7.1` | `tokens` `fonts` `reset` `base` `marketing` `product` + `./react` | npm |
@@ -421,13 +421,14 @@ Verified 2026-09-04 by enumeration (below), not by memory.
 | `P20260707-vss/frontend` | `#v0.2.3` | `tokens` `fonts` `shadcn` + preset + `./brand` | pnpm |
 | `P20260706-rag-service/frontend` | `#v0.2.2` (reports **0.2.1**) | `tokens` `fonts`, vanilla | npm |
 
-**Drift today (2026-09-05, by the loop).** **Every consumer is now behind**: v3.0.0 is cut and no pin
-has moved — deliberately, because a two-major jump is its own piece of work. `leanwise-ai` `#v2.3.0` and
-`leanwise-inspect` `#v2.2.2` are one major back; ⚠ this table went stale TWICE in one morning because
-releases landed from another session between writing it and committing it — **run the loop below, do not
-hand-edit a row.** **Three sit on `#v1.7.1`** (tss-app, 4DXs_plan, sop) and must cross BOTH v2.0.0 and
-v3.0.0 — each release's **§Migration — per consumer, what to grep** lists the removals against every
-tree, and v3.0.0's is one line (`leanwise-ai/src/routes/admin.posts.$id.tsx:602`, `<Toast tone="ok">`). **VSS (`#v0.2.3`) and rag-service (`#v0.2.2`) are pre-1.1**
+**Drift today (2026-09-05, by the loop).** **`leanwise-ai` is current on `#v3.0.0`** — bumped the day
+v3 was cut, and the whole migration was the one line v3's §Migration predicted: `<Toast tone="ok">` →
+`tone="success"` in `src/routes/admin.posts.$id.tsx`. Nothing else in that tree touched a removed export,
+class, token or prop. It is the worked example for the other six. ⚠ This table went stale TWICE in one
+morning because releases landed from another session between writing it and committing it — **run the
+loop below, do not hand-edit a row.** `leanwise-inspect` `#v2.2.2` is one major back. **Three sit on
+`#v1.7.1`** (tss-app, 4DXs_plan, sop) and must cross BOTH v2.0.0 and v3.0.0 — each release's
+**§Migration — per consumer, what to grep** lists the removals against every tree. **VSS (`#v0.2.3`) and rag-service (`#v0.2.2`) are pre-1.1**
 and cannot be bumped in one jump: v1.1.0 broke the **JS entry points**, not the CSS surface. Sequence pin
 bump → layer migration, so breakage is attributable to one or the other. (There is no `v1.1.0` tag and no
 `v1.0.x` at all — the tags go `v0.9.0` → `v1.1.1`.)
