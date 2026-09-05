@@ -26,6 +26,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { splitRules, stripComments, declarationsIn } from "./_css.mjs";
 import { generated } from "./_generated.mjs";
+import { MANIFEST, manifestWith, scopeLabel } from "./_manifest.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const args = process.argv.slice(2);
@@ -116,15 +117,31 @@ for (const m of css.matchAll(/(--[\w-]+)\s*:\s*[^;\n]+;([^\n]*)/g)) {
    now, so there is no third place for the next parse defect to hide. */
 const byTheme = { base: {}, light: {}, dark: {}, compact: {}, comfortable: {} };
 const scopes = new Set();
+/* Every distinct token name, with the value of its FIRST declaration — the
+   manifest's `tokens` array, which was hand-maintained at 442 entries against a
+   real 323 until v3.0.0 (see tools/_manifest.mjs). */
+const declared = new Map();
+/* The SWITCHABLE scopes — a selector a consumer can put on an element. Taken
+   from the real selector lists, which is why the stray `[data-band="dark"])`
+   and the `:root[data-theme="dark"]` block deleted in v1.13.0 cannot come
+   back: `:where(...)` re-derive machinery and `@media` scopes are not switches
+   and are skipped. */
+const switchable = new Set();
 
 for (const { selector, directBody, atRule } of splitRules(stripComments(css))) {
   if (!selector || selector.startsWith("@")) continue;
   const theme = THEME(selector, atRule);
   scopes.add(selector);
+  if (!atRule && !selector.includes(":where(")) {
+    for (const part of selector.split(",").map((x) => x.trim()).filter(Boolean)) {
+      if (/^(\.[a-z-]|\[data-)/i.test(part)) switchable.add(part);
+    }
+  }
   // directBody, not body: a parent's body includes every nested child verbatim,
   // so a `:root` wrapping a nested rule would absorb that rule's declarations.
   for (const [name, value] of Object.entries(declarationsIn(directBody))) {
     byTheme[theme]["--lw-" + name] = value;
+    if (!declared.has("--lw-" + name)) declared.set("--lw-" + name, value);
   }
 }
 
@@ -216,10 +233,16 @@ if (problems.length) {
 // installs from a git tag, where a generated-at-publish file does not exist).
 // A committed generated file can go stale silently, so the check that runs on
 // every token change is also the one that catches it.
-const files = new Map([[outPath, JSON.stringify(doc, null, 2) + "\n"]]);
+const manifest = manifestWith({
+  tokens: [...declared].map(([name, value]) => ({
+    name, value, kind: KIND(name, value, hints.get(name)), definedIn: "tokens.css",
+  })),
+  themes: [...switchable].sort().map((selector) => ({ selector, label: scopeLabel(selector) })),
+});
+const files = new Map([[outPath, JSON.stringify(doc, null, 2) + "\n"], [MANIFEST, manifest]]);
 const stale = await generated({
   name: "lw-tokens-dtcg", files, check: checkOnly,
-  hint: "tokens.css has moved since it was generated. Run `npm run tokens` and commit the result.",
+  hint: "tokens.css has moved since this was generated (tokens.json, and _ds_manifest.json's tokens + themes, are one computation). Run `npm run tokens` and commit both.",
 });
 if (stale) process.exit(1);
 if (checkOnly) {

@@ -84,6 +84,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import esbuild from "esbuild";
 import { generated } from "./_generated.mjs";
+import { MANIFEST, manifestWith } from "./_manifest.mjs";
 import { JSX_RUNTIME_SHIM_SOURCE } from "./_jsx-shim.mjs";
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -432,12 +433,22 @@ try {
   const { text, exposed, unexposed, bundled, vendored, cardNames } = await generate();
   const rel = path.relative(ROOT, OUT_PATH);
 
+  /* `_ds_manifest.json`'s `namespace` and `components` are THIS computation,
+     and were hand-maintained beside it until v3.0.0 — REVIEW.md items 1 and 6.
+     Patched here, in the same Map, so one `--check` covers both files and the
+     manifest cannot drift from the bundle it describes. */
+  const manifest = manifestWith({
+    namespace: NAMESPACE,
+    components: exposed.map(({ name, sourcePath }) => ({ name, sourcePath })),
+  });
+
   const stale = await generated({
-    name: "lw-bundle", files: new Map([[OUT_PATH, text]]), check,
+    name: "lw-bundle", files: new Map([[OUT_PATH, text], [MANIFEST, manifest]]), check,
     hint:
-      `the cards render from this file, not from components/**/*.jsx — until it is ` +
-      `regenerated, check:a11y and check:visual are testing the previous sources. ` +
-      `Fix: npm run bundle && git add ${rel}`,
+      `the cards render from _ds_bundle.js, not from components/**/*.jsx — until it is ` +
+      `regenerated, check:a11y and check:visual are testing the previous sources; and ` +
+      `_ds_manifest.json's namespace + components are the same computation, so they move ` +
+      `together. Fix: npm run bundle && git add ${rel} _ds_manifest.json`,
   });
   if (stale) process.exit(1);
   if (check) {
