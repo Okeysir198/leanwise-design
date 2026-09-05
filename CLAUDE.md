@@ -136,6 +136,7 @@ Every `check:*` in `package.json#scripts`.
 | `check:assets` | each on-dark artwork twin is current with its `-ink` source (a token-driven substitution, never a hand-edit) | a stale generated SVG |
 | `check:pack` | `npm pack`, install the tarball into a scratch dir, and USE it — the only gate not run against the working tree; since v3.0.0 it also resolves every relative `href`/`src` in every packed `*.card.html` | a `files` list that drops something. This is how `dist/` was never built for anyone, how the `lw-token-lint` bin went missing under pnpm, and how every shipped card loaded three files the tarball did not carry for eight releases |
 | `check:a11y` | axe over every `@dsCard` — see below | serious/critical violations; moderate/minor report only |
+| `check:forced-colors` | a real Chromium at `forcedColors: "active"`: every ground WRAPPER survives with all its text, and every decorative `::before`/`::after` is hidden | a content wrapper hidden outright (v3.0.0 blanked the page this way) **or** decoration still painted (pre-v3 hid nothing). Nothing else here sees forced-colors |
 | `check:visual` | every card × light/dark × comfortable/compact — see below | a per-shot pixel diff over threshold |
 
 `_cards.mjs` is not a gate but is the list BOTH browser gates enumerate: it cross-checks
@@ -268,6 +269,13 @@ so their `position: fixed` layers stay inside their stage. Without it the ground
   inside a custom property against the DOCUMENT**, not the stylesheet. `.lw-page-ground` resolves off
   `[data-theme]` on `<html>`, not a consumer-picked class, because a theme class in the HTML makes the
   document cookie-dependent and `s-maxage` with no `Vary` then caches it on URL alone.
+- ⚠ **The grounds are content WRAPPERS, not layers — never hide one.** `.lw-page-ground` is
+  `body > div` around the whole page in a consumer, and `.lw-aurora` lifts its children with
+  `z-index`. Both paint through `::before`/`::after`, so anything that wants the decoration gone
+  (the forced-colors block) hides the PSEUDO-ELEMENTS. v3.0.0 hid the wrapper and shipped a blank
+  page to every Windows High Contrast visitor; the version before it named two classes that do
+  not exist and hid nothing. `check:forced-colors` is the gate, because reading the rule is how
+  both were got wrong.
 - ⚠ **A hero on a themed ground must NOT carry a band scope.** `.lw-hero-dark` is in the dark band list
   because a standalone hero is always navy; inside `.lw-page-ground` that pinned it dark while the ground
   painted white — 1.09:1 sitewide for every default-theme visitor. Fixed by re-pointing its channels to

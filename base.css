@@ -2448,6 +2448,24 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
     border: 2px solid Highlight;
   }
 
-  /* Decorative washes only add noise once the palette is forced. */
-  .lw-page-ground, .lw-aurora { display: none; }
+  /* Decorative washes only add noise once the palette is forced — but the
+     ground and the aurora are CONTENT WRAPPERS, not layers. `.lw-page-ground`
+     is `body > div` around the whole page on the flagship consumer (a `<main>`
+     and ~360 descendants), and `.lw-aurora` puts its children at
+     `z-index: var(--lw-z-raised)` on purpose. So the decoration is the
+     PSEUDO-ELEMENTS, and only those may be hidden.
+
+     ⚠ Hiding the elements themselves blanks the page. Through v2.3.0 this list
+     read `.lw-ground, .lw-aurora, .lw-sheen`, of which two named no rule at all —
+     so it hid the aurora's content and nothing else, and the phantoms made the
+     whole line look like it was doing more than it was. v3.0.0 corrected the
+     names to real ones and shipped the blanking for one deploy. Verified in a
+     browser at `forcedColors: active`, which is the only way to see any of
+     this: no gate here emulates forced-colors. */
+  :is(.lw-page-dark, .lw-page-light, .lw-page-ground)::before,
+  :is(.lw-page-dark, .lw-page-light, .lw-page-ground)::after,
+  :is(.lw-page-dark, .lw-page-light, .lw-page-ground) .lw-hero-dark::before,
+  :is(.lw-page-dark, .lw-page-light, .lw-page-ground) .lw-hero-dark::after,
+  .lw-hero-dark::before, .lw-hero-dark::after,
+  .lw-aurora::before, .lw-aurora::after { display: none; }
 }

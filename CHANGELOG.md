@@ -24,6 +24,54 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 ## [Unreleased]
 
+## [3.0.1] — 2026-09-05
+
+**A patch for a defect v3.0.0 introduced and shipped: in Windows High Contrast the entire page
+went blank.** Found by verifying the v3.0.0 forced-colors fix in a real browser, which is the
+only place any of this is visible.
+
+### Fixed
+
+- **`@media (forced-colors: active)` hid the page, not the decoration.** v3.0.0 corrected the
+  hide list from `.lw-ground, .lw-aurora, .lw-sheen` — two of which named no rule in the package
+  — to `.lw-page-ground, .lw-aurora`. The names became real and the bug got **worse**, because
+  those are not layers: **`.lw-page-ground` is `body > div` around the entire page** on the
+  flagship consumer (a `<main>` and ~360 descendants), and `.lw-aurora` lifts its children with
+  `z-index: var(--lw-z-raised)`. Measured in Chromium at `forcedColors: "active"` against
+  production: **0 characters of body text**, against 15 normally. Shipped for one deploy.
+
+  Every ground paints through `::before` / `::after`, so those — and the hero's two — are the
+  only things that may be hidden. The wrapper stays.
+
+  ⚠ **Both versions of this rule were wrong, and in opposite directions.** Before v3 it hid
+  nothing except the aurora's own content; in v3.0.0 it hid everything. Both are the same
+  mistake: reasoning about a forced-colors rule by *reading* it. That is why the fix ships with
+  a gate rather than a correction.
+
+### Added
+
+- **`check:forced-colors`** — opens a real Chromium at `forcedColors: "active"` and asserts, per
+  ground, that the **wrapper survives with all of its text** and **every decorative
+  pseudo-element is hidden**. It fails in both directions, which is the point: hiding a content
+  wrapper and leaving decoration painted are both caught. Sabotaged with each of the two rules
+  this package actually shipped — the v3.0.0 list produces 11 problems naming the wrappers and
+  their descendant counts, the pre-v3 list produces 9 naming the surviving pseudo-elements —
+  plus a `--self-test` that proves both failure modes are detectable without a browser.
+
+  It lives in `check:ci` and in CI beside `check:a11y`, because **nothing else here can see
+  forced-colors**: `check:contrast` measures tokens and forced-colors ignores tokens, axe does
+  not emulate it, and `check:visual` shoots the normal palette. `.lw-aurora` is rendered by no
+  card, so the gate carries its own fixture for it rather than skipping its second subject.
+
+- The `forced-colors-grounds-not-hidden` advisory is re-pointed to `fixedIn: 3.0.1`, raised to
+  **high**, and its derivation rewritten to count ground wrappers hidden *outright*. ⚠ The first
+  draft of that derivation split the selector list on commas and tore
+  `:is(.lw-page-dark, .lw-page-light, .lw-page-ground)::before` into three pieces that looked
+  like bare wrappers, reading 4 against a correct tree; it splits at depth zero now.
+
+  **If you are pinned to v3.0.0 exactly, upgrade** — the page is blank for high-contrast users.
+  On any earlier pin the decoration merely survives, which is cosmetic.
+
 ## [3.0.0] — 2026-09-05
 
 **The major that keeps the promises the deprecation policy already made, and a dead-code

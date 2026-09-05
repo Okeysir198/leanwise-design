@@ -15,7 +15,7 @@ document is a second home that goes stale, and this line has proved it twice: it
 exports … 5 gates" when the barrel exported 82 and there were six, and then "442 tokens, eight
 theme scopes" against an actual 283 across twelve.
 
-**Last pass:** v3.0.0 — see the verdict below. **Previous passes:** v2.0.0, v1.13.0. It found a `:root[data-theme="dark"]` block that was value-identical to
+**Last pass:** v3.0.1 — see the verdict below. **Previous passes:** v2.0.0, v1.13.0. It found a `:root[data-theme="dark"]` block that was value-identical to
 `.dark, [data-theme=dark]` and had been maintained in parallel for the life of the package; 25
 derived roles that stayed on the PAGE theme inside `.lw-page-dark` because that ground joined
 the band list in v1.4.0 and never joined the re-derive list (the demo writes `class="dark
@@ -57,6 +57,15 @@ specimen that did not exist, or existed in the wrong state.**
   entire point is that decoration stands down. **No gate here asserts that a selector in a layer names
   a class the package defines**, and a selector matching nothing costs nothing and reports nothing.
   That is a gate-shaped hole and it is still open — see item 12.
+
+  ⚠ **And the correction was worse than the defect, which is the part worth keeping.** v3.0.0
+  replaced the phantoms with the real names and shipped `display: none` on `.lw-page-ground` —
+  `body > div` around the whole page — so high-contrast visitors got a blank document, measured at
+  0 characters of body text on production. Fixed in v3.0.1 by hiding the pseudo-elements, and gated
+  by `check:forced-colors`. **Both versions of the rule were reasoned about by READING them**, which
+  no amount of care survives: the grounds look like layers and are wrappers. The lesson is not
+  "check your selector names" — it is that a media query no gate emulates is a media query nobody
+  has ever seen render.
 - **email.css had drifted from three tokens.** The contrast gate asserted one direction only; adding
   the inverse found the drift immediately. A second home is safe only while something compares the two
   **in both directions**, and half a comparison reads exactly like a whole one.

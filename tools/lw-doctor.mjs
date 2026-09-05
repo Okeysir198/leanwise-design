@@ -263,21 +263,38 @@ if (SELF) {
        the two phantoms survived — so the derivation is "is this class defined
        anywhere", asked of the list itself. */
     "forced-colors-grounds-not-hidden": () => {
-      const layers = ["base.css", "marketing.css", "product.css", "tokens.css"]
-        .map((f) => fs.readFileSync(path.join(ROOT, f), "utf8").replace(/\/\*[\s\S]*?\*\//g, "")).join("\n");
-      const base = layers;
-      const block = /@media\s*\(forced-colors:\s*active\)/.exec(base);
-      if (!block) throw new Error("base.css has no forced-colors block");
-      const hide = /\n\s*(\.lw-[^{}]*?)\{\s*display:\s*none;\s*\}/g;
-      let n = 0;
-      for (const m of base.slice(block.index).matchAll(hide)) {
-        for (const sel of m[1].split(",").map((x) => x.trim())) {
-          if (!/^\.lw-[a-z0-9-]+$/.test(sel)) continue;
-          /* Defined = the class heads a selector somewhere other than this list. */
-          const defined = new RegExp(`\\${sel}(?![a-z0-9-])`, "g");
-          if ([...base.matchAll(defined)].length <= 1) n++;
+      /* Count ground WRAPPERS hidden OUTRIGHT by the forced-colors rule. A
+         wrapper hidden outright takes its content with it — the v3.0.0
+         regression. The same name carrying a `::before`/`::after` is the
+         correct form and counts 0.
+
+         ⚠ Split the selector list at DEPTH ZERO. A naive `.split(",")` tears
+         `:is(.lw-page-dark, .lw-page-light, .lw-page-ground)::before` into
+         three pieces, two of which look like bare wrappers — which is exactly
+         how the first draft of this derivation read 4 against a correct tree. */
+      const css = fs.readFileSync(path.join(ROOT, "base.css"), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+      const at = /@media\s*\(forced-colors:\s*active\)/.exec(css);
+      if (!at) throw new Error("base.css has no forced-colors block");
+      const WRAPPERS = [".lw-page-ground", ".lw-page-dark", ".lw-page-light", ".lw-aurora"];
+      const topLevel = (list) => {
+        const out = []; let depth = 0, cur = "";
+        for (const ch of list) {
+          if (ch === "(") depth++;
+          else if (ch === ")") depth--;
+          if (ch === "," && depth === 0) { out.push(cur); cur = ""; continue; }
+          cur += ch;
         }
-        break; // the first display:none list inside the block is the decorative one
+        if (cur.trim()) out.push(cur);
+        return out.map((x) => x.trim()).filter(Boolean);
+      };
+      let n = 0;
+      for (const m of css.slice(at.index).matchAll(/([^{}]+)\{\s*display:\s*none;\s*\}/g)) {
+        for (const sel of topLevel(m[1])) {
+          if (sel.includes("::")) continue;                 // a pseudo-element — the correct form
+          if (WRAPPERS.some((w) => sel.split(/[\s>+~]/).includes(w) || sel === w)) { n++; continue; }
+          const is = /:is\(([^)]*)\)\s*$/.exec(sel);        // `:is(a, b)` with nothing after it
+          if (is && is[1].split(",").some((x) => WRAPPERS.includes(x.trim()))) n++;
+        }
       }
       return n;
     },

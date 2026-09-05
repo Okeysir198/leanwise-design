@@ -206,15 +206,15 @@
     },
     {
       "id": "forced-colors-grounds-not-hidden",
-      "fixedIn": "3.0.0",
-      "affects": "<3.0.0",
-      "severity": "low",
-      "title": "The forced-colors block hid two classes that do not exist, so every decorative ground stayed painted",
-      "detail": "`@media (forced-colors: active)` in base.css set `display: none` on `.lw-ground, .lw-aurora, .lw-sheen`. `.lw-aurora` is real; the other two are not rules anywhere in the package \u2014 the page ground is `.lw-page-ground`, and `.lw-sheen` was never defined at all (`.lw-shine` was the near-name, itself removed in v3.0.0 as unreachable). So in Windows High Contrast and every other forced-colors mode \u2014 the one mode whose entire point is that decoration stands down \u2014 the honeycomb, the glow and the oversized mark kept painting behind forced text colours. A selector that matches nothing costs nothing and reports nothing, which is why this survived: no gate here asserts that a selector in a layer names a class the package defines.",
-      "measuredBy": "check:advisories \u2014 the derivation counts the names in base.css's forced-colors `display: none` list that no layer defines, which is 2 in the affected tree and 0 once the list names `.lw-page-ground`",
+      "fixedIn": "3.0.1",
+      "affects": "<3.0.1",
+      "severity": "high",
+      "title": "The forced-colors hide list was wrong twice \u2014 first it hid nothing, then it hid the whole page",
+      "detail": "base.css's `@media (forced-colors: active)` block hides the decorative grounds. Through v2.3.0 the list read `.lw-ground, .lw-aurora, .lw-sheen` \u2014 two of those three name NO rule in the package (the ground is `.lw-page-ground`; `.lw-sheen` never existed), so in Windows High Contrast the honeycomb, glow and oversized mark kept painting, and the only thing hidden was `.lw-aurora` \u2014 including the aurora's own CONTENT, since it lifts its children with z-index rather than being a layer. v3.0.0 corrected the names and made it much worse: `.lw-page-ground` is `body > div` around the ENTIRE page on the flagship consumer, so a high-contrast visitor got a blank document. Measured in Chromium at forcedColors:active on production \u2014 0 characters of body text against 15 normally. It shipped for one deploy and is fixed in v3.0.1: every ground is a content WRAPPER that paints through ::before/::after, so only the pseudo-elements are hidden. \u26a0 If you are on v3.0.0 exactly, upgrade \u2014 the page is blank for those users. On any earlier pin the decoration merely survives, which is cosmetic. Nothing here could see either version: check:contrast measures tokens and forced-colors ignores tokens, axe does not emulate forced-colors, and check:visual shoots the normal palette. v3.0.1 adds `check:forced-colors`, which opens a real browser.",
+      "measuredBy": "check:advisories \u2014 the derivation counts ground WRAPPERS named directly in base.css's forced-colors display:none list (a wrapper hidden outright), which is 2 in the v3.0.0 tree and 0 once the list names only ::before/::after",
       "count": 0,
-      "countMeans": "undefined classes named in the forced-colors hide list \u2014 the defect, so a fixed tree derives 0",
-      "verifiedAgainst": "v2.3.0"
+      "countMeans": "content wrappers hidden outright by the forced-colors rule \u2014 the defect, so a fixed tree derives 0",
+      "verifiedAgainst": "v3.0.0"
     },
     {
       "id": "email-css-drifted-from-tokens",

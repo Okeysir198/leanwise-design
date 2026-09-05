@@ -55,6 +55,13 @@ jobs:
       - name: Accessibility
         run: npm run check:a11y
 
+      # Windows High Contrast. Nothing else here can see it — contrast measures
+      # tokens and forced-colors ignores tokens, axe does not emulate it, and
+      # the visual gate shoots the normal palette. Added after v3.0.0 shipped a
+      # forced-colors rule that hid the whole page.
+      - name: Forced colors
+        run: npm run check:forced-colors
+
       # ---------------------------------------------------------------------
       # Visual regression.
       #
