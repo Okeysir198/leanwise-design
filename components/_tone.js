@@ -34,65 +34,13 @@
  * is forbidden is a component spelling a judgement it DOES support differently
  * from the token it resolves to. `tools/lw-tone.mjs` enforces exactly that.
  *
- * ⚠️ LEGACY NAMES STILL WORK, and warn once. Six consumers pin this package by
- * exact git tag; removing a name would break their build on the day they
- * upgrade, for a rename. Per the deprecation policy in CHANGELOG.md they are
- * accepted for one MINOR and removed at the next MAJOR.
+ * ⚠️ THE LEGACY NAMES ARE GONE (v3.0.0). `ok`/`warn`/`err`/`pos`/`neg` were
+ * accepted with a one-time console warning from v1.x; the deprecation policy in
+ * CHANGELOG.md gave them one minor and the next major, and this is it. There is
+ * no normalising step any more — a component receives the canonical value and
+ * emits it, which is why `tools/lw-tone.mjs` reads TONES from this file rather
+ * than restating the list.
  */
-
-import { deprecate } from "./_deprecate.js";
 
 /** The canonical vocabulary, in the order `tokens.css` declares the roles. */
 export const TONES = ["brand", "success", "warning", "danger", "neutral", "info", "cta"];
-
-/**
- * Deprecated spelling → canonical.
- *
- * `pos`/`neg` are here because `KpiTile` used them for a JUDGEMENT ("did the
- * number move in a good direction"), which is the same question `success`/
- * `danger` answer everywhere else. Its `direction` prop keeps carrying the
- * orthogonal fact — which way the number moved — and is untouched; the two
- * genuinely disagree for latency, which is why that component has both.
- */
-const LEGACY = {
-  ok: "success",
-  warn: "warning",
-  err: "danger",
-  pos: "success",
-  neg: "danger",
-};
-
-/**
- * Normalise one tone value, warning once per component+value if it is legacy.
- *
- * Unknown values pass through untouched rather than throwing: a component
- * library that crashes a page over a typo'd tone has made a cosmetic mistake
- * fatal, and the CSS already fails safe — an unmatched selector paints the
- * default. `lw-tone` catches the typo at build time in the consumer instead.
- */
-export function normTone(component, value, prop = "tone") {
-  if (value == null) return value;
-  const canonical = LEGACY[value];
-  if (!canonical) return value;
-  deprecate(
-    component,
-    `${prop}=${value}`,
-    `${prop}="${value}" is deprecated — use ${prop}="${canonical}". ` +
-      "One vocabulary across every component: success | warning | danger | neutral | brand | info | cta. " +
-      "The old names are accepted for one minor and removed at the next major.",
-  );
-  return canonical;
-}
-
-/**
- * Normalise the KEYS of a per-tone lookup a consumer supplies — `Toast`'s
- * `toneLabels`, say. Renaming the prop's values without renaming the map keys
- * would silently drop the consumer's own display text, which on a Toast is the
- * status word and on a Vietnamese product is the whole point of the prop.
- */
-export function normToneMap(component, map, prop) {
-  if (!map) return map;
-  const out = {};
-  for (const [key, value] of Object.entries(map)) out[normTone(component, key, prop) ?? key] = value;
-  return out;
-}

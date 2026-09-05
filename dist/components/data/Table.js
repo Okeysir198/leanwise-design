@@ -3,7 +3,7 @@ import { jsx, jsxs } from "react/jsx-runtime";
 import { Icon } from "../primitives/Icon.js";
 import { Menu } from "../overlays/Menu.js";
 import { useOverflow } from "../_overflow.js";
-import { colHeader, legacySortArgs, emitSort } from "./_columns.js";
+import { colHeader, emitSort } from "./_columns.js";
 import { warnOnce } from "../_deprecate.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
 const labelText = (h) => typeof h === "string" ? h : typeof h === "number" ? String(h) : void 0;
@@ -22,7 +22,6 @@ function Table({
   children,
   ...rest
 }) {
-  const legacyArgs = legacySortArgs("Table", columns || [], onSort);
   const cards = collapse === "cards";
   const wrapRef = useOverflow();
   if (cards && !detailsLabel) {
@@ -34,10 +33,9 @@ function Table({
   }
   const sortOf = (c) => {
     if (sortState && sortState.key === c.key) return sortState.dir === "desc" ? "descending" : "ascending";
-    if (sortState) return void 0;
-    return c.sort === "asc" ? "ascending" : c.sort === "desc" ? "descending" : c.sort;
+    return void 0;
   };
-  const isSortable = (c) => Boolean((c.sortable || c.sort) && onSort);
+  const isSortable = (c) => Boolean(c.sortable && onSort);
   const head = columns && /* @__PURE__ */ jsx("thead", { role: cards ? "rowgroup" : void 0, children: /* @__PURE__ */ jsx("tr", { role: cards ? "row" : void 0, children: columns.map((c) => {
     const sortable = isSortable(c);
     const sort = sortOf(c);
@@ -48,7 +46,7 @@ function Table({
         scope: "col",
         role: cards ? "columnheader" : void 0,
         "aria-sort": sortable ? sort || "none" : sort || void 0,
-        children: sortable ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => emitSort(onSort, legacyArgs, c.key, sort === "ascending" ? "desc" : "asc"), children: [
+        children: sortable ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => emitSort(onSort, c.key, sort === "ascending" ? "desc" : "asc"), children: [
           colHeader("Table", c),
           /* @__PURE__ */ jsx(Icon, { name: sort === "descending" ? "chevron-down" : "chevron-up", size: 12 })
         ] }) : colHeader("Table", c)
@@ -81,7 +79,7 @@ function Table({
       })),
       onSelect: (key) => {
         const c = sortableCols.find((x) => x.key === key);
-        emitSort(onSort, legacyArgs, key, sortOf(c) === "ascending" ? "desc" : "asc");
+        emitSort(onSort, key, sortOf(c) === "ascending" ? "desc" : "asc");
       },
       trigger: /* @__PURE__ */ jsxs("button", { type: "button", className: "lw-btn lw-btn-ghost lw-btn-sm", children: [
         sortLabel,

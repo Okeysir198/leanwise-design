@@ -29,11 +29,6 @@ export function hexToRgb(hex) {
   return { r: parseInt(h.slice(0, 2), 16) / 255, g: parseInt(h.slice(2, 4), 16) / 255, b: parseInt(h.slice(4, 6), 16) / 255 };
 }
 
-/** { r, g, b } in 0..1 -> `#RRGGBB`, upper-case. */
-export function rgbToHex({ r, g, b }) {
-  return "#" + [r, g, b].map((v) => Math.round(v * 255).toString(16).padStart(2, "0")).join("").toUpperCase();
-}
-
 /**
  * WCAG 2.1 relative luminance. Accepts `{ r, g, b }` or `[r, g, b]` — the
  * contrast gate composites alpha into a bare array before calling it.

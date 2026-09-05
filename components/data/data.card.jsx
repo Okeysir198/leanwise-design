@@ -1,6 +1,26 @@
 const LW = window.LeanWiseDesign_f2d907;
 
-const { Table, KpiTile, StatMeter, EmptyState, Console, CodeBlock, Grid, Stack, Button, Chip } = LW;
+const { Table, KpiTile, StatMeter, EmptyState, Console, Grid, Stack, Button, Chip, Icon } = LW;
+
+/* The `CodeBlock` wrapper was removed in v3.0.0 (no consumer imported it).
+   `.lw-code` is one of the larger surfaces in the package and is authored
+   directly by the docs template, so it keeps its fixture here — a <figure>
+   with a <figcaption> head, which is what makes the filename a caption of the
+   code rather than a floating label above it. */
+const Code = ({ filename, lang, code }) => (
+  <figure className="lw-code">
+    <figcaption className="lw-code-head">
+      <span className="fn">{filename}</span>
+      <span className="end">
+        <span className="lang">{lang}</span>
+        <button type="button" className="lw-icon-btn" aria-label="Copy code" title="Copy code">
+          <Icon name="copy" size={15} />
+        </button>
+      </span>
+    </figcaption>
+    <pre><code>{code}</code></pre>
+  </figure>
+);
 const cols = [
   {key:"src",label:"Source"},{key:"docs",label:"Docs",num:true},
   {key:"hit",label:"Hit rate",num:true},{key:"st",label:"Status"}
@@ -51,7 +71,7 @@ function Demo() {
       ]} />
       {/* Raw `code`, so the copy control is on by default — a snippet a reader
           has to select by hand is a snippet they mis-copy. */}
-      <CodeBlock filename="theme.js" lang="js" code={'const theme = brandVars("#0C727B");'} />
+      <Code filename="theme.js" lang="js" code={'const theme = brandVars("#0C727B");'} />
       <EmptyState icon="check" title="No evaluations yet"
         description="Run a suite against this index to see grounding and citation accuracy over time."
         action={<Button size="sm" style={{marginTop:4}}>Run first evaluation</Button>} />

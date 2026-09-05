@@ -25,18 +25,33 @@
 </div>
 
 <form style="display:flex;flex-direction:column;gap:12px" onSubmit="{{ onSubmit }}">
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.InputGroup" hint-size="100%,48px" prefix="{{ searchIcon }}" suffix="{{ searchHint }}">
+<div class="lw-input-group"><span class="affix">{{ searchIcon }}</span>
 <input value="{{ query }}" onChange="{{ onQuery }}" placeholder="Search documents, sources and answers" aria-label="Search" style="flex:1;min-width:0;border:0;background:none;outline:none;font:inherit;font-size:var(--lw-text-body);color:var(--lw-fg)">
-</x-import>
+<span class="affix mono">{{ searchHint }}</span>
+</div>
 <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
 <sc-for list="{{ facetGroups }}" as="g" hint-placeholder-count="3">
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.Menu" hint-size="120px,32px" items="{{ g.items }}" label="{{ g.label }}" onSelect="{{ g.onSelect }}" trigger="{{ g.trigger }}"></x-import>
 </sc-for>
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.DatePicker" hint-size="230px,32px" range="{{ true }}" size="sm" value="{{ range }}" onChange="{{ setRange }}" label="Date modified" placeholder="Any date"></x-import>
+<button type="button" class="lw-input lw-input-sm lw-datefield" aria-label="Date modified" data-placeholder="{{ noRange }}" onClick="{{ setRange }}" style="width:230px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="15px,15px" name="calendar" size="15" class="lw-datefield-ic"></x-import>
+<span class="lw-datefield-text">{{ rangeText }}</span>
+</button>
 <span style="flex:1"></span>
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.Select" hint-size="150px,32px" options="{{ sortOptions }}" value="{{ sort }}" onChange="{{ onSort }}" aria-label="Sort results"></x-import>
 </div>
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.FilterBar" hint-size="100%,26px" filters="{{ chips }}" onRemove="{{ removeChip }}" onClear="{{ clearAll }}"></x-import>
+<div class="lw-filters" role="group" aria-label="Applied filters">
+<sc-for list="{{ chips }}" as="f" hint-placeholder-count="2">
+<span class="lw-filter-chip">
+<span class="k">{{ f.key }}</span>
+<span>{{ f.label }}</span>
+<button type="button" aria-label="{{ f.removeLabel }}" onClick="{{ removeChip }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="11px,11px" name="close" size="11"></x-import>
+</button>
+</span>
+</sc-for>
+<button type="button" class="lw-filter-clear" onClick="{{ clearAll }}">Clear all</button>
+</div>
 </form>
 
 <sc-if value="{{ isIdle }}" hint-placeholder-val="{{ false }}">
@@ -183,6 +198,10 @@ class Component extends DCLogic {
         facetMenu("Owner", "owner", OWNERS),
       ],
       range: s.range,
+      /* The field is `.lw-datefield` written out — the `DatePicker` wrapper went
+         in v3.0.0 — so the closed trigger's TEXT is the template's to format. */
+      rangeText: s.range ? s.range : "Any date",
+      noRange: s.range ? undefined : "true",
       setRange: (r) => this.setState({ range: r, page: 1 }),
       sortOptions: [
         { value: "relevance", label: "Most relevant" },
@@ -192,7 +211,10 @@ class Component extends DCLogic {
       sort: s.sort,
       onSort: (e) => this.setState({ sort: e.target.value }),
 
-      chips: s.facets.map(f => ({ id: f.id, key: f.key, value: f.value })),
+      chips: s.facets.map(f => ({
+        id: f.id, key: f.key, value: f.value, label: f.value,
+        removeLabel: "Remove filter " + f.key + " " + f.value,
+      })),
       removeChip: (c) => this.setState(st => ({ facets: st.facets.filter(f => f.id !== c.id), page: 1 })),
       clearAll: () => this.setState({ facets: [], page: 1 }),
 

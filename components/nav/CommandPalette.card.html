@@ -1,4 +1,4 @@
-<!-- @dsCard group="Navigation" name="CommandPalette" subtitle="A dialog, not a popover — the same modal shell, and it does not bind ⌘K for you" viewport="960x620" -->
+<!-- @dsCard group="Navigation" name="CommandPalette" subtitle="lw-cmdk painted open in a paint-contained stage — the fixed panel, its search header and its hint foot" viewport="960x620" -->
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><title>Command palette</title>
 <link rel="stylesheet" href="../../preview/_card.css">
@@ -13,11 +13,13 @@
 <p class="sub"><b>A dialog, not a popover.</b> It is modal, it takes the whole keyboard, and the page behind it should
 be inert — so it is the same Radix <code>Dialog</code> shell as <code>Dialog</code>, in the same overlay layer with the
 same scrim, and only the listbox and its scorer are its own. Opening resets the query and focuses the input.</p>
-<p class="sub"><b>It does not bind ⌘K.</b> A component that installs a global key handler fights the host app for the
-shortcut and cannot be turned off on the one screen where ⌘K means something else. Bind it where you mount it.
-Matching is a scored <b>subsequence</b>, not a substring: "opdb" finds "Open database", and an early contiguous match
-ranks above a scattered one — a palette that returns the right row ninth is one people stop using.</p></header>
-<div class="pane" id="root" style="min-height:180px"></div>
+<p class="sub"><b>The React wrapper was removed in v3.0.0</b> — no consumer had imported it, and everything it
+composed is still here: <code>Dialog</code> supplies the modal shell, <code>.lw-menu-*</code> the rows, and
+<code>.lw-cmdk</code> the 560px panel, its search header and its hint foot. What went with it was the scored
+subsequence matcher, which was product logic rather than a token contract. <b>Nothing binds ⌘K</b>, and nothing
+ever did: a component that installs a global key handler fights the host app for the shortcut and cannot be
+turned off on the one screen where ⌘K means something else.</p></header>
+<div class="panes"><div class="pane" id="light"></div><div class="pane dark lw-band-dark" id="dark"></div></div>
 </div>
 <script src="./CommandPalette.card.js"></script>
 </body></html>

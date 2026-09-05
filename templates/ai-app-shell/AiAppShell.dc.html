@@ -76,17 +76,21 @@
 
 <sc-if value="{{ hasThread }}" hint-placeholder-val="{{ true }}">
 <div>
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.Message" hint-size="100%,80px" role="user" who="You">Which contracts auto-renew before the end of Q3?
+<div class="lw-msg user">
+<span class="lw-msg-avatar" aria-hidden="true"><x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="16px,16px" name="user" size="16"></x-import></span>
+<div class="lw-msg-main"><span class="who">You</span><div class="body">Which contracts auto-renew before the end of Q3?
 <div class="lw-msg-actions">
 <button type="button" aria-label="Edit question" title="Edit" class="lw-icon-btn" style-hover="color:var(--lw-brand-text)">
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="17px,17px" name="edit" size="17"></x-import>
 </button>
 </div>
-</x-import>
+</div></div></div>
 
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.Message" hint-size="100%,200px" role="ai" streaming="{{ streaming }}" data-comment-anchor="b4f0369b6b-div">
+<div class="lw-msg ai" data-streaming="{{ streaming }}" data-comment-anchor="b4f0369b6b-div">
+<span class="lw-msg-avatar" aria-hidden="true"><x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="19px,19px" name="spark" size="19"></x-import></span>
+<div class="lw-msg-main"><span class="who">LeanWise</span><div class="body">
 <p style="margin:0">Four agreements auto-renew before 30 September.</p>
-<p style="margin:.7em 0 0">The <b>master services agreement</b> renews on 12 August with a 60-day notice window, so the decision date has already passed <x-import component-from-global-scope="LeanWiseDesign_f2d907.SourceChip" hint-size="20px,18px" n="1"></x-import>. <b>Statement of work 3</b> and the <b>amended agreement</b> both renew on 1 September <x-import component-from-global-scope="LeanWiseDesign_f2d907.SourceChip" hint-size="20px,18px" n="2"></x-import><x-import component-from-global-scope="LeanWiseDesign_f2d907.SourceChip" hint-size="20px,18px" n="3"></x-import>, and the <b>framework agreement</b> renews on 22 September under an evergreen clause <x-import component-from-global-scope="LeanWiseDesign_f2d907.SourceChip" hint-size="20px,18px" n="4"></x-import>.</p>
+<p style="margin:.7em 0 0">The <b>master services agreement</b> renews on 12 August with a 60-day notice window, so the decision date has already passed <button type="button" class="lw-source" aria-label="Source 1">1</button>. <b>Statement of work 3</b> and the <b>amended agreement</b> both renew on 1 September <button type="button" class="lw-source" aria-label="Source 2">2</button><button type="button" class="lw-source" aria-label="Source 3">3</button>, and the <b>framework agreement</b> renews on 22 September under an evergreen clause <button type="button" class="lw-source" aria-label="Source 4">4</button>.</p>
 <p style="margin:.7em 0 0">No other agreement in the indexed corpus has a renewal date inside the window.</p>
 <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:14px">
 <button type="button" onClick="{{ openSources }}" aria-label="Show the 4 cited passages" title="4 citations" class="lw-icon-btn" style="width:auto;gap:7px;height:28px;padding:0 4px;color:var(--lw-fg-muted);font-family:var(--lw-font-mono);font-size:11px;letter-spacing:.04em;cursor:pointer" style-hover="color:var(--lw-brand-text)">
@@ -105,7 +109,7 @@
 </button>
 </div>
 </div>
-</x-import>
+</div></div></div>
 </div>
 </sc-if>
 
@@ -128,7 +132,9 @@
 
 <div style="padding:8px 32px 18px;background:var(--lw-bg)">
 <div style="max-width:72ch;margin:0 auto">
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.PromptInput" hint-size="100%,112px" value="{{ prompt }}" onChange="{{ setPrompt }}" onSubmit="{{ send }}" data-comment-anchor="7424304326-div">
+<div class="lw-prompt" data-comment-anchor="7424304326-div">
+<textarea rows="2" aria-label="Prompt" placeholder="Ask anything about your documents…" value="{{ prompt }}" onChange="{{ setPrompt }}"></textarea>
+<div class="lw-prompt-foot">
 <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;width:100%">
 <button type="button" aria-label="Attach a document" title="Attach a document" class="lw-icon-btn" style-hover="color:var(--lw-brand-text)">
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="19px,19px" name="paperclip" size="19"></x-import>
@@ -142,7 +148,8 @@
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="16px,16px" name="send" size="16"></x-import>
 </x-import>
 </div>
-</x-import>
+</div>
+</div>
 <p style="margin:8px 0 0;text-align:center;font-size:11.5px;color:var(--lw-fg-subtle);text-wrap:pretty">AI can make mistakes. Please double-check responses.</p>
 </div>
 </div>
@@ -157,10 +164,21 @@
 </button>
 </div>
 <div style="flex:1;overflow:auto;padding:16px 18px;display:flex;flex-direction:column;gap:20px" class="lw-scroll" data-comment-anchor="76149bb023-div">
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.SourceList" hint-size="100%,220px" sources="{{ sources }}"></x-import>
+<div class="lw-source-list">
+<sc-for list="{{ sources }}" as="s" hint-placeholder-count="3">
+<button type="button" class="lw-source-item">
+<span class="n">{{ s.n }}</span>
+<span class="lw-source-main"><span class="t">{{ s.title }}</span><span class="m">{{ s.meta }}</span></span>
+</button>
+</sc-for>
+</div>
 <div style="display:flex;flex-direction:column;gap:10px">
 <span style="font-family:var(--lw-font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--lw-fg-subtle)">Trace</span>
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.AgentTrace" hint-size="100%,160px" steps="{{ steps }}"></x-import>
+<ol class="lw-trace">
+<sc-for list="{{ steps }}" as="st" hint-placeholder-count="4">
+<li data-state="{{ st.state }}"><span class="step">{{ st.label }}</span><span class="meta">{{ st.meta }}</span></li>
+</sc-for>
+</ol>
 </div>
 </div>
 </aside>

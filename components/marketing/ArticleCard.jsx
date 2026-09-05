@@ -1,4 +1,4 @@
-import { Card, CardHead, CardTitle, CardBody, CardFoot } from "../primitives/Card.jsx";
+import { Card, CardHead, CardTitle, CardBody } from "../primitives/Card.jsx";
 import { Byline } from "./Byline.jsx";
 const cx = (...a) => a.filter(Boolean).join(" ");
 
@@ -7,7 +7,7 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  * A blog / resources index entry.
  *
  * There is NO `.lw-post` class behind this and there deliberately is not going
- * to be: the card is `.lw-card` + `CardHead`/`CardBody`/`CardFoot` +
+ * to be: the card is `.lw-card` + `CardHead`/`CardBody`/`.lw-card-foot` +
  * `.lw-card-media` + `.lw-byline` + `.lw-pill`, all of which this system already
  * ships. A row of them is a `Grid`. CONTRIBUTING's first rule is to prove a
  * thing is not already here, and for the index card the honest answer was that
@@ -48,13 +48,15 @@ export function ArticleCard({
         </div>
       )}
       {(author || date || read != null) && (
-        <CardFoot>
+        /* `.lw-card-foot` directly: the `CardFoot` wrapper was removed in
+           v3.0.0 and it was one div, so an internal caller writes the class. */
+        <div className="lw-card-foot">
           {/* Read time rides the byline's own `.date` face (mono, xs, subtle)
               rather than inventing a class for one number. */}
           <Byline name={author} role={role} date={date} dateTime={dateTime} src={avatar} size="sm">
             {read != null && <span className="date">{read}</span>}
           </Byline>
-        </CardFoot>
+        </div>
       )}
     </Card>
   );

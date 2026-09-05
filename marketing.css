@@ -454,8 +454,6 @@
 .lw-hero-dark .lw-lead { color: var(--lw-on-dark-2); }
 .lw-hero-dark .lw-eyebrow { color: var(--lw-brand-300); }
 .lw-hero-dark .lw-eyebrow::before { background: var(--lw-brand-300); }
-.lw-hero-dark .lw-italic-brand,
-.lw-hero-dark .lw-accent,
 /* A bare <em> in a dark-ground headline is the accent convention in practice —
    style it here so consumers stop forking the ink (v0.3.1). */
 .lw-hero-dark h1 em,
@@ -711,78 +709,6 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 .dark .lw-bar[data-tone="neutral"] .fill, [data-band="dark"] .lw-bar[data-tone="neutral"] .fill, .lw-band-dark .lw-bar[data-tone="neutral"] .fill,
 :is(.dark, [data-band="dark"], .lw-band-dark) .lw-bar[data-tone="neutral"]::after { background: var(--lw-neutral-on); }
 
-/* Animated count-up stat (v0.3.0). Extends the .lw-stat number look. The
-   CONTRACT: markup ships the FINAL value (SSR-safe, JS-free correct); the
-   `animateCounter` helper (@leanwise/design/hooks; the `./counter` alias was
-   removed in v2.0.0) reads data-target and
-   animates from 0 only when invoked and reduced motion is not requested. */
-.lw-counter {
-  font-family: var(--lw-font-mono);
-  font-weight: var(--lw-fw-semibold);
-  letter-spacing: var(--lw-tracking-tight);
-  font-variant-numeric: tabular-nums;
-}
-
-/* ---- Scroll-driven motion (v0.4.0) -----------------------------------------
-   Progressive enhancement on CSS scroll timelines. Double-gated: browsers
-   without animation-timeline and readers who prefer reduced motion both get
-   the complete static state. These layer ON TOP of the consumer's own
-   IntersectionObserver reveal — never replace it. */
-
-/* Fade + small rise as the element scrolls into view. */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .lw-scroll-fade {
-      animation: lwScrollFade linear both;
-      animation-timeline: view();
-      animation-range: entry 10% entry 90%;
-    }
-  }
-}
-@keyframes lwScrollFade {
-  from { opacity: 0; transform: translateY(14px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Page/section scroll progress rail. Consumer sizes and positions the bar;
-   this only drives its scaleX from the document scroll. */
-.lw-scroll-progress {
-  transform-origin: 0 50%;
-  transform: scaleX(1);
-  background: var(--lw-brand-500);
-}
-@supports (animation-timeline: scroll()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .lw-scroll-progress {
-      animation: lwScrollGrow linear both;
-      animation-timeline: scroll(root block);
-    }
-  }
-}
-@keyframes lwScrollGrow {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
-}
-
-/* SVG line-draw keyed to scroll. Apply to a path with a known length exported
-   as --lw-draw-len (px). Static state is FULLY DRAWN — SSR and non-supporting
-   browsers show the finished diagram. */
-.lw-draw { stroke-dashoffset: 0; }
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .lw-draw {
-      stroke-dasharray: var(--lw-draw-len, 1000);
-      animation: lwDrawIn linear both;
-      animation-timeline: view();
-      animation-range: entry 20% cover 60%;
-    }
-  }
-}
-@keyframes lwDrawIn {
-  from { stroke-dashoffset: var(--lw-draw-len, 1000); }
-  to { stroke-dashoffset: 0; }
-}
-
 /* ---- Browser frame (v0.4.0) ------------------------------------------------
    Chrome around a product screenshot: toolbar dots + address pill, soft brand
    glow. Pure CSS, token colors only. Markup:
@@ -833,48 +759,8 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
    Linear/Vercel-class affordances, all token-driven and reduced-motion safe.
    Static state is always complete; hover/scroll only ever add. */
 
-/* Cursor spotlight for cards. The consumer sets --lw-mx/--lw-my (px, relative
-   to the card) from a pointermove handler; without JS the card is unchanged. */
-.lw-spotlight { position: relative; overflow: hidden; }
-.lw-spotlight::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: var(--lw-z-base);
-  opacity: 0;
-  transition: opacity var(--lw-dur-sm) var(--lw-ease-out);
-  background: radial-gradient(240px circle at var(--lw-mx, 50%) var(--lw-my, 50%),
-    hsl(var(--lw-brand-500-c) / 0.12), transparent 65%);
-  pointer-events: none;
-}
-.lw-spotlight > * { position: relative; z-index: var(--lw-z-raised); }
-@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .lw-spotlight:hover::before { opacity: 1; }
-}
-
-/* Shine sweep across a button face on hover. Pair with .lw-btn. */
-.lw-shine { position: relative; overflow: hidden; }
-/* Literal white, deliberately NOT a surface token: a specular sweep is light, and it
-   must stay white on both grounds. Borrowing --lw-surface-0-c froze to the right value
-   by luck, but it reads as a role used out of role. */
-.lw-shine::after {
-  content: "";
-  position: absolute;
-  top: 0; bottom: 0;
-  left: -60%;
-  width: 40%;
-  transform: skewX(-18deg);
-  background: linear-gradient(90deg, transparent,
-    var(--lw-on-dark-sheen), transparent);
-  pointer-events: none;
-}
-@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .lw-shine:hover::after { animation: lwShine var(--lw-dur-xl) var(--lw-ease-out); }
-}
-@keyframes lwShine { to { left: 120%; } }
-
 /* Aurora layer for dark grounds: two slow counter-drifting brand blobs behind
-   the content. Sibling to .lw-wash — use one or the other, not both. */
+   the content. */
 .lw-aurora { position: relative; }
 .lw-aurora::before,
 .lw-aurora::after {
@@ -909,21 +795,6 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
   to { transform: translate3d(-8%, -10%, 0) scale(1); }
 }
 
-/* Perspective tilt for framed screenshots: rests flat, leans back a touch on
-   hover. Wrap the frame in .lw-tilt-scene for the 3D context. */
-.lw-tilt-scene { perspective: 1200px; }
-@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .lw-tilt {
-    transform-style: preserve-3d;
-    transition: transform var(--lw-dur-lg) var(--lw-ease-out),
-                box-shadow var(--lw-dur-lg) var(--lw-ease-out);
-  }
-  .lw-tilt:hover {
-    transform: rotateX(1.6deg) rotateY(-1.2deg) translateY(-4px);
-    box-shadow: var(--lw-shadow-lg), var(--lw-brand-glow);
-  }
-}
-
 /* Cross-document/page fade for the View Transitions API. The consumer opts the
    router in; this only shapes the default snapshot animation. */
 @media (prefers-reduced-motion: no-preference) {
@@ -944,26 +815,6 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
    --lw-* token; the code surface and its token spans are an ALWAYS-DARK island
    (like .lw-section.dark), so they read identically in both site themes.
    ============================================================================= */
-
-/* ---- Run controls (console playback) --------------------------------------
-   A row of console playback buttons (Run / Step / Scrub). This is the layout
-   shell only — children are .lw-btn elements (use .lw-btn-brand for the primary
-   Run action, .lw-btn-ghost for Step/Scrub). An optional range scrubber picks
-   up the brand accent-color. */
-.lw-run-controls {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--lw-space-8);
-  flex-wrap: wrap;
-}
-/* Was `min-height: 36px`, which is (0,2,0) and unconditional — it beat the
-   (0,1,0) `@media (pointer: coarse) { .lw-btn { min-height: 44px } }` floor and
-   shipped a 36px touch target. 36px is off the 32/40/48 scale too; the small
-   control tier is a token, and it keeps the coarse-pointer floor. */
-.lw-run-controls .lw-btn { min-height: var(--lw-control-h-sm); }
-@media (pointer: coarse) { .lw-run-controls .lw-btn { min-height: 44px; } }
-.lw-run-controls input[type="range"] { accent-color: var(--lw-brand-500); }
-.lw-run-controls :focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
 
 /* ===========================================================================
    v0.6.0 layout primitives — the classes FeatureGrid / StoryCard / LogoRail
@@ -1914,10 +1765,12 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 .lw-flow-node[aria-current] .lw-flow-title { font-weight: var(--lw-fw-semibold); }
 .lw-flow-node[aria-current] .lw-flow-label { color: var(--lw-brand-text); }
 
-/* The connector. A 1px `--lw-line` rule with a brand-coloured leading segment —
-   NOT the `.lw-draw` / `.lw-flow-line` machinery, which is SVG stroke geometry
-   and needs a path with a known length; a DOM chain of arbitrary-height cards
-   has no such path. Fully drawn in the static state. */
+/* The connector. A 1px `--lw-line` rule with a brand-coloured leading segment,
+   not SVG stroke geometry: that needs a path with a known length, and a DOM
+   chain of arbitrary-height cards has no such path. (The `.lw-draw` /
+   `.lw-flow-line` scroll-timeline machinery this used to contrast itself with
+   was removed in v3.0.0 — nothing had ever rendered it.) Fully drawn in the
+   static state. */
 .lw-flow-edge {
   position: relative;
   align-self: center;

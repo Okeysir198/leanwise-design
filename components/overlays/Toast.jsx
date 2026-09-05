@@ -1,5 +1,4 @@
 import { Icon } from "../primitives/Icon.jsx";
-import { normTone, normToneMap } from "../_tone.js";
 
 const cx = (...a) => a.filter(Boolean).join(" ");
 
@@ -10,16 +9,14 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  *  Pass `onClose` for a dismiss control. It is opt-in: an auto-dismissing toast
  *  that also carries an X invites the user to race the timer. */
 export function Toast({
-  tone: toneIn = "info", label, onClose,
-  toneLabels: toneLabelsIn = { success: "done", warning: "warn", danger: "error", info: "info" },
+  tone = "info", label, onClose,
+  toneLabels = { success: "done", warning: "warn", danger: "error", info: "info" },
   dismissLabel = "Dismiss",
   children, className, ...rest
 }) {
   // Both the VALUE and the map KEYS are normalised. Renaming the values without
   // the keys would silently drop a consumer's own status word — which on a
   // Vietnamese product is the entire reason the prop exists.
-  const tone = normTone("Toast", toneIn);
-  const toneLabels = normToneMap("Toast", toneLabelsIn, "toneLabels key");
   const k = label || toneLabels[tone] || toneLabels.info;
   return (
     /* No role here. The enclosing ToastRegion is the live region; a role="status"

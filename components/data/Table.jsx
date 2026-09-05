@@ -2,7 +2,7 @@
 import { Icon } from "../primitives/Icon.jsx";
 import { Menu } from "../overlays/Menu.jsx";
 import { useOverflow } from "../_overflow.js";
-import { colHeader, legacySortArgs, emitSort } from "./_columns.js";
+import { colHeader, emitSort } from "./_columns.js";
 import { warnOnce } from "../_deprecate.js";
 
 const cx = (...a) => a.filter(Boolean).join(" ");
@@ -42,7 +42,6 @@ export function Table({
   collapse, detailsLabel, sortLabel,
   className, children, ...rest
 }) {
-  const legacyArgs = legacySortArgs("Table", columns || [], onSort);
   const cards = collapse === "cards";
   const wrapRef = useOverflow();
 
@@ -60,22 +59,19 @@ export function Table({
   /** The sort state a header cell should advertise. One reading, two callers. */
   const sortOf = (c) => {
     if (sortState && sortState.key === c.key) return sortState.dir === "desc" ? "descending" : "ascending";
-    if (sortState) return undefined;
-    return c.sort === "asc" ? "ascending" : c.sort === "desc" ? "descending" : c.sort;
+    return undefined;
   };
-  const isSortable = (c) => Boolean((c.sortable || c.sort) && onSort);
+  const isSortable = (c) => Boolean(c.sortable && onSort);
 
   const head = columns && (
     <thead role={cards ? "rowgroup" : undefined}><tr role={cards ? "row" : undefined}>{columns.map(c => {
       const sortable = isSortable(c);
-      /* Top-level `sort` is canonical (it is what DataGrid takes); the
-         per-column `c.sort` is the legacy home for the same state. */
       const sort = sortOf(c);
       return (
         <th key={c.key} className={c.num ? "num" : undefined} scope="col" role={cards ? "columnheader" : undefined}
           aria-sort={sortable ? (sort || "none") : sort || undefined}>
           {sortable ? (
-            <button type="button" onClick={() => emitSort(onSort, legacyArgs, c.key, sort === "ascending" ? "desc" : "asc")}>
+            <button type="button" onClick={() => emitSort(onSort, c.key, sort === "ascending" ? "desc" : "asc")}>
               {colHeader("Table", c)}
               <Icon name={sort === "descending" ? "chevron-down" : "chevron-up"} size={12} />
             </button>
@@ -116,7 +112,7 @@ export function Table({
         }))}
         onSelect={(key) => {
           const c = sortableCols.find(x => x.key === key);
-          emitSort(onSort, legacyArgs, key, sortOf(c) === "ascending" ? "desc" : "asc");
+          emitSort(onSort, key, sortOf(c) === "ascending" ? "desc" : "asc");
         }}
         trigger={
           <button type="button" className="lw-btn lw-btn-ghost lw-btn-sm">

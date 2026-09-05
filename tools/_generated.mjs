@@ -24,7 +24,8 @@ import { fileURLToPath } from "node:url";
 
 export const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
-export const relpathOf = (p, root = ROOT) => relative(root, p) || p;
+/* Internal: only `generated()` below reports paths. */
+const relpathOf = (p, root = ROOT) => relative(root, p) || p;
 
 export async function generated({ name, files, hint, check }) {
   if (!(files instanceof Map)) throw new TypeError("generated(): `files` must be a Map<absPath, content>");

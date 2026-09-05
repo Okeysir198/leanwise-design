@@ -1,7 +1,27 @@
 const LW = window.LeanWiseDesign_f2d907;
 
-const { Field, Input, InputGroup, Textarea, Select, Switch, Checkbox, Segmented, Button, Stack, Cluster, Icon,
-        PasswordInput, PasswordMeter, OtpInput } = LW;
+const { Field, Input, Textarea, Select, Switch, Checkbox, Segmented, Button, Stack, Cluster, Icon,
+        PasswordInput, OtpInput } = LW;
+
+/* The `InputGroup` and `PasswordMeter` wrappers were removed in v3.0.0 — no
+   consumer imported either. `.lw-input-group` and `.lw-pwmeter` are still
+   shipped rules, and the templates still author them, so the specimen writes
+   the markup the wrappers emitted. */
+const Group = ({ prefix, suffix, children }) => (
+  <div className="lw-input-group">
+    {prefix && <span className="affix">{prefix}</span>}
+    {children}
+    {suffix && <span className="affix mono">{suffix}</span>}
+  </div>
+);
+const PwMeter = ({ level, label }) => (
+  <div className="lw-pw-strength">
+    <div className="lw-pwmeter" data-level={level || undefined} aria-hidden="true"><span /><span /><span /><span /></div>
+    {/* Announced, not merely present: strength changes as the user types and a
+        silent bar tells a screen-reader user nothing at all. */}
+    <p className="lw-help" role="status">{level >= 3 ? <Icon name="check" size={13} /> : null}{label}</p>
+  </div>
+);
 function Demo({ns}) {
   const [seg, setSeg] = React.useState("semantic");
   return (
@@ -16,7 +36,7 @@ function Demo({ns}) {
         <Input id={ns+"-c"} defaultValue="lw_live_8f2a…" invalid />
       </Field>
       <Field label="Search" htmlFor={ns+"-d"}>
-        <InputGroup prefix={<Icon name="search" />} suffix="⌘K"><input id={ns+"-d"} placeholder="Find a document…" /></InputGroup>
+        <Group prefix={<Icon name="search" />} suffix="⌘K"><input id={ns+"-d"} placeholder="Find a document…" /></Group>
       </Field>
       <Field label="System prompt" htmlFor={ns+"-e"} optional>
         <Textarea id={ns+"-e"} placeholder="Answer only from the retrieved passages…" />
@@ -25,7 +45,7 @@ function Demo({ns}) {
       <Field label="Password" htmlFor={ns+"-pw"} help="At least 12 characters.">
         <PasswordInput id={ns+"-pw"} defaultValue="correct horse battery" autoComplete="new-password" />
       </Field>
-      <PasswordMeter level={3} label="Strong" />
+      <PwMeter level={3} label="Strong" />
       <Field label="Six-digit code" htmlFor={ns+"-otp"}>
         <OtpInput id={ns+"-otp"} defaultValue="184" />
       </Field>

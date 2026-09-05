@@ -2,7 +2,6 @@
 import * as React from "react";
 import { Popover as RadixPopover } from "radix-ui";
 import { Layer, useLayer } from "./_layer.js";
-import { deprecate } from "../_deprecate.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
 
 /* The DS placement vocabulary onto Radix's side + align. A bare side keeps the
@@ -39,16 +38,14 @@ const HASPOPUP = { menu: "menu", listbox: "listbox", dialog: "dialog" };
  * `anchor` renders the trigger as a positioning anchor ONLY — no ARIA, no
  * click-to-toggle — for a field that owns its own semantics (a combobox input
  * carries role="combobox" and its own aria-expanded / aria-controls). The
- * caller then drives `open`. It replaces `triggerAria={false}`.
+ * caller then drives `open`.
  */
 export function Popover({
   trigger, open, defaultOpen, onOpenChange,
   placement = "bottom-start", offset = 6, matchWidth,
   label, role = "dialog", padded, anchor = false, autoFocus = true, container,
-  triggerAria, className, children, ...rest
+  className, children, ...rest
 }) {
-  if (triggerAria !== undefined) deprecate("Popover", "triggerAria", "`triggerAria` is ignored since v2.0.0 — pass `anchor` for a trigger that owns its own ARIA.");
-  if (role === "grid") { deprecate("Popover", "role=\"grid\"", "`role=\"grid\"` is not a popup role; the panel renders as a dialog since v2.0.0."); role = "dialog"; }
   // The anchor element is STATE, not a ref: `Layer from` and the outside-press
   // guard read it during render, and a ref is null on the first one.
   const [anchorEl, setAnchorElState] = React.useState(null);

@@ -36,9 +36,10 @@
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.Input" hint-size="100%,40px" type="email" autoComplete="email" value="{{ email }}" onChange="{{ setEmail }}" placeholder="you@company.com" aria-label="Work email"></x-import>
 </x-import>
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.Field" hint-size="100%,72px" label="Password" required="{{ true }}" error="{{ pwError }}">
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.InputGroup" hint-size="100%,40px" suffix="{{ revealBtn }}">
+<div class="lw-input-group">
 <input type="{{ pwType }}" autoComplete="current-password" value="{{ password }}" onChange="{{ setPassword }}" aria-label="Password" aria-invalid="{{ pwInvalid }}" style="flex:1;min-width:0;border:0;background:none;outline:none;font:inherit;color:var(--lw-fg)">
-</x-import>
+<span class="affix mono">{{ revealBtn }}</span>
+</div>
 </x-import>
 <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.Checkbox" hint-size="140px,24px" label="Keep me signed in" checked="{{ remember }}" onChange="{{ setRemember }}"></x-import>
@@ -62,9 +63,10 @@
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.Input" hint-size="100%,40px" value="{{ fullName }}" onChange="{{ setFullName }}" placeholder="Jamie Tran" aria-label="Your name"></x-import>
 </x-import>
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.Field" hint-size="100%,84px" label="Choose a password" required="{{ true }}" help="At least 12 characters. A passphrase beats a symbol soup.">
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.InputGroup" hint-size="100%,40px" suffix="{{ revealBtn }}">
+<div class="lw-input-group">
 <input type="{{ pwType }}" autoComplete="new-password" value="{{ password }}" onChange="{{ setPassword }}" aria-label="Choose a password" style="flex:1;min-width:0;border:0;background:none;outline:none;font:inherit;color:var(--lw-fg)">
-</x-import>
+<span class="affix mono">{{ revealBtn }}</span>
+</div>
 </x-import>
 <div class="lw-pwmeter" aria-hidden="true" data-level="{{ strengthLevel }}"><span></span><span></span><span></span><span></span></div>
 <p style="margin:-6px 0 0;font-size:var(--lw-text-xs);color:var(--lw-fg-subtle)" aria-live="polite">{{ strengthLabel }}</p>

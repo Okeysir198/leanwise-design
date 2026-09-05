@@ -1,5 +1,17 @@
 const LW = window.LeanWiseDesign_f2d907;
-const { AnnounceBar, TopBar, SiteFooter, Button, Icon, Cluster } = LW;
+const { TopBar, SiteFooter, Button, Icon, Cluster } = LW;
+
+/* The `AnnounceBar` wrapper was removed in v3.0.0 (no consumer imported it).
+   `.lw-announce` still ships; it is `role="status"`, because a bar that
+   appears above the header is an announcement, not a landmark. */
+const Announce = ({ onDismiss, children }) => (
+  <div className="lw-announce" role="status">
+    {children}
+    <button type="button" className="lw-icon-btn" aria-label="Dismiss announcement" onClick={onDismiss}>
+      <Icon name="close" size={14} />
+    </button>
+  </div>
+);
 
 const navLinks = [
   { href: "#", label: "Product" },
@@ -39,9 +51,9 @@ const legal = "LeanWise AI is a retrieval and review tool. It does not provide l
 
 ReactDOM.createRoot(document.getElementById("chrome")).render(
   <div style={{border:"1px solid var(--lw-line)",borderRadius:"var(--lw-radius-lg)",overflow:"hidden"}}>
-    <AnnounceBar onDismiss={() => {}}>
+    <Announce onDismiss={() => {}}>
       Retrieval evaluation is now on by default. <a href="#">Read the note</a>
-    </AnnounceBar>
+    </Announce>
     {/* `logo` is ON, and it is worth saying why it once was not. `.brand-mark` is
         a per-theme background-image, and through v1.2 `lw-visual` flipped the
         theme and screenshot in the same frame with no image-decode wait — so the

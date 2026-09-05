@@ -29,24 +29,21 @@ export interface PopoverProps extends Omit<React.HTMLAttributes<HTMLDivElement>,
   /**
    * `dialog` (default), `menu` or `listbox` — sets the trigger's `aria-haspopup`
    * too. `presentation` for a wrapper whose child owns the role (a combobox's
-   * `ul[role=listbox]`). `grid` is deprecated and renders as `dialog`.
+   * `ul[role=listbox]`).
    */
-  role?: "dialog" | "menu" | "listbox" | "presentation" | "grid";
+  role?: "dialog" | "menu" | "listbox" | "presentation";
   /** Card padding rather than the menu gutter — for prose and form content. */
   padded?: boolean;
   /**
    * Render the trigger as a positioning ANCHOR only — no ARIA, no click-to-toggle,
    * and a click on it does not dismiss the panel. For a field that owns its own
-   * semantics (a combobox input); the caller then drives `open`. Replaces
-   * `triggerAria={false}`.
+   * semantics (a combobox input); the caller then drives `open`.
    */
   anchor?: boolean;
   /** Default true: focus moves into the panel on open. False keeps it on the field. */
   autoFocus?: boolean;
   /** Portal container. Default: the nearest `OverlayProvider` layer, else `document.body`. */
   container?: HTMLElement | null;
-  /** @deprecated Ignored since v2.0.0 — use `anchor`. */
-  triggerAria?: boolean;
 }
 /**
  * The system's one floating surface: Menu, Combobox, DatePicker and every filter

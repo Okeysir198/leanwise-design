@@ -111,7 +111,6 @@
 
   --lw-tracking-tighter: -0.035em; /* @kind other */
   --lw-tracking-tight: -0.022em; /* @kind other */
-  --lw-tracking-normal: 0; /* @kind other */
   --lw-tracking-wide: 0.02em; /* @kind other */
   --lw-tracking-eyebrow: 0.14em; /* @kind other */
   /* Letterspaced capitals need their word spaces OPENED, not closed. Tracking
@@ -419,8 +418,6 @@
      hairline or it disappears. */
   --lw-on-dark-border: rgba(255, 255, 255, 0.22);
   --lw-on-dark-border-hover: rgba(255, 255, 255, 0.45);
-  /* The sheen sweep — a decorative highlight, not a surface. */
-  --lw-on-dark-sheen: rgba(255, 255, 255, 0.35);
 
   /* ---- Space (4px base) -------------------------------------------------
      Named by PIXEL VALUE, deliberately: --lw-space-24 is 24px, always. An index
@@ -604,7 +601,6 @@
   --lw-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1); /* @kind other */
   --lw-ease-emphasis: cubic-bezier(0.16, 1, 0.3, 1); /* @kind other */    /* long, patient decel */
   --lw-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* @kind other */  /* subtle overshoot */
-  --lw-stagger: 60ms; /* @kind other */ /* per-sibling reveal delay */
 
   /* Loop and ambient tiers (v1.13.0; the twenty-one bespoke per-effect names
      they replaced were removed in v2.0.0). Three loop speeds for a blink, a
@@ -672,7 +668,6 @@
   --lw-z-local-4: 4; /* @kind other */
   --lw-z-raised: 10; /* @kind other */
   --lw-z-nav: 50; /* @kind other */
-  --lw-z-sticky: 60; /* @kind other */
   --lw-z-overlay: 90; /* @kind other */
   --lw-z-toast: 100; /* @kind other */
   --lw-z-modal: 110; /* @kind other */

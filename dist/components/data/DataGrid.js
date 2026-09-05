@@ -2,7 +2,7 @@
 import { jsx, jsxs } from "react/jsx-runtime";
 import * as React from "react";
 import { Icon } from "../primitives/Icon.js";
-import { colHeader, legacySortArgs, emitSort } from "./_columns.js";
+import { colHeader, emitSort } from "./_columns.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
 function DataGrid({
   columns = [],
@@ -31,7 +31,6 @@ function DataGrid({
   ...rest
 }) {
   const DEFAULT_W = 160, MIN_W = 72, SEL_W = 44;
-  const legacyArgs = legacySortArgs("DataGrid", columns, onSort);
   const [widths, setWidths] = React.useState(() => columns.map((c) => c.width || DEFAULT_W));
   const [scrollTop, setScrollTop] = React.useState(0);
   const scrollRef = React.useRef(null);
@@ -156,7 +155,7 @@ function DataGrid({
                         {
                           type: "button",
                           className: "lw-dgrid-sort",
-                          onClick: () => emitSort(onSort, legacyArgs, c.key, dir === "asc" ? "desc" : "asc"),
+                          onClick: () => emitSort(onSort, c.key, dir === "asc" ? "desc" : "asc"),
                           children: [
                             colHeader("DataGrid", c),
                             /* @__PURE__ */ jsx(Icon, { name: dir === "asc" ? "sort-asc" : dir === "desc" ? "sort-desc" : "chevrons-up-down", size: 13 })

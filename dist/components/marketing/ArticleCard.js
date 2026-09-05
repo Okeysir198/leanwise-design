@@ -1,5 +1,5 @@
 import { jsx, jsxs } from "react/jsx-runtime";
-import { Card, CardHead, CardTitle, CardBody, CardFoot } from "../primitives/Card.js";
+import { Card, CardHead, CardTitle, CardBody } from "../primitives/Card.js";
 import { Byline } from "./Byline.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
 function ArticleCard({
@@ -34,7 +34,9 @@ function ArticleCard({
         /* @__PURE__ */ jsx(CardTitle, { children: title }),
         dek && /* @__PURE__ */ jsx(CardBody, { children: dek }),
         tags.length > 0 && /* @__PURE__ */ jsx("div", { className: "lw-cluster", children: tags.map((t, i) => /* @__PURE__ */ jsx("span", { className: "lw-pill", children: t }, i)) }),
-        (author || date || read != null) && /* @__PURE__ */ jsx(CardFoot, { children: /* @__PURE__ */ jsx(Byline, { name: author, role, date, dateTime, src: avatar, size: "sm", children: read != null && /* @__PURE__ */ jsx("span", { className: "date", children: read }) }) })
+        (author || date || read != null) && /* `.lw-card-foot` directly: the `CardFoot` wrapper was removed in
+           v3.0.0 and it was one div, so an internal caller writes the class. */
+        /* @__PURE__ */ jsx("div", { className: "lw-card-foot", children: /* @__PURE__ */ jsx(Byline, { name: author, role, date, dateTime, src: avatar, size: "sm", children: read != null && /* @__PURE__ */ jsx("span", { className: "date", children: read }) }) })
       ]
     }
   );

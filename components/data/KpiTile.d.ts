@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { Tone, LegacyTone } from "../_tone";
+import type { Tone } from "../_tone";
 
 export interface KpiTileProps extends React.HTMLAttributes<HTMLDivElement> {
   label: React.ReactNode;
@@ -8,13 +8,13 @@ export interface KpiTileProps extends React.HTMLAttributes<HTMLDivElement> {
   icon?: string;
   /** Semantic family for the icon's tint — the tile's SUBJECT, not its movement.
    *  Keep it distinct from `tone`, which judges the delta. Defaults to brand. */
-  accent?: Extract<Tone, "brand" | "success" | "danger" | "warning" | "neutral"> | LegacyTone;
+  accent?: Extract<Tone, "brand" | "success" | "danger" | "warning" | "neutral">;
   delta?: React.ReactNode;
   /** Which way the number moved — draws the arrow glyph. */
   direction?: "up" | "down";
   /** Whether that movement is good — sets the ink. Defaults to `direction`.
    *  Pass explicitly wherever down is good (latency, cost, error count). */
-  tone?: Extract<Tone, "success" | "danger"> | LegacyTone;
+  tone?: Extract<Tone, "success" | "danger">;
   /**
    * A few words beside the delta — "vs last week", a unit, a caveat. It sits in
    * the delta row, so keep it SHORT: a full sentence belongs under the tile, not

@@ -33,7 +33,7 @@
 </x-import>
 </div>
 </div>
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.Toolbar" hint-size="100%,36px">
+<div class="lw-toolbar">
 <span class="lw-toolbar-grow">
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.Input" hint-size="100%,36px" size="sm" placeholder="Search sources" aria-label="Search sources" value="{{ query }}" onChange="{{ onQuery }}"></x-import>
 </span>
@@ -41,8 +41,19 @@
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="15px,15px" name="filter" size="15"></x-import>
 <span>Filter</span>
 </x-import>
-</x-import>
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.FilterBar" hint-size="100%,26px" filters="{{ filters }}" onRemove="{{ removeFilter }}" onClear="{{ clearFilters }}"></x-import>
+</div>
+<div class="lw-filters" role="group" aria-label="Applied filters">
+<sc-for list="{{ filters }}" as="f" hint-placeholder-count="2">
+<span class="lw-filter-chip">
+<span class="k">{{ f.key }}</span>
+<span>{{ f.label }}</span>
+<button type="button" aria-label="{{ f.removeLabel }}" onClick="{{ removeFilter }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="11px,11px" name="close" size="11"></x-import>
+</button>
+</span>
+</sc-for>
+<button type="button" class="lw-filter-clear" onClick="{{ clearFilters }}">Clear all</button>
+</div>
 </div>
 
 <div class="lw-scroll" style="flex:1;min-height:0;overflow:auto;padding:16px 24px 24px">
@@ -200,7 +211,15 @@ class Component extends DCLogic {
 
       query: s.query,
       onQuery: (e) => this.setState({ query: e.target.value, page: 1 }),
-      filters: s.filters,
+      /* `label` and `removeLabel` are computed here now that the markup is
+         `.lw-filters` rather than the `FilterBar` wrapper (removed v3.0.0): a
+         bare × with no accessible name is four identical buttons to a screen
+         reader. */
+      filters: s.filters.map(f => ({
+        ...f,
+        label: f.label ?? f.value,
+        removeLabel: "Remove filter " + (f.key ? f.key + " " : "") + (f.label ?? f.value),
+      })),
       addFilter: () => this.setState(st => st.filters.some(f => f.key === "owner")
         ? st : { filters: [...st.filters, { id: 2, key: "owner", value: "J. Tran" }], page: 1 }),
       removeFilter: (f) => this.setState(st => ({ filters: st.filters.filter(x => x.id !== f.id), page: 1 })),

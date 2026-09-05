@@ -23,13 +23,9 @@ function CardTitle({ as: Tag = "h3", className, children, ...rest }) {
 function CardBody({ className, children, ...rest }) {
   return /* @__PURE__ */ jsx("p", { className: cx("lw-card-body", className), ...rest, children });
 }
-function CardFoot({ className, children, ...rest }) {
-  return /* @__PURE__ */ jsx("div", { className: cx("lw-card-foot", className), ...rest, children });
-}
 export {
   Card,
   CardBody,
-  CardFoot,
   CardHead,
   CardTitle
 };

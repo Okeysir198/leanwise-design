@@ -30,6 +30,5 @@ function NavItem({ href, label, icon, badge, current, collapsed, linkAs = "a", c
   );
 }
 export {
-  NavItem,
   Sidebar
 };

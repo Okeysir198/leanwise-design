@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { Tone, LegacyTone } from "../_tone";
+import type { Tone } from "../_tone";
 
 export interface StatMeterProps extends React.HTMLAttributes<HTMLDivElement> {
   label?: React.ReactNode;
@@ -17,7 +17,7 @@ export interface StatMeterProps extends React.HTMLAttributes<HTMLDivElement> {
    * `cta`, `success` and `neutral` worked and could not be written down. Widened to
    * what the CSS actually paints; `lw-tone` now fails if the two disagree again.
    */
-  tone?: Extract<Tone, "success" | "warning" | "danger" | "neutral" | "cta"> | LegacyTone;
+  tone?: Extract<Tone, "success" | "warning" | "danger" | "neutral" | "cta">;
   foot?: React.ReactNode;
   /* --- Display text. Every user-visible string this component renders is a
      prop, because a component library cannot hold display text (v1.3.1). --- */

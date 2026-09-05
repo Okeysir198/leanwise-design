@@ -28,7 +28,7 @@ export function Sidebar({ items = [], collapsed = false, footer, linkAs, label =
  *  keeps any prefix that Link applies. It receives what the raw <a> would:
  *  `href`, `className`, `aria-current`, `title` and `children`. An item WITHOUT
  *  an href is still a <button>; `linkAs` never replaces that. */
-export function NavItem({ href, label, icon, badge, current, collapsed, linkAs = "a", className, ...rest }) {
+function NavItem({ href, label, icon, badge, current, collapsed, linkAs = "a", className, ...rest }) {
   const Tag = href ? linkAs : "button";
   // Only a string label can become a title. String(node) yields
   // "[object Object]", which is what a collapsed rail would then show on hover.

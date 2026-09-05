@@ -1,5 +1,26 @@
 const LW = window.LeanWiseDesign_f2d907;
-const { DataGrid, Pagination, FilterBar, Toolbar, Input, Button, Chip, Stack } = LW;
+const { DataGrid, Pagination, Input, Button, Chip, Stack, Icon } = LW;
+
+/* The `Toolbar` and `FilterBar` wrappers were removed in v3.0.0 — no consumer
+   imported either, and `Toolbar` was four lines of flex. `.lw-toolbar` and
+   `.lw-filters` still ship and the list-detail and search templates still
+   author them, so the specimen writes their markup. */
+const Bar = ({ children }) => <div className="lw-toolbar">{children}</div>;
+const Filters = ({ filters, onRemove, onClear }) => (
+  !filters.length ? null : (
+    <div className="lw-filters" role="group" aria-label="Applied filters">
+      {filters.map((f) => (
+        <span key={f.id} className="lw-filter-chip">
+          {f.key && <span className="k">{f.key}</span>}
+          <span>{f.label ?? f.value}</span>
+          <button type="button" aria-label={"Remove filter " + (f.key ? f.key + " " : "") + (f.label ?? f.value)}
+            onClick={() => onRemove(f)}><Icon name="close" size={11} /></button>
+        </span>
+      ))}
+      {filters.length > 1 && <button type="button" className="lw-filter-clear" onClick={onClear}>Clear all</button>}
+    </div>
+  )
+);
 
 const NAMES = ["contracts/2024","policies/handbook","support/tickets","product/specs","legal/archive","research/notes","sales/decks","eng/runbooks"];
 const rows = Array.from({length:240},(_,i)=>({
@@ -27,12 +48,12 @@ function Demo(){
   ];
   return (
     <Stack gap={12}>
-      <Toolbar>
+      <Bar>
         <span className="lw-toolbar-grow"><Input placeholder="Search sources" aria-label="Search sources" /></span>
         <Button variant="ghost" size="sm">Columns</Button>
         <Button variant="ghost" size="sm">Export</Button>
-      </Toolbar>
-      <FilterBar filters={filters} onRemove={f=>setFilters(fs=>fs.filter(x=>x.id!==f.id))} onClear={()=>setFilters([])} />
+      </Bar>
+      <Filters filters={filters} onRemove={f=>setFilters(fs=>fs.filter(x=>x.id!==f.id))} onClear={()=>setFilters([])} />
       <DataGrid columns={cols} rows={sorted} sort={sort} onSort={setSort} selectable selected={sel}
         onSelectionChange={setSel} virtualize height={340} rowHeight={44} label="Indexed sources"
         selectionActions={<><Button size="sm" variant="ghost">Re-index</Button><Button size="sm" variant="danger">Delete</Button></>} />

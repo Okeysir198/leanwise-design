@@ -9,27 +9,11 @@ export interface TableColumn {
   /** The header cell's content. Same word `DataGrid` uses, and the same word the
    *  DOM uses — `label` is the form-control sense everywhere else here. */
   header?: React.ReactNode;
-  /**
-   * @deprecated Renamed to `header` in v1.1.7 to match `DataGrid` and to stop
-   * colliding with the form-control / accessible-name sense of `label` used
-   * throughout this package. Still honoured; warns once per component.
-   * Removed in v2.0.0.
-   */
-  label?: React.ReactNode;
   /** Mono, tabular-nums, right-aligned. Use for every numeric column. */
   num?: boolean;
   muted?: boolean;
   /** Renders the header as a sort button. Requires `onSort` on the Table. */
   sortable?: boolean;
-  /**
-   * @deprecated Sort state moved to the top-level `sort={{ key, dir }}` prop in
-   * v1.1.7, which is what `DataGrid` takes. Still honoured when `sort` is absent.
-   * Removed in v2.0.0.
-   *
-   * The short forms are what the implementation reads; the ARIA forms are
-   * accepted and mapped straight through.
-   */
-  sort?: "asc" | "desc" | "ascending" | "descending";
 }
 /**
  * Everything a Table takes except the `collapse` group, which is a discriminated
@@ -51,12 +35,11 @@ export interface TableBaseProps extends Omit<React.TableHTMLAttributes<HTMLTable
    * column renders as plain text — `aria-sort` on a th nothing can focus is a
    * promise the keyboard cannot keep.
    *
-   * The object form is canonical and is what `DataGrid` takes. A handler
-   * declared with TWO parameters is read as the deprecated positional form
-   * `(key, direction)` and called that way; so is any Table still using
-   * `columns[].label`. Both are removed in v2.0.0.
+   * The object form is the only form since v3.0.0, and is what `DataGrid`
+   * takes — the positional `(key, direction)` shape and `columns[].label`,
+   * both announced for removal in v2.0.0, are gone.
    */
-  onSort?: ((sort: SortState) => void) | ((key: string, direction: SortDirection) => void);
+  onSort?(sort: SortState): void;
 }
 
 /**

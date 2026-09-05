@@ -3,7 +3,6 @@ import { jsx, jsxs } from "react/jsx-runtime";
 import * as React from "react";
 import { Popover as RadixPopover } from "radix-ui";
 import { Layer, useLayer } from "./_layer.js";
-import { deprecate } from "../_deprecate.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
 function toSideAlign(placement) {
   const [side = "bottom", align = "start"] = String(placement || "bottom-start").split("-");
@@ -24,16 +23,10 @@ function Popover({
   anchor = false,
   autoFocus = true,
   container,
-  triggerAria,
   className,
   children,
   ...rest
 }) {
-  if (triggerAria !== void 0) deprecate("Popover", "triggerAria", "`triggerAria` is ignored since v2.0.0 \u2014 pass `anchor` for a trigger that owns its own ARIA.");
-  if (role === "grid") {
-    deprecate("Popover", 'role="grid"', '`role="grid"` is not a popup role; the panel renders as a dialog since v2.0.0.');
-    role = "dialog";
-  }
   const [anchorEl, setAnchorElState] = React.useState(null);
   const anchorRef = React.useRef(null);
   const setAnchorEl = React.useCallback((el) => {

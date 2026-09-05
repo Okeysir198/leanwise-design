@@ -9,9 +9,10 @@
  *
  * TWO CHECKS, and the second is the one that would have caught StatMeter:
  *
- *   1. SPELLING — every literal in a `tone`/`accent` union is either canonical
- *      or a declared legacy alias reached through `LegacyTone`. A new component
- *      inventing `err` fails here.
+ *   1. SPELLING — every literal in a `tone`/`accent` union is canonical. A new
+ *      component inventing `err` fails here, and so does a component still
+ *      carrying one of the five spellings retired at v3.0.0, which are named in
+ *      RETIRED below so the failure says what to rename it to.
  *
  *   2. THE VALUE HAS A RULE — every canonical value a component advertises has a
  *      CSS selector that matches what the component actually emits. This is the
@@ -32,8 +33,15 @@ import { join } from "node:path";
 import { report } from "./_report.mjs";
 
 const ROOT = new URL("..", import.meta.url).pathname;
-const TONES = ["brand", "success", "warning", "danger", "neutral", "info", "cta"];
-const LEGACY = ["ok", "warn", "err", "pos", "neg"];
+
+/* The vocabulary is READ from the component layer, not restated here. It was
+   restated for eleven releases, which is the second home this repo has paid for
+   in tokens.json, react.d.ts and the CI step list. */
+const { TONES } = await import(new URL("../components/_tone.js", import.meta.url));
+
+/* Retired at v3.0.0 after a one-time console warning from v1.x. Kept ONLY so a
+   component that still carries one gets told what to rename it to. */
+const RETIRED = { ok: "success", warn: "warning", err: "danger", pos: "success", neg: "danger" };
 
 /** How each component turns a tone into something CSS can match. */
 const EMITTERS = [
@@ -55,15 +63,11 @@ const EMITTERS = [
     css: ["product.css"], selector: (v) => `.lw-kpi .d.${v}` },
 ];
 
-/** The literals in `prop?: Extract<Tone, "a" | "b"> | LegacyTone;`. */
+/** The literals in `prop?: Extract<Tone, "a" | "b">;`. */
 function advertised(source, prop) {
   const line = new RegExp(`^\\s*${prop}\\?:([^;]+);`, "m").exec(source);
   if (!line) return null;
-  const decl = line[1];
-  return {
-    values: [...decl.matchAll(/"([a-z]+)"/g)].map((m) => m[1]),
-    legacyViaAlias: /\bLegacyTone\b/.test(decl),
-  };
+  return { values: [...line[1].matchAll(/"([a-z]+)"/g)].map((m) => m[1]) };
 }
 
 function check(emitters, read) {
@@ -81,10 +85,9 @@ function check(emitters, read) {
 
     for (const value of found.values) {
       checked++;
-      if (LEGACY.includes(value) && !found.legacyViaAlias) {
+      if (RETIRED[value]) {
         problems.push(
-          `${e.component}.${e.prop}: "${value}" is a deprecated spelling written out inline — ` +
-            `use the canonical name and let \`| LegacyTone\` carry the old one`,
+          `${e.component}.${e.prop}: "${value}" was retired at v3.0.0 — rename it to "${RETIRED[value]}"`,
         );
         continue;
       }
@@ -112,7 +115,7 @@ const readFile = (f) => readFileSync(join(ROOT, f), "utf8");
 if (process.argv.includes("--self-test")) {
   const fake = {
     "bad-spelling.d.ts": `  tone?: "ok" | "success";`,
-    "no-rule.d.ts": `  tone?: Extract<Tone, "success" | "info"> | LegacyTone;`,
+    "no-rule.d.ts": `  tone?: Extract<Tone, "success" | "info">;`,
     "fake.css": ".lw-fake-success { color: red; }",
   };
   const read = (f) => fake[f] ?? readFile(f);
@@ -121,9 +124,9 @@ if (process.argv.includes("--self-test")) {
   const two = check([{ component: "Gap", file: "no-rule.d.ts", prop: "tone",
     css: ["fake.css"], selector: (v) => `.lw-fake-${v}` }], read);
 
-  const ok1 = one.problems.some((p) => p.includes('"ok" is a deprecated spelling'));
+  const ok1 = one.problems.some((p) => p.includes('"ok" was retired at v3.0.0'));
   const ok2 = two.problems.some((p) => p.includes('advertises "info"') && p.includes("paints nothing"));
-  console.log(`  ${ok1 ? "ok  " : "FAIL"} an inline legacy spelling is caught`);
+  console.log(`  ${ok1 ? "ok  " : "FAIL"} a retired spelling is caught`);
   console.log(`  ${ok2 ? "ok  " : "FAIL"} a value with no CSS rule is caught`);
   if (!ok1 || !ok2) process.exit(1);
   console.log("lw-tone --self-test: both failure modes are detectable");

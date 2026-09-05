@@ -75,9 +75,9 @@
 <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
 <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px;justify-content:space-between">
 <h2 style="margin:0;font-size:16px;font-weight:600;letter-spacing:-.012em">Indexed sources</h2>
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.InputGroup" hint-size="220px,40px" prefix="{{ searchIcon }}" style="width:220px">
+<div class="lw-input-group" style="width:220px"><span class="affix">{{ searchIcon }}</span>
 <input placeholder="Filter sources…" aria-label="Filter sources" />
-</x-import>
+</div>
 </div>
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.Table" hint-size="100%,280px" columns="{{ columns }}" rows="{{ rows }}" on-sort="{{ onSort }}" caption="Indexed sources and their retrieval hit rate"></x-import>
 </div>

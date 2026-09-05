@@ -1,4 +1,15 @@
-const { Input, Select, Textarea, Switch, Checkbox, Segmented, InputGroup, Stack, Icon } = window.LeanWiseDesign_f2d907;
+const { Input, Select, Textarea, Switch, Checkbox, Segmented, Stack, Icon } = window.LeanWiseDesign_f2d907;
+
+/* The `InputGroup` wrapper was removed in v3.0.0; `.lw-input-group` was not.
+   The state matrix below is why the rule needs a fixture at all — it is where
+   the invalid affix border was caught. */
+const Group = ({ prefix, suffix, children, ...rest }) => (
+  <div className="lw-input-group" {...rest}>
+    {prefix && <span className="affix">{prefix}</span>}
+    {children}
+    {suffix && <span className="affix mono">{suffix}</span>}
+  </div>
+);
 function Matrix({ ns }) {
   const [seg, setSeg] = React.useState("hybrid");
   const id = (s) => ns + "-" + s;
@@ -15,10 +26,10 @@ function Matrix({ ns }) {
       <Input defaultValue="acme-legal" disabled aria-label="Workspace, locked" />
 
       <span className="hd">group</span>
-      <InputGroup prefix={<Icon name="search" />} suffix="⌘K"><input placeholder="Find…" aria-label="Search" /></InputGroup>
-      <InputGroup prefix={<Icon name="search" />} data-focus-demo=""><input placeholder="Find…" aria-label="Search, focused" /></InputGroup>
-      <InputGroup prefix={<Icon name="search" />}><input placeholder="Find…" aria-invalid="true" aria-label="Search" /></InputGroup>
-      <InputGroup prefix={<Icon name="search" />}><input placeholder="Find…" disabled aria-label="Search" /></InputGroup>
+      <Group prefix={<Icon name="search" />} suffix="⌘K"><input placeholder="Find…" aria-label="Search" /></Group>
+      <Group prefix={<Icon name="search" />} data-focus-demo=""><input placeholder="Find…" aria-label="Search, focused" /></Group>
+      <Group prefix={<Icon name="search" />}><input placeholder="Find…" aria-invalid="true" aria-label="Search" /></Group>
+      <Group prefix={<Icon name="search" />}><input placeholder="Find…" disabled aria-label="Search" /></Group>
 
       <span className="hd">select</span>
       <Select options={["Semantic", "Hybrid", "Keyword"]} aria-label="Mode" />

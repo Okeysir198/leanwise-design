@@ -1,6 +1,5 @@
 import { jsx, jsxs } from "react/jsx-runtime";
 import { Icon } from "../primitives/Icon.js";
-import { normTone } from "../_tone.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
 function StatMeter({
   label,
@@ -10,7 +9,7 @@ function StatMeter({
   direction,
   percent,
   target,
-  tone: toneIn,
+  tone,
   foot,
   interactive = false,
   formatValueText = (p, t) => p + "% of a " + t + "% target",
@@ -46,7 +45,7 @@ function StatMeter({
           "div",
           {
             className: "lw-bar",
-            "data-tone": normTone("StatMeter", toneIn),
+            "data-tone": tone,
             style: { "--lw-bar-value": percent + "%" },
             role: "meter",
             "aria-valuenow": percent,

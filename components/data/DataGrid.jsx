@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { Icon } from "../primitives/Icon.jsx";
-import { colHeader, legacySortArgs, emitSort } from "./_columns.js";
+import { colHeader, emitSort } from "./_columns.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
 
 /**
@@ -35,7 +35,6 @@ export function DataGrid({
      offset and the table's min-width) as well as a <col> width, so the number
      cannot live only in CSS — but it can live in one place here. */
   const DEFAULT_W = 160, MIN_W = 72, SEL_W = 44;
-  const legacyArgs = legacySortArgs("DataGrid", columns, onSort);
   const [widths, setWidths] = React.useState(() => columns.map(c => c.width || DEFAULT_W));
   const [scrollTop, setScrollTop] = React.useState(0);
   const scrollRef = React.useRef(null);
@@ -163,7 +162,7 @@ export function DataGrid({
                     aria-sort={dir ? (dir === "asc" ? "ascending" : "descending") : undefined}>
                     {c.sortable && onSort ? (
                       <button type="button" className="lw-dgrid-sort"
-                        onClick={() => emitSort(onSort, legacyArgs, c.key, dir === "asc" ? "desc" : "asc")}>
+                        onClick={() => emitSort(onSort, c.key, dir === "asc" ? "desc" : "asc")}>
                         {colHeader("DataGrid", c)}
                         <Icon name={dir === "asc" ? "sort-asc" : dir === "desc" ? "sort-desc" : "chevrons-up-down"} size={13} />
                       </button>

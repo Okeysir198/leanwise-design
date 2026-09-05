@@ -1,10 +1,7 @@
 import { jsx, jsxs } from "react/jsx-runtime";
 import { Icon } from "../primitives/Icon.js";
-import { normTone } from "../_tone.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
-function KpiTile({ label, value, icon, accent: accentIn = "brand", delta, direction, tone: toneIn, note, className, ...rest }) {
-  const accent = normTone("KpiTile", accentIn, "accent");
-  const tone = normTone("KpiTile", toneIn);
+function KpiTile({ label, value, icon, accent = "brand", delta, direction, tone, note, className, ...rest }) {
   const ink = tone || (direction === "up" ? "success" : direction === "down" ? "danger" : void 0);
   return /* @__PURE__ */ jsxs("div", { className: cx("lw-kpi", className), ...rest, children: [
     /* @__PURE__ */ jsxs("span", { className: "lw-kpi-head", children: [

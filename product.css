@@ -110,13 +110,6 @@ span.lw-kpi-icon, .lw-kpi-badge {
   width: 34px; height: 34px; border-radius: var(--lw-radius-md);
   background: var(--lw-brand-soft); color: var(--lw-brand-on);
 }
-span.lw-kpi-icon[data-accent="pos"], .lw-kpi-badge[data-accent="pos"] { background: var(--lw-success-soft); color: var(--lw-success-on); }
-span.lw-kpi-icon[data-accent="neg"], .lw-kpi-badge[data-accent="neg"] { background: var(--lw-danger-soft); color: var(--lw-danger-on); }
-span.lw-kpi-icon[data-accent="warn"], .lw-kpi-badge[data-accent="warn"] { background: var(--lw-warning-soft); color: var(--lw-warning-on); }
-/* CANONICAL TONE SPELLINGS. The abbreviated selectors above are kept because raw
-   markup in the wild uses them and a design system does not get to break a page it
-   already styled; the components emit these. One vocabulary, and both resolve to the
-   same token — see components/_tone.js. */
 span.lw-kpi-icon[data-accent="success"], .lw-kpi-badge[data-accent="success"] { background: var(--lw-success-soft); color: var(--lw-success-on); }
 span.lw-kpi-icon[data-accent="danger"], .lw-kpi-badge[data-accent="danger"] { background: var(--lw-danger-soft); color: var(--lw-danger-on); }
 span.lw-kpi-icon[data-accent="warning"], .lw-kpi-badge[data-accent="warning"] { background: var(--lw-warning-soft); color: var(--lw-warning-on); }
@@ -145,12 +138,6 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
    note too, which is prose. A one-sentence note then could not wrap and pushed
    its own tile past the viewport. Measured at 1440px in leanwise-inspect. */
 .lw-kpi .d .w { color: var(--lw-fg-subtle); white-space: normal; }
-.lw-kpi .d.pos { color: var(--lw-success-on); }
-.lw-kpi .d.neg { color: var(--lw-danger-on); }
-/* CANONICAL TONE SPELLINGS. The abbreviated selectors above are kept because raw
-   markup in the wild uses them and a design system does not get to break a page it
-   already styled; the components emit these. One vocabulary, and both resolve to the
-   same token — see components/_tone.js. */
 .lw-kpi .d.success { color: var(--lw-success-on); }
 .lw-kpi .d.danger { color: var(--lw-danger-on); }
 
@@ -355,13 +342,8 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 .lw-toast-region[data-above-nav] { bottom: calc(var(--lw-bottom-nav-h) + var(--lw-safe-bottom) + var(--lw-space-12)); }
 .lw-toast { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; background: var(--lw-bg); border: 1px solid var(--lw-line); border-radius: var(--lw-radius-md); box-shadow: var(--lw-shadow-lg); font-size: var(--lw-text-sm); color: var(--lw-fg); }
 .lw-toast .k { font-family: var(--lw-font-mono); font-size: var(--lw-text-2xs); letter-spacing: 0.12em; word-spacing: var(--lw-word-spacing-caps); text-transform: uppercase; padding-top: 3px; flex: none; color: var(--lw-fg-subtle); }
-.lw-toast.ok .k { color: var(--lw-success-on); }
-.lw-toast.warn .k { color: var(--lw-warning-on); }
-.lw-toast.err .k { color: var(--lw-danger-on); }
-/* CANONICAL TONE SPELLINGS. The abbreviated selectors above are kept because raw
-   markup in the wild uses them and a design system does not get to break a page it
-   already styled; the components emit these. One vocabulary, and both resolve to the
-   same token — see components/_tone.js. */
+/* One tone vocabulary — see components/_tone.js. The abbreviated spellings
+   (ok/warn/err) were retired at v3.0.0 along with the prop aliases. */
 .lw-toast.success .k { color: var(--lw-success-on); }
 .lw-toast.warning .k { color: var(--lw-warning-on); }
 .lw-toast.danger .k { color: var(--lw-danger-on); }
@@ -390,21 +372,6 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
   }
   @keyframes lwTooltipIn { from { opacity: 0; transform: translateY(-2px); } }
 }
-
-/* DEPRECATED v2.0 — vanilla consumers; removed in v3. The CSS-only wrapper
-   (`.lw-tip[data-tip]`, painted by ::after): the text is invisible to assistive
-   technology, which is why the React Tooltip no longer renders it. */
-.lw-tip { position: relative; display: inline-flex; }
-.lw-tip::after {
-  content: attr(data-tip);
-  position: absolute; bottom: calc(100% + 7px); left: 50%; transform: translateX(-50%);
-  padding: 5px 9px; border-radius: var(--lw-radius-sm);
-  background: var(--lw-navy-900); color: var(--lw-on-dark);
-  font-size: var(--lw-text-xs); line-height: 1.35; white-space: nowrap;
-  opacity: 0; pointer-events: none; z-index: var(--lw-z-overlay);
-  transition: opacity var(--lw-dur-xs) var(--lw-ease-out);
-}
-.lw-tip:hover::after, .lw-tip:focus-within::after { opacity: 1; }
 
 /* ---- AI surfaces -----------------------------------------------------------
    The components a generic system does not have and an AI product cannot ship
@@ -598,10 +565,6 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 .lw-popover[data-match-width] { min-width: var(--radix-popover-trigger-width, var(--radix-dropdown-menu-trigger-width)); }
 /* A plain content popover wants the card's padding, not the menu's gutter. */
 .lw-popover-pad { padding: var(--lw-space-16); }
-/* DEPRECATED v2.0.0 — removed in v3.0. The React Popover no longer wraps its
-   trigger (Radix anchors to the trigger node itself); kept as a no-op for
-   vanilla markup that still carries the class, so a pin bump moves nothing. */
-.lw-popover-anchor { display: contents; }
 @media (prefers-reduced-motion: no-preference) {
   .lw-popover[data-state="open"] { animation: lwPopIn var(--lw-dur-xs) var(--lw-ease-out); }
   @keyframes lwPopIn { from { opacity: 0; transform: translateY(-2px); } }
@@ -991,7 +954,6 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
   font-size: var(--lw-text-sm); color: var(--lw-brand-text);
 }
 .lw-dgrid-selbar .count { font-family: var(--lw-font-mono); font-weight: var(--lw-fw-semibold); font-variant-numeric: tabular-nums; }
-.lw-dgrid-selbar .lw-dgrid-selbar-spacer { flex: 1; } /* legacy alias of .lw-spacer */
 
 /* ---- Stepper -----------------------------------------------------------------
    The step number becomes a CHECK once done — the marker carries the state, so
@@ -1061,13 +1023,6 @@ a.lw-feed-item, button.lw-feed-item { cursor: pointer; }
 a.lw-feed-item:hover, button.lw-feed-item:hover { background: var(--lw-bg-subtle); }
 .lw-feed-item:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
 .lw-feed-item .lw-feed-ic { flex: none; display: grid; place-items: center; width: 28px; height: 28px; border-radius: var(--lw-radius-md); background: var(--lw-bg-inset); color: var(--lw-fg-muted); }
-.lw-feed-item[data-tone="ok"] .lw-feed-ic { background: var(--lw-success-soft); color: var(--lw-success-on); }
-.lw-feed-item[data-tone="warn"] .lw-feed-ic { background: var(--lw-warning-soft); color: var(--lw-warning-on); }
-.lw-feed-item[data-tone="err"] .lw-feed-ic { background: var(--lw-danger-soft); color: var(--lw-danger-on); }
-/* CANONICAL TONE SPELLINGS. The abbreviated selectors above are kept because raw
-   markup in the wild uses them and a design system does not get to break a page it
-   already styled; the components emit these. One vocabulary, and both resolve to the
-   same token — see components/_tone.js. */
 .lw-feed-item[data-tone="success"] .lw-feed-ic { background: var(--lw-success-soft); color: var(--lw-success-on); }
 .lw-feed-item[data-tone="warning"] .lw-feed-ic { background: var(--lw-warning-soft); color: var(--lw-warning-on); }
 .lw-feed-item[data-tone="danger"] .lw-feed-ic { background: var(--lw-danger-soft); color: var(--lw-danger-on); }
@@ -1203,13 +1158,6 @@ a.lw-feed-item:hover, button.lw-feed-item:hover { background: var(--lw-bg-subtle
    component that owns it rather than to a caller's style attribute. */
 .lw-progress { display: block; width: 100%; height: 3px; border-radius: var(--lw-radius-pill); background: var(--lw-bg-inset); overflow: hidden; }
 .lw-progress > i { display: block; height: 100%; width: 0; border-radius: inherit; background: var(--lw-brand-500); transition: width var(--lw-dur-md) var(--lw-ease-out); }
-.lw-progress[data-tone="ok"] > i { background: var(--lw-success-on); }
-.lw-progress[data-tone="warn"] > i { background: var(--lw-warning-on); }
-.lw-progress[data-tone="err"] > i { background: var(--lw-danger-on); }
-/* CANONICAL TONE SPELLINGS. The abbreviated selectors above are kept because raw
-   markup in the wild uses them and a design system does not get to break a page it
-   already styled; the components emit these. One vocabulary, and both resolve to the
-   same token — see components/_tone.js. */
 .lw-progress[data-tone="success"] > i { background: var(--lw-success-on); }
 .lw-progress[data-tone="warning"] > i { background: var(--lw-warning-on); }
 .lw-progress[data-tone="danger"] > i { background: var(--lw-danger-on); }
@@ -1338,7 +1286,6 @@ a.lw-feed-item:hover, button.lw-feed-item:hover { background: var(--lw-bg-subtle
 .lw-editor-glyph { font-size: 13px; font-weight: var(--lw-fw-medium); }
 .lw-editor-glyph[data-glyph="bold"] { font-weight: var(--lw-fw-bold); }
 .lw-editor-glyph[data-glyph="italic"] { font-style: italic; }
-.lw-editor-spacer { flex: 1; }
 .lw-editor-count[data-over="true"] { color: var(--lw-danger-on); }
 
 /* Skeleton's multi-line form. Was an inline flex column plus an inline 62% on the

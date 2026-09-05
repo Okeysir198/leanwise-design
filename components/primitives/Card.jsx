@@ -24,4 +24,3 @@ export function Card({ interactive = false, glow = false, selected, as, classNam
 export function CardHead({ className, children, ...rest }) { return <div className={cx("lw-card-head", className)} {...rest}>{children}</div>; }
 export function CardTitle({ as: Tag = "h3", className, children, ...rest }) { return <Tag className={cx("lw-card-title", className)} {...rest}>{children}</Tag>; }
 export function CardBody({ className, children, ...rest }) { return <p className={cx("lw-card-body", className)} {...rest}>{children}</p>; }
-export function CardFoot({ className, children, ...rest }) { return <div className={cx("lw-card-foot", className)} {...rest}>{children}</div>; }

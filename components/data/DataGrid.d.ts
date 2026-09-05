@@ -8,12 +8,6 @@ export interface DataGridColumn<R = any> {
   key: string;
   /** The header cell's content. Canonical across `Table` and `DataGrid`. */
   header?: React.ReactNode;
-  /**
-   * @deprecated `Table`'s pre-v1.1.7 spelling of `header`, accepted here so a
-   * column definition moves between the two components unedited. Warns once per
-   * component. Removed in v2.0.0.
-   */
-  label?: React.ReactNode;
   /** Starting width in px. The user can drag it; `minWidth` floors that. */
   width?: number;
   minWidth?: number;
@@ -33,12 +27,9 @@ export interface DataGridProps<R = any> extends Omit<React.HTMLAttributes<HTMLDi
   sort?: SortState;
   /**
    * Called with the column and the direction to move to. The object form is
-   * canonical and is shared with `Table`. A handler declared with TWO parameters
-   * is read as `Table`'s deprecated positional form `(key, direction)` and called
-   * that way; so is any grid still using `columns[].label`. Both are removed in
-   * v2.0.0.
+   * the only form since v3.0.0 and is shared with `Table`.
    */
-  onSort?: ((sort: SortState) => void) | ((key: string, direction: SortDirection) => void);
+  onSort?(sort: SortState): void;
   selectable?: boolean;
   selected?: (string | number)[];
   onSelectionChange?(keys: (string | number)[]): void;

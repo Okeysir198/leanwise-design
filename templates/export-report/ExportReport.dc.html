@@ -97,7 +97,10 @@
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.Select" hint-size="100%,40px" options="{{ datasets }}" value="{{ dataset }}" onChange="{{ setDataset }}" aria-label="What to export"></x-import>
 </x-import>
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.Field" hint-size="100%,72px" label="Period">
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.DatePicker" hint-size="100%,40px" range="{{ true }}" value="{{ range }}" onChange="{{ setRange }}" label="Period"></x-import>
+<button type="button" class="lw-input lw-datefield" aria-label="Period" onClick="{{ setRange }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Icon" hint-size="15px,15px" name="calendar" size="15" class="lw-datefield-ic"></x-import>
+<span class="lw-datefield-text">{{ rangeText }}</span>
+</button>
 </x-import>
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.Field" hint-size="100%,72px" label="Columns" help="Fewer columns, faster export.">
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.Combobox" hint-size="100%,40px" multiple="{{ true }}" options="{{ columnOptions }}" value="{{ columns }}" onChange="{{ setColumns }}" label="Columns"></x-import>
@@ -251,6 +254,9 @@ class Component extends DCLogic {
       dataset: s.dataset,
       setDataset: (e) => this.setState({ dataset: e.target.value }),
       range: s.range,
+      /* `.lw-datefield` written out — the `DatePicker` wrapper went in v3.0.0 —
+         so the closed trigger's text is the template's to format. */
+      rangeText: s.range ? s.range : "Pick a range",
       setRange: (r) => this.setState({ range: r }),
       columnOptions: COLUMNS,
       columns: s.columns,

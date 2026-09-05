@@ -1,8 +1,8 @@
 import * as React from "react";
-import type { Tone, LegacyTone } from "../_tone";
+import type { Tone } from "../_tone";
 
 export interface ChipProps extends React.HTMLAttributes<HTMLSpanElement> {
-  tone?: Extract<Tone, "brand" | "success" | "warning" | "danger" | "neutral"> | LegacyTone;
+  tone?: Extract<Tone, "brand" | "success" | "warning" | "danger" | "neutral">;
 }
 /**
  * The status atom. `tone` names the JUDGEMENT, not the colour, so a status that

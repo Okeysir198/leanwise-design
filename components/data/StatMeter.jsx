@@ -1,5 +1,4 @@
 import { Icon } from "../primitives/Icon.jsx";
-import { normTone } from "../_tone.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
 
 
@@ -9,7 +8,7 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  * target a reader cannot tell whether 94% is good news.
  */
 export function StatMeter({
-  label, value, unit, delta, direction, percent, target, tone: toneIn, foot, interactive = false,
+  label, value, unit, delta, direction, percent, target, tone, foot, interactive = false,
   formatValueText = (p, t) => p + "% of a " + t + "% target",
   className, ...rest
 }) {
@@ -40,7 +39,7 @@ export function StatMeter({
         )}
       </div>
       {percent != null && (
-        <div className="lw-bar" data-tone={normTone("StatMeter", toneIn)} style={{ "--lw-bar-value": percent + "%" }}
+        <div className="lw-bar" data-tone={tone} style={{ "--lw-bar-value": percent + "%" }}
           role="meter" aria-valuenow={percent} aria-valuemin={0} aria-valuemax={100}
           aria-label={typeof label === "string" ? label : undefined}
           aria-valuetext={target != null ? formatValueText(percent, target) : undefined}>

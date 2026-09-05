@@ -57,6 +57,14 @@ for (const f of ["react.js", "brand.js", "hooks.js"]) ENTRIES.push(f);
 
 const OUT = path.join(ROOT, CHECK ? ".dist-check" : "dist");
 
+/* CLEAR IT FIRST. esbuild writes the files it is given and leaves everything
+   else alone, so deleting a component left its build behind — and `--check`
+   below reports an orphan, which means `npm run build` could not make its own
+   gate green for a whole category of change. Found at v3.0.0, when removing
+   twenty-six components left twenty-four orphans no rebuild would clear. The
+   writer must produce exactly the tree the checker computes. */
+fs.rmSync(OUT, { recursive: true, force: true });
+
 await esbuild.build({
   absWorkingDir: ROOT,
   entryPoints: ENTRIES,

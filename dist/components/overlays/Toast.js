@@ -1,19 +1,16 @@
 import { jsx, jsxs } from "react/jsx-runtime";
 import { Icon } from "../primitives/Icon.js";
-import { normTone, normToneMap } from "../_tone.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
 function Toast({
-  tone: toneIn = "info",
+  tone = "info",
   label,
   onClose,
-  toneLabels: toneLabelsIn = { success: "done", warning: "warn", danger: "error", info: "info" },
+  toneLabels = { success: "done", warning: "warn", danger: "error", info: "info" },
   dismissLabel = "Dismiss",
   children,
   className,
   ...rest
 }) {
-  const tone = normTone("Toast", toneIn);
-  const toneLabels = normToneMap("Toast", toneLabelsIn, "toneLabels key");
   const k = label || toneLabels[tone] || toneLabels.info;
   return (
     /* No role here. The enclosing ToastRegion is the live region; a role="status"

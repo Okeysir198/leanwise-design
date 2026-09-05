@@ -207,8 +207,8 @@ table.visually-hidden > caption,
    on the flagship site's customer stories, which sat 40px past the fold. Wrapping
    in `min()` caps the floor at the space that actually exists, so the last column
    narrows instead of escaping. */
-.lw-grid { display: grid; gap: var(--lw-space-16); grid-template-columns: repeat(auto-fit, minmax(min(var(--lw-grid-min, 240px), 100%), 1fr)); align-items: stretch; }
 .lw-grid-2 { --lw-grid-min: 320px; } .lw-grid-3 { --lw-grid-min: 240px; } .lw-grid-4 { --lw-grid-min: 180px; }
+.lw-grid { display: grid; gap: var(--lw-space-16); grid-template-columns: repeat(auto-fit, minmax(min(var(--lw-grid-min, 240px), 100%), 1fr)); align-items: stretch; }
 .lw-grid-24 { gap: var(--lw-space-24); }
 
 /* SPLIT — a main column and a fixed-ish rail that collapses to one column.
@@ -324,12 +324,6 @@ table.visually-hidden > caption,
   max-width: var(--lw-measure);
   margin: 0;
   text-wrap: pretty;
-}
-
-.lw-italic-brand {
-  color: var(--lw-brand-text);
-  font-style: italic;
-  font-weight: var(--lw-fw-medium);
 }
 
 /* ---- Buttons ------------------------------------------------------------- */
@@ -765,7 +759,6 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
    in five places before it was a rule. */
 .lw-auth-or { display: flex; align-items: center; gap: var(--lw-space-12); color: var(--lw-fg-subtle); font-size: var(--lw-text-xs); }
 .lw-auth-or::before, .lw-auth-or::after { content: ""; flex: 1; height: 1px; background: var(--lw-line); }
-
 .lw-avatar { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; flex: none; border-radius: 50%; background: var(--lw-brand-soft); color: var(--lw-brand-on); font-size: 12px; font-weight: var(--lw-fw-medium); letter-spacing: 0.01em; overflow: hidden; user-select: none; }
 .lw-avatar img { width: 100%; height: 100%; object-fit: cover; }
 .lw-avatar-sm { width: 24px; height: 24px; font-size: var(--lw-text-2xs); }
@@ -1403,9 +1396,6 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
 /* A tone owns the whole line, so a muted cell must not out-rank it — muting is
    for the neutral stream only. */
 .lw-console-cell.muted { color: var(--lw-fg-faint); }
-.lw-console-line.ok .lw-console-cell.muted,
-.lw-console-line.warn .lw-console-cell.muted,
-.lw-console-line.err .lw-console-cell.muted { color: inherit; opacity: 0.72; }
 .lw-console-line.success .lw-console-cell.muted,
 .lw-console-line.warning .lw-console-cell.muted,
 .lw-console-line.danger .lw-console-cell.muted { color: inherit; opacity: 0.72; }
@@ -1420,27 +1410,9 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
      as separated fields rather than collapsing into one run. */
   .lw-console-cell:last-child { flex: 1; }
 }
-.lw-console-line.ok { color: var(--lw-success-on); }
-.lw-console-line.warn { color: var(--lw-warning-on); }
-.lw-console-line.err { color: var(--lw-danger-on); }
-/* CANONICAL TONE SPELLINGS. The abbreviated selectors above are kept because raw
-   markup in the wild uses them and a design system does not get to break a page it
-   already styled; the components emit these. One vocabulary, and both resolve to the
-   same token — see components/_tone.js. */
 .lw-console-line.success { color: var(--lw-success-on); }
 .lw-console-line.warning { color: var(--lw-warning-on); }
 .lw-console-line.danger { color: var(--lw-danger-on); }
-
-/* Blinking caret — decorative; a solid block under reduced motion. */
-.lw-console-caret::after {
-  content: "▋";
-  color: var(--lw-brand-text);
-  animation: lwCaretBlink var(--lw-dur-loop-fast) steps(1) infinite;
-}
-@media (prefers-reduced-motion: reduce) {
-  .lw-console-caret::after { animation: none; }
-}
-@keyframes lwCaretBlink { 0%, 60% { opacity: 1; } 61%, 100% { opacity: 0; } }
 
 /* ---- Spacing utilities --------------------------------------------------- */
 
@@ -1449,12 +1421,6 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
 .lw-mt-4 { margin-top: var(--lw-space-16); }
 .lw-mt-6 { margin-top: var(--lw-space-24); }
 .lw-mt-8 { margin-top: var(--lw-space-32); }
-.lw-mb-2 { margin-bottom: var(--lw-space-8); }
-.lw-mb-3 { margin-bottom: var(--lw-space-12); }
-.lw-mb-4 { margin-bottom: var(--lw-space-16); }
-.lw-mb-5 { margin-bottom: var(--lw-space-20); }
-.lw-mb-6 { margin-bottom: var(--lw-space-24); }
-.lw-mb-8 { margin-bottom: var(--lw-space-32); }
 .lw-measure { max-width: var(--lw-measure); }
 .lw-measure-sm { max-width: var(--lw-measure-sm); }
 
@@ -1555,12 +1521,11 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
 /* The flexible gap in a row of controls — the thing that pushes what follows to
    the trailing edge. It was written six ways: inline in Artifact's footer, and
    as .lw-dgrid-selbar-spacer, .lw-pag-spacer, .lw-editor-spacer and a bare
-   `.spacer` scoped under two different parents. Six homes for one declaration.
-   Deliberately a slot rather than `margin-inline-start: auto` on the next child:
-   the caller drops it into a run of actions without having to know which action
-   happens to be first on the trailing side. Component-scoped spellings stay in
-   product.css as aliases — the vanilla consumers still author them — and each
-   should collapse onto this class the next time its component is touched. */
+   `.spacer` scoped under two different parents. Six homes for one declaration,
+   and v3.0.0 removed the last of the component-scoped aliases — this is now the
+   only spelling. Deliberately a slot rather than `margin-inline-start: auto` on
+   the next child: the caller drops it into a run of actions without having to
+   know which action happens to be first on the trailing side. */
 .lw-spacer { flex: 1; }
 
 /* =============================================================================
@@ -1588,36 +1553,6 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
 /* Row highlight for data tables. */
 .lw-row-hover tbody tr { transition: background var(--lw-dur-xs) var(--lw-ease-out); }
 .lw-row-hover tbody tr:hover td { background: var(--lw-bg-subtle); }
-
-/* Flowing connector line — pair with an SVG path (fill none, stroke set by the
-   consumer). The dash drift reads as data moving along the line. */
-.lw-flow-line { stroke-dasharray: 6 6; }
-@media (prefers-reduced-motion: no-preference) {
-  .lw-flow-line { animation: lwDashFlow var(--lw-dur-loop-fast) linear infinite; }
-}
-@keyframes lwDashFlow { to { stroke-dashoffset: -12; } }
-
-/* Slow drifting brand wash for dark grounds. Layered as its own pseudo so the
-   ground's grid/wash stay put; transform-only, compositor-friendly. */
-.lw-wash { position: relative; }
-.lw-wash::before {
-  content: "";
-  position: absolute;
-  inset: -30%;
-  z-index: var(--lw-z-base);
-  background: radial-gradient(42rem at 30% 30%, hsl(var(--lw-brand-500-c) / 0.10), transparent 60%);
-  pointer-events: none;
-}
-.lw-wash > * { position: relative; z-index: var(--lw-z-raised); }
-@media (prefers-reduced-motion: no-preference) {
-  /* AMBIENT loop: `--lw-ambient-play` can pause it (a signal loop — skeleton,
-     caret, spinner — never reads this token; those stay unconditional). */
-  .lw-wash::before { animation: lwDrift calc(var(--lw-dur-ambient) * 1.25) ease-in-out infinite alternate; animation-play-state: var(--lw-ambient-play); }
-}
-@keyframes lwDrift {
-  from { transform: translate3d(-4%, -3%, 0) scale(1); }
-  to   { transform: translate3d(5%, 4%, 0) scale(1.12); }
-}
 
 /* Grow a ≥44×44px tap target on small controls WITHOUT resizing them visually.
    Touch only — a mouse does not need it and it would eat hover areas. */
@@ -1905,41 +1840,6 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
    one control is not a style
    choice, it is a bug that takes a year to notice. */
 
-/* ---- File tree (document explorer) ----------------------------------------
-   A vertical mono file list for the console's explorer pane. Rows are <li>;
-   the selected row carries data-active. Brand-soft tint + brand-text ink +
-   a left brand rail — all AA-checked pairs, no fill-as-text. */
-.lw-file-tree {
-  /* The element IS the <ul role="listbox"> (options are direct <li> children) — a
-     listbox must own its options with no wrapper between, so role="listbox" lives here,
-     not on a parent div. Reset the <ul> defaults so it reads as a panel, not a list. */
-  list-style: none;
-  margin: 0;
-  font-family: var(--lw-font-mono);
-  font-size: var(--lw-text-sm);
-  background: var(--lw-bg-subtle);
-  border: 1px solid var(--lw-line);
-  border-radius: var(--lw-radius-md);
-  padding: var(--lw-space-8) 0;
-}
-.lw-file-tree li {
-  display: flex;
-  align-items: center;
-  gap: var(--lw-space-8);
-  padding: 5px var(--lw-space-16);
-  color: var(--lw-fg-muted);
-  cursor: pointer;
-  transition: background var(--lw-dur-xs) var(--lw-ease-out),
-              color var(--lw-dur-xs) var(--lw-ease-out);
-}
-.lw-file-tree li:hover { background: var(--lw-bg-muted); color: var(--lw-fg); }
-.lw-file-tree li[data-active] {
-  background: var(--lw-brand-soft);
-  color: var(--lw-brand-on);
-  box-shadow: inset 2px 0 0 var(--lw-brand-500);
-}
-.lw-file-tree li:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
-
 /* ---- Tabs -----------------------------------------------------------------
    `.lw-code-tabs` was REMOVED in v1.0. A tab strip above a code panel is a tab
    strip; it did not need its own class, and having two meant the same
@@ -1999,7 +1899,6 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
    and the rows-per-page select silently grows to fill its row. */
 .lw-pagination { display: flex; align-items: center; gap: var(--lw-space-8); flex-wrap: wrap; }
 .lw-pagination .lw-pag-info { font-family: var(--lw-font-mono); font-size: var(--lw-text-xs); color: var(--lw-fg-subtle); font-variant-numeric: tabular-nums; }
-.lw-pagination .lw-pag-spacer { flex: 1; } /* legacy alias of .lw-spacer */
 /* The rows-per-page select sizes to its options. Every other .lw-input fills its
    column; this one sits in a control row where a full-width field would push the
    page buttons off the end. */
@@ -2376,18 +2275,6 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
    panel stays painted while its own attribute says it is hidden. Every
    `display:`-carrying element that is toggled with `hidden` needs this line. */
 .lw-topbar-panel[hidden] { display: none; }
-/* The bar's own <nav> is display:none below md, and the panel sits inside the
-   bar — so the panel's nav has to opt back in. Two selector levels rather than
-   one: at equal specificity this would depend on source order, which is not a
-   thing a consumer should have to know. */
-@media (max-width: 1023.98px) {
-  .lw-topbar .lw-topbar-panel nav { display: flex; flex-direction: column; gap: var(--lw-space-4); }
-  /* A 12px block pad around a ~20px line is a 44px row — the coarse-pointer
-     minimum, reached with padding rather than a height so a wrapped label
-     grows the row instead of overflowing it. */
-  .lw-topbar .lw-topbar-panel nav a { padding-block: var(--lw-space-12); }
-}
-
 /* The panel's own actions row — where a `.lw-topbar-collapse` twin goes.
  *
  * Separated from the links by a hairline rather than by space alone: the rows
@@ -2401,6 +2288,17 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
   margin-block-start: var(--lw-space-12);
   padding-block-start: var(--lw-space-12);
   border-block-start: 1px solid var(--lw-line);
+}
+/* The bar's own <nav> is display:none below md, and the panel sits inside the
+   bar — so the panel's nav has to opt back in. Two selector levels rather than
+   one: at equal specificity this would depend on source order, which is not a
+   thing a consumer should have to know. */
+@media (max-width: 1023.98px) {
+  .lw-topbar .lw-topbar-panel nav { display: flex; flex-direction: column; gap: var(--lw-space-4); }
+  /* A 12px block pad around a ~20px line is a 44px row — the coarse-pointer
+     minimum, reached with padding rather than a height so a wrapped label
+     grows the row instead of overflowing it. */
+  .lw-topbar .lw-topbar-panel nav a { padding-block: var(--lw-space-12); }
 }
 @media (prefers-reduced-motion: no-preference) {
   .lw-topbar-panel { animation: lwNavPanelIn var(--lw-dur-sm) var(--lw-ease-out); }
@@ -2487,7 +2385,7 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
 }
 
 .lw-tabs [role="tab"], .lw-segmented button, .lw-nav-item, .lw-chip[role="button"],
-.lw-pill[role="button"], .lw-copy, .lw-code-tabs button,
+.lw-pill[role="button"], .lw-code-tabs button,
 /* `.lw-source-chip` was a name this system never shipped, so that selector matched
    nothing for two releases. The citation atom is `.lw-source`. Everything listed
    here is a link or a button that a pointer can activate; anything NOT clickable
@@ -2551,5 +2449,5 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
   }
 
   /* Decorative washes only add noise once the palette is forced. */
-  .lw-ground, .lw-aurora, .lw-sheen { display: none; }
+  .lw-page-ground, .lw-aurora { display: none; }
 }

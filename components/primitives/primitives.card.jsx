@@ -1,6 +1,9 @@
 const LW = window.LeanWiseDesign_f2d907;
 
-const { Button, Card, CardHead, CardTitle, CardBody, CardFoot, Chip, Eyebrow, Avatar, Skeleton, Icon } = LW;
+const { Button, Card, CardHead, CardTitle, CardBody, Chip, Eyebrow, Avatar, Skeleton, Icon } = LW;
+/* The `CardFoot` wrapper was removed in v3.0.0 (no consumer imported it);
+   `.lw-card-foot` is still the rule that puts every card's actions in the
+   same place, so the specimen writes the div it emitted. */
 function Demo() {
   return (
     <>
@@ -25,7 +28,7 @@ function Demo() {
         <Card interactive glow>
           <CardHead><CardTitle>Contract corpus</CardTitle><Chip tone="success">live</Chip></CardHead>
           <CardBody>1,284 documents, re-embedded nightly.</CardBody>
-          <CardFoot><span className="lw-mono" style={{fontSize:11,color:"var(--lw-fg-subtle)"}}>v4 · 12m ago</span></CardFoot>
+          <div className="lw-card-foot"><span className="lw-mono" style={{fontSize:11,color:"var(--lw-fg-subtle)"}}>v4 · 12m ago</span></div>
         </Card>
         <Card><CardHead><CardTitle>Loading</CardTitle></CardHead><Skeleton lines={3} /></Card>
       </div>

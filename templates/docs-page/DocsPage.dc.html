@@ -14,9 +14,10 @@
 <div class="{{ themeClass }}" data-band="{{ band }}" style="min-height:100vh;background:var(--lw-bg);color:var(--lw-fg);font-family:var(--lw-font-sans)">
 
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.TopBar" hint-size="100%,56px" brand="LeanWise AI" brand-href="#" logo="{{ true }}" links="{{ navLinks }}">
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.InputGroup" hint-size="200px,40px" prefix="{{ searchIcon }}" suffix="⌘K" style="width:200px">
+<div class="lw-input-group" style="width:200px"><span class="affix">{{ searchIcon }}</span>
 <input placeholder="Search docs…" aria-label="Search docs" />
-</x-import>
+<span class="affix mono">⌘K</span>
+</div>
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.ThemeToggle" hint-size="72px,30px" modes="{{ themeModes }}" value="{{ theme }}" onChange="{{ setTheme }}"></x-import>
 </x-import>
 
@@ -55,7 +56,13 @@
 <section style="display:flex;flex-direction:column;gap:14px">
 <h2 style="margin:0;font-size:24px;font-weight:600;letter-spacing:-.022em">Response shape</h2>
 <p style="margin:0;font-size:15.5px;line-height:1.7;color:var(--lw-fg-muted);max-width:72ch">Citations are returned as character offsets into <code style="font-family:var(--lw-font-mono);font-size:.9em;background:var(--lw-bg-inset);padding:1px 5px;border-radius:var(--lw-radius-xs)">answer</code>, not as inline markers, so a client can render them as chips, footnotes or margin notes without parsing prose.</p>
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.CodeBlock" hint-size="100%,220px" filename="POST /v1/ask · 200" lang="json" code="{{ sampleJson }}"></x-import>
+<figure class="lw-code">
+<figcaption class="lw-code-head">
+<span class="fn">POST /v1/ask · 200</span>
+<span class="end"><span class="lang">json</span></span>
+</figcaption>
+<pre><code>{{ sampleJson }}</code></pre>
+</figure>
 </section>
 
 <section style="display:flex;flex-direction:column;gap:14px">

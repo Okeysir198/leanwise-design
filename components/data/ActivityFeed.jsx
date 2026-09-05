@@ -1,7 +1,6 @@
 "use client";
 import * as React from "react";
 import { Icon } from "../primitives/Icon.jsx";
-import { normTone } from "../_tone.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
 
 const ms = (when) => (when instanceof Date ? when.getTime() : new Date(when).getTime());
@@ -94,7 +93,7 @@ export function ActivityFeed({
             return (
               <Tag key={it.id ?? gi + "-" + i} className="lw-feed-item"
                 href={it.href || undefined} type={Tag === "button" ? "button" : undefined}
-                data-unread={it.unread ? "true" : undefined} data-tone={normTone("ActivityFeed", it.tone)}
+                data-unread={it.unread ? "true" : undefined} data-tone={it.tone}
                 onClick={Tag === "div" ? undefined : () => (it.onClick ? it.onClick(it) : onItemClick && onItemClick(it))}>
                 {it.icon && <span className="lw-feed-ic"><Icon name={it.icon} size={15} /></span>}
                 <span className="lw-feed-main">
