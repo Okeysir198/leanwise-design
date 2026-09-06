@@ -108,7 +108,7 @@ what is still open. `CONTRIBUTING.md` points back here — the checklist lives i
 ## Install
 
 ```jsonc
-"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v3.0.1" }
+"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v3.0.2" }
 ```
 
 ```css
@@ -957,6 +957,8 @@ npm run check        # every gate that needs no browser, in order — what a con
 npm run check:ci     # the above plus check:pack and the two that need a browser
 
 npm run check:contrast   # every token pair ≥ WCAG AA in three canonical scopes, plus band scope
+npm run check:affordance # a control marked not-allowed must be a pointer when enabled; a state
+                         #   rule must not WIPE a decoration with the `background:` shorthand
 npm run check:tokens     # raw hex, palette escapes, arbitrary-value access, >1 CTA
 npm run check:themes     # every themable CHANNEL re-pointed in every theme scope
 npm run check:dts        # react.d.ts covers every runtime export of react.js
@@ -993,6 +995,20 @@ determined due to a pseudo element"* and files the finding as `incomplete`, whic
 not read. Four serious incompletes, zero violations, measured. Exemptions live in
 `BAND_SCOPE_EXEMPT`, named with their reason and countable — same discipline as
 `data-a11y-expect`.
+
+**`check:affordance` exists because a comment was doing a gate's job.** The pointer-affordance
+block at the foot of `base.css` stated that "`<button>` and `a[href]` get the pointer from the
+UA". Only the link does — every UA sheet gives a button `cursor: default` — so `.lw-btn`, the
+most-clicked class in the package, read as inert text under the mouse in **all seven consumers**
+from v1.0 to v3.0.1. Nothing could see it: a cursor is not in a screenshot, so `check:visual` is
+structurally blind to it, and axe has no rule for it. Its sibling rule caught the second bug in
+the same block — `.lw-input:disabled, .lw-textarea:disabled, .lw-select:disabled { background:
+… }`, where the SHORTHAND also resets `background-image` and took the select's chevron with it,
+leaving a disabled select painted as a disabled text input. Both rules read the SUBJECT of a
+selector (`.lw-band-dark .lw-kpi` styles the KPI), and rule 2 asks whether the shorthand actually
+wins — by specificity or by order, because the select's `:disabled` rule sits twenty lines
+*above* the base one and beat it from there. `--self-test` injects both faults and requires the
+gate to report them.
 
 **`check:bundle` exists because the cards were testing the wrong thing.** They render from
 `_ds_bundle.js`, which had no generator in this repo — it was cut in the design project. So a

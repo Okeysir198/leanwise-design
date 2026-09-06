@@ -24,6 +24,53 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 ## [Unreleased]
 
+## [3.0.2] — 2026-09-06
+
+**Three defects in the control layer, all of them found by looking at a screen rather than at
+the CSS, and none of them visible to any gate this package had.** Two are in the same twelve
+lines of `base.css`; the third is the comment that explained why nobody needed to check.
+
+### Fixed
+
+- **`.lw-btn` had no `cursor: pointer`, and never had.** The pointer-affordance block asserted
+  that "`<button>` and `a[href]` get the pointer from the UA". Only the link does — Chromium,
+  Gecko and WebKit all give a button `cursor: default`. So the most-clicked class in the package
+  read as inert text under the mouse in **all seven consumers**, from v1.0 to v3.0.1. The
+  comment WAS the audit, which is why eleven releases went past it; a cursor is not in a
+  screenshot, so `check:visual` is structurally blind to it and axe has no rule for it. The
+  disabled state is unchanged — `.lw-btn:disabled` is (0,2,0) against the new rule's (0,1,0).
+
+- **A disabled `<select>` lost its chevron entirely.** `.lw-input:disabled, .lw-textarea:disabled,
+  .lw-select:disabled` set the `background:` SHORTHAND, which also resets `background-image` —
+  and the select's arrow IS a background image. With `appearance: none` suppressing the platform
+  arrow as well, a disabled select painted as a disabled TEXT INPUT: two controls a user cannot
+  tell apart, from one word in a declaration only ever meant to set a fill. Now
+  `background-color:`. `.lw-input` and `.lw-textarea` carry no image, so nothing else in the
+  selector moves.
+
+- **The select chevron sat 5px too close to the right edge, at every density.** The arrow is
+  10px wide — two 5px halves — and `background-position` places a layer's LEFT edge, so
+  `calc(100% - 12px)` ended the right half **7px** from the border while the text sat 12px from
+  the opposite one. A `padding-right: 34px` next to a position that reads `12px` looks
+  self-consistent right up until the gap is measured. The gutter and both layer positions now
+  derive from `--lw-field-pad-x`, so the asymmetry cannot return **and the chevron tracks
+  `[data-density]`** — which the hard-coded pair never did (compact: 26px gutter, 8px each side).
+
+### Added
+
+- **`npm run check:affordance`** — `tools/lw-affordance.mjs`, two static rules over `base.css`,
+  `product.css` and `marketing.css`. **(1)** A class marked `cursor: not-allowed` when disabled
+  must be `cursor: pointer` when it is not; the exceptions are controls you type into, named in
+  `TEXT_ENTRY` with the reason a caret is right. **(2)** A class that declares `background-image`
+  may not be re-declared by a later or higher-specificity `background:` shorthand that carries no
+  image component (`none` counts — clearing one deliberately is allowed and says so). Both rules
+  read the SUBJECT of a selector, not every class in it: `.lw-band-dark .lw-kpi` styles the KPI,
+  and the first version, which read all of them, reported 28 problems on a clean tree. Rule 2
+  asks whether the shorthand actually WINS — the select's `:disabled` rule sits twenty lines
+  *above* the base one and beat it on specificity from up there, which the first version's
+  order-only check let straight through. `--self-test` injects one fault per rule and requires
+  the gate to report both; run against v3.0.1 it reports the two defects above.
+
 ## [3.0.1] — 2026-09-05
 
 **A patch for a defect v3.0.0 introduced and shipped: in Windows High Contrast the entire page

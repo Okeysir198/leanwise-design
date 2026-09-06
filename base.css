@@ -1104,7 +1104,14 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
 .lw-input[data-focus-demo], .lw-textarea[data-focus-demo], .lw-select[data-focus-demo],
 .lw-input-group[data-focus-demo] { outline: none; border-color: var(--lw-brand-500); box-shadow: var(--lw-focus-ring); }
 
-.lw-input:disabled, .lw-textarea:disabled, .lw-select:disabled { background: var(--lw-bg-muted); color: var(--lw-fg-faint); cursor: not-allowed; border-color: var(--lw-line); }
+/* `background-COLOR`, never the shorthand. `background:` resets background-image
+   too, and the one control in this group that HAS a background-image is the select
+   — so a disabled select lost its chevron completely and, with `appearance: none`
+   suppressing the platform arrow as well, rendered as a disabled TEXT INPUT. Two
+   controls a user cannot tell apart, from a one-word difference in a declaration
+   that was only ever meant to set a fill. `.lw-input` and `.lw-textarea` carry no
+   image, so nothing else in the selector changes. */
+.lw-input:disabled, .lw-textarea:disabled, .lw-select:disabled { background-color: var(--lw-bg-muted); color: var(--lw-fg-faint); cursor: not-allowed; border-color: var(--lw-line); }
 /* Invalid is driven by aria-invalid, not a class: the attribute is what the
    screen reader reads, so binding the colour to it makes the two impossible to
    desync. The ring goes red too — a red border with a cyan focus ring reads as
@@ -1115,17 +1122,32 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
 .lw-input-lg { height: var(--lw-control-h-lg); padding: 0 calc(var(--lw-field-pad-x) + 2px); font-size: var(--lw-text-body); }
 
 /* Select needs its own chevron: the native arrow cannot be tokenised, and it is
-   the one control whose default styling gives the platform away. */
+   the one control whose default styling gives the platform away.
+
+   THE CHEVRON IS 10px WIDE — two 5px halves — and `background-position` places a
+   layer's LEFT edge. Written as `calc(100% - 12px)` the right half therefore ENDS
+   7px from the edge, not 12: the arrow sat 5px closer to the border than the text
+   sat to the opposite one, on every select in every consumer, and a padding value
+   that reads 34px next to a position that reads 12px looks self-consistent right
+   up until you measure the gap. The gutter and the two positions are now all
+   derived from ONE token, so the asymmetry cannot come back and the arrow tracks
+   [data-density] — which the hard-coded pair never did. */
 .lw-select {
   appearance: none;
+  /* Local to this rule, NOT a token: the chevron's width is the geometry of one
+     decoration, not a role a consumer should be able to re-point. It exists as a
+     variable only so the gutter and the two layer positions cannot drift apart. */
+  --lw-select-chevron-w: 10px;
   /* PHYSICAL, and coupled: this padding reserves room for the chevron, which is
      painted by background-position below — and background-position has no
      logical form. Convert one without the other and RTL gets the gap on the
      start edge with the chevron still on the right. They move together or not at
      all; today they are a self-consistent physical pair. */
-  padding-right: 34px;
+  padding-right: calc(var(--lw-field-pad-x) * 2 + var(--lw-select-chevron-w));
   background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%);
-  background-position: calc(100% - 17px) center, calc(100% - 12px) center;
+  background-position:
+    calc(100% - var(--lw-field-pad-x) - var(--lw-select-chevron-w)) center,
+    calc(100% - var(--lw-field-pad-x) - var(--lw-select-chevron-w) / 2) center;
   background-size: 5px 5px, 5px 5px;
   background-repeat: no-repeat;
   cursor: pointer;
@@ -2370,10 +2392,20 @@ a.lw-topbar .brand, .lw-topbar a.brand { cursor: pointer; transition: opacity va
 }
 
 /* ---- Pointer affordance ---------------------------------------------------
-   Anything that responds to a click must say so. <button> and a[href] get the
-   pointer from the UA; label-wrapped controls, <select> and sortable headers do
-   not, and without this they read as text while behaving as controls. */
-.lw-switch, .lw-check, .lw-select, .lw-switch input, .lw-check input { cursor: pointer; }
+   Anything that responds to a click must say so. `a[href]` gets the pointer from
+   the UA; label-wrapped controls, <select> and sortable headers do not, and
+   without this they read as text while behaving as controls.
+
+   ⚠️ AND NEITHER DOES `<button>`. Every UA sheet — Chromium, Gecko, WebKit — gives
+   a button `cursor: default`; only the link is special-cased. This block asserted
+   the opposite for eleven releases, which is why nobody looked: the comment WAS
+   the audit. So `.lw-btn` — the most-clicked class in the package, in all seven
+   consumers — read as inert text under the mouse, and it is the one affordance no
+   screenshot gate can see, because a cursor is not in the screenshot. `:disabled`
+   is (0,2,0) against this rule's (0,1,0), so the not-allowed state above still
+   wins; the button family's own `pointer-events: none` decides what a pointer
+   over a disabled button shows. */
+.lw-btn, .lw-switch, .lw-check, .lw-select, .lw-switch input, .lw-check input { cursor: pointer; }
 .lw-switch:has(input:disabled), .lw-check:has(input:disabled),
 .lw-select:disabled, .lw-switch input:disabled, .lw-check input:disabled { cursor: not-allowed; }
 .lw-table th[aria-sort] { cursor: pointer; }

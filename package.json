@@ -1,6 +1,6 @@
 {
   "name": "@leanwise/design",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "LeanWise Design System — token core, CSS layers, React components, twelve templates.",
   "license": "UNLICENSED",
   "private": false,
@@ -106,7 +106,7 @@
     "check:presence:list": "node tools/lw-presence.mjs --list",
     "test": "node --test test/*.test.mjs",
     "inline": "node tools/lw-inline.mjs",
-    "check": "npm test && npm run check:presence && npm run check:rsc && npm run check:build && npm run check:types && npm run check:registry && npm run check:advisories && npm run check:favicon && npm run check:contrast && npm run check:tone && npm run check:tokens && npm run check:themes && npm run check:dts && npm run check:bundle && npm run check:templates && npm run check:cards && npm run check:assets",
+    "check": "npm test && npm run check:presence && npm run check:rsc && npm run check:build && npm run check:types && npm run check:registry && npm run check:advisories && npm run check:favicon && npm run check:contrast && npm run check:tone && npm run check:affordance && npm run check:tokens && npm run check:themes && npm run check:dts && npm run check:bundle && npm run check:templates && npm run check:cards && npm run check:assets",
     "check:ci": "npm run check && npm run check:pack && npm run check:a11y && npm run check:forced-colors && npm run check:visual",
     "tokens": "node tools/lw-tokens-dtcg.mjs",
     "dts": "node tools/lw-dts-barrel.mjs",
@@ -126,7 +126,8 @@
     "check:cards": "node tools/lw-cards.mjs --check",
     "assets": "node tools/lw-assets.mjs",
     "check:assets": "node tools/lw-assets.mjs --check",
-    "check:forced-colors": "node tools/lw-forced-colors.mjs"
+    "check:forced-colors": "node tools/lw-forced-colors.mjs",
+    "check:affordance": "node tools/lw-affordance.mjs --self-test && node tools/lw-affordance.mjs"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",
