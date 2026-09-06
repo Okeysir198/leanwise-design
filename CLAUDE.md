@@ -417,19 +417,23 @@ version."
 
 ## Consumers
 
-Verified 2026-09-04 by enumeration (below), not by memory.
+Verified 2026-09-06 by enumeration (below), not by memory.
 
 | Consumer | Pin | Consumes | PM |
 |---|---|---|---|
 | `leanwise-ai` | `#v3.0.1` | `tokens` `fonts` `reset` `base` `marketing` `product` + `./react` `./hooks` | pnpm |
-| `leanwise-inspect/frontend` | `#v3.0.1` | `tokens` `fonts` `shadcn` `theme` `base` `product` + `./react` `./hooks` | npm |
+| `leanwise-inspect/frontend` | `#v3.0.2` | `tokens` `fonts` `shadcn` `theme` `base` `product` + `./react` `./hooks` | npm |
 | `P20251121-tss-app/frontend` | `#v1.7.1` | `tokens` `fonts` `shadcn` `theme` `base` | npm |
 | `4DXs_plan/app` | `#v3.0.1` | `tokens` `fonts` `reset` `base` `marketing` `product` + `./react` | npm ⚠ no VCS |
 | `P20260806-sop/apps/web` | `#v1.7.1` | `tokens` `fonts` `shadcn` `theme` `base` `product` | npm |
 | `P20260707-vss/frontend` | `#v0.2.3` | `tokens` `fonts` `shadcn` + preset + `./brand` | pnpm |
 | `P20260706-rag-service/frontend` | `#v0.2.2` (reports **0.2.1**) | `tokens` `fonts`, vanilla | npm |
 
-**Drift today (2026-09-05, by the loop).** **The two React consumers are current on `#v3.0.1`**, both
+**Drift today (2026-09-06, by the loop).** **`leanwise-inspect` is on `#v3.0.2` and is the only consumer
+that is** — it is where the v3.0.2 control-layer defects were found, so it bumped the hour they were fixed,
+with no source change of its own. `leanwise-ai` and `4DXs_plan` sit one patch behind on `#v3.0.1`; the bump
+is CSS-only and needs no edit in either, but it is the fix for `.lw-btn` having no pointer cursor, which is
+visible on every screen they have. The two React consumers were already current on `#v3.0.1`, both
 bumped the day v3 was cut. Between them they are the worked example for the other five, and the
 headline is how small it was: `leanwise-ai` needed **one line** (`<Toast tone="ok">` → `tone="success"`)
 and `leanwise-inspect` needed **none at all**, across two minors and a major. ⚠ This table went stale
