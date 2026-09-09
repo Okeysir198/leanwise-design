@@ -471,13 +471,41 @@
 .lw-hero-compact {
   padding: clamp(36px, 4vw, 60px) 0 clamp(28px, 3vw, 44px);
 }
-.lw-hero-compact::after {
-  top: 4%;
-  width: min(15rem, 22%);
-  opacity: 0.22;
-}
 .lw-hero-compact::before {
   mask-image: radial-gradient(34rem 20rem at 82% 0%, #000 8%, transparent 76%);
+}
+/* ⚠ SCOPED TO THE GROUND, and the first version of this was not — which meant
+   it never applied anywhere this modifier is actually used. `.lw-hero-compact::after`
+   is (0,1,1); the ground's own mark rule above is
+   `:is(.lw-page-dark, .lw-page-light, .lw-page-ground) .lw-hero-dark::after`, which
+   is (0,3,1) and wins every time. A standalone hero is the only place the bare
+   selector would have taken effect, and a standalone hero is the case that did
+   not need it. Measured: the "compact" mark rendered at the full 301px/0.45 of
+   the standard one. */
+:is(.lw-page-dark, .lw-page-light, .lw-page-ground) .lw-hero-compact::after {
+  height: 46%;
+  opacity: calc(var(--lw-ground-mark-alpha) * 0.7);
+}
+
+/* ⚠ THE MARK MUST NOT COMPETE WITH THE TEXT ON A NARROW SCREEN, and it did.
+   Inside a ground the mark is sized off the hero's HEIGHT — correct, because it
+   is taller than it is wide — but a narrow viewport makes the hero TALL: the
+   headline wraps to four lines and the lead to five, so `height: 62%` resolved
+   to a 301px-wide mark at 0.45 opacity on a 390px screen, sitting squarely
+   behind the lead paragraph.
+
+   On a wide screen this never shows up, because the text column is ~60% and the
+   mark sits in the empty right third. There is no width at which the mark can
+   sit BESIDE the text on a phone, so on a phone it has to become texture:
+   smaller, and faint enough to read as part of the ground rather than as a
+   second thing to look at. `--lw-ground-mark-alpha` is re-pointed rather than
+   overwritten so the dark theme keeps its own higher base. */
+@media (max-width: 767.98px) {
+  :is(.lw-page-dark, .lw-page-light, .lw-page-ground) .lw-hero-dark::after {
+    height: 30%;
+    right: clamp(4px, 2vw, 16px);
+    opacity: calc(var(--lw-ground-mark-alpha) * 0.42);
+  }
 }
 /* A bare <em> in a dark-ground headline is the accent convention in practice —
    style it here so consumers stop forking the ink (v0.3.1). */

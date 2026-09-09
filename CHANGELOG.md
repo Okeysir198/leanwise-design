@@ -24,6 +24,32 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 ## [Unreleased]
 
+## [3.1.4] — 2026-09-09
+
+### Fixed
+
+- ⚠ **The hero mark sat behind the headline on a phone, at 301px and 0.45 opacity.** Inside a page
+  ground the mark is sized off the hero's **height** — right, because it is taller than it is wide
+  — but a narrow viewport makes the hero *tall*: the headline wraps to four lines and the lead to
+  five, so `height: 62%` resolved to a 301px-wide mark on a 390px screen, squarely behind the lead
+  paragraph. On a wide screen it never shows, because the text column is ~60% and the mark sits in
+  the empty right third. There is no width at which it can sit *beside* the text on a phone, so
+  below `768px` it now becomes texture: `height: 30%` at 42% of the ground's mark alpha. Measured
+  after: 193px at 0.19 on `/`, 146px at 0.19 on a compact hero.
+- ⚠ **`.lw-hero-compact`'s artwork rules never applied where the modifier is actually used.**
+  `.lw-hero-compact::after` is (0,1,1); the ground's own
+  `:is(.lw-page-dark, .lw-page-light, .lw-page-ground) .lw-hero-dark::after` is (0,3,1) and won
+  every time. So v3.1.0's "the mark shrinks and rises" was true only for a standalone hero — the
+  one case that did not need it — and a compact hero inside a ground rendered the full-size mark.
+  Now scoped to the ground to match. Measured on a 1440px compact hero: 223px at 0.32, against
+  531px at 0.45 for the standard one.
+
+  ⚠ **Neither was visible to `check:visual`, and the reason is the familiar one:** no specimen
+  card pairs a hero with a page ground at a phone width, so the combination that breaks was never
+  shot. Both were found by looking at the flagship consumer on a 390px viewport. This is the same
+  fixture blindness `REVIEW.md` records for the stranded-CSS and blank-card findings.
+
+
 ## [3.1.3] — 2026-09-09
 
 ### Fixed
