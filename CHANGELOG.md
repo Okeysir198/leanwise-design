@@ -24,6 +24,82 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 ## [Unreleased]
 
+## [3.1.0] — 2026-09-09
+
+**The motion this package advertised for eleven releases, and the anchor offset it had spelled
+five ways.** Both were found by auditing the flagship consumer rather than the package:
+`leanwise-ai` reads nothing from `@leanwise/design/hooks`, sets `data-ambient` nowhere, and had
+written the contents-rail sticky block locally — once wrongly.
+
+### Added
+
+- **`.lw-reveal` / `.lw-reveal-group` — the paint for `useReveal()`.** The hook has returned
+  `[ref, shown]` since v0.3.2 under a README line that said *"you own the CSS"*, so every
+  consumer that wanted a scroll fade authored one locally or went without. The default path is
+  **CSS-only** — `animation-timeline: view()`, no hook, no observer, no JavaScript — because a
+  marketing page that must render complete with scripts off is the common case, not the edge
+  one. `.lw-reveal-group` staggers its children from `:nth-child`, so vanilla HTML gets the
+  identical cascade, capped at 8: the same ceiling `.lw-flow` and `useDeterministicCascade`
+  already use. Three ceilings, one number.
+  **One class, two paths, and the attribute wins.** `data-reveal="pending" | "shown"` on a
+  `.lw-reveal` is the state a script sets, and the scroll rules exclude `[data-reveal]` so the
+  timeline animation stands down rather than fighting the transition — both would otherwise
+  write `opacity` and `transform` on the same box. The attribute is the contract, not the hook.
+  ⚠ **Nothing is hidden outside a gate.** A reveal utility is the easiest way in this package to
+  ship a blank page: hide first, un-hide on an event, and any reader whose event never arrives
+  gets nothing, silently. The opacity floor therefore lives *inside* `@supports` +
+  `prefers-reduced-motion: no-preference`, or *inside* an attribute the element does not carry
+  until a script adds it.
+  ⚠ The attribute selectors are **scoped to the class**, and the first draft was not:
+  `check:presence`'s layer-purity rule refused a bare `[data-reveal]`, correctly — an un-layered
+  attribute rule outranks every Tailwind utility and would have made `marketing.css` unsafe for
+  a Tailwind consumer.
+- **`.lw-spotlight` — the paint for `useSpotlight()`.** The hook has written `--lw-mx` /
+  `--lw-my` via rAF since v0.3.2 and **no shipped layer read either property**. The highlight is
+  an `::after` on `--lw-z-local-1` rather than a background on the box, so it never fights a
+  card's own themed ground, and the 50% fallbacks are load-bearing: unset properties would
+  resolve the gradient at 0,0 and park a bright corner on every untouched card.
+- **`--lw-topbar-h` and `--lw-anchor-offset`.** One number that had **five spellings** —
+  `.lw-topbar`'s own `height: 56px`, `.lw-prose :is(h2,h3,h4)` at 64px, the docs template at
+  76px, and in `leanwise-ai` both `section[id]` at 96px and its rail at 80px. Nothing could see
+  the drift: a heading that lands under the sticky bar is present, visible, correctly named and
+  simply covered, so no gate here or in any consumer had ever measured it. Values are unchanged.
+- **`.lw-toc-sticky`.** Every consumer shipping a contents rail has written this block locally.
+  ⚠ The `min-width: 1024px` gate is not optional, and the comment in the consumer argued it was:
+  *"below that width the rail's grid area is exactly its own height, so a sticky box with nowhere
+  to travel never moves."* A sticky box travels within its **containing block**, which is the
+  `.lw-split`, not its own cell — so once the split collapsed the rail pinned itself and painted
+  a 350×329 panel over the page content for the whole scroll at 390px. The page still fits and
+  axe has no rule about one box covering another, so nothing saw it.
+- **`Hero` gains `compact`** — padding and artwork only, same tokens, same ink. `leanwise-ai`
+  opened five pages with the identical band, so every inner page announced itself as the front
+  door and the site read as one page repeated.
+
+### Changed
+
+- `:root:has(.lw-announce)` now **re-points `--lw-anchor-offset`** instead of reaching into
+  `.lw-prose`. Strictly wider: the old rule fixed prose headings and left every other anchor
+  target on an announced page — a rail, a consumer's `section[id]` — still landing under the bar.
+- ⚠ **`check:advisories`' deriver for `announce-breaks-prose-anchors` was rewritten, and the
+  reason is worth keeping.** It pattern-matched the *fix* rather than the *behaviour*, so
+  replacing that selector with a strictly better token re-point made it report the defect as
+  **back**, at exactly its historical 28px. A gate that recognises one spelling of a fix fails
+  the release that improves it. It now resolves the declared chain — what `.lw-prose` reads, what
+  `--lw-anchor-offset` resolves to, whether the announced scope re-points it — and was
+  sabotage-tested both ways: reverting the prose rule and deleting the re-point each return 28.
+
+### Fixed
+
+- **README §Motion advertised six effects and three of them did not exist.** `scroll fade` and
+  `spotlight` had hooks but no CSS; `shine` and `tilt` have neither, in any layer. The list now
+  names what ships, and says plainly that the other two are unbuilt — so the next reader does
+  not go looking for them the way this audit did.
+
+**Consumers:** additive. Nothing renders differently until a consumer opts in — `.lw-reveal`,
+`.lw-spotlight`, `.lw-toc-sticky` and `compact` are all new names, and the two token
+introductions resolve to the values their call sites already had.
+
+
 ## [3.0.2] — 2026-09-06
 
 **Three defects in the control layer, all of them found by looking at a screen rather than at

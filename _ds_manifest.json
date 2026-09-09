@@ -2094,6 +2094,18 @@
       "definedIn": "tokens.css"
     },
     {
+      "name": "--lw-topbar-h",
+      "value": "56px",
+      "kind": "dimension",
+      "definedIn": "tokens.css"
+    },
+    {
+      "name": "--lw-anchor-offset",
+      "value": "calc(var(--lw-topbar-h) + var(--lw-space-8))",
+      "kind": "dimension",
+      "definedIn": "tokens.css"
+    },
+    {
       "name": "--lw-bp-xs",
       "value": "360px",
       "kind": "other",

@@ -1768,11 +1768,16 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
 .lw-prose h4 { font-size: var(--lw-text-body); font-weight: var(--lw-fw-semibold); line-height: var(--lw-lh-snug); }
 /* The scroll-margin is load-bearing, not polish: `.lw-topbar` is position:
    sticky, so a #fragment link lands the heading UNDER the bar without it, and
-   the reader arrives at a section whose title is invisible. 64px clears the
-   56px bar with a gap. */
+   the reader arrives at a section whose title is invisible.
+
+   `--lw-anchor-offset` since v3.1.0, where this said `--lw-space-64` and three
+   other files said three other numbers for the same clearance. The value is
+   unchanged (56px bar + 8px gap = the 64px this always was); what changed is
+   that an announcement bar now moves it here too, instead of needing the
+   separate `:root:has(.lw-announce)` override marketing.css used to carry. */
 .lw-prose :is(h2, h3, h4) {
   margin-block-start: var(--lw-space-40);
-  scroll-margin-block-start: var(--lw-space-64);
+  scroll-margin-block-start: var(--lw-anchor-offset);
 }
 
 .lw-prose p { text-wrap: pretty; }
@@ -2007,9 +2012,39 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
    and cost this panel several rounds of misdiagnosis. Hover keeps its snap. */
 .lw-toc a[aria-current] { color: var(--lw-brand-on); font-weight: var(--lw-fw-medium); background: var(--lw-brand-soft); }
 
+/* STICKY, and only in a two-column layout (v3.1.0). Every consumer that has
+   shipped a contents rail has written this block locally, and `leanwise-ai`
+   wrote it twice — once wrongly.
+
+   ⚠ The gate is not optional, and the comment that used to sit in the consumer
+   argued the opposite: "below that width the rail's grid area is exactly its
+   own height, so a sticky box with nowhere to travel never moves." That is
+   wrong. A sticky box travels within its CONTAINING BLOCK, which is the
+   `.lw-split` grid container, not the rail's own cell. Once the split collapses
+   to one column the container spans every section on the page, so the rail
+   pinned itself and painted a 350x329 panel over the page content for the whole
+   scroll at 390px. No gate saw it: the rail is inside the viewport, the page
+   still fits, and axe has no rule about one box covering another.
+
+   1024px is `--lw-bp-lg` spelled literally, because @media cannot read a custom
+   property — the same five numbers every hand-written query in these layers
+   uses. It matches `.lw-split`'s own collapse point by construction.
+
+   The height cap earns its place on a short viewport: a rail taller than the
+   screen would otherwise pin its own overflow out of reach. `dvh`, not `vh`,
+   for the mobile toolbar. */
+@media (min-width: 1024px) {
+  .lw-toc-sticky {
+    position: sticky;
+    inset-block-start: calc(var(--lw-anchor-offset) + var(--lw-space-16));
+    max-block-size: calc(100dvh - var(--lw-anchor-offset) - var(--lw-space-32));
+    overflow-y: auto;
+  }
+}
+
 /* TOP BAR — the app chrome. Sticky, hairline, never a shadow: a shadow under a
    1px bar reads as a rendering bug on a light ground. */
-.lw-topbar { position: sticky; top: 0; z-index: var(--lw-z-nav); display: flex; align-items: center; gap: var(--lw-space-16); height: 56px; padding: 0 var(--lw-space-20); background: hsl(var(--lw-bg-c) / 0.86); backdrop-filter: blur(12px) saturate(1.4); -webkit-backdrop-filter: blur(12px) saturate(1.4); border-bottom: 1px solid var(--lw-line); }
+.lw-topbar { position: sticky; top: 0; z-index: var(--lw-z-nav); display: flex; align-items: center; gap: var(--lw-space-16); height: var(--lw-topbar-h); padding: 0 var(--lw-space-20); background: hsl(var(--lw-bg-c) / 0.86); backdrop-filter: blur(12px) saturate(1.4); -webkit-backdrop-filter: blur(12px) saturate(1.4); border-bottom: 1px solid var(--lw-line); }
 .lw-topbar .brand { display: flex; align-items: center; gap: 9px; font-weight: var(--lw-fw-semibold); font-size: var(--lw-text-sm); letter-spacing: -0.012em; color: var(--lw-fg); text-decoration: none; flex: none; }
 .lw-topbar .spacer { flex: 1; }
 /* As a link the brand is one target covering mark and name. Opacity, not a

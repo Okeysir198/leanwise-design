@@ -622,6 +622,22 @@
      `data-ambient="off"` still parks a subtree inside an opted-in page. Frame 0
      of every loop is its resting state, so the still render is the same paint. */
   --lw-ambient-play: paused; /* @kind other */
+  /* ---- Chrome geometry --------------------------------------------------
+     The sticky header's height, and the scroll offset every #fragment target
+     needs to clear it. ⚠ These are ONE number that had FIVE spellings before
+     v3.1.0 — `.lw-topbar`'s own `height: 56px`, `.lw-prose :is(h2,h3,h4)` at
+     64px, the docs template at 76px, and in `leanwise-ai` both `section[id]`
+     at 96px and its contents rail at 80px. Nothing could see the drift: a
+     heading that lands under the bar is present, visible, correctly named and
+     simply covered, so no gate in this package or any consumer ever measured
+     it. Re-point here, once.
+
+     `--lw-anchor-offset` is a ROLE — `marketing.css` re-points it when an
+     announcement bar sits above the header, and anything reading it follows
+     automatically. That direction is deliberate: marketing may know about
+     `.lw-topbar`, base must never know about `.lw-announce`. */
+  --lw-topbar-h: 56px; /* @kind dimension */
+  --lw-anchor-offset: calc(var(--lw-topbar-h) + var(--lw-space-8)); /* @kind dimension */
   /* ---- Layout ----------------------------------------------------------- */
   /* Breakpoints. Declared as tokens so the value is quotable in a review even
      though @media cannot read a custom property — every hand-written query in

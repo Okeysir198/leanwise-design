@@ -454,6 +454,31 @@
 .lw-hero-dark .lw-lead { color: var(--lw-on-dark-2); }
 .lw-hero-dark .lw-eyebrow { color: var(--lw-brand-300); }
 .lw-hero-dark .lw-eyebrow::before { background: var(--lw-brand-300); }
+
+/* COMPACT (v3.1.0). An inner page is not a landing page, and until now every
+   consumer had exactly one hero. `leanwise-ai` opened five pages with the
+   identical band — same padding, same oversized mark, same two-line headline —
+   so `/product`, `/pricing`, `/customers` and `/company` each announced
+   themselves as the front door and the site read as one page repeated.
+
+   Padding and artwork only. The token scope, the ink and the reveal behaviour
+   are untouched, so a compact hero is the same component with less air —
+   nothing here needs re-checking against the contrast gate.
+
+   The mark shrinks and rises rather than disappearing: it is the one element
+   tying an inner page back to the landing page, and a hero with no artwork at
+   all reads as an unstyled heading rather than as a band. */
+.lw-hero-compact {
+  padding: clamp(36px, 4vw, 60px) 0 clamp(28px, 3vw, 44px);
+}
+.lw-hero-compact::after {
+  top: 4%;
+  width: min(15rem, 22%);
+  opacity: 0.22;
+}
+.lw-hero-compact::before {
+  mask-image: radial-gradient(34rem 20rem at 82% 0%, #000 8%, transparent 76%);
+}
 /* A bare <em> in a dark-ground headline is the accent convention in practice —
    style it here so consumers stop forking the ink (v0.3.1). */
 .lw-hero-dark h1 em,
@@ -804,6 +829,152 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-old(root),
   ::view-transition-new(root) { animation: none; }
+}
+
+/* =============================================================================
+   ENTER REVEAL and SPOTLIGHT (v3.1.0).
+
+   `hooks.js` has shipped `useReveal()` and `useSpotlight()` since v0.3.2 and the
+   README §Motion has advertised "scroll fade" and "spotlight" for just as long.
+   NEITHER HAD ANY PAINT. `useReveal` returns `[ref, shown]` and the README said
+   "you own the CSS"; `useSpotlight` writes `--lw-mx` / `--lw-my` and nothing in
+   any shipped layer read them. So every consumer that wanted either had to
+   author it locally — which is the one thing this package exists to stop, and
+   the flagship consumer simply went without: `leanwise-ai` imports nothing from
+   `@leanwise/design/hooks` at all.
+
+   Two paths, and the CSS-ONLY one is the default on purpose.
+
+     .lw-reveal / .lw-reveal-group   scroll-driven, no JavaScript, no hook
+     ...[data-reveal="pending"|"shown"]   the attribute a hook sets, for the rest
+
+   ONE class, two paths, and the attribute WINS: the scroll rules exclude
+   `[data-reveal]`, so the moment a script starts driving an element the
+   timeline animation stands down rather than fighting the transition. Both
+   would otherwise write `opacity` and `transform` on the same box.
+
+   ⚠ The attribute selectors are SCOPED to the class, and that is not cosmetic.
+   A bare `[data-reveal]` is an un-layered attribute rule, which outranks every
+   Tailwind utility and would make `marketing.css` unsafe for a Tailwind
+   consumer — `check:presence`'s layer-purity rule refuses it, and refused this
+   block on its first draft.
+
+   THE ATTRIBUTE IS THE CONTRACT, not the hook — the same rule `_overflow.js`
+   states for `data-overflow`. A consumer may drive `data-reveal` from
+   `useReveal`, from its own observer, or from a framework directive, and the
+   paint is identical.
+
+   ⚠ NOTHING IS HIDDEN OUTSIDE A GATE, and that is the whole safety argument. A
+   reveal utility is the easiest way in this package to ship a blank page: hide
+   first, un-hide on an event, and any reader whose event never arrives — no
+   JavaScript, an observer that never fires, a crawler — gets nothing, with no
+   error anywhere. So the opacity floor lives INSIDE `@supports` +
+   `prefers-reduced-motion: no-preference` for the CSS path, and INSIDE an
+   attribute the element does not carry until a script adds it for the JS path.
+   Strip the script, strip the support, or ask for reduced motion, and the static
+   state is the complete state.
+
+   NO `--lw-dur-*` IN THE SCROLL BLOCK, for the reason `.lw-flow` states at
+   length: `animation-duration` and `animation-delay` are IGNORED while
+   `animation-timeline` names a progress timeline, so a time token written there
+   documents an intent the browser discards. The per-sibling offset is a RANGE
+   offset, the index comes from `:nth-child` so vanilla HTML gets the identical
+   cascade, and it caps at 8 — the same ceiling `.lw-flow` and
+   `useDeterministicCascade` already use. Three ceilings, one number.
+
+   `lwReveal` is verified unused: a keyframe name is GLOBAL and last-wins, and no
+   gate can see a collision. */
+
+/* The CSS-only path. `.lw-reveal` reveals itself; `.lw-reveal-group` reveals its
+   children in sequence. A group is not a nested `.lw-reveal` — an element that
+   both reveals and staggers its children would need two `animation`s on one box,
+   and the shorthand resets `animation-timeline`. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .lw-reveal:not([data-reveal]),
+    .lw-reveal-group > :not([data-reveal]) {
+      animation: lwReveal linear both;
+      animation-timeline: view();
+      animation-range:
+        entry calc(10% + var(--lw-reveal-i, 0) * var(--lw-reveal-step, 5%))
+        entry calc(64% + var(--lw-reveal-i, 0) * var(--lw-reveal-step, 5%));
+    }
+    .lw-reveal-group > :nth-child(2) { --lw-reveal-i: 1; }
+    .lw-reveal-group > :nth-child(3) { --lw-reveal-i: 2; }
+    .lw-reveal-group > :nth-child(4) { --lw-reveal-i: 3; }
+    .lw-reveal-group > :nth-child(5) { --lw-reveal-i: 4; }
+    .lw-reveal-group > :nth-child(6) { --lw-reveal-i: 5; }
+    .lw-reveal-group > :nth-child(7) { --lw-reveal-i: 6; }
+    .lw-reveal-group > :nth-child(8) { --lw-reveal-i: 7; }
+    .lw-reveal-group > :nth-child(n+9) { --lw-reveal-i: 8; }
+  }
+}
+
+/* The JS path, for a consumer already holding `useReveal`'s `shown`. The element
+   ships with NO `data-reveal`; a script adds `"pending"` on mount and flips it to
+   `"shown"`. Script absent, script broken, observer never fires — the attribute
+   never lands and the element was never hidden.
+
+   A transition, not an animation, so a flip mid-flight retargets from where the
+   box actually is rather than restarting. `--lw-dur-lg` is legitimate here: this
+   path has a real clock. */
+@media (prefers-reduced-motion: no-preference) {
+  .lw-reveal[data-reveal],
+  .lw-reveal-group > [data-reveal] {
+    transition:
+      opacity var(--lw-dur-lg) var(--lw-ease-out),
+      transform var(--lw-dur-lg) var(--lw-ease-out);
+  }
+  .lw-reveal[data-reveal="pending"],
+  .lw-reveal-group > [data-reveal="pending"] {
+    opacity: 0;
+    transform: translate3d(0, var(--lw-reveal-shift, 12px), 0);
+  }
+  .lw-reveal[data-reveal="shown"],
+  .lw-reveal-group > [data-reveal="shown"] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes lwReveal {
+  from { opacity: 0; transform: translate3d(0, var(--lw-reveal-shift, 12px), 0); }
+  to { opacity: 1; transform: none; }
+}
+
+/* SPOTLIGHT — the paint for `useSpotlight()`, which writes `--lw-mx` / `--lw-my`
+   as 0–100% via rAF and already stands itself down on a coarse pointer and under
+   reduced motion. Until now it wrote two custom properties into the void.
+
+   The highlight is an `::after` on `--lw-z-local-1` rather than a background on
+   the box itself: a card's own ground is frequently a gradient or a token that
+   the theme re-points, and painting over it would fight both. `pointer-events:
+   none` so the highlight never eats a click on the card it decorates.
+
+   The 50% fallbacks matter — before the first pointer move, and forever on a
+   device that has no pointer, the properties are unset. Centred is the resting
+   state; a missing fallback would resolve the gradient at 0,0 and park a bright
+   corner on every untouched card. */
+.lw-spotlight { position: relative; isolation: isolate; }
+.lw-spotlight::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: var(--lw-z-local-1);
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--lw-dur-md) var(--lw-ease-out);
+  background: radial-gradient(
+    var(--lw-spotlight-size, 26rem) circle at var(--lw-mx, 50%) var(--lw-my, 50%),
+    hsl(var(--lw-brand-500-c) / 0.10),
+    transparent 60%
+  );
+}
+.lw-spotlight:hover::after,
+.lw-spotlight:focus-within::after { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .lw-spotlight::after { transition: none; }
 }
 
 /* =============================================================================
@@ -1387,9 +1558,16 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 
    Measured, not reasoned: announce 35px + topbar 56px = 91px of chrome against a
    heading landing at 64px. No specimen paired an announcement with a prose
-   document, which is why two releases of `.lw-prose` shipped over it. */
-:root:has(.lw-announce) .lw-prose :is(h2, h3, h4) {
-  scroll-margin-block-start: calc(var(--lw-space-64) + var(--lw-announce-h, 36px));
+   document, which is why two releases of `.lw-prose` shipped over it.
+
+   ⚠ v3.1.0 turned this from a selector into a TOKEN RE-POINT, and that is the
+   whole improvement: it used to reach into `.lw-prose` specifically, so every
+   OTHER anchor target on an announced page — a `.lw-toc-sticky` rail, a
+   consumer's own `section[id]` — kept the un-offset value and stayed broken.
+   Re-pointing `--lw-anchor-offset` fixes all of them at once, and anything that
+   starts reading the token inherits the fix for free. */
+:root:has(.lw-announce) {
+  --lw-anchor-offset: calc(var(--lw-topbar-h) + var(--lw-announce-h, 36px) + var(--lw-space-8));
 }
 
 /* ===========================================================================

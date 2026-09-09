@@ -11,5 +11,9 @@ export interface HeroProps extends Omit<React.HTMLAttributes<HTMLElement>, "titl
   /** Two buttons at most. The amber CTA is one of them, once. */
   actions?: React.ReactNode;
   aside?: React.ReactNode;
+  /** Inner-page hero: less padding, a smaller mark. Same tokens, same ink —
+   *  use it everywhere that is not the landing page, so a site does not open
+   *  five pages with the identical band. */
+  compact?: boolean;
 }
 export declare function Hero(props: HeroProps): React.JSX.Element;

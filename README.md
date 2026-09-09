@@ -108,7 +108,7 @@ what is still open. `CONTRIBUTING.md` points back here — the checklist lives i
 ## Install
 
 ```jsonc
-"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v3.0.2" }
+"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v3.1.0" }
 ```
 
 ```css
@@ -884,9 +884,27 @@ narrow rail). `Prose`'s `measure` prop is a spelling of the first and third.
 Restrained by policy: 100–200ms on state change, no entrance choreography, and nothing that
 moves without the user causing it. The three ambient exceptions are all *signals* — the
 skeleton shimmer, the streaming caret, the active trace dot — and each has a static fallback.
-`marketing.css` ships opt-in motion (scroll fade, spotlight, shine, aurora,
-tilt, marquee), double-gated behind `@supports (animation-timeline: …)` and
+`marketing.css` ships opt-in motion — `.lw-reveal` / `.lw-reveal-group` (scroll fade),
+`.lw-spotlight`, `.lw-aurora`, the page ground's drifts and `.lw-logo-rail.marquee` —
+double-gated behind `@supports (animation-timeline: …)` and
 `prefers-reduced-motion: no-preference`; the static state is always complete.
+
+⚠ **This paragraph used to list "scroll fade, spotlight, shine, aurora, tilt, marquee", and
+three of those six shipped no CSS at all.** `useReveal()` and `useSpotlight()` existed in
+`hooks.js` from v0.3.2 — the first returning `[ref, shown]` under a README line that said "you
+own the CSS", the second writing `--lw-mx` / `--lw-my` into a layer that read neither — so a
+consumer following this list authored the paint locally or, like the flagship marketing site,
+went without and imported nothing from `@leanwise/design/hooks` at all. **v3.1.0 ships the two
+that had hooks.** `shine` and `tilt` still do not exist in any layer and are named here only so
+the next person does not go looking: they are unbuilt, not undocumented.
+
+The reveal has **two paths and one class**. `.lw-reveal` alone is scroll-driven and needs no
+JavaScript; add `data-reveal="pending" | "shown"` from `useReveal()` (or any observer) and the
+attribute takes over, the scroll rules standing down so the two never animate one box. The
+attribute is the contract, not the hook — the same rule `_overflow.js` states for
+`data-overflow`. **Nothing is hidden outside a gate**: the opacity floor lives inside the
+`@supports` + reduced-motion block, or inside an attribute a script must add, so no JavaScript,
+no scroll timelines and reduced motion all render the complete page.
 
 Durations: `--lw-dur-xs` 100 · `sm` 180 · `md` 300 · `lg` 500 · `xl` 800.
 House curve: `--lw-ease-out: cubic-bezier(.22,1,.36,1)`.

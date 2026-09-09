@@ -1,4 +1,4 @@
-<!-- @dsCard group="Motion" name="Motion" subtitle="Durations and easing — and the reduced-motion contract" width="760" -->
+<!-- @dsCard group="Motion" name="Motion" subtitle="Durations, easing, ambient loops, reveal and spotlight — and the reduced-motion contract" width="760" -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -64,6 +64,22 @@
   scale above. The loops are <b>paused by default</b>: a page that wants the drifts writes
   <span class="mono">data-ambient="on"</span> once; the frame a paused loop rests on is the frame it starts from, so the
   still render is identical.</p>
+  <table>
+    <thead><tr><th>Enter reveal and spotlight (v3.1)</th><th>Use</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">.lw-reveal</td><td>the element fades and rises as it scrolls in. <b>CSS only</b> — <span class="mono">animation-timeline: view()</span>, no hook, no observer, no JavaScript</td></tr>
+      <tr><td class="mono">.lw-reveal-group</td><td>the same, applied to each CHILD in sequence. The index comes from <span class="mono">:nth-child</span>, so vanilla HTML gets the identical cascade; capped at 8, the ceiling <span class="mono">.lw-flow</span> and <span class="mono">useDeterministicCascade</span> already share</td></tr>
+      <tr><td class="mono">[data-reveal]</td><td>on a <span class="mono">.lw-reveal</span>: the state a script sets — <span class="mono">"pending"</span> then <span class="mono">"shown"</span>, e.g. from <span class="mono">useReveal()</span>. The attribute is the contract, not the hook, and it <b>wins</b>: the scroll rules stand down so the two never write <span class="mono">opacity</span> on one box</td></tr>
+      <tr><td class="mono">--lw-reveal-shift</td><td>the rise distance (default 12px)</td></tr>
+      <tr><td class="mono">.lw-spotlight</td><td>a pointer-following highlight, the paint for <span class="mono">useSpotlight()</span> — which has written <span class="mono">--lw-mx</span> / <span class="mono">--lw-my</span> since v0.3.2 into a layer that read neither</td></tr>
+    </tbody>
+  </table>
+  <p class="sub"><b>Nothing is hidden outside a gate.</b> A reveal utility is the easiest way to ship a
+  blank page — hide first, un-hide on an event, and a reader whose event never arrives gets nothing,
+  silently. So the opacity floor lives <i>inside</i> <code class="mono">@supports (animation-timeline: view())</code>
+  and <code class="mono">prefers-reduced-motion: no-preference</code> for the CSS path, and <i>inside</i> an
+  attribute the element does not carry until a script adds it for the JS path. No JavaScript, no scroll
+  timelines, or a reduced-motion preference: the static state is the complete state.</p>
   <p class="sub">The legacy <span class="mono">--lw-duration-*</span> aliases were removed in v2.0 — a consumer reads
   <span class="mono">--lw-dur-xs</span> / <span class="mono">-sm</span> / <span class="mono">-lg</span> directly.</p>
   <p class="sub">Every animation is wrapped in <code class="mono">@media (prefers-reduced-motion: reduce)</code>,

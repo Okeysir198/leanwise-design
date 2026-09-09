@@ -201,32 +201,63 @@ if (SELF) {
        applies when an announcement bar is present. Static on purpose — the real
        defect was measured in a browser (27px, the announcement box rendering 35px
        rather than its 36px offset token), but a number this file records has to be
-       re-derivable headlessly, and the three declared values are.
+       re-derivable headlessly, and the declared values are.
 
-       Reads the clearance from the `:has(.lw-announce)` override if marketing.css
-       carries one and falls back to base.css's flat --lw-space-64 if it does not,
-       so deleting the fix makes this go non-zero again rather than silently pass. */
+       ⚠ REWRITTEN IN v3.1.0, AND THE REASON IS THE POINT OF THIS COMMENT. The
+       first version pattern-matched the FIX rather than the BEHAVIOUR: it looked
+       for a `:root:has(.lw-announce) … .lw-prose … scroll-margin-block-start`
+       rule and fell back to a flat `--lw-space-64` when it found none. v3.1.0
+       replaced that selector with a token re-point — strictly better, because the
+       old rule reached into `.lw-prose` alone and left every other anchor target
+       on an announced page (a `.lw-toc-sticky` rail, a consumer's `section[id]`)
+       still broken — and this deriver promptly reported the defect as BACK, at
+       exactly its historical 28px. A gate that recognises one spelling of a fix
+       fails the release that improves it.
+
+       So it now resolves the chain the CSS actually declares: what
+       `.lw-prose :is(h2,h3,h4)` reads, what `--lw-anchor-offset` resolves to at
+       `:root`, and whether `:root:has(.lw-announce)` re-points it. Deleting any
+       link still makes this go non-zero — reverting the prose rule to
+       `--lw-space-64`, dropping the announced re-point, or removing the token
+       all land back at 28. */
     "announce-breaks-prose-anchors": () => {
       const num = (re, css, d) => Number(css.match(re)?.[1] ?? d);
       const base = fs.readFileSync(path.join(ROOT, "base.css"), "utf8");
       const mk = fs.readFileSync(path.join(ROOT, "marketing.css"), "utf8");
       const tok = fs.readFileSync(path.join(ROOT, "tokens.css"), "utf8");
 
+      const space8 = num(/--lw-space-8:\s*(\d+)px/, tok, 8);
       const space64 = num(/--lw-space-64:\s*(\d+)px/, tok, 64);
-      const bar = num(/\.lw-topbar\s*\{[^}]*?height:\s*(\d+)px/, base, 56);
+      const topbarTok = num(/--lw-topbar-h:\s*(\d+)px/, tok, 0);
+      // The bar may state its height literally or read the token; either is the
+      // real number, and a missing token must not silently read as zero.
+      const barLit = num(/\.lw-topbar\s*\{[^}]*?height:\s*(\d+)px/, base, 0);
+      const bar = barLit || topbarTok || 56;
       const announce = num(/\.lw-announce\s*\+\s*\.lw-topbar\s*\{[^}]*?--lw-announce-h,\s*(\d+)px/, mk, 36);
 
-      // Does a rule raise the prose clearance while an announcement is present?
-      const override = mk.match(
-        /:root:has\(\.lw-announce\)[^{]*\.lw-prose[^{]*\{[^}]*?scroll-margin-block-start:\s*([^;]+);/,
-      );
-      let clearance = space64;
-      if (override) {
-        const expr = override[1];
-        clearance =
-          (/--lw-space-64/.test(expr) ? space64 : 0) +
-          (/--lw-announce-h/.test(expr) ? num(/--lw-announce-h,\s*(\d+)px/, expr, announce) : 0);
+      // Resolve a `calc()` of the three knobs this chain is allowed to use.
+      const resolve = (expr) =>
+        (/--lw-topbar-h/.test(expr) ? topbarTok : 0) +
+        (/--lw-space-64/.test(expr) ? space64 : 0) +
+        (/--lw-space-8/.test(expr) ? space8 : 0) +
+        (/--lw-announce-h/.test(expr) ? num(/--lw-announce-h,\s*(\d+)px/, expr, announce) : 0);
+
+      // 1. What does the prose heading actually read for its clearance?
+      const proseExpr =
+        base.match(/\.lw-prose\s*:is\(h2,\s*h3,\s*h4\)\s*\{[^}]*?scroll-margin-block-start:\s*([^;]+);/)?.[1] ?? "";
+      if (!/--lw-anchor-offset/.test(proseExpr)) {
+        // Pre-v3.1.0 shape: a flat value, plus whatever the old :has() override raised it to.
+        const override = mk.match(
+          /:root:has\(\.lw-announce\)[^{]*\.lw-prose[^{]*\{[^}]*?scroll-margin-block-start:\s*([^;]+);/,
+        );
+        const clearance = override ? resolve(override[1]) : resolve(proseExpr) || space64;
+        return Math.max(0, announce + bar - clearance);
       }
+
+      // 2. It reads the role. Resolve the role, under an announcement.
+      const announced = mk.match(/:root:has\(\.lw-announce\)\s*\{[^}]*?--lw-anchor-offset:\s*([^;]+);/);
+      const rootExpr = tok.match(/--lw-anchor-offset:\s*([^;]+);/)?.[1] ?? "";
+      const clearance = announced ? resolve(announced[1]) : resolve(rootExpr);
       return Math.max(0, announce + bar - clearance);
     },
     /* The 25 roles that stayed on the PAGE theme inside `.lw-page-dark`: every
