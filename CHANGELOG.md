@@ -24,6 +24,30 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 ## [Unreleased]
 
+## [3.1.2] — 2026-09-09
+
+### Fixed
+
+- ⚠ **`.lw-reveal` dimmed tall subjects while they were being read.** The range was
+  `entry 10% → entry 64%`, and a percentage offset into `entry` is a percentage of the entry
+  PHASE — which scales with the **subject's** height. So a subject taller than the scrollport was
+  still fading with a screenful of it on screen. Measured in the flagship consumer at 390px: a
+  comparison matrix at **0.52** opacity, a story grid at **0.65**, an accuracy table at **0.83**.
+  That is the package's own "never dim content with `opacity`" rule breaking at production content
+  height, and nothing could see it — opacity is not an axe contrast input, and the page still fits,
+  so a width gate stays green.
+  Now expressed in **lengths**: `entry 0px → entry 320px`, staggered by `40px` per sibling. A
+  length is a fixed scroll distance, so the reveal takes the same 320px however tall the subject
+  is. Verified side by side — with percentages a 2200px subject bottoms out at 0.87 while a 200px
+  one holds 1.00; with lengths both hold 1.00.
+  Two new knobs fall out of it: `--lw-reveal-dur` (320px) and `--lw-reveal-step` (40px, was a
+  percentage).
+  **A consumer should still put the class on small children — a heading block, a card grid —
+  because that reads better. It must not have to, and until now it did.**
+  ⚠ `.lw-flow` keeps percentage offsets deliberately: its children are diagram cells, small by
+  construction, and `tests/e2e/diagram.spec.ts` in the consumer asserts its behaviour.
+
+
 ## [3.1.1] — 2026-09-09
 
 ### Fixed
