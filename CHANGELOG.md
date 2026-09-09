@@ -28,14 +28,24 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 ### Fixed
 
-- ⚠ **Reverts v3.1.2's length-based `.lw-reveal` range, which was a worse bug than the one it
-  fixed.** A `<length>` offset is clamped to the timeline PHASE, and a short subject's `entry`
-  phase is only as long as the subject — so `entry 320px` lands past the end of a 120px heading's
-  range and the animation never reaches its end keyframe. Measured after shipping it: **32
-  elements stuck at opacity 0, permanently**, on a single page, invisible to a reader who had
-  scrolled right to them. v3.1.2 was tested against a *tall* subject and not a short one.
-  The range is proportional again. The known weakness stands and is documented in place: the
-  consumer must put `.lw-reveal-group` on **small** children — a heading block, a card grid —
+- **Reverts v3.1.2's length-based `.lw-reveal` range.** A `<length>` offset is clamped to the
+  timeline PHASE, and a short subject's `entry` phase is only as long as the subject — so
+  `entry 320px` can land past the end of a short heading's range. v3.1.2 was tested against a
+  *tall* subject and not a short one.
+
+  ⚠️ **The measurement, corrected.** The first draft of this entry claimed "32 elements stuck at
+  opacity 0, permanently" and that was **wrong** — it counted elements far ABOVE the viewport,
+  which are not visible and do not matter. Re-measured properly, counting only elements **fully on
+  screen with their top above the halfway mark** (i.e. actually being read), across 9 pages × 2
+  widths: **v3.1.2 leaves one element at 0.78 opacity** (`/product`, 390px); **v3.1.3 leaves
+  none.** So the revert is right, but by a small margin rather than the catastrophe first recorded.
+  This package's own rule is that a count here is measured, not asserted; the first version of this
+  entry broke it.
+
+  The range is proportional again. The known weakness stands and is documented in place: an offset
+  into `entry` is a percentage of the entry phase, which is exactly the subject's block size, so a
+  subject taller than the scrollport is still fading while it is being read. **The real fix is the
+  placement rule** — put `.lw-reveal-group` on SMALL children, a heading block or a card grid,
   never on a band whose children are page-sized. A percentage range is correct for a subject about
   a screen tall or less, which is what a revealed thing should be anyway.
 
