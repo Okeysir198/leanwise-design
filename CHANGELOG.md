@@ -24,6 +24,22 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 ## [Unreleased]
 
+## [3.1.3] — 2026-09-09
+
+### Fixed
+
+- ⚠ **Reverts v3.1.2's length-based `.lw-reveal` range, which was a worse bug than the one it
+  fixed.** A `<length>` offset is clamped to the timeline PHASE, and a short subject's `entry`
+  phase is only as long as the subject — so `entry 320px` lands past the end of a 120px heading's
+  range and the animation never reaches its end keyframe. Measured after shipping it: **32
+  elements stuck at opacity 0, permanently**, on a single page, invisible to a reader who had
+  scrolled right to them. v3.1.2 was tested against a *tall* subject and not a short one.
+  The range is proportional again. The known weakness stands and is documented in place: the
+  consumer must put `.lw-reveal-group` on **small** children — a heading block, a card grid —
+  never on a band whose children are page-sized. A percentage range is correct for a subject about
+  a screen tall or less, which is what a revealed thing should be anyway.
+
+
 ## [3.1.2] — 2026-09-09
 
 ### Fixed

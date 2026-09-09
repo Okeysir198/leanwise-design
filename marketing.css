@@ -904,28 +904,32 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
     .lw-reveal-group > :not([data-reveal]) {
       animation: lwReveal linear both;
       animation-timeline: view();
-      /* ⚠ LENGTHS, not percentages, and this is the correctness of the whole
-         rule. A percentage offset into `entry` is a percentage of the ENTRY
-         PHASE, and that phase scales with the SUBJECT's height — so a subject
-         taller than the scrollport is still fading while a screenful of it is
-         being read. Measured in the flagship consumer at 390px with the old
-         `entry 10% → 64%`: a comparison matrix at **0.52** opacity, a story grid
-         at 0.65, an accuracy table at 0.83, each with half a screen visible.
-         That is the "never dim content with opacity" rule breaking at
-         production content height, and nothing could see it — opacity is not an
-         axe contrast input and the page still fits.
+      /* ⚠ PERCENTAGES, and v3.1.2 tried LENGTHS and had to be reverted — the
+         reasoning is worth keeping so nobody tries it a third time.
 
-         A length is a fixed scroll distance, so the reveal takes the same
-         320px no matter how tall the subject is. Verified side by side: with
-         percentages a 2200px subject bottoms out at 0.87 while a 200px one
-         stays at 1.00; with lengths both stay at 1.00.
+         The known weakness of a percentage here is real: an offset into `entry`
+         is a percentage of the entry PHASE, and that phase is exactly the
+         subject's block size. So a subject taller than the scrollport is still
+         fading with a screenful of it on screen — measured in the flagship
+         consumer at 0.52 on a comparison matrix.
 
-         The consumer should still put this on small children — a heading block,
-         a card grid — because that is what reads well. But it must not have to,
-         and until now it did. */
+         A length looked like the fix: fixed scroll distance, height-independent,
+         and it tested clean on a tall subject. It is WRONG, because the range is
+         clamped to the phase. A SHORT subject's entry phase is only as long as
+         the subject, so `entry 320px` lands past the end of a 120px heading's
+         range and the animation never reaches its end keyframe. Measured after
+         shipping it: 32 elements stuck at **opacity 0, permanently**, on one
+         page — content invisible to a reader who had scrolled all the way to it.
+         That is far worse than the dimming it set out to fix.
+
+         So the range stays proportional, and the rule the consumer follows is
+         the real fix: put this on SMALL children — a heading block, a card grid
+         — never on a band whose children are page-sized. A percentage range is
+         correct for a subject about a screen tall or less, which is what a
+         revealed thing should be anyway. */
       animation-range:
-        entry calc(var(--lw-reveal-i, 0) * var(--lw-reveal-step, 40px))
-        entry calc(var(--lw-reveal-dur, 320px) + var(--lw-reveal-i, 0) * var(--lw-reveal-step, 40px));
+        entry calc(10% + var(--lw-reveal-i, 0) * var(--lw-reveal-step, 5%))
+        entry calc(64% + var(--lw-reveal-i, 0) * var(--lw-reveal-step, 5%));
     }
     .lw-reveal-group > :nth-child(2) { --lw-reveal-i: 1; }
     .lw-reveal-group > :nth-child(3) { --lw-reveal-i: 2; }
