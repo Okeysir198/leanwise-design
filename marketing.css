@@ -890,7 +890,16 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
    both reveals and staggers its children would need two `animation`s on one box,
    and the shorthand resets `animation-timeline`. */
 @supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
+  /* ⚠ `screen and`, and it is not decoration. A scroll-driven reveal hides its
+     subject until the subject is scrolled into view — and PRINT NEVER SCROLLS.
+     Without this the printed page is BLANK below the first band: measured at
+     26 of 26 band children at opacity 0 under `emulateMedia({media:'print'})`.
+     `prefers-reduced-motion` does not help, because a printer has no such
+     preference. The same hole existed in `.lw-flow` from v1.6.0 and is fixed
+     with it below. A PDF, a print preview and a screenshot renderer are all
+     readers that cannot scroll; the static state has to be complete for them
+     too, which is the rule this whole file is written to. */
+  @media screen and (prefers-reduced-motion: no-preference) {
     .lw-reveal:not([data-reveal]),
     .lw-reveal-group > :not([data-reveal]) {
       animation: lwReveal linear both;
@@ -918,7 +927,7 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
    A transition, not an animation, so a flip mid-flight retargets from where the
    box actually is rather than restarting. `--lw-dur-lg` is legitimate here: this
    path has a real clock. */
-@media (prefers-reduced-motion: no-preference) {
+@media screen and (prefers-reduced-motion: no-preference) {
   .lw-reveal[data-reveal],
   .lw-reveal-group > [data-reveal] {
     transition:
@@ -1991,7 +2000,9 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
    scroll binding — exactly the class of regression this section exists to
    prevent. */
 @supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
+  /* `screen and` — see the note on `.lw-reveal`. This draw-in has hidden the
+     diagram on paper since v1.6.0; nothing measured print, so nothing saw it. */
+  @media screen and (prefers-reduced-motion: no-preference) {
     .lw-flow > * {
       animation: lwFlowPulse linear both;
       animation-timeline: view();

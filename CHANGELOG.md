@@ -24,6 +24,23 @@ and **0.9.0** (visual, palette), and **1.1.0** (everything). `v0.2.2` additional
 
 ## [Unreleased]
 
+## [3.1.1] — 2026-09-09
+
+### Fixed
+
+- ⚠ **A scroll-driven reveal hid its subject on PAPER, because print never scrolls.** Both
+  scroll-timeline blocks — v3.1.0's `.lw-reveal` / `.lw-reveal-group` and `.lw-flow`'s draw-in,
+  which has shipped this way **since v1.6.0** — were gated on `@supports (animation-timeline:
+  view())` + `prefers-reduced-motion: no-preference`. Neither condition excludes print, and a
+  printer has no motion preference to state. Measured in the flagship consumer with
+  `emulateMedia({ media: 'print' })`: **26 of 26 band children at opacity 0** — the printed page
+  was blank below the first band, and the workflow diagram had been invisible on paper for six
+  minor releases. Both now read `@media screen and (…)`.
+  **The rule this restates:** a PDF, a print preview and a screenshot renderer are all readers
+  that cannot scroll. "The static state is the complete state" has to hold for them too, and
+  `prefers-reduced-motion` is not the only way to be one of them.
+
+
 ## [3.1.0] — 2026-09-09
 
 **The motion this package advertised for eleven releases, and the anchor offset it had spelled
