@@ -16,6 +16,20 @@ pinned inside that older range; `CLAUDE.md` §Consumers is the enumerated pin ta
 
 ## [Unreleased]
 
+## [3.2.0] — 2026-09-11
+
+### Deprecated
+
+- **`email.css` + the `Email` template, and the `pitch-deck` template — removed in v4.0.0.**
+  Restated here deliberately: v3.1.5 announced both, and v3.1.5 was a PATCH. The policy at the
+  head of this file is *warned one minor, removed the next major*, so a removal that follows only
+  a patch-release notice has not served its term — a consumer who upgrades patch-to-patch and
+  reads no changelog would meet the removal with one release of warning inside a version range
+  they had no reason to read. This minor is that term. The reasons are unchanged and live in
+  3.1.5: `email.css` is a physical-property island whose literals have drifted twice and whose
+  layout nothing asserts, and `pitch-deck` is 2,969 vendored lines carrying Claude's coral,
+  exempt from the lint, and overwritten by the next `copy_starter_component`.
+
 ### Added
 
 - **`check:template-literals`** (`tools/lw-template-literals.mjs`) — every `#RRGGBB` in a
