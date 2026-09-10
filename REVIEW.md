@@ -63,8 +63,10 @@ findable in text — no runtime needed.
 project deleted its copy this pass, correctly for that surface: its compiler scans every file
 in the project and read all seventy mirrors as duplicate exports of the `.jsx` sources they came
 from. In THIS repository the same directory is load-bearing — every consumer installs from a
-**git tag**, a git install runs no lifecycle script, so `prepublishOnly` never fires and
-`exports`'s `default` (`./dist/react.js`) resolves to a file that does not exist. Removing it
+**git tag**, and `prepublishOnly` does not fire on one, so `exports`'s `default`
+(`./dist/react.js`) would resolve to a file that does not exist. (`prepare` *does* fire on a git
+install and is the supported alternative; declined — it moves the failure from a stale tree a gate
+catches to a consumer-side build a nobody catches.) Removing it
 here would break four consumers on their next install with a bare module-not-found. So the two
 surfaces differ on purpose: generated output lives in git and not in the design project, and
 `check:build` is what keeps the committed copy honest. **The general rule survives** — a fact

@@ -105,8 +105,12 @@ exactly its documented recipe**; **a property carrying a COLOUR is base.css's to
 
 **Ships `.jsx` SOURCE deliberately** — the consumer's bundler does the transform, and styling lives in the
 CSS layer, NEVER in a `.jsx`. **Everything generated here is committed**, because every consumer installs
-from a **git tag**: a git install runs no lifecycle script, `prepublishOnly` never fires, so a file built
-at publish time exists for nobody and an `exports` subpath pointing at one 404s. The cost is silent
+from a **git tag**, and `prepublishOnly` does NOT fire on one — so a file built at publish time exists
+for nobody and an `exports` subpath pointing at one 404s. (⚠ Be precise about which script: npm *does*
+run **`prepare`** for a git dependency, devDeps and all. That is the supported route to not committing
+build output, and it was considered and declined — it makes every consumer's install compile the
+package, so a toolchain failure on their machine becomes an install failure, replacing a staleness
+risk that `check:build` already catches. Committed-and-gated is the cheaper trade here.) The cost is silent
 staleness, hence a `--check` per generator in `npm run check` — **change the source, run the generator,
 commit both.** ⚠ `templates/_shared/` has **no generator here** (those two files arrive from the design
 project), so `check:templates` hard-fails any sibling copy a re-pull puts back beside a template.
@@ -405,8 +409,8 @@ arithmetic is not checked by anything over there.
 
 ⚠ **Two files differ between the surfaces ON PURPOSE — do not "fix" either.** `dist/` lives in
 git and NOT in the project: its compiler reads all seventy mirrors as duplicate exports of the
-`.jsx` they came from, while here a git-tag install runs no lifecycle script and `exports`'s
-`default` resolves into `dist/`, so dropping it 404s four consumers. `_adherence.oxlintrc.json`
+`.jsx` they came from, while here `prepublishOnly` does not fire on a git-tag install and `exports`'s
+`default` resolves into `dist/`, so dropping it without adding a `prepare` script 404s four consumers. `_adherence.oxlintrc.json`
 is the reverse — the project's own lint config, deleted here at v1.13.0 and recreated there.
 A push plan that enumerates writes by glob will re-add `dist/`; leave it out of the list.
 
