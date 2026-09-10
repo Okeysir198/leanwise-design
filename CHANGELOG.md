@@ -16,6 +16,39 @@ pinned inside that older range; `CLAUDE.md` §Consumers is the enumerated pin ta
 
 ## [Unreleased]
 
+### Added
+
+- **`check:template-literals`** (`tools/lw-template-literals.mjs`) — every `#RRGGBB` in a
+  `templates/*/*.dc.html` must be the resolved value of some token, in some scope. The twelve
+  templates are the surface no gate renders (REVIEW item 2), and they are written in literal hex
+  by necessity, which made them a second home with nothing comparing it to the original. It reads
+  `tokens.json` rather than parsing `tokens.css` — that file is generated and `check:themes`
+  fails when it is stale, so the gate adds no parser and no second home of its own. It asserts
+  the mechanical half only: that a value matches *a* token. Whether it is the RIGHT token for its
+  ground stays a judgement, and REVIEW's standing note is that a judgement about a relationship
+  needs an eye or a fixture, not a rule.
+- **`hex-comment`** in `lw-token-lint --css` — the `/* #RRGGBB */` beside a channel triple in
+  `tokens.css` must be what that triple resolves to. Those comments are the only human-readable
+  form of the palette, so every literal copied out of the token core is copied out of one.
+  `SAMPLED_FROM` exempts the three macOS traffic lights, whose comments name the colour the
+  triple approximates.
+
+### Fixed
+
+- **`Email`'s footer line was below AA.** `#8A94A6` on the `#F7F6F5` backdrop measures **2.83:1**
+  at 11.5px. It now takes `--lw-text-3` (`#656B78`, 4.95). Nothing here could see it:
+  `check:contrast` evaluates tokens and `email.css`, `check:a11y` renders cards and not templates,
+  `check:visual` shoots what is there rather than judging it.
+- **`PitchDeck` painted `#7C8AA3`**, which is the value `--lw-on-navy-3` held before v1.1.3
+  re-tuned it for the same AA hole `--lw-text-3` had. Eleven releases of a token moving and its
+  copy not. Now `#808DA6`.
+- **13 of 77 hex comments in `tokens.css` were wrong**, by one to a few channels each — hand
+  conversions of HSL that nothing compared to the triple beside them. All corrected to the
+  resolved value; **no triple moved**, so nothing renders differently. The comment was the copy,
+  not the source: `--lw-on-navy-3` claimed `#808EA6` against an actual `#808DA6`, and this repo
+  then wrote the claimed value into `PitchDeck` while fixing the stale literal above — the
+  third off-by-one from a trusted comment in one afternoon, and the reason the rule exists.
+
 ## [3.1.5] — 2026-09-10
 
 ### Fixed

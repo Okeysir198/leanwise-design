@@ -204,7 +204,7 @@
   --lw-navy-inset-c: 221.1 45.2% 16.5%; /* @kind color */   /* #17233D — muted / inset */
   --lw-on-navy-1-c: 215   33.3% 92.9%; /* @kind color */    /* #E7ECF3 — body ink, 15.76 on paper */
   --lw-on-navy-2-c: 218.7 21.7% 72.0%; /* @kind color */    /* #A8B3C7 — 8.88 on paper */
-  --lw-on-navy-3-c: 218.5 17.5% 57.5%; /* @kind color */    /* #808EA6 — 5.62 on paper, 4.6 on a raised card */
+  --lw-on-navy-3-c: 218.5 17.5% 57.5%; /* @kind color */    /* #808DA6 — 5.62 on paper, 4.6 on a raised card */
   --lw-on-navy-4-c: 218.5 17.5% 46.0%; /* @kind color */    /* decorative only, fails AA as body text */
   --lw-navy-line-1-c: 220.5 38.7% 21.8%; /* @kind color */  /* #22304D — hairline */
   --lw-navy-line-2-c: 220.5 38.7% 28.0%; /* @kind color */  /* divider */
@@ -289,7 +289,7 @@
      near-complementary, so it reads as a deliberate accent rather than a second
      brand color. Lemon (55°+) goes flat against navy paper and can't produce a
      700 tier that holds AA as text on white without turning olive. */
-  --lw-cta-300-c: 45.0 97.0% 70.0%; /* @kind color */     /* #FDDA69 — tint above the anchor */
+  --lw-cta-300-c: 45.0 97.0% 70.0%; /* @kind color */     /* #FDD868 — tint above the anchor */
   --lw-cta-400-c: 44.0 96.0% 58.0%; /* @kind color */     /* #FBC42D — ANCHOR of the ramp; amber as TEXT on dark (11.62) */
   --lw-cta-500-c: 43.0 98.0% 50.0%; /* @kind color */     /* #FCB603 — the CTA fill (navy ink, 10.54) */
   --lw-cta-600-c: 38.0 95.0% 44.0%; /* @kind color */     /* #DB8D06 — hover (navy ink, 6.97) */
@@ -369,7 +369,7 @@
   /* Amber family, but its own value — never an alias of a cta tier. A mid lightness
      on a 38° hue reads brown; ~6° toward orange at full chroma keeps it clean
      rather than muddy, and separates it from the CTA by HUE instead of by tier. */
-  --lw-warning-c: 37.0  98.0% 50.0%; /* @kind color */  /* #FA9C02  fill — 7.17 with navy ink */
+  --lw-warning-c: 37.0  98.0% 50.0%; /* @kind color */  /* #FC9D03  fill — 7.17 with navy ink */
   --lw-warning-soft-c: 48.0  96.5% 88.8%; /* @kind color */  /* #FEF3C7  chip tint */
   --lw-danger-c: 0     72.2% 50.6%; /* @kind color */  /* #DC2626  fill — the one fill that takes WHITE ink */
   --lw-danger-soft-c: 0     93.3% 94.1%; /* @kind color */  /* #FEE2E2  chip tint */
@@ -380,23 +380,23 @@
      reached for anyway: tss-app derived its own --tss-phase2 from exactly that
      token, for exactly that reason. A dark fill, so it takes white ink like
      danger and neutral. */
-  --lw-info-c: 258.0 52.0% 46.0%; /* @kind color */  /* #5B37A8  fill — the one blue-adjacent role, and it is VIOLET on purpose */
-  --lw-info-soft-c: 258.0 84.0% 95.0%; /* @kind color */  /* #EDE6FE  chip tint */
+  --lw-info-c: 258.0 52.0% 46.0%; /* @kind color */  /* #5D38B2  fill — the one blue-adjacent role, and it is VIOLET on purpose */
+  --lw-info-soft-c: 258.0 84.0% 95.0%; /* @kind color */  /* #EEE8FD  chip tint */
   /* The fourth status. Not "info": info would want a blue, and every blue in this
      system already means brand or link. Neutral is the state a row is in before it
      is anything — idle, pending, draft, not-run — and it must NOT read as an alert. */
-  --lw-neutral-c: 215.0 25.0% 34.0%; /* @kind color */  /* #414F65  fill — white ink */
-  --lw-neutral-soft-c: 213.0 30.0% 95.0%; /* @kind color */  /* #EEF2F7  chip tint */
+  --lw-neutral-c: 215.0 25.0% 34.0%; /* @kind color */  /* #41536C  fill — white ink */
+  --lw-neutral-soft-c: 213.0 30.0% 95.0%; /* @kind color */  /* #EEF2F6  chip tint */
 
   /* Status AS TEXT. These must clear AA on BOTH the page (white) and their own soft
      tint, because a badge is text on the tint. The lighter -700 shades (#15803D,
      #B45309) clear white at 5.02 but only reach ~3.1 on the tint — so the darker
      -800s are the real floor. This is why fill and text are separate tokens. */
   --lw-success-text-c: 142.8 64.2% 24.1%; /* @kind color */  /* #166534 — 7.13 on white, 6.49 on tint */
-  --lw-warning-text-c: 25.0  92.0% 28.0%; /* @kind color */  /* #8A3F05 — 7.46 on white, 6.64 on tint */
+  --lw-warning-text-c: 25.0  92.0% 28.0%; /* @kind color */  /* #893C06 — 7.46 on white, 6.64 on tint */
   --lw-danger-text-c: 0     73.7% 41.8%; /* @kind color */  /* #B91C1C — 6.47 on white, 5.30 on tint */
-  --lw-neutral-text-c: 215.0 30.0% 26.0%; /* @kind color */  /* #2E3B54 — 10.4 on white, 9.8 on tint */
-  --lw-info-text-c: 258.0 58.0% 38.0%; /* @kind color */  /* #4A2A99 */
+  --lw-neutral-text-c: 215.0 30.0% 26.0%; /* @kind color */  /* #2E3F56 — 10.4 on white, 9.8 on tint */
+  --lw-info-text-c: 258.0 58.0% 38.0%; /* @kind color */  /* #4A2999 */
   --lw-neutral: hsl(var(--lw-neutral-c));
   --lw-neutral-soft: hsl(var(--lw-neutral-soft-c));
   /* The *-text tiers deliberately have NO derived colour — channels only. They
@@ -841,7 +841,7 @@
   --lw-warning-on-c: var(--lw-cta-400-c); /* @kind color */    /* #FBC42D — the amber anchor */
   --lw-danger-on-c: 0     90.6% 70.8%; /* @kind color */    /* #F87171 — 6.77 on paper */
   --lw-info-on-c: 258.0 88.0% 80.0%; /* @kind color */
-  --lw-neutral-on-c: 214.0 22.0% 72.0%; /* @kind color */    /* #AAB6C8 — 8.1 on paper */
+  --lw-neutral-on-c: 214.0 22.0% 72.0%; /* @kind color */    /* #A8B6C7 — 8.1 on paper */
 
   /* The soft tints MUST be re-pointed for dark. Left at their light values, a
      success badge renders #34D399 text on #DCFCE7 — contrast 1.75, invisible.
@@ -850,7 +850,7 @@
   --lw-warning-soft-c: 38.9  67.3% 10.8%; /* @kind color */  /* #2E2109 — 9.40 */
   --lw-info-soft-c: 258.0 46.0% 16.0%; /* @kind color */
   --lw-danger-soft-c: 0     53.2% 15.1%; /* @kind color */  /* #3B1212 — 5.93 */
-  --lw-neutral-soft-c: 215.0 30.0% 15.0%; /* @kind color */  /* #1A2331 — ink lands at 7.6 */
+  --lw-neutral-soft-c: 215.0 30.0% 15.0%; /* @kind color */  /* #1B2432 — ink lands at 7.6 */
   --lw-cta-soft-c: 34.0  62.0% 13.0%; /* @kind color */  /* #36240D — cta-400 on it 9.22 */
 
   /* Tinted shadows are invisible on a navy ground: go black, and lean on the
@@ -897,7 +897,7 @@
     --lw-warning-soft-c: 38.9  67.3% 10.8%; /* @kind color */  /* #2E2109 — 9.40 */
     --lw-info-soft-c: 258.0 46.0% 16.0%; /* @kind color */
     --lw-danger-soft-c: 0     53.2% 15.1%; /* @kind color */  /* #3B1212 — 5.93 */
-  --lw-neutral-soft-c: 215.0 30.0% 15.0%; /* @kind color */  /* #1A2331 — ink lands at 7.6 */
+  --lw-neutral-soft-c: 215.0 30.0% 15.0%; /* @kind color */  /* #1B2432 — ink lands at 7.6 */
     --lw-cta-soft-c: 34.0  62.0% 13.0%; /* @kind color */  /* #36240D — cta-400 on it 9.22 */
     --lw-shadow-ink-c: 0 0% 0%; /* @kind color */
     --lw-shadow-xs: 0 1px 0 hsl(var(--lw-line-c) / 0.5);

@@ -132,6 +132,12 @@ because it will recur again:
   was green; three hexes in the file that no token accounted for had drifted. **Half a comparison
   reads exactly like a whole one.**
 
+- **The hex comments in tokens.css were nobody's job** (v3.1.5). 16 of 77 were wrong, and they are
+  the only human-readable form of the palette — so every literal copied out of the token core was
+  copied out of a value nothing checked. Three off-by-one literals in one afternoon came through
+  them, including one written by the repo while fixing another. The triple was gated from the day
+  the contrast check existed; the sentence beside it was decoration until `hex-comment`.
+
 - **The surface tiers were only ever demoed as a ramp** (v3.1.5). Four adjacent swatches answer
   "do these step evenly" and cannot answer "does this ground belong to this page", which is the
   only question a consumer's screen asks. Three minors of a visibly wrong palette, reported from
@@ -158,10 +164,13 @@ when they first ran, which is the argument for computing them.
 `lw-templates.mjs` reads them as text. The cards get axe and pixel diffs; the twelve templates —
 the thing a person actually looks at — get neither, because they need the `<x-dc>` runtime to
 render. Whether that runtime can be driven headless here is unknown and worth half a day.
-**v3.1.5 raised the price of this**: both template literal sets had drifted onto a grey family no
-token accounts for, and nothing here could see it. The text-only half is cheap and worth writing
-first — every `#RRGGBB` in a `.dc.html` should be a token value, and a gate can say so without a
-browser.
+**The text-only half is now CLOSED** — `check:template-literals` asserts that every `#RRGGBB` in a
+`.dc.html` is a token's resolved value, and it found two defects on its first run: `PitchDeck`
+carrying `--lw-on-navy-3`'s pre-v1.1.3 value, and `Email`'s footer at **2.83:1**, below AA in a
+shipped template. **The rendering half is still open**, and it is the larger one: nothing here
+knows whether a template's layout survives, whether its dark mode inverts, or whether the token
+it painted is the RIGHT token for the ground it sits on. That last one is why the gate asserts
+only "a token" and not "the correct token" — see item 14.
 
 ### 3. `preview/_vendor` and the packed cards — CLOSED in v3.0.0
 
@@ -298,6 +307,22 @@ kept it safe, not the greps. Record them here because the next sweep will want t
 - a family (`.lw-auth-*`) survives if any sibling is used, because a vanilla page composes members
 - a standalone decorative effect no component emits, no card demonstrates, no template lays out and
   no consumer writes is the only safe category, and it is where all 33 deletions came from
+
+### 14. "A token" is not "the right token", and only an eye closes that gap
+
+`check:template-literals` proves a template's `#F7F6F5` is *some* token's value. It cannot say
+whether that ground should have been the muted tier at all — `email.css` needed exactly that
+judgement at v3.1.5 (subtle sits 1.6% off white, which a mail client renders as no frame) and no
+rule could have reached it. The same hole exists one level up: a component painting
+`--lw-bg-muted` where `--lw-bg-subtle` was meant passes every gate in this repo.
+
+This is the standing division of labour with the Claude Design project, and it is worth stating
+as a rule rather than rediscovering it: **a gate settles whether a value belongs to the system;
+a person or a fixture settles whether it belongs HERE.** v3.1.5 is the worked example — the
+defect was found by an eye, the fix was verified by the gates, and the durable output was
+neither the diagnosis nor the hex values (which were wrong) but `colors-surfaces.html`, a
+fixture both browser gates now measure forever. Judge a visual pass by what fixture it leaves
+behind.
 
 ---
 

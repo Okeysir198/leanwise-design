@@ -38,6 +38,7 @@ import { readdirSync, readFileSync, statSync, existsSync } from "node:fs";
 import { join, relative, extname, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { splitRules, stripComments } from "./_css.mjs";
+import { hslToRgb } from "./_color.mjs";
 import { report } from "./_report.mjs";
 
 /* PATH NOTE — this folder sits under templates/ because everything outside it is
@@ -57,6 +58,7 @@ if (!arg || arg === "--css") {
     jsxSelfCheck(), docPinSelfCheck(),
     legacyDurationSelfCheck(), keyframeNameSelfCheck(), breakpointSelfCheck(),
     docCountSelfCheck(), readmeCoverageSelfCheck(), dynamicClassSelfCheck(),
+    hexCommentSelfCheck(),
   );
   process.exit(report("lw-token-lint --css", {
     problems: errs.map((e) => `${e.file || "css"}  [${e.rule}]  ${e.hit}\n      in \`${e.selector}\` — ${e.msg}`),
@@ -608,6 +610,69 @@ function dynamicClassSelfCheck() {
     errs.push({
       rule: "dynamic-class", file: "components/", hit: `${checked} value(s)`, selector: "components/**/*.jsx",
       msg: "found fewer than twenty template-literal class values — the walk has stopped measuring",
+    });
+  }
+  return errs;
+}
+
+/**
+ * Rule `hex-comment` — the `/* #RRGGBB *\/` beside a channel triple in
+ * tokens.css must be what that triple actually resolves to.
+ *
+ * Those comments are the only human-readable form of the palette, so every
+ * literal copied OUT of the token core is copied out of one: `email.css`, the
+ * twelve templates, an artwork stroke, a consumer's one hardcode. When the
+ * comment is wrong the copy is wrong, and the copy is what ships.
+ *
+ * Written after three separate off-by-one literals in one afternoon — two in
+ * `email.css` and both templates (`#F2F0EE` for `#F2F1EE`, `#ECEAE7` for
+ * `#EBEAE7`), and a third when this repo trusted `--lw-on-navy-3`'s comment
+ * while replacing a stale value and wrote `#808EA6` where the token resolves to
+ * `#808DA6`. Every one was a hand-conversion of HSL that landed a channel or
+ * two off, and nothing compared the two halves of the line. 16 of 77 comments
+ * were wrong when the rule was first run.
+ *
+ * SAMPLED_FROM is the exemption: a comment that names the colour a triple was
+ * sampled FROM, rather than what it resolves to. The macOS traffic lights are
+ * the whole list — the triples approximate Apple's reds and greens on purpose,
+ * and losing the source value would lose the only reason those numbers exist.
+ */
+function hexCommentSelfCheck() {
+  /* Declared inside, not above: the --css entry at the top of this file calls
+     these checks, and only a function declaration hoists that far. */
+  const SAMPLED_FROM = {
+    "sys-mac-red": "macOS traffic light red, approximated",
+    "sys-mac-amber": "macOS traffic light amber, approximated",
+    "sys-mac-green": "macOS traffic light green, approximated",
+  };
+  const errs = [];
+  const p = join(PKG_ROOT, "tokens.css");
+  if (!existsSync(p)) return [{ rule: "hex-comment", file: "tokens.css", hit: "-", selector: "-", msg: `not found at ${p}` }];
+  const lines = readFileSync(p, "utf8").split("\n");
+  let checked = 0;
+  lines.forEach((line, i) => {
+    const decl = /--lw-([\w-]+)-c:\s*([\d.]+)\s+([\d.]+)%\s+([\d.]+)%\s*;/.exec(line);
+    if (!decl) return;
+    const claim = /\/\*[^*]*?(#[0-9A-Fa-f]{6})\b/.exec(line.slice(decl.index + decl[0].length));
+    if (!claim) return;
+    const name = decl[1];
+    if (name in SAMPLED_FROM) return;
+    checked++;
+    const { r, g, b } = hslToRgb(+decl[2], +decl[3], +decl[4]);
+    const real = "#" + [r, g, b].map((v) => Math.round(v * 255).toString(16).padStart(2, "0")).join("").toUpperCase();
+    if (real !== claim[1].toUpperCase()) {
+      errs.push({
+        rule: "hex-comment", file: "tokens.css",
+        hit: `--lw-${name}-c says ${claim[1]}, resolves to ${real}`,
+        selector: `tokens.css:${i + 1}`,
+        msg: "every literal copied out of the token core is copied out of this comment — fix the comment, or the triple if the comment was the intent",
+      });
+    }
+  });
+  if (checked < 40) {
+    errs.push({
+      rule: "hex-comment", file: "tokens.css", hit: `only ${checked} annotated triple(s) read`, selector: "tokens.css",
+      msg: "the declaration regex has stopped matching; fix it rather than this number",
     });
   }
   return errs;
