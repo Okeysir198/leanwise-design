@@ -386,6 +386,30 @@ against the sources it finds, so a stale bundle arriving WITH stale sources agre
 `tokens.css`+`.json`, `Hero.*`, the bundle, manifest, advisories, docs) and one delete. Two things
 that release taught:
 
+⚠ **The traffic is BIDIRECTIONAL, and only one direction has a tool.** Within the hour of that
+push the project had authored a whole release of its own — the v3.1.5 palette retune, the
+`shadcn.css` `--card` fix, `preview/colors-surfaces.html`, and the README/CHANGELOG/REVIEW history
+cleanup. There is no pull: it is `get_file` per path, one at a time. What makes it bearable is
+that **a large `get_file` result is persisted to a file on disk instead of returned inline** — so
+`node -e "…JSON.parse(…).content"` writes it out and you `diff` it against the working tree, at no
+cost in context. Fetch the big files FIRST for that reason. Small ones come back inline and have
+to be retyped, so prefer a targeted `Edit` over rewriting the file.
+
+⚠ **The project cannot run a gate, so treat everything it computes as a claim.** v3.1.5's retune
+arrived with two literals off by one — `--lw-surface-3` resolves to `#F2F1EE`, not `#F2F0EE`, and
+`--lw-border-1` to `#EBEAE7`, not `#ECEAE7` — copied into `email.css` and both templates, where
+`check:contrast`'s two-way email assertion caught them in seconds. **Re-derive every hex from the
+triple** (`hslToRgb` in `tools/_color.mjs`) rather than trusting a comment, and run `npm run check`
+before believing any palette change. The judgement in what comes back is usually good; the
+arithmetic is not checked by anything over there.
+
+⚠ **Two files differ between the surfaces ON PURPOSE — do not "fix" either.** `dist/` lives in
+git and NOT in the project: its compiler reads all seventy mirrors as duplicate exports of the
+`.jsx` they came from, while here a git-tag install runs no lifecycle script and `exports`'s
+`default` resolves into `dist/`, so dropping it 404s four consumers. `_adherence.oxlintrc.json`
+is the reverse — the project's own lint config, deleted here at v1.13.0 and recreated there.
+A push plan that enumerates writes by glob will re-add `dist/`; leave it out of the list.
+
 - ⚠ **A DELETE survives a "full" push.** `_adherence.oxlintrc.json` was deleted here at v1.13.0 and
   was still in the project on 2026-09-10 — it outlived the 2026-09-04 wholesale push, because writes
   go up as globs (which name only what exists locally) while deletes must be enumerated by hand.
