@@ -470,27 +470,34 @@ Verified 2026-09-06 by enumeration (below), not by memory.
 
 | Consumer | Pin | Consumes | PM |
 |---|---|---|---|
-| `leanwise-ai` | `#v3.0.1` | `tokens` `fonts` `reset` `base` `marketing` `product` + `./react` `./hooks` | pnpm |
-| `leanwise-inspect/frontend` | `#v3.0.2` | `tokens` `fonts` `shadcn` `theme` `base` `product` + `./react` `./hooks` | npm |
+| `leanwise-ai` | `#v3.1.5` | `tokens` `fonts` `reset` `base` `marketing` `product` + `./react` `./hooks` | pnpm |
+| `leanwise-inspect/frontend` | `#v3.1.5` | `tokens` `fonts` `shadcn` `theme` `base` `product` + `./react` `./hooks` | npm |
 | `P20251121-tss-app/frontend` | `#v1.7.1` | `tokens` `fonts` `shadcn` `theme` `base` | npm |
-| `4DXs_plan/app` | `#v3.0.1` | `tokens` `fonts` `reset` `base` `marketing` `product` + `./react` | npm ⚠ no VCS |
+| `4DXs_plan/app` | `#v3.1.5` | `tokens` `fonts` `reset` `base` `marketing` `product` + `./react` | npm |
 | `P20260806-sop/apps/web` | `#v1.7.1` | `tokens` `fonts` `shadcn` `theme` `base` `product` | npm |
 | `P20260707-vss/frontend` | `#v0.2.3` | `tokens` `fonts` `shadcn` + preset + `./brand` | pnpm |
 | `P20260706-rag-service/frontend` | `#v0.2.2` (reports **0.2.1**) | `tokens` `fonts`, vanilla | npm |
 
-**Drift today (2026-09-06, by the loop).** **`leanwise-inspect` is on `#v3.0.2` and is the only consumer
-that is** — it is where the v3.0.2 control-layer defects were found, so it bumped the hour they were fixed,
-with no source change of its own. `leanwise-ai` and `4DXs_plan` sit one patch behind on `#v3.0.1`; the bump
-is CSS-only and needs no edit in either, but it is the fix for `.lw-btn` having no pointer cursor, which is
-visible on every screen they have. The two React consumers were already current on `#v3.0.1`, both
-bumped the day v3 was cut. Between them they are the worked example for the other five, and the
-headline is how small it was: `leanwise-ai` needed **one line** (`<Toast tone="ok">` → `tone="success"`)
-and `leanwise-inspect` needed **none at all**, across two minors and a major. ⚠ This table went stale
-TWICE in one morning because releases landed from another session between writing it and committing it
-— **run the loop below, do not hand-edit a row.** **`4DXs_plan` also crossed both majors** from `#v1.7.1` and needed three
-one-word edits, all of them retired tone spellings. **Two sit on `#v1.7.1`** (tss-app, sop) and must
-still cross BOTH v2.0.0 and v3.0.0 — each release's **§Migration — per consumer, what to grep** lists
-the removals against every tree.
+**Drift today (2026-09-10, by the loop).** **Three consumers are current on `#v3.1.5`** —
+`leanwise-ai`, `leanwise-inspect`, `4DXs_plan` — bumped the day it was cut, and **none of the three
+needed a source change**, across a minor and up to five patches. That is now the fourth release
+running where the measured break across every tree was nothing at all; treat "this bump is small"
+as the default and the exceptions as the thing to look for. The remaining four are the hard ones
+and always were: **two on `#v1.7.1`** (tss-app, sop) must still cross BOTH v2.0.0 and v3.0.0, and
+**VSS `#v0.2.3` / rag-service `#v0.2.2` are pre-1.1** and cannot jump in one step — each release's
+**§Migration — per consumer, what to grep** lists the removals against every tree.
+
+⚠ **v3.1.5 is the first release in this line a person can SEE without being told where to look**,
+which changes how to pitch the remaining four: the light surface tiers were a cream 2.5–7.1% below
+a white page and read as beige patches on every recessed ground. A consumer still on v1.7.1 is
+not merely behind on gates, it looks wrong on every screen with a sidebar or a table head.
+
+⚠ **The npm lockfile no-op bit again on inspect, exactly as predicted**, and `rm -rf
+node_modules/@leanwise/design` was NOT enough on its own: `npm install` re-resolved from the
+lockfile's old commit and left the tree reporting `3.0.2` with package.json already on `#v3.1.5`.
+**The fix that works is an explicit `npm install github:Okeysir198/leanwise-design#<tag>`**, which
+rewrites the lock entry. inspect's `.ds-pin-sha` + `ds:contract` caught it; the other npm consumers
+have no such check, so on those, read the lockfile yourself.
 
 ⚠ **`4DXs_plan` had NO version control until 2026-09-05** — it is a git repo now (local, `main`,
 no remote). Its `app/.gitignore` is the authority for everything under `app/` and keeps three secret
