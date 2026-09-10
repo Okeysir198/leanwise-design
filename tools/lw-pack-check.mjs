@@ -59,7 +59,7 @@ try {
   /* ---- 1. everything a consumer imports is actually in the tarball -------- */
   const MUST_PACK = [
     "tokens.css", "shadcn.css", "theme.css", "reset.css", "base.css",
-    "marketing.css", "product.css", "fonts.css", "email.css",
+    "marketing.css", "product.css", "fonts.css",
     "tailwind-preset.cjs", "tokens.json", "react.d.ts",
     "tools/lw-token-lint.mjs", "tools/_css.mjs",
     "dist/react.js", "dist/components/overlays/Dialog.js", "dist/components/primitives/Card.js",

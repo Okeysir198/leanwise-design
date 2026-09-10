@@ -330,33 +330,6 @@ if (SELF) {
       return n;
     },
 
-    /* Hexes in email.css that no watched token resolves to and no exemption
-       names. Re-derived here from the two lists in lw-contrast-check.mjs rather
-       than re-resolving the palette — this file stays headless and regex-light,
-       and the gate itself does the colour maths. */
-    "email-css-drifted-from-tokens": () => {
-      const gate = fs.readFileSync(path.join(ROOT, "tools/lw-contrast-check.mjs"), "utf8");
-      const email = fs.readFileSync(path.join(ROOT, "email.css"), "utf8");
-      const tokens = fs.readFileSync(path.join(ROOT, "tokens.css"), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
-      const present = new Set([...email.matchAll(/#[0-9A-Fa-f]{6}\b/g)].map((m) => m[0].toUpperCase()));
-      const watched = [...(/const EMAIL_LITERALS = \[([\s\S]*?)\n\];/.exec(gate)?.[1] ?? "")
-        .matchAll(/token:\s*"([a-z0-9-]+)"/g)].map((m) => m[1]);
-      const exempt = new Set([...(/const EMAIL_EXEMPT = \{([\s\S]*?)\n  \};/.exec(gate)?.[1] ?? "")
-        .matchAll(/"(#[0-9A-Fa-f]{6})"/g)].map((m) => m[1].toUpperCase()));
-      if (!watched.length) throw new Error("could not read EMAIL_LITERALS from lw-contrast-check.mjs");
-      /* Resolve each watched token the way the gate does — one `--lw-<t>-c` HSL
-         triple, through the shared colour maths — rather than trusting a hex to
-         appear in a tokens.css comment, which is how the first draft of this
-         derivation read 1 in a clean tree. */
-      const accounted = new Set(exempt);
-      for (const t of watched) {
-        const hsl = new RegExp(`--lw-${t}-c:\\s*([0-9.]+)\\s+([0-9.]+)%\\s+([0-9.]+)%`).exec(tokens);
-        if (!hsl) continue; // a role, not a primitive — the gate resolves the chain, this does not
-        const { r, g, b } = hslToRgb(+hsl[1], +hsl[2], +hsl[3]);
-        accounted.add("#" + [r, g, b].map((v) => Math.round(v * 255).toString(16).padStart(2, "0")).join("").toUpperCase());
-      }
-      return [...present].filter((h) => !accounted.has(h)).length;
-    },
 
     "page-dark-derived-roles": () => {
       const css = fs.readFileSync(path.join(ROOT, "tokens.css"), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");

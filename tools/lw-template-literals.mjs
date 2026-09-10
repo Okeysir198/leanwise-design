@@ -5,27 +5,33 @@
  *
  * ## Why this exists
  *
- * The twelve templates are the one surface no gate renders (REVIEW item 2:
- * they need the `<x-dc>` runtime, and `lw-templates.mjs` reads them as text).
- * They are also, unavoidably, written in LITERAL hex — a `.dc.html` is styled
- * with inline `style=` attributes, and several are deliberately theme-free
- * (a deck slide, an email). So they are a SECOND HOME for palette values, the
- * same shape as `email.css`, with one difference that mattered: `email.css`
- * has had a two-way literal assertion in `check:contrast` since v3.0.0, and
- * the templates had nothing at all.
+ * The templates are the one surface no gate renders (REVIEW item 2: they need
+ * the `<x-dc>` runtime, and `lw-templates.mjs` reads them as text). Two of them
+ * were also written in LITERAL hex — a `.dc.html` is styled with inline
+ * `style=` attributes, and a deck slide and an email are deliberately
+ * theme-free — which made them a SECOND HOME for palette values, the same shape
+ * as `email.css`, with one difference that mattered: `email.css` had a two-way
+ * literal assertion in `check:contrast` from v3.0.0, and the templates had
+ * nothing at all.
  *
  * What that cost, both found the hour this gate was first run:
  *
  *   - `PitchDeck` painted `#7C8AA3`, which is the value `--lw-on-navy-3` held
- *     BEFORE v1.1.3 re-tuned it to `#808EA6` for the same AA hole `--lw-text-3`
+ *     BEFORE v1.1.3 re-tuned it to `#808DA6` for the same AA hole `--lw-text-3`
  *     had. A token moved and its copy did not, for eleven releases.
  *   - `Email`'s footer line painted `#8A94A6` on the `#F7F6F5` backdrop —
  *     **2.83:1 at 11.5px**, below AA. No gate here could see it: `check:contrast`
- *     evaluates tokens and `email.css`, `check:a11y` renders cards and not
+ *     evaluated tokens and `email.css`, `check:a11y` renders cards and not
  *     templates, and `check:visual` shoots what is there rather than judging it.
  *
  * Neither is exotic. Both are what a literal does when nothing compares it to
  * the thing it was copied from.
+ *
+ * ⚠ **Both of those templates were removed at v4.0.0, so the tree it guards now
+ * holds ZERO literals.** That is not a reason to delete the gate — it is the
+ * state the gate exists to keep. The floor moved from "40 literals read" to
+ * "10 templates read" so a clean tree passes and a broken glob still fails, and
+ * the self-test plants a literal rather than corrupting one.
  *
  * ## What it asserts, and what it deliberately does not
  *
@@ -53,9 +59,10 @@
  * accepted set is the union, and narrowing it per template would need to know
  * which ground each element sits on — see "does not assert", above.
  *
- * `templates/pitch-deck/deck-stage.js` is NOT read: it is vendored, carries
- * `@ds-adherence-ignore` on line 1, and the next `copy_starter_component`
- * overwrites it (REVIEW item 4). Only `*.dc.html` is ours to hold.
+ * Only `*.dc.html` is read. That rule was written for `deck-stage.js`, which was
+ * vendored, `@ds-adherence-ignore` on line 1, and overwritten by the next
+ * `copy_starter_component` (REVIEW item 4); it went with `pitch-deck` at
+ * v4.0.0, and the rule stands for the next vendored file that arrives.
  *
  *   node tools/lw-template-literals.mjs
  *   node tools/lw-template-literals.mjs --self-test   # plant a fault, expect red
@@ -79,10 +86,14 @@ const TEMPLATE_HEX_EXEMPT = {
   // "#RRGGBB": "why this is not a token",
 };
 
-/* A gate that reads nothing reports clean. The tree has twelve templates and
-   ~80 literals; these floors are well under that and exist to catch a glob or a
-   regex that has silently stopped matching, not to encode the current counts. */
-const MIN_LITERALS = 40;
+/* A gate that reads nothing reports clean — so the floor is the number of
+   TEMPLATES read, not the number of literals found.
+   
+   It was literals until v4.0.0, which removed `email` and `pitch-deck` — the
+   only two templates that painted in hex. Every remaining template paints
+   entirely from tokens, so the honest literal count is now ZERO, and a floor of
+   40 would have failed a clean tree. Zero literals is a pass; a glob that stops
+   finding templates is not, and neither is a literal that matches no token. */
 const MIN_TEMPLATES = 10;
 
 const norm = (h) => {
@@ -175,43 +186,38 @@ if (process.argv.includes("--self-test")) {
     console.error("lw-template-literals --self-test: the tree is already failing; fix that first.");
     process.exit(1);
   }
-  /* The FIRST template carrying a 6-digit literal, not the first template:
-     `ai-app-shell` sorts first and paints entirely from tokens, so anchoring on
-     it made the self-test fail for the best possible reason and read exactly
-     like a broken gate. */
-  let first = null, hex = null;
-  for (const f of templateFiles()) {
-    const m = /#([0-9A-Fa-f]{6})\b/.exec(readFileSync(f[1], "utf8"));
-    if (m) { first = f; hex = m; break; }
-  }
-  if (!hex) {
-    console.error("lw-template-literals --self-test: no 6-digit literal anywhere to corrupt — the fixture assumption is stale.");
+  /* PLANT a literal rather than corrupt one. Until v4.0.0 this bumped an
+     existing hex by a channel — the shape both real findings had — but the two
+     templates that carried hex went with that release, so there is nothing left
+     to corrupt and "no literal to corrupt" reads exactly like a broken gate.
+     Injecting into the `<body` of the first template exercises the same path:
+     read the file, match the hex, fail to account for it. */
+  const [first] = templateFiles();
+  if (!first) {
+    console.error("lw-template-literals --self-test: no templates found at all.");
     process.exit(1);
   }
-  const bumped = "#" + (parseInt(hex[1], 16) + 1).toString(16).padStart(6, "0").toUpperCase();
-  const dirty = run({ inject: { file: first[0], find: hex[0], replace: bumped } });
+  const PLANT = "#ABCDEF";  // not a token value in any scope, and not exempt
+  const src = readFileSync(first[1], "utf8");
+  const at = /<body[^>]*>/.exec(src);
+  if (!at) {
+    console.error(`lw-template-literals --self-test: ${first[0]} has no <body> to plant in.`);
+    process.exit(1);
+  }
+  const dirty = run({ inject: { file: first[0], find: at[0], replace: `${at[0]}<i style="color:${PLANT}"></i>` } });
   if (!dirty.problems.length) {
-    console.error(`lw-template-literals --self-test: FAILED — ${hex[0]} -> ${bumped} in ${first[0]} was not caught.`);
+    console.error(`lw-template-literals --self-test: FAILED — ${PLANT} planted in ${first[0]} was not caught.`);
     process.exit(1);
   }
-  console.log(`lw-template-literals --self-test: a one-channel drift in ${first[0]} is caught.`);
+  console.log(`lw-template-literals --self-test: a planted ${PLANT} in ${first[0]} is caught.`);
   process.exit(0);
 }
 
 const r = run();
-/* Two ways to read nothing, so two floors. `report`'s minChecked covers the
-   regex; a glob that stops finding templates would also drop the literal count,
-   but not necessarily below MIN_LITERALS — one big template could carry it. */
-if (r.files < MIN_TEMPLATES) {
-  r.problems.unshift(
-    `only ${r.files} template(s) found under templates/ (expected at least ${MIN_TEMPLATES}) — ` +
-    "the directory walk is reading nothing; fix it rather than this number.",
-  );
-}
 process.exit(report("lw-template-literals", {
   problems: r.problems,
-  checked: r.literals,
-  minChecked: MIN_LITERALS,
+  checked: r.files,
+  minChecked: MIN_TEMPLATES,
   summary: `lw-template-literals: OK — ${r.literals} hex literal(s) across ${r.files} template(s), every one a token's value` +
     (Object.keys(TEMPLATE_HEX_EXEMPT).length ? ` (${Object.keys(TEMPLATE_HEX_EXEMPT).length} documented exemption(s))` : "") +
     dim(` · ${r.tokens} distinct token colours`),

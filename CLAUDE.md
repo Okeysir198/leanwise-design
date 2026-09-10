@@ -5,7 +5,7 @@ Guidance for Claude Code when working in this repository.
 ## What this is
 
 **`@leanwise/design`** — the LeanWise design system: tokens, the CSS layers, a Tailwind preset, the React
-components, twelve page templates, and the **gates** that turn the style guide into build failures.
+components, ten page templates, and the **gates** that turn the style guide into build failures.
 (**`package.json` is the authority for the version**, and README §Components for the component list —
 a version or a count repeated in prose is one that disagrees, which is what the `doc-count` and
 `stale-install-pin` lint rules refuse.) ⚠ **`components/ai/` is CSS-only since v3.0.0** — its React
@@ -59,8 +59,6 @@ base.css       shared controls, the layer every surface needs: layout, type, but
 marketing.css  grounds + hero + site chrome (footer, announce, plans, matrix, flow, editorial)
 product.css    app surfaces: data grid, overlays + the portal layer, app shell and rails, AI, mobile bars
 reset.css      the nine bare-element rules. Vanilla consumers want it; Tailwind apps must NOT import it.
-email.css      literal hex + table layout on purpose — a SECOND HOME for palette values, so
-     check:contrast asserts its literals. Move a token, move the literal.
 shadcn.css     maps --primary/--background/--accent onto tokens (no values of its own).
 theme.css      the v4 spelling of the vocabulary tailwind-preset.cjs states for v3 — the preset registers
      cta/success/warning/brand/navy as REAL utilities so nobody reaches for bg-[hsl(var(--x))].
@@ -82,7 +80,7 @@ components/    ai data forms layout marketing nav overlays primitives — .jsx +
            five legacy spellings and with them normTone/normToneMap. check:tone IMPORTS TONES from
            here rather than restating it, which it did for eleven releases.
        _deprecate.js   one-time console notices, deduped by component+prop, silent in production.
-templates/     twelve page templates, each *.dc.html + .thumbnail; ds-base.js and support.js live ONCE in
+templates/     ten page templates, each *.dc.html + .thumbnail; ds-base.js and support.js live ONCE in
      templates/_shared/.
 tools/         the gates + the shared helpers; ROOT is ONE level up.
 preview/       foundation cards + _card.css/_card.js + _vendor/ (React + ReactDOM as PINNED, hashed UMD
@@ -155,11 +153,12 @@ several incidents in the CHANGELOG are a gate reporting clean while measuring no
 **`check:contrast`** parses `tokens.css` per theme block, resolves `var()` chains, evaluates a derived
 MANIFEST, enforces **dark-block parity**, carries a **non-text group (WCAG 1.4.11, 3:1)** for control
 boundaries and focus indicators, and asserts the literal hex living outside tokens.css (logo gradient
-stops, artwork strokes, `email.css`) because custom properties reach none of them. ⚠ **The email
-assertion runs BOTH ways since v3.0.0**: every watched token's hex must be in `email.css`, *and* every
-hex in `email.css` must be a watched token's value or a named `EMAIL_EXEMPT` entry. The first half alone
-was green while three literals sat on values a token re-tune had moved away from — a second home is only
-safe while something compares the two, in both directions. Three rules in it are
+stops, artwork strokes) because custom properties reach none of them. ⚠ **The rule that block taught
+outlived it**: `email.css` was asserted in BOTH directions from v3.0.0 — every watched token's hex in
+the file, *and* every hex in the file accounted for — because the one-way version was green for three
+releases while three literals sat on values a re-tune had moved away from. The layer went at v4.0.0;
+the rule is what to carry to the next literal that has to exist (`hex-comment`, the logo stops).
+**A second home is only safe while something compares the two, in both directions.** Three rules in it are
 load-bearing:
 
 - ⚠ **BAND SCOPE.** A selector used as an ancestor scope to re-ink descendants from the `--lw-on-dark*`

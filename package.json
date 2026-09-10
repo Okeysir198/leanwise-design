@@ -1,6 +1,6 @@
 {
   "name": "@leanwise/design",
-  "version": "3.2.0",
+  "version": "4.0.0",
   "description": "LeanWise Design System — token core, CSS layers, React components, twelve templates.",
   "license": "UNLICENSED",
   "private": false,
@@ -44,7 +44,6 @@
     "./base.css": "./base.css",
     "./marketing.css": "./marketing.css",
     "./product.css": "./product.css",
-    "./email.css": "./email.css",
     "./tokens.json": "./tokens.json",
     "./assets/*": "./assets/*",
     "./fonts/*": "./fonts/*",
@@ -76,7 +75,6 @@
     "base.css",
     "marketing.css",
     "product.css",
-    "email.css",
     "tokens.json",
     "dist",
     "components",

@@ -16,6 +16,46 @@ pinned inside that older range; `CLAUDE.md` §Consumers is the enumerated pin ta
 
 ## [Unreleased]
 
+## [4.0.0] — 2026-09-11
+
+**The lean pass.** Two surfaces leave the package. Both were announced at v3.1.5 and carried
+through the v3.2.0 minor, which is the term the policy at the head of this file asks for.
+
+### Removed — BREAKING
+
+- **`email.css`, the `./email.css` export, and the `email` template.** The layer was right about
+  its subject and wrong for this package. A mail client has no custom properties, so it carried
+  literal hex on purpose — a deliberate second home for the palette — and its literals drifted
+  twice, in v3.0.0 and again at v3.1.5. Nothing here asserted its layout, because nothing renders
+  a template; only its colours were ever gated. No product in the org sends transactional mail.
+  **Migration:** nothing in any of the seven consumer trees imports it (checked by grep, not by
+  memory), so the expected impact is zero. If you need it, `git show v3.2.0:email.css` is the last
+  version, and it belongs beside the templates it styles in the product that sends them. README
+  §Email keeps the recipe — values literal, layout in tables, classes as a convenience, buttons as
+  padded anchors, navy ink on the amber CTA, ship the plain-text part.
+- **The `pitch-deck` template**, and `deck-stage.js` with it. 2,969 of its lines were a vendored
+  scaffold carrying Claude's coral `#D97757`, `@ds-adherence-ignore` on line 1, exempt from the
+  lint, and the header said the next `copy_starter_component` overwrites the file — so a local fix
+  was lost silently and tokenising it would have been undone upstream. **Migration:** build the
+  deck in the consuming project from the starter there, and take type and colour from `tokens.css`
+  like any other surface.
+- **The `email-css-drifted-from-tokens` advisory**, and its derivation in `lw-doctor`. It read a
+  file that no longer exists. The defect it recorded is in the v3.0.0 entry.
+
+### Changed
+
+- **`check:contrast` no longer carries `EMAIL_LITERALS` / `EMAIL_EXEMPT`.** The lesson stayed where
+  the machinery was, as a comment: a file that must carry literal hex is a second home, and the only
+  thing that makes one safe is a comparison in BOTH directions. The one-way version of that check
+  was green for three releases while three literals sat on values a re-tune had moved away from.
+  The surviving instances of the pattern are the logo gradient stops and `hex-comment`.
+- **`check:template-literals` now floors on TEMPLATES read, not literals found.** Removing the two
+  templates that painted in hex took the tree to zero literals, which a floor of 40 would have
+  failed on a clean tree. Its self-test plants a literal instead of corrupting one, for the same
+  reason. **Zero is the state the gate exists to keep, not evidence it has nothing to do.**
+- **`NO_SKIP_LINK` in `check:templates` is empty.** Both entries described templates rather than
+  exceptions, and both templates are gone. Every template that remains has a skip link.
+
 ## [3.2.0] — 2026-09-11
 
 ### Deprecated

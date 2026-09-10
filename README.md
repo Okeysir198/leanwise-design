@@ -1,7 +1,7 @@
 # @leanwise/design — LeanWise Design System
 
 The brand foundation for every LeanWiseAI product: one token core, five CSS layers, the
-React component layer, and twelve starting templates. **Depend on it; never copy it.**
+React component layer, and ten starting templates. **Depend on it; never copy it.**
 
 ```
 tokens.css        the source of truth — HSL triples, light + dark, both re-pointed
@@ -16,10 +16,9 @@ base.css          the SHARED layer — layout, type, buttons, the ICON and the i
                   prose, disclosure, the pointer list
 marketing.css     the MARKETING layer (grounds, hero, features, stories, ambient motion)
 product.css       the PRODUCT layer (data, overlays, app shell/rails, AI, mobile bars)
-email.css         the EMAIL layer — literal values, tables, no var(). See Email below
 components/       the React layer — components + their specimen cards, thin
                   wrappers over the CSS above (no styling of their own)
-templates/        twelve starting points (see Templates)
+templates/        ten starting points (see Templates)
 assets/           the logo — generated SVG/PNG, this package is its source of truth
 preview/          FOUNDATION cards (brand, colour, type, spacing, motion)
 ```
@@ -72,7 +71,7 @@ what is still open. `CONTRIBUTING.md` points back here — the checklist lives i
 ## Install
 
 ```jsonc
-"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v3.2.0" }
+"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v4.0.0" }
 ```
 
 ```css
@@ -533,7 +532,7 @@ that grows chrome.
 
 ## Templates
 
-Twelve starting points under `templates/`. Each is one `.dc.html` entry; the two scripts they
+Ten starting points under `templates/`. Each is one `.dc.html` entry; the two scripts they
 all share — `ds-base.js` (whose single `base` line points at this package) and `support.js` —
 live once, in `templates/_shared/`, and `check:templates` fails if a re-pull puts a sibling copy
 back beside a template.
@@ -545,13 +544,11 @@ back beside a template.
 | `dashboard` | KPI tiles, sortable table, run log, empty state |
 | `settings` | Sectioned settings with help/error patterns and a destructive-action block |
 | `docs-page` | Three-column docs: nav rail, prose with code and callouts, on-this-page |
-| `pitch-deck` | 1920×1080 deck on the LeanWise palette, one amber CTA at the close |
 | `list-detail` | **List → detail → edit.** The back-office default: filtered list, detail rail, edit mode behind one unsaved-changes guard, bulk actions in a selection bar, and role-gated destructive controls |
 | `search-results` | **Search + filter + results.** Faceted search, applied-filter chips, and three distinct states — no query yet, no results, results. Those first two are different screens |
 | `onboarding-wizard` | **Multi-step form.** Validates on advance, never loses work going back, resumes from a draft, ends on a review screen that can still reach every field |
 | `auth` | **Five auth screens** on one split layout: sign in, SSO/passkey, two-factor, accept-invite, reset — with the lockout and failure states |
 | `export-report` | **Work that takes longer than a click.** Queue it, show row-based progress, choose a delivery, and make a failure retryable without rebuilding the request |
-| `email` | **Transactional email.** A 600px table-based email that survives Outlook: literal values, padded-anchor buttons, one max-width breakpoint, and a plain-text version beside it |
 
 ### The patterns those templates settle
 
@@ -653,27 +650,22 @@ ever renders both side by side until someone builds a page that does.
 
 ---
 
-## Email
+## Email — removed at v4.0.0
 
-`email.css` is a separate layer, and separate for a reason worth stating: **an email is not
-a web page with fewer features.** It is a document rendered by thirty engines, several of
-which predate flexbox, most of which strip `<link>`, and one of which renders through Word.
+`email.css` and the `email` template are gone. They were right about their subject and wrong for
+this package: a mail client has no custom properties, so the layer carried literal hex on purpose,
+which made it a second home for the palette — and its literals drifted twice, in v3.0.0 and again
+at v3.1.5. Nothing here asserted its layout, because nothing renders a template.
 
-Three rules follow, and they are the opposite of the rules everywhere else here:
-
-1. **Values are literal.** `var()` does not resolve in Outlook, and one that falls back to
-   nothing paints black on black. Every value is the resolved hex from `tokens.css`, copied
-   deliberately — so this file is a **second home for brand values** and must be regenerated
-   when the palette moves. `lw-token-lint` skips it for that reason; the contrast gate is what
-   guards the pairs.
-2. **Layout is tables.** Not taste — Outlook has no flex and no grid.
-3. **The classes are a convenience, not the contract.** Ship every rule that matters inline on
-   the element too; this file is where the values are written down once for the inliner.
-
-Buttons are padded **anchors** in a table cell, never `<button>` — a button element does
-nothing in most clients, and a bare anchor gives a 15px tap target. The amber CTA takes navy
-ink here for exactly the reason it does in the app: white on `#FCB603` is 1.77. And ship the
-plain-text part: it is what a text-only client renders and what spam filters weigh.
+If you need to send mail, copy the recipe rather than the file: **values literal** (a `var()` that
+falls back to nothing paints black on black in Outlook), **layout in tables** (no flex, no grid),
+and **classes as a convenience, not the contract** — ship every rule that matters inline on the
+element too. Buttons are padded anchors in a table cell, never `<button>`: a button element does
+nothing in most clients and a bare anchor gives a 15px tap target. The amber CTA takes navy ink for
+the same reason it does in the app — white on `#FCB603` is 1.77. Ship the plain-text part; it is
+what a text-only client renders and what spam filters weigh. `git show v3.2.0:email.css` is the
+last version of the file, and it belongs beside the templates it styles, in the product that sends
+them.
 
 ## Single-file artifacts
 

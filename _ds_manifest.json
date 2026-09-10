@@ -727,16 +727,6 @@
       }
     },
     {
-      "name": "Pitch deck",
-      "description": "1920×1080 deck on the LeanWise palette — dark section openers, mono eyebrows, one amber CTA at the close.",
-      "folder": "templates/pitch-deck",
-      "entryPath": "templates/pitch-deck/PitchDeck.dc.html",
-      "thumbnail": {
-        "path": "templates/pitch-deck/.thumbnail",
-        "kind": "captured"
-      }
-    },
-    {
       "name": "Search + filter + results",
       "description": "Faceted search with applied-filter chips, three distinct result states (no query / no results / results), and the empty-vs-no-results distinction most products get wrong.",
       "folder": "templates/search-results",
@@ -753,16 +743,6 @@
       "entryPath": "templates/settings/Settings.dc.html",
       "thumbnail": {
         "path": "templates/settings/.thumbnail",
-        "kind": "captured"
-      }
-    },
-    {
-      "name": "Transactional email",
-      "description": "A 600px table-based email that survives Outlook: literal values, padded-anchor buttons, one max-width breakpoint, and a plain-text version beside it.",
-      "folder": "templates/email",
-      "entryPath": "templates/email/Email.dc.html",
-      "thumbnail": {
-        "path": "templates/email/.thumbnail",
         "kind": "captured"
       }
     }

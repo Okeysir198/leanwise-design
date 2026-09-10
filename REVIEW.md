@@ -4,7 +4,7 @@ Standing audit. `CHANGELOG.md` records what moved; this file records what is tru
 still open, and why. Re-read it before touching the CSS layers or the gates.
 
 **Scope:** the token core and five CSS layers, the React barrel and its components, the gates,
-packaging, the twelve templates and the specimen cards.
+packaging, the ten templates and the specimen cards.
 
 ⚠ **Read items 12 and 13 before deleting any CSS.** The v3.0.0 sweep nearly deleted three live
 public classes, and the three rules that stopped it are written down in 13 — they are not obvious
@@ -161,7 +161,7 @@ rather than inventing one, and two generators can run in either order. All four 
 when they first ran, which is the argument for computing them.
 ### 2. The `.dc.html` templates are not rendered by any gate
 
-`lw-templates.mjs` reads them as text. The cards get axe and pixel diffs; the twelve templates —
+`lw-templates.mjs` reads them as text. The cards get axe and pixel diffs; the ten templates —
 the thing a person actually looks at — get neither, because they need the `<x-dc>` runtime to
 render. Whether that runtime can be driven headless here is unknown and worth half a day.
 **The text-only half is now CLOSED** — `check:template-literals` asserts that every `#RRGGBB` in a
@@ -181,16 +181,16 @@ keeping:** `check:pack` resolves every relative `href`/`src` in every packed car
 installed tree and refuses to pass having read fewer than 100. Neither `MUST_PACK` nor the
 `exports` walk could have caught it — both check what a consumer *imports*, and a card is loaded
 by a browser. Eight releases.
-### 4. `deck-stage.js` is vendored, and must not be gated
+### 4. `deck-stage.js` was vendored and ungateable — CLOSED in v4.0.0
 
 2,969 lines under `templates/pitch-deck/`, carrying its own dark palette in Claude's coral
-(`#D97757`), not the LeanWise one. Line 1 is `// @ds-adherence-ignore -- omelette starter
-scaffold` and the header says re-running `copy_starter_component` **overwrites the file**. So
-tokenising it or bringing it under the lint would be undone by the next upstream copy, and any
-local fix is lost silently. Leave it. *(An earlier revision of this file claimed it mirrors
-`PRINT_BASELINE_CSS` into another repo — that was wrong. The mirror is in `support.js`, all
-twelve copies, and the `apps/web` repo it names is not on this box, so the pairing cannot be
-checked here at all.)*
+(`#D97757`), `@ds-adherence-ignore` on line 1, and a header saying the next
+`copy_starter_component` **overwrites the file** — so tokenising it would have been undone
+upstream and any local fix lost silently. The template went with it at v4.0.0. The rule it
+leaves behind: **a file this repo cannot patch and cannot gate does not belong in it**, however
+good the artefact is. *(An earlier revision claimed it mirrored `PRINT_BASELINE_CSS` into
+another repo — that was wrong. The mirror is in `support.js`, which arrives from the design
+project and is still here.)*
 
 ### 5. `.lw-editor-body` duplicated `.lw-prose` — CLOSED in v2.0.0
 
@@ -232,8 +232,9 @@ by the generator that computes it; see item 1.
   italic are genuinely simultaneous. Documented, but the reasoning lives only in the source.
 - The `:dir(rtl)` fallback in the drawer uses `[dir="rtl"]`, which needs the attribute set. No
   consumer sets it yet, so RTL is *correct in principle and untested in practice*.
-- `email.css` cannot use logical properties (mail clients), so it stays a physical-property
-  island. The contrast gate asserts its literals; nothing asserts its layout.
+- `email.css` was removed at v4.0.0. The gap that killed it is worth remembering rather than the
+  file: nothing here renders a template, so its layout was asserted by nothing for its whole life,
+  and only its colours were ever gated.
 - **Correction to a claim this file used to make:** the a11y worker was reported as leaking a
   Chromium process when a card throws. It does not — `playwright-core`'s `bootstrap.js`
   registers a `process.on("exit")` reaper, confirmed by process counts either side of a
@@ -326,7 +327,7 @@ behind.
 
 ---
 
-## The v4.0.0 lean pass — planned, not executed
+## The v4.0.0 lean pass — EXECUTED at v4.0.0
 
 Asked for at v3.1.5: make the system lean. The inventory below is what a sweep would actually
 touch, with the verdict on each, because **five of the six candidates named in the ask are either
@@ -338,8 +339,8 @@ which is which is the useful half.
 | The 26 unimported components | **Already gone.** Removed in v3.0.0 after being marked at v2.0.0; CHANGELOG 3.0.0 §"Removed — announced at v2.0.0" names every one. Nothing to cut. |
 | The marketing layer (13 components + `marketing.css`) | **Keep.** It is the layer with a live external consumer (`leanwise-ai`), six specimen cards, and the `MarketingLanding` template. "Products don't ship marketing pages" is false for this org — the marketing site *is* a product. |
 | The 47 specimen cards + their `.card.js` twins | **Keep the twins; they are not duplicates.** v1.13.0 pre-compiles each `.card.jsx` so the cards run without `@babel/standalone` (3.1 MB out of the clone). The `.html` loads the `.js`; delete it and every card goes blank. The near-duplicate PAIRS (`Menu` + `Menu-open`, `Dialog-open`, `DatePicker`, `Table-collapse`) each exist because a closed overlay measures the trigger, not the surface — the v3.0.0 calendar defect is what they are for. |
-| The 12 templates | **Cut `pitch-deck`.** It is the one template that is not this design system: 2,969 vendored lines carrying Claude's coral `#D97757`, `@ds-adherence-ignore` on line 1, exempt from the lint, and overwritten wholesale by the next `copy_starter_component`. A template nothing gates and nobody can safely patch is a liability, not a starting point. The other eleven are one `.dc.html` each over `_shared/`, which is the cheapest thing in the repo. |
-| `email.css` + the `Email` template | **Deprecate now, remove at v4.0.0.** `"./email.css"` is a published export, so deletion is breaking. The case for removing it is item 7's: it cannot use logical properties, so it is a physical-property island; `check:contrast` asserts its literals and **nothing asserts its layout**; and its literals drifted twice (v3.0.0, and again at v3.1.5 in the `Email` template). Revisit only when a product actually sends mail. |
+| The 12 templates | **DONE in v4.0.0 — `pitch-deck` cut.** It is the one template that is not this design system: 2,969 vendored lines carrying Claude's coral `#D97757`, `@ds-adherence-ignore` on line 1, exempt from the lint, and overwritten wholesale by the next `copy_starter_component`. A template nothing gates and nobody can safely patch is a liability, not a starting point. The other eleven are one `.dc.html` each over `_shared/`, which is the cheapest thing in the repo. |
+| `email.css` + the `Email` template | **DONE — deprecated at v3.1.5, carried through the v3.2.0 minor, removed at v4.0.0.** `"./email.css"` is a published export, so deletion is breaking. The case for removing it is item 7's: it cannot use logical properties, so it is a physical-property island; `check:contrast` asserts its literals and **nothing asserts its layout**; and its literals drifted twice (v3.0.0, and again at v3.1.5 in the `Email` template). Revisit only when a product actually sends mail. |
 | README | **Restructure, don't delete.** Done at v3.1.5: the index and the recipes stayed, the archaeology came out — 44 version references down to the install pin, with each "since v1.3.1" anecdote kept as the rule it taught. The `readme-coverage` lint reads the index half, so every barrel export kept its row. |
 
 ---

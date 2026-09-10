@@ -49,10 +49,12 @@ const SHARED = ["support.js", "ds-base.js"];
    naming them is that the list is short, greppable and arguable — the same
    discipline as `data-a11y-expect` on the cards. An empty exemption list would
    be a lie; a blanket "skip links are optional" would be a hole. */
-const NO_SKIP_LINK = {
-  email: "table-layout mail; clients strip in-document anchors, and there is no viewport to skip within",
-  "pitch-deck": "a <deck-stage> web component owns focus and keyboard navigation for the whole surface",
-};
+/* EMPTY since v4.0.0, and empty is the honest state: both entries described
+   TEMPLATES rather than exceptions — `email` (mail clients strip in-document
+   anchors) and `pitch-deck` (a <deck-stage> component owned the keyboard) —
+   and both templates were removed. Every template that remains has a skip
+   link, which is what the list should have been arguing for all along. */
+const NO_SKIP_LINK = {};
 
 const dirs = readdirSync(TEMPLATES)
   .filter((d) => !d.startsWith("_") && statSync(join(TEMPLATES, d)).isDirectory())
