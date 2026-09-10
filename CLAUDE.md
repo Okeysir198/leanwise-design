@@ -362,6 +362,13 @@ was found at **v1.1.8** — fifteen releases behind, still carrying `templates/_
 v1.13.0 onward existed only in git, and the project is the surface a wholesale re-pull would have
 restored from.
 
+⚠ **`list_files` cannot answer "are we in sync" — it sees ADDS and DELETES only.** After the
+2026-09-04 push the structure matched to within four paths while the project's *content* was seven
+releases stale, because a release that edits `tokens.css` and `base.css` in place changes no
+filename. **`get_file package.json` is the cheap version probe**: read `version` from it, then
+`git diff --name-status v<that>..HEAD` IS the push plan, exactly. Do that first — a structural diff
+is the second check, not the first.
+
 **To push:** `list_files` for the structural diff, then `finalize_plan` (globs for the writes, exact
 paths for the deletes; the user approves the list), then `write_files` in batches of ≤256 with
 `localPath` so contents never enter the model's context, then `delete_files`. Three things that cost
@@ -373,6 +380,20 @@ loop; and `get_file` caps at 256 KiB, reporting `truncated: true`.
 `*.card.js`) rather than leaving the project's older copies in place. Stale generated files are the
 one thing a re-pull can reintroduce that no gate here would catch: `check:bundle` compares the bundle
 against the sources it finds, so a stale bundle arriving WITH stale sources agrees with itself.
+
+**Synced again on 2026-09-10**: project at v3.0.0, repo at v3.1.4, so `v3.0.0..HEAD` — 20 writes
+(the two new gate tools `lw-affordance.mjs`/`lw-forced-colors.mjs`, `base.css`, `marketing.css`,
+`tokens.css`+`.json`, `Hero.*`, the bundle, manifest, advisories, docs) and one delete. Two things
+that release taught:
+
+- ⚠ **A DELETE survives a "full" push.** `_adherence.oxlintrc.json` was deleted here at v1.13.0 and
+  was still in the project on 2026-09-10 — it outlived the 2026-09-04 wholesale push, because writes
+  go up as globs (which name only what exists locally) while deletes must be enumerated by hand.
+  So the delete list can never be derived from the write list: **take it from the `D` lines of the
+  `git diff --name-status`**, and for a full push, from the `comm -13` of the two file lists.
+- **The push record here is incomplete by construction.** The v3.0.0 content reached the project
+  from a session that never wrote it down, so the line above claiming v2.3.0 was the last push was
+  wrong within a week. Trust `get_file package.json`, never this paragraph.
 
 ## Releasing — the tag invariant (do not get this wrong)
 
