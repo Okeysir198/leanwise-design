@@ -27,6 +27,12 @@ pinned inside that older range; `CLAUDE.md` §Consumers is the enumerated pin ta
   the mechanical half only: that a value matches *a* token. Whether it is the RIGHT token for its
   ground stays a judgement, and REVIEW's standing note is that a judgement about a relationship
   needs an eye or a fixture, not a rule.
+- **`gate-coverage`** in `lw-token-lint --css` — every `check:*` in `package.json` must have a row
+  in CLAUDE.md's gates table. That table opens by claiming it lists every one, which makes it a
+  second home for the gate list, and it had drifted twice with nothing comparing the two:
+  `check:affordance` was missing from v3.0.2 onward and `check:template-literals` from the hour it
+  was added. It is `readme-coverage`'s job pointed at the other document. CLAUDE.md is git-only, so
+  a missing file is a skip — the packed tarball does not carry it.
 - **`hex-comment`** in `lw-token-lint --css` — the `/* #RRGGBB */` beside a channel triple in
   `tokens.css` must be what that triple resolves to. Those comments are the only human-readable
   form of the palette, so every literal copied out of the token core is copied out of one.

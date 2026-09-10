@@ -24,15 +24,17 @@ carries its full rationale.**
 
 ```bash
 npm install
-npm test               # node --test over test/. Helpers with tests today: tools/_css, _png, _semver,
-                       #   _jsx-shim, brand.js — plus repo.test.mjs, which asserts every gate is reachable
-                       #   from an npm script and that CI runs the scripts.
+npm test               # node --test over test/. Helpers with tests today: tools/_css, _color, _png,
+                       #   _semver, _jsx-shim, brand.js and the bundle's jsx shim — plus repo.test.mjs,
+                       #   which asserts every gate is reachable from an npm script and that CI runs it.
+                       #   `ls test/*.test.mjs` is the list; this line has been short twice.
 npm run check          # every gate that needs no browser. package.json#scripts.check IS the list — do
                        #   not restate it here; it has been wrong every time it was.
 npm run check:ci       # the above plus check:pack, a11y and visual (the last two need a browser)
 npm run check:a11y     # axe over every @dsCard — needs `npx playwright install chromium`
 npm run check:visual   # every card x light/dark x comfortable/compact. --self-test checks the PNG
-                       #   comparator itself. Baselines: `.visual/`, ~63 MB, gitignored.
+                       #   comparator itself. Baselines: `.visual/`, gitignored — `du -sh .visual` for
+                       #   the size. The figure written here said ~63 MB against an actual 72.
 npm run tokens         # -> tokens.json (DTCG)     npm run cards    # *.card.jsx -> *.card.js
 npm run dts            # -> react.d.ts             npm run assets   # on-dark art <- the -ink SVGs
 npm run bundle         # -> _ds_bundle.js          npm run registry # -> r/*.json
@@ -41,8 +43,8 @@ npm run build          # -> dist/, per file        npm run favicon  # -> assets/
 
 CI runs `npm run check`, then `check:pack`, then the two browser gates (`.github/workflows/ci.yml`, every
 push/PR); `package.json#scripts.check` is the one list of gate names and `test/repo.test.mjs` keeps it so.
-Shared helpers in `tools/`: `_cards` `_color` `_css` `_generated` `_jsx-shim` `_png` `_report` `_semver`
-`_tw-probe`. `_generated` is the one generated-and-staleness-checked harness; `_report` is the one report
+Shared helpers in `tools/`: `_cards` `_color` `_css` `_generated` `_jsx-shim` `_manifest` `_png`
+`_report` `_semver` `_tw-probe`. `_generated` is the one generated-and-staleness-checked harness; `_report` is the one report
 shape, and carries the rule that **a gate must refuse to pass vacuously** — reading zero of the thing it
 measures is a failure, not a clean run.
 
@@ -130,6 +132,8 @@ Every `check:*` in `package.json#scripts`.
 | `check:advisories` | `lw-doctor --self-check` re-derives every advisory's `count` from the tree | an advisory gone stale — the hand-maintained fact the tool exists to replace |
 | `check:favicon` | `assets/logo-favicon.svg` is current with `assets/logo-mark.svg` | a stale favicon |
 | `check:contrast` | WCAG AA pairs + the scope rules — see below | see below |
+| `check:affordance` | the pointer-affordance rules over `base.css`, and `--self-test` proves both catch their injected fault | an interactive `.lw-*` that states no pointer cursor |
+| `check:template-literals` | every `#RRGGBB` in a `templates/*/*.dc.html` is some token's resolved value, read from `tokens.json` (generated, and `check:themes` fails when it is stale, so no second parser). `--self-test` plants a one-channel drift | a literal matching no token — a stale copy of one that MOVED, or a colour the system does not own. Exemptions live in `TEMPLATE_HEX_EXEMPT` |
 | `check:tone` | every literal in a `tone`/`accent` union is canonical, **and** every advertised value has a CSS selector matching what the component emits. Reads `TONES` from `components/_tone.js` rather than restating it | a misspelled tone, one of the five spellings retired at v3.0.0, a value with no rule, a rule with no value — and reading fewer than twenty values at all |
 | `check:tokens` | the token lint — see below | see below |
 | `check:themes` | `tokens.json` matches what `tokens.css` generates, and every channel is re-pointed in *every* theme scope | a stale `tokens.json`; a token that exists in light and silently inherits in dark |

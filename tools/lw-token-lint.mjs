@@ -58,7 +58,7 @@ if (!arg || arg === "--css") {
     jsxSelfCheck(), docPinSelfCheck(),
     legacyDurationSelfCheck(), keyframeNameSelfCheck(), breakpointSelfCheck(),
     docCountSelfCheck(), readmeCoverageSelfCheck(), dynamicClassSelfCheck(),
-    hexCommentSelfCheck(),
+    hexCommentSelfCheck(), gateCoverageSelfCheck(),
   );
   process.exit(report("lw-token-lint --css", {
     problems: errs.map((e) => `${e.file || "css"}  [${e.rule}]  ${e.hit}\n      in \`${e.selector}\` — ${e.msg}`),
@@ -673,6 +673,64 @@ function hexCommentSelfCheck() {
     errs.push({
       rule: "hex-comment", file: "tokens.css", hit: `only ${checked} annotated triple(s) read`, selector: "tokens.css",
       msg: "the declaration regex has stopped matching; fix it rather than this number",
+    });
+  }
+  return errs;
+}
+
+
+/**
+ * Rule `gate-coverage` — every `check:*` in package.json has a row in
+ * CLAUDE.md's gates table.
+ *
+ * That table opens by claiming it lists "every `check:*` in
+ * `package.json#scripts`", which makes it a SECOND HOME for the gate list, and
+ * it drifted twice before anything compared the two: `check:affordance` was
+ * missing from v3.0.2 onward and `check:template-literals` from the hour it was
+ * added. A table that asserts its own completeness is exactly the shape this
+ * repo keeps writing rules for — `readme-coverage` does the same job for barrel
+ * exports, and this is that rule pointed at the other document.
+ *
+ * It checks coverage in ONE direction on purpose. A row naming a script that no
+ * longer exists is worth catching too, but the table legitimately carries rows
+ * for things reached another way, and the failure that actually happens is a new
+ * gate nobody documented.
+ *
+ * CLAUDE.md is git-only — never packed, never pushed to the design project — so
+ * a missing file is a skip, not a failure, exactly as `doc-count` treats it.
+ */
+function gateCoverageSelfCheck() {
+  const doc = readLayer("CLAUDE.md");
+  if (doc === null) return [];
+
+  let scripts;
+  try { scripts = JSON.parse(readFileSync(join(PKG_ROOT, "package.json"), "utf8")).scripts ?? {}; }
+  catch { return [{ rule: "gate-coverage", file: "package.json", hit: "-", selector: "-", msg: "unreadable" }]; }
+
+  /* `check` is the chain itself, `check:ci` the browser superset, and
+     `check:presence:list` a reporting flag rather than a gate. None names an
+     assertion, so none earns a row. */
+  const NOT_A_GATE = new Set(["check", "check:ci", "check:presence:list"]);
+  const gates = Object.keys(scripts).filter((k) => k.startsWith("check:") && !NOT_A_GATE.has(k));
+
+  const rows = new Set(
+    doc.split("\n")
+      .map((l) => /^\|\s*`(check:[a-z0-9-]+)`\s*\|/.exec(l))  // a11y has digits in it
+      .filter(Boolean)
+      .map((m) => m[1]),
+  );
+
+  const errs = gates
+    .filter((g) => !rows.has(g))
+    .map((g) => ({
+      rule: "gate-coverage", file: "CLAUDE.md", hit: `\`${g}\` has no row`, selector: "CLAUDE.md §The gates",
+      msg: "the table says it lists every check:* in package.json — add the row, or the claim is false",
+    }));
+
+  if (rows.size < 15) {
+    errs.push({
+      rule: "gate-coverage", file: "CLAUDE.md", hit: `only ${rows.size} row(s) parsed`, selector: "CLAUDE.md §The gates",
+      msg: "the table regex has stopped matching; fix it rather than this number",
     });
   }
   return errs;
