@@ -811,7 +811,12 @@ const EMAIL_LITERALS = [
   { token: "text-3",    scope: "light" },
   { token: "border-1",  scope: "light" },
   { token: "border-2",  scope: "light" },
-  { token: "surface-1", scope: "light" },
+  /* surface-2, not surface-1: v3.1.5 tightened the light ramp, which put subtle
+     1.6% off white — a frame a mail client renders as no frame at all — so the
+     email backdrop and the inset panel took the MUTED tier instead. The watch
+     follows the tier the file actually paints; watching a tier email.css no
+     longer uses fails on a value that was never wrong. */
+  { token: "surface-2", scope: "light" },
   { token: "brand-500", scope: "light" },
   { token: "navy-700",  scope: "light" },
   { token: "cta-500",   scope: "light" },

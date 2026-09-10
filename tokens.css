@@ -304,13 +304,31 @@
 
   /* ---- Neutrals — surfaces --------------------------------------------- */
   --lw-surface-0-c: 0     0%    100%; /* @kind color */    /* #FFFFFF */
-  /* WARM PAPER, NAVY INK (v1.13.0). The three lifts and the two hairlines sit at
-     hue 45° — a cream that reads as paper — while surface-0 stays pure white and
-     every text tier keeps its navy. Ink hue is SHARED with the dark theme; paper
-     is what differs. See "Paper and ink" in the theme note below. */
-  --lw-surface-1-c: 45    20.0% 97.5%; /* @kind color */   /* #FAF9F7 */
-  --lw-surface-2-c: 45    15.0% 95.3%; /* @kind color */   /* #F5F4F1 */
-  --lw-surface-3-c: 45    14.0% 92.9%; /* @kind color */   /* #EFEEEA */
+  /* WARM PAPER, NAVY INK (v1.13.0), RETUNED v3.1.5. The three lifts and the two
+     hairlines share ONE paper hue with surface-0's white; every text tier keeps
+     its navy. Ink hue is SHARED with the dark theme; paper is what differs. See
+     "Paper and ink" in the theme note below.
+
+     v3.1.5 — the lifts were 45° at 14–20% saturation, 2.5–7.1% darker than the
+     page. That is a cream, and a cream 2.5% down from PURE WHITE does not read as
+     the same paper lit differently: it reads as a beige patch dropped on a cold
+     white screen. Every subtle-ground component (sidebar, table head, segmented
+     shell, KPI, chip, code, table th, user bubble, menu hover) showed as a
+     visibly different colour from the page around it. Two things were wrong, and
+     both are fixed here rather than by picking a new palette:
+       1. HUE. 45° is the olive edge of yellow; at these saturations, next to a
+          neutral white, it goes dingy. 38° is the same paper, one notch to the
+          warm side of it, and stays clean against #FFFFFF.
+       2. DISTANCE. The steps now start at 1.6% below the page instead of 2.5%
+          and land 5.8% down instead of 7.1%, so a lift reads as a lift and not
+          as a second background colour. Cards, toasts, dialogs and popovers sit
+          FLUSH on --lw-bg by design — the tiers are for grounds that are meant
+          to recede, and only those.
+     All three tiers moved LIGHTER, so every text-on-surface ratio improved; the
+     text-3 floor is now 4.75 on surface-3 (was 4.61). */
+  --lw-surface-1-c: 38    16.0% 98.4%; /* @kind color */   /* #FCFBFA */
+  --lw-surface-2-c: 38    13.0% 96.5%; /* @kind color */   /* #F7F6F5 */
+  --lw-surface-3-c: 38    12.0% 94.2%; /* @kind color */   /* #F2F1EE */
   --lw-surface-0: hsl(var(--lw-surface-0-c));
   --lw-surface-1: hsl(var(--lw-surface-1-c));
   --lw-surface-2: hsl(var(--lw-surface-2-c));
@@ -319,8 +337,8 @@
   /* ---- Neutrals — text -------------------------------------------------- */
   --lw-text-1-c: 220   48.8% 8.4%; /* @kind color */       /* #0B1220 — also the ink on every brand fill */
   --lw-text-2-c: 215   13.8% 34.1%; /* @kind color */      /* #4B5563 */
-  --lw-text-3-c: 220    8.9% 43.3%; /* @kind color */      /* #656B78 — the muted floor. 5.34 on white, and 4.61 on
-                                                              surface-3 (4.51 before the paper warmed): through v1.1.2 this was 46.1% (#6B7280), AA on
+  --lw-text-3-c: 220    8.9% 43.3%; /* @kind color */      /* #656B78 — the muted floor. 5.34 on white, and 4.75 on
+                                                              surface-3 (4.61 at the v1.13.0 tiers, 4.51 before the paper warmed): through v1.1.2 this was 46.1% (#6B7280), AA on
                                                               the page and 4.07 on an inset panel — where `code`, `.lbl`
                                                               and most muted captions actually sit. A floor measured
                                                               against only the lightest surface is not a floor. */
@@ -331,8 +349,8 @@
   --lw-text-4: hsl(var(--lw-text-4-c));
 
   /* ---- Borders ---------------------------------------------------------- */
-  --lw-border-1-c: 45  10.0% 91.0%; /* @kind color */      /* #EAE9E6 — warm, with the paper */
-  --lw-border-2-c: 45   8.0% 83.9%; /* @kind color */      /* #D9D8D3 */
+  --lw-border-1-c: 38  10.0% 91.5%; /* @kind color */      /* #EBEAE7 — warm, with the paper (hue with the v3.1.5 lifts) */
+  --lw-border-2-c: 38   8.0% 83.9%; /* @kind color */      /* #D9D7D3 */
   /* The CONTROL BOUNDARY — WCAG 1.4.11, 3:1 against its adjacent surface.
      Distinct from --lw-line-strong on purpose. `line-strong` is a DIVIDER, and a
      divider is decorative: 1.4.11 exempts it. But `line-strong` was also doing

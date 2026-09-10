@@ -15,7 +15,7 @@ document is a second home that goes stale, and this line has proved it twice: it
 exports … 5 gates" when the barrel exported 82 and there were six, and then "442 tokens, eight
 theme scopes" against an actual 283 across twelve.
 
-**Last pass:** v3.0.1 — see the verdict below. **Previous passes:** v2.0.0, v1.13.0. It found a `:root[data-theme="dark"]` block that was value-identical to
+**Last pass:** v3.1.5 — see the verdict below. **Previous passes:** v3.0.1, v2.0.0, v1.13.0. It found a `:root[data-theme="dark"]` block that was value-identical to
 `.dark, [data-theme=dark]` and had been maintained in parallel for the life of the package; 25
 derived roles that stayed on the PAGE theme inside `.lw-page-dark` because that ground joined
 the band list in v1.4.0 and never joined the re-derive list (the demo writes `class="dark
@@ -32,120 +32,54 @@ too: a rule that states the invariant (`rederiveCompleteness`, the root-block re
 
 ## Verdict
 
-**v3.0.0 is the pass where the deprecation policy was executed rather than described, and where
-executing it found four live defects.** Nothing in it is a new idea: every removal was announced in a
-CHANGELOG entry or a `@deprecated` tag, and four of them named a version — v2.0.0 — that had already
-shipped and gone. That is the shape to name, because it is not the one this file has been watching.
-The recurring failure below is *a fact held in two places*; this is **a fact held in one place and not
-acted on**. A policy written down and not executed is worse than no policy, because everything that
-touches it — a `.d.ts` tag, a README ⚠, a CSS comment, an advisory's `fixedIn` — becomes a second home
-for a promise, and every one of them was wrong.
+**v3.1.5 is the pass where the recurring shape appeared in the PALETTE, and the demo that could
+not fail was a swatch row.** The light lifts `--lw-surface-1..3` shipped at hue 45° and 2.5–7.1%
+below a pure-white page in v1.13.0 — a cream, and a cream that far from white does not read as the
+same paper lifted, it reads as a beige patch on a cold screen. Every recessed ground in the system
+wore it: sidebar, table head, segmented shell, KPI, filter chip, `code`, user bubble, menu and row
+hover. It shipped through three minors and was reported from outside, not by a gate, and the reason
+is the one this file keeps writing down: **`colors-neutrals` demos the tiers as a ramp of adjacent
+swatches, which is the one arrangement in which a tier cannot look wrong.** A ramp answers "do
+these step evenly"; nobody had ever rendered a tinted ground and the page ground in one frame,
+which is the question a consumer's screen asks on every load. `preview/colors-surfaces.html` now
+does, and it is a fixture rather than a rule for the same reason as `ground.card.html`: the defect
+is a judgement about a relationship, and no ratio expresses it. Contrast could not have caught it —
+every pair involved passed, and the fix (all three tiers lighter, hue 38°) *raised* the
+`--lw-text-3` floor from 4.61 to 4.75.
 
-What the removals uncovered is the more interesting half, and every one is the same shape: **a
-specimen that did not exist, or existed in the wrong state.**
+Two second homes came with it, both the same shape as the v3.0.0 `email.css` finding.
+`shadcn.css` set `--card` and `--popover` to `--lw-bg-subtle-c` on light directly under a comment
+reading "the same as the page on light, and LIFT on dark" — **the prose and the value disagreed in
+adjacent lines, and the prose was right**; every shadcn Card, Popover, Dialog and Sheet painted a
+tint on an untinted page. And `PitchDeck` / `Email` carried a cool blue-grey literal set (`#F6F8FB`,
+`#DDE3EC`, `#CBD3DE`, `#42506A` …) that no token accounts for, beside `#FFFFFF` slides from the same
+files. `check:contrast` asserts `email.css`'s literals in both directions since v3.0.0; **nothing
+asserts a `.dc.html` template's literals in either direction**, and item 2's note that the templates
+are read as text rather than rendered is exactly why. That is the next rule worth writing: a
+template literal that is not a token value, or is a token value under the wrong role, is mechanically
+findable in text — no runtime needed.
 
-- **Eight calendar cells per month have been failing AA in every consumer.**
-  `.lw-cal-day[data-outside="true"]` painted `--lw-fg-faint`, documented "decorative only, fails AA as
-  body text" and excused by `check:contrast` only behind a `:disabled`/`aria-disabled` selector. An
-  adjacent-month day is a real, clickable date. It surfaced on the FIRST a11y run after a specimen
-  painted the panel OPEN — the old card demoed a closed Popover, so the grid never entered the DOM.
-  This is the blind spot this file has recorded since v1.3.1 ("a closed overlay is still invisible to
-  it"), and it was closed for dialogs only. **It is now closed for the date panel too, and the lesson
-  generalises: an overlay's CLOSED specimen measures the trigger, not the surface.**
-- **The forced-colors block hid two classes that do not exist** — `.lw-ground` and `.lw-sheen`, where
-  the real name is `.lw-page-ground`. So every decorative ground kept painting in the one mode whose
-  entire point is that decoration stands down. **No gate here asserts that a selector in a layer names
-  a class the package defines**, and a selector matching nothing costs nothing and reports nothing.
-  That is a gate-shaped hole and it is still open — see item 12.
+**`dist/` stays committed here, and that is not negotiable by tooling.** The Claude Design
+project deleted its copy this pass, correctly for that surface: its compiler scans every file
+in the project and read all seventy mirrors as duplicate exports of the `.jsx` sources they came
+from. In THIS repository the same directory is load-bearing — every consumer installs from a
+**git tag**, a git install runs no lifecycle script, so `prepublishOnly` never fires and
+`exports`'s `default` (`./dist/react.js`) resolves to a file that does not exist. Removing it
+here would break four consumers on their next install with a bare module-not-found. So the two
+surfaces differ on purpose: generated output lives in git and not in the design project, and
+`check:build` is what keeps the committed copy honest. **The general rule survives** — a fact
+with two homes needs something comparing them — but the comparator here is a gate, not a copy.
 
-  ⚠ **And the correction was worse than the defect, which is the part worth keeping.** v3.0.0
-  replaced the phantoms with the real names and shipped `display: none` on `.lw-page-ground` —
-  `body > div` around the whole page — so high-contrast visitors got a blank document, measured at
-  0 characters of body text on production. Fixed in v3.0.1 by hiding the pseudo-elements, and gated
-  by `check:forced-colors`. **Both versions of the rule were reasoned about by READING them**, which
-  no amount of care survives: the grounds look like layers and are wrappers. The lesson is not
-  "check your selector names" — it is that a media query no gate emulates is a media query nobody
-  has ever seen render.
-- **email.css had drifted from three tokens.** The contrast gate asserted one direction only; adding
-  the inverse found the drift immediately. A second home is safe only while something compares the two
-  **in both directions**, and half a comparison reads exactly like a whole one.
-- **`npm run build` could not make `check:build` green.** esbuild leaves what it was not handed, so
-  deleting a component left its build behind. A generator whose output cannot satisfy its own gate for
-  a whole category of change — deletion — is a gate that is green by luck.
-
-And one near-miss worth more than the four, because it is about this audit's own method. **The
-dead-CSS sweep put `.lw-btn-ink`, `.lw-cluster-16` and `.lw-cluster-24` on its delete list.** All three
-are live public API. They are invisible because the class is composed from a prop
-(`` `lw-btn-${variant}` ``), so the string exists nowhere but base.css defining itself — and *every
-technique this repo uses to decide whether a rule is reachable is a grep*. A second pass caught it. A
-rule should have, and now does (`dynamic-class`). **The reachability question cannot be answered by
-search alone, and this file should stop implying that it can.**
-
-Three open items close: 1 and 6 (the manifest's second homes, now written by the generators that
-compute them) and 3 (the packed cards, which had never rendered for anyone). Items 2, 4, 5, 7–11
-stand.
-
-**v2.0.0 is the pass where the platform stopped being the answer for overlays, and the record
-caught up with the code.** Every floating and modal surface now rides a Radix primitive behind
-the same `.lw-*` CSS — the hand-rolled `place()` engine that only flipped on the block axis, the
-`showModal()` that never locked scroll, and the `data-tip` tooltip no screen reader could hear
-are gone, and each is an advisory whose count `lw-doctor` derives to zero. What the pass did NOT
-change is the thesis: styling still lives in the CSS layer and the React and vanilla consumers
-still render the same rules; Radix supplies positioning, focus, scroll lock and ARIA, nothing
-visual. Three open items closed the way they said they would (5, 9, 10, below), everything 1.13
-warned about is removed, and twenty-six components no consumer imports are marked rather than
-deleted. The gates gained the one thing a Radix overlay needs measured — an OPEN state: four
-open-state cards, and axe's `aria-dialog-name` rule. The blind spot this file has recorded
-since v1.3.1 — axe files what it cannot resolve as `incomplete` — is therefore **closed for
-dialogs only**: a dialog now renders open under axe, with a name or a failure. A closed overlay
-still measures nothing, and the grounds' pseudo-element surfaces are as invisible as before.
-The shape to watch next is the one every major invites: a consumer pinned to v1 reading the
-v2 README. The migration section of the CHANGELOG was written from greps over all seven trees,
-not from memory, and CLAUDE.md §Consumers says no pin has moved.
-
-**v1.13.0 is the pass where the second homes were found by a script rather than by a reader.**
-The redundant root block, the missing re-derive members, the CI list, the counts in prose and
-the barrel exports with no README row were all facts held in two places, and every one was
-found by a rule written to look for exactly that shape — not by the audit. That is the right
-direction: this file names the shape, the gate finds the instances. The earlier verdicts below
-stand, and the pattern they describe is what those rules encode.
-
-**v1.3.1 is the pass where the recurring shape stopped being a story about gates and became a
-story about FIXTURES.** v1.3.0 declared the layer promotion finished and the README said a
-marketing page needed two stylesheets. Both browser gates agreed — because
-`marketing.card.html` and `site-chrome.card.html` were themselves loading `product.css`. A
-specimen that loads the file its documented recipe tells you to drop cannot see anything
-stranded in it, no matter how good the gate reading it is. Deleting one `<link>` from two cards
-found five more stranded components, one of which (`.lw-icon`, the entire layout contract for
-the icon set) nobody had reported and nobody found by reading.
-
-The second finding is worse, because it is a gate that cannot fail for a reason no amount of
-care would have surfaced. `.lw-hero-dark` painted navy without establishing the dark token
-scope, so a `Byline` in a hero rendered at **1.5:1**. `check:contrast` could not see it — both
-tokens in the pair are correct, it is the SCOPE that is wrong, which no pair can express. And
-`check:a11y` could not see it either: the hero carries two decorative pseudo-elements, so axe
-answers *"background color could not be determined due to a pseudo element"* and files it as
-`incomplete`, which `lw-a11y.mjs` does not read. **Four serious incompletes, zero violations.**
-Every hero in every consumer sits behind that hole. A new band-scope rule in `check:contrast`
-now states the invariant directly, and was watched failing.
-
-The system audits itself to a degree it did not before — **and v1.3.0 was the pass that proved
-the qualifier still matters.** Two of the gates this file most trusted, `check:a11y` and
-`check:visual`, had been reporting green on **26 blank cards for two minor releases**, and the
-first thing the repaired bundle produced was four serious `color-contrast` failures at 2.28:1 on
-a control that had been shipping that way the whole time. The defect was not in the gates'
-*logic*; it was that the one thing a browser gate has to establish first — *did the specimen
-render?* — was asserted by a test that could not fail.
-
-That is now the fourth gate in this repository found to be a hypothesis rather than a gate
-(byte-exact PNG comparison, the missing templates gate, the un-generated bundle, and this). The
-pattern is stable enough to plan around: **when you add a gate, sabotage the thing it watches
-and confirm it goes red, in the same sitting.** Both v1.3.0 gate changes were watched failing
-before they were trusted.
-
-What is left is genuinely small and mostly judgement. There is no known correctness bug in what
-ships to a browser today — but that sentence was also true of the last two audits, and it was
-wrong both times for the same reason.
+**Earlier passes are not restated here.** v3.0.1, v3.0.0, v2.0.0, v1.13.0 and v1.3.x each have
+a verdict in `git` and a full entry in `CHANGELOG.md`; what they *taught* is the list below,
+which is the part that has to stay readable. Three of them are worth naming in one line each,
+because their lessons are still load-bearing: **v3.0.0** executed the deprecation policy rather
+than describing it, and found four live defects doing it — a policy written down and not executed
+is a second home for every fact it touches. **v2.0.0** moved every floating and modal surface
+onto Radix behind the same `.lw-*` CSS, and the thesis did not change: styling stays in the CSS
+layer, Radix supplies positioning, focus, scroll lock and ARIA, nothing visual. **v1.13.0** was
+the pass where the second homes were found by a script rather than by a reader, which is the
+direction all of this should keep going — this file names the shape, a gate finds the instances.
 
 ---
 
@@ -196,8 +130,14 @@ because it will recur again:
   was green; three hexes in the file that no token accounted for had drifted. **Half a comparison
   reads exactly like a whole one.**
 
+- **The surface tiers were only ever demoed as a ramp** (v3.1.5). Four adjacent swatches answer
+  "do these step evenly" and cannot answer "does this ground belong to this page", which is the
+  only question a consumer's screen asks. Three minors of a visibly wrong palette, reported from
+  outside.
+
 In every case the demo path (a class on `<html>`, a light-mode screenshot, a fresh checkout,
-a card with prose in it, a filled button) worked perfectly. **Test the path nobody demos.**
+a card with prose in it, a filled button, a swatch beside its neighbour) worked perfectly.
+**Test the path nobody demos.**
 
 ---
 
@@ -205,53 +145,31 @@ a card with prose in it, a filled button) worked perfectly. **Test the path nobo
 
 Nothing here is known to be broken. These are judgement calls and second homes.
 
-### 1. `_ds_manifest.json` duplicates the bundle header — CLOSED in v3.0.0
+### 1. `_ds_manifest.json` duplicated the bundle header — CLOSED in v3.0.0
 
-It carries its own `namespace` and `components` list, which `lw-bundle.mjs` also computes and
-writes into the bundle's `@ds-bundle` header. Nothing reads the manifest's copy at runtime — the
-cards read the global, and `_cards.mjs` reads only its `cards` array — so it is inert today. But
-it is a generated fact with a hand-maintained second copy, which is the exact shape
-`tokens.json` and `react.d.ts` both needed a gate for. **Still open at v1.13.0**: the bundle
-generator does not write `_ds_manifest.json`, so the array is still edited by hand. Fold it in.
-
-**Done in v3.0.0, and it took two generators rather than one.** `tools/_manifest.mjs` lets each
-patch only its own keys onto what is on disk — `lw-bundle` writes `namespace` and `components`,
-`lw-tokens-dtcg` writes `tokens` and `themes` — so they never clobber each other, verified by
-running them in both orders. It refuses a key the manifest does not already have, so a generator
-corrects an existing fact rather than inventing one, and key order is preserved because the design
-project reads this file on a re-pull. All four were wrong when the generators first ran: 94
-components against 89 sources, 442 tokens against 323, and a `themes` list carrying both a stray
-paren and a scope `check:contrast` refuses to allow back.
-
+`tools/_manifest.mjs` lets each generator patch only its own keys onto what is on disk, and
+refuses a key the manifest does not already have — so a generator corrects an existing fact
+rather than inventing one, and two generators can run in either order. All four facts were wrong
+when they first ran, which is the argument for computing them.
 ### 2. The `.dc.html` templates are not rendered by any gate
 
 `lw-templates.mjs` reads them as text. The cards get axe and pixel diffs; the twelve templates —
 the thing a person actually looks at — get neither, because they need the `<x-dc>` runtime to
 render. Whether that runtime can be driven headless here is unknown and worth half a day.
+**v3.1.5 raised the price of this**: both template literal sets had drifted onto a grey family no
+token accounts for, and nothing here could see it. The text-only half is cheap and worth writing
+first — every `#RRGGBB` in a `.dc.html` should be a token value, and a gate can say so without a
+browser.
 
-### 3. `preview/_vendor/` is ~1.2 MB in the clone — CLOSED in v3.0.0
+### 3. `preview/_vendor` and the packed cards — CLOSED in v3.0.0
 
-v1.13.0 removed `@babel/standalone` (3.1 MB) by compiling each card's `<name>.card.jsx` ahead
-of time; what remains is the two React development builds, kept on purpose for the warnings.
-Correct trade (both browser gates are offline-capable and deterministic), but worth knowing:
-`github:…#tag` installs clone the whole repo. `preview/` is not in `package.json#files`, so it
-never reaches the tarball. Note that the shipped `components/**/*.card.html` already referenced
-`../../preview/_card.css` and `../../_ds_bundle.js`, neither of which ships — **the cards in the
-published package have always been non-functional.** Either exclude them from `files` or ship
-what they need; today it is neither.
-
-**v3.0.0 ships what they need, and swapped the vendor pair to make that affordable.** The
-development builds were 1.19 MB; the production pair is 142 KB, so the clone drops ~1.05 MB and the
-tarball carries ~45 KB gz instead of ~255 KB. That reverses the "development builds, deliberately"
-decision recorded above, and the justification is narrow and checkable: **no gate reads a React
-warning.** `lw-a11y.mjs` listens on `pageerror`, the production build still throws, and the visual
-run after the swap moved the same 20 shots as before it and not one more.
-
-⚠ **The part worth keeping is the assertion, not the fix.** `check:pack` now resolves every
-relative `href`/`src` in every packed card against the installed tree, refusing to pass having read
-fewer than 100 of them. Neither `MUST_PACK` nor the `exports` walk could ever have caught this:
-both check what a consumer **imports**, and a card is loaded by a browser. Eight releases.
-
+The cards in the published package had never been functional: they referenced `preview/_card.css`
+and `_ds_bundle.js`, neither of which shipped. v3.0.0 ships what they need and swapped the React
+development pair for production (1.19 MB → 142 KB) to afford it. **The assertion is the part worth
+keeping:** `check:pack` resolves every relative `href`/`src` in every packed card against the
+installed tree and refuses to pass having read fewer than 100. Neither `MUST_PACK` nor the
+`exports` walk could have caught it — both check what a consumer *imports*, and a card is loaded
+by a browser. Eight releases.
 ### 4. `deck-stage.js` is vendored, and must not be gated
 
 2,969 lines under `templates/pitch-deck/`, carrying its own dark palette in Claude's coral
@@ -263,46 +181,19 @@ local fix is lost silently. Leave it. *(An earlier revision of this file claimed
 twelve copies, and the `apps/web` repo it names is not on this box, so the pairing cannot be
 checked here at all.)*
 
-### 5. `.lw-editor-body` is still a second treatment of `.lw-prose` — CLOSED in v2.0.0
+### 5. `.lw-editor-body` duplicated `.lw-prose` — CLOSED in v2.0.0
 
-Done as the entry below prescribed: one commit, `RichText.jsx` emits `lw-prose lw-editor-body`,
-`.lw-editor-body` keeps the box, the caret, the placeholder and `--lw-prose-max: none`, and the
-bundle was regenerated in the same change. The visual delta on the `RichText` specimen is the
-one listed — h2 step, `--lw-space-20` rhythm, `--lw-lh-relaxed` — and is recorded in the
-CHANGELOG as intended. The original entry is kept for the reasoning.
+`RichText.jsx` emits `lw-prose lw-editor-body`; the editor class keeps only its own delta (the
+box, the caret, the placeholder, `--lw-prose-max: none`). Done in one commit **with the bundle
+regenerated in the same change** — a `.jsx` edit is invisible to both browser gates until
+`npm run bundle`, so splitting the two would have landed the change with its verification
+deferred.
+### 6. `_ds_manifest.json`'s `components` array went stale — CLOSED in v3.0.0
 
-
-`product.css`'s `.lw-editor-body` (the `RichText` surface) and the new `.lw-prose` are two
-treatments of one thing: a block of authored rich text sized on the type scale. The v1.3.0 plan
-was to group the editor's selectors onto the `.lw-prose` blocks and reduce `.lw-editor-body` to
-its editor-only delta. It was **not done**, and the reason is worth recording rather than
-re-deciding:
-
-- The convergence is a real visual change to `RichText` — `h2` moves from `--lw-text-h3` to the
-  h2 step, block spacing from `0.7em` to `--lw-space-20`, line-height from 1.65 to
-  `--lw-lh-relaxed`, list indent from `1.4em` to `--lw-space-24`, and the surface gains a 68ch
-  measure it does not have today.
-- It also requires `RichText.jsx` to emit `className="lw-prose lw-editor-body"`, and a `.jsx`
-  edit is only visible to the two browser gates after `npm run bundle`. So the change would have
-  landed with its verification deferred — the one shape this repo has paid for repeatedly.
-
-Do it in one commit, with the bundle regenerated in the same commit, and read the `RichText`
-card's diff rather than the gate summary. Until then the duplication is known, bounded and
-recorded here, which is better than a half-verified merge.
-
-### 6. `_ds_manifest.json`'s `components` array had gone 12 entries stale — CLOSED in v3.0.0
-
-Found while verifying the manifest against the filesystem for v1.3.0. The `cards` array — the
-load-bearing half, since both browser gates enumerate from it and `_cards.mjs` cross-checks it
-in both directions — was clean, with all four marker attributes matching byte-for-byte. The
-`components` array was not: it was missing the entire v1.3.0 component set. Refreshed by hand
-here, which is exactly the treatment open item 1 says it should stop needing. Two non-barrel
-names (`CHART_W`, `CHART_PAD`) and `chart-parts.jsx`'s losing `Grid` are still absent by
-design — the array describes the namespace surface, and `lw-bundle.mjs` already computes that
-list. **Fold it into the bundle generator and this item and item 1 both close.** Not done at
-v1.13.0; checked, the generator still writes only the bundle header. **Done in v3.0.0 — see item 1.**
-`CHART_W` and `CHART_PAD` are moot: `chart-parts.jsx` went with the two charts it existed for.
-
+Twelve entries behind, found by verifying against the filesystem rather than by reading. The
+load-bearing half (`cards`) was clean, because both browser gates enumerate from it in both
+directions — which is the whole lesson: the half nothing reads is the half that rots. Now written
+by the generator that computes it; see item 1.
 ### 7. Smaller
 
 - **Nothing gates the *geometric* half of the reset leak.** `check:a11y` now catches a UA
@@ -352,41 +243,17 @@ dropped. Also: **rag-service was never install-drifted** — the `v0.2.2` tag's 
 says `0.2.1`, so the pin resolves correctly to a tree reporting the older number, and no
 reinstall changes that. Bump it to `#v0.2.3`.
 
-### 9. `Button`'s `type` default is still HTML's `submit` — CLOSED in v2.0.0
+### 9. `Button`'s `type` defaulted to HTML's `submit` — CLOSED in v2.0.0
 
-Flipped to `"button"` at the major, together with the `readMinutes` removal, exactly as below.
-One consumer site needed `type="submit"` (`leanwise-ai/src/components/contact-form.tsx:212`);
-the CHANGELOG migration note lists the grep and the finding.
-
-
-`Card`, `SourceChip` and `NavItem` all default to `type="button"`; `Button` defaults to
-nothing, i.e. `submit`. That inconsistency is the house rule being applied everywhere except
-the one component it matters most for. It was NOT changed in 1.3.1 on purpose: flipping it
-would silently stop `<form onSubmit>` + `<Button>Save</Button>` from submitting, and a silent
-no-op is a worse patch-release failure than the wrong-op it replaces. Change it at the next
-major, together with the `readMinutes` removal.
-
-### 10. `product.css` overrides the token band's default ink — CLOSED in v2.0.0
+Flipped to `"button"` at the major, never at a patch: silently stopping `<form onSubmit>` +
+`<Button>Save</Button>` from submitting is a worse patch-release failure than the wrong-op it
+replaces. One consumer needed `type="submit"` and the CHANGELOG migration note names the grep.
+### 10. `product.css` overrode the token band's default ink — CLOSED in v2.0.0
 
 The `product.css` rule is deleted and the role wins: dark-band ink is `--lw-fg` in both load
-orders, 9.42:1 → 15.78:1 in an app, recorded as an intended visual change. The entry below is
-the measurement that justified it.
-
-
-`product.css` carries `.lw-band-dark, [data-band="dark"] { color: var(--lw-on-dark-2) }`, which
-outranks `tokens.css`'s band block (`:where(…) { color: var(--lw-fg) }`, specificity 0). So the
-SAME dark band renders one default ink on a marketing page (base + marketing → `--lw-fg`,
-15.78:1 on the footer ground) and a dimmer one in an app (base + product → `--lw-on-dark-2` at
-70% white, 9.42:1). Both clear AA comfortably, so nothing is broken — but it is two treatments
-of one thing, decided by which layer you happen to load, which is the shape CONTRIBUTING's
-first rule exists to catch.
-
-Measured, not guessed: it is the entire remaining delta on `site-chrome.card` in the 1.3.1
-visual run — 733 pixels, 8 inherited nodes, all of them `color`. Resolving it moves pixels on
-every dark band in every consumer either way, so it is a minor, not a patch. The likely answer
-is to delete the `product.css` rule and let the role win, since a raw `--lw-on-dark-2` tier
-overriding a role is the thing rule 11 of the README already forbids.
-
+orders (9.42:1 → 15.78:1 in an app). It was two treatments of one thing decided by which layer
+you happened to load — and a raw `--lw-on-dark-2` tier overriding a role is what README rule 12
+already forbids.
 ### 11. `lw-visual`'s `decoded()` is not airtight
 
 v1.3.0 added an image-decode wait and recorded three runs agreeing to 0.0001%. During the
@@ -429,6 +296,24 @@ kept it safe, not the greps. Record them here because the next sweep will want t
 - a family (`.lw-auth-*`) survives if any sibling is used, because a vanilla page composes members
 - a standalone decorative effect no component emits, no card demonstrates, no template lays out and
   no consumer writes is the only safe category, and it is where all 33 deletions came from
+
+---
+
+## The v4.0.0 lean pass — planned, not executed
+
+Asked for at v3.1.5: make the system lean. The inventory below is what a sweep would actually
+touch, with the verdict on each, because **five of the six candidates named in the ask are either
+already done, load-bearing, or a breaking change that has to wait for the major** — and saying
+which is which is the useful half.
+
+| Candidate | Verdict |
+|---|---|
+| The 26 unimported components | **Already gone.** Removed in v3.0.0 after being marked at v2.0.0; CHANGELOG 3.0.0 §"Removed — announced at v2.0.0" names every one. Nothing to cut. |
+| The marketing layer (13 components + `marketing.css`) | **Keep.** It is the layer with a live external consumer (`leanwise-ai`), six specimen cards, and the `MarketingLanding` template. "Products don't ship marketing pages" is false for this org — the marketing site *is* a product. |
+| The 47 specimen cards + their `.card.js` twins | **Keep the twins; they are not duplicates.** v1.13.0 pre-compiles each `.card.jsx` so the cards run without `@babel/standalone` (3.1 MB out of the clone). The `.html` loads the `.js`; delete it and every card goes blank. The near-duplicate PAIRS (`Menu` + `Menu-open`, `Dialog-open`, `DatePicker`, `Table-collapse`) each exist because a closed overlay measures the trigger, not the surface — the v3.0.0 calendar defect is what they are for. |
+| The 12 templates | **Cut `pitch-deck`.** It is the one template that is not this design system: 2,969 vendored lines carrying Claude's coral `#D97757`, `@ds-adherence-ignore` on line 1, exempt from the lint, and overwritten wholesale by the next `copy_starter_component`. A template nothing gates and nobody can safely patch is a liability, not a starting point. The other eleven are one `.dc.html` each over `_shared/`, which is the cheapest thing in the repo. |
+| `email.css` + the `Email` template | **Deprecate now, remove at v4.0.0.** `"./email.css"` is a published export, so deletion is breaking. The case for removing it is item 7's: it cannot use logical properties, so it is a physical-property island; `check:contrast` asserts its literals and **nothing asserts its layout**; and its literals drifted twice (v3.0.0, and again at v3.1.5 in the `Email` template). Revisit only when a product actually sends mail. |
+| README | **Restructure, don't delete.** Done at v3.1.5: the index and the recipes stayed, the archaeology came out — 44 version references down to the install pin, with each "since v1.3.1" anecdote kept as the rule it taught. The `readme-coverage` lint reads the index half, so every barrel export kept its row. |
 
 ---
 

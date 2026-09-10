@@ -379,6 +379,12 @@
       "name": "Status"
     },
     {
+      "path": "preview/colors-surfaces.html",
+      "group": "Colors",
+      "subtitle": "Every ground a component can paint, against the page it sits on — the mismatch test",
+      "name": "Surfaces on the page"
+    },
+    {
       "path": "components/data/Chart.card.html",
       "group": "Data",
       "viewport": "1080x680",
@@ -1333,19 +1339,19 @@
     },
     {
       "name": "--lw-surface-1-c",
-      "value": "45    20.0% 97.5%",
+      "value": "38    16.0% 98.4%",
       "kind": "color",
       "definedIn": "tokens.css"
     },
     {
       "name": "--lw-surface-2-c",
-      "value": "45    15.0% 95.3%",
+      "value": "38    13.0% 96.5%",
       "kind": "color",
       "definedIn": "tokens.css"
     },
     {
       "name": "--lw-surface-3-c",
-      "value": "45    14.0% 92.9%",
+      "value": "38    12.0% 94.2%",
       "kind": "color",
       "definedIn": "tokens.css"
     },
@@ -1423,13 +1429,13 @@
     },
     {
       "name": "--lw-border-1-c",
-      "value": "45  10.0% 91.0%",
+      "value": "38  10.0% 91.5%",
       "kind": "color",
       "definedIn": "tokens.css"
     },
     {
       "name": "--lw-border-2-c",
-      "value": "45   8.0% 83.9%",
+      "value": "38   8.0% 83.9%",
       "kind": "color",
       "definedIn": "tokens.css"
     },

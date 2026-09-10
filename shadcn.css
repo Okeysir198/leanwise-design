@@ -35,10 +35,15 @@
   --background: var(--lw-bg-c);
   --foreground: var(--lw-fg-c);
 
-  /* Cards/popovers are the same as the page on light, and LIFT on dark. */
-  --card: var(--lw-bg-subtle-c);
+  /* Cards/popovers are the same as the page on light, and LIFT on dark — the
+     dark block below re-points both. Through v1.13.0 the LIGHT values here said
+     --lw-bg-subtle-c, which contradicted the sentence above them: every shadcn
+     Card, Popover, Dialog and Sheet painted a tinted ground on an untinted page,
+     so the whole app read as mismatched patches. The lift belongs to dark only;
+     on light a card is defined by its hairline and its shadow, not by a fill. */
+  --card: var(--lw-bg-c);
   --card-foreground: var(--lw-fg-c);
-  --popover: var(--lw-bg-subtle-c);
+  --popover: var(--lw-bg-c);
   --popover-foreground: var(--lw-fg-c);
 
   /* The workhorse. Tenant-themable at runtime (see lib/brand.ts::brandVars). */

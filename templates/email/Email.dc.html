@@ -9,7 +9,7 @@
 <x-dc>
 <!-- @template name="Transactional email" description="A 600px table-based email that survives Outlook: literal values, padded-anchor buttons, one max-width breakpoint, and a plain-text version beside it." -->
 <helmet><link rel="stylesheet" href="../../email.css"><script src="../_shared/ds-base.js"></script></helmet>
-<div role="main" id="lw-main" style="min-height:100vh;padding:32px 16px;background:#F6F8FA">
+<div role="main" id="lw-main" style="min-height:100vh;padding:32px 16px;background:#F7F6F5">
 
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="lw-em-body">
 <tr><td align="center">
@@ -21,20 +21,20 @@
 </td></tr>
 
 <tr><td class="lw-em-pad" style="padding:32px 32px 8px">
-<p class="lw-em-eyebrow" style="margin:0 0 10px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#4A5567">{{ eyebrow }}</p>
+<p class="lw-em-eyebrow" style="margin:0 0 10px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#4B5563">{{ eyebrow }}</p>
 <h1 class="lw-em-h1" style="margin:0;font-size:24px;line-height:1.25;font-weight:600;letter-spacing:-.02em;color:#0B1220">{{ headline }}</h1>
 </td></tr>
 
 <tr><td class="lw-em-pad-b" style="padding:14px 32px 8px">
-<p class="lw-em-p" style="margin:0;font-size:15px;line-height:1.62;color:#4A5567">{{ intro }}</p>
+<p class="lw-em-p" style="margin:0;font-size:15px;line-height:1.62;color:#4B5563">{{ intro }}</p>
 </td></tr>
 
 <tr><td style="padding:8px 32px 20px">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="lw-em-panel" style="background:#F6F8FA;border:1px solid #E3E8EF;border-radius:8px">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="lw-em-panel" style="background:#F7F6F5;border:1px solid #EBEAE7;border-radius:8px">
 <tr><td style="padding:18px 20px">
 <sc-for list="{{ facts }}" as="f" hint-placeholder-count="4">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
-<td style="padding:5px 0;font-size:13px;color:#6B7684">{{ f.k }}</td>
+<td style="padding:5px 0;font-size:13px;color:#656B78">{{ f.k }}</td>
 <td align="right" class="lw-em-mono" style="padding:5px 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:13px;color:#0B1220">{{ f.v }}</td>
 </tr></table>
 </sc-for>
@@ -48,17 +48,17 @@
 <a href="#" style="display:inline-block;padding:13px 26px;font-size:15px;font-weight:600;line-height:1;color:#FFFFFF;text-decoration:none">{{ ctaLabel }}</a>
 </td>
 <td style="width:10px">&nbsp;</td>
-<td class="lw-em-btn lw-em-btn-ghost" style="background:#FFFFFF;border:1px solid #CBD3DE;border-radius:8px">
+<td class="lw-em-btn lw-em-btn-ghost" style="background:#FFFFFF;border:1px solid #D9D7D3;border-radius:8px">
 <a href="#" style="display:inline-block;padding:12px 22px;font-size:15px;font-weight:500;line-height:1;color:#0B1220;text-decoration:none">View the source</a>
 </td>
 </tr></table>
 </td></tr>
 
-<tr><td style="padding:0 32px"><div class="lw-em-rule" style="height:1px;line-height:1px;font-size:0;background:#E3E8EF">&nbsp;</div></td></tr>
+<tr><td style="padding:0 32px"><div class="lw-em-rule" style="height:1px;line-height:1px;font-size:0;background:#EBEAE7">&nbsp;</div></td></tr>
 
 <tr><td class="lw-em-foot" style="padding:22px 32px 32px">
-<p class="lw-em-small" style="margin:0 0 10px;font-size:12.5px;line-height:1.55;color:#6B7684">{{ footLine }}</p>
-<p class="lw-em-small" style="margin:0;font-size:12.5px;line-height:1.55;color:#6B7684">
+<p class="lw-em-small" style="margin:0 0 10px;font-size:12.5px;line-height:1.55;color:#656B78">{{ footLine }}</p>
+<p class="lw-em-small" style="margin:0;font-size:12.5px;line-height:1.55;color:#656B78">
 <a href="#" style="color:#0C727B">Notification settings</a> · <a href="#" style="color:#0C727B">Unsubscribe from digests</a>
 </p>
 </td></tr>
@@ -74,9 +74,9 @@
 </td></tr>
 </table>
 
-<div style="max-width:600px;margin:32px auto 0;padding:20px;border:1px dashed #CBD3DE;border-radius:8px;background:#FFFFFF">
-<p style="margin:0 0 10px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#6B7684">Plain-text part — ship both</p>
-<pre style="margin:0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;line-height:1.6;color:#4A5567;white-space:pre-wrap">{{ plain }}</pre>
+<div style="max-width:600px;margin:32px auto 0;padding:20px;border:1px dashed #D9D7D3;border-radius:8px;background:#FFFFFF">
+<p style="margin:0 0 10px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#656B78">Plain-text part — ship both</p>
+<pre style="margin:0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;line-height:1.6;color:#4B5563;white-space:pre-wrap">{{ plain }}</pre>
 </div>
 </div>
 </x-dc>
