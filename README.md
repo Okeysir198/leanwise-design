@@ -697,6 +697,45 @@ must not do is invent its own colour, radius, spacing or breakpoint values. And 
 `--logo=mark-mono` outright, because `currentColor` cannot resolve inside a data URI — see
 §Logo.
 
+### …and when the bytes ship on every request: `lw-subset`
+
+`lw-inline` assumes one render and one reader, so size is irrelevant and it emits the core
+**verbatim** (~84 KB, of which ~58 KB is this README's own reasoning restated in comments).
+
+A Cloudflare Worker serving a `no-store` page is the same supply chain — no npm at runtime, no
+bundler, hand-written HTML — with one difference that changes the arithmetic: **the bytes ship
+again on every request.** Inlining the verbatim core takes one such page from 31 KB to ~115 KB,
+forever, to carry prose no browser reads. Told that, an author does exactly what the report's
+author did.
+
+```bash
+npx lw-subset --manifest=tokens.manifest.json                      # → stdout
+npx lw-subset --manifest=… --format=ts --out=src/ui/tokens.gen.ts  # TS literal, backticks escaped
+```
+
+The manifest lists **seed** token names; the tool resolves the transitive `var()` closure and
+emits only those declarations. Measured: 30 seeds → 60 tokens ≈ 7 KB; 69 → 124 ≈ 14 KB.
+
+It keeps every guarantee above — generated never typed, the **same** `tokens.css sha256` so a
+subset and a verbatim copy are diffable by one parser, token core only — and keeps **every
+retained token's own trailing comment**. `lw-inline` rejects comment-*stripping*, not
+selection-*narrowing*: the reasons that govern a value the app ships travel with it. What is
+dropped is prose about values the app does not ship, which is here and reachable via the digest.
+
+It adds a `selection sha256` over the sorted seed list, without which "the artifact is stale"
+and "the manifest changed" are indistinguishable. **An unresolvable seed is a hard error**, not
+an omission — an absent token resolves to nothing at runtime and a padding collapses while
+every other gate stays green.
+
+⚠️ **Seed the THEMABLE roles** (`--lw-bg`/`-fg`/`-line`, the `-on`/`-soft` status tiers), not
+the static `--lw-surface-N` / `--lw-text-N` tiers. `tokens.css` re-points the themable names
+under `[data-theme="dark"]`; seeding the static ones forces an app to hand-maintain its own
+dark palette, which is exactly what two consumers were doing before they moved.
+
+⚠️ Nothing reads the banner back yet — `lw-doctor` refuses to run without a resolvable install
+and has no vendor path. Drift detection is a consumer-side gate: regenerate and diff. The four
+Worker consumers each ship one as `npm run check:tokens`.
+
 ---
 
 ## Mobile
