@@ -16,6 +16,47 @@ pinned inside that older range; `CLAUDE.md` §Consumers is the enumerated pin ta
 
 ## [Unreleased]
 
+## [4.1.0] — 2026-09-19
+
+**A supported path for the consumer that cannot import AND cannot afford the whole core.**
+
+### Added
+- **`npx lw-subset` — the token core, narrowed to what a consumer actually uses.**
+  `lw-inline` answers the single-file artifact: one render, one reader, size irrelevant.
+  A Cloudflare Worker serving a `no-store` page is the same supply chain — no npm at
+  runtime, no bundler, hand-written HTML — with one difference that changes the
+  arithmetic: **the bytes ship again on every request.** Inlining the verbatim core
+  takes one of those pages from 31 KB to ~115 KB, forever, to carry ~58 KB of this
+  package's own block prose that no browser reads. Told that, an author does what the
+  SOP report's author did and retypes thirty values by hand — the failure this package
+  already conceded once when `lw-inline` shipped at v1.8.0.
+
+  It takes a `tokens.manifest.json` of seed names, resolves the transitive `var()`
+  closure, and emits only those declarations. Measured: 30 seeds → 60 tokens ≈ 7 KB;
+  69 seeds → 124 tokens ≈ 14 KB, against 84 KB verbatim.
+
+  **What it keeps from `lw-inline`, deliberately:** generated never typed; the SAME
+  `tokens.css sha256:` over the whole unmodified file, so a subset and a verbatim copy
+  are diffable by one parser; token core only, never a component layer; and **every
+  retained token's own trailing comment.** `lw-inline` rejects comment-STRIPPING —
+  "the comments are where the reasoning lives" — and that rejection is honoured: the
+  reasons that govern a value the app ships travel with it. What is dropped is prose
+  *about values the app does not ship*, which is in README and reachable via the digest.
+
+  **What it adds:** a `selection sha256:` over the sorted seed list. Without it two
+  subsets of one source are indistinguishable, and "the artifact is stale" looks
+  exactly like "the manifest changed". A seed that does not resolve is a hard error,
+  not an omission — an absent token resolves to nothing at runtime and a padding
+  collapses while every other gate stays green.
+
+  ⚠️ **The parser is declaration-level, not line-level**, and that is not a
+  nicety. `tokens.css` packs several declarations per line
+  (`--lw-space-4: 4px;  --lw-space-8: 8px;`), writes two trailing comments on one
+  (`--lw-sys-mac-red-c`), and its prose quotes token names with colons
+  (`--lw-z-raised: these never compete with page furniture`). Each of those broke a
+  simpler implementation; the last one silently dropped two tokens until the
+  round-trip test caught it. `test/lw-subset.test.mjs` pins all three.
+
 ## [4.0.0] — 2026-09-11
 
 **The lean pass.** Two surfaces leave the package. Both were announced at v3.1.5 and carried

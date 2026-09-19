@@ -1,6 +1,6 @@
 {
   "name": "@leanwise/design",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "LeanWise Design System — token core, CSS layers, React components, twelve templates.",
   "license": "UNLICENSED",
   "private": false,
@@ -56,7 +56,8 @@
     "lw-token-lint": "./tools/lw-token-lint.mjs",
     "lw-doctor": "./tools/lw-doctor.mjs",
     "lw-inline": "./tools/lw-inline.mjs",
-    "lw-favicon": "./tools/lw-favicon.mjs"
+    "lw-favicon": "./tools/lw-favicon.mjs",
+    "lw-subset": "./tools/lw-subset.mjs"
   },
   "files": [
     "react.js",
@@ -126,7 +127,8 @@
     "check:assets": "node tools/lw-assets.mjs --check",
     "check:forced-colors": "node tools/lw-forced-colors.mjs",
     "check:affordance": "node tools/lw-affordance.mjs --self-test && node tools/lw-affordance.mjs",
-    "check:template-literals": "node tools/lw-template-literals.mjs --self-test && node tools/lw-template-literals.mjs"
+    "check:template-literals": "node tools/lw-template-literals.mjs --self-test && node tools/lw-template-literals.mjs",
+    "subset": "node tools/lw-subset.mjs"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",
