@@ -480,6 +480,7 @@ Verified 2026-09-06 by enumeration (below), not by memory.
 | `P20260806-sop/apps/web` | `#v1.7.1` | `tokens` `fonts` `shadcn` `theme` `base` `product` | npm |
 | `P20260707-vss/frontend` | `#v0.2.3` | `tokens` `fonts` `shadcn` + preset + `./brand` | pnpm |
 | `P20260706-rag-service/frontend` | `#v0.2.2` (reports **0.2.1**) | `tokens` `fonts`, vanilla | npm |
+| `mcp-manage` (in personal-mcp-server) | `#v4.1.0` | `tokens` via `lw-subset` + vendored `reset` `base` `product`, vanilla | npm |
 
 **Drift today (2026-09-10, by the loop).** **Three consumers are current on `#v3.1.5`** —
 `leanwise-ai`, `leanwise-inspect`, `4DXs_plan` — bumped the day it was cut, and **none of the three
@@ -552,6 +553,8 @@ for d in /srv/share/01_project-dev/*/ /srv/share/01_project-dev/*/frontend/ \
   [ -n "$pin" ] && printf '%-46s %s\n' "${d#/srv/share/01_project-dev/}" "$pin"
 done | sort -u
 ```
+
+⚠ **The loop cannot see an eighth consumer for a different reason: it lives outside the tree.** `mcp-manage` sits in `~/Documents/01_Personal/personal-mcp-server/mcp-manage/`, not under `/srv/share/01_project-dev/`, so no glob above reaches it — check its pin by hand when releasing (`grep '@leanwise/design' ~/Documents/01_Personal/personal-mcp-server/mcp-manage/package.json`). Unlike the `*/apps/web/` miss, no glob fixes it; the row was added by hand.
 
 Before any bump: (1) rag-service hardcodes the brand at `src/routes/admin/w.$slug.tsx:720,728`
 (`draft.branding?.accent || "#14B8A6"`), the only real brand hardcode in any consumer; (2) VSS spreads

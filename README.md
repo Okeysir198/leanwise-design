@@ -733,8 +733,9 @@ under `[data-theme="dark"]`; seeding the static ones forces an app to hand-maint
 dark palette, which is exactly what two consumers were doing before they moved.
 
 ⚠️ Nothing reads the banner back yet — `lw-doctor` refuses to run without a resolvable install
-and has no vendor path. Drift detection is a consumer-side gate: regenerate and diff. The four
-Worker consumers each ship one as `npm run check:tokens`.
+and has no vendor path. Drift detection is a consumer-side gate: regenerate and diff. `mcp-manage`
+is the one consumer: its `npm run check:tokens` re-runs `lw-subset` and byte-diffs the artifact —
+the sibling Workers dropped their own pipelines on 2026-09-19, when their manage UIs moved into it.
 
 ---
 
