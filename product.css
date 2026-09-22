@@ -86,7 +86,7 @@
 
 /* KPI TILE — one number, its label, and at most one delta. Anything more is a
    card, not a KPI. The number is mono + tabular so a row of tiles aligns. */
-.lw-kpi { display: flex; flex-direction: column; gap: 8px; padding: var(--lw-space-20); background: var(--lw-bg); border: 1px solid var(--lw-line); border-radius: var(--lw-radius-lg); min-width: 0; }
+.lw-kpi { display: flex; flex-direction: column; gap: 8px; padding: var(--lw-space-20); background: var(--lw-bg-subtle); border: 1px solid var(--lw-line); border-radius: var(--lw-radius-lg); min-width: 0; }
 /* Label left, subject icon right. The icon is a tinted chip: it identifies the
    tile at a glance and must never compete with the figure for attention.
    The label WRAPS rather than truncating — the chip costs 46px of a ~200px tile,
@@ -438,8 +438,11 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
 .lw-source:hover { background: hsl(var(--lw-brand-500-c) / 0.24); }
 .lw-source:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
 .lw-source-list { display: flex; flex-direction: column; gap: var(--lw-space-8); }
-.lw-source-item { display: flex; gap: 10px; padding: 10px 12px; border: 1px solid var(--lw-line); border-radius: var(--lw-radius-md); background: var(--lw-bg); text-decoration: none; color: inherit; transition: border-color var(--lw-dur-xs) var(--lw-ease-out), background var(--lw-dur-xs) var(--lw-ease-out); }
-.lw-source-item:hover { border-color: var(--lw-brand-line); background: var(--lw-bg-subtle); }
+.lw-source-item { display: flex; gap: 10px; padding: 10px 12px; border: 1px solid var(--lw-line); border-radius: var(--lw-radius-md); background: var(--lw-bg-subtle); text-decoration: none; color: inherit; transition: border-color var(--lw-dur-xs) var(--lw-ease-out), background var(--lw-dur-xs) var(--lw-ease-out); }
+/* One rung further than the resting surface. The resting state moved up to
+   --lw-bg-subtle in v4.3.0, which left this hover setting the colour the
+   element already had -- a hover that changed only the border. */
+.lw-source-item:hover { border-color: var(--lw-brand-line); background: var(--lw-bg-muted); }
 .lw-source-item:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
 .lw-source-item .n { font-family: var(--lw-font-mono); font-size: var(--lw-text-2xs); color: var(--lw-brand-text); padding-top: 2px; flex: none; }
 /* The text column needs min-width:0 or the title's ellipsis never fires — a flex
@@ -893,7 +896,7 @@ svg.lw-kpi-icon { background: none; color: var(--lw-fg-faint); }
    own scroll box, its header is sticky, its columns are resizable and pinnable,
    and it may be windowed. Table stays the simple static one — merging them
    would make every static table pay for machinery it never uses. */
-.lw-dgrid { position: relative; border: 1px solid var(--lw-line); border-radius: var(--lw-radius-lg); background: var(--lw-bg); overflow: hidden; }
+.lw-dgrid { position: relative; border: 1px solid var(--lw-line); border-radius: var(--lw-radius-lg); background: var(--lw-bg-subtle); overflow: hidden; }
 .lw-dgrid-scroll { overflow: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: var(--lw-line-strong) transparent; }
 .lw-dgrid table { width: 100%; border-collapse: separate; border-spacing: 0; table-layout: fixed; font-size: var(--lw-text-sm); }
 .lw-dgrid th, .lw-dgrid td {

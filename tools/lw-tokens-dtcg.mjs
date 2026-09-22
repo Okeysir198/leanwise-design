@@ -200,7 +200,7 @@ const EXEMPT = new RegExp(
   + "|^--lw-border-(\\d+|control)-c$"                // border ramp + the 1.4.11 control boundary
   + "|^--lw-navy-(700|900|deep)-c$"                  // the mark's navy constants
   + "|^--lw-(success|warning|danger|neutral)(-text)?-c$" // status fills + their light ink
-  + "|^--lw-navy-(paper|raised|inset|line-1|line-2|line-control)-c$" // the navy band's own surfaces: theme-invariant by construction
+  + "|^--lw-navy-(paper|raised|inset-2|inset|line-1|line-2|line-control)-c$" // the navy band's own surfaces: theme-invariant by construction
   + "|^--lw-on-navy-[1-4]-c$"                       // inks on that band (already under ^--lw-on-; named for the grep)
 );
 const problems = [];

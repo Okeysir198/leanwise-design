@@ -629,8 +629,19 @@ table.visually-hidden > caption,
 /* ---- Cards --------------------------------------------------------------- */
 
 .lw-card {
-  background: var(--lw-bg);
+  /* --lw-bg-subtle, NOT --lw-bg: a card painted in the page's own colour is not
+     a surface, it is a 1px outline. This read background: var(--lw-bg) until
+     v4.3.0 and measured contrast 1.000:1 / dE 0.00 against the page in BOTH
+     themes -- while tokens.css said in three places (:203, :818, :820) that the
+     raised surface is where cards live. The demos never showed it because every
+     one of them renders inside .pane, which is itself --lw-bg-subtle; the bug
+     only appears on a real page, which is the last place you want to find it. */
+  background: var(--lw-bg-subtle);
   border: 1px solid var(--lw-line);
+  /* A resting shadow, so elevation does not rest on the hairline alone. The
+     token is theme-aware by design: tinted shadows are invisible on navy, so
+     the dark scope resolves this to a line-coloured hairline instead. */
+  box-shadow: var(--lw-shadow-xs);
   border-radius: var(--lw-radius-lg);
   transition: border-color var(--lw-dur-sm), box-shadow var(--lw-dur-sm), transform var(--lw-dur-sm);
 }

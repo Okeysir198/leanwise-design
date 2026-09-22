@@ -1263,6 +1263,130 @@ if (bindingFails.length) {
 }
 
 /* ===========================================================================
+   SURFACE SEPARATION — can you see the card at all?
+
+   Every pair in the MANIFEST above is ink-on-ground or a border/focus ring
+   against a ground. None of them is ground-against-GROUND, and that is a whole
+   category this gate could not see: a card painted in the page's own colour
+   passes every check in this file, because nothing ever compares the two.
+
+   It is not hypothetical. Through v4.2.x `.lw-card` read `background: var(--lw-bg)`
+   -- the page's own role -- so a card measured contrast 1.000:1 and dE 0.00
+   against the page it sat on, in BOTH themes, while this file printed
+   "All 153 pairs pass WCAG AA". The elevation ladder was no better: the light
+   surface-0 -> surface-1 step measured dE 1.41, under the ~2.3 JND for a flat
+   field, so "raised" was a value the code carried and the eye could not see.
+
+   Two things are measured, and they are different questions:
+
+     RUNG   consecutive rungs of one theme's neutral ladder must differ by
+            >= SURFACE_DE_FLOOR, or the ladder has steps that do not step.
+     REST   a component that paints a resting surface must separate from the
+            page ground EITHER by its fill (>= SURFACE_DE_FLOOR) or by a
+            boundary at >= SURFACE_BOUNDARY_CR. A floating surface is exempt by
+            name: a dialog, toast or prompt carries a real shadow, and a shadow
+            is elevation this arithmetic cannot see.
+
+   Why the boundary bar is 3:1 and the fill bar is a dE: WCAG 1.4.11 asks 3:1 of
+   "visual information required to identify user interface components", which is
+   a contrast question about a boundary. Whether two large flat fields look
+   different is not a contrast question at all -- it is a perceptual-distance
+   one, and dE is the honest measure. A card may satisfy either.
+
+   --lw-line is deliberately NOT held to 3:1 as a divider (see the note in the
+   MANIFEST): it has 88 uses, most of them decorative rules between rows, and
+   3:1 on all of them would turn the light theme into a spreadsheet. A card that
+   leans on the hairline alone is the case this catches -- the fix is the fill
+   step, not a heavier rule.
+   =========================================================================== */
+
+const SURFACE_DE_FLOOR = 3.0;      // ~ the JND for a large flat field, plus margin
+const SURFACE_BOUNDARY_CR = 3.0;   // WCAG 1.4.11, non-text contrast
+
+/* Ladders are per-theme: the light rungs and the navy rungs are different
+   colours reached through the same role names. */
+const SURFACE_LADDER = ["bg", "bg-subtle", "bg-muted", "bg-inset"];
+
+/* The selectors that paint a RESTING surface. What each one actually paints is
+   READ from the CSS, never listed here: a list of what a component "should" use
+   is a second copy of the truth, and the first version of this gate did exactly
+   that -- it named `.lw-card: bg-subtle` and so stayed green when .lw-card was
+   edited back to var(--lw-bg), which is the one bug it was written to catch.
+   Caught by mutation-testing the gate itself. */
+const RESTING_SELECTORS = [".lw-card", ".lw-kpi", ".lw-dgrid", ".lw-source-item"];
+
+/* Exempt, by name and with the reason: these float and carry a real shadow,
+   which is elevation this arithmetic cannot see. */
+const FLOATING_EXEMPT = {
+  ".lw-dialog": "--lw-shadow-xl", ".lw-toast": "--lw-shadow-lg", ".lw-prompt": "--lw-shadow-sm",
+};
+
+/** What a selector actually paints: its background token and its border token. */
+function paintedSurfaces() {
+  const out = [];
+  for (const layer of LAYERS) {
+    let src;
+    try { src = readFileSync(join(ROOT, layer), "utf8"); } catch { continue; }
+    for (const { selector, directBody } of splitRules(stripComments(src))) {
+      if (!selector) continue;
+      const sel = selector.split(",")[0].trim();
+      if (!RESTING_SELECTORS.includes(sel)) continue;
+      const bgm = directBody.match(/(?:^|[;{])\s*background(?:-color)?\s*:\s*var\(--lw-([a-z0-9-]+)\)/);
+      // Shorthand `border: 1px solid var(--lw-line)` and longhand both.
+      const bdm = directBody.match(/(?:^|[;{])\s*border(?:-color)?\s*:[^;}]*var\(--lw-([a-z0-9-]+)\)/);
+      const shadow = /(?:^|[;{])\s*box-shadow\s*:/.test(directBody);
+      if (!bgm) continue;
+      out.push({ sel, bg: bgm[1], border: bdm ? bdm[1] : null, shadow, layer });
+    }
+  }
+  return out;
+}
+const RESTING_SURFACES = paintedSurfaces();
+if (!RESTING_SURFACES.length) {
+  console.log(`  ${C.red}✗${C.reset} surface separation: no resting surface resolved from ${LAYERS.join(", ")} — the selector list is stale`);
+  failed++;
+}
+
+const surfaceFails = [];
+let surfaceTightest = { d: Infinity, a: null, b: null, scope: null };
+for (const scopeName of ["light", ...DARK_SCOPES]) {
+  const rung = (k) => resolveColor(k, scopeName);
+  for (let i = 0; i + 1 < SURFACE_LADDER.length; i++) {
+    const a = SURFACE_LADDER[i], b = SURFACE_LADDER[i + 1];
+    const ca = rung(a), cb = rung(b);
+    if (!ca || !cb) continue;
+    const d = deltaE76(ca, cb);
+    if (d < surfaceTightest.d) surfaceTightest = { d, a, b, scope: scopeName };
+    if (d < SURFACE_DE_FLOOR) {
+      surfaceFails.push(
+        `${a} -> ${b} [${scopeName}] — dE ${d.toFixed(2)}, floor ${SURFACE_DE_FLOOR}` +
+        ` (a rung that does not step: the eye cannot see this surface change)`);
+    }
+  }
+  const page = rung("bg");
+  if (!page) continue;
+  for (const { sel, bg, border } of RESTING_SURFACES) {
+    if (sel in FLOATING_EXEMPT) continue;
+    const fill = rung(bg), edge = border ? rung(border) : null;
+    if (!fill) continue;
+    const fillD = deltaE76(fill, page);
+    const edgeCR = edge ? contrast(edge, page) : 0;
+    if (fillD < SURFACE_DE_FLOOR && edgeCR < SURFACE_BOUNDARY_CR) {
+      surfaceFails.push(
+        `${sel} paints --lw-${bg} [${scopeName}] — fill dE ${fillD.toFixed(2)} (floor ${SURFACE_DE_FLOOR}) AND ` +
+        `boundary ${edgeCR.toFixed(2)}:1 (floor ${SURFACE_BOUNDARY_CR}:1) — ` +
+        `neither its surface nor its edge separates it from the page`);
+    }
+  }
+}
+if (surfaceFails.length) {
+  console.log(`${C.bold}surface separation (a surface the reader cannot distinguish from the page)${C.reset}`);
+  for (const m of surfaceFails) console.log(`  ${C.red}✗${C.reset} ${m}`);
+  console.log();
+  failed += surfaceFails.length;
+}
+
+/* ===========================================================================
    CATEGORICAL SEPARATION — the chart ramp.
 
    Contrast is the wrong measure for a series colour. Two chart colours can each
@@ -1406,6 +1530,13 @@ console.log(`${C.dim}Band scope: ${bandScanned} on-dark descendant rule(s) scann
 console.log(`${C.dim}band in tokens.css (${BAND_SCOPE_EXEMPT.size} exempted by name: ${[...BAND_SCOPE_EXEMPT].join(", ")}).${C.reset}\n`);
 console.log(`${C.dim}Re-derive: ${rederiveRoles} derived role(s) restated for ${rederiveMembers} band member(s); the re-derive list${C.reset}`);
 console.log(`${C.dim}is a superset of both band lists.${C.reset}\n`);
+console.log(
+  `${C.dim}Surface separation: ${SURFACE_LADDER.length - 1} rung step(s) x ${1 + DARK_SCOPES.length} scope(s) at dE >= ${SURFACE_DE_FLOOR}, ` +
+  `${RESTING_SURFACES.length} resting surface(s) checked against the page;${C.reset}`);
+console.log(
+  `${C.dim}tightest rung is ${surfaceTightest.a} -> ${surfaceTightest.b} [${surfaceTightest.scope}] at dE ${surfaceTightest.d.toFixed(2)}.${C.reset}`);
+console.log();
+
 console.log(
   `${C.dim}Dichromatic separation: slots 1-${CHART_CVD_TIER} at dE >= ${CHART_CVD_FLOOR}, 7-12 at >= ${CHART_CVD_FLOOR_TAIL} ` +
   `(protan/deutan/tritan); tightest overall is${C.reset}`);

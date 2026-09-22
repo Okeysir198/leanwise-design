@@ -1042,6 +1042,12 @@
       "definedIn": "tokens.css"
     },
     {
+      "name": "--lw-navy-inset-2-c",
+      "value": "221.1 45.2% 19.0%",
+      "kind": "color",
+      "definedIn": "tokens.css"
+    },
+    {
       "name": "--lw-on-navy-1-c",
       "value": "215   33.3% 92.9%",
       "kind": "color",
@@ -1055,7 +1061,7 @@
     },
     {
       "name": "--lw-on-navy-3-c",
-      "value": "218.5 17.5% 57.5%",
+      "value": "218.5 17.5% 58.8%",
       "kind": "color",
       "definedIn": "tokens.css"
     },
@@ -1319,19 +1325,19 @@
     },
     {
       "name": "--lw-surface-1-c",
-      "value": "38    16.0% 98.4%",
+      "value": "38    16.0% 96.4%",
       "kind": "color",
       "definedIn": "tokens.css"
     },
     {
       "name": "--lw-surface-2-c",
-      "value": "38    13.0% 96.5%",
+      "value": "38    13.0% 92.9%",
       "kind": "color",
       "definedIn": "tokens.css"
     },
     {
       "name": "--lw-surface-3-c",
-      "value": "38    12.0% 94.2%",
+      "value": "38    12.0% 89.5%",
       "kind": "color",
       "definedIn": "tokens.css"
     },
@@ -1373,7 +1379,7 @@
     },
     {
       "name": "--lw-text-3-c",
-      "value": "220    8.9% 43.3%",
+      "value": "220    8.9% 41.5%",
       "kind": "color",
       "definedIn": "tokens.css"
     },
@@ -1409,13 +1415,13 @@
     },
     {
       "name": "--lw-border-1-c",
-      "value": "38  10.0% 91.5%",
+      "value": "38  10.0% 85.8%",
       "kind": "color",
       "definedIn": "tokens.css"
     },
     {
       "name": "--lw-border-2-c",
-      "value": "38   8.0% 83.9%",
+      "value": "38   8.0% 77.5%",
       "kind": "color",
       "definedIn": "tokens.css"
     },

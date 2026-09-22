@@ -73,8 +73,15 @@ body {
    consensus and it is within 2px of every card's own choice. */
 .panes { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .pane svg { max-width: 110px; }
+/* --lw-bg, NOT --lw-bg-subtle: a pane is standing in for a PAGE, so it has to
+   be the colour a page actually is. Painting it one rung up quietly gave every
+   demo a contrast step a real consumer does not get, and that is not a cosmetic
+   difference -- it is how .lw-card shipped at dE 0.00 against the page for four
+   major versions. The card looked fine in every screenshot here, because here
+   it was never on the page ground. A preview that flatters the component is
+   worse than no preview. */
 .pane { border-radius: 10px; padding: 20px; display: grid; gap: 14px; align-content: start;
-        background: var(--lw-bg-subtle); color: var(--lw-fg);
+        background: var(--lw-bg); color: var(--lw-fg);
         box-shadow: inset 0 0 0 1px var(--lw-line); }
 
 /* generic */

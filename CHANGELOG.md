@@ -16,6 +16,77 @@ pinned inside that older range; `CLAUDE.md` §Consumers is the enumerated pin ta
 
 ## [Unreleased]
 
+## [4.3.0] — 2026-09-22
+
+**The card was the same colour as the page, and the gate had no way to ask.**
+
+### Changed
+- **BREAKING (visually): `.lw-card` and the light neutral ladder both move.** Most
+  surfaces in a light UI shift by a few percent of lightness; 142 of 188 visual
+  baselines changed. No API, class or token name changed.
+
+  `.lw-card` read `background: var(--lw-bg)` — the page's own role — so a card
+  measured **contrast 1.000:1, dE 0.00** against the page it sat on, in BOTH
+  themes, while `tokens.css` said in three separate places (`:203`, `:818`,
+  `:820`) that the raised surface is where cards live. It is now
+  `--lw-bg-subtle`, plus a resting `--lw-shadow-xs` so elevation does not rest
+  on the hairline alone. `.lw-kpi`, `.lw-dgrid` and `.lw-source-item` had the
+  same defect and the same fix. `.lw-dialog`, `.lw-toast` and `.lw-prompt` keep
+  `--lw-bg` deliberately: they float and carry a real shadow.
+
+- **The light rungs were re-spaced, because the fix above needed somewhere to
+  land.** Every step was at or below the ~2.3 dE just-noticeable-difference for
+  a flat field, so "raised" was a value the code carried and the eye could not
+  see:
+
+  | step | before | after |
+  |---|---|---|
+  | surface-0 → surface-1 | dE **1.41** | dE **3.20** |
+  | surface-1 → surface-2 | dE 1.65 | dE 3.00 |
+  | surface-2 → surface-3 | dE 2.02 | dE 3.00 |
+  | surface-3 → border-1 | dE 2.36 | dE 3.30 |
+
+- **`--lw-bg-muted` and `--lw-bg-inset` were the same colour on dark** — both
+  pointed at `--lw-navy-inset-c`, so the dark ladder had three rungs where light
+  had four and an inset well was indistinguishable from a muted panel. A new
+  `--lw-navy-inset-2-c` (`#1B2846`) separates them: 3.5 dE below muted, still
+  3.7 dE clear of the hairline. Found by the new gate the moment it was written.
+
+- **Both muted text floors moved, in opposite directions**, because a floor is
+  pinned to the deepest surface it can land on, not to the page. Light
+  `--lw-text-3-c` goes DOWN (43.3% → 41.5%) to hold AA on the deeper inset
+  (4.25 → 4.55; it also improves on white, 5.34 → 5.72). Dark `--lw-on-navy-3-c`
+  goes UP (57.5% → 58.8%) for the same reason on a lighter inset (4.36 → 4.55;
+  on a raised card 4.6 → 5.42).
+
+- **`--lw-line` was NOT raised to 3:1.** It has 88 uses, most of them decorative
+  rules between rows, and the MANIFEST already exempts it as a divider on
+  purpose. It strengthens with the ladder (dE 7.44 → 12.50 in light) and no
+  further: a card that leans on the hairline alone is fixed by the fill step,
+  not by making every table rule heavier.
+
+- **The preview `.pane` is now `--lw-bg`, not `--lw-bg-subtle`.** A pane stands
+  in for a PAGE, and painting it one rung up gave every demo a contrast step no
+  consumer gets. That is not cosmetic: it is precisely why a card at dE 0.00
+  against the page looked correct in every screenshot in this repo for four
+  major versions. A preview that flatters the component is worse than none.
+
+### Added
+- **`lw-contrast-check` measures SURFACE separation** — a category the gate did
+  not have. All 153 manifest pairs are ink-on-ground or border/focus-ring; none
+  is ground-against-GROUND, so a card painted in the page colour passed
+  everything. Two checks: consecutive ladder rungs must differ by
+  `SURFACE_DE_FLOOR` (3.0), and a resting surface must separate from the page by
+  fill (dE 3.0) **or** boundary (`SURFACE_BOUNDARY_CR`, 3:1, per WCAG 1.4.11).
+  Floating components are exempt by name, with their shadow token as the reason.
+
+  ⚠️ It **reads what each selector actually paints** out of the CSS layers. The
+  first version listed the expected token per component, and so stayed green
+  when `.lw-card` was edited back to `var(--lw-bg)` — the one bug it existed to
+  catch. Mutation-testing the gate is what found that; a stale selector list now
+  fails loudly rather than silently checking nothing.
+
+
 ## [4.2.0] — 2026-09-22
 
 **The chart ramp was never colour-blind-safe, and nothing could see it.**
