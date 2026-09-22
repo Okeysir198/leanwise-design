@@ -16,6 +16,63 @@ pinned inside that older range; `CLAUDE.md` §Consumers is the enumerated pin ta
 
 ## [Unreleased]
 
+## [4.2.0] — 2026-09-22
+
+**The chart ramp was never colour-blind-safe, and nothing could see it.**
+
+### Changed
+- **BREAKING (visually): all twelve `--lw-chart-*` slots moved, in all four scopes.**
+  A chart rendered by any consumer changes colour. No API, class or token name changed,
+  so nothing breaks at build time — but screenshots and visual baselines will differ,
+  and a consumer that hard-coded a chart colour instead of reading the token will now
+  disagree with the ramp.
+
+  The palette header claimed the ramp was "spaced by hue AND by lightness, so the series
+  stay distinguishable in greyscale and to a colour-blind reader". Measured, that was
+  false. Every pair cleared the CIE76 floor for normal vision — the gate said so, at 198
+  pairs — while **dark `chart-2` (navy) and `chart-4` (violet) sat at dE 0.8 under
+  deuteranopia**: the same colour to roughly 8% of men. It was not the only one. Light
+  `chart-8` vs `chart-10` measured 2.4 under tritanopia, dark `chart-1` vs `chart-8` 1.8
+  under deuteranopia, and in the DARK scope the ramp failed from slot 4 onward — the
+  two-series case the first three slots exist to serve measured 5.6 under tritanopia.
+
+  The floor for normal vision was not lowered to fit: it stays at 19 and the new ramp
+  clears it with more room than the old one (tightest pair 20.1, was 20.0). The brand
+  trio stays the brand trio — cyan, navy and amber keep their hue, capped at dE 9 of
+  visible movement each, because a one- or two-series chart should still look like this
+  product.
+
+  | | before | after |
+  |---|---|---|
+  | normal vision, all pairs | 20.2 light · 20.0 dark | **27.1** light · **20.1** dark |
+  | dichromat, slots 1-6 | 10.9 light · **0.8** dark | **16.7** light · **16.2** dark |
+  | dichromat, all 12 | 2.4 light · 0.8 dark | **12.0** both |
+
+- **The ramp is now explicitly TIERED, and the tier is the honest part.** Slots 1-6
+  separate under protanopia, deuteranopia and tritanopia; slots 7-12 separate for normal
+  vision and are **label-assisted** — README rule 6 is load-bearing for them, not advice.
+  Twelve saturated hues cannot all separate for a dichromat: red-green dichromacy
+  collapses three cone dimensions to two, so twelve categories are over-subscribed on
+  colour alone however they are chosen. Six is what the space affords. A palette that
+  says so is more useful than a twelfth slot that quietly fails for a twelfth of readers.
+
+### Added
+- **`simulateCvd()`, `deltaE76Cvd()` and `CVD_KINDS` in `tools/_color.mjs`** — Viénot,
+  Brettel & Mollon (1999) dichromatic simulation, run in LINEAR light (doing the
+  projection on gamma-encoded channels is the classic error and lands several dE off,
+  enough to flip a verdict here).
+- **`lw-contrast-check` measures dichromatic separation** alongside the existing CIE76
+  pass, with two floors matching the tiers (15 for slots 1-6, 11 beyond) and the failing
+  dichromacy named per pair. Both floors are measured against the post-pass ramp the same
+  way `CHART_DE_FLOOR` was measured against v1.1.8 — they sit just under what the palette
+  achieves, so it passes as it stands and any new colour must be at least as separable.
+- **`test/cvd.test.mjs`** — grey is a fixed point of every dichromacy, blue survives
+  red-green and is what tritanopia destroys, red/green collapse together, and the shipped
+  `tokens.css` keeps its tiered promise **in every scope** (parsed from the file, not a
+  fixture, so the test guards what actually ships). Validated by planting the old navy
+  back: 1 test failure and 3 gate failures.
+
+
 ## [4.1.0] — 2026-09-19
 
 **A supported path for the consumer that cannot import AND cannot afford the whole core.**

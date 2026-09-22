@@ -57,7 +57,7 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { splitRules, stripComments, declarationsIn, splitSelectorList } from "./_css.mjs";
-import { hslToRgb, hexToRgb, luminance, contrast, deltaE76 } from "./_color.mjs";
+import { hslToRgb, hexToRgb, luminance, contrast, deltaE76, deltaE76Cvd } from "./_color.mjs";
 
 /* PATH NOTE — this folder sits under templates/ because everything outside it is
    compiled into the design system's browser bundle, and a Node script (node:fs,
@@ -1294,15 +1294,43 @@ const CHART_KEYS = Array.from({ length: 12 }, (_, i) => `chart-${i + 1}`);
    The floor sits just under that, so the palette passes as it stands and any new
    colour has to be at least as separable as the closest existing pair.
 
-   That chart-1/chart-7 pair is genuinely tight and is the first thing to fix in a
-   future palette pass — but widening it is a visible change to every chart in
-   every consumer, so it does not belong in a release whose whole claim is that no
-   pixel moved. Raising this number is a palette decision, not a tuning knob. */
+   That chart-1/chart-7 pair WAS the tightest and was named here as the first
+   thing a palette pass should fix. The pass happened: the ramp was re-stepped to
+   clear the dichromatic floors below, and chart-1/chart-7 widened along with it.
+   The floor stays at 19 because it still describes the bar correctly ("no worse
+   than v1.1.8"); the ramp now clears it with room (tightest 20.1). Raising this
+   number is still a palette decision, not a tuning knob. */
 const CHART_DE_FLOOR = 19;
 
+/* The same question, asked for a reader with dichromacy — and it needs a SECOND
+   floor, because twelve saturated hues cannot all separate for a dichromat. That
+   is not a tuning failure, it is the colour space: red-green dichromacy collapses
+   three cone dimensions to two, so twelve categories are over-subscribed on colour
+   alone no matter how they are chosen. Pretending otherwise would mean either a
+   floor low enough to be meaningless or a permanently red build.
+
+   So the ramp is TIERED, and the tier is the honest part of this gate:
+
+     slots 1-6   must separate under protanopia, deuteranopia AND tritanopia.
+                 Six is what the space actually affords, and it covers the charts
+                 this system is mostly used for.
+     slots 7-12  must separate to normal vision (CHART_DE_FLOOR above) and are
+                 explicitly LABEL-ASSISTED — README rule 6 is not advice for them,
+                 it is load-bearing. A twelve-series chart distinguished by colour
+                 alone is unreadable to a dichromat whatever we put in these slots.
+
+   Both floors are measured against the post-pass ramp, the same way CHART_DE_FLOOR
+   was measured against v1.1.8: they sit just under what the palette achieves, so
+   it passes as it stands and any new colour must be at least as separable. */
+const CHART_CVD_TIER = 6;
+const CHART_CVD_FLOOR = 15;      // slots 1-6, worst of the three dichromacies
+const CHART_CVD_FLOOR_TAIL = 11; // slots 7-12 and cross-tier pairs
+
 const chartFails = [];
+const cvdFails = [];
 let chartPairs = 0;
 let tightest = { d: Infinity, a: null, b: null, scope: null };
+let cvdTightest = { d: Infinity, kind: null, a: null, b: null, scope: null };
 for (const scopeName of ["light", ...DARK_SCOPES]) {
   const present = CHART_KEYS.map((k) => [k, resolveColor(k, scopeName)]).filter(([, v]) => v);
   // A ramp member that exists in one scope and not another is the dark-scope
@@ -1316,6 +1344,19 @@ for (const scopeName of ["light", ...DARK_SCOPES]) {
       if (d < CHART_DE_FLOOR) {
         chartFails.push(`${present[i][0]} vs ${present[j][0]} [${scopeName}] — dE ${d.toFixed(1)}, floor ${CHART_DE_FLOOR}`);
       }
+      // Slot number, not array index: a scope missing a member must not silently
+      // slide slot 7 into the tier that promises dichromatic separation.
+      const slotI = Number(present[i][0].slice(6));
+      const slotJ = Number(present[j][0].slice(6));
+      const inTier = slotI <= CHART_CVD_TIER && slotJ <= CHART_CVD_TIER;
+      const cvdFloor = inTier ? CHART_CVD_FLOOR : CHART_CVD_FLOOR_TAIL;
+      const cvd = deltaE76Cvd(present[i][1], present[j][1]);
+      if (cvd.d < cvdTightest.d) cvdTightest = { ...cvd, a: present[i][0], b: present[j][0], scope: scopeName };
+      if (cvd.d < cvdFloor) {
+        cvdFails.push(
+          `${present[i][0]} vs ${present[j][0]} [${scopeName}] — dE ${cvd.d.toFixed(1)} under ${cvd.kind}opia` +
+          `, floor ${cvdFloor}${inTier ? " (slots 1-6 must separate for a dichromat)" : ""}`);
+      }
     }
   }
 }
@@ -1324,6 +1365,13 @@ if (chartFails.length) {
   for (const m of chartFails) console.log(`  ${C.red}✗${C.reset} ${m}`);
   console.log();
   failed += chartFails.length;
+}
+
+if (cvdFails.length) {
+  console.log(`${C.bold}dichromatic separation (two series a COLOUR-BLIND reader cannot tell apart)${C.reset}`);
+  for (const m of cvdFails) console.log(`  ${C.red}✗${C.reset} ${m}`);
+  console.log();
+  failed += cvdFails.length;
 }
 
 if (bandOffenders.size) {
@@ -1358,5 +1406,12 @@ console.log(`${C.dim}Band scope: ${bandScanned} on-dark descendant rule(s) scann
 console.log(`${C.dim}band in tokens.css (${BAND_SCOPE_EXEMPT.size} exempted by name: ${[...BAND_SCOPE_EXEMPT].join(", ")}).${C.reset}\n`);
 console.log(`${C.dim}Re-derive: ${rederiveRoles} derived role(s) restated for ${rederiveMembers} band member(s); the re-derive list${C.reset}`);
 console.log(`${C.dim}is a superset of both band lists.${C.reset}\n`);
+console.log(
+  `${C.dim}Dichromatic separation: slots 1-${CHART_CVD_TIER} at dE >= ${CHART_CVD_FLOOR}, 7-12 at >= ${CHART_CVD_FLOOR_TAIL} ` +
+  `(protan/deutan/tritan); tightest overall is${C.reset}`);
+console.log(
+  `${C.dim}${cvdTightest.a} vs ${cvdTightest.b} [${cvdTightest.scope}] at dE ${cvdTightest.d.toFixed(1)} under ` +
+  `${cvdTightest.kind}opia. Slots 7-12 are label-assisted by design — see README rule 6.${C.reset}`);
+console.log();
 console.log(`${C.dim}Categorical separation: ${chartPairs} chart pairs at dE >= ${CHART_DE_FLOOR}; tightest is${C.reset}`);
 console.log(`${C.dim}${tightest.a} vs ${tightest.b} [${tightest.scope}] at dE ${tightest.d.toFixed(1)}.${C.reset}\n`);

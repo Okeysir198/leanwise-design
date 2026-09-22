@@ -72,3 +72,48 @@ export const deltaE76 = (a, b) => {
   const [la, lb] = [toLab(a), toLab(b)];
   return Math.hypot(la[0] - lb[0], la[1] - lb[1], la[2] - lb[2]);
 };
+
+/* ---- Dichromatic simulation --------------------------------------------------
+ * CIE76 over the ramp answers "can a reader tell these two series apart" for a
+ * reader with full colour vision. It does not answer it for the ~8% of men with
+ * red-green dichromacy, and the difference is not a rounding error: measured on
+ * the v1.x ramp, dark chart-2 (navy) and chart-4 (violet) sit at dE 39.5 to
+ * normal vision and dE 0.8 under deuteranopia — the same colour. A gate that
+ * cannot see that reports a palette as separable when a twelfth of the audience
+ * is looking at a chart with two identical lines in it.
+ *
+ * Viénot, Brettel & Mollon (1999): convert to LMS, collapse the missing cone's
+ * axis onto the plane the remaining two span, convert back. The projection runs
+ * in LINEAR light — doing it on gamma-encoded channels is the classic error and
+ * it lands the result several dE off, which is enough to flip a pass/fail here.
+ */
+const RGB_TO_LMS = [[0.31399, 0.63951, 0.04649], [0.15537, 0.75789, 0.08670], [0.01775, 0.10944, 0.87259]];
+const LMS_TO_RGB = [[5.47221, -4.64196, 0.16963], [-1.12524, 2.29317, -0.16789], [0.02980, -0.19318, 1.16364]];
+const DICHROMAT = {
+  protan: [[0, 1.05118294, -0.05116099], [0, 1, 0], [0, 0, 1]],
+  deutan: [[1, 0, 0], [0.9513092, 0, 0.04866992], [0, 0, 1]],
+  tritan: [[1, 0, 0], [0, 1, 0], [-0.86744736, 1.86727089, 0]],
+};
+export const CVD_KINDS = Object.keys(DICHROMAT);
+
+/** Simulate dichromacy. `kind` is protan | deutan | tritan; { r, g, b } in 0..1. */
+export function simulateCvd({ r, g, b }, kind) {
+  const M = DICHROMAT[kind];
+  if (!M) throw new Error(`unknown CVD kind: ${kind}`);
+  const toLin = (v) => (v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+  const toSrgb = (v) => (v <= 0.0031308 ? v * 12.92 : 1.055 * v ** (1 / 2.4) - 0.055);
+  const clamp = (v) => Math.min(1, Math.max(0, v));
+  const apply = (m, v) => m.map((row) => row[0] * v[0] + row[1] * v[1] + row[2] * v[2]);
+  const out = apply(LMS_TO_RGB, apply(M, apply(RGB_TO_LMS, [toLin(r), toLin(g), toLin(b)])));
+  return { r: clamp(toSrgb(clamp(out[0]))), g: clamp(toSrgb(clamp(out[1]))), b: clamp(toSrgb(clamp(out[2]))) };
+}
+
+/** Worst-case CIE76 between two colours across all three dichromacies. */
+export function deltaE76Cvd(a, b) {
+  let worst = { d: Infinity, kind: null };
+  for (const kind of CVD_KINDS) {
+    const d = deltaE76(simulateCvd(a, kind), simulateCvd(b, kind));
+    if (d < worst.d) worst = { d, kind };
+  }
+  return worst;
+}

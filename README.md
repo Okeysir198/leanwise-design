@@ -71,7 +71,7 @@ what is still open. `CONTRIBUTING.md` points back here — the checklist lives i
 ## Install
 
 ```jsonc
-"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v4.1.0" }
+"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v4.2.0" }
 ```
 
 ```css
@@ -825,9 +825,11 @@ get wrong:
 
 Eight categorical series, `--lw-chart-1..8`, and they are not a rainbow. The first three
 are the brand's own family — cyan, navy, amber — because a one- or two-series chart is the
-common case and it should look like this product. The rest are spaced by hue **and** by
-lightness, so they stay apart in greyscale and to a colour-blind reader. Every series lifts a
-tier on the dark ground, the same reason the focus ring switches to brand-400 there.
+common case and it should look like this product. The ramp is **tiered**: slots 1-6 stay apart
+for a dichromat (protanopia, deuteranopia, tritanopia) as well as in greyscale; slots 7-12 stay
+apart for normal vision and are **label-assisted**, because twelve saturated hues cannot all
+separate under red-green dichromacy — rule 6 is load-bearing for those, not advice. Every series
+lifts a tier on the dark ground, the same reason the focus ring switches to brand-400 there.
 
 `--lw-chart-N` is a **fill**. Label a slice in `--lw-fg`, not in its own series colour — and
 rule 6 still holds, so a chart carries direct labels or a pattern, never colour alone.
