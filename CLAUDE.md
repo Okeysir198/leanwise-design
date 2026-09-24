@@ -39,10 +39,10 @@ The repo is also the working copy of a Claude Design project
 src/palette.mjs        THE source: ANCHORS, the cyan ramp, themes.light/.dark role maps
 scripts/gen.mjs        every generated file; --check fails on a stale one
 scripts/check.mjs      the checks: lint | contrast | presence | a11y | visual | pack
-scripts/lib/           oklch (colour space), theme (theme.css + type/radius/font scales),
-                       tokens-json, tw (compile through real Tailwind), contrast, lint,
-                       color (WCAG, dE76, CVD simulation), png (shot codec + comparator),
-                       cards (preview enumeration), parse, report
+scripts/{assets,favicon,affordance,forced-colors,templates}.mjs   standalone generators/checks
+scripts/lib/           oklch, theme (theme.css), tokens-json, registry (r/), bundle (preview
+                       bundle + preview.css + manifest), card-build, tw, contrast, lint, color,
+                       png, cards, css, generated, parse, report
 theme.css tokens.json  GENERATED
 registry/ registry.json r/   shadcn registry source and its built items
 marketing.css          plain-CSS marketing layer over theme variables
@@ -50,15 +50,20 @@ fonts.css fonts/ assets/   Geist, logo and artwork
 brand.js hooks.js      brandVars(hex, scheme); useTheme, useReducedMotion, THEME_KEY
 bin/lw-token-lint.mjs  the consumer lint
 skills/leanwise-ui/    the agent skill consumers copy
-preview/ templates/ components/   Claude Design cards; @dsCard pages are what a11y/visual render
+registry/blocks/       OUR blocks (app-shell, state-view, file-upload, section-nav): the one
+                       copy; the preview compiles them directly
+preview/src/ui/        stock new-york-v4 shadcn, UNMODIFIED; shadcn-blocks/ = stock blocks
+                       (sidebar-07, login-04), unmodified; index.ts = the bundle namespace
+preview/cards/*.card.jsx   card sources -> generated .card.js/.card.html (@dsCard marker)
+templates/*/*.dc.html  Claude Design templates over the namespace (x-import)
 ```
 
 ## Commands
 
 ```bash
-npm run gen         # palette -> theme.css, tokens.json
-npm run check       # gen --check, node tests, tsc, lint, contrast, presence
-npm run check:ci    # + pack, a11y, visual --self-test  (needs `npx playwright install chromium`)
+npm run gen         # theme.css, tokens.json, r/, preview bundle + cards + manifest, logo assets
+npm run check       # gen/assets --check, tests, tsc, lint, contrast, presence, affordance, templates
+npm run check:ci    # + pack, a11y, forced-colors, visual --self-test (needs `npx playwright install chromium`)
 npm run lint -- <dir>   # token lint (default: registry/)
 node scripts/check.mjs visual --record | --compare [--dir d] [--report-only]
 ```
@@ -73,6 +78,25 @@ node scripts/check.mjs visual --record | --compare [--dir d] [--report-only]
 | `pack` | `npm pack`, install the tarball in a scratch app, resolve every export, compile theme.css from it, parse `r/`, run the bin both ways |
 
 `test/checks.test.mjs` holds the contrast and lint sabotage proofs; keep one per rule.
+
+## Adding a stock component or block
+
+1. Search shadcn first (MCP in `.mcp.json`). Copy the item's files from
+   `https://ui.shadcn.com/r/styles/new-york-v4/<name>.json` UNMODIFIED into `preview/src/ui/`
+   (blocks: `preview/src/shadcn-blocks/<block>/`); add npm deps as devDependencies.
+2. Export it from `preview/src/index.ts`, `npm run gen`, `npm run check && npm run check:a11y`.
+3. An a11y failure is fixed in the card markup or `src/palette.mjs`, never in a stock file.
+
+## Gotchas
+
+- Stock blocks hard-code sample content (`Acme`, `/placeholder.svg`, `/avatars/*`); leave it,
+  consumers edit it after `shadcn add`.
+- Stock data-table and blocks use TanStack Table **v9** (`useTable`, `FlexRender`); templates,
+  which cannot call hooks, use `constructTable`.
+- Templates need a literal `<main>` and must be served over http (`python3 -m http.server`).
+- UI rules live in README §Brand: action order (right-aligned, primary last), sidebar
+  current-page bar via `data-active`, `@leanwise/section-nav` in content, pointer cursor.
+- If git has no identity configured, commit with `git -c user.name=… -c user.email=…`.
 
 ## Releasing
 
@@ -96,7 +120,8 @@ Never move a published tag — cut the next version.
 2. **The plan**: `git diff --name-status v<that>..HEAD`. `A`/`M` lines are writes, `D` lines
    are deletes — a delete is never implied by a write glob.
 3. `list_files` for the structural diff (it sees adds/deletes only, never content drift).
-4. `finalize_plan` — globs for writes, exact paths for deletes; the user approves.
+4. `finalize_plan` — globs for writes, exact paths for deletes (pass `deletes: []` when none;
+   it is required); the user approves.
 5. `write_files` in batches of ≤256 with `localPath`, so contents never enter context.
 6. `delete_files`.
 
