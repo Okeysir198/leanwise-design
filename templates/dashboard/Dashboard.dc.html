@@ -9,91 +9,48 @@
 </head>
 <body>
 <x-dc>
-<!-- @template name="App dashboard" description="Sidebar app shell with KPI tiles, a chart on the chart palette, and a recent-activity list — the home screen of a LeanWise product." -->
+<!-- @template name="App dashboard" description="shadcn dashboard-01 on the LeanWise theme: inset sidebar, site header, KPI section cards, the interactive area chart and the sortable data table." -->
 <helmet><script src="../_shared/ds-base.js"></script></helmet>
 <a class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-background focus:px-3 focus:py-2" href="#main">Skip to content</a>
-<div class="bg-background text-foreground flex min-h-svh font-sans">
-<aside class="bg-sidebar text-sidebar-foreground border-sidebar-border hidden w-60 shrink-0 flex-col border-r md:flex">
-<div class="text-primary flex h-14 items-center px-4 font-semibold">LeanWise AI</div>
-<nav aria-label="Main" class="flex flex-col gap-1 p-2">
-<sc-for list="{{ nav }}" as="item" hint-placeholder-count="5">
-<a href="#" aria-current="{{ item.current }}" class="{{ item.cls }}">{{ item.label }}</a>
-</sc-for>
-</nav>
-</aside>
-<div class="flex min-w-0 flex-1 flex-col">
-<header class="flex h-14 items-center gap-3 border-b px-4 md:px-6">
-<h1 class="font-semibold">Overview</h1>
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.Input" hint-size="240px,36px" className="ml-auto hidden w-60 md:block" placeholder="Search" aria-label="Search"></x-import>
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="64px,32px" variant="ghost" size="sm" onClick="{{ toggleTheme }}" data-theme-toggle="">{{ themeLabel }}</x-import>
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="120px,36px">New question</x-import>
-</header>
-<main id="main" class="flex flex-col gap-6 p-4 md:p-6">
-<div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-<sc-for list="{{ kpis }}" as="k" hint-placeholder-count="4">
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.KpiTile" hint-size="100%,120px" label="{{ k.label }}" value="{{ k.value }}" delta="{{ k.delta }}" trend="{{ k.trend }}" hint="{{ k.hint }}"></x-import>
-</sc-for>
+<div class="font-sans">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.SidebarProvider" hint-size="100%,100%" style="{{ shellVars }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.AppSidebar" hint-size="288px,100%" variant="inset"></x-import>
+<main id="main" data-slot="sidebar-inset" class="bg-background relative flex w-full flex-1 flex-col md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.SiteHeader" hint-size="100%,48px"></x-import>
+<div class="flex flex-1 flex-col">
+<div class="@container/main flex flex-1 flex-col gap-2">
+<div class="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.SectionCards" hint-size="100%,190px"></x-import>
+<div class="px-4 lg:px-6">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.ChartAreaInteractive" hint-size="100%,380px"></x-import>
 </div>
-<div class="grid gap-4 xl:grid-cols-3">
-<section class="bg-card text-card-foreground flex flex-col gap-4 rounded-xl border p-6 shadow-sm xl:col-span-2" aria-labelledby="chart-h">
-<div class="flex items-baseline justify-between">
-<h2 id="chart-h" class="font-semibold">Answers per day</h2>
-<span class="text-muted-foreground text-sm">Last 14 days</span>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.DataTable" hint-size="100%,560px" data="{{ rows }}"></x-import>
 </div>
-<div role="img" aria-label="{{ chartLabel }}" class="flex h-48 items-end gap-2 border-b">
-<sc-for list="{{ bars }}" as="b" hint-placeholder-count="14">
-<div class="bg-chart-1 flex-1 rounded-t-sm" style="{{ b.style }}"></div>
-</sc-for>
 </div>
-</section>
-<section class="bg-card text-card-foreground flex flex-col gap-4 rounded-xl border p-6 shadow-sm" aria-labelledby="act-h">
-<h2 id="act-h" class="font-semibold">Recent activity</h2>
-<ul class="flex flex-col divide-y text-sm">
-<sc-for list="{{ activity }}" as="a" hint-placeholder-count="5">
-<li class="flex items-center justify-between gap-3 py-2.5"><span class="min-w-0 truncate">{{ a.text }}</span><span class="text-muted-foreground shrink-0 text-xs">{{ a.when }}</span></li>
-</sc-for>
-</ul>
-</section>
 </div>
 </main>
-</div>
+</x-import>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:820}}">
-const NAV_BASE = "flex h-9 items-center rounded-md px-2 text-sm";
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900}}">
+const ROWS = [
+  ["Cover page", "Cover page", "In Process", "18", "5", "Eddie Lake"],
+  ["Table of contents", "Table of contents", "Done", "29", "24", "Eddie Lake"],
+  ["Executive summary", "Narrative", "Done", "10", "13", "Eddie Lake"],
+  ["Technical approach", "Narrative", "Done", "27", "23", "Jamik Tashpulatov"],
+  ["Design", "Narrative", "In Process", "2", "16", "Jamik Tashpulatov"],
+  ["Capabilities", "Narrative", "In Process", "20", "8", "Jamik Tashpulatov"],
+  ["Integration with existing systems", "Narrative", "In Process", "19", "21", "Jamik Tashpulatov"],
+  ["Innovation and advantages", "Narrative", "Done", "25", "26", "Assign reviewer"],
+  ["Overview of EMR's innovative solutions", "Technical content", "Done", "7", "23", "Assign reviewer"],
+  ["Advanced algorithms and machine learning", "Narrative", "Done", "30", "28", "Assign reviewer"],
+];
 
 class Component extends DCLogic {
-  state = { theme: "light" };
-
-  componentDidUpdate() { document.documentElement.classList.toggle("dark", this.state.theme === "dark"); }
-
   renderVals() {
-    const s = this.state;
-    const series = [38, 42, 40, 51, 47, 55, 60, 58, 63, 61, 70, 68, 74, 79];
-    const max = Math.max(...series);
     return {
-      themeLabel: s.theme === "dark" ? "Light" : "Dark",
-      toggleTheme: () => this.setState({ theme: s.theme === "dark" ? "light" : "dark" }),
-      nav: ["Overview", "Ask", "Sources", "Evaluations", "Settings"].map((label, i) => ({
-        label,
-        current: i === 0 ? "page" : undefined,
-        cls: NAV_BASE + (i === 0 ? " bg-sidebar-accent text-sidebar-accent-foreground font-medium" : " hover:bg-sidebar-accent"),
-      })),
-      kpis: [
-        { label: "Questions answered", value: "12,480", delta: "+8.2%", trend: "up", hint: "vs last week" },
-        { label: "Hit rate", value: "91.4%", delta: "+1.1 pt", trend: "up" },
-        { label: "Median latency", value: "1.8 s", delta: "+0.3 s", trend: "down" },
-        { label: "Sources", value: "12", hint: "3 syncing" },
-      ],
-      bars: series.map((v) => ({ style: { height: (v / max) * 100 + "%" } })),
-      chartLabel: "Answers per day, rising from 38 to 79 over 14 days",
-      activity: [
-        { text: "Contracts / 2024 re-indexed", when: "4 min" },
-        { text: "Jamie asked about notice periods", when: "12 min" },
-        { text: "Support transcripts marked stale", when: "1 h" },
-        { text: "R. Okafor invited 3 members", when: "3 h" },
-        { text: "Legacy wiki ingest failed", when: "Yesterday" },
-      ],
+      shellVars: { "--sidebar-width": "calc(var(--spacing) * 72)", "--header-height": "calc(var(--spacing) * 12)" },
+      rows: ROWS.map(([header, type, status, target, limit, reviewer], i) => ({ id: i + 1, header, type, status, target, limit, reviewer })),
     };
   }
 }

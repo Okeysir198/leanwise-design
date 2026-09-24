@@ -40,6 +40,9 @@ function resolvePlugin(ROOT) {
       b.onLoad({ filter: /.*/, namespace: "shim" }, (a) => ({ contents: SHIMS[a.path], loader: "js" }));
       b.onResolve({ filter: /^(cn|@\/lib\/utils)$/ }, () => ({ path: ts(path.join(src, "lib/utils")) }));
       b.onResolve({ filter: /^next-themes$/ }, () => ({ path: ts(path.join(src, "shims/next-themes")) }));
+      b.onResolve({ filter: /^@\/(registry\/new-york-v4\/)?(hooks|blocks)\// }, (a) => ({
+        path: ts(path.join(src, a.path.replace(/^@\/(registry\/new-york-v4\/)?/, ""))),
+      }));
       b.onResolve({ filter: /^@\/(registry\/new-york-v4\/)?ui\// }, (a) => ({
         path: ts(path.join(src, "ui", a.path.replace(/^.*\/ui\//, ""))),
       }));
