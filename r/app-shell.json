@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "app-shell",
+  "type": "registry:block",
+  "title": "App shell",
+  "description": "Collapsible sidebar nav and a sticky top bar on shadcn Sidebar.",
+  "registryDependencies": [
+    "sidebar",
+    "separator"
+  ],
+  "files": [
+    {
+      "path": "registry/blocks/app-shell.tsx",
+      "type": "registry:component",
+      "target": "components/app-shell.tsx",
+      "content": "import * as React from \"react\"\n\nimport { Separator } from \"@/components/ui/separator\"\nimport {\n  Sidebar,\n  SidebarContent,\n  SidebarFooter,\n  SidebarGroup,\n  SidebarGroupContent,\n  SidebarHeader,\n  SidebarInset,\n  SidebarMenu,\n  SidebarMenuButton,\n  SidebarMenuItem,\n  SidebarProvider,\n  SidebarTrigger,\n} from \"@/components/ui/sidebar\"\n\ntype AppShellNavItem = {\n  title: string\n  href: string\n  icon?: React.ComponentType<{ className?: string }>\n  active?: boolean\n}\n\ntype AppShellProps = React.ComponentProps<typeof SidebarProvider> & {\n  brand: React.ReactNode\n  nav: AppShellNavItem[]\n  /** Right side of the top bar: search, theme toggle, account menu. */\n  actions?: React.ReactNode\n  /** Page title or breadcrumb, left of the top bar. */\n  heading?: React.ReactNode\n  footer?: React.ReactNode\n}\n\nfunction AppShell({ brand, nav, actions, heading, footer, children, className, ...props }: AppShellProps) {\n  return (\n    <SidebarProvider data-slot=\"app-shell\" className={className} {...props}>\n      <Sidebar collapsible=\"icon\">\n        <SidebarHeader>{brand}</SidebarHeader>\n        <SidebarContent>\n          <SidebarGroup>\n            <SidebarGroupContent>\n              <SidebarMenu>\n                {nav.map(({ title, href, icon: Icon, active }) => (\n                  <SidebarMenuItem key={href}>\n                    <SidebarMenuButton asChild isActive={active} tooltip={title}>\n                      <a href={href} aria-current={active ? \"page\" : undefined}>\n                        {Icon && <Icon />}\n                        <span>{title}</span>\n                      </a>\n                    </SidebarMenuButton>\n                  </SidebarMenuItem>\n                ))}\n              </SidebarMenu>\n            </SidebarGroupContent>\n          </SidebarGroup>\n        </SidebarContent>\n        {footer != null && <SidebarFooter>{footer}</SidebarFooter>}\n      </Sidebar>\n      <SidebarInset>\n        <header\n          data-slot=\"app-shell-header\"\n          className=\"bg-background/80 sticky top-0 z-10 flex h-14 shrink-0 items-center gap-2 border-b px-4 backdrop-blur\"\n        >\n          <SidebarTrigger className=\"-ml-1\" />\n          <Separator orientation=\"vertical\" className=\"mr-2 h-4 self-center\" />\n          <div className=\"min-w-0 flex-1 truncate font-medium\">{heading}</div>\n          {actions}\n        </header>\n        <main data-slot=\"app-shell-main\" className=\"flex-1 p-4 md:p-6\">\n          {children}\n        </main>\n      </SidebarInset>\n    </SidebarProvider>\n  )\n}\n\nexport { AppShell, type AppShellNavItem, type AppShellProps }\n"
+    }
+  ]
+}

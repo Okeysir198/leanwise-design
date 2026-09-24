@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "leanwise-font",
+  "type": "registry:font",
+  "title": "Geist",
+  "description": "Geist as --font-sans.",
+  "font": {
+    "family": "'Geist Variable', sans-serif",
+    "provider": "google",
+    "import": "Geist",
+    "variable": "--font-sans",
+    "subsets": [
+      "latin",
+      "latin-ext",
+      "vietnamese"
+    ],
+    "dependency": "@fontsource-variable/geist"
+  }
+}

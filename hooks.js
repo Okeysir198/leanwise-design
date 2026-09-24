@@ -1,219 +1,66 @@
 "use client";
 /**
- * Runtime hooks — @leanwise/design/hooks
- *
- * Every hook here exists because the same 20 lines were being rewritten per app
- * with a different bug each time. They are all SSR-safe (no window at module
- * scope, no state read during render) and all honour prefers-reduced-motion by
- * completing instantly rather than by doing nothing — a reader who prefers less
- * motion still needs to see the final state.
+ * Runtime hooks — @leanwise/design/hooks. SSR-safe: nothing reads window at
+ * module scope or during render.
  */
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 const canDOM = () => typeof window !== "undefined";
-const prefersReduced = () => canDOM() && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-/* ---- theme ---------------------------------------------------------------- */
-
-/* Exported: ThemeToggle reads and writes through these, so "the hook and the
-   component must never disagree" is enforced rather than asserted. */
-export const THEME_KEY = "lw-theme";
-const read = () => { try { return localStorage.getItem(THEME_KEY) || "system"; } catch (e) { return "system"; } };
-
-/* The choice is written TWICE, to two stores, for two different readers.
- *
- * localStorage is for this document — it is what `read()` picks back up on the
- * next mount. But a server cannot see localStorage, so an SSR consumer has no
- * way to emit `<html data-theme>` in the first byte, and the user gets a frame
- * of the wrong theme on every reload. The cookie is what makes the server-side
- * resolve possible; leanwise-ai's SSR reads exactly this key.
- *
- * v0.6.5 added the cookie for that reason. The v1.1.0 wholesale replacement
- * rewrote this hook with localStorage only and dropped it — nothing failed, no
- * gate could see it, and the flash came back. Restored in v1.1.7. If you are
- * tempted to simplify this to one store again: the two readers are a server and
- * a browser, and neither can read the other's.
- *
- * SameSite=Lax so it survives a top-level navigation back to the app (which is
- * the case that matters — the reload), and not None, which would need Secure
- * and ship the preference to every third party. */
-export const persist = (mode) => {
-  try { localStorage.setItem(THEME_KEY, mode); } catch (e) { /* private mode — the DOM attribute still applied */ }
-  try { document.cookie = THEME_KEY + "=" + mode + "; max-age=31536000; path=/; samesite=lax"; } catch (e) {}
-};
 const systemDark = () => canDOM() && window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-/* Exported so ThemeToggle writes the theme through the SAME function the hook
-   reads it back with. The comment on THEME_KEY used to say "the hook and the
-   component must never disagree" — documenting a coupling instead of removing
-   it. The component had its own copy, without the system-preference listener. */
-/* The name of the event `paint()` fires. Exported for the same reason THEME_KEY
-   is: a listener that hard-codes the string is a second copy of the contract. */
-export const THEME_EVENT = "lw:theme";
+/** The localStorage key and the cookie name. */
+export const THEME_KEY = "lw-theme";
 
-export function paint(mode) {
+const read = () => {
+  try { return localStorage.getItem(THEME_KEY) || "system"; } catch { return "system"; }
+};
+
+/* localStorage is for this document; the cookie is what a server reads to emit
+   the right class on <html> in the first byte. */
+function persist(mode) {
+  try { localStorage.setItem(THEME_KEY, mode); } catch { /* storage blocked */ }
+  try { document.cookie = `${THEME_KEY}=${mode}; max-age=31536000; path=/; samesite=lax`; } catch { /* no document */ }
+}
+
+function apply(mode) {
   const dark = mode === "dark" || (mode === "system" && systemDark());
-  const el = document.documentElement;
-  el.classList.toggle("dark", dark);
-  el.setAttribute("data-theme", dark ? "dark" : "light");
-  /* Announce the CHOICE, not the resolved scheme — a picker shows which of
-     light/dark/system the reader selected, and "system" is not recoverable from
-     the resolved value.
-
-     This exists because the theme has exactly one source of truth (the document)
-     and any number of views onto it. v1.3.4 gave `.lw-topbar` a collapse
-     contract, so a bar and its narrow-width panel now each render a
-     `ThemeToggle`; without this event the one that is off-screen keeps whatever
-     mode it mounted with and comes back showing the wrong segment highlighted
-     after a resize past the breakpoint. Nothing throws, the page is the right
-     colour, and the control simply lies about which mode produced it — which no
-     gate can see. The same applies to any consumer that renders a picker twice,
-     or that calls `paint()` from its own code. */
-  try {
-    window.dispatchEvent(new CustomEvent(THEME_EVENT, { detail: mode }));
-  } catch (e) { /* no CustomEvent (very old engines) — the paint above still applied */ }
-  return dark;
+  document.documentElement.classList.toggle("dark", dark);
+  return dark ? "dark" : "light";
 }
 
 /**
- * Three states, not two: light / dark / system. Returns the user's CHOICE and
- * the RESOLVED scheme separately, because a component that needs to pick a tier
- * (brandVars) wants the resolved one while the picker UI wants the choice.
+ * light / dark / system. `mode` is the choice, `resolved` what is painted.
  *
  *   const { mode, resolved, setMode } = useTheme();
  */
 export function useTheme() {
-  const [mode, setMode] = useState("system");
+  const [mode, setModeState] = useState("system");
   const [resolved, setResolved] = useState("light");
 
-  /* Mount, not render: the server has no localStorage and guessing here is what
-     produces the one-frame flash of the wrong theme. */
-  useEffect(() => { const m = read(); setMode(m); setResolved(paint(m) ? "dark" : "light"); }, []);
+  useEffect(() => {
+    const m = read();
+    setModeState(m);
+    setResolved(apply(m));
+  }, []);
 
-  /* While the choice is "system", the OS is still in charge. */
   useEffect(() => {
     if (mode !== "system" || !canDOM()) return;
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
-    const on = () => setResolved(paint("system") ? "dark" : "light");
+    const on = () => setResolved(apply("system"));
     mq.addEventListener("change", on);
     return () => mq.removeEventListener("change", on);
   }, [mode]);
 
-  const choose = useCallback((m) => {
-    setMode(m);
+  const setMode = useCallback((m) => {
+    setModeState(m);
     persist(m);
-    setResolved(paint(m) ? "dark" : "light");
+    setResolved(apply(m));
   }, []);
 
-  return { mode, resolved, setMode: choose, isDark: resolved === "dark" };
+  return { mode, resolved, setMode };
 }
 
-/* ---- reveal --------------------------------------------------------------- */
-
-/**
- * One-shot enter reveal. Returns a ref and a boolean; you own the CSS.
- * Unobserves on first hit — a reveal that re-fires on scroll-up is a distraction,
- * not an animation. Under reduced motion it reports true immediately.
- *
- *   const [ref, shown] = useReveal();
- *   <div ref={ref} data-shown={shown} />
- */
-/** localStorage key for the rail's collapsed state. */
-export const RAIL_KEY = "lw-rail-collapsed";
-
-/**
- * The product rail's collapsed state, persisted.
- *
- * A hook rather than state inside `Sidebar`, because the control that toggles
- * the rail is almost never inside it — it lives in the `AppBar`, which is a
- * sibling. A `Sidebar` that owned this could not tell the button about it, so
- * every consumer re-implemented the same `localStorage` read, the same
- * try/catch for Safari private mode, and the same `aria-pressed`.
- *
- * Read on MOUNT, not during render: the server has no localStorage, and
- * guessing there is what produces a one-frame flash of the wrong width — the
- * same reason `useTheme` does it this way.
- */
-export function useRailCollapsed(initial = false) {
-  const [collapsed, setCollapsed] = useState(initial);
-  useEffect(() => {
-    try {
-      const v = localStorage.getItem(RAIL_KEY);
-      if (v != null) setCollapsed(v === "1");
-    } catch { /* private mode: the rail simply starts where it started */ }
-  }, []);
-  const set = useCallback((next) => {
-    setCollapsed(next);
-    try { localStorage.setItem(RAIL_KEY, next ? "1" : "0"); } catch { /* as above */ }
-  }, []);
-  const toggle = useCallback(() => set(!collapsed), [collapsed, set]);
-  return { collapsed, setCollapsed: set, toggle };
-}
-
-export function useReveal({ threshold = 0.15, rootMargin = "0px 0px -10% 0px" } = {}) {
-  const ref = useRef(null);
-  const [shown, setShown] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    if (prefersReduced() || typeof IntersectionObserver === "undefined") { setShown(true); return; }
-    const io = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) { setShown(true); io.unobserve(el); }
-    }, { threshold, rootMargin });
-    io.observe(el);
-    return () => io.disconnect();
-  }, [threshold, rootMargin]);
-  return [ref, shown];
-}
-
-/* ---- spotlight ------------------------------------------------------------ */
-
-/**
- * Writes --lw-mx / --lw-my (0-100%) on the element so CSS can place a
- * pointer-following highlight. Coordinates go to the DOM, not to React state:
- * a setState per mousemove re-renders the subtree 60 times a second.
- * Off entirely on a coarse pointer and under reduced motion.
- */
-export function useSpotlight() {
-  const ref = useRef(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || prefersReduced()) return;
-    if (window.matchMedia("(pointer: coarse)").matches) return;
-    let frame = 0;
-    const on = (e) => {
-      if (frame) return;
-      frame = requestAnimationFrame(() => {
-        frame = 0;
-        const r = el.getBoundingClientRect();
-        el.style.setProperty("--lw-mx", ((e.clientX - r.left) / r.width * 100).toFixed(2) + "%");
-        el.style.setProperty("--lw-my", ((e.clientY - r.top) / r.height * 100).toFixed(2) + "%");
-      });
-    };
-    const off = () => { el.style.removeProperty("--lw-mx"); el.style.removeProperty("--lw-my"); };
-    el.addEventListener("pointermove", on);
-    el.addEventListener("pointerleave", off);
-    return () => { cancelAnimationFrame(frame); el.removeEventListener("pointermove", on); el.removeEventListener("pointerleave", off); };
-  }, []);
-  return ref;
-}
-
-/* ---- cascade -------------------------------------------------------------- */
-
-/**
- * Stagger delays for a list — deterministic, so the third card's delay is the
- * same on every render and in every screenshot test. Returns a function, not an
- * array, so the list length can change without re-running a hook.
- *
- *   const delay = useDeterministicCascade({ step: 60, max: 8 });
- *   items.map((it, i) => <Card style={{ transitionDelay: delay(i) }} />)
- */
-export function useDeterministicCascade({ step = 60, max = 8, base = 0 } = {}) {
-  const reduced = useReducedMotion();
-  return useCallback((i) => (reduced ? "0ms" : `${base + Math.min(i, max) * step}ms`), [step, max, base, reduced]);
-}
-
-/** Live prefers-reduced-motion. Re-renders when the OS setting changes. */
+/** Live prefers-reduced-motion. */
 export function useReducedMotion() {
   const [reduced, setReduced] = useState(false);
   useEffect(() => {
@@ -225,33 +72,4 @@ export function useReducedMotion() {
     return () => mq.removeEventListener("change", on);
   }, []);
   return reduced;
-}
-
-/* ---- counter -------------------------------------------------------------- */
-
-/**
- * Counts a KPI up to its value. NOT a hook — call it on an element, imperatively,
- * from a reveal. Writes textContent directly for the same reason as useSpotlight.
- * Under reduced motion it sets the final number and returns.
- *
- *   animateCounter(el, 1284, { format: (n) => n.toLocaleString() })
- *
- * Returns a cancel function.
- */
-export function animateCounter(el, to, { from = 0, duration = 900, decimals = 0, format } = {}) {
-  if (!el) return () => {};
-  const fmt = format || ((n) => n.toFixed(decimals));
-  if (prefersReduced()) { el.textContent = fmt(to); return () => {}; }
-  /* The house curve, matched to --lw-ease-out so a counter and the card it sits
-     in settle together. */
-  const ease = (t) => 1 - (1 - t) ** 3;
-  const t0 = performance.now();
-  let raf = 0, done = false;
-  const tick = (now) => {
-    const t = Math.min(1, (now - t0) / duration);
-    el.textContent = fmt(from + (to - from) * ease(t));
-    if (t < 1) raf = requestAnimationFrame(tick); else done = true;
-  };
-  raf = requestAnimationFrame(tick);
-  return () => { if (!done) { cancelAnimationFrame(raf); el.textContent = fmt(to); } };
 }

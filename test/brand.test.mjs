@@ -1,48 +1,49 @@
-/** brand.js — per-tenant theming: the clamp band, the ink rule, the var set. */
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { brandRamp, brandVars, parseHex, rgbToHsl, hslToRgb, contrast } from "../brand.js";
+import { brandRamp, brandVars, clampedHex, isInBand, parseHex, contrast, rgbToOklch, oklchToRgb, toHex } from "../brand.js";
 
-const WHITE = [255, 255, 255], NAVY = [11, 18, 32];
-
-test("an achromatic pick falls through to LeanWise cyan (null)", () => {
-  assert.equal(brandRamp("#888888"), null);
-  assert.equal(brandRamp("not a colour"), null);
-});
-
-test("the anchor is clamped: L to [20,50], S to [26,92]", () => {
-  const dark = brandRamp("#020a0c");      // L ≈ 2.7 → floored to 20
-  assert.equal(dark.anchor[2], 20);
-  const light = brandRamp("#ccf2ff");     // L ≈ 90 → capped at 50
-  assert.equal(light.anchor[2], 50);
-  const dull = brandRamp("#8a7a70");      // S ≈ 10 (> achromatic 8) → floored to 26
-  assert.equal(dull.anchor[1], 26);
-  const loud = brandRamp("#00ff00");      // S = 100 → capped at 92
-  assert.equal(loud.anchor[1], 92);
-  assert.deepEqual(loud.tiers[500], loud.anchor, "tier 500 IS the clamped anchor");
-});
-
-test("ink follows the fill's lightness: white on brand cyan, navy on the amber CTA", () => {
-  assert.deepEqual(brandRamp("#0C727B").ink, WHITE);
-  assert.deepEqual(brandRamp("#FCB603").ink, NAVY);
-});
-
-test("brandVars emits both the -c channel and the derived colour for every tier", () => {
-  const vars = brandVars("#0C727B", "light");
-  for (const k of [50, 100, 200, 300, 400, 500, 600, 700]) {
-    assert.ok(vars[`--lw-brand-${k}-c`], `--lw-brand-${k}-c`);
-    assert.equal(vars[`--lw-brand-${k}`], `hsl(${vars[`--lw-brand-${k}-c`]})`);
-  }
-  assert.equal(vars["--primary"], vars["--lw-brand-500-c"]);
-  assert.equal(vars["--ring"], vars["--lw-brand-text-c"]);
-  assert.equal(vars["--primary-foreground"], "0 0% 100%");
-  assert.equal(brandVars("#0C727B", "dark")["--lw-brand-text-c"], vars["--lw-brand-400-c"], "dark reads text from tier 400");
+test("no usable colour returns {} so the theme applies unchanged", () => {
   assert.deepEqual(brandVars(null), {});
-  assert.doesNotMatch(JSON.stringify(vars), /--accent/, "a tenant never owns --accent");
+  assert.deepEqual(brandVars("nope"), {});
+  assert.deepEqual(brandVars("#888888"), {}, "achromatic");
+  assert.equal(brandRamp("#888888"), null);
 });
 
-test("hsl <-> rgb round-trips the brand hex", () => {
-  const rgb = parseHex("#0C727B");
-  assert.deepEqual(hslToRgb(rgbToHsl(rgb)), rgb);
-  assert.ok(contrast(rgb, WHITE) > 5.6 && contrast(rgb, WHITE) < 5.7);
+test("oklch round-trips a hex", () => {
+  for (const h of ["#0C727B", "#024576", "#FCB603"]) assert.equal(toHex(oklchToRgb(rgbToOklch(parseHex(h)))), h);
+});
+
+test("the LeanWise cyan is in band and paints itself", () => {
+  assert.ok(isInBand("#0C727B"));
+  assert.equal(clampedHex("#0C727B"), "#0C727B");
+  const v = brandVars("#0C727B");
+  assert.equal(v["--primary"], "#0C727B");
+  assert.equal(v["--primary-foreground"], "#FFFFFF");
+  assert.equal(v["--ring"], v["--primary"]);
+  assert.equal(v["--brand-600"], "#0C727B");
+});
+
+test("lightness is clamped so primary ink clears AA in both schemes", () => {
+  assert.ok(!isInBand("#CCF2FF"));
+  for (const h of ["#CCF2FF", "#00FF00", "#FCB603", "#8A2BE2"]) {
+    for (const s of ["light", "dark"]) {
+      const v = brandVars(h, s);
+      assert.ok(contrast(v["--primary"], v["--primary-foreground"]) >= 4.5, `${h} ${s}`);
+    }
+  }
+});
+
+test("the ramp has ten tiers, light to dark", () => {
+  const r = brandRamp("#8A2BE2");
+  const keys = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900];
+  assert.deepEqual(Object.keys(r).map(Number), keys);
+  const L = keys.map((k) => rgbToOklch(parseHex(r[k]))[0]);
+  for (let i = 1; i < L.length; i++) assert.ok(L[i] < L[i - 1], `tier ${keys[i]}`);
+});
+
+test("a tenant never owns --accent, and emits only known vars", () => {
+  const v = brandVars("#8A2BE2", "dark");
+  for (const k of Object.keys(v)) {
+    assert.match(k, /^--(brand-\d+|primary|primary-foreground|ring|sidebar-primary|sidebar-primary-foreground|sidebar-ring|chart-1)$/);
+  }
 });
