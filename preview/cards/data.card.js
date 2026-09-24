@@ -27,12 +27,17 @@
     EmptyHeader,
     EmptyTitle,
     EmptyDescription,
-    useReactTable,
-    getCoreRowModel,
-    getSortedRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    flexRender,
+    useTable,
+    tableFeatures,
+    FlexRender,
+    columnFilteringFeature,
+    columnVisibilityFeature,
+    rowPaginationFeature,
+    rowSelectionFeature,
+    rowSortingFeature,
+    createFilteredRowModel,
+    createPaginatedRowModel,
+    createSortedRowModel,
     ArrowUpDownIcon,
     MoreHorizontalIcon
   } = window.LeanWiseDesign_f2d907;
@@ -51,6 +56,16 @@
     Stale: "border-transparent bg-warning text-warning-foreground",
     Failed: "border-transparent bg-destructive-soft text-destructive-soft-foreground"
   };
+  const features = tableFeatures({
+    columnFilteringFeature,
+    columnVisibilityFeature,
+    rowPaginationFeature,
+    rowSelectionFeature,
+    rowSortingFeature,
+    filteredRowModel: createFilteredRowModel(),
+    paginatedRowModel: createPaginatedRowModel(),
+    sortedRowModel: createSortedRowModel()
+  });
   const columns = [
     {
       id: "select",
@@ -101,19 +116,18 @@
     const [sorting, setSorting] = React.useState([]);
     const [columnFilters, setColumnFilters] = React.useState([]);
     const [rowSelection, setRowSelection] = React.useState({ s1: true });
-    const table = useReactTable({
+    const [pagination, setPagination] = React.useState({ pageIndex: 0, pageSize: 5 });
+    const table = useTable({
+      features,
       data: DATA,
       columns,
+      state: { sorting, columnFilters, rowSelection, pagination },
       getRowId: (r) => r.id,
+      enableRowSelection: true,
       onSortingChange: setSorting,
       onColumnFiltersChange: setColumnFilters,
       onRowSelectionChange: setRowSelection,
-      getCoreRowModel: getCoreRowModel(),
-      getSortedRowModel: getSortedRowModel(),
-      getFilteredRowModel: getFilteredRowModel(),
-      getPaginationRowModel: getPaginationRowModel(),
-      initialState: { pagination: { pageSize: 5 } },
-      state: { sorting, columnFilters, rowSelection }
+      onPaginationChange: setPagination
     });
     const status = table.getColumn("status").getFilterValue() ?? "all";
     return /* @__PURE__ */ React.createElement("div", { className: "flex flex-col gap-4" }, /* @__PURE__ */ React.createElement("div", { className: "flex items-center gap-3" }, /* @__PURE__ */ React.createElement(
@@ -136,7 +150,7 @@
         onValueChange: (v) => table.getColumn("status").setFilterValue(v || "all")
       },
       ["all", "Live", "Stale", "Failed", "Archived"].map((s) => /* @__PURE__ */ React.createElement(ToggleGroupItem, { key: s, value: s }, s === "all" ? "All" : s))
-    )), /* @__PURE__ */ React.createElement("div", { className: "overflow-hidden rounded-md border" }, /* @__PURE__ */ React.createElement(Table, null, /* @__PURE__ */ React.createElement(TableHeader, null, table.getHeaderGroups().map((hg) => /* @__PURE__ */ React.createElement(TableRow, { key: hg.id }, hg.headers.map((h) => /* @__PURE__ */ React.createElement(TableHead, { key: h.id }, h.isPlaceholder ? null : flexRender(h.column.columnDef.header, h.getContext())))))), /* @__PURE__ */ React.createElement(TableBody, null, table.getRowModel().rows.length ? table.getRowModel().rows.map((row) => /* @__PURE__ */ React.createElement(TableRow, { key: row.id, "data-state": row.getIsSelected() && "selected" }, row.getVisibleCells().map((cell) => /* @__PURE__ */ React.createElement(TableCell, { key: cell.id }, flexRender(cell.column.columnDef.cell, cell.getContext()))))) : /* @__PURE__ */ React.createElement(TableRow, null, /* @__PURE__ */ React.createElement(TableCell, { colSpan: columns.length, className: "p-0" }, /* @__PURE__ */ React.createElement(Empty, null, /* @__PURE__ */ React.createElement(EmptyHeader, null, /* @__PURE__ */ React.createElement(EmptyTitle, null, "No results"), /* @__PURE__ */ React.createElement(EmptyDescription, null, "No sources match that filter.")))))))), /* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-end gap-2" }, /* @__PURE__ */ React.createElement("div", { className: "text-muted-foreground flex-1 text-sm" }, table.getFilteredSelectedRowModel().rows.length, " of ", table.getFilteredRowModel().rows.length, " row(s) selected."), /* @__PURE__ */ React.createElement(Button, { variant: "outline", size: "sm", onClick: () => table.previousPage(), disabled: !table.getCanPreviousPage() }, "Previous"), /* @__PURE__ */ React.createElement(Button, { variant: "outline", size: "sm", onClick: () => table.nextPage(), disabled: !table.getCanNextPage() }, "Next")));
+    )), /* @__PURE__ */ React.createElement("div", { className: "overflow-hidden rounded-md border" }, /* @__PURE__ */ React.createElement(Table, null, /* @__PURE__ */ React.createElement(TableHeader, null, table.getHeaderGroups().map((hg) => /* @__PURE__ */ React.createElement(TableRow, { key: hg.id }, hg.headers.map((h) => /* @__PURE__ */ React.createElement(TableHead, { key: h.id }, h.isPlaceholder ? null : /* @__PURE__ */ React.createElement(FlexRender, { header: h })))))), /* @__PURE__ */ React.createElement(TableBody, null, table.getRowModel().rows.length ? table.getRowModel().rows.map((row) => /* @__PURE__ */ React.createElement(TableRow, { key: row.id, "data-state": row.getIsSelected() && "selected" }, row.getVisibleCells().map((cell) => /* @__PURE__ */ React.createElement(TableCell, { key: cell.id }, /* @__PURE__ */ React.createElement(FlexRender, { cell }))))) : /* @__PURE__ */ React.createElement(TableRow, null, /* @__PURE__ */ React.createElement(TableCell, { colSpan: columns.length, className: "p-0" }, /* @__PURE__ */ React.createElement(Empty, null, /* @__PURE__ */ React.createElement(EmptyHeader, null, /* @__PURE__ */ React.createElement(EmptyTitle, null, "No results"), /* @__PURE__ */ React.createElement(EmptyDescription, null, "No sources match that filter.")))))))), /* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-end gap-2" }, /* @__PURE__ */ React.createElement("div", { className: "text-muted-foreground flex-1 text-sm" }, table.getFilteredSelectedRowModel().rows.length, " of ", table.getFilteredRowModel().rows.length, " row(s) selected."), /* @__PURE__ */ React.createElement(Button, { variant: "outline", size: "sm", onClick: () => table.previousPage(), disabled: !table.getCanPreviousPage() }, "Previous"), /* @__PURE__ */ React.createElement(Button, { variant: "outline", size: "sm", onClick: () => table.nextPage(), disabled: !table.getCanNextPage() }, "Next")));
   }
   lwCard("Data", "Numbers right-aligned and tabular; status is a Badge carrying a role colour, never a raw hue.", /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(DataTable, null), /* @__PURE__ */ React.createElement("div", { className: "flex flex-col gap-3", role: "status", "aria-busy": "true", "aria-label": "Loading" }, /* @__PURE__ */ React.createElement(Skeleton, { className: "h-5 w-1/3" }), /* @__PURE__ */ React.createElement(Skeleton, { className: "h-10 w-full" }), /* @__PURE__ */ React.createElement(Skeleton, { className: "h-10 w-full" }))));
 })();

@@ -6,32 +6,8 @@
       "sourcePath": "node_modules/@hookform/resolvers/zod"
     },
     {
-      "name": "createTable",
-      "sourcePath": "node_modules/@tanstack/react-table"
-    },
-    {
-      "name": "flexRender",
-      "sourcePath": "node_modules/@tanstack/react-table"
-    },
-    {
-      "name": "getCoreRowModel",
-      "sourcePath": "node_modules/@tanstack/react-table"
-    },
-    {
-      "name": "getFilteredRowModel",
-      "sourcePath": "node_modules/@tanstack/react-table"
-    },
-    {
-      "name": "getPaginationRowModel",
-      "sourcePath": "node_modules/@tanstack/react-table"
-    },
-    {
-      "name": "getSortedRowModel",
-      "sourcePath": "node_modules/@tanstack/react-table"
-    },
-    {
-      "name": "useReactTable",
-      "sourcePath": "node_modules/@tanstack/react-table"
+      "name": "storeReactivityBindings",
+      "sourcePath": "node_modules/@tanstack/table-core/store-reactivity-bindings"
     },
     {
       "name": "AlertCircleIcon",
@@ -42,7 +18,39 @@
       "sourcePath": "node_modules/lucide-react"
     },
     {
+      "name": "ArrowUpIcon",
+      "sourcePath": "node_modules/lucide-react"
+    },
+    {
+      "name": "BadgeCheckIcon",
+      "sourcePath": "node_modules/lucide-react"
+    },
+    {
+      "name": "CalendarIcon",
+      "sourcePath": "node_modules/lucide-react"
+    },
+    {
       "name": "CheckCircle2Icon",
+      "sourcePath": "node_modules/lucide-react"
+    },
+    {
+      "name": "ChevronRightIcon",
+      "sourcePath": "node_modules/lucide-react"
+    },
+    {
+      "name": "ChevronsUpDownIcon",
+      "sourcePath": "node_modules/lucide-react"
+    },
+    {
+      "name": "CopyIcon",
+      "sourcePath": "node_modules/lucide-react"
+    },
+    {
+      "name": "CreditCardIcon",
+      "sourcePath": "node_modules/lucide-react"
+    },
+    {
+      "name": "FileTextIcon",
       "sourcePath": "node_modules/lucide-react"
     },
     {
@@ -54,7 +62,19 @@
       "sourcePath": "node_modules/lucide-react"
     },
     {
+      "name": "PlusIcon",
+      "sourcePath": "node_modules/lucide-react"
+    },
+    {
       "name": "SearchIcon",
+      "sourcePath": "node_modules/lucide-react"
+    },
+    {
+      "name": "SettingsIcon",
+      "sourcePath": "node_modules/lucide-react"
+    },
+    {
+      "name": "UserIcon",
       "sourcePath": "node_modules/lucide-react"
     },
     {
@@ -104,6 +124,54 @@
     {
       "name": "cn",
       "sourcePath": "preview/src/lib/utils.ts"
+    },
+    {
+      "name": "AppSidebar",
+      "sourcePath": "preview/src/shadcn-blocks/dashboard-01/components/app-sidebar.tsx"
+    },
+    {
+      "name": "ChartAreaInteractive",
+      "sourcePath": "preview/src/shadcn-blocks/dashboard-01/components/chart-area-interactive.tsx"
+    },
+    {
+      "name": "description",
+      "sourcePath": "preview/src/shadcn-blocks/dashboard-01/components/chart-area-interactive.tsx"
+    },
+    {
+      "name": "DataTable",
+      "sourcePath": "preview/src/shadcn-blocks/dashboard-01/components/data-table.tsx"
+    },
+    {
+      "name": "schema",
+      "sourcePath": "preview/src/shadcn-blocks/dashboard-01/components/data-table.tsx"
+    },
+    {
+      "name": "SectionCards",
+      "sourcePath": "preview/src/shadcn-blocks/dashboard-01/components/section-cards.tsx"
+    },
+    {
+      "name": "SiteHeader",
+      "sourcePath": "preview/src/shadcn-blocks/dashboard-01/components/site-header.tsx"
+    },
+    {
+      "name": "LoginForm",
+      "sourcePath": "preview/src/shadcn-blocks/login-02/components/login-form.tsx"
+    },
+    {
+      "name": "Accordion",
+      "sourcePath": "preview/src/ui/accordion.tsx"
+    },
+    {
+      "name": "AccordionContent",
+      "sourcePath": "preview/src/ui/accordion.tsx"
+    },
+    {
+      "name": "AccordionItem",
+      "sourcePath": "preview/src/ui/accordion.tsx"
+    },
+    {
+      "name": "AccordionTrigger",
+      "sourcePath": "preview/src/ui/accordion.tsx"
     },
     {
       "name": "AlertDialog",
@@ -250,6 +318,14 @@
       "sourcePath": "preview/src/ui/button.tsx"
     },
     {
+      "name": "Calendar",
+      "sourcePath": "preview/src/ui/calendar.tsx"
+    },
+    {
+      "name": "CalendarDayButton",
+      "sourcePath": "preview/src/ui/calendar.tsx"
+    },
+    {
       "name": "Card",
       "sourcePath": "preview/src/ui/card.tsx"
     },
@@ -304,6 +380,114 @@
     {
       "name": "Checkbox",
       "sourcePath": "preview/src/ui/checkbox.tsx"
+    },
+    {
+      "name": "Collapsible",
+      "sourcePath": "preview/src/ui/collapsible.tsx"
+    },
+    {
+      "name": "CollapsibleContent",
+      "sourcePath": "preview/src/ui/collapsible.tsx"
+    },
+    {
+      "name": "CollapsibleTrigger",
+      "sourcePath": "preview/src/ui/collapsible.tsx"
+    },
+    {
+      "name": "Command",
+      "sourcePath": "preview/src/ui/command.tsx"
+    },
+    {
+      "name": "CommandDialog",
+      "sourcePath": "preview/src/ui/command.tsx"
+    },
+    {
+      "name": "CommandEmpty",
+      "sourcePath": "preview/src/ui/command.tsx"
+    },
+    {
+      "name": "CommandGroup",
+      "sourcePath": "preview/src/ui/command.tsx"
+    },
+    {
+      "name": "CommandInput",
+      "sourcePath": "preview/src/ui/command.tsx"
+    },
+    {
+      "name": "CommandItem",
+      "sourcePath": "preview/src/ui/command.tsx"
+    },
+    {
+      "name": "CommandList",
+      "sourcePath": "preview/src/ui/command.tsx"
+    },
+    {
+      "name": "CommandSeparator",
+      "sourcePath": "preview/src/ui/command.tsx"
+    },
+    {
+      "name": "CommandShortcut",
+      "sourcePath": "preview/src/ui/command.tsx"
+    },
+    {
+      "name": "ContextMenu",
+      "sourcePath": "preview/src/ui/context-menu.tsx"
+    },
+    {
+      "name": "ContextMenuCheckboxItem",
+      "sourcePath": "preview/src/ui/context-menu.tsx"
+    },
+    {
+      "name": "ContextMenuContent",
+      "sourcePath": "preview/src/ui/context-menu.tsx"
+    },
+    {
+      "name": "ContextMenuGroup",
+      "sourcePath": "preview/src/ui/context-menu.tsx"
+    },
+    {
+      "name": "ContextMenuItem",
+      "sourcePath": "preview/src/ui/context-menu.tsx"
+    },
+    {
+      "name": "ContextMenuLabel",
+      "sourcePath": "preview/src/ui/context-menu.tsx"
+    },
+    {
+      "name": "ContextMenuPortal",
+      "sourcePath": "preview/src/ui/context-menu.tsx"
+    },
+    {
+      "name": "ContextMenuRadioGroup",
+      "sourcePath": "preview/src/ui/context-menu.tsx"
+    },
+    {
+      "name": "ContextMenuRadioItem",
+      "sourcePath": "preview/src/ui/context-menu.tsx"
+    },
+    {
+      "name": "ContextMenuSeparator",
+      "sourcePath": "preview/src/ui/context-menu.tsx"
+    },
+    {
+      "name": "ContextMenuShortcut",
+      "sourcePath": "preview/src/ui/context-menu.tsx"
+    },
+    {
+      "name": "ContextMenuSub",
+      "sourcePath": "preview/src/ui/context-menu.tsx"
+    },
+    {
+      "name": "ContextMenuSubContent",
+      "sourcePath": "preview/src/ui/context-menu.tsx"
+    },
+    {
+      "name": "ContextMenuSubTrigger",
+      "sourcePath": "preview/src/ui/context-menu.tsx"
+    },
+    {
+      "name": "ContextMenuTrigger",
+      "sourcePath": "preview/src/ui/context-menu.tsx"
     },
     {
       "name": "Dialog",
@@ -470,6 +654,18 @@
       "sourcePath": "preview/src/ui/field.tsx"
     },
     {
+      "name": "HoverCard",
+      "sourcePath": "preview/src/ui/hover-card.tsx"
+    },
+    {
+      "name": "HoverCardContent",
+      "sourcePath": "preview/src/ui/hover-card.tsx"
+    },
+    {
+      "name": "HoverCardTrigger",
+      "sourcePath": "preview/src/ui/hover-card.tsx"
+    },
+    {
       "name": "InputGroup",
       "sourcePath": "preview/src/ui/input-group.tsx"
     },
@@ -492,6 +688,22 @@
     {
       "name": "InputGroupTextarea",
       "sourcePath": "preview/src/ui/input-group.tsx"
+    },
+    {
+      "name": "InputOTP",
+      "sourcePath": "preview/src/ui/input-otp.tsx"
+    },
+    {
+      "name": "InputOTPGroup",
+      "sourcePath": "preview/src/ui/input-otp.tsx"
+    },
+    {
+      "name": "InputOTPSeparator",
+      "sourcePath": "preview/src/ui/input-otp.tsx"
+    },
+    {
+      "name": "InputOTPSlot",
+      "sourcePath": "preview/src/ui/input-otp.tsx"
     },
     {
       "name": "Input",
@@ -538,6 +750,14 @@
       "sourcePath": "preview/src/ui/item.tsx"
     },
     {
+      "name": "Kbd",
+      "sourcePath": "preview/src/ui/kbd.tsx"
+    },
+    {
+      "name": "KbdGroup",
+      "sourcePath": "preview/src/ui/kbd.tsx"
+    },
+    {
       "name": "Label",
       "sourcePath": "preview/src/ui/label.tsx"
     },
@@ -552,6 +772,42 @@
     {
       "name": "NativeSelectOption",
       "sourcePath": "preview/src/ui/native-select.tsx"
+    },
+    {
+      "name": "NavigationMenu",
+      "sourcePath": "preview/src/ui/navigation-menu.tsx"
+    },
+    {
+      "name": "NavigationMenuContent",
+      "sourcePath": "preview/src/ui/navigation-menu.tsx"
+    },
+    {
+      "name": "NavigationMenuIndicator",
+      "sourcePath": "preview/src/ui/navigation-menu.tsx"
+    },
+    {
+      "name": "NavigationMenuItem",
+      "sourcePath": "preview/src/ui/navigation-menu.tsx"
+    },
+    {
+      "name": "NavigationMenuLink",
+      "sourcePath": "preview/src/ui/navigation-menu.tsx"
+    },
+    {
+      "name": "NavigationMenuList",
+      "sourcePath": "preview/src/ui/navigation-menu.tsx"
+    },
+    {
+      "name": "NavigationMenuTrigger",
+      "sourcePath": "preview/src/ui/navigation-menu.tsx"
+    },
+    {
+      "name": "navigationMenuTriggerStyle",
+      "sourcePath": "preview/src/ui/navigation-menu.tsx"
+    },
+    {
+      "name": "NavigationMenuViewport",
+      "sourcePath": "preview/src/ui/navigation-menu.tsx"
     },
     {
       "name": "Pagination",
@@ -620,6 +876,14 @@
     {
       "name": "RadioGroupItem",
       "sourcePath": "preview/src/ui/radio-group.tsx"
+    },
+    {
+      "name": "ScrollArea",
+      "sourcePath": "preview/src/ui/scroll-area.tsx"
+    },
+    {
+      "name": "ScrollBar",
+      "sourcePath": "preview/src/ui/scroll-area.tsx"
     },
     {
       "name": "Select",
@@ -798,6 +1062,10 @@
       "sourcePath": "preview/src/ui/skeleton.tsx"
     },
     {
+      "name": "Slider",
+      "sourcePath": "preview/src/ui/slider.tsx"
+    },
+    {
       "name": "Toaster",
       "sourcePath": "preview/src/ui/sonner.tsx"
     },
@@ -938,6 +1206,13 @@
       "name": "Type scale"
     },
     {
+      "path": "preview/cards/accordion.card.html",
+      "group": "Components",
+      "viewport": "1200x640",
+      "subtitle": "Single-open Accordion and a Collapsible list, both expanded",
+      "name": "Accordion & Collapsible"
+    },
+    {
       "path": "preview/cards/alert-dialog.card.html",
       "group": "Components",
       "viewport": "1000x640",
@@ -952,11 +1227,25 @@
       "name": "Buttons"
     },
     {
+      "path": "preview/cards/command.card.html",
+      "group": "Components",
+      "viewport": "1200x720",
+      "subtitle": "CommandDialog opened by ⌘K — groups, shortcuts and an empty state",
+      "name": "Command palette"
+    },
+    {
       "path": "preview/cards/data.card.html",
       "group": "Components",
       "viewport": "1100x1000",
       "subtitle": "Data table (TanStack): selection, sorting, row actions, status filter, pagination and Empty — plus Progress, Skeleton and Avatar",
       "name": "Data"
+    },
+    {
+      "path": "preview/cards/date-picker.card.html",
+      "group": "Components",
+      "viewport": "1200x720",
+      "subtitle": "Calendar in a Popover — a single date and a two-month range, rendered open",
+      "name": "Date picker"
     },
     {
       "path": "preview/cards/feedback.card.html",
@@ -973,6 +1262,13 @@
       "name": "Forms"
     },
     {
+      "path": "preview/cards/input-group.card.html",
+      "group": "Components",
+      "viewport": "1200x760",
+      "subtitle": "Addons around an input, joined buttons, key hints and list rows with actions",
+      "name": "Input group, Button group, Kbd, Item"
+    },
+    {
       "path": "preview/cards/navigation.card.html",
       "group": "Components",
       "viewport": "1000x640",
@@ -983,8 +1279,15 @@
       "path": "preview/cards/overlays.card.html",
       "group": "Components",
       "viewport": "1200x820",
-      "subtitle": "DropdownMenu, Popover, Tooltip and Dialog — rendered open",
+      "subtitle": "DropdownMenu, ContextMenu, Popover, HoverCard, Tooltip and Dialog — rendered open",
       "name": "Overlays"
+    },
+    {
+      "path": "preview/cards/sheet.card.html",
+      "group": "Components",
+      "viewport": "1200x720",
+      "subtitle": "Side sheet with a form; footer actions Cancel then Save, primary last",
+      "name": "Sheet"
     },
     {
       "path": "preview/cards/app-shell.card.html",
@@ -1011,13 +1314,13 @@
   "templates": [
     {
       "name": "Sign in",
-      "description": "Split sign-in screen: email and password, SSO, an inline error that names the lockout rule, and a brand panel on wide screens.",
+      "description": "shadcn login-02 on the LeanWise theme: brand mark, the stock LoginForm (email, password, GitHub) and an image panel on wide screens.",
       "folder": "templates/auth",
       "entryPath": "templates/auth/Auth.dc.html"
     },
     {
       "name": "App dashboard",
-      "description": "Sidebar app shell with KPI tiles, a chart on the chart palette, and a recent-activity list — the home screen of a LeanWise product.",
+      "description": "shadcn dashboard-01 on the LeanWise theme: inset sidebar, site header, KPI section cards, the interactive area chart and the sortable data table.",
       "folder": "templates/dashboard",
       "entryPath": "templates/dashboard/Dashboard.dc.html"
     },
@@ -1029,7 +1332,7 @@
     },
     {
       "name": "Marketing landing",
-      "description": "Site header, a display-size hero with the one amber CTA, a feature grid, a navy proof band and a footer.",
+      "description": "Site header on the stock NavigationMenu, a display-size hero with the one amber CTA, a stock Card feature grid, a navy proof band and a footer.",
       "folder": "templates/marketing-landing",
       "entryPath": "templates/marketing-landing/MarketingLanding.dc.html"
     },

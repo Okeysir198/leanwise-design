@@ -133,6 +133,7 @@ const COLUMNS = [
 class Component extends DCLogic {
   state = {
     theme: "light",
+    tick: 0,
     tableState: { sorting: [], columnFilters: [], rowSelection: { s1: true }, pagination: { pageIndex: 0, pageSize: 5 } },
   };
 
@@ -142,19 +143,21 @@ class Component extends DCLogic {
     const NS = window.LeanWiseDesign_f2d907;
     if (!NS) return null;
     if (!this._table) {
-      this._table = NS.createTable({
-        data: DATA, columns: COLUMNS, getRowId: (r) => r.id,
-        state: this.state.tableState,
-        onStateChange: () => {}, renderFallbackValue: null,
-        getCoreRowModel: NS.getCoreRowModel(), getSortedRowModel: NS.getSortedRowModel(),
-        getFilteredRowModel: NS.getFilteredRowModel(), getPaginationRowModel: NS.getPaginationRowModel(),
+      // v9 has no hook-free useTable; constructTable + the vanilla store bindings is its
+      // non-framework form. State lives in the table's own atoms; a store subscription re-renders.
+      this._table = NS.constructTable({
+        features: NS.tableFeatures({
+          coreReactivityFeature: NS.storeReactivityBindings(),
+          columnFilteringFeature: NS.columnFilteringFeature, rowPaginationFeature: NS.rowPaginationFeature,
+          rowSelectionFeature: NS.rowSelectionFeature, rowSortingFeature: NS.rowSortingFeature,
+          filteredRowModel: NS.createFilteredRowModel(), paginatedRowModel: NS.createPaginatedRowModel(),
+          sortedRowModel: NS.createSortedRowModel(),
+        }),
+        data: DATA, columns: COLUMNS, getRowId: (r) => r.id, enableRowSelection: true,
+        initialState: this.state.tableState,
       });
+      this._table.store.subscribe(() => this.setState((s) => ({ tick: s.tick + 1 })));
     }
-    this._table.setOptions((prev) => ({
-      ...prev,
-      state: this.state.tableState,
-      onStateChange: (u) => this.setState((s) => ({ tableState: typeof u === "function" ? u(s.tableState) : u })),
-    }));
     return this._table;
   }
 

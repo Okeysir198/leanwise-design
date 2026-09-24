@@ -43,6 +43,9 @@ function resolvePlugin(ROOT) {
       b.onResolve({ filter: /^@\/(registry\/new-york-v4|components)\/ui\// }, (a) => ({
         path: ts(path.join(src, "ui", a.path.replace(/^.*\/ui\//, ""))),
       }));
+      b.onResolve({ filter: /^@\/(registry\/new-york-v4\/)?blocks\// }, (a) => ({
+        path: ts(path.join(src, "shadcn-blocks", a.path.replace(/^.*\/blocks\//, ""))),
+      }));
       b.onResolve({ filter: /^@\/(registry\/new-york-v4\/)?hooks\// }, (a) => ({
         path: ts(path.join(src, "hooks", a.path.replace(/^.*\/hooks\//, ""))),
       }));

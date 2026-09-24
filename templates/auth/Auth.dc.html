@@ -9,76 +9,32 @@
 </head>
 <body>
 <x-dc>
-<!-- @template name="Sign in" description="Split sign-in screen: email and password, SSO, an inline error that names the lockout rule, and a brand panel on wide screens." -->
+<!-- @template name="Sign in" description="shadcn login-02 on the LeanWise theme: brand mark, the stock LoginForm (email, password, GitHub) and an image panel on wide screens." -->
 <helmet><script src="../_shared/ds-base.js"></script></helmet>
 <a class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-background focus:px-3 focus:py-2" href="#main">Skip to content</a>
 <div class="bg-background text-foreground grid min-h-svh font-sans lg:grid-cols-2">
-<main id="main" class="flex flex-col items-center justify-center px-6 py-12">
-<div class="flex w-full max-w-sm flex-col gap-6">
-<div class="flex items-center justify-between">
-<span class="text-primary text-sm font-semibold">LeanWise AI</span>
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="64px,32px" variant="ghost" size="sm" onClick="{{ toggleTheme }}" data-theme-toggle="">{{ themeLabel }}</x-import>
+<div class="flex flex-col gap-4 p-6 md:p-10">
+<div class="flex justify-center gap-2 md:justify-start">
+<a href="#home" class="flex items-center gap-2 font-medium">
+<img src="../../assets/logo-mark.svg" alt="" class="size-6">
+LeanWise AI
+</a>
 </div>
-<div class="flex flex-col gap-1.5">
-<h1 class="text-2xl font-semibold tracking-tight">Sign in</h1>
-<p class="text-muted-foreground text-sm">Use your work account. Sessions last 30 days.</p>
-</div>
-<sc-if value="{{ showError }}" hint-placeholder-val="{{ false }}">
-<div role="alert" class="bg-destructive-soft text-destructive-soft-foreground border-destructive-border rounded-lg border px-4 py-3 text-sm">{{ errorText }}</div>
-</sc-if>
-<form class="flex flex-col gap-4" onSubmit="{{ submit }}">
-<div class="flex flex-col gap-2">
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.Label" hint-size="80px,16px" htmlFor="email">Work email</x-import>
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.Input" hint-size="100%,36px" id="email" type="email" autoComplete="email" value="{{ email }}" onChange="{{ setEmail }}" placeholder="you@company.com"></x-import>
-</div>
-<div class="flex flex-col gap-2">
-<div class="flex items-center justify-between">
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.Label" hint-size="80px,16px" htmlFor="password">Password</x-import>
-<a href="#reset" class="text-primary text-sm font-medium hover:underline">Forgot password?</a>
-</div>
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.Input" hint-size="100%,36px" id="password" type="password" autoComplete="current-password" value="{{ password }}" onChange="{{ setPassword }}" aria-invalid="{{ invalid }}"></x-import>
-</div>
-<div class="flex items-center gap-2">
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.Checkbox" hint-size="16px,16px" id="remember" defaultChecked="{{ true }}"></x-import>
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.Label" hint-size="120px,16px" htmlFor="remember">Keep me signed in</x-import>
-</div>
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="100%,36px" type="submit" className="w-full">Sign in</x-import>
-</form>
-<div class="text-muted-foreground flex items-center gap-3 text-xs"><span class="bg-border h-px flex-1"></span>or<span class="bg-border h-px flex-1"></span></div>
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="100%,36px" variant="outline" className="w-full">Continue with SSO</x-import>
-<p class="text-muted-foreground text-center text-sm">New to LeanWise? <a href="#signup" class="text-primary font-medium hover:underline">Request access</a></p>
+<main id="main" class="flex flex-1 items-center justify-center">
+<div class="w-full max-w-xs">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.LoginForm" hint-size="320px,420px" onSubmit="{{ submit }}"></x-import>
 </div>
 </main>
-<aside class="bg-navy text-navy-foreground hidden flex-col justify-between p-12 lg:flex">
-<span class="text-sm font-semibold">LeanWise AI</span>
-<blockquote class="flex flex-col gap-4">
-<p class="text-2xl leading-snug font-medium tracking-tight">“Our analysts stopped searching and started answering. Every claim links to the page it came from.”</p>
-<footer class="text-sm opacity-80">R. Okafor, Head of Knowledge, Acme Legal</footer>
-</blockquote>
-</aside>
+</div>
+<div class="bg-muted relative hidden lg:block">
+<img src="../../assets/hex-lattice.svg" alt="" class="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale">
+</div>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:820}}">
 class Component extends DCLogic {
-  state = { theme: "light", email: "jamie@acme.com", password: "", attempts: 0 };
-
-  componentDidUpdate() { document.documentElement.classList.toggle("dark", this.state.theme === "dark"); }
-
   renderVals() {
-    const s = this.state;
-    const left = Math.max(0, 5 - s.attempts);
-    return {
-      themeLabel: s.theme === "dark" ? "Light" : "Dark",
-      toggleTheme: () => this.setState({ theme: s.theme === "dark" ? "light" : "dark" }),
-      email: s.email,
-      password: s.password,
-      setEmail: (e) => this.setState({ email: e.target.value }),
-      setPassword: (e) => this.setState({ password: e.target.value }),
-      invalid: s.attempts > 0 ? "true" : undefined,
-      showError: s.attempts > 0,
-      errorText: `That email and password do not match. ${left} attempt${left === 1 ? "" : "s"} left before the account locks for 15 minutes.`,
-      submit: (e) => { e.preventDefault(); this.setState({ attempts: s.attempts + 1 }); },
-    };
+    return { submit: (e) => e.preventDefault() };
   }
 }
 </script>

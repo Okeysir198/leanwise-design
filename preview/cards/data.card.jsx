@@ -5,7 +5,9 @@ const {
   ToggleGroup, ToggleGroupItem,
   DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem, DropdownMenuSeparator,
   Empty, EmptyHeader, EmptyTitle, EmptyDescription,
-  useReactTable, getCoreRowModel, getSortedRowModel, getFilteredRowModel, getPaginationRowModel, flexRender,
+  useTable, tableFeatures, FlexRender,
+  columnFilteringFeature, columnVisibilityFeature, rowPaginationFeature, rowSelectionFeature, rowSortingFeature,
+  createFilteredRowModel, createPaginatedRowModel, createSortedRowModel,
   ArrowUpDownIcon, MoreHorizontalIcon,
 } = window.LeanWiseDesign_f2d907;
 
@@ -24,6 +26,17 @@ const STATUS = {
   Stale: "border-transparent bg-warning text-warning-foreground",
   Failed: "border-transparent bg-destructive-soft text-destructive-soft-foreground",
 };
+
+const features = tableFeatures({
+  columnFilteringFeature,
+  columnVisibilityFeature,
+  rowPaginationFeature,
+  rowSelectionFeature,
+  rowSortingFeature,
+  filteredRowModel: createFilteredRowModel(),
+  paginatedRowModel: createPaginatedRowModel(),
+  sortedRowModel: createSortedRowModel(),
+});
 
 const columns = [
   {
@@ -102,19 +115,18 @@ function DataTable() {
   const [sorting, setSorting] = React.useState([]);
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [rowSelection, setRowSelection] = React.useState({ s1: true });
-  const table = useReactTable({
+  const [pagination, setPagination] = React.useState({ pageIndex: 0, pageSize: 5 });
+  const table = useTable({
+    features,
     data: DATA,
     columns,
+    state: { sorting, columnFilters, rowSelection, pagination },
     getRowId: (r) => r.id,
+    enableRowSelection: true,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onRowSelectionChange: setRowSelection,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    initialState: { pagination: { pageSize: 5 } },
-    state: { sorting, columnFilters, rowSelection },
+    onPaginationChange: setPagination,
   });
   const status = table.getColumn("status").getFilterValue() ?? "all";
 
@@ -141,7 +153,7 @@ function DataTable() {
             {table.getHeaderGroups().map((hg) => (
               <TableRow key={hg.id}>
                 {hg.headers.map((h) => (
-                  <TableHead key={h.id}>{h.isPlaceholder ? null : flexRender(h.column.columnDef.header, h.getContext())}</TableHead>
+                  <TableHead key={h.id}>{h.isPlaceholder ? null : <FlexRender header={h} />}</TableHead>
                 ))}
               </TableRow>
             ))}
@@ -151,7 +163,7 @@ function DataTable() {
               table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+                    <TableCell key={cell.id}><FlexRender cell={cell} /></TableCell>
                   ))}
                 </TableRow>
               ))

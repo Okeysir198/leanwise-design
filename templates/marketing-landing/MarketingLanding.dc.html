@@ -9,17 +9,21 @@
 </head>
 <body>
 <x-dc>
-<!-- @template name="Marketing landing" description="Site header, a display-size hero with the one amber CTA, a feature grid, a navy proof band and a footer." -->
+<!-- @template name="Marketing landing" description="Site header on the stock NavigationMenu, a display-size hero with the one amber CTA, a stock Card feature grid, a navy proof band and a footer." -->
 <helmet><script src="../_shared/ds-base.js"></script></helmet>
 <a class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-background focus:px-3 focus:py-2" href="#main">Skip to content</a>
 <div class="bg-background text-foreground min-h-svh font-sans">
 <header class="mx-auto flex h-16 max-w-6xl items-center gap-6 px-6">
 <span class="text-primary font-semibold">LeanWise AI</span>
-<nav aria-label="Site" class="text-muted-foreground hidden gap-6 text-sm md:flex">
-<a href="#product" class="hover:text-foreground">Product</a>
-<a href="#security" class="hover:text-foreground">Security</a>
-<a href="#pricing" class="hover:text-foreground">Pricing</a>
-</nav>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.NavigationMenu" hint-size="300px,36px" className="hidden md:flex" aria-label="Site">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.NavigationMenuList" hint-size="300px,36px">
+<sc-for list="{{ nav }}" as="n" hint-placeholder-count="3">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.NavigationMenuItem" hint-size="90px,36px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.NavigationMenuLink" hint-size="90px,36px" href="{{ n.href }}" className="{{ navLink }}">{{ n.label }}</x-import>
+</x-import>
+</sc-for>
+</x-import>
+</x-import>
 <div class="ml-auto flex items-center gap-2">
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="64px,32px" variant="ghost" size="sm" onClick="{{ toggleTheme }}" data-theme-toggle="">{{ themeLabel }}</x-import>
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="72px,32px" variant="outline" size="sm">Sign in</x-import>
@@ -27,7 +31,7 @@
 </header>
 <main id="main">
 <section class="mx-auto flex max-w-6xl flex-col items-start gap-6 px-6 pt-20 pb-24">
-<span class="bg-secondary text-secondary-foreground rounded-full px-3 py-1 text-xs font-medium">Now with SharePoint sources</span>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Badge" hint-size="170px,22px" variant="secondary">Now with SharePoint sources</x-import>
 <h1 class="text-display max-w-4xl font-semibold tracking-tight">Answers from your own documents, with the page they came from.</h1>
 <p class="text-muted-foreground max-w-2xl text-lg">LeanWise reads your contracts, policies and tickets, and answers in plain language — every claim cited, every source permissioned.</p>
 <div class="flex flex-wrap gap-3">
@@ -40,11 +44,13 @@
 <h2 id="feat-h" class="text-3xl font-semibold tracking-tight">Built for teams that must show their work</h2>
 <div class="grid gap-6 md:grid-cols-3">
 <sc-for list="{{ features }}" as="f" hint-placeholder-count="3">
-<div class="bg-card text-card-foreground flex flex-col gap-2 rounded-xl border p-6 shadow-sm">
-<span class="bg-accent text-accent-foreground flex size-9 items-center justify-center rounded-lg text-sm font-semibold">{{ f.n }}</span>
-<h3 class="font-semibold">{{ f.title }}</h3>
-<p class="text-muted-foreground text-sm">{{ f.body }}</p>
-</div>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Card" hint-size="100%,180px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.CardHeader" hint-size="100%,140px">
+<span class="bg-accent text-accent-foreground mb-2 flex size-9 items-center justify-center rounded-lg text-sm font-semibold">{{ f.n }}</span>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.CardTitle" hint-size="160px,20px"><h3>{{ f.title }}</h3></x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.CardDescription" hint-size="100%,40px">{{ f.body }}</x-import>
+</x-import>
+</x-import>
 </sc-for>
 </div>
 </div>
@@ -73,6 +79,12 @@ class Component extends DCLogic {
   renderVals() {
     const s = this.state;
     return {
+      nav: [
+        { label: "Product", href: "#product" },
+        { label: "Security", href: "#security" },
+        { label: "Pricing", href: "#pricing" },
+      ],
+      navLink: window.LeanWiseDesign_f2d907?.navigationMenuTriggerStyle?.() ?? "",
       themeLabel: s.theme === "dark" ? "Light" : "Dark",
       toggleTheme: () => this.setState({ theme: s.theme === "dark" ? "light" : "dark" }),
       features: [
