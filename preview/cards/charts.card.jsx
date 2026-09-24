@@ -33,7 +33,7 @@ const areaConfig = {
 
 lwCard("Charts", "Five series maximum; beyond that, group into Other. Colour comes from ChartConfig, never a literal.", (
   <>
-    <div className="grid grid-cols-5 gap-4">
+    <div className="grid grid-cols-3 gap-4 sm:grid-cols-5">
       {[1, 2, 3, 4, 5].map((i) => (
         <div key={i} className="flex flex-col gap-1.5">
           <div className="h-10 rounded-md" style={{ background: `var(--chart-${i})` }} />
@@ -41,7 +41,7 @@ lwCard("Charts", "Five series maximum; beyond that, group into Other. Colour com
         </div>
       ))}
     </div>
-    <div className="grid grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
       <Card>
         <CardHeader>
           <CardTitle>Answers by source</CardTitle>

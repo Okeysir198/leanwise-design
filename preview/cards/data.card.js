@@ -130,14 +130,14 @@
       onPaginationChange: setPagination
     });
     const status = table.getColumn("status").getFilterValue() ?? "all";
-    return /* @__PURE__ */ React.createElement("div", { className: "flex flex-col gap-4" }, /* @__PURE__ */ React.createElement("div", { className: "flex items-center gap-3" }, /* @__PURE__ */ React.createElement(
+    return /* @__PURE__ */ React.createElement("div", { className: "flex flex-col gap-4" }, /* @__PURE__ */ React.createElement("div", { className: "flex flex-wrap items-center gap-3" }, /* @__PURE__ */ React.createElement(
       Input,
       {
         placeholder: "Filter sources\u2026",
         "aria-label": "Filter sources",
         value: table.getColumn("source").getFilterValue() ?? "",
         onChange: (e) => table.getColumn("source").setFilterValue(e.target.value),
-        className: "max-w-xs"
+        className: "w-full sm:max-w-xs"
       }
     ), /* @__PURE__ */ React.createElement(
       ToggleGroup,
