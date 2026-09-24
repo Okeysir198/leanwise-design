@@ -25,46 +25,22 @@
  *      `prefers-color-scheme` media query inside an SVG favicon; browsers that do
  *      not simply keep the light stops, which is the safer default of the two.
  *
- * The literal `stop-color` attributes stay as written for that last case — a
- * renderer that drops the <style> block still gets the light gradient rather than
- * black. `lw-contrast-check.mjs` asserts all four stops against their tokens, so
- * this file is guarded exactly like the other logo assets rather than becoming a
- * third unguarded home for a brand value.
+ * The literal `stop-color` attributes stay as written so a renderer that drops
+ * the <style> block still gets the light gradient.
  */
 import { readFileSync } from "node:fs";
 import { generated } from "./_generated.mjs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { ANCHORS, ramp } from "../src/palette.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SRC = join(ROOT, "assets", "logo-mark.svg");
 const OUT = join(ROOT, "assets", "logo-favicon.svg");
 
-/** Read an `--lw-<name>-c: H S% L%;` channel triple out of tokens.css. */
-function channel(name) {
-  const css = readFileSync(join(ROOT, "tokens.css"), "utf8");
-  const m = css.match(new RegExp(`--lw-${name}-c:\\s*([\\d.]+)\\s+([\\d.]+)%\\s+([\\d.]+)%`));
-  if (!m) throw new Error(`--lw-${name}-c not found in tokens.css`);
-  return [Number(m[1]), Number(m[2]), Number(m[3])];
-}
-
-function hslToHex(h, s, l) {
-  s /= 100; l /= 100;
-  const c = (1 - Math.abs(2 * l - 1)) * s;
-  const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
-  const m = l - c / 2;
-  const [r, g, b] = [
-    [c, x, 0], [x, c, 0], [0, c, x], [0, x, c], [x, 0, c], [c, 0, x],
-  ][Math.floor(h / 60) % 6];
-  return "#" + [r, g, b]
-    .map((v) => Math.round((v + m) * 255).toString(16).padStart(2, "0").toUpperCase())
-    .join("");
-}
-
-const hex = (name) => hslToHex(...channel(name));
-
-const LIGHT = [hex("navy-700"), hex("logo-cyan")];
-const DARK = [hex("logo-navy-ondark"), hex("logo-cyan-ondark")];
+/* Logo gradient: navy -> cyan on light, the lifted pair on dark. */
+const LIGHT = [ANCHORS.navy, ramp[500]];
+const DARK = ["#4FA8D8", "#8FEAF4"];
 
 function build() {
   let svg = readFileSync(SRC, "utf8");
@@ -74,10 +50,6 @@ function build() {
     // 871.1 wide inside a 1000 box -> (1000 - 871.1) / 2 = 64.45 of bleed each side.
     .replace('viewBox="0 0 871.1 1000"', 'viewBox="-64.45 0 1000 1000"')
     .replace('width="871.1" height="1000"', 'width="1000" height="1000"')
-    // The class goes AFTER stop-color, not before. lw-contrast-check.mjs matches
-    // `<stop offset="…" stop-color="…"` as one adjacent pair across every logo
-    // asset; inserting an attribute between the two makes this file invisible to
-    // the gate — which is how it read "found 0 gradient stops" the first time.
     .replace(
       `<stop offset="0" stop-color="${LIGHT[0]}">`,
       `<stop offset="0" stop-color="${LIGHT[0]}" class="a">`,

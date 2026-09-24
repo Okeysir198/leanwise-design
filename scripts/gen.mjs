@@ -5,6 +5,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildThemeCss } from "./lib/theme.mjs";
 import { buildTokensJson } from "./lib/tokens-json.mjs";
+import { registryOutputs } from "./lib/registry.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const check = process.argv.includes("--check");
@@ -12,6 +13,7 @@ const check = process.argv.includes("--check");
 const outputs = {
   "theme.css": buildThemeCss,
   "tokens.json": buildTokensJson,
+  ...registryOutputs(ROOT),
 };
 
 let stale = 0;
