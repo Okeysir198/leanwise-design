@@ -203,7 +203,7 @@ For Claude Code and other agents building LeanWise UIs:
 - **The `leanwise-ui` skill** — `skills/leanwise-ui/SKILL.md` in this package: the
   shadcn-first order, theme roles only, one CTA per view. Copy it into your app's
   `.claude/skills/`.
-- **The lint** — `npx lw-token-lint src` before every commit and in CI.
+- **The lint** — `npx lw-token-lint src` before every commit.
 
 ## The lint
 

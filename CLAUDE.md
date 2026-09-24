@@ -69,7 +69,7 @@ node scripts/check.mjs visual --record | --compare [--dir d] [--report-only]
 | `contrast` | text pairs ≥4.5 in both themes; `input`/`ring`/`primary` ≥3:1 on every surface; role parity light⇄dark; anchors exact in palette and theme.css; chart-1..5 pairwise dE76 ≥19 normal and ≥15 worst dichromacy; brand hue band |
 | `presence` | every role/ramp/type/radius utility compiles through Tailwind + theme.css |
 | `a11y` | axe (WCAG 2.1 A/AA) over every `@dsCard` page, light and `.dark`; serious/critical fail. A node may opt out of one rule with `data-a11y-expect="<rule-id>"` |
-| `visual` | every card x light/dark, per-shot soft/strong pixel rules; CI records the base ref on the runner then compares HEAD; `[visual-ok]` in the head commit reports without failing |
+| `visual` | every card x light/dark, per-shot soft/strong pixel rules; `--record` a baseline, then `--compare` |
 | `pack` | `npm pack`, install the tarball in a scratch app, resolve every export, compile theme.css from it, parse `r/`, run the bin both ways |
 
 `test/checks.test.mjs` holds the contrast and lint sabotage proofs; keep one per rule.
@@ -78,7 +78,7 @@ node scripts/check.mjs visual --record | --compare [--dir d] [--report-only]
 
 The git tag, `package.json#version` and the content must agree.
 
-1. `npm run check` green; `npm run check:ci` green (or CI).
+1. `npm run check` green; `npm run check:ci` green.
 2. Bump `package.json#version` and the `#vX.Y.Z` in README's install and registry URLs, in
    one commit.
 3. `git tag vX.Y.Z`, `git push && git push --tags`.

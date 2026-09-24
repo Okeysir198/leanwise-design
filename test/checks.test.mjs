@@ -66,11 +66,8 @@ test("tokens.json is DTCG, resolved to hex, anchors exact", () => {
   for (const g of ["light", "dark"]) for (const v of Object.values(t[g])) assert.match(v.$value, /^#[0-9A-F]{6}$/);
 });
 
-test("every check subcommand is wired into an npm script, and CI runs check + check:ci", () => {
+test("every check subcommand is wired into an npm script", () => {
   const pkg = JSON.parse(read("package.json"));
   const all = Object.values(pkg.scripts).join(" ");
   for (const c of ["lint", "contrast", "presence", "a11y", "visual", "pack"]) assert.match(all, new RegExp(`check\\.mjs ${c}\\b`), c);
-  const ci = read(".github/workflows/ci.yml");
-  assert.match(ci, /npm run check\b/);
-  assert.match(ci, /npm run check:ci|check:pack/);
 });
