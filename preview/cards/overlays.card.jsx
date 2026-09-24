@@ -26,7 +26,7 @@ lwCard("Overlays", "Every surface paints on --popover; the dialogs are shown non
       </DropdownMenu>
       <Popover open>
         <PopoverTrigger asChild><Button variant="outline">Share</Button></PopoverTrigger>
-        <PopoverContent align="start" onOpenAutoFocus={(e) => e.preventDefault()}>
+        <PopoverContent align="start" aria-label="Share link" onOpenAutoFocus={(e) => e.preventDefault()}>
           <div className="flex flex-col gap-2">
             <Label htmlFor="p-link">Link</Label>
             <Input id="p-link" readOnly defaultValue="lw.ai/s/8f2k" />

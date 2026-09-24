@@ -131,7 +131,7 @@ async function visual() {
     const [name, buf] = shots.entries().next().value;
     const img = decodePng(buf);
     const bad = Buffer.from(img.data);
-    for (let x = 0; x < img.width; x++) bad[x * 4] ^= 0xff; // one recoloured row
+    for (let x = 0; x < img.width; x++) bad[x * 4] = bad[x * 4] < 128 ? 255 : 0; // one recoloured row, delta >= 128 whatever its ink
     const same = compareShots(buf, buf).ok, differs = !compareShots(buf, encodePng(img.width, img.height, bad)).ok;
     return report("visual --self-test", {
       problems: [!same && "identical shots compared unequal", !differs && "a recoloured row compared equal"].filter(Boolean),

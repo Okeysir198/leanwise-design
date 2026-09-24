@@ -23,6 +23,11 @@ export function pairsFor(t) {
     for (const n of NON_TEXT) if (t[n]) pairs.push([n, s, FLOORS.nonText]);
   }
   for (const link of ["primary", "destructive"]) pairs.push([link, "background", FLOORS.text]);
+  /* Alpha inks stock components paint, composited over what they sit on:
+     inactive Tabs trigger (text-foreground/60, light) and the destructive Alert
+     (text-destructive, description text-destructive/90, on card or the soft tint). */
+  for (const s of ["muted", "background"]) pairs.push(["foreground", s, FLOORS.text, 0.6, "light"]);
+  for (const s of ["card", "destructive-soft"]) for (const a of [1, 0.9]) pairs.push(["destructive", s, FLOORS.text, a]);
   return pairs;
 }
 
@@ -36,10 +41,11 @@ export function checkContrast({ ANCHORS, ramp, themes, themeCss }) {
     for (const other of Object.keys(themes)) for (const k of Object.keys(themes[other]))
       need(k in t, `${name}: role --${k} is missing (present in ${other})`);
 
-    for (const [fg, bg, floor] of pairsFor(t)) {
-      if (!(fg in t) || !(bg in t)) continue;
-      const r = cr(toRgb(t[fg]), toRgb(t[bg]));
-      need(r >= floor, `${name}: --${fg} on --${bg} is ${r.toFixed(2)}:1 (< ${floor})`);
+    for (const [fg, bg, floor, alpha = 1, only] of pairsFor(t)) {
+      if (!(fg in t) || !(bg in t) || (only && only !== name)) continue;
+      const b = toRgb(t[bg]), f = toRgb(t[fg]).map((c, i) => alpha * c + (1 - alpha) * b[i]);
+      const r = cr(f, b);
+      need(r >= floor, `${name}: --${fg}${alpha < 1 ? `/${alpha * 100}` : ""} on --${bg} is ${r.toFixed(2)}:1 (< ${floor})`);
     }
 
     const charts = Object.keys(t).filter((k) => CHART.test(k)).sort();

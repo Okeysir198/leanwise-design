@@ -680,7 +680,7 @@
     },
     {
       "name": "--foreground",
-      "value": "oklch(0.25 0.05 245)",
+      "value": "oklch(0.21 0.05 245)",
       "kind": "color",
       "definedIn": "theme.css"
     },
@@ -692,7 +692,7 @@
     },
     {
       "name": "--card-foreground",
-      "value": "oklch(0.25 0.05 245)",
+      "value": "oklch(0.21 0.05 245)",
       "kind": "color",
       "definedIn": "theme.css"
     },
@@ -704,7 +704,7 @@
     },
     {
       "name": "--popover-foreground",
-      "value": "oklch(0.25 0.05 245)",
+      "value": "oklch(0.21 0.05 245)",
       "kind": "color",
       "definedIn": "theme.css"
     },
@@ -884,7 +884,7 @@
     },
     {
       "name": "--sidebar-foreground",
-      "value": "oklch(0.25 0.05 245)",
+      "value": "oklch(0.21 0.05 245)",
       "kind": "color",
       "definedIn": "theme.css"
     },

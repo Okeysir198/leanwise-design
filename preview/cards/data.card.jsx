@@ -48,7 +48,7 @@ lwCard("Data", "Numbers right-aligned and tabular; status is a Badge carrying a 
         </TableBody>
       </Table>
     </div>
-    <div className="flex flex-col gap-3" aria-busy="true" aria-label="Loading">
+    <div className="flex flex-col gap-3" role="status" aria-busy="true" aria-label="Loading">
       <Skeleton className="h-5 w-1/3" />
       <Skeleton className="h-10 w-full" />
       <Skeleton className="h-10 w-full" />

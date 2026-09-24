@@ -36,6 +36,9 @@ lwCard("Navigation", "Tabs switch views of one object; the sidebar (see Blocks) 
         <TabsTrigger value="week">Week</TabsTrigger>
         <TabsTrigger value="month">Month</TabsTrigger>
       </TabsList>
+      <TabsContent value="day" className="pt-2 text-sm">Today</TabsContent>
+      <TabsContent value="week" className="pt-2 text-sm">This week</TabsContent>
+      <TabsContent value="month" className="pt-2 text-sm">This month</TabsContent>
     </Tabs>
     <div className="flex items-center gap-2">
       <Button variant="outline" size="sm">Previous</Button>

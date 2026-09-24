@@ -15,7 +15,7 @@ function Toasts() {
     toast.success("Source re-indexed", { description: "1,284 documents in 42 s", duration: Infinity });
     toast("Invite sent to jamie@acme.com", { duration: Infinity });
   }, []);
-  return <Toaster position="bottom-right" expand />;
+  return <Toaster position="bottom-right" expand toastOptions={{ classNames: { description: "text-muted-foreground!" } }} />;
 }
 
 lwCard("Feedback", "Inline alerts sit in the flow; toasts confirm what already happened and never ask a question.", (
