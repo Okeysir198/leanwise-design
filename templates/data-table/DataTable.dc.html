@@ -32,7 +32,7 @@
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="120px,36px">Add source</x-import>
 </div>
 <div class="flex flex-wrap items-center gap-3">
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.Input" hint-size="280px,36px" className="max-w-xs" placeholder="Filter sources…" aria-label="Filter sources" value="{{ query }}" onChange="{{ setQuery }}"></x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Input" hint-size="280px,36px" className="w-full sm:max-w-xs" placeholder="Filter sources…" aria-label="Filter sources" value="{{ query }}" onChange="{{ setQuery }}"></x-import>
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.ToggleGroup" hint-size="320px,32px" type="single" variant="outline" size="sm" aria-label="Status" value="{{ status }}" onValueChange="{{ setStatus }}">
 <sc-for list="{{ filters }}" as="f" hint-placeholder-count="5">
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.ToggleGroupItem" hint-size="64px,32px" value="{{ f.value }}">{{ f.label }}</x-import>

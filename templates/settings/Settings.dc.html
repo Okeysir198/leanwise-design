@@ -101,7 +101,7 @@
 
 <sc-if value="{{ dirty }}" hint-placeholder-val="{{ false }}">
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.Card" hint-size="100%,72px" className="sticky bottom-4 py-0 shadow-lg" role="region" aria-label="Unsaved changes">
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.Item" hint-size="100%,72px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Item" hint-size="100%,72px" className="flex-wrap">
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.ItemContent" hint-size="200px,40px">
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.ItemTitle" hint-size="200px,20px">You have unsaved changes</x-import>
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.ItemDescription" hint-size="240px,16px">Save to apply them to every member.</x-import>
@@ -118,7 +118,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:1100}}">
 class Component extends DCLogic {
-  state = { theme: "light", name: "Acme Legal", dirty: true };
+  state = { theme: "light", name: "Acme Legal", dirty: false };
 
   componentDidUpdate() { document.documentElement.classList.toggle("dark", this.state.theme === "dark"); }
 

@@ -132,13 +132,13 @@ function DataTable() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center gap-3">
         <Input
           placeholder="Filter sources…"
           aria-label="Filter sources"
           value={table.getColumn("source").getFilterValue() ?? ""}
           onChange={(e) => table.getColumn("source").setFilterValue(e.target.value)}
-          className="max-w-xs"
+          className="w-full sm:max-w-xs"
         />
         <ToggleGroup type="single" variant="outline" size="sm" value={status} aria-label="Status"
           onValueChange={(v) => table.getColumn("status").setFilterValue(v || "all")}>
