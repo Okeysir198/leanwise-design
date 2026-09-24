@@ -1,1263 +1,237 @@
-# @leanwise/design — LeanWise Design System
+# @leanwise/design
 
-The brand foundation for every LeanWiseAI product: one token core, five CSS layers, the
-React component layer, and ten starting templates. **Depend on it; never copy it.**
+The LeanWise brand as a **shadcn/ui theme and registry**. You build with stock shadcn
+components; this package supplies the colours, type, focus ring and a handful of brand
+blocks, so every LeanWise app looks like one product without anyone forking a component.
 
+What ships:
+
+| Path | What it is |
+|---|---|
+| `theme.css` | The whole theme for Tailwind v4 + shadcn: every role as a CSS variable, light and `.dark`, registered as utilities (`bg-primary`, `bg-cta`, `text-muted-foreground`…), the type scale, the radius, the solid focus ring, pointer cursors |
+| `r/*.json`, `registry.json` | The shadcn registry: `leanwise-theme`, `leanwise-font`, `leanwise-font-mono`, `leanwise-base`, and the blocks `kpi-tile`, `state-view`, `file-upload`, `app-shell` |
+| `marketing.css` | Plain-CSS layer for marketing sites (hero, sections, plans, footer), over theme variables only |
+| `fonts.css`, `fonts/` | Geist + Geist Mono, self-hosted, Vietnamese subsets included |
+| `assets/` | Logo mark, lockups, favicon, hero artwork |
+| `brand` | `brandVars(hex, scheme)` — per-tenant theming |
+| `hooks` | `useTheme`, `useReducedMotion`, `THEME_KEY` |
+| `tokens.json` | The palette as DTCG, resolved to hex, for tools that cannot read CSS |
+| `lw-token-lint` | The consumer lint (bin) |
+
+Everything is generated from one file, `src/palette.mjs`.
+
+## The rule: shadcn first
+
+Every UI decision goes down this list and stops at the first step that works.
+
+1. **A stock shadcn component or block, used the shadcn way.** `npx shadcn add button`.
+   Composition, variants and props as the shadcn docs show them. The theme already makes it
+   LeanWise.
+2. **Stock component + a brand role.** When the brand needs something shadcn has no variant
+   for, reach it through a theme variable or a `@leanwise` registry item — never by editing
+   the component. The CTA is the example: a stock `Button` with
+   `className="bg-cta text-cta-foreground hover:bg-cta/90"`.
+3. **Build your own — only when shadcn has nothing.** Then build it from shadcn primitives
+   and theme roles, and if a second app will need it, it belongs in this registry.
+
+Keep local edits to installed components small, so `npx shadcn add <name> --diff` keeps
+showing you real upstream changes.
+
+## Quick start
+
+A Tailwind v4 app with shadcn:
+
+```bash
+npx shadcn@latest init --base radix
+npm i github:Okeysir198/leanwise-design#v5.0.0
 ```
-tokens.css        the source of truth — HSL triples, light + dark, both re-pointed
-fonts.css         Geist + Geist Mono, self-hosted, incl. Vietnamese subsets
-shadcn.css        maps --primary/--background/… onto the tokens
-tailwind-preset.cjs Tailwind v3 consumers (CommonJS — a tailwind.config.js requires it)
-reset.css         the nine bare-element rules. A vanilla consumer wants it; a
-                  Tailwind app does NOT (preflight covers the useful half)
-base.css          the SHARED layer — layout, type, buttons, the ICON and the icon
-                  button, cards, chips, the avatar, form controls, tabs,
-                  pagination, the empty state, the top bar and its mobile nav,
-                  prose, disclosure, the pointer list
-marketing.css     the MARKETING layer (grounds, hero, features, stories, ambient motion)
-product.css       the PRODUCT layer (data, overlays, app shell/rails, AI, mobile bars)
-components/       the React layer — components + their specimen cards, thin
-                  wrappers over the CSS above (no styling of their own)
-templates/        ten starting points (see Templates)
-assets/           the logo — generated SVG/PNG, this package is its source of truth
-preview/          FOUNDATION cards (brand, colour, type, spacing, motion)
-```
 
-**Load order is always `tokens.css` → `base.css` → the layer you need.** An app takes
-`product.css`; a marketing page takes `marketing.css`; a page that is both takes both, in that
-order. Nothing can drop `tokens.css` or `base.css`.
-
-The names are load-bearing, because the previous two-layer split got this wrong: `.lw-btn`
-lived in `lw.css`, "the marketing layer", so an app that dropped it got correct layout, forms,
-tables and overlays — and unstyled buttons. The shared controls now live in `base.css`, which
-is the layer nobody drops.
-
-Two rules decide which layer a rule belongs in. Both were learned the expensive way; the
-receipts are in `CHANGELOG.md`.
-
-**Presence is load-bearing, position is not.** A `:is(.dark, …)`-scoped patch outranks the rule
-it patches wherever it sits — but a page that never loads `product.css` never sees it at all. So
-anything a marketing page can reach lives in `base.css`: the layout primitives, the form field
-and control face, the site header, `.lw-icon-btn`, `.lw-avatar`, `.lw-empty`, `.lw-tabs`,
-`.lw-pagination`, and `.lw-icon` — one rule that is the entire layout contract for the icon set.
-
-**A property carrying a COLOUR is `base.css`'s to state.** Geometry may lean on a reset, because
-getting geometry wrong is visible. Colour may not: a colour `base.css` does not state is a colour
-the contrast gate cannot see, and the UA will supply one. `.lw-btn` states its own `background`
-and `border` for exactly this reason.
-
-**A marketing page needs `tokens.css` + `base.css` + `marketing.css` and nothing else** — see
-[Marketing recipes](#marketing-recipes).
-
----
-
-## Contents
-
-**Getting in:** [Install](#install) · [The brand](#the-brand-two-anchors-one-accent) ·
-[Components](#components) · [Marketing recipes](#marketing-recipes) · [Templates](#templates)
-**The reasoning:** [The rules that are not obvious](#the-rules-that-are-not-obvious) ·
-[Adding a component](#adding-a-component) · [Enforcement](#enforcement)
-**The layers:** [Email](#email) · [Mobile](#mobile) · [Charts](#charts) · [Motion](#motion) ·
-[Accessibility](#accessibility)
-**The foundations:** [Responsive](#responsive) · [Spacing](#spacing-is-named-by-value) ·
-[Density](#density) · [HSL triples](#why-colours-are-authored-as-hsl-triples) ·
-[Per-tenant theming](#per-tenant-theming) · [Logo](#logo)
-
-Two companion files: `CHANGELOG.md` for what moved, `REVIEW.md` for the current audit and
-what is still open. `CONTRIBUTING.md` points back here — the checklist lives in one place.
-
----
-
-## Install
-
-```jsonc
-"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v4.3.0" }
-```
+In your global CSS, after Tailwind:
 
 ```css
-/* Tailwind v4 + shadcn app (tss-app) */
 @import "tailwindcss";
-@import "tw-animate-css";                            /* animate-in / animate-out */
 @import "@leanwise/design/fonts.css";
-@import "@leanwise/design/tokens.css";
-@import "@leanwise/design/shadcn.css";
-@import "@leanwise/design/theme.css";                /* AFTER shadcn.css */
-@import "@leanwise/design/base.css" layer(components);     /* shared controls */
-@import "@leanwise/design/product.css" layer(components);  /* app surfaces */
+@import "@leanwise/design/theme.css";
 ```
 
-**`radix-ui` is a dependency** — the unified package, one install, tree-shaken by
-your bundler; `react` / `react-dom` stay peers. Every overlay imports from it, so a consumer of
-`./react` gets it transitively; a CSS-only consumer never loads it. Your own vendored
-`@radix-ui/react-*` copies are unaffected — the two do not collide.
+`theme.css` replaces the colour block `shadcn init` writes into your CSS — delete that block
+(`:root`, `.dark`, `@theme inline`) so there is one source.
 
-`theme.css` is the v4 half of `tailwind-preset.cjs` — it registers the tokens as real
-utilities (`bg-cta`, `text-h1`, `shadow-focus`). Without it a v4 app has to hand-write the
-whole bridge, and the parts that are easiest to miss are the ones with no `@theme`
-namespace at all. See its header for the `@theme` vs `@theme inline` rule and the one cost
-of adopting it (`--color-*` are not on `:root`).
+Add the registry to `components.json`:
 
-`layer(components)` is what keeps the `.lw-*` rules beatable by a utility. The nine
-bare-element rules live in `reset.css`, which a Tailwind app should **not** import: un-layered
-element rules beat every utility regardless of specificity, Tailwind's preflight already covers
-the useful half, and the rest is the half that does the damage.
-
-```js
-// Tailwind v3 — tailwind.config.cjs. The preset is CJS, so `require` needs a CJS config.
-module.exports = { presets: [require("@leanwise/design/tailwind-preset")] };
-
-// tailwind.config.js in a "type": "module" package — import it instead.
-// `export default { presets: [require(…)] }` is a ReferenceError there.
-import preset from "@leanwise/design/tailwind-preset";
-export default { presets: [preset] };
+```json
+{
+  "registries": {
+    "@leanwise": "https://raw.githubusercontent.com/Okeysir198/leanwise-design/v5.0.0/r/{name}.json"
+  }
+}
 ```
 
-The v3 preset and `theme.css` are two spellings of one vocabulary, and `npm run
-check:presence` fails the build if they ever stop agreeing.
-
-### Components — the shadcn registry
-
-Both shadcn consumers use **zero** of this package's React components (§Components): they vendor
-shadcn's and hand-align them to the `.lw-*` spec, which is how one app came to re-type
-`padding: 0 18px`, the control heights, the focus rule and the table-header treatment from
-scratch. The registry is how that stops being re-typed per app — and the consumer still
-**owns** the file, which is the point of shadcn.
+Then install the base and whatever blocks you need:
 
 ```bash
-npx shadcn@latest add ./node_modules/@leanwise/design/r/button.json
+npx shadcn add @leanwise/leanwise-base
+npx shadcn add @leanwise/app-shell @leanwise/kpi-tile
+npx shadcn add button card dialog table   # stock, as always
 ```
 
-Nine items: `button`, `badge`, `input`, `card`, `table`, `switch`, `tabs`, `dialog`, `utils`.
-No static host is needed — `r/` is committed for the same reason `tokens.json` and
-`react.d.ts` are: every consumer installs from a git tag, where a publish-time artifact does
-not exist. If a docs site appears later it serves this same folder.
+Dark mode is the `.dark` class on an ancestor (shadcn's convention). `useTheme()` from
+`@leanwise/design/hooks` toggles it and remembers the choice.
 
-The five form primitives — `button`, `badge`, `input`, `card`, `table` — stay Tailwind items
-the consumer owns, rendering against the geometry tokens (`px-btn-x`, `h-control-md`,
-`text-th`, `tracking-th`), so a registry `<Button>` and a `.lw-btn` cannot drift apart by hand.
-The three Radix-backed items — `dialog`, `tabs`, `switch` — are **thin wrappers
-over the design system's own CSS** (`.lw-dialog*`, `.lw-backdrop`, `.lw-tabs`, `.lw-switch`):
-one source of styling, shared with the vanilla and React consumers, and no utility strings to
-re-align. They require the named layers loaded — `dialog` needs `base.css` + `product.css`,
-`tabs` and `switch` need `base.css` — and depend on the unified `radix-ui` package.
-`npm run check:registry` compiles every design-system utility the Tailwind items use and
-fails if one emits nothing, and asserts every `lw-*` literal in a wrapper is a class some
-selector in `base.css`/`product.css` names — a wrapper that names none is a failure, not a
-pass. A registry that drifts from the CSS is worse than no registry, because it looks
-authoritative.
+## The brand
 
-### Am I missing anything?
+- **Three fixed anchors**, asserted exact by `npm run check`:
+  cyan `#0C727B` (`--primary`), navy `#024576` (`--navy`), amber `#FCB603` (`--cta`).
+  Everything else is derived from the logo gradient, navy to cyan.
+- **Logo**: `assets/logo-lockup.svg` on light, `assets/logo-lockup-ondark.svg` on navy,
+  `assets/logo-mark.svg` alone, `assets/logo-favicon.svg` for the tab. Never recolour it.
+- **One CTA per view.** Amber is the single high-energy action on a screen. Everything else
+  is the default (cyan) button or quieter. `lw-token-lint` counts `variant="cta"` per file.
+- **Ink follows the fill.** White on cyan and on navy; navy on amber and on warning.
+- **Focus is a solid brand ring**, never faded. `theme.css` states it unlayered, so it wins
+  over the `ring-ring/50` stock components carry — no component needs editing.
+- **Borders** are quiet (`border`); **control boundaries** are stronger (`input`, 3:1 on
+  every surface) so a text field reads as a field.
+- **Pointer cursor** on everything interactive — buttons, tabs, menu items, options,
+  switches, links, `summary`. `theme.css` sets it.
+- **Info and error messages are soft.** Use `bg-info-soft text-info-soft-foreground
+  border-info-border` (and the `destructive-soft` trio) for alerts and callouts; the solid
+  fills are for badges and buttons.
+- **Charts** use `chart-1`..`chart-5`, checked for separation under normal vision and all
+  three dichromacies.
 
-```bash
-npx lw-doctor      # from a consumer's root
-```
+## Roles
 
-Reads the version installed **locally** and fetches the advisory list from the repo **tip** —
-the newest release is the only thing that knows what is wrong with the older ones. Every count
-in `advisories.json` is measured by a named gate and re-verified against the tree by
-`npm run check:advisories`, because a hand-maintained list of what is wrong is exactly the
-thing that has already been wrong twice here.
+Every role is a CSS variable in `:root` and `.dark`, and a Tailwind colour: `bg-<role>`,
+`text-<role>`, `border-<role>`, `ring-<role>`, `fill-<role>`, with `/<opacity>`.
 
-```css
-/* vanilla CSS (leanwise-ai, rag-service) */
-@import "@leanwise/design/tokens.css";
-@import "@leanwise/design/reset.css";     /* vanilla only — a Tailwind app skips this */
-@import "@leanwise/design/base.css";
-@import "@leanwise/design/marketing.css";
-```
-
-```ts
-// React
-import { Button, Field, Table, PromptInput } from "@leanwise/design/react";
-```
-
-The React entry re-exports `.jsx` source rather than a build artefact — deliberately, so a
-component is one file to read and patch, and so the CSS layer stays the single source of
-styling. The cost is that your bundler must apply its JSX transform to this dependency.
-Vite's dependency pre-bundling does it with no configuration; a hand-rolled webpack config
-may need this package inside `babel-loader`'s `include`.
-
-**Everything documented here ships.** `package.json` declares the subpath exports, so the
-import lines above resolve: `/react` (the barrel — every component), `/brand` (`brandVars`),
-`/hooks` (`useTheme`, `useReveal`, `useSpotlight`, `useDeterministicCascade`,
-`useReducedMotion`, `animateCounter`), `/tailwind-preset`, and each stylesheet by name.
-Nothing else is importable — there is no deep path into `components/`, so a component can
-move without breaking a consumer.
-
-`useTheme` and `ThemeToggle` read and write the same `lw-theme` key and paint the same
-`.dark` + `data-theme` pair, so an app can use either or both without them desyncing.
-
----
-
-## The brand: two anchors, one accent
-
-| | | |
-|---|---|---|
-| **cyan** `#0C727B` `--lw-brand-500` | the brand | every fill, `--primary`, the default button |
-| **navy** `#024576` `--lw-navy-700` | the ground | dark surfaces, heading ink on light |
-| **amber** `#FCB603` `--lw-cta-500` | the accent | one CTA per view, nothing else |
-
-Cyan and navy are the logo's own two gradient stops — the palette is derived from the mark,
-not picked from a swatch book. Amber sits ~144° from the cyan so it can never read as a
-second brand colour.
-
-**The two themes share the INK hue, not the paper hue.** Light paper is warm (`--lw-surface-1..3`
-and `--lw-border-1/2` sit on hue 38 — `#FCFBFA`, `#F7F6F5`, `#F2F1EE`); the page
-itself stays white, and the dark theme's paper is navy. What both share is the ink: text tiers,
-heading ink and the one shadow ink (`--lw-shadow-ink-c`) are navy on both grounds. The lifts are deliberately CLOSE to the page — subtle is 1.6% down, inset 5.8% — because a tinted ground more than a couple of percent off an untinted page reads as a different colour rather than as the same paper lit differently. Cards, dialogs, popovers and toasts sit FLUSH on `--lw-bg` on light and are defined by their hairline plus shadow; the tiers are only for grounds meant to recede (sidebar, table head, inset panel, hover). A warm surface
-under navy ink reads as paper; a cool grey under it reads as a spreadsheet. `--lw-text-3` on
-`--lw-surface-3` — the tightest pair in the system — measures 4.75.
-
----
-
-## Components
-
-**Two kinds of card.** A composition card per folder shows how the pieces go
-together; a *state matrix* card shows one control against every state it can be in, on both
-grounds. The matrix is not decoration — the axis is what finds bugs. `Button.card` caught
-disabled being painted from the `surface-3`/`text-4` tiers, which no dark scope re-points, so a
-disabled button on navy stayed a pale grey block; `forms-states.card` caught the `InputGroup`
-invalid state above. Neither is visible on one ground, and neither is visible without the
-state axis.
-
-Every component is a thin wrapper over the `.lw-*` CSS in `base.css` / `marketing.css` / `product.css` —
-they add no styling of their own, so the React and vanilla consumers cannot drift apart.
-
-**Some CSS here has no React wrapper, on purpose** — `.lw-msg`, `.lw-cal-*`, `.lw-chart`,
-`.lw-tool`, `.lw-cmdk` and the rest are shipped rules a vanilla page composes, each with a
-specimen card writing the markup. Adopting one as a React component is a matter of saying so in
-an issue.
-Every interactive component ships `:hover`, `:focus-visible`, `:disabled` and a dark-ground
-rule; every transform stands down under `prefers-reduced-motion`.
-
-### Primitives — `components/primitives/`
-
-| Component | Purpose |
+| Role | Use |
 |---|---|
-| `Button` | `variant`: brand · cta · ink · ghost · danger · link. `size`: sm/md/lg. `iconOnly`, `loading`. **`type` defaults to `"button"`** — the submit control of a `<form>` says `type="submit"`. Forwards its ref |
-| `Card` | The surface. `interactive` makes it a real control, not a div with a click handler |
-| `CardHead` | The card's header row — title on the left, controls on the right |
-| `CardTitle` | The card's heading. `as` picks the heading level; the size does not change with it |
-| `CardBody` | The card's copy, on the body scale |
-| `Chip` | Status atom. `tone`: brand · success · warning · danger · neutral |
-| `Eyebrow` | The signature mono/uppercase label, tipped with a hexagon node |
-| `Avatar` | Initials by default; an image only when there is one |
-| `Skeleton` | `shape` or `lines={n}`. Shaped like the thing it replaces |
-| `Icon` | The icon set — `IconNames.length` glyphs, the count that cannot go stale. One 24-grid, one stroke weight, `currentColor` only. `name` `size` `label`. The ONLY place an icon path is drawn: components name a glyph, they never redraw one |
-| `Disclosure` | A native `<details>`/`<summary>` row — the FAQ pattern, complete with **zero JavaScript**, so it opens before hydration and with JS off. Uncontrolled: `defaultOpen` applies once and the browser owns the state; observe `onToggle`. No height animation, because `<details>` cannot animate its own height portably — only the chevron moves |
-| `Prose` | The read surface for sanitized markdown HTML. Puts one class on one wrapper and styles the DESCENDANTS, so it takes `dangerouslySetInnerHTML` without knowing which elements the author used. `measure`: prose (68ch) / narrow (46ch); a third width is `--lw-prose-max`. It needs **no dark-ground rules at all** — every value is a role, so `.lw-band-dark` re-points the whole article |
-| `.lw-icon-btn` | Class, not a component: the borderless icon control. Owns the 28px hit area, hover ink and brand focus ring — use it instead of hand-styling a bare `<button>` |
-
-### Layout — `components/layout/`
-
-| Component | Purpose |
-|---|---|
-| `Container` | The 1200px reading column |
-| `Stack` | Vertical rhythm. `gap` = a spacing token |
-| `Cluster` | A wrapping row. `justify`, `align` |
-| `Grid` | Auto-fit columns. `min` is the only knob — no breakpoint needed |
-| `Split` | Main column + rail. Collapses at `--lw-bp-lg` |
-| `Section` | A page band. `dark` flips every descendant's ink |
-
-### Forms — `components/forms/`
-
-| Component | Purpose |
-|---|---|
-| `Field` | **The unit.** Wires `htmlFor`, `aria-describedby`, `aria-invalid`. `label` `help` `error` `required` `optional` |
-| `Input` | `size`, `invalid` |
-| `PasswordInput` | A password that can be read back. Reveal toggle with `aria-pressed`, and a Caps Lock warning — the commonest cause of "the password is right and it says it is wrong", invisible on every keyboard |
-| `OtpInput` | A one-time code as ONE field, not six boxes. Six inputs break `autoComplete="one-time-code"` (the platform fills only the first), make six tab stops, and turn a pasted "123 456" into one digit. The segmented LOOK is letter-spacing |
-| `Textarea` | |
-| `Select` | `options` as strings or `{value,label}`. CSS chevron |
-| `Switch` | For a setting that applies immediately |
-| `Checkbox` | `radio` for the round variant |
-| `Segmented` | 2–4 mutually exclusive views |
-| `FileUpload` | Dropzone + file list. The zone is a `<label>` around a real file input, so click, keyboard and the a11y name are the platform's. Rejects by name, with the limit stated |
-| `Combobox` | Single and multi-select with filtering, on `Popover`. Focus stays in the input and `aria-activedescendant` names the active row — the ARIA 1.2 pattern, and the opposite of `Menu`. `onSearch` hands filtering to the caller: the options passed ARE the result |
-
-### Data — `components/data/`
-
-| Component | Purpose |
-|---|---|
-| `Table` | `columns` + `rows`. A column with `num` gets mono tabular-nums, right-aligned. `sortable` + `onSort` renders the header as a real button with a caret. `collapse="cards"` + `detailsLabel` turns each row into a card below `--lw-bp-md` of **container** width — one DOM, a container query, explicit roles; see §Responsive |
-| `KpiTile` | `icon` + `accent` draw a tinted subject chip; the delta sits on the number's baseline beside it. `accent` is the SUBJECT's family, `tone` judges the movement — two different facts |
-| `StatMeter` | A number with a unit, a bar and a target marker — a reading, not a decoration |
-| `EmptyState` | `icon` (a glyph name) `title` `description` `action` — exactly one action |
-| `StateView` | **The five states as one set**: empty · loading · error · offline · denied. Shipping only `empty` is how the other four get invented per product. `error`/`offline` announce with `role="alert"`; `loading` uses `role="status"` + `aria-busy` |
-| `Console` | `lines[].cells` renders aligned subgrid columns (`num` right-aligns); `text` stays free-running and spans the stream. Never pad mono text with runs of spaces |
-| `DataGrid` | **Not an extension of `Table`.** Sticky header, resizable and pinnable columns, bulk selection, optional windowing. Reach for `Table` first — a static list should not pay for grid machinery |
-| `Progress` | Determinate only, with real `role="progressbar"` values. Indeterminate work is a `Skeleton` — a bar that moves without knowing its extent reports a number it does not have |
-| `Pagination` | Page navigation AND the result count, because the count is the control's feedback. `cursor` mode is prev/next only, for an API that cannot count |
-| `ActivityFeed` | Notifications and activity — the same list with a different verb. Day-bucketed; unread is a dot plus weight, never a tint alone |
-
-**`Table` and `DataGrid` share one column contract.** A column is
-`{ key, header, num, sortable, … }` and sorting is `sort={{ key, dir }}` + `onSort({ key, dir })`
-— identical in both, so a column definition moves between them unedited. Reach for `Table`
-first; `DataGrid` adds resize, pinning, selection and windowing.
-
-> `columns[].header` and `onSort({ key, dir })` are the only shapes. Sort state is top-level —
-> `sort={{ key, dir }}` — never per column.
-
-**The deprecation cycle.** A rename ships accepting both spellings, warns once per component per
-prop, and is removed only at the next major. Nothing in this package disappears inside a minor —
-a design system whose API moves under a consumer's feet is a reason to vendor it.
-
-### Navigation — `components/nav/`
-
-| Component | Purpose |
-|---|---|
-| `TopBar` | Sticky app chrome. `brand` `links` `actions` |
-| `AppBar` | **Use this, not a hand-written bar.** Brand + breadcrumbs + actions on `TopBar`, with an optional rail toggle. The lead holder is `flex: 0 1 auto` because TopBar already ships a `flex: 1` spacer — a second claimant splits the slack and ellipsises the breadcrumbs with a third of the row empty, which is exactly what five hand-written copies did |
-| `Sidebar` | The product rail. `collapsed` → 60px icon rail. `linkAs` swaps the anchor for a router Link |
-| `NavMenu` | The site-header dropdown that teaches a taxonomy: named groups, one line of prose per destination. A native `<details>`, so it is server-safe and works with JavaScript off — **not** built on `Menu`/`Popover`, whose CSS lives in the layer a marketing page drops. Put it FIRST in the bar's nav. Escape-to-close and close-on-route-change are the consumer's |
-| `Tabs` | Roving tabindex: arrow keys, Home/End — selection AND focus move together |
-| `Breadcrumbs` | Mono, so it reads as a path |
-| `BottomNav` | The touch answer to `Sidebar`. Three to five DESTINATIONS, never actions (warns past five). Reserves the home indicator from `--lw-safe-bottom`, and takes its 44px target from the bar height rather than padding |
-| `NavToggle` | The narrow-bar nav for `TopBar` — a toggle in the bar and a panel under it, rendered as `TopBar` children. **Not `Drawer`:** a drawer is a modal `<dialog>` in the top layer that makes the page inert, so it needs a focus trap and a scrim; this hangs under the bar, leaves the page interactive, and needs neither. Appears at `--lw-bp-md`, the same breakpoint at which the bar's own links drop. `aria-expanded` + `aria-controls`, Escape closes and returns focus |
-| `LocaleSwitcher` | Which language the interface is in. `Segmented` when there is room; `compact` opens a **menu**, not a cycle — a reader who cannot read the current language cannot predict what the next press gives them. Ships no language names: a list of endonyms is a claim about which languages exist and how they are spelt |
-| `ThemeToggle` | Light / dark by default (`modes` adds `"system"` where a product honours it). Driven by `value`/`onChange` — never uncontrolled beside a themed wrapper, which paints half a theme |
-
-### Overlays — `components/overlays/`
-
-| Component | Purpose |
-|---|---|
-| `Dialog` | Radix Dialog behind the same `.lw-dialog` CSS: portal, `.lw-backdrop`, focus trap, Esc, outside-click and a scroll lock. `trigger` (a `forwardRef` element), `open` / `onOpenChange`, `title` or `label` — an unnamed dialog fails `check:a11y` |
-| `Toast` | `tone`: info · ok · warn · err. Errors use `role="alert"`. `onClose` adds a dismiss control |
-| `ToastRegion` | The live region toasts mount into — one per page. `urgent` raises it to `assertive`; `label` names it |
-| `Tooltip` | Radix Tooltip — a real `role="tooltip"` wired through `aria-describedby`, Escape-dismissable, on touch. `side`, `open`, `delayDuration`. The child MUST forward its ref (`Button` does). Hints only: never the sole name of a control |
-| `Popover` | **The one floating surface.** Menu, Combobox, DatePicker and every filter panel are this plus contents. Radix Popover, portalled, so it escapes an ancestor's `overflow: hidden`; `placement` flips and shifts on every side when the preferred one does not fit. `anchor` when the trigger owns its own ARIA (a Combobox input), `autoFocus`, `container` |
-| `Drawer` | The side sheet — a modal that enters from an edge, so it is `Dialog` with a `side`: start · end · bottom (the touch answer to a centred dialog). Same portal, backdrop and scroll lock |
-| `OverlayProvider` | The portal root every Radix-backed overlay renders into, plus the shared tooltip delay budget. One per app or per themed island, placed INSIDE the element carrying `brandVars()` / `.dark` — a portal inherits theme from its container, not its trigger. Never inside `.lw-topbar` (its `backdrop-filter` becomes the containing block for `position: fixed`) |
-| `Menu` | The action menu, on Radix DropdownMenu. Arrows, Home/End, typeahead, Esc-returns-focus; `open` / `onOpenChange`. `items` take `icon` (a glyph name), `kbd`, `checked` (→ `menuitemcheckbox`, styled by `[data-state="checked"]`), `danger`, `separator` and `label` rows |
-
-**The overlay recipe.** Mount one `OverlayProvider` inside the element that carries the
-theme — `<html class="dark">` → `<body>` → `<OverlayProvider>` — or one per branded island
-(`brandVars()`); every Dialog, Drawer, Popover, Menu, Tooltip and CommandPalette below it renders
-into that provider's layer, and the layer mirrors the opener's `.dark` / `.lw-band-*` scope onto
-itself so a dialog opened from a dark card is dark. Load `base.css` + `product.css` (`.lw-layer`,
-`.lw-backdrop` and every overlay class live in the app layer). **z-index:** the layer sits at
-`--lw-z-modal` (110) for modals and `--lw-z-overlay` for the rest, not the native top layer — so a
-consumer z-index above 110 paints over an open modal; keep app chrome on the `--lw-z-*` scale.
-State selectors are Radix's: `[data-state="open"]` on the dialog, drawer and popover,
-`[data-state="checked"]` on a menu row; `.lw-backdrop` is an element, not `::backdrop`.
-**Kept native on purpose:** `Select`, `Switch`, `Checkbox`, `Segmented`, `Toast`, `NavToggle`,
-`Disclosure`, `NavMenu` — the platform control is the right one on a phone, submits without
-JavaScript, or is a disclosure rather than a floating surface.
-
-### AI — CSS only
-
-**This category is CSS, with no React wrappers** — no consumer ever imported one, and what they
-wrapped is the part a design system owns: `.lw-msg` (a turn: avatar, mono role label, prose body — never a bubble, because
-a bubble caps line length and this product answers in paragraphs), `.lw-source` and
-`.lw-source-list` (the numbered citation a claim and its passage share), `.lw-confidence`
-(number **and** bar, neutral below 60%), `.lw-trace`, `.lw-prompt`, `.lw-tool`, `.lw-diff`,
-`.lw-artifact` and `.lw-feedback`.
-
-Two specimens render all of it on both grounds — `components/ai/ai.card.html` and
-`components/ai/ToolCall.card.html` — and `templates/ai-app-shell` lays it out as a page. Both
-are how the rules stay under `check:a11y` and `check:visual`, and both are the markup to copy.
-
-### Marketing — `components/marketing/`
-
-| Component | Purpose |
-|---|---|
-| `Hero` | The hero band, and **a real dark BAND**: `.lw-hero-dark` is in `tokens.css`'s band-selector list, so every role token inside it re-points and no consumer has to hand-add `data-band="dark"` any more. On its own: navy ground, honeycomb texture, the mark oversized at the upper right. Inside `.lw-page-dark` it goes transparent and the page owns the background (`assets/hero-mark.svg`, `assets/hero-mark-ink.svg`, `assets/hex-lattice.svg`, `assets/hex-lattice-ink.svg` — copy all four) |
-| `FeatureGrid` | Numbered features; the brand edge draws in on hover |
-| `StoryCard` | The quote renders **only** with quote + person + role |
-| `LogoRail` | Marks are masked to one ink through the image's ALPHA — supply a transparent single-colour silhouette, or a JPEG / white-card PNG / opaque-white lettering masks to a solid blob. `mode="mono"` (per rail or per logo) draws a multi-tone raster under `grayscale()` instead. A mark without `src` degrades to a mono wordmark. `marquee` for a slow loop; static under reduced motion |
-| `SiteFooter` | Not `Footer` — `CardFoot` exists and the bundle namespace is flat. A dark footer is `dark` → `data-band="dark"`, **never** a hard-coded navy tier: the band re-points every role token, so no child needs a dark variant. A column entry with no `href` is an inert note, not a dead link |
-| `Steps` | A numbered sequence — timeline, roadmap, "how it works". **No state axis on purpose**: `Stepper` owns wizard state; a timeline has none. `label` is a pill that grows to fit a short phase name and ellipsises past its column (full text in `title`); a sentence goes in `meta`. `orientation="horizontal"` reverts to the stack under `--lw-bp-md` |
-| `Quote` | The standalone pull quote. Shares its brand spine with `StoryCard`'s quote through **one** declaration block, so the drawing has one owner |
-| `Byline` | Author, role, date on the existing `Avatar`. The date is a real `<time>` |
-| `ArticleCard` | The index entry — a composition of `Card` + `CardHead`/`CardBody`/`CardFoot` + `.lw-card-media` + `Byline` + `.lw-pill`. There is deliberately no `.lw-post` class, and no `.lw-article` grid: the article page is a `Split` |
-| `PlanCard` | A pricing plan. Composes `.lw-card` and adds four declarations. **`price` is optional and a card without one is a FINISHED card** — nothing reserves the slot, so it closes up. `featured` adds a brand edge and `--lw-brand-glow` and *nothing else*; a dark featured plan is `data-band="dark"`, never a hard-coded navy tier. An excluded feature is a `minus` glyph plus an `.lw-sr-only` word, never a greyed check |
-| `CompareTable` | The feature matrix. Distinct from `Table` **by meaning**: `Table` is a data table (records, values, sorting); this never sorts and has one repeated cell type. Sticky on both axes via `--lw-z-local-1/2/3`; every cell is two glyphs and a word, and `--lw-success-on` (the text variant), never `--lw-success` (a fill) |
-| `Flow` | The animated flow diagram — pipeline, onboarding sequence, roadmap. **The static state is the COMPLETE diagram**; all motion is double-gated behind `@supports (animation-timeline: view())` *and* `prefers-reduced-motion: no-preference`, and scroll only replays it. An inactive node is **never** dimmed with `opacity`; the active one is marked positively via real `aria-current`. Server-safe — no state, no effects, no `"use client"`; a node that expands is the consumer composing `Disclosure` into `detail`. **Two forms since v1.6.0**: a chain, and a *graph* — selected automatically by any edge joining non-consecutive nodes — which lays the nodes on a routing lattice so a fan-in, a fan-out and a loop all draw, in CSS borders rather than SVG. The graph form also emits an `.lw-sr-only` successors table, because a lattice of bordered cells states "01 leads to 02 *and* 03" in pixels alone; that is why `label` and `tableLabels` are required there |
-
-#### Two deliberate non-additions in the pricing set
-
-Recorded here because this is the pair most likely to be re-litigated, and because
-`.lw-theme-toggle` and `.lw-code-tabs` were both deleted for being exactly this kind of
-duplicate. CONTRIBUTING's first rule is to prove a thing is not already here:
-
-- **There is no `.lw-plans` grid class and no `PlanGrid`.** A row of plans is
-  `<Grid min={280}>`, which already auto-fits and stretches — `.lw-plan` sets
-  `block-size: 100%` so unequal feature counts still share one CTA baseline. A `PlanGrid`
-  would be `Grid` with one number baked in, and the first plan row that wanted a different
-  minimum would fork it.
-- **There is no billing-toggle class and no `BillingToggle`.** A billing period is a two-way
-  *exclusive* choice, which is `Segmented` — a real `radiogroup` with arrow-key navigation and
-  a set size, none of which a bespoke toggle would have re-earned. What ships instead is the
-  **composition**: `.lw-plans-head` (flex, space-between, wrap) holding an eyebrow, a
-  `<Segmented>` and an optional savings `.lw-pill`. The period is the consumer's state, which
-  is the point — a `BillingToggle` would have owned it and become a second treatment of one
-  interaction.
-
----
-
-## Marketing recipes
-
-**Neither recipe below needs `product.css`.** `Tabs`, `Pagination`, `EmptyState`, `Avatar` and
-`Icon` are all in `base.css` — a site composing this package's own documented
-index — `Tabs` for the category filter, `Pagination` under it, `EmptyState` for no results,
-`Byline` on each `ArticleCard` — rendered a 0×0 avatar, an unstyled tab strip, unstyled page
-buttons and a centred paragraph where the empty state should be. The flagship consumer was
-importing `product.css` through a `?url` side-channel on two public routes to get them back:
-~24 KB gzip of app-surface rules on pages that render none of it. Delete that import.
-
-The header, its mobile nav, the icon and the icon button, the avatar, tabs, pagination, the
-empty state, the form controls with their dark-band treatment, prose, disclosure and the whole
-layout family are all in `base.css`; the grounds, hero, footer, plans, matrix, flow and
-editorial chrome are in `marketing.css`. `product.css` is app surfaces — data grids, dialogs,
-rails, the AI chat surface — and a marketing page importing it is importing ~60 KB of rules
-for components it does not render.
-
-```css
-@import "@leanwise/design/tokens.css";
-@import "@leanwise/design/fonts.css";
-@import "@leanwise/design/reset.css";      /* vanilla only — NOT in a Tailwind app */
-@import "@leanwise/design/base.css";
-@import "@leanwise/design/marketing.css";
-```
-
-```jsx
-import {
-  AnnounceBar, TopBar, NavToggle, Hero, FeatureGrid, Steps, Flow, PlanCard,
-  CompareTable, Quote, StoryCard, ArticleCard, Byline, Prose, Disclosure,
-  SiteFooter, Button, Card, Grid, Section, Segmented,
-  Tabs, Pagination, EmptyState, Avatar, Icon,
-} from "@leanwise/design/react";
-```
-
-A full page is `AnnounceBar` → `TopBar` (with `NavToggle` as a child) → `Section`s →
-`SiteFooter`. An index page is `Tabs` → `Grid` of `ArticleCard` (or `EmptyState`) →
-`Pagination`. Nothing on either path reaches into `product.css`.
-
-```jsx
-/* The article index, entire. Every class it lands on is in base.css or
-   marketing.css. `readTime` is a pre-formatted NODE — the
-   component holds no display text, so the string is yours to localise. */
-<Tabs label="Categories" tabs={cats} value={cat} onChange={setCat} />
-{posts.length === 0
-  ? <EmptyState icon="inbox" title={t.noneTitle} description={t.noneBody} />
-  : <Grid min={280}>
-      {posts.map(p => (
-        <ArticleCard key={p.slug} href={p.href} category={p.category} title={p.title}
-          dek={p.dek} author={p.author} role={p.role} date={p.date} dateTime={p.iso}
-          readTime={t.readTime(p.minutes)} />
-      ))}
-    </Grid>}
-<Pagination page={page} pageSize={12} total={total} onPageChange={setPage}
-  prevLabel={t.prev} nextLabel={t.next}
-  formatCount={(f, to, all, n) => t.count(n(f), n(to), n(all))} />
-```
-
-**Every user-visible string in this package is a prop**, defaulting to the
-English it replaced. Words are `*Label`; anything interpolating a number is a `format*`
-function, because a translation reorders the parts and a template with the number in a fixed
-position is the same bug one layer down.
-
-### The cookie banner, which is deliberately NOT a component
-
-This is the composition most often asked for and the one most clearly *not* ours. A consent
-banner is a legal artefact before it is a visual one: which categories exist, whether the
-page is blocked until a choice is made, whether "reject all" must be one click, where the
-decision is persisted and for how long, and whether any of that changes by jurisdiction. A
-design system that shipped `<CookieBanner>` would be shipping an answer to all of those, and
-the first consumer whose counsel disagreed would fork it. What the system owes you is that it
-already draws every piece:
-
-```jsx
-/* role="region" + a label, NOT role="dialog": a dialog implies the page behind it is
-   inert, and a banner that traps focus on arrival is a worse experience than the
-   thing it is disclosing. The consumer owns `open`, the persistence and the
-   categories — this is markup, not behaviour. */
-<div className="lw-card" role="region" aria-label="Cookie choices"
-     style={{ position: "fixed", insetInline: "var(--lw-space-16)",
-              insetBlockEnd: "var(--lw-space-16)", zIndex: "var(--lw-z-toast)",
-              maxInlineSize: "min(100% - 2rem, 68ch)" }}>
-  <div className="lw-card-body lw-stack" data-gap="12">
-    <p className="lw-text-sm">
-      We use cookies to measure how the site is used. Analytics stays off until you say yes.
-      {" "}<a className="lw-link" href="/cookies">What we store</a>
-    </p>
-    <div className="lw-cluster">
-      <Button variant="brand" size="sm" onClick={acceptAll}>Accept</Button>
-      <Button variant="ghost" size="sm" onClick={rejectAll}>Reject</Button>
-      <Button variant="link" size="sm" onClick={openSettings}>Choose categories</Button>
-    </div>
-  </div>
-</div>
-```
-
-Four things that composition gets right for free, and that a hand-rolled banner has to
-re-earn: the surface, radius and shadow are `.lw-card`; `--lw-z-toast` is a real tier rather
-than a `9999`; **reject is as reachable as accept** because both are the same `Button` at the
-same size, which is the accessibility half of the legal requirement; and the whole thing
-re-points on a dark ground with no child overrides. If the category list needs to expand in
-place, that is `Disclosure` — a native `<details>`, complete with zero JavaScript.
-
-### A screenshot on a themed page — `.lw-media-plate`
-
-A screenshot is the one thing on the page whose colours cannot re-point. Every surface the
-system draws reads a role and follows the ground; a raster is pixels, so a light product shot
-stays light while the page goes navy, and it lands as a hard slab with square corners bleeding
-to the edge of the column. **No gate in this repo can see that** — an image is opaque to axe
-and to `check:contrast` alike, which is why it is written down here instead.
-
-```html
-<figure class="lw-figure">
-  <span class="lw-pill">Sample output</span>
-  <div class="lw-media-plate">
-    <img src="/shot.png" alt="…" width="990" height="235">
-  </div>
-  <figcaption class="lw-figcaption">One document, on invented data.</figcaption>
-</figure>
-```
-
-Padding, `--lw-bg-inset`, a hairline and two radii — the outer one on the plate, the inner one
-on the media, which is the line that actually does the work: a radius on the plate alone leaves
-the picture's own four square corners sitting inside it. The surface is a **role**, so there is
-no `prefers-color-scheme` query near it; that would be the wrong question in a consumer whose
-theme is `[data-theme]` on `<html>`. On light the mat sits one step below the page, on dark one
-step above it. `--lw-media-plate-pad` is the one knob.
-
-**It is not `.lw-browser-frame`, and rule 9 below is not violated by having both** — they make
-different claims. A toolbar, three dots and an address pill assert that you are looking at a
-whole application window; around a **crop** that is a small lie told by a decoration. The frame
-is for a full window, the plate for a piece of one, and the plate deliberately has no variant
-that grows chrome.
-
----
-
-## Templates
-
-Ten starting points under `templates/`. Each is one `.dc.html` entry; the two scripts they
-all share — `ds-base.js` (whose single `base` line points at this package) and `support.js` —
-live once, in `templates/_shared/`, and `check:templates` fails if a re-pull puts a sibling copy
-back beside a template.
-
-| Template | What it starts |
-|---|---|
-| `marketing-landing` | One continuous ground — `.lw-page-dark` or `.lw-page-light`, fixed and centre-symmetric, switchable from the template's `theme` tweak: centred hero, features, grounded-answer proof, use cases, CTA, footer |
-| `ai-app-shell` | Sidebar, ask surface with streaming answer and inline citations, sources + trace rail |
-| `dashboard` | KPI tiles, sortable table, run log, empty state |
-| `settings` | Sectioned settings with help/error patterns and a destructive-action block |
-| `docs-page` | Three-column docs: nav rail, prose with code and callouts, on-this-page |
-| `list-detail` | **List → detail → edit.** The back-office default: filtered list, detail rail, edit mode behind one unsaved-changes guard, bulk actions in a selection bar, and role-gated destructive controls |
-| `search-results` | **Search + filter + results.** Faceted search, applied-filter chips, and three distinct states — no query yet, no results, results. Those first two are different screens |
-| `onboarding-wizard` | **Multi-step form.** Validates on advance, never loses work going back, resumes from a draft, ends on a review screen that can still reach every field |
-| `auth` | **Five auth screens** on one split layout: sign in, SSO/passkey, two-factor, accept-invite, reset — with the lockout and failure states |
-| `export-report` | **Work that takes longer than a click.** Queue it, show row-based progress, choose a delivery, and make a failure retryable without rebuilding the request |
-
-### The patterns those templates settle
-
-A component library is not a product kit; the decisions between the components are what
-actually get re-litigated per team. Each template above exists to settle a set of them:
-
-| Decision | Settled in |
-|---|---|
-| Detail in a rail vs. a drawer; unsaved-changes guard in ONE place, not per button | `list-detail` |
-| Bulk selection bar REPLACES the toolbar (two rows where one was jumps the table) | `list-detail` |
-| Role-gated UI: **disable and explain**, never hide — a hidden control reads as "the product cannot do this" and becomes a bug report | `list-detail` |
-| Undo over confirm for reversible bulk actions; confirm stays for destructive ones | `list-detail` |
-| Facets additive within a group, exclusive across; query and facets live in the URL | `search-results` |
-| Empty ≠ no-results ≠ loading — three screens, three jobs | `search-results`, `StateView` |
-| Validate on advance, not per keystroke; help text stands down when an error appears | `onboarding-wizard` |
-| Draft persistence per change, not per step | `onboarding-wizard` |
-| Never confirm whether an email has an account | `auth` |
-| State the lockout rule BEFORE it fires | `auth` |
-| Queue anything slower than a click; progress from rows done, not time elapsed | `export-report` |
-| A failure names the row and the reason, and retries without a rebuild | `export-report` |
-
----
-
-## The rules that are not obvious
-
-**1. Ink is chosen by the fill's LIGHTNESS, not by whether it is "the brand".** Measured:
-
-| | white text | navy `#0B1220` text |
-|---|---|---|
-| cyan `#0C727B` (brand) | **5.66** ✓ | 3.31 ✗ |
-| amber `#FCB603` (CTA) | 1.77 ✗ | **10.54** ✓ |
-| green `#16A34A` (success) | 3.30 ✗ | **5.69** ✓ |
-
-The dark brand fill takes WHITE; the light CTA and status fills take NAVY. Never memorise
-the outcome — re-measure when a fill changes, because the answer follows the lightness.
-`lw-contrast-check.mjs` enforces every pair.
-
-**2. A fill colour and a text colour are usually different tokens.** A colour bright enough
-to fill a button is normally too bright to read as text. Use the role token, not a tier:
-
-```tsx
-<Button>Save</Button>        {/* bg-primary — the cyan FILL, white label */}
-<a className="text-brand">   {/* theme-aware: brand-500 on light, brand-400 on dark */}
-```
-Same for `success`/`success-on`, `warning`/`warning-on`, `destructive`/`destructive-on`,
-`cta`/`cta-on`. Every `-on` utility is theme-aware, so you never hand-write a conditional.
-
-**3. `--primary` is cyan. Amber is a variant, not a token.** shadcn's `--primary` drives the
-*default* Button, so putting amber there would make every button a CTA:
-
-```tsx
-<Button>Ask</Button>                             // cyan, the default, use freely
-<Button variant="cta">Start free trial</Button>  // AMBER — max ONE per view (linted)
-```
-
-And the corollary that catches everyone: **shadcn's `--accent` is a hover *surface*, not a
-brand colour.** Per-tenant themes override `--primary` and `--ring`; never `--accent`.
-
-**4. Invalid state is driven by `aria-invalid`, not a class.** The attribute is what a
-screen reader reads, so binding the colour to it makes the two impossible to desync. The catch
-is a control whose frame is drawn by a PARENT: put the attribute on the inner input and the
-border on the wrapper, and an invalid group announces an error that nothing shows. `.lw-input-group`
-selects with `:has()` — still no class, still one source of truth.
-
-**5. A field shows help text OR an error, never both.** A field with both is a field whose
-error is easy to miss. `Field` enforces this at runtime.
-
-**6. Direction is never colour alone.** A KPI delta and a stat delta carry an arrow icon as
-well as ink; a toast carries a mono status word as well as a tint; a chip pairs a dot with
-its tint. Every one of these survives greyscale and a colour-blind reader.
-
-**7. Direction and judgement are separate props.** `KpiTile` takes `direction` (which way the
-number moved — the arrow) and `tone` (whether that is good — the ink). They agree for revenue
-and disagree for latency, so a component that fuses them paints every latency improvement red.
-
-**8. One drawing, one owner.** No component redraws an icon it could name. `Message`,
-`ThemeToggle`, `Dialog`, `Toast`, `CodeBlock`, `Table`, `KpiTile`, `StatMeter`, `EmptyState` and
-`FeatureGrid` all import `Icon` and pass a name. A second copy of a path is a second thing to
-keep in step, and it is always the copy that is a stroke-weight behind. This includes typed
-glyphs: a `▲` in a delta string, a `→` in a link label and a `↑` from CSS `content` are all
-icons drawn by the font instead of by the set, at the font's weight rather than the system's.
-
-**8b. A chip class never lands on the glyph.** Box styling goes on a WRAPPER (`.lw-kpi-badge`),
-because `Icon` writes its size inline and inline size outranks any class rule — a box rule that
-lands on the svg paints a tinted 16px square instead of a 34px chip. Where both must be
-supported, qualify the tag (`span.lw-kpi-icon`) rather than renaming, so the stylesheet and the
-compiled component are never out of step at the same moment.
-
-**8c. Alignment is grid columns, never padded text.** `Console` takes `cells`; a mono string
-padded with runs of spaces only looks aligned in the source, at one width, until a value grows
-past what the author counted. The same rule is why `Table` has a `num` column type instead of
-right-padded strings.
-
-**9. One control, one class.** `.lw-segmented` and `.lw-tabs` are the only segmented controls —
-two earlier ones were deleted for being second implementations with their own radius and
-selected state. Two treatments of one
-interaction is not a style choice — it is a bug that takes a year to notice, because nothing
-ever renders both side by side until someone builds a page that does.
-
----
-
-## Email — removed at v4.0.0
-
-`email.css` and the `email` template are gone. They were right about their subject and wrong for
-this package: a mail client has no custom properties, so the layer carried literal hex on purpose,
-which made it a second home for the palette — and its literals drifted twice, in v3.0.0 and again
-at v3.1.5. Nothing here asserted its layout, because nothing renders a template.
-
-If you need to send mail, copy the recipe rather than the file: **values literal** (a `var()` that
-falls back to nothing paints black on black in Outlook), **layout in tables** (no flex, no grid),
-and **classes as a convenience, not the contract** — ship every rule that matters inline on the
-element too. Buttons are padded anchors in a table cell, never `<button>`: a button element does
-nothing in most clients and a bare anchor gives a 15px tap target. The amber CTA takes navy ink for
-the same reason it does in the app — white on `#FCB603` is 1.77. Ship the plain-text part; it is
-what a text-only client renders and what spam filters weigh. `git show v3.2.0:email.css` is the
-last version of the file, and it belongs beside the templates it styles, in the product that sends
-them.
-
-## Single-file artifacts
-
-`tokens.css` says *"Do not copy this file into an app; depend on the package."* That is right
-for every consumer with a bundler, and **unactionable for the one without**.
-
-A single-file HTML artifact — a report emailed to a customer, a briefing behind a password, a
-takeaway deck — has no npm, no build step and no second request: everything it renders with is
-already inside the one file. Told to depend on a package it cannot install, an author does the
-only thing left and retypes the values. That is not hypothetical. One such report shipped with
-~30 hand-transcribed HSL triples and four media queries at breakpoints this package does not
-declare, and nothing in it could ever have reported drift.
-
-This is the `email.css` argument one step further out. An email is a different *renderer*; a
-single-file artifact is a different *supply chain*. Both deserve a supported path rather than a
-prohibition that gets ignored:
-
-```bash
-npx lw-inline > tokens-block.css                       # token core only
-npx lw-inline --fonts --logo=lockup-ondark --out b.css # + woff2 + a --lw-logo data URI
-```
-
-The output carries the package version and a `sha256` of `tokens.css`. **That banner is the
-whole point** — a vendored copy that says where it came from can be diffed against a later
-release; a hand-typed one cannot be checked by anything, ever.
-
-It emits the token core and nothing else. A static artifact writes its own components; what it
-must not do is invent its own colour, radius, spacing or breakpoint values. And it refuses
-`--logo=mark-mono` outright, because `currentColor` cannot resolve inside a data URI — see
-§Logo.
-
-### …and when the bytes ship on every request: `lw-subset`
-
-`lw-inline` assumes one render and one reader, so size is irrelevant and it emits the core
-**verbatim** (~84 KB, of which ~58 KB is this README's own reasoning restated in comments).
-
-A Cloudflare Worker serving a `no-store` page is the same supply chain — no npm at runtime, no
-bundler, hand-written HTML — with one difference that changes the arithmetic: **the bytes ship
-again on every request.** Inlining the verbatim core takes one such page from 31 KB to ~115 KB,
-forever, to carry prose no browser reads. Told that, an author does exactly what the report's
-author did.
-
-```bash
-npx lw-subset --manifest=tokens.manifest.json                      # → stdout
-npx lw-subset --manifest=… --format=ts --out=src/ui/tokens.gen.ts  # TS literal, backticks escaped
-```
-
-The manifest lists **seed** token names; the tool resolves the transitive `var()` closure and
-emits only those declarations. Measured: 30 seeds → 60 tokens ≈ 7 KB; 69 → 124 ≈ 14 KB.
-
-It keeps every guarantee above — generated never typed, the **same** `tokens.css sha256` so a
-subset and a verbatim copy are diffable by one parser, token core only — and keeps **every
-retained token's own trailing comment**. `lw-inline` rejects comment-*stripping*, not
-selection-*narrowing*: the reasons that govern a value the app ships travel with it. What is
-dropped is prose about values the app does not ship, which is here and reachable via the digest.
-
-It adds a `selection sha256` over the sorted seed list, without which "the artifact is stale"
-and "the manifest changed" are indistinguishable. **An unresolvable seed is a hard error**, not
-an omission — an absent token resolves to nothing at runtime and a padding collapses while
-every other gate stays green.
-
-⚠️ **Seed the THEMABLE roles** (`--lw-bg`/`-fg`/`-line`, the `-on`/`-soft` status tiers), not
-the static `--lw-surface-N` / `--lw-text-N` tiers. `tokens.css` re-points the themable names
-under `[data-theme="dark"]`; seeding the static ones forces an app to hand-maintain its own
-dark palette, which is exactly what two consumers were doing before they moved.
-
-⚠️ Nothing reads the banner back yet — `lw-doctor` refuses to run without a resolvable install
-and has no vendor path. Drift detection is a consumer-side gate: regenerate and diff. `mcp-manage`
-is the one consumer: its `npm run check:tokens` re-runs `lw-subset` and byte-diffs the artifact —
-the sibling Workers dropped their own pipelines on 2026-09-19, when their manage UIs moved into it.
-
----
-
-## Mobile
-
-Safe areas are tokens — `--lw-safe-top/right/bottom/left` — so a layout reserves the notch
-and the home indicator without every component writing `env()` itself, and the fallback is
-stated once. `env()` resolves to 0 on a desktop browser, which is correct: **the token is
-additive, never a minimum**, so `calc(56px + var(--lw-safe-bottom))` is right on every device.
-
-`BottomNav` is the destination bar; `Drawer side="bottom"` is the touch answer to a centred
-dialog. Controls already reach 44px on a coarse pointer from the density tokens, so nothing
-here needs a second touch rule.
-
-**12. An AI surface is never the ONLY path to an outcome.** Every generated artifact has a
-manual editor; every agent action has a manual equivalent. That is why `Artifact` takes
-`onEdit` and why it is documented as required-in-spirit rather than optional — much cheaper to
-assert once than to retrofit surface by surface later.
-
----
-
-## Responsive
-
-Five breakpoints, declared as tokens so the value is quotable in a review:
-`--lw-bp-sm` 480 · `--lw-bp-md` 768 · `--lw-bp-lg` 1024 · `--lw-bp-xl` 1280 · `--lw-bp-2xl` 1536.
-
-Every hand-written media query in the CSS layers uses one of those five numbers and
-nothing else — audited, and it holds. A media query cannot
-read a `var()`, so each one writes the number and names its token in a comment — that comment
-is the only thing tying the two together, which is why it is not optional.
-
-Only `md` and `lg` are load-bearing today; `sm`, `xl` and `2xl` are declared and unused. That
-is deliberate — a layout that needs one has a token waiting, and an undeclared number in a
-review is the thing to catch, not an unused declared one.
-
-Most layouts need no query at all: `Grid` auto-fits, `Cluster` wraps, `Split` collapses at
-`--lw-bp-lg`. Controls reach a 44px target on a coarse pointer without changing the desktop
-size, so density and the touch minimum are not forced to be one number.
-
-### Tables on phones
-
-A wide table is the one layout no breakpoint fixes: the columns are the content. `Table`
-takes `collapse="cards"`, and below `--lw-bp-md` of the WRAPPER's width every row paints as a
-card — first cell the title, next two a meta line, the rest behind a native `<details>` whose
-label you supply (`detailsLabel`; the sort menu's is `sortLabel`). This package holds no
-display text, so both are yours, and `detailsLabel` is required by the type the moment
-`collapse` is set.
-
-**A container query, not a media query**, and that is the whole point: the thing that is too
-narrow is the table's track, not the screen. The same table is fine at 768px of page inside a
-300px rail and unreadable at 1280px of page inside a 318px one — which is exactly where
-leanwise-inspect's six console lists sat, 1.5–2.4× the viewport wide.
-
-**The DOM does not change.** One real `<table>` at every width, re-laid-out by CSS: nothing is
-measured, nothing re-renders at a breakpoint, and the server and the client cannot disagree
-about which form to emit. The price is stated rather than hidden — `display: block` on a table
-element drops the implicit table semantics, so `Table` emits explicit
-`role="table" / "rowgroup" / "row" / "columnheader" / "cell"` whenever `collapse` is set, and
-only then. Where `@container` is unsupported nothing applies and the table scrolls as it always
-did. `Table.d.ts` carries the rest, including why the `<details>` holds the control and not the
-cells.
-
-**Every `.lw-table-wrap` gains an overflow hint**, collapsed or not: while it actually scrolls
-sideways it carries `data-overflow="true"` and fades its inline edge. React sets the attribute
-from a `ResizeObserver`; a vanilla page sets it or does not, and sees exactly what it saw
-before. ⚠ A wrap inside a grid or flex item needs a `min-width: 0` ancestor, or it grows past
-its pane instead of scrolling and there is nothing to hint at.
-
-### Anchors under sticky chrome
-
-`.lw-prose :is(h2,h3,h4)` carries `scroll-margin-block-start: var(--lw-space-64)` so a
-`#fragment` link does not park a heading behind `.lw-topbar`. Two things about that are easy to
-get wrong:
-
-- **`scroll-padding-top` on the container and `scroll-margin-top` on the target STACK.** They are
-  not alternatives. Set both — the container insets its snapport, the target expands its own
-  scroll box — and every anchor lands at *twice* the clearance, which reads as a mysteriously
-  generous gap rather than as a bug. Use one. This package uses the target property, so a
-  consumer that adds `html { scroll-padding-top }` on top is the case to watch for.
-- **Anything else sticky above the header adds to the clearance.** `AnnounceBar` offsets
-  `.lw-topbar` by `--lw-announce-h`, which made the chrome 92px against a 64px clearance and put
-  every heading 28px under the bar — fixed in 1.7.2 by a `:root:has(.lw-announce)` override in
-  `marketing.css`, and recorded in `advisories.json`. If you stack your own sticky element above
-  the header, its height is yours to add.
-
-## Charts
-
-Eight categorical series, `--lw-chart-1..8`, and they are not a rainbow. The first three
-are the brand's own family — cyan, navy, amber — because a one- or two-series chart is the
-common case and it should look like this product. The ramp is **tiered**: slots 1-6 stay apart
-for a dichromat (protanopia, deuteranopia, tritanopia) as well as in greyscale; slots 7-12 stay
-apart for normal vision and are **label-assisted**, because twelve saturated hues cannot all
-separate under red-green dichromacy — rule 6 is load-bearing for those, not advice. Every series
-lifts a tier on the dark ground, the same reason the focus ring switches to brand-400 there.
-
-`--lw-chart-N` is a **fill**. Label a slice in `--lw-fg`, not in its own series colour — and
-rule 6 still holds, so a chart carries direct labels or a pattern, never colour alone.
-
-**The policy, so it does not have to be re-argued:** `BarChart` and `LineChart` are ~120 lines
-of tokenised SVG each, with a hidden data table. That is the right trade for a dashboard — no
-dependency, no bundle cost, the correct palette by default — and it will not survive brushing,
-zoom, mixed axes or stacked-and-grouped. **The trigger to adopt a real charting library is the
-third chart type, not a feature request on the first two.** Say no to the scatter plot rather
-than growing these two files into a library nobody chose.
+| `background` / `foreground` | The page and its text |
+| `card`, `popover` (+ `-foreground`) | Raised surfaces |
+| `primary` (+ `-foreground`) | Cyan. Default buttons, links, selection |
+| `secondary` (+ `-foreground`) | Quiet cyan-tinted buttons and chips |
+| `muted` / `muted-foreground` | Recessed surfaces; secondary text |
+| `accent` (+ `-foreground`) | Hover and active surface for ghost items — not a brand colour |
+| `destructive` (+ `-foreground`) | Errors, delete |
+| `destructive-soft`, `-soft-foreground`, `-border` | Error alerts and callouts |
+| `info` (+ `-foreground`) | Informational fill |
+| `info-soft`, `info-soft-foreground`, `info-border` | Info alerts and callouts |
+| `success`, `warning` (+ `-foreground`) | Status fills |
+| `cta` (+ `-foreground`) | The amber call to action — one per view |
+| `navy` (+ `-foreground`) | Brand dark panels and bands |
+| `border` | Dividers, card edges |
+| `input` | Control boundaries (3:1) |
+| `ring` | Focus |
+| `chart-1` … `chart-5` | Data series |
+| `sidebar`, `sidebar-foreground`, `sidebar-primary`(`-foreground`), `sidebar-accent`(`-foreground`), `sidebar-border`, `sidebar-ring` | shadcn's sidebar |
+| `brand-50` … `brand-900`, `brand` | The cyan ramp (`brand` = 600). For illustration and data, not UI state |
+
+Never write a hex or a Tailwind palette class (`bg-blue-500`) in app code, and never reach a
+role through an arbitrary value (`bg-[var(--primary)]`) — use the utility.
 
 ## Type
 
-Geist for everything, Geist Mono for the eyebrow and code. The display faces read
-`--lw-font-display` (default: `--lw-font-sans`), so a consumer can put a serif on `.lw-display`,
-`.lw-h1`, `.lw-h2` and `.lw-prose h2` with one line and leave the body alone. A display face
-that is not Geist should re-check `--lw-tracking-tighter`: the negative tracking was measured for
-Geist's counters and can close a serif's. `.lw-display` is the step above `.lw-h1`, for the one
-line on a page that is allowed to be that big.
+Geist for text, Geist Mono for code and figures. App body is 14px (`text-sm`); 12px
+(`text-xs`) is the floor.
 
-Line-heights are tokens too — `.lw-h3` reads `--lw-lh-snug` and `.lw-lead` reads
-`--lw-lh-normal` rather than carrying a literal. Measures: `--lw-measure-prose` 68ch (the
-article), `--lw-measure` 60ch (a lead, a card's copy), `--lw-measure-sm` 46ch (a caption, a
-narrow rail). `Prose`'s `measure` prop is a spelling of the first and third.
+| Utility | Size / line height |
+|---|---|
+| `text-xs` | 12 / 16 |
+| `text-sm` | 14 / 20 — body |
+| `text-base` | 16 / 24 |
+| `text-lg` | 18 / 28 |
+| `text-xl` | 20 / 28 |
+| `text-2xl` | 24 / 32 |
+| `text-3xl` | 30 / 36 |
+| `text-display-sm` | fluid 28–48, marketing |
+| `text-display` | fluid 38–72, marketing |
 
-## Motion
+Radius: `--radius` is 0.625rem; `rounded-sm/md/lg/xl` scale from it.
 
-Restrained by policy: 100–200ms on state change, no entrance choreography, and nothing that
-moves without the user causing it. The three ambient exceptions are all *signals* — the
-skeleton shimmer, the streaming caret, the active trace dot — and each has a static fallback.
-`marketing.css` ships opt-in motion — `.lw-reveal` / `.lw-reveal-group` (scroll fade),
-`.lw-spotlight`, `.lw-aurora`, the page ground's drifts and `.lw-logo-rail.marquee` —
-double-gated behind `@supports (animation-timeline: …)` and
-`prefers-reduced-motion: no-preference`; the static state is always complete.
+## Marketing sites
 
-⚠ **`shine` and `tilt` do not exist in any layer** and are named here only so the next person
-does not go looking: they are unbuilt, not undocumented. Everything else in this list ships its
-own CSS — a hook that writes a custom property no layer reads is a hook that ships nothing.
+`marketing.css` is plain CSS over the theme variables — no JavaScript, works with or
+without React.
 
-The reveal has **two paths and one class**. `.lw-reveal` alone is scroll-driven and needs no
-JavaScript; add `data-reveal="pending" | "shown"` from `useReveal()` (or any observer) and the
-attribute takes over, the scroll rules standing down so the two never animate one box. The
-attribute is the contract, not the hook — the same rule `_overflow.js` states for
-`data-overflow`. **Nothing is hidden outside a gate**: the opacity floor lives inside the
-`@supports` + reduced-motion block, or inside an attribute a script must add, so no JavaScript,
-no scroll timelines and reduced motion all render the complete page.
-
-Durations: `--lw-dur-xs` 100 · `sm` 180 · `md` 300 · `lg` 500 · `xl` 800.
-House curve: `--lw-ease-out: cubic-bezier(.22,1,.36,1)`.
-
-**Tiers for the things that loop.** `--lw-dur-loop-fast` 1.1s (the caret),
-`--lw-dur-loop` 1.5s (pulse, shimmer, trace, the tool dot), `--lw-dur-loop-slow` 2.4s (the
-reduced-motion spinner); and for the decorative drifts `--lw-dur-ambient` 24s and
-`--lw-dur-ambient-slow` 40s. An effect that sits between two tiers reads a ratio of one —
-`calc(var(--lw-dur-ambient) * .8)` — not a number of its own.
-
-**One switch for every ambient loop, off by default.** `--lw-ambient-play` is the
-`animation-play-state` of every decorative drift; it is `paused` at `:root`.
-`data-ambient="on"` on any ancestor runs the loops — a page that wants the ground to drift says
-so once — and `data-ambient="off"` parks a subtree inside an opted-in page. Frame 0 is the resting
-frame of every loop, so a page that never opts in paints exactly what it painted at t=0.
-
-## Accessibility
-
-WCAG AA on every token pair, enforced by the contrast gate — **measured, 35/35 pairs in both
-themes**, in a browser against the real cascade rather than a parse of the file. Three holes
-that the pair list could not see, because in each case the pair was right and something else
-was wrong:
-
-- `--lw-fg-faint` measures **2.54** on white. tokens.css has always declared it decorative,
-  and 14 rules in the CSS layers used it as text anyway — nav group labels, breadcrumb
-  separators, tab counts, prompt hints, trace and source metadata, placeholders. All now take
-  `--lw-fg-subtle` (4.83). `fg-faint` survives only on `:disabled` states, which WCAG exempts
-  and which are meant to read as unavailable, and on the three places it is a fill or a border.
-- The `--lw-on-*` ink **channels** pointed at role tokens (`var(--lw-text-1-c)`). The derived
-  colours were theme-safe by accident — substituted at `:root`, so frozen to the light palette
-  — but a Tailwind consumer composing `hsl(var(--lw-on-cta-c))` inside a dark scope re-resolved
-  `text-1` to near-white and put 1.77 ink on the amber. They are literal triples now: a fill
-  that does not follow the theme cannot take an ink that does.
-- `--lw-neutral-text` had a derived colour while its three siblings had only channels. Those
-  tiers are light-theme values (2.42–2.89 on the dark paper), so the derived name was an
-  invitation to fail silently on dark. None of the four has one now; `--lw-success-on` and its
-  siblings are the theme-aware roles, as rule 2 already said. Every interactive component
-ships a visible `:focus-visible` ring (the ring switches to the brand-400 tier on dark,
-where the 500 ring disappears into the navy), correct ARIA, and full keyboard operation —
-`Tabs` implements roving tabindex and moves focus with it, `Dialog` delegates the focus trap
-to the platform and generates its own label ids, `Field` wires `aria-describedby` /
-`aria-invalid` and names `required` for a screen reader, `Toast` distinguishes `alert` from
-`status`, `ConfidenceMeter` and `StatMeter`'s bar carry `role="meter"` with real values, and
-a `Button` that is `loading` keeps its focus ring but refuses the click.
-
-**Single-choice controls are radio groups.** `Segmented` and `ThemeToggle` render
-`role="radiogroup"` with `role="radio"` + `aria-checked` children, one tab stop for the set, and
-Arrow/Home/End to move *and* select. `aria-pressed` describes N *independent* toggles, and is
-kept only for controls that are actually independent — `RichText`'s formatting buttons, which
-genuinely combine, and `Feedback`'s thumbs, which can each be cleared (something a radio cannot
-do). `DatePicker`'s presets are `aria-current`: they are shortcut *actions* that apply a range
-and close the panel, not a selection state, and as toggles they announced four buttons with
-three of them "not pressed" for a set where usually none is current.
-
-Nothing is focusable without a role. `StatMeter interactive` renders a `<button>` rather than
-a `<div tabindex="0">`, and a `SourceList` entry with no URL renders as a button rather than an
-`<a>` with no `href` — an anchor without a target is not reachable by keyboard and is not
-announced as a control.
-
-## Enforcement
-
-```bash
-npm test             # node --test over tools/ — the helpers the gates are built on
-npm run check        # every gate that needs no browser, in order — what a contributor runs.
-                     #   package.json#scripts.check is the list; it starts with `npm test`
-npm run check:ci     # the above plus check:pack and the two that need a browser
-
-npm run check:contrast   # every token pair ≥ WCAG AA in three canonical scopes, plus band scope
-npm run check:affordance # a control marked not-allowed must be a pointer when enabled; a state
-                         #   rule must not WIPE a decoration with the `background:` shorthand
-npm run check:tokens     # raw hex, palette escapes, arbitrary-value access, >1 CTA
-npm run check:themes     # every themable CHANNEL re-pointed in every theme scope
-npm run check:dts        # react.d.ts covers every runtime export of react.js
-npm run check:bundle     # _ds_bundle.js matches the .jsx sources it is built from
-npm run check:templates  # templates/_shared is the only home of ds-base.js/support.js; landmarks present
-npm run check:a11y       # axe over every card, both grounds (serious/critical fail)
-npm run check:visual     # every card × light/dark × comfortable/compact
-npm run tokens           # tokens.css → tokens.json (DTCG, for Tokens Studio)
-npm run dts              # react.js → react.d.ts (generated, committed)
-npm run bundle           # components/**/*.jsx → _ds_bundle.js (generated, committed)
+```css
+@import "tailwindcss";
+@import "@leanwise/design/fonts.css";
+@import "@leanwise/design/theme.css";
+@import "@leanwise/design/marketing.css";
 ```
 
-**`check:contrast` measures three scopes, not two.** Light, `.dark`, and `light ⊕ media-dark` —
-the last being what a browser computes for a visitor whose OS prefers dark and whose page sets
-no class. That is the default for a plain marketing page and so the most common deployment
-there is — and the one that used to be asserted by nothing. The scope is merged in *source order* — a
-`:root` inside a media query and a top-level `:root` have identical specificity, so a naive
-merge reports a palette the browser never paints.
+| Classes | For |
+|---|---|
+| `lw-container`, `lw-section`, `lw-section-head`, `lw-section-muted` | Page rhythm |
+| `lw-page-ground`, `lw-page-dark`, `lw-aurora` | Page backgrounds |
+| `lw-site-header`, `lw-site-brand`, `lw-site-nav`, `lw-announce` | Site chrome |
+| `lw-hero`, `lw-hero-compact`, `lw-hero-actions`, `lw-display`, `lw-display-sm`, `lw-eyebrow`, `lw-lead` | Hero and display type |
+| `lw-features`, `lw-feature`, `lw-feature-icon`, `lw-steps`, `lw-step` | Feature grids and flows |
+| `lw-plans`, `lw-plan`, `lw-plan-featured`, `lw-compare` | Pricing and comparison |
+| `lw-stat-row`, `lw-logo-rail`, `lw-quote`, `lw-media-plate`, `lw-prose` | Proof and content |
+| `lw-footer`, `lw-cookie` | Footer and consent |
 
-**`check:contrast` also owns the BAND SCOPE rule.** A selector used as an
-ancestor scope to re-ink descendants from the `--lw-on-dark*` family is declaring itself a
-dark ground, and must appear in `tokens.css`'s dark band list — hand-patching a child's ink
-because the ground is dark IS the band's job, done manually and incompletely. `.lw-hero-dark`
-was exactly that for the whole life of the package: it painted navy, patched the four elements
-anyone demos, and left every other role token inside a hero resolving against the **light**
-palette. A `Byline` in a hero measured **1.5:1**.
-
-Nothing else here could see it. The pair gate measures TOKENS, and both tokens in the pair were
-correct — it was the *scope* that was wrong. And `check:a11y` cannot see it **structurally**:
-the hero carries two decorative pseudo-elements, so axe answers *"background color could not be
-determined due to a pseudo element"* and files the finding as `incomplete`, which the gate does
-not read. Four serious incompletes, zero violations, measured. Exemptions live in
-`BAND_SCOPE_EXEMPT`, named with their reason and countable — same discipline as
-`data-a11y-expect`.
-
-**`check:affordance` exists because a comment was doing a gate's job.** The pointer-affordance
-block at the foot of `base.css` stated that "`<button>` and `a[href]` get the pointer from the
-UA". Only the link does — every UA sheet gives a button `cursor: default` — so `.lw-btn`, the
-most-clicked class in the package, read as inert text under the mouse in every consumer.
-Nothing could see it: a cursor is not in a screenshot, so `check:visual` is
-structurally blind to it, and axe has no rule for it. Its sibling rule caught the second bug in
-the same block — `.lw-input:disabled, .lw-textarea:disabled, .lw-select:disabled { background:
-… }`, where the SHORTHAND also resets `background-image` and took the select's chevron with it,
-leaving a disabled select painted as a disabled text input. Both rules read the SUBJECT of a
-selector (`.lw-band-dark .lw-kpi` styles the KPI), and rule 2 asks whether the shorthand actually
-wins — by specificity or by order, because the select's `:disabled` rule sits twenty lines
-*above* the base one and beat it from there. `--self-test` injects both faults and requires the
-gate to report them.
-
-**`check:bundle` exists because the cards were testing the wrong thing.** They render from
-`_ds_bundle.js`, which had no generator in this repo — it was cut in the design project. So a
-component fix was invisible to `check:a11y` and `check:visual` until the next wholesale sync,
-so a component fix stayed invisible to both browser gates until the next wholesale sync. **Edit a
-`.jsx`, run `npm run bundle`, commit both.**
-
-**`check:templates` is the only gate that opens a `.dc.html`.** It asserts the twelve
-`ds-base.js` and `support.js` exist only in `templates/_shared/` and are loaded in order by every
-template, and that `lang`, a main landmark and a resolvable skip link are all present.
-
-**`check:dts` exists because the barrel had two homes for one fact.** `react.js` is the
-runtime export list; `react.d.ts` was hand-written beside it and drifted — four re-exports
-named a sibling's file, which broke `npm run build` outright, and dozens of components had
-no types at all, which broke only the consumer. The generator joins `react.js` to each
-component's own `.d.ts` so neither can drift from the other again.
-
-**`check:themes` exists because of a specific bug in this system's history.**
-`--lw-neutral-text` had a derived colour while its three siblings had only channels, so it
-silently froze to the light palette on dark. A generator that walks all the theme scopes is
-the cheapest place to catch that class of thing, and it is the same pass that emits the
-Figma tokens — one generator, no hand-maintained second copy.
-
-**`check:visual` is nearly free because the cards already exist.** They are the right fixture
-set — one per folder, plus a state matrix where there is a state axis — and shooting each on
-both grounds AND both densities is what protects the CSS layers from each other. A
-change that only breaks compact-on-dark is exactly the one no human notices. A missing
-baseline records rather than fails, so adding a card never breaks the PR that adds it.
-
-**`.visual/` is gitignored, so a baseline is only valid on the machine that recorded it.** CI
-records its own from the base ref inside the same runner and compares with a pixel tolerance — a
-byte-exact match across machines is permanently red, not green.
-
-**`check:a11y` closes the one hole the contrast gate cannot see.** That gate proves token
-PAIRS in isolation; axe proves the palette as actually composed, plus rendered ARIA — a role
-that is wrong in composition, a control with no accessible name, a heading order that only
-breaks inside a card.
-
-The scripts live in `tools/` — outside `templates/`, because every directory under it is
-compiled into the browser bundle and a Node script cannot be. Keep them there: a location that
-needs a `files` exclusion plus a re-include is a pattern npm honours and **pnpm does not**, and
-the packed `bin` then silently goes missing in a pnpm install.
-
-The lint fails on raw hex, on Tailwind palette escapes (`bg-emerald-500`), on arbitrary-value
-token access (`bg-[hsl(var(--primary))]` — use `bg-primary`), and on more than one
-`variant="cta"` per view. **It is the load-bearing part of this package.** A shared token file
-does not make products consistent on its own; nothing stops a dev writing `bg-emerald-500`
-next to it.
-
----
-
-## Adding a component
-
-The checklist, in order. A component that skips a step is the one that drifts.
-
-1. **Prove it is not already here.** Two treatments of one interaction is not a style choice —
-   it is a bug that takes a year to notice, because nothing renders both side by side until
-   someone builds a page that does. `.lw-theme-toggle` and `.lw-code-tabs` were both deleted for
-   this reason.
-2. **Write the CSS first**, in `base.css` (shared), `marketing.css` or `product.css`, against tokens only —
-   no raw hex, no raw px outside the icon scale. The component must render correctly as plain
-   HTML with those classes and no JavaScript at all.
-3. **Add `Name.jsx` + `Name.d.ts`** side by side in the right folder. The JSX is a thin wrapper
-   that emits those classes and holds no styling of its own, so the React and vanilla consumers
-   cannot drift apart. **Thin is the target, not a tolerance:** a component that only emits a
-   className should be about ten lines (`CardBody` is one). Logic that exists to reproduce a
-   CSS rule in JavaScript is the CSS rule in the wrong file.
-4. **Name an icon, never draw one.** `import { Icon } from "../primitives/Icon.jsx"` and pass a
-   name. If the glyph does not exist, add it to `Icon.jsx` and to the `IconName` union — once.
-5. **Both grounds.** Check it on light and on `.lw-band-dark`. A component that only works on one
-   is not finished.
-6. **Keyboard and ARIA before visuals are final.** Real roles, a visible `:focus-visible` ring,
-   and nothing focusable without a role or a key handler. Status is never colour alone.
-   - The ring is **solid**, never a translucent halo. `var(--lw-focus-ring)` is a 2px brand band;
-     `--lw-focus-ring-danger` is its error twin. A washed ring has no defined edge, so it reads as
-     a glow, and being translucent it mixes with whatever ground sits behind it — one ring then
-     looks like a different colour per surface.
-   - **On a brand-filled control, use `outline` + `outline-offset: 2px` instead** — checked switch,
-     checked checkbox/radio, filled buttons. A brand ring flush against a brand fill is 1:1
-     against it and reads as the control getting 2px bigger. The gap must be *transparent* so it
-     shows the real local ground, which is why it is an outline: a transparent box-shadow layer
-     paints nothing (it does not mask the layer beneath), and a gap painted from `--lw-bg` would
-     show a white sliver on every `bg-subtle` surface.
-7. **A pointer cursor is a promise.** Everything clickable gets `cursor: pointer` from the
-   consolidated list at the foot of `base.css`; nothing inert does. A KPI tile and a table row stay
-   `auto` — a pointer over text that does nothing is a lie. Watch declaration ORDER: a later
-   `cursor: default` on a base class silently cancels `.lw-card-interactive`, which is how the
-   interactive `StatMeter` lost its pointer for two releases.
-8. **Re-export from `react.js`**, so the component is reachable at
-   `@leanwise/design/react` — there is no deep path into `components/`.
-9. **Add it to the folder's composition card**, and give it a state card of its own if it has a
-   state axis (rest / hover / invalid / disabled) a composition cannot show.
-10. **Update this README's table.** An undocumented component is one a consumer will rebuild.
-11. **Spell a judgement the way the token spells it.** If the component carries pass/fail/caution,
-    the prop is `tone` and its values come from **`success | warning | danger | neutral | brand |
-    info | cta`** — the vocabulary in `components/_tone.js`, which is the vocabulary `tokens.css`
-    already uses. Support whatever subset makes sense; invent no spelling. `npm run check:tone`
-    fails on a new name, and fails again if a value you advertise has no CSS rule behind it.
-
-    This was the one load-bearing rule in the package left to memory instead of a script, and it
-    is the one that rotted: the tone-carrying components spelled five judgements six different ways —
-    "warning" three ways, "danger" three, "success" three — while every one of them resolved to
-    `--lw-warning-on` / `--lw-danger-on` / `--lw-success-on` underneath. The tokens were never
-    drifted. Only the props were.
-12. **Paint from ROLES, never raw tiers.** `--lw-fg`, `--lw-fg-subtle`, `--lw-bg`, `--lw-bg-subtle`,
-    `--lw-line` re-point under every theme scope; `--lw-text-1`, `--lw-surface-1`, `--lw-border-1`
-    do not. A raw tier looks correct on light and silently freezes on dark — and it is worse when
-    only *part* of an element uses one, as when a status dot's fill re-pointed and its halo did not.
-
----
-
-## Logo
-
-`assets/` holds the brand logo, and **this package is its source of truth**:
-
-```
-assets/logo-mark.svg        the hexagon mark, brand gradient — for light grounds
-assets/logo-mark-mono.svg   the same geometry in currentColor — for dark grounds
-assets/logo-lockup.svg      mark + LEANWISE AI wordmark
-assets/logo-lockup-ondark.svg  the lockup with the wordmark in white — dark grounds
-assets/logo-favicon.svg     the mark, squared and self-switching — the browser tab
-assets/logo-icon.png        raster fallback of the mark (apple-touch-icon, and any
-                            surface that cannot take an SVG). Kept for one reason:
-                            `marketing.card` renders it as the `mode="mono"` raster,
-                            the one LogoRail form an SVG cannot demonstrate
-```
-
-`hex-lattice.svg`, `hero-mark.svg` and `logo-lockup-ondark.svg` are **generated** from their
-`-ink` sources by `npm run assets` (`check:assets` fails when stale) — the on-dark stops come
-from the artwork-only `--lw-art-*` tokens, so the ink and on-dark artwork cannot drift apart.
-
-**The favicon is generated, not drawn** — `npx lw-favicon` (and `--check`, which runs inside
-`npm run check`). It is derived from `logo-mark.svg` and differs in exactly two ways, both of
-which exist because a tab strip is the one surface where the ground is not ours:
-
-- **Square viewBox.** The mark is 871.1 × 1000 and a favicon slot is square, so a browser
-  letterboxes it and the drawing renders smaller than the space allows. The viewBox widens to
-  1000 and the origin shifts to `-64.45`, centring the identical paths — no coordinate moves,
-  so the geometry stays the autotrace.
-- **It switches itself.** Every other asset is placed on a ground you chose, which is why there
-  is a light variant and a dark one and a rule for picking. A tab gives you neither the choice
-  nor the knowledge: the same file is painted on near-white and near-black depending on an OS
-  setting, and `#024576` is invisible on the second. So this asset alone carries both pairs and
-  a `prefers-color-scheme` query inside the SVG. Renderers that ignore the query keep the light
-  stops, which is the safer default.
-
-**The on-dark gradient is tokenised too** — `--lw-logo-navy-ondark` `#4FA8D8` and
-`--lw-logo-cyan-ondark` `#8FEAF4`, artwork-only on exactly the terms `--lw-logo-cyan` is. They
-were literal hexes inside `logo-lockup-ondark.svg` with nothing guarding them, because
-`logoStops()` read only `logo-mark.svg` and `logo-lockup.svg`. It now reads all four assets,
-including the favicon's `<style>` block.
-
-**Geometry** is an autotrace of the master art (IoU 0.991 mark, 0.975 wordmark) — re-trace
-only when the art changes, never hand-edit the paths. **Colour** is resolved from `tokens.css`
-at build time — regenerate after any brand or navy change, never hand-edit an SVG.
-
-**The gradient stops are literal hexes.** CSS custom properties do not cascade into an SVG
-loaded through `<img>`, so a `var()` there renders its fallback forever. That makes the SVG a
-second home for a brand value, and `lw-contrast-check.mjs` fails if the two disagree —
-`lw-token-lint` cannot see inside `.svg`, so that gate is the only thing guarding it.
-
-**The mark's cyan is not `brand-500`.** `--lw-logo-cyan` (`#0A8799`) exists purely for artwork
-and no UI rule may consume it: it is too dark to read on the navy paper (4.06) and too light
-to carry white ink (4.25). `brand-500` is ~5 points darker so white ink clears AA — a
-compromise the logo does not have to make, because a logo carries no text.
-
-**The gradient variant is never tinted.** Do not run `logo-mark.svg` through `--primary`, a
-CSS `filter`, or tenant `brandVars()`. When the mark must take the surrounding ink, use
-`logo-mark-mono.svg`, which is `currentColor` by design — and note it must be **inlined or
-used as a CSS `mask`**: `currentColor` inside an SVG loaded through `<img>` resolves against
-that SVG's own root, not your document, so it would paint black.
-
----
+Dark follows `.dark`. Ambient motion is off unless an ancestor sets `data-ambient="on"`,
+and `prefers-reduced-motion` always stops it.
 
 ## Per-tenant theming
 
+A tenant's accent colour re-points the brand roles for its workspace only:
+
 ```tsx
 import { brandVars } from "@leanwise/design/brand";
-import { useTheme } from "@leanwise/design/hooks";
 
-const { resolved } = useTheme();
-<div style={brandVars(org?.accent, resolved)}>…</div>   // the workspace, not <html>
+<div style={brandVars(org.accent, resolvedTheme)}>…</div>
 ```
 
-Returns `{}` when there is no tenant colour, so tokens fall through to LeanWise cyan —
-**there is no "no-brand" state**. Tenant hexes are clamped (lightness to 20–50%, saturation
-floored at 26%) because a customer will eventually pick `#FFFF00`, and the ink
-on top is chosen from the *clamped* colour by measured luminance — `brandRamp()` exposes
-that decision, `clampedHex()` the colour actually painted, `isInBand()` whether the clamp
-moved anything (show the customer, don't silently correct them). A grey or black pick has no
-hue to honour, so it falls through to cyan rather than have a hue invented for it — flooring
-the saturation of `#888888` would ship a red-brown nobody chose.
+One hex in; `--primary`, `--primary-foreground`, `--ring`, the sidebar twins and the
+`--brand-50..900` ramp out, with lightness clamped so white ink still clears AA. Returns
+`{}` for no usable colour, so the LeanWise theme applies unchanged. Scope it to the
+workspace element, not `<html>`. The CTA, navy and status roles never change per tenant.
 
-The second argument is the **resolved** scheme, and it decides one thing: which tier answers
-as brand *text* (500 on light, 400 on dark). The fill tiers are theme-agnostic. Pass
-`useTheme().resolved` and it re-renders on a theme change.
+## Agent tooling
 
-**Why the function returns both channels and derived colours.** A custom property is
-substituted at computed-value time on the element that *declares* it, so `--lw-brand-500`
-— declared at `:root` — resolves against `:root`'s channel and inherits as a finished
-colour. Overriding the channel on a subtree does not move it. Values read *through* `var()`
-at use time (the alpha mixes, `hsl(var(--primary) / .15)`) do follow. Both are set.
+For Claude Code and other agents building LeanWise UIs:
 
----
+- **shadcn MCP** — search and install stock and `@leanwise` items from the agent. This repo
+  ships `.mcp.json`; in an app, add the same:
+  ```json
+  { "mcpServers": { "shadcn": { "command": "npx", "args": ["shadcn@latest", "mcp"] } } }
+  ```
+- **The official shadcn skill** — `npx skills add shadcn/ui`.
+- **The `leanwise-ui` skill** — `skills/leanwise-ui/SKILL.md` in this package: the
+  shadcn-first order, theme roles only, one CTA per view. Copy it into your app's
+  `.claude/skills/`.
+- **The lint** — `npx lw-token-lint src` before every commit and in CI.
 
-## Why colours are authored as HSL triples
+## The lint
 
-```css
---lw-brand-500-c: 185.0 82.0% 26.5%;          /* authored */
---lw-brand-500:   hsl(var(--lw-brand-500-c)); /* derived  */
+```bash
+npx lw-token-lint src
 ```
 
-The triple exists because Tailwind composes `hsl(var(--primary))` and needs bare channels;
-the derived value exists because vanilla CSS needs a real colour. Holding H/S/L as separate
-numbers is also what lets `brandVars()` synthesize tints at runtime. Edit the triple; never
-the derived line; never a hex in an app.
+Fails on a raw hex, a Tailwind palette class (`bg-blue-500`), a role reached through an
+arbitrary value (`bg-[var(--primary)]`), or more than one `variant="cta"` in a file. It also
+fails when it finds no source files, so a wrong path cannot pass.
 
-## Spacing is named by value
+## Developing this package
 
-`--lw-space-24` is 24px. Always. An index name states nothing about its value, so two scales
-a hyphen apart can mean different pixels and read as identical.
-
-## Density
-
-That rule is also what stops density living in the space scale: re-pointing `--lw-space-24`
-to 16px in compact mode would break the one promise the token's name makes. So density is a
-**second, semantic layer that consumes the literal scale**. The px scale is what you compose
-from; these are what components paint with, and only these move:
-
-`--lw-control-h-sm/md/lg` · `--lw-field-pad-x` · `--lw-row-h` · `--lw-cell-pad-y` ·
-`--lw-card-pad` · `--lw-stack-gap`
-
-```html
-<div data-density="compact">   <!-- a grid, a rail, a workspace — not <html> -->
+```bash
+npm install
+npm run gen        # src/palette.mjs -> theme.css, tokens.json
+npm run check      # generated files current, tests, types, lint, contrast, presence
+npm run check:ci   # + pack, a11y, visual self-test (needs `npx playwright install chromium`)
 ```
 
-**It scopes, it does not globalise**, the same way `brandVars()` goes on the workspace. A
-dashboard is compact in its table and comfortable in its filter bar, and that is correct.
+A new role is a change to `src/palette.mjs`, then `npm run gen` — never a local override in
+an app. `check contrast` then holds it to the contract: every text pair 4.5:1, controls and
+focus 3:1, the anchors exact, the chart series separable under colour blindness, and every
+non-status colour inside the brand hue band.
 
-**The 44px coarse-pointer minimum overrides density, never the other way round** — and it is
-set on the TOKEN in `tokens.css`, not on each control, so it reaches every control that reads
-the token including the ones not written yet. Compact is a desktop affordance; the hand does
-not get smaller because a table wants more rows. The corollary: **never write a control height
-in a `@media (pointer: coarse)` block again** — a height on the control outranks the token the
-touch block already lifted, which is the bug that guard is there to prevent.
+## References
 
-Marketing bands read none of these; a hero has one size. `.lw-btn` does read them, because a
-button in a compact toolbar is a control, not a band — a marketing page sets no density
-attribute, so it resolves to the 40px default and nothing there moves.
-
-### What density reaches, and what it does not
-
-Deliberate, and worth knowing before you set the attribute on a whole workspace and expect a
-uniformly denser app.
-
-| Responds to `data-density` | Does not |
-|---|---|
-| `.lw-input` `.lw-select` `.lw-textarea` `.lw-input-group` (base.css) `.lw-combo` | `.lw-topbar` (56px — base.css) |
-| `.lw-btn` and every size | `.lw-nav-item`, `.lw-sidebar` |
-| `.lw-dgrid` rows and header, `.lw-menu-item`, `.lw-option` | `.lw-avatar` (base.css), `.lw-msg-avatar` |
-| `.lw-card` padding, `Stack` gaps, `.lw-cal-preset` | `.lw-toast`, `.lw-kpi-badge` (34px), `.lw-source` (18px) |
-
-**The chrome staying put is the point, not an oversight.** A compact table inside a
-comfortable shell is the common case and it is what reads correctly — a 32px top bar looks
-broken, and an avatar that shrinks with a table makes a person's face a density setting.
-Extend the tokens into the shell only when a product asks for it, and add the row to this
-table when you do.
+- shadcn theming — https://ui.shadcn.com/docs/theming
+- shadcn registry — https://ui.shadcn.com/docs/registry
+- shadcn MCP — https://ui.shadcn.com/docs/mcp
+- shadcn skills — https://ui.shadcn.com/docs/skills

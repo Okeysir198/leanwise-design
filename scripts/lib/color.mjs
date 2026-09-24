@@ -1,17 +1,4 @@
-/**
- * The colour maths the gates share.
- *
- * Extracted from lw-contrast-check.mjs in v1.13.0 so a second tool that needs
- * a luminance or a dE (a future palette generator, a card that prints ratios)
- * does not grow its own copy — the CSS reader in _css.mjs exists for the same
- * reason and the same lesson: three parsers, one of them stale, shipped a
- * gutted tokens.json.
- *
- * Every channel here is 0..1, NOT 0..255. `hslToRgb` returns normalised values
- * and `luminance` consumes them that way; dividing by 255 again collapses every
- * colour to near-black, which showed up as dE 0.2 between obviously different
- * hues the first time the chart-separation check ran.
- */
+/* Colour maths for the gates. Channels are 0..1 throughout. */
 
 /** HSL (h in degrees, s and l in PERCENT) -> { r, g, b } in 0..1. */
 export function hslToRgb(h, s, l) {
@@ -73,20 +60,7 @@ export const deltaE76 = (a, b) => {
   return Math.hypot(la[0] - lb[0], la[1] - lb[1], la[2] - lb[2]);
 };
 
-/* ---- Dichromatic simulation --------------------------------------------------
- * CIE76 over the ramp answers "can a reader tell these two series apart" for a
- * reader with full colour vision. It does not answer it for the ~8% of men with
- * red-green dichromacy, and the difference is not a rounding error: measured on
- * the v1.x ramp, dark chart-2 (navy) and chart-4 (violet) sit at dE 39.5 to
- * normal vision and dE 0.8 under deuteranopia — the same colour. A gate that
- * cannot see that reports a palette as separable when a twelfth of the audience
- * is looking at a chart with two identical lines in it.
- *
- * Viénot, Brettel & Mollon (1999): convert to LMS, collapse the missing cone's
- * axis onto the plane the remaining two span, convert back. The projection runs
- * in LINEAR light — doing it on gamma-encoded channels is the classic error and
- * it lands the result several dE off, which is enough to flip a pass/fail here.
- */
+/* Dichromat simulation: Viénot, Brettel & Mollon (1999), in linear light. */
 const RGB_TO_LMS = [[0.31399, 0.63951, 0.04649], [0.15537, 0.75789, 0.08670], [0.01775, 0.10944, 0.87259]];
 const LMS_TO_RGB = [[5.47221, -4.64196, 0.16963], [-1.12524, 2.29317, -0.16789], [0.02980, -0.19318, 1.16364]];
 const DICHROMAT = {

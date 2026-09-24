@@ -1,139 +1,66 @@
 {
   "name": "@leanwise/design",
-  "version": "4.3.0",
-  "description": "LeanWise Design System \u2014 token core, CSS layers, React components, twelve templates.",
+  "version": "5.0.0",
+  "description": "LeanWise brand as a shadcn/ui theme and registry: theme.css for Tailwind v4, brand registry items, marketing layer.",
   "license": "UNLICENSED",
-  "private": false,
   "type": "module",
   "sideEffects": [
     "*.css"
   ],
-  "main": "./react.js",
-  "types": "./react.d.ts",
   "exports": {
-    ".": {
-      "types": "./react.d.ts",
-      "source": "./react.js",
-      "default": "./dist/react.js"
-    },
-    "./react": {
-      "types": "./react.d.ts",
-      "source": "./react.js",
-      "default": "./dist/react.js"
-    },
+    "./theme.css": "./theme.css",
+    "./marketing.css": "./marketing.css",
+    "./fonts.css": "./fonts.css",
+    "./fonts/*": "./fonts/*",
+    "./assets/*": "./assets/*",
     "./brand": {
       "types": "./brand.d.ts",
-      "source": "./brand.js",
-      "default": "./dist/brand.js"
+      "default": "./brand.js"
     },
     "./hooks": {
       "types": "./hooks.d.ts",
-      "source": "./hooks.js",
-      "default": "./dist/hooks.js"
+      "default": "./hooks.js"
     },
-    "./tailwind-preset": {
-      "types": "./tailwind-preset.d.cts",
-      "require": "./tailwind-preset.cjs",
-      "default": "./tailwind-preset.cjs"
-    },
-    "./tokens.css": "./tokens.css",
-    "./fonts.css": "./fonts.css",
-    "./shadcn.css": "./shadcn.css",
-    "./theme.css": "./theme.css",
-    "./reset.css": "./reset.css",
-    "./base.css": "./base.css",
-    "./marketing.css": "./marketing.css",
-    "./product.css": "./product.css",
     "./tokens.json": "./tokens.json",
-    "./assets/*": "./assets/*",
-    "./fonts/*": "./fonts/*",
-    "./package.json": "./package.json",
     "./r/*": "./r/*",
-    "./registry.json": "./registry/registry.json",
-    "./advisories.json": "./advisories.json"
+    "./registry.json": "./registry.json",
+    "./package.json": "./package.json"
   },
   "bin": {
-    "lw-token-lint": "./tools/lw-token-lint.mjs",
-    "lw-doctor": "./tools/lw-doctor.mjs",
-    "lw-inline": "./tools/lw-inline.mjs",
-    "lw-favicon": "./tools/lw-favicon.mjs",
-    "lw-subset": "./tools/lw-subset.mjs"
+    "lw-token-lint": "./bin/lw-token-lint.mjs"
   },
   "files": [
-    "react.js",
-    "react.d.ts",
+    "theme.css",
+    "marketing.css",
+    "fonts.css",
+    "fonts",
+    "assets",
     "brand.js",
     "brand.d.ts",
     "hooks.js",
     "hooks.d.ts",
-    "tailwind-preset.cjs",
-    "tailwind-preset.d.cts",
-    "tokens.css",
-    "fonts.css",
-    "shadcn.css",
-    "theme.css",
-    "reset.css",
-    "base.css",
-    "marketing.css",
-    "product.css",
     "tokens.json",
-    "dist",
-    "components",
-    "assets",
-    "fonts",
-    "tools",
-    "README.md",
-    "preview",
-    "_ds_bundle.js",
-    "tsconfig.json",
     "r",
-    "registry",
-    "advisories.json"
+    "registry.json",
+    "bin",
+    "scripts/lib/lint.mjs",
+    "scripts/lib/report.mjs",
+    "skills",
+    "README.md"
   ],
   "scripts": {
-    "build": "node tools/lw-build.mjs",
-    "check:contrast": "node tools/lw-contrast-check.mjs",
-    "check:tokens": "node tools/lw-token-lint.mjs --css && node tools/lw-token-lint.mjs registry",
-    "check:themes": "node tools/lw-tokens-dtcg.mjs --check",
-    "check:dts": "node tools/lw-dts-barrel.mjs --check",
-    "check:bundle": "node tools/lw-bundle.mjs --check",
-    "check:templates": "node tools/lw-templates.mjs",
-    "check:a11y": "node tools/lw-a11y.mjs",
-    "check:visual": "node tools/lw-visual.mjs",
-    "check:presence": "node tools/lw-presence.mjs",
-    "check:tone": "node tools/lw-tone.mjs",
-    "check:presence:list": "node tools/lw-presence.mjs --list",
+    "gen": "node scripts/gen.mjs",
     "test": "node --test test/*.test.mjs",
-    "inline": "node tools/lw-inline.mjs",
-    "check": "npm test && npm run check:presence && npm run check:rsc && npm run check:build && npm run check:types && npm run check:registry && npm run check:advisories && npm run check:favicon && npm run check:contrast && npm run check:tone && npm run check:affordance && npm run check:tokens && npm run check:themes && npm run check:dts && npm run check:bundle && npm run check:templates && npm run check:template-literals && npm run check:cards && npm run check:assets",
-    "check:ci": "npm run check && npm run check:pack && npm run check:a11y && npm run check:forced-colors && npm run check:visual",
-    "tokens": "node tools/lw-tokens-dtcg.mjs",
-    "dts": "node tools/lw-dts-barrel.mjs",
-    "bundle": "node tools/lw-bundle.mjs",
-    "prepublishOnly": "npm run check && npm run tokens && npm run dts && npm run bundle && npm run registry && npm run build",
-    "check:build": "node tools/lw-build.mjs --check",
-    "rsc": "node tools/lw-rsc.mjs",
-    "check:rsc": "node tools/lw-rsc.mjs --check",
-    "check:types": "tsc --noEmit",
-    "check:pack": "node tools/lw-pack-check.mjs",
-    "registry": "node tools/lw-registry.mjs",
-    "check:registry": "node tools/lw-registry.mjs --check",
-    "check:advisories": "node tools/lw-doctor.mjs --self-check",
-    "favicon": "node tools/lw-favicon.mjs",
-    "check:favicon": "node tools/lw-favicon.mjs --check",
-    "cards": "node tools/lw-cards.mjs",
-    "check:cards": "node tools/lw-cards.mjs --check",
-    "assets": "node tools/lw-assets.mjs",
-    "check:assets": "node tools/lw-assets.mjs --check",
-    "check:forced-colors": "node tools/lw-forced-colors.mjs",
-    "check:affordance": "node tools/lw-affordance.mjs --self-test && node tools/lw-affordance.mjs",
-    "check:template-literals": "node tools/lw-template-literals.mjs --self-test && node tools/lw-template-literals.mjs",
-    "subset": "node tools/lw-subset.mjs"
+    "lint": "node scripts/check.mjs lint",
+    "check": "node scripts/gen.mjs --check && npm test && tsc --noEmit && node scripts/check.mjs lint && node scripts/check.mjs contrast && node scripts/check.mjs presence",
+    "check:ci": "npm run check && npm run check:pack && npm run check:a11y && npm run check:visual -- --self-test",
+    "check:pack": "node scripts/check.mjs pack",
+    "check:a11y": "node scripts/check.mjs a11y",
+    "check:visual": "node scripts/check.mjs visual"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",
     "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.4",
     "axe-core": "^4.10.0",
     "esbuild": "^0.27.7",
     "playwright": "^1.48.0",
@@ -144,25 +71,18 @@
     "typescript": "^5.6.0"
   },
   "peerDependencies": {
-    "react": ">=18",
-    "react-dom": ">=18"
+    "react": ">=18"
   },
   "peerDependenciesMeta": {
-    "react-dom": {
+    "react": {
       "optional": true
     }
-  },
-  "publishConfig": {
-    "access": "restricted"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Okeysir198/leanwise-design.git"
   },
   "engines": {
-    "node": ">=18"
-  },
-  "dependencies": {
-    "radix-ui": "^1.6.7"
+    "node": ">=20"
   }
 }

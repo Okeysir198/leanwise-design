@@ -1,5 +1,3 @@
-# The gate. `npm run check` is what a contributor runs; this adds the two that
-# need a browser, which is why they are not in the local default.
 name: check
 
 on:
@@ -8,158 +6,33 @@ on:
     branches: [main]
 
 jobs:
-  gates:
+  check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          # The visual gate records the BASE REF's baseline on this runner
-          # before it shoots HEAD (see below), so the base commit has to be in
-          # this clone. The default fetch-depth of 1 does not put it there.
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
-
       - run: npm ci
+      - run: npm run check
+      - run: npx playwright install --with-deps chromium
+      - run: npm run check:ci
 
-      # Every browserless gate, in the order package.json#scripts.check states
-      # them. They used to be six hand-listed steps here — a second home for
-      # the list, which had drifted: presence, rsc, build, types, registry,
-      # advisories, favicon and tone were in `check` and NOT in CI. One step,
-      # one list. Bundle freshness is inside it, and must run BEFORE the
-      # browser gates below or they score the previous components.
-      - name: Browserless gates
-        run: npm run check
-
-      # check:dts proves react.d.ts is not STALE; it does not run
-      # rollup-plugin-dts, whose own resolution rules are what actually failed
-      # (a re-export the target does not declare). prepublishOnly runs the build,
-      # so without this step the FIRST time anyone learns the build is broken is
-      # at publish — after the tag has been cut. It is the only gate in
-      # prepublishOnly that CI did not exercise.
-      - name: Build
-        run: npm run build
-
-      # The packed tarball — what a consumer actually installs from a git tag.
-      # It was in check:ci and never in this workflow, so CI proved the tree
-      # and not the package.
-      - name: Pack check
-        run: npm run check:pack
-
-      - name: Install Chromium
-        run: npx playwright install --with-deps chromium
-
-      # Rendered ARIA. serious/critical fail; moderate/minor report and pass.
-      - name: Accessibility
-        run: npm run check:a11y
-
-      # Windows High Contrast. Nothing else here can see it — contrast measures
-      # tokens and forced-colors ignores tokens, axe does not emulate it, and
-      # the visual gate shoots the normal palette. Added after v3.0.0 shipped a
-      # forced-colors rule that hid the whole page.
-      - name: Forced colors
-        run: npm run check:forced-colors
-
-      # ---------------------------------------------------------------------
-      # Visual regression.
-      #
-      # `.visual/` is gitignored and a pixel baseline is only meaningful on the
-      # machine that recorded it, so CI records its OWN: shoot the BASE REF
-      # first, on this runner, with this Chromium and these fonts; then shoot
-      # HEAD and pixel-diff the two. Same machine on both sides is the whole
-      # reason the comparison means anything. Committing this box's baselines
-      # would instead make CI permanently red.
-      #
-      # The baseline lives in $RUNNER_TEMP, outside the worktree, because the
-      # step in between checks the tree back out and git would clean it away.
-      # ---------------------------------------------------------------------
-      - name: Visual gate self-test
-        # Proves the PNG decoder agrees with Chromium's own and that a
-        # perturbed image FAILS. A comparator that always answers "same" is the
-        # exact defect this whole section exists to remove, and it is invisible
-        # to a green run.
-        run: node tools/lw-visual.mjs --self-test
-
-      - name: Resolve the base ref
-        id: base
+      # Visual regression: record the base ref on this runner, then diff HEAD.
+      # A head commit carrying [visual-ok] reports differences without failing.
+      - name: Visual regression
+        if: github.event_name == 'pull_request'
         env:
-          EVENT: ${{ github.event_name }}
-          PR_BASE: ${{ github.event.pull_request.base.sha }}
-          PUSH_BEFORE: ${{ github.event.before }}
-        run: |
-          set -uo pipefail
-          echo "head=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-          if [ "$EVENT" = "pull_request" ]; then BASE="${PR_BASE:-}"; else BASE="${PUSH_BEFORE:-}"; fi
-          # A branch's first push, an initial commit and a force-push over a
-          # discarded commit all hand us the all-zero sha or an object that is
-          # not in this clone. None of those is a regression; none of them is a
-          # pass either. Say so, and let the gate skip out loud.
-          if [ -z "$BASE" ] || [ "$BASE" = "0000000000000000000000000000000000000000" ] \
-             || ! git cat-file -e "${BASE}^{commit}" 2>/dev/null; then
-            echo "::warning title=lw-visual::No usable base ref (event=$EVENT, base='$BASE'). The visual gate will skip loudly — it compares nothing this run."
-            echo "skip=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "base=$BASE" >> "$GITHUB_OUTPUT"
-            echo "skip=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Record the base ref's baseline
-        if: steps.base.outputs.skip != 'true'
-        # A base ref that cannot be shot (a card that fails to render at that
-        # commit) is a defect of the base, not of this change, so it must not
-        # block the PR: the recorder is allowed to fail, and the comparison
-        # below then degrades to a loud skip or to a partial compare that names
-        # every shot it had no baseline for.
-        continue-on-error: true
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD: ${{ github.event.pull_request.head.sha }}
         run: |
           set -euo pipefail
-          git checkout --force --detach "${{ steps.base.outputs.base }}"
-          # Both sides are measured by the SAME comparator: keep HEAD's gate
-          # tooling even while the CARDS and the CSS are the base ref's.
-          # Otherwise a PR that touches this gate is scored by two different
-          # gates and the diff is uninterpretable. node_modules is untracked,
-          # so the browser and its deps stay exactly as `npm ci` left them.
-          git checkout --force "${{ steps.base.outputs.head }}" -- tools
-          node tools/lw-visual.mjs --record --dir "$RUNNER_TEMP/visual"
-
-      - name: Restore HEAD
-        if: always() && steps.base.outputs.skip != 'true'
-        run: git checkout --force --detach "${{ steps.base.outputs.head }}"
-
-      # Compare only — never records. With no baseline (the skip cases above)
-      # this exits 0 with a SKIPPED banner rather than recording 136 shots and
-      # calling it a pass, which is what it used to do on every single run.
-      #
-      # An INTENDED visual change still has to be able to land. `--update` is
-      # meaningless here (the baseline is thrown away with the runner), so the
-      # escape hatch is a marker in the head commit message. It is deliberately
-      # awkward and it is greppable — `git log --grep='\[visual-ok\]'` counts
-      # every time somebody waved the gate through, the same property that makes
-      # `data-a11y-expect` safe to have.
-      - name: Visual regression
-        env:
-          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-        run: |
-          set -uo pipefail
-          ACCEPT=""
-          if git log -1 --pretty=%B "$HEAD_SHA" | grep -qF '[visual-ok]'; then
-            echo "::warning title=lw-visual::[visual-ok] in the head commit — visual differences will be reported but will not fail the build. Review the uploaded diff artifact."
-            ACCEPT="--report-only"
-          fi
-          node tools/lw-visual.mjs --compare $ACCEPT --dir "$RUNNER_TEMP/visual"
-
-      # always(), not failure(): under [visual-ok] the gate exits 0, and that is
-      # precisely the run whose diff a reviewer has to look at. `if-no-files-found:
-      # ignore` keeps it silent on the runs that produced no diff at all.
-      - name: Upload visual diff
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: visual
-          path: |
-            ${{ runner.temp }}/visual/diff
-            ${{ runner.temp }}/visual/current
-          if-no-files-found: ignore
-          retention-days: 14
+          git checkout --force --detach "$BASE"
+          git checkout --force "$HEAD" -- scripts
+          node scripts/check.mjs visual --record --dir "$RUNNER_TEMP/visual" || echo "::warning::base ref could not be recorded"
+          git checkout --force --detach "$HEAD"
+          FLAG=""; git log -1 --pretty=%B "$HEAD" | grep -qF '[visual-ok]' && FLAG="--report-only"
+          node scripts/check.mjs visual --compare --dir "$RUNNER_TEMP/visual" $FLAG

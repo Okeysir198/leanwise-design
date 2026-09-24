@@ -1,15 +1,4 @@
-/**
- * The PNG codec and the shot comparator, as a MODULE.
- *
- * These lived inside lw-visual.mjs, which has no main guard: importing it
- * launches Chromium and runs the gate. That made the decoder, the encoder and
- * the two-rule comparator untestable without a browser, so the only proof they
- * worked was `--self-test` — which needs Playwright and a rendered card. Here
- * they can be exercised by `node --test` against hand-built PNGs, one per
- * filter type, with no browser at all. lw-visual.mjs imports them back; the
- * behaviour is byte-identical. The rationale for every threshold and for the
- * narrow decoder is kept with the code below, unchanged.
- */
+/* PNG codec and the two-rule shot comparator used by `check visual`. */
 import { deflateSync, inflateSync } from "node:zlib";
 
 /* ------------------------------------------------------------------ PNG I/O */
@@ -136,49 +125,12 @@ export function encodePng(width, height, rgba) {
 
 /* -------------------------------------------------------------- comparison */
 
-/**
- * Two rules, because either alone has a blind spot the other covers, and both
- * far tighter than a cross-machine comparator could afford.
- *
- * WHAT THE NOISE FLOOR ACTUALLY IS. Measured, not assumed: over six full
- * compare runs against a fixed baseline (816 shots, separate browser launches
- * each time), 815 shots came back BYTE-identical and one — Chart.card on light
- * — moved 0.0002% of its pixels once, about two pixels on an antialiased curve.
- * Chromium's raster is effectively bit-deterministic on one machine, and CI
- * shoots both sides on ONE runner with one browser and one font set. So these
- * numbers are insurance against that rare two-pixel jitter, not headroom for a
- * known drift: the soft rule sits ~100× above the largest wobble ever observed,
- * and is still 5× tighter than the ~0.1% a cross-machine comparator needs.
- *
- * `soft` — channel delta > 8, fail above 0.02% of pixels. The area rule: a
- * repaint, a reflow, a shifted glyph run. 8/255 ≈ 3% is roughly the floor of a
- * visible flat-colour change, so anything under it is not a regression a person
- * could see anyway. 0.02% is ~460 px on a typical 1280×1800 card.
- *
- * `strong` — channel delta > 48, fail above 0.002% of pixels. Covers what an
- * area rule cannot: something small that changed a LOT. A 1px hairline
- * recoloured from grey to brand teal along 1200px of one card measures 0.038%
- * of that shot — a 0.1% area rule never sees it, and it is exactly the token
- * regression this repo ships. 48/255 ≈ 19% of the range is "a different
- * colour", not "a shade"; a 12-point lightness nudge (Δ≈31) stays under it on
- * purpose, because that kind of change is always broad and the area rule owns it.
- *
- * KNOWN BLIND SPOT, stated rather than tuned away: a small-area, moderate-delta
- * change on a single card — one control's border nudged two steps — sits under
- * both rules. Neither number can be lowered to catch it without inventing a
- * noise budget nobody has measured. If CI ever flakes, RAISE these with the
- * observed diff percentage quoted in the commit message; never round up "to be
- * safe", which is how a gate stops being one.
- *
- * Both rules are per-shot and never averaged across the run: 136 shots averaged
- * would hide a single card breaking completely.
- */
+/* Two per-shot rules. soft: channel delta > 8 over 0.02% of pixels (a repaint).
+   strong: delta > 48 over 0.002% (a recoloured hairline). Raise only with an
+   observed diff percentage quoted. */
 export const TOL = { softDelta: 8, strongDelta: 48, softRatio: 0.0002, strongRatio: 0.00002 };
 
 export function compareShots(baseBuf, curBuf) {
-  // Fast path. Baseline and candidate are recorded on the same machine by
-  // design, so most shots ARE byte-identical; skipping the inflate of two
-  // multi-megabyte images for those is most of the gate's wall clock.
   if (baseBuf.length === curBuf.length && baseBuf.equals(curBuf)) {
     return { ok: true, identical: true, soft: 0, strong: 0, softPct: 0, strongPct: 0 };
   }

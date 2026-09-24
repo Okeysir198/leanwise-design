@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { deflateSync, crc32 as zlibCrc32 } from "node:zlib";
-import { PNG_SIG, decodePng, crc32, chunk, encodePng, compareShots, TOL } from "../tools/_png.mjs";
+import { PNG_SIG, decodePng, crc32, chunk, encodePng, compareShots, TOL } from "../scripts/lib/png.mjs";
 
 // The fixture builder carries its OWN Paeth predictor. Importing the decoder's
 // would test it against itself: a broken paeth then encodes and decodes
