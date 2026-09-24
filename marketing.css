@@ -1,2189 +1,338 @@
-/* @leanwise/design — MARKETING layer
- *
- * The parts a product app genuinely drops: page grounds, the hero, sections,
- * feature grids, story cards, the logo rail, data-viz bars, the browser frame,
- * scroll-driven and ambient motion, marketing stat tiles, console run controls.
- *
- * Requires the BASE layer (tokens → base → marketing) — the buttons, cards and
- * chips these compositions are built from live there.
- *
- * All motion here is opt-in and double-gated behind
- * `@supports (animation-timeline: …)` and `prefers-reduced-motion: no-preference`;
- * the static state is always complete.
- */
+/* @leanwise/design — marketing layer. Plain CSS over theme.css variables only.
 
-/* ---- Sections ------------------------------------------------------------ */
+     @import "tailwindcss";
+     @import "@leanwise/design/fonts.css";
+     @import "@leanwise/design/theme.css";
+     @import "@leanwise/design/marketing.css";
 
-/* Compact rhythm (v0.4.0): the old 120px cap read as a brochure, not a lean
-   product site. One scale, two densities — nothing else sets section padding.
+   Dark follows `.dark` on an ancestor, the same switch theme.css uses.
+   Ambient motion is OFF: `data-ambient="on"` on any ancestor runs the loops,
+   and prefers-reduced-motion stops them regardless.                          */
 
-   `.lw-footer` (v1.3.0) shares the declaration rather than restating the clamp.
-   The footer IS a section by another name, and this clamp is the page's vertical
-   signature — a second copy of it is a second home for the number that decides
-   how the whole site breathes, and the two would drift the first time either is
-   tuned. The footer's own colour/border rules live in the site-chrome block at
-   the foot of this file. */
-.lw-section,
-.lw-footer { padding: clamp(48px, 5.5vw, 88px) 0; }
-.lw-section.tight { padding: clamp(32px, 3.5vw, 56px) 0; }
-
-/* Section separators (v1.4.0). Once a page carries ONE ground, bands can no
-   longer alternate fills to show where one ends — `.lw-page-* .lw-section.dark`
-   is neutralised further down, and correctly so. A border is what is left, and
-   it is untouched by that neutralisation, which is why this works at all.
-
-   One weight, because the package has exactly one hairline vocabulary and a
-   second thickness would be a second home for the number that decides how every
-   edge on the site reads. `--lw-section-rule-w` is a LOCAL knob with a fallback
-   — marketing.css's own discipline for exactly this: no new design token, so no
-   theme-scope obligation and nothing for check:themes to walk. */
-.lw-section-rule { border-block-start: var(--lw-section-rule-w, 1px) solid var(--lw-line); }
-.lw-section-rule-b { border-block-end: var(--lw-section-rule-w, 1px) solid var(--lw-line); }
-
-/* A dark BAND on a light page — not dark mode. */
-.lw-section.dark {
-  background: var(--lw-navy-900);
-  color: var(--lw-on-dark);
+:root {
+  --ambient-play: paused;
+  --ambient-dur: 26s;
+  --ease-io: cubic-bezier(0.65, 0, 0.35, 1);
+  --section-y: clamp(3.5rem, 7vw, 6.5rem);
+  --glow-a: color-mix(in oklch, var(--brand-500) 12%, transparent);
+  --glow-b: color-mix(in oklch, var(--brand-600) 8%, transparent);
+  --glow-c: color-mix(in oklch, var(--brand-600) 6%, transparent);
+  --lattice-alpha: 0.55;
+  --mark-alpha: 0.45;
 }
-.lw-section.dark .lw-lead { color: var(--lw-on-dark-2); }
-.lw-section.dark .lw-eyebrow { color: var(--lw-brand-300); }
-.lw-section.dark .lw-eyebrow::before { background: var(--lw-brand-300); }
-/* Headings and links are universal text roles on a dark band, same as .lw-lead —
-   consumers were re-deriving these locally (v0.3.1). */
-.lw-section.dark .lw-h1,
-.lw-section.dark .lw-h2,
-.lw-section.dark .lw-h3 { color: var(--lw-on-dark-1); }
-.lw-section.dark a:not(.lw-btn) { color: var(--lw-brand-400); }
+.dark, .lw-page-dark, .lw-hero {
+  --glow-a: color-mix(in oklch, var(--brand-500) 30%, transparent);
+  --glow-b: color-mix(in oklch, var(--brand-600) 18%, transparent);
+  --glow-c: color-mix(in oklch, var(--navy) 45%, transparent);
+  --lattice-alpha: 0.36;
+  --mark-alpha: 0.6;
+}
+[data-ambient="on"] { --ambient-play: running; }
+[data-ambient="off"] { --ambient-play: paused; }
 
-/* ---- Full-page ground (v0.5.1) --------------------------------------------
-   ONE background for the whole page, not a dark hero followed by a light body
-   and a dark band — that reads as three pages stapled together and the seams
-   move as you scroll. Both layers are `position: fixed`, so the composition is
-   dead still under scroll, and both are symmetric about the centre line.
+/* ---- Layout + type --------------------------------------------------------- */
 
-     <div class="dark lw-page-dark" data-band="dark">   dark ground
-     <div class="lw-page-light">                        light ground
+.lw-container { width: 100%; max-width: 72rem; margin-inline: auto; padding-inline: clamp(1rem, 4vw, 2rem); }
+.lw-section { padding-block: var(--section-y); }
+.lw-section-muted { background: var(--muted); }
+.lw-section-head { max-width: 46rem; margin: 0 auto 3rem; text-align: center; }
+.lw-section-head > * + * { margin-top: 0.75rem; }
 
-   Sections inside go transparent and role tokens re-point on their own — cards,
-   tables and inputs need no per-section overrides. The two grounds share their
-   geometry and differ only in ground colour, glow alpha and artwork ink: the
-   lattice needs a darker stroke on white (hex-lattice-ink.svg) and the mark
-   needs its gradient re-ranged per ground: hero-mark.svg lifts the stops so the
-   navy end does not vanish into navy paper, hero-mark-ink.svg widens them
-   (deep navy -> bright cyan) so the run is legible at low alpha on white. The
-   mark's own two stops sit close in value and flatten to one wash otherwise. */
+.lw-display, .lw-display-sm {
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+.lw-display { font-size: var(--text-display, clamp(2.375rem, 5vw, 4.5rem)); line-height: var(--text-display--line-height, 1.05); }
+.lw-display-sm { font-size: var(--text-display-sm, clamp(1.75rem, 3.4vw, 3rem)); line-height: var(--text-display-sm--line-height, 1.1); }
+.lw-display em, .lw-display-sm em { font-style: normal; color: var(--primary); }
+.lw-lead { margin: 0; max-width: 60ch; font-size: var(--text-lg, 1.125rem); line-height: var(--text-lg--line-height, 1.75rem); color: var(--muted-foreground); text-wrap: pretty; }
+.lw-eyebrow {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  font-family: var(--font-mono); font-size: var(--text-xs, 0.75rem); font-weight: 500;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--primary);
+}
+.lw-eyebrow::before { content: ""; width: 1.25rem; height: 2px; border-radius: 1px; background: currentColor; }
 
-/* ---- The three grounds are ONE rule set, parameterised (v1.13.0) --------
-   Through v1.12 this was ~26 hand-twinned blocks — every geometry rule written
-   three times, every dark rule twice — and the twinning had already missed once
-   (`lwMarkBreathe`, v1.5.1). Everything that differs between the grounds is a
-   custom property declared here with the LIGHT value and re-pointed once for
-   dark: lattice alpha, the three glow stops, the comb keyframe, the mark alpha
-   and the sheen colour. The geometry is written once against `:is(...)`, which
-   keeps the specificity of every rule exactly what the twins had.
+.lw-prose { max-width: 68ch; font-size: var(--text-base, 1rem); line-height: 1.7; }
+.lw-prose > * + * { margin-top: 1em; }
+.lw-prose :is(h2, h3) { margin-top: 2em; line-height: 1.25; font-weight: 600; letter-spacing: -0.015em; }
+.lw-prose h2 { font-size: var(--text-2xl, 1.5rem); }
+.lw-prose h3 { font-size: var(--text-xl, 1.25rem); }
+.lw-prose a { color: var(--primary); text-decoration: underline; text-underline-offset: 3px; }
+.lw-prose :is(ul, ol) { padding-inline-start: 1.25rem; }
+.lw-prose ul { list-style: disc; }
+.lw-prose ol { list-style: decimal; }
+.lw-prose code { font-family: var(--font-mono); font-size: 0.9em; padding: 0.1em 0.35em; border-radius: calc(var(--radius) * 0.6); background: var(--muted); }
+.lw-prose blockquote { border-inline-start: 3px solid var(--primary); padding-inline-start: 1rem; color: var(--muted-foreground); }
 
-   The artwork URLs are the one thing that stays in explicit two-selector
-   rules: Firefox resolves a `url()` inside a custom property against the
-   DOCUMENT, not the stylesheet, so a consumer at any other path would 404 the
-   lattice. Add a differing value as a property; add a differing image as a
-   rule. */
-.lw-page-dark, .lw-page-light, .lw-page-ground {
-  /* Light values. On white a glow has to stay under ~0.12 or it stops reading
-     as light and starts reading as a coloured panel with a visible edge. The
-     LATTICE goes the other way — it is a hairline of a mid-value teal at 0.5
-     stroke-opacity inside the file, so on white its layer alpha has to sit
-     well above the dark ground's to land at the same visible weight. */
-  --lw-ground-alpha: 0.55;
-  --lw-ground-glow-1: hsl(var(--lw-brand-500-c) / 0.12);
-  --lw-ground-glow-2: hsl(var(--lw-logo-cyan-c) / 0.08);
-  --lw-ground-glow-3: hsl(var(--lw-brand-500-c) / 0.06);
-  --lw-ground-comb: lwCombPulseLight;
-  --lw-ground-mark-alpha: 0.45;
-  --lw-ground-sheen: hsl(var(--lw-brand-500-c) / 0.12);
+/* ---- Page grounds -----------------------------------------------------------
+   Content WRAPPERS that paint through ::before (glow) and ::after (hex lattice).
+   Forced-colors hides the pseudo-elements, never the wrapper. `url()`s stay in
+   selector rules: Firefox resolves a url() in a custom property against the
+   document, not this stylesheet. */
+
+.lw-page-ground, .lw-page-dark {
   position: relative;
   min-height: 100vh;
   isolation: isolate;
-  /* `clip`, never `hidden`: hidden would make the wrapper a scroll container and
-     break any sticky descendant (the TopBar). Needed because .lw-hero-dark runs
-     overflow: visible here so the mark is not clipped — which also leaves the
-     travelling sheen free to push the document's scrollable width. The fixed
-     glow layers are unaffected. */
   overflow-x: clip;
-  background: var(--lw-bg);
-  color: var(--lw-fg);
+  background: var(--background);
+  color: var(--foreground);
 }
-/* Dark: a cyan crown on the centre line, a brand wash under it, and a matched
-   navy pair on both flanks. Every stop is mirrored left/right. The same values
-   serve `.lw-page-dark` always and `.lw-page-ground` when the document is dark.
-   `html:is(...)` rather than a bare `:is(...)`: it keeps the themed branch at
-   (0,2,1), above the light default at (0,1,0), and symmetric with anything a
-   third state adds later. */
-.lw-page-dark, html:is(.dark, [data-theme="dark"]) .lw-page-ground {
-  --lw-ground-alpha: 0.36;
-  --lw-ground-glow-1: hsl(var(--lw-logo-cyan-c) / 0.30);
-  --lw-ground-glow-2: hsl(var(--lw-brand-500-c) / 0.18);
-  --lw-ground-glow-3: hsl(var(--lw-navy-700-c) / 0.45);
-  --lw-ground-comb: lwCombPulseDark;
-  --lw-ground-mark-alpha: 0.62;
-  --lw-ground-sheen: hsl(var(--lw-logo-cyan-c) / 0.22);
-  color-scheme: dark;
+.lw-page-dark { background: var(--navy); color: var(--navy-foreground); color-scheme: dark; }
+:is(.lw-page-ground, .lw-page-dark)::before,
+:is(.lw-page-ground, .lw-page-dark)::after {
+  content: ""; position: fixed; inset: 0; pointer-events: none;
 }
-/* AFTER the shared rule: same specificity, so source order is what wins. */
-.lw-page-dark { background: var(--lw-navy-deep); color: var(--lw-on-dark); }
-
-/* Ground motion (v0.6.0). Ambient by exception, same terms as the rest of this
-   file's motion: it is the BACKGROUND only, nothing under the reader's eye
-   moves, and all of it stands down under prefers-reduced-motion. Since v2.0.0
-   it is OFF by default: `--lw-ambient-play` is `paused` at :root, and
-   `data-ambient="on"` on any ancestor runs the loops; `data-ambient="off"`
-   parks a subtree again. Frame 0 is the resting frame of every loop, so a
-   paused ground paints exactly what a running one paints at t=0.
-
-   Three layers, and every one animates ONLY transform or opacity, so none of
-   them repaints — they run on the compositor:
-
-     glow drift    the wash slides and swells                    26s
-     comb pulse    the honeycomb breathes in and out of view     14s
-     sheen         a soft cyan light travels across the comb     19s
-     mark breathe  the logo swells fractionally                  24s
-
-   v0.5.3 drifted the comb by animating background-position on a fixed,
-   full-viewport pseudo-element, which forced a full-viewport repaint every frame
-   for the life of every page that used it. Translating that layer instead is not
-   an option either: mask-image is painted WITH the element, so a transform drags
-   the radial fade along with the tiles and the fade visibly wanders. Hence a
-   pulse (opacity, safe) for the comb, and a separate travelling element for the
-   sense of movement across it.
-
-   Honeycomb on the LEFT, the mark on the RIGHT (v0.5.2) — the two brand shapes
-   hold opposite ends of the page instead of stacking on the centre line, so
-   neither sits under the copy. The lattice tiles from the left edge and its
-   mask fades right; the mark is anchored to the right edge below.
-
-   The tile is a REGULAR flat-top hexagon — all six sides equal — and the cells
-   SHARE their edges, so the layer reads as one connected comb. Two earlier
-   passes got this wrong: one stretched the hexagon to the mark's 871:1000
-   proportion, leaving the diagonals longer than the flat edges; the next rounded
-   the corners by 9 of the 30-unit side, which made each cell read as a circle
-   AND broke the comb — a generous corner pulls away from its neighbour's, so a
-   gap opens at every shared vertex. The radius is now 3.5: enough to echo the
-   mark's soft corners, small enough that the edges still meet. */
-:is(.lw-page-dark, .lw-page-light, .lw-page-ground)::before,
-:is(.lw-page-dark, .lw-page-light, .lw-page-ground)::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-}
-:is(.lw-page-dark, .lw-page-light, .lw-page-ground)::before {
+:is(.lw-page-ground, .lw-page-dark)::before {
   z-index: -2;
   background:
-    radial-gradient(52rem 30rem at 84% -3rem, var(--lw-ground-glow-1), transparent 66%),
-    radial-gradient(76rem 48rem at 20% -4rem, var(--lw-ground-glow-2), transparent 72%),
-    radial-gradient(40rem 40rem at -6% 46%, var(--lw-ground-glow-3), transparent 70%);
-  animation: lwGroundDrift var(--lw-dur-ambient) var(--lw-ease-in-out) infinite alternate;
-  animation-play-state: var(--lw-ambient-play);
+    radial-gradient(52rem 30rem at 84% -3rem, var(--glow-a), transparent 66%),
+    radial-gradient(76rem 48rem at 20% -4rem, var(--glow-b), transparent 72%),
+    radial-gradient(40rem 40rem at -6% 46%, var(--glow-c), transparent 70%);
+  animation: lwGroundDrift var(--ambient-dur) var(--ease-io) infinite alternate;
+  animation-play-state: var(--ambient-play);
 }
-:is(.lw-page-dark, .lw-page-light, .lw-page-ground)::after {
+:is(.lw-page-ground, .lw-page-dark)::after {
   z-index: -1;
-  background-repeat: repeat;
-  background-position: left top;
-  background-size: 132px 76.2px;
+  background: url("assets/hex-lattice-ink.svg") repeat left top / 132px 76.2px;
   mask-image: radial-gradient(50rem 38rem at 2% 4%, #000 6%, transparent 80%);
-  opacity: var(--lw-ground-alpha);
-  animation: var(--lw-ground-comb) calc(var(--lw-dur-ambient) / 2) var(--lw-ease-in-out) infinite alternate;
-  animation-play-state: var(--lw-ambient-play);
+  opacity: var(--lattice-alpha);
+  animation: lwCombPulse calc(var(--ambient-dur) / 2) var(--ease-io) infinite alternate;
+  animation-play-state: var(--ambient-play);
 }
-.lw-page-light::after, .lw-page-ground::after { background-image: url("assets/hex-lattice-ink.svg"); }
-.lw-page-dark::after, html:is(.dark, [data-theme="dark"]) .lw-page-ground::after { background-image: url("assets/hex-lattice.svg"); }
-
-/* Inside a full-page ground the hero paints no ground of its own — it keeps
-   only the mark, held against the RIGHT edge opposite the lattice, and lends
-   its ::before to the sheen, which the full-page ground otherwise has no use
-   for. Oversized and translated, so it never exposes its own edge. */
-:is(.lw-page-dark, .lw-page-light, .lw-page-ground) .lw-hero-dark { background: none; overflow: visible; color: inherit; }
-:is(.lw-page-dark, .lw-page-light, .lw-page-ground) .lw-hero-dark::before {
-  content: "";
-  position: absolute;
-  top: -40%;
-  left: -60%;
-  width: 80%;
-  height: 180%;
-  z-index: -1;
-  pointer-events: none;
-  border-radius: 50%;
-  filter: blur(40px);
-  background: radial-gradient(closest-side, var(--lw-ground-sheen), transparent 100%);
-  animation: lwSheen calc(var(--lw-dur-ambient) * .8) var(--lw-ease-in-out) infinite alternate;
-  animation-play-state: var(--lw-ambient-play);
-}
-:is(.lw-page-dark, .lw-page-light, .lw-page-ground) .lw-hero-dark::after {
-  top: 50%;
-  left: auto;
-  right: clamp(12px, 4vw, 72px);
-  transform: translateY(-50%);
-  /* Sized off the hero's HEIGHT, not its width: the mark is taller than it is
-     wide, so a width-sized copy gets clipped top and bottom and stops reading
-     as a hexagon at all. */
-  height: 62%;
-  width: auto;
-  aspect-ratio: 871.1 / 1000;
-  /* Opacity high enough that the mark's navy->cyan run is actually legible as
-     a gradient — below ~0.45 on either ground it flattens to one wash. */
-  opacity: var(--lw-ground-mark-alpha);
-  animation: lwMarkBreathe var(--lw-dur-ambient) var(--lw-ease-in-out) infinite alternate;
-  animation-play-state: var(--lw-ambient-play);
-}
-/* The mark's gradient is re-ranged per ground: hero-mark.svg lifts the stops so
-   the navy end does not vanish into navy paper, hero-mark-ink.svg widens them
-   (deep navy -> bright cyan) so the run is legible at low alpha on white. */
-.lw-page-light .lw-hero-dark::after, .lw-page-ground .lw-hero-dark::after { background-image: url("assets/hero-mark-ink.svg"); }
-.lw-page-dark .lw-hero-dark::after, html:is(.dark, [data-theme="dark"]) .lw-page-ground .lw-hero-dark::after { background-image: url("assets/hero-mark.svg"); }
-
-@keyframes lwGroundDrift {
-  from { transform: translate3d(0, 0, 0) scale(1); }
-  to { transform: translate3d(-3.5%, 2%, 0) scale(1.09); }
-}
-@keyframes lwCombPulseDark {
-  from { opacity: 0.24; }
-  to { opacity: 0.52; }
-}
-@keyframes lwCombPulseLight {
-  from { opacity: 0.38; }
-  to { opacity: 0.7; }
-}
-@keyframes lwSheen {
-  from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(150%, -6%, 0); }
-}
-@keyframes lwMarkBreathe {
-  from { transform: translateY(-50%) scale(1); }
-  to { transform: translateY(-50%) scale(1.035); }
-}
-/* With the sheen parked it would sit as a bright blob off the left edge — so
-   it is hidden whenever the loops stand down, by preference or by switch. */
-@media (prefers-reduced-motion: reduce) {
-  :is(.lw-page-dark, .lw-page-light, .lw-page-ground)::before,
-  :is(.lw-page-dark, .lw-page-light, .lw-page-ground)::after,
-  :is(.lw-page-dark, .lw-page-light, .lw-page-ground) .lw-hero-dark::before,
-  :is(.lw-page-dark, .lw-page-light, .lw-page-ground) .lw-hero-dark::after { animation: none; }
-  :is(.lw-page-dark, .lw-page-light, .lw-page-ground) .lw-hero-dark::before { display: none; }
-}
-/* The ambient switch (v1.13.0; default flipped to paused in v2.0.0). Both
-   arms declare ONE custom property and no paint, so neither can beat a
-   utility — they are on lw-presence's LAYER_PURITY_EXEMPT list by name. */
-[data-ambient="on"] { --lw-ambient-play: running; }
-[data-ambient="off"] { --lw-ambient-play: paused; }
-[data-ambient="off"] :is(.lw-page-dark, .lw-page-light, .lw-page-ground) .lw-hero-dark::before { display: none; }
-
-/* ---- The themed ground's hero follows the DOCUMENT (v1.5.3) ---------------
-   `.lw-hero-dark` is in tokens.css's DARK band list, because a standalone hero
-   is always navy and has to establish the scope to match. On `.lw-page-ground`
-   that is exactly wrong: the ground paints `var(--lw-bg)` and follows the
-   reader's theme, while the hero inside it stayed pinned dark. In light theme
-   the rules below then wrote `color: var(--lw-fg)` — resolving to the DARK tier
-   — and every hero rendered #E7ECF3 on #FFFFFF. **1.09:1, sitewide, in both
-   locales, for every default-theme visitor.** It shipped in v1.5.0.
-
-   Fixed by re-pointing the channels to `inherit`, which is the whole idea: this
-   hero has no scope of its own, it uses the document's. Correct in both themes
-   by construction, with no values duplicated here — the one thing a second copy
-   of the palette in this file would guarantee is drift.
-
-   Why not tokens.css, where the other two grounds are handled: adding
-   `.lw-page-ground .lw-hero-dark` to the light band list fixes light and breaks
-   dark (measured, 1.00:1 the other way). That block sets the property ON the
-   hero, and an element's own declaration beats one inherited from `<html>`
-   however the selectors weigh — so the entry cannot be made conditional there,
-   and until v1.13.0 `html:not(...)` was unavailable there too, because the
-   contrast gate matched theme-block selectors with `[^)]*` and a nested paren
-   failed `check:themes`. v1.13.0 generalised that matcher; the `inherit`
-   re-point stays because it is the correct mechanism, not a workaround.
-
-   The channel list is exactly tokens.css's dark-band set. If that block gains a
-   channel, this one must too — otherwise the new channel stays pinned dark here
-   and nothing fails. */
-.lw-page-ground .lw-hero-dark {
-  --lw-bg-c: inherit;
-  --lw-bg-subtle-c: inherit;
-  --lw-bg-muted-c: inherit;
-  --lw-bg-inset-c: inherit;
-  --lw-fg-c: inherit;
-  --lw-fg-muted-c: inherit;
-  --lw-fg-subtle-c: inherit;
-  --lw-fg-faint-c: inherit;
-  --lw-line-c: inherit;
-  --lw-line-strong-c: inherit;
-  --lw-line-control-c: inherit;
-  --lw-brand-text-c: inherit;
-  --lw-cta-text-c: inherit;
-  --lw-brand-on-c: inherit;
-  --lw-success-on-c: inherit;
-  --lw-warning-on-c: inherit;
-  --lw-danger-on-c: inherit;
-  --lw-info-on-c: inherit;
-  --lw-neutral-on-c: inherit;
-  --lw-success-soft-c: inherit;
-  --lw-warning-soft-c: inherit;
-  --lw-info-soft-c: inherit;
-  --lw-danger-soft-c: inherit;
-  --lw-neutral-soft-c: inherit;
-  --lw-cta-soft-c: inherit;
-  --lw-shadow-xs: inherit;
-  --lw-shadow-sm: inherit;
-  --lw-shadow-md: inherit;
-  --lw-shadow-lg: inherit;
-  --lw-shadow-xl: inherit;
-  --lw-focus-ring: inherit;
-  --lw-focus-ring-danger: inherit;
+.lw-page-dark::after, .dark .lw-page-ground::after, .lw-page-ground.dark::after {
+  background-image: url("assets/hex-lattice.svg");
 }
 
-/* On a light ground the hero's on-dark text roles have to stand down. The
-   themed ground shares this: its tokens re-point with the document, so the
-   same rules are right in both themes. */
-:is(.lw-page-light, .lw-page-ground) .lw-hero-dark :is(.lw-h1, .lw-h2, .lw-h3) { color: var(--lw-fg); }
-:is(.lw-page-light, .lw-page-ground) .lw-hero-dark .lw-lead { color: var(--lw-fg-muted); }
-:is(.lw-page-light, .lw-page-ground) .lw-hero-dark .lw-eyebrow,
-:is(.lw-page-light, .lw-page-ground) .lw-hero-dark .lw-eyebrow::before { color: var(--lw-brand-text); background: none; }
-:is(.lw-page-light, .lw-page-ground) .lw-hero-dark .lw-eyebrow::before { background: var(--lw-brand-500); }
-:is(.lw-page-light, .lw-page-ground) .lw-hero-dark :is(h1, h2) em { color: var(--lw-brand-text); }
-:is(.lw-page-light, .lw-page-ground) .lw-hero-dark .lw-btn-ghost {
-  color: var(--lw-fg);
-  border-color: var(--lw-line-strong);
+.lw-aurora { position: relative; isolation: isolate; }
+.lw-aurora::before, .lw-aurora::after {
+  content: ""; position: absolute; z-index: -1; width: 55%; aspect-ratio: 1;
+  border-radius: 50%; filter: blur(80px); pointer-events: none;
+  animation: lwAurora var(--ambient-dur) ease-in-out infinite alternate;
+  animation-play-state: var(--ambient-play);
 }
-:is(.lw-page-light, .lw-page-ground) .lw-hero-dark .lw-btn-ghost:hover { background: var(--lw-bg-subtle); }
-/* A section can no longer paint its own band without breaking the ground. */
-:is(.lw-page-dark, .lw-page-light, .lw-page-ground) .lw-section.dark { background: none; }
+.lw-aurora::before { top: -25%; left: -12%; background: radial-gradient(circle, color-mix(in oklch, var(--brand-500) 16%, transparent), transparent 65%); }
+.lw-aurora::after { bottom: -30%; right: -10%; background: radial-gradient(circle, color-mix(in oklch, var(--cta) 8%, transparent), transparent 65%); animation-direction: alternate-reverse; }
 
-/* ---- Full-bleed dark hero (v0.4.0) ----------------------------------------
-   The hero background is now DERIVED FROM THE MARK, in three layers:
+/* ---- Hero -------------------------------------------------------------------
+   Standalone, `.lw-hero` is a navy band: put `dark` on it too so shadcn
+   components inside re-theme. Inside a page ground it is transparent and
+   keeps only the mark — never add `dark` there. */
 
-     1. ground   deep navy, washed by two radials on the mark's own gradient
-                 axis — cyan at the upper right, navy at the lower left, the
-                 same lower-left-navy -> upper-right-cyan run as the logo.
-     2. ::before  a honeycomb lattice (assets/hex-lattice.svg) — the mark's
-                 hexagon tiled as texture, radially masked so it only exists
-                 where the cyan wash is and dissolves before the copy.
-     3. ::after   THE MARK ITSELF (assets/hero-mark.svg), oversized at the upper
-                 right — assets/logo-mark.svg with only its gradient stops
-                 lifted, because the real navy->teal run is too dark to read on
-                 a navy ground. Same single path, so the rounded hexagon and the
-                 node-tipped trajectory are the genuine geometry. It is a
-                 background-image, not a mask: masked artwork renders unreliably
-                 in capture and export paths.
-
-                 An earlier pass hand-drew an approximation of the hexagon here;
-                 it had square corners and the wrong trajectory. Never redraw
-                 the mark — reference it.
-
-   The rectangular hairline grid this replaced was generic tech-page texture and
-   said nothing about LeanWise. --lw-logo-cyan is artwork-only by contract; a
-   hero background is artwork, and this is the one place a UI file may use it.
-   Padding lives here too — the hero previously shipped with none, so consumers
-   had to invent their own vertical rhythm. */
-
-.lw-hero-dark {
+.lw-hero {
   position: relative;
-  padding: clamp(60px, 7vw, 104px) 0 clamp(52px, 6vw, 88px);
-  background:
-    radial-gradient(58rem 38rem at 88% -12%, hsl(var(--lw-logo-cyan-c) / 0.28), transparent 62%),
-    radial-gradient(50rem 34rem at 4% 108%, hsl(var(--lw-navy-700-c) / 0.55), transparent 66%),
-    radial-gradient(36rem 24rem at 46% -22%, hsl(var(--lw-brand-500-c) / 0.18), transparent 70%),
-    var(--lw-navy-deep);
-  color: var(--lw-on-dark);
-  overflow: hidden;
   isolation: isolate;
+  overflow: hidden;
+  padding-block: clamp(4rem, 8vw, 6.5rem) clamp(3.25rem, 6vw, 5.5rem);
+  background:
+    radial-gradient(58rem 38rem at 88% -12%, color-mix(in oklch, var(--brand-500) 28%, transparent), transparent 62%),
+    radial-gradient(50rem 34rem at 4% 108%, color-mix(in oklch, var(--brand-900) 55%, transparent), transparent 66%),
+    oklch(0.2 0.05 250);
+  color: var(--navy-foreground);
 }
-/* Honeycomb texture — the hexagon, tiled and dissolving. */
-.lw-hero-dark::before {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  z-index: -1;
-  /* The tile is a FLAT-TOP hexagon at the mark's 871:1000 proportion, with the
-     mark's corner rounding. A regular pointy-top hex is the wrong shape. */
+.lw-hero::before {
+  content: ""; position: absolute; inset: -1px; z-index: -1; pointer-events: none;
   background: url("assets/hex-lattice.svg") repeat 62% -12% / 132px 101px;
   opacity: 0.34;
   mask-image: radial-gradient(46rem 30rem at 80% 2%, #000 10%, transparent 74%);
-  pointer-events: none;
 }
-/* The mark, oversized. */
-.lw-hero-dark::after {
-  content: "";
-  position: absolute;
-  top: 8%;
-  right: 3%;
-  width: min(23rem, 31%);
-  aspect-ratio: 871.1 / 1000;
-  z-index: -1;
+.lw-hero::after {
+  content: ""; position: absolute; z-index: -1; pointer-events: none;
+  top: 50%; right: clamp(12px, 4vw, 72px); height: 62%; aspect-ratio: 871.1 / 1000;
+  transform: translateY(-50%);
   background: url("assets/hero-mark.svg") no-repeat center / contain;
-  opacity: 0.3;
-  pointer-events: none;
+  opacity: var(--mark-alpha);
+  animation: lwMarkBreathe var(--ambient-dur) var(--ease-io) infinite alternate;
+  animation-play-state: var(--ambient-play);
 }
-/* The hero's own vertical rhythm. Eyebrow → headline → lead → actions came out
-   flush against each other, because the roles all zero their margins and nothing
-   here supplied the gap. */
-.lw-hero-dark > .lw-container { display: flex; flex-direction: column; align-items: flex-start; gap: var(--lw-space-20, 20px); }
-/* `align-items: flex-start` is right for the hero's own parts — an eyebrow pill
-   and an action row should hug their content, not stretch to the column — but it
-   makes EVERY child shrink-to-fit, and a shrink-to-fit box sizes against its
-   content rather than its parent. So a wide child (the console artifact) sized
-   itself to 314px inside a 280px column at a 320px viewport and the section's
-   `overflow: hidden` cut it off. The cap is the half `flex-start` leaves out:
-   hug what fits, never exceed the column.
+.lw-hero > .lw-container { display: flex; flex-direction: column; align-items: flex-start; gap: 1.25rem; }
+:where(.lw-hero > .lw-container) > * { max-inline-size: 100%; }
+.lw-hero .lw-lead { color: var(--brand-100); }
+.lw-hero .lw-eyebrow { color: var(--brand-300); }
+.lw-hero .lw-display em, .lw-hero .lw-display-sm em { color: var(--brand-300); }
+.lw-hero-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.75rem; }
+.lw-hero-compact { padding-block: clamp(2.25rem, 4vw, 3.75rem) clamp(1.75rem, 3vw, 2.75rem); }
+.lw-hero-compact::after { height: 44%; top: 40%; }
 
-   ⚠ `:where()`, and it is LOAD-BEARING. `max-inline-size` is the same property a
-   component uses to set its own reading measure, so written at ordinary
-   specificity this rule silently WINS against every one of them: the first cut
-   was `.lw-hero-dark > .lw-container > *` (0,2,0), which beat `.lw-lead`'s
-   `max-width: 60ch` (0,1,0) and stretched the hero lead from a 611px measure to
-   the full 1098px column — three lines of readable text turned into two lines of
-   unreadable ones, on every hero in the system. Nothing failed; the package's own
-   visual gate caught it as a 26px height change and nothing else would have.
-   `:where()` zeroes the specificity, so a component's own measure wins and this
-   only ever applies to a child that declared none. A defensive cap must be the
-   weakest rule in the room, never the strongest. */
-:where(.lw-hero-dark > .lw-container) > * { max-inline-size: 100%; }
-/* The action row sits further from the lead than the stack gap gives it. A hero's
-   CTA is the one thing on the section that is not prose, and running it at the
-   same rhythm as the paragraphs above reads as another line of copy. */
-.lw-hero-dark .lw-hero-actions { margin-top: var(--lw-space-24); }
-.lw-hero-dark .lw-h1,
-.lw-hero-dark .lw-h2,
-.lw-hero-dark .lw-h3 { color: var(--lw-on-dark-1); }
-.lw-hero-dark .lw-lead { color: var(--lw-on-dark-2); }
-.lw-hero-dark .lw-eyebrow { color: var(--lw-brand-300); }
-.lw-hero-dark .lw-eyebrow::before { background: var(--lw-brand-300); }
+:is(.lw-page-ground, .lw-page-dark) .lw-hero { background: none; overflow: visible; color: inherit; }
+:is(.lw-page-ground, .lw-page-dark) .lw-hero::before { display: none; }
+.lw-page-ground .lw-hero::after { background-image: url("assets/hero-mark-ink.svg"); }
+:is(.dark .lw-page-ground, .lw-page-ground.dark, .lw-page-dark) .lw-hero::after { background-image: url("assets/hero-mark.svg"); }
+.lw-page-ground .lw-hero .lw-lead { color: var(--muted-foreground); }
+.lw-page-ground .lw-hero :is(.lw-eyebrow, .lw-display em, .lw-display-sm em) { color: var(--primary); }
+@media (max-width: 767px) { .lw-hero::after { opacity: calc(var(--mark-alpha) * 0.5); height: 40%; top: 18%; } }
 
-/* COMPACT (v3.1.0). An inner page is not a landing page, and until now every
-   consumer had exactly one hero. `leanwise-ai` opened five pages with the
-   identical band — same padding, same oversized mark, same two-line headline —
-   so `/product`, `/pricing`, `/customers` and `/company` each announced
-   themselves as the front door and the site read as one page repeated.
+/* ---- Site chrome ------------------------------------------------------------ */
 
-   Padding and artwork only. The token scope, the ink and the reveal behaviour
-   are untouched, so a compact hero is the same component with less air —
-   nothing here needs re-checking against the contrast gate.
+.lw-announce {
+  display: flex; justify-content: center; align-items: center; gap: 0.75rem;
+  padding: 0.5rem 1rem; font-size: var(--text-sm, 0.875rem); text-align: center;
+  background: var(--navy); color: var(--navy-foreground);
+}
+.lw-announce a { color: var(--cta); font-weight: 500; text-decoration: underline; text-underline-offset: 3px; }
 
-   The mark shrinks and rises rather than disappearing: it is the one element
-   tying an inner page back to the landing page, and a hero with no artwork at
-   all reads as an unstyled heading rather than as a band. */
-.lw-hero-compact {
-  padding: clamp(36px, 4vw, 60px) 0 clamp(28px, 3vw, 44px);
+.lw-site-header {
+  position: sticky; top: 0; z-index: 40;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in oklch, var(--background) 82%, transparent);
+  backdrop-filter: saturate(1.4) blur(12px);
 }
-.lw-hero-compact::before {
-  mask-image: radial-gradient(34rem 20rem at 82% 0%, #000 8%, transparent 76%);
+.lw-site-header > .lw-container { display: flex; align-items: center; gap: 1.5rem; min-height: 4rem; }
+.lw-site-brand { display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600; color: inherit; text-decoration: none; }
+.lw-site-brand img { height: 1.75rem; width: auto; }
+.lw-site-nav { display: flex; align-items: center; gap: 0.25rem; margin-inline-start: auto; }
+.lw-site-nav > a {
+  display: inline-flex; align-items: center; min-height: 2.5rem; padding-inline: 0.75rem;
+  border-radius: calc(var(--radius) * 0.8); font-size: var(--text-sm, 0.875rem); color: var(--muted-foreground); text-decoration: none;
+  transition: color 0.15s, background-color 0.15s;
 }
-/* ⚠ SCOPED TO THE GROUND, and the first version of this was not — which meant
-   it never applied anywhere this modifier is actually used. `.lw-hero-compact::after`
-   is (0,1,1); the ground's own mark rule above is
-   `:is(.lw-page-dark, .lw-page-light, .lw-page-ground) .lw-hero-dark::after`, which
-   is (0,3,1) and wins every time. A standalone hero is the only place the bare
-   selector would have taken effect, and a standalone hero is the case that did
-   not need it. Measured: the "compact" mark rendered at the full 301px/0.45 of
-   the standard one. */
-:is(.lw-page-dark, .lw-page-light, .lw-page-ground) .lw-hero-compact::after {
-  height: 46%;
-  opacity: calc(var(--lw-ground-mark-alpha) * 0.7);
-}
+.lw-site-nav > a:hover, .lw-site-nav > a[aria-current="page"] { color: var(--foreground); background: var(--accent); }
+@media (max-width: 767px) { .lw-site-nav > a:not(:last-child) { display: none; } }
 
-/* ⚠ THE MARK MUST NOT COMPETE WITH THE TEXT ON A NARROW SCREEN, and it did.
-   Inside a ground the mark is sized off the hero's HEIGHT — correct, because it
-   is taller than it is wide — but a narrow viewport makes the hero TALL: the
-   headline wraps to four lines and the lead to five, so `height: 62%` resolved
-   to a 301px-wide mark at 0.45 opacity on a 390px screen, sitting squarely
-   behind the lead paragraph.
+.lw-footer { border-top: 1px solid var(--border); padding-block: 3.5rem 2rem; font-size: var(--text-sm, 0.875rem); color: var(--muted-foreground); }
+.lw-footer-grid { display: grid; gap: 2rem; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); }
+.lw-footer-brand { grid-column: span 2; max-width: 22rem; }
+.lw-footer-brand p { margin-top: 0.75rem; }
+.lw-footer-head { margin-bottom: 0.75rem; font-weight: 600; color: var(--foreground); }
+.lw-footer-link { display: block; padding-block: 0.25rem; color: inherit; text-decoration: none; cursor: pointer; }
+.lw-footer-link:hover { color: var(--primary); }
+.lw-footer-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); font-size: var(--text-xs, 0.75rem); }
+@media (max-width: 639px) { .lw-footer-brand { grid-column: 1 / -1; } }
 
-   On a wide screen this never shows up, because the text column is ~60% and the
-   mark sits in the empty right third. There is no width at which the mark can
-   sit BESIDE the text on a phone, so on a phone it has to become texture:
-   smaller, and faint enough to read as part of the ground rather than as a
-   second thing to look at. `--lw-ground-mark-alpha` is re-pointed rather than
-   overwritten so the dark theme keeps its own higher base. */
-@media (max-width: 767.98px) {
-  :is(.lw-page-dark, .lw-page-light, .lw-page-ground) .lw-hero-dark::after {
-    height: 30%;
-    right: clamp(4px, 2vw, 16px);
-    opacity: calc(var(--lw-ground-mark-alpha) * 0.42);
-  }
+.lw-cookie {
+  position: fixed; inset-inline: 1rem; bottom: 1rem; z-index: 50;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 1rem;
+  max-width: 40rem; margin-inline: auto; padding: 1rem 1.25rem;
+  border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--popover); color: var(--popover-foreground);
+  box-shadow: 0 12px 32px -12px color-mix(in oklch, var(--navy) 35%, transparent);
+  font-size: var(--text-sm, 0.875rem);
 }
-/* A bare <em> in a dark-ground headline is the accent convention in practice —
-   style it here so consumers stop forking the ink (v0.3.1). */
-.lw-hero-dark h1 em,
-.lw-section.dark h1 em,
-.lw-hero-dark h2 em,
-.lw-section.dark h2 em { color: var(--lw-brand-400); }
+.lw-cookie p { flex: 1 1 16rem; margin: 0; }
+.lw-cookie-actions { display: flex; gap: 0.5rem; }
 
-/* The ghost button on the package's own dark grounds: transparent fill,
-   on-dark ink, hairline that reads on navy (v0.3.1). */
-.lw-hero-dark .lw-btn-ghost,
-.lw-section.dark .lw-btn-ghost {
-  background: transparent;
-  color: var(--lw-on-dark-1);
-  border-color: var(--lw-on-dark-line);
-}
-.lw-hero-dark .lw-btn-ghost:hover,
-.lw-section.dark .lw-btn-ghost:hover {
-  background: hsl(var(--lw-navy-700-c) / 0.5);
-  border-color: var(--lw-on-dark-3);
-}
+/* ---- Logo rail ---------------------------------------------------------------
+   Default: a MASK over `--logo-src`, so the mark takes the ink colour. The mask
+   reads alpha only; for an opaque raster use `.is-mono` on an <img>. */
 
-/* ---- Data-viz bars (v0.3.0) -----------------------------------------------
-   Token-filled horizontal bar. Width via --lw-bar-value (a percentage) or an
-   inline width on .fill. Purely presentational — pair with visually-hidden
-   text or aria attributes in the consumer. */
-
-.lw-bar {
-  --lw-bar-value: 0%;
-  position: relative;
-  height: 8px;
-  border-radius: var(--lw-radius-pill);
-  /* --lw-line, not the --lw-border-1 tier: the track has to follow the ground. */
-  background: var(--lw-line);
-  overflow: hidden;
-}
-.lw-bar .fill,
-.lw-bar::after {
-  content: "";
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: var(--lw-bar-value);
-  border-radius: inherit;
-  background: var(--lw-brand-500);
-  transition: width var(--lw-dur-lg) var(--lw-ease-out);
-}
-/* An explicit <i class="fill"> node wins over the ::after fill. */
-.lw-bar:has(.fill)::after { display: none; }
-
-/* Meter variant: thicker, inset track. */
-.lw-bar.lw-meter,
-.lw-meter { height: 12px; background: var(--lw-bg-inset); border: 1px solid var(--lw-line); }
-
-/* Dark context (inside .lw-section.dark / .lw-hero-dark): the light track
-   tokens vanish on navy — use the on-dark fills instead. */
-.lw-section.dark .lw-bar,
-.lw-hero-dark .lw-bar {
-  background: var(--lw-on-dark-fill);
-}
-.lw-section.dark .lw-meter,
-.lw-hero-dark .lw-meter {
-  background: var(--lw-on-dark-fill);
-  border-color: var(--lw-on-dark-line);
-}
-.lw-section.dark .lw-bar .fill, .lw-section.dark .lw-bar::after,
-.lw-hero-dark .lw-bar .fill, .lw-hero-dark .lw-bar::after {
-  background: var(--lw-brand-400);
-}
-
-/* ---- Logo rail (v0.3.0) ---------------------------------------------------
-   A logo wall. Default: static wrapping row. `.marquee`: a slow horizontal
-   loop — duplicate the track content ONCE in markup ([track][track]) so the
-   -50% translate lands seamlessly. Reduced motion falls back to the static
-   wrap layout (no animation, no overflow clip). */
-
-.lw-logo-rail {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: var(--lw-space-24) var(--lw-space-48);
-}
-.lw-logo-rail.marquee {
-  flex-wrap: nowrap;
-  overflow: hidden;
-}
-.lw-logo-rail.marquee .lw-logo-track {
-  display: flex;
-  align-items: center;
-  flex: 0 0 auto;
-  gap: var(--lw-space-48);
-  padding-inline-end: var(--lw-space-48);
-  animation: lwMarquee var(--lw-dur-ambient-slow) linear infinite;
-}
-@keyframes lwMarquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-100%); }
-}
-/* A rail item is a MASK over a single ink, not an <img>. Customer marks arrive in a
-   dozen inks and two of them will clash with the page; masking guarantees one ink and
-   one opacity, which is the entire point of a logo rail. */
-/* v0.4.0: this is now the ONLY rail item. The competing `.lw-logo-cell` chip
-   (fixed bordered box, greyscale <img>, name fallback) was a second
-   implementation of the same thing, and the one LogoRail.jsx actually rendered
-   — so the rail's own hover/dark rules, which target .lw-logo-item, never
-   applied. The chip is gone; a mark without an image now degrades to a mono
-   wordmark (.is-text) rather than a bordered placeholder box. */
+.lw-logo-rail { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 1.5rem 3rem; }
 .lw-logo-item {
-  display: block;
-  width: 108px; height: 34px;
-  background: currentColor;
-  color: var(--lw-fg);
-  opacity: 0.42;
-  mask: var(--lw-logo-src) center / contain no-repeat;
-  transition: opacity var(--lw-dur-sm) var(--lw-ease-out), color var(--lw-dur-sm) var(--lw-ease-out), transform var(--lw-dur-sm) var(--lw-ease-out);
+  display: block; width: 108px; height: 34px;
+  background: currentColor; color: var(--foreground); opacity: 0.45;
+  mask: var(--logo-src) center / contain no-repeat;
+  transition: opacity 0.2s, color 0.2s;
 }
-/* Text fallback: no mask, no box — a wordmark in the rail's single ink. */
-.lw-logo-item.is-text {
-  width: auto; height: auto;
-  background: none;
-  /* The rail dims its marks with opacity: 0.42, which is right for a masked
-     GRAPHIC and wrong for a wordmark — as text it measured 2.77. Text carries
-     the same recede with a muted ink at full opacity, and that one is AA. */
-  opacity: 1;
-  color: var(--lw-fg-subtle);
-  mask: none;
-  font-family: var(--lw-font-mono);
-  font-size: 12.5px;
-  letter-spacing: 0.13em;
-  word-spacing: var(--lw-word-spacing-caps);
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-/* `mode="mono"` (v2.2.0): the image itself, desaturated, under the rail's
-   opacity — for a multi-tone raster whose alpha is not its silhouette. Inverted
-   on a dark ground so a dark mark does not vanish into navy; `object-fit`
-   keeps the 108x34 box the masked marks share. */
-.lw-logo-item.is-image {
-  background: none;
-  mask: none;
-  object-fit: contain;
-  filter: grayscale(1);
-}
-:is(.dark, [data-band="dark"], .lw-band-dark) .lw-logo-item.is-image { filter: grayscale(1) invert(1); }
-a.lw-logo-item, .lw-logo-item-interactive { cursor: pointer; }
-a.lw-logo-item:hover, .lw-logo-item-interactive:hover,
-a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
-  opacity: 1; color: var(--lw-brand-text); transform: translateY(-1px); outline: none;
-}
-/* Hovering one mark dims the rest, so the rail reads as a set the visitor is scanning
-   rather than eight logos shouting at once. */
-.lw-logo-rail:hover .lw-logo-item { opacity: 0.24; }
-.lw-logo-rail:hover .lw-logo-item:hover { opacity: 1; }
-:is(.dark, [data-band="dark"], .lw-band-dark) .lw-logo-item { color: var(--lw-on-dark); opacity: 0.55; }
-:is(.dark, [data-band="dark"], .lw-band-dark) .lw-logo-item:hover { color: var(--lw-brand-300); }
-
-/* The marquee has to fade at both edges or marks appear to be sliced off by the
-   container. Mask, not a gradient overlay, so it works on any ground. */
-.lw-logo-rail.marquee {
-  mask: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-}
+.lw-logo-item.is-mono { background: none; mask: none; object-fit: contain; filter: grayscale(1); opacity: 0.6; }
+.dark .lw-logo-item.is-mono, .lw-hero .lw-logo-item.is-mono { filter: grayscale(1) invert(1); }
+.lw-logo-item.is-text { width: auto; height: auto; background: none; mask: none; opacity: 1; color: var(--muted-foreground); font-weight: 600; letter-spacing: -0.01em; }
+a.lw-logo-item { cursor: pointer; }
+a.lw-logo-item:hover { opacity: 1; color: var(--primary); }
+.lw-logo-rail.marquee { flex-wrap: nowrap; overflow: hidden; mask: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.lw-logo-track { display: flex; align-items: center; flex: 0 0 auto; gap: 3rem; padding-inline-end: 3rem; animation: lwMarquee 40s linear infinite; animation-play-state: var(--ambient-play); }
 .lw-logo-rail.marquee:hover .lw-logo-track { animation-play-state: paused; }
 
-@media (prefers-reduced-motion: reduce) {
-  .lw-logo-item { transition: none; }
-  .lw-logo-rail.marquee { flex-wrap: wrap; overflow: visible; mask: none; }
-  .lw-logo-rail.marquee .lw-logo-track {
-    animation: none;
-    flex-wrap: wrap;
-    padding-inline-end: 0;
-  }
-  /* With the duplicate track hidden, the rail reads as a plain logo wall. */
-  .lw-logo-rail.marquee .lw-logo-track + .lw-logo-track { display: none; }
-}
+/* ---- Features, stats -------------------------------------------------------- */
 
-/* ---- Stat / KPI ---------------------------------------------------------- */
-
-.lw-stat { display: flex; flex-direction: column; gap: 4px; }
-.lw-stat .n {
-  font-family: var(--lw-font-mono);
-  font-weight: var(--lw-fw-semibold);
-  font-size: clamp(28px, 3.2vw, 40px);
-  letter-spacing: var(--lw-tracking-tight);
-  color: var(--lw-fg);
-  font-variant-numeric: tabular-nums;
-}
-.lw-stat .l {
-  font-family: var(--lw-font-mono);
-  font-size: var(--lw-text-eyebrow);
-  letter-spacing: var(--lw-tracking-eyebrow);
-  word-spacing: var(--lw-word-spacing-caps);
-  text-transform: uppercase;
-  color: var(--lw-fg-subtle);
-}
-/* A number without a unit, a direction and a baseline is decoration. These three
-   parts are what turn a stat into a reading. */
-.lw-stat .u { font-family: var(--lw-font-mono); font-size: 0.5em; font-weight: 500; color: var(--lw-fg-subtle); letter-spacing: 0; margin-inline-start: 2px; }
-.lw-stat-row { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
-.lw-stat-delta {
-  display: inline-flex; align-items: center; gap: 4px;
-  font-family: var(--lw-font-mono); font-size: var(--lw-text-2xs); font-weight: 500;
-  padding: 3px 7px; border-radius: var(--lw-radius-pill);
-  background: var(--lw-neutral-soft); color: var(--lw-neutral-on);
-}
-.lw-stat-delta[data-dir="up"] { background: var(--lw-success-soft); color: var(--lw-success-on); }
-.lw-stat-delta[data-dir="down"] { background: var(--lw-danger-soft); color: var(--lw-danger-on); }
-.lw-stat-delta[data-dir="watch"] { background: var(--lw-warning-soft); color: var(--lw-warning-on); }
-.lw-stat-foot { font-size: var(--lw-text-2xs); color: var(--lw-fg-subtle); }
-/* Meter fills by semantic role, not by hand-picked hex at the call site. */
-.lw-bar[data-tone="cta"] .fill, .lw-bar[data-tone="cta"]::after { background: var(--lw-cta-500); }
-.lw-bar[data-tone="success"] .fill, .lw-bar[data-tone="success"]::after { background: var(--lw-success); }
-.lw-bar[data-tone="warning"] .fill, .lw-bar[data-tone="warning"]::after { background: var(--lw-warning); }
-.lw-bar[data-tone="danger"] .fill, .lw-bar[data-tone="danger"]::after { background: var(--lw-danger); }
-.lw-bar[data-tone="neutral"] .fill, .lw-bar[data-tone="neutral"]::after { background: var(--lw-neutral); }
-/* Target marker — a meter with no target is a bar with no argument. */
-/* The marker sits ON the fill as often as beside it, so it cannot be a single ink:
-   a light core with a dark hairline reads against both the track and the fill. */
-.lw-bar .target { position: absolute; top: -3px; bottom: -3px; width: 2px; border-radius: 1px; background: var(--lw-bg); box-shadow: 0 0 0 1px var(--lw-scrim); }
-/* A reading is not clickable, so a plain tile’s default cursor is right — but this
-   rule loads AFTER .lw-card-interactive and was overriding it, so an INTERACTIVE
-   tile promised nothing on hover. Scope it to the non-interactive case. */
-/* The tile pins the number instead of inheriting .lw-stat .n's fluid clamp. The
-   clamp tracks the VIEWPORT (28-40px), which is right for a hero stat whose
-   column is the page — and wrong in a KPI grid, where the tile's width is set by
-   the grid and a viewport-driven number grows out of a box that did not. One
-   fixed step, at the middle of the clamp's range. */
-.lw-stat-tile .lw-stat .n { font-size: 32px; }
-.lw-stat-tile:not(.lw-card-interactive):not([role="button"]) { cursor: default; }
-.lw-stat-tile.lw-card-interactive .lw-bar .fill { transition: width var(--lw-dur-lg) var(--lw-ease-out), background var(--lw-dur-sm) var(--lw-ease-out); }
-.dark .lw-stat .n, [data-band="dark"] .lw-stat .n, .lw-band-dark .lw-stat .n { color: var(--lw-on-dark); }
-.dark .lw-stat .l, [data-band="dark"] .lw-stat .l, .lw-band-dark .lw-stat .l { color: var(--lw-on-dark-3); }
-:is(.dark, [data-band="dark"], .lw-band-dark) .lw-bar { background: var(--lw-on-dark-fill); }
-/* The dark ground lightens the meter fill to the 400 tier — but ONLY where no
-   tone is set. Written as :not([data-tone]) rather than relying on declaration
-   order: this rule and the [data-tone] block above are both (0,3,0), so a tie is
-   resolved by whichever happens to sit lower in the file, which is not a
-   decision anyone made. It shipped as a tie for one release and every warning
-   meter on a dark surface rendered brand cyan — the component silently
-   contradicting the rule its own card states. A tone is semantic; it holds on
-   both grounds or it means nothing.
-
-   The toned fills step to the dark-legible tiers, because the light fills are
-   mixed against white and go muddy on navy. */
-.dark .lw-bar:not([data-tone]) .fill, [data-band="dark"] .lw-bar:not([data-tone]) .fill, .lw-band-dark .lw-bar:not([data-tone]) .fill,
-:is(.dark, [data-band="dark"], .lw-band-dark) .lw-bar:not([data-tone])::after { background: var(--lw-brand-400); }
-.dark .lw-bar[data-tone="cta"] .fill, [data-band="dark"] .lw-bar[data-tone="cta"] .fill, .lw-band-dark .lw-bar[data-tone="cta"] .fill,
-:is(.dark, [data-band="dark"], .lw-band-dark) .lw-bar[data-tone="cta"]::after { background: var(--lw-cta-400); }
-.dark .lw-bar[data-tone="success"] .fill, [data-band="dark"] .lw-bar[data-tone="success"] .fill, .lw-band-dark .lw-bar[data-tone="success"] .fill,
-:is(.dark, [data-band="dark"], .lw-band-dark) .lw-bar[data-tone="success"]::after { background: var(--lw-success-on); }
-.dark .lw-bar[data-tone="warning"] .fill, [data-band="dark"] .lw-bar[data-tone="warning"] .fill, .lw-band-dark .lw-bar[data-tone="warning"] .fill,
-:is(.dark, [data-band="dark"], .lw-band-dark) .lw-bar[data-tone="warning"]::after { background: var(--lw-warning-on); }
-.dark .lw-bar[data-tone="danger"] .fill, [data-band="dark"] .lw-bar[data-tone="danger"] .fill, .lw-band-dark .lw-bar[data-tone="danger"] .fill,
-:is(.dark, [data-band="dark"], .lw-band-dark) .lw-bar[data-tone="danger"]::after { background: var(--lw-danger-on); }
-.dark .lw-bar[data-tone="neutral"] .fill, [data-band="dark"] .lw-bar[data-tone="neutral"] .fill, .lw-band-dark .lw-bar[data-tone="neutral"] .fill,
-:is(.dark, [data-band="dark"], .lw-band-dark) .lw-bar[data-tone="neutral"]::after { background: var(--lw-neutral-on); }
-
-/* ---- Browser frame (v0.4.0) ------------------------------------------------
-   Chrome around a product screenshot: toolbar dots + address pill, soft brand
-   glow. Pure CSS, token colors only. Markup:
-     <figure class="lw-browser-frame">
-       <div class="lw-browser-bar"><i></i><i></i><i></i>
-         <span class="lw-browser-url">app.example.com</span></div>
-       <img … />
-     </figure> */
-.lw-browser-frame {
-  margin: 0;
-  border: 1px solid var(--lw-line);
-  border-radius: var(--lw-radius-lg);
-  overflow: hidden;
-  /* Roles throughout this component. .lw-browser-bar below already used
-     --lw-bg-subtle while the frame and the URL pill used surface-0/surface-2/text-3
-     tiers, so on a dark ground the bar re-pointed and the frame around it did not —
-     one component painting from two palettes. */
-  background: var(--lw-bg);
-  box-shadow: var(--lw-shadow-md), var(--lw-brand-glow);
-}
-.lw-browser-bar {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 10px 14px;
-  background: var(--lw-bg-subtle);
-  border-bottom: 1px solid var(--lw-line);
-}
-.lw-browser-bar i {
-  width: 10px;
-  height: 10px;
-  border-radius: var(--lw-radius-pill);
-  background: hsl(var(--lw-fg-faint-c) / 0.5);
-}
-.lw-browser-url {
-  margin-inline-start: var(--lw-space-8);
-  padding: 3px 12px;
-  border-radius: var(--lw-radius-pill);
-  background: var(--lw-bg-muted);
-  font-family: var(--lw-font-mono);
-  font-size: var(--lw-text-xs);
-  color: var(--lw-fg-subtle);
-  line-height: 1.4;
-}
-.lw-browser-frame img { display: block; width: 100%; height: auto; }
-
-/* ---- SOTA interaction layer (v0.5.0) ---------------------------------------
-   Linear/Vercel-class affordances, all token-driven and reduced-motion safe.
-   Static state is always complete; hover/scroll only ever add. */
-
-/* Aurora layer for dark grounds: two slow counter-drifting brand blobs behind
-   the content. */
-.lw-aurora { position: relative; }
-.lw-aurora::before,
-.lw-aurora::after {
-  content: "";
-  position: absolute;
-  z-index: var(--lw-z-base);
-  width: 55%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  filter: blur(80px);
-  pointer-events: none;
-}
-.lw-aurora::before {
-  top: -25%; left: -12%;
-  background: radial-gradient(circle, hsl(var(--lw-brand-500-c) / 0.16), transparent 65%);
-}
-.lw-aurora::after {
-  bottom: -30%; right: -10%;
-  background: radial-gradient(circle, hsl(var(--lw-cta-500-c) / 0.07), transparent 65%);
-}
-.lw-aurora > * { position: relative; z-index: var(--lw-z-raised); }
-@media (prefers-reduced-motion: no-preference) {
-  .lw-aurora::before { animation: lwAuroraA var(--lw-dur-ambient) ease-in-out infinite alternate; animation-play-state: var(--lw-ambient-play); }
-  .lw-aurora::after { animation: lwAuroraB calc(var(--lw-dur-ambient) * 1.25) ease-in-out infinite alternate; animation-play-state: var(--lw-ambient-play); }
-}
-@keyframes lwAuroraA {
-  from { transform: translate3d(0, 0, 0) scale(1); }
-  to { transform: translate3d(10%, 8%, 0) scale(1.15); }
-}
-@keyframes lwAuroraB {
-  from { transform: translate3d(0, 0, 0) scale(1.1); }
-  to { transform: translate3d(-8%, -10%, 0) scale(1); }
-}
-
-/* Cross-document/page fade for the View Transitions API. The consumer opts the
-   router in; this only shapes the default snapshot animation. */
-@media (prefers-reduced-motion: no-preference) {
-  ::view-transition-old(root) { animation-duration: var(--lw-dur-sm); }
-  ::view-transition-new(root) { animation-duration: var(--lw-dur-md); }
-}
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-old(root),
-  ::view-transition-new(root) { animation: none; }
-}
-
-/* =============================================================================
-   ENTER REVEAL and SPOTLIGHT (v3.1.0).
-
-   `hooks.js` has shipped `useReveal()` and `useSpotlight()` since v0.3.2 and the
-   README §Motion has advertised "scroll fade" and "spotlight" for just as long.
-   NEITHER HAD ANY PAINT. `useReveal` returns `[ref, shown]` and the README said
-   "you own the CSS"; `useSpotlight` writes `--lw-mx` / `--lw-my` and nothing in
-   any shipped layer read them. So every consumer that wanted either had to
-   author it locally — which is the one thing this package exists to stop, and
-   the flagship consumer simply went without: `leanwise-ai` imports nothing from
-   `@leanwise/design/hooks` at all.
-
-   Two paths, and the CSS-ONLY one is the default on purpose.
-
-     .lw-reveal / .lw-reveal-group   scroll-driven, no JavaScript, no hook
-     ...[data-reveal="pending"|"shown"]   the attribute a hook sets, for the rest
-
-   ONE class, two paths, and the attribute WINS: the scroll rules exclude
-   `[data-reveal]`, so the moment a script starts driving an element the
-   timeline animation stands down rather than fighting the transition. Both
-   would otherwise write `opacity` and `transform` on the same box.
-
-   ⚠ The attribute selectors are SCOPED to the class, and that is not cosmetic.
-   A bare `[data-reveal]` is an un-layered attribute rule, which outranks every
-   Tailwind utility and would make `marketing.css` unsafe for a Tailwind
-   consumer — `check:presence`'s layer-purity rule refuses it, and refused this
-   block on its first draft.
-
-   THE ATTRIBUTE IS THE CONTRACT, not the hook — the same rule `_overflow.js`
-   states for `data-overflow`. A consumer may drive `data-reveal` from
-   `useReveal`, from its own observer, or from a framework directive, and the
-   paint is identical.
-
-   ⚠ NOTHING IS HIDDEN OUTSIDE A GATE, and that is the whole safety argument. A
-   reveal utility is the easiest way in this package to ship a blank page: hide
-   first, un-hide on an event, and any reader whose event never arrives — no
-   JavaScript, an observer that never fires, a crawler — gets nothing, with no
-   error anywhere. So the opacity floor lives INSIDE `@supports` +
-   `prefers-reduced-motion: no-preference` for the CSS path, and INSIDE an
-   attribute the element does not carry until a script adds it for the JS path.
-   Strip the script, strip the support, or ask for reduced motion, and the static
-   state is the complete state.
-
-   NO `--lw-dur-*` IN THE SCROLL BLOCK, for the reason `.lw-flow` states at
-   length: `animation-duration` and `animation-delay` are IGNORED while
-   `animation-timeline` names a progress timeline, so a time token written there
-   documents an intent the browser discards. The per-sibling offset is a RANGE
-   offset, the index comes from `:nth-child` so vanilla HTML gets the identical
-   cascade, and it caps at 8 — the same ceiling `.lw-flow` and
-   `useDeterministicCascade` already use. Three ceilings, one number.
-
-   `lwReveal` is verified unused: a keyframe name is GLOBAL and last-wins, and no
-   gate can see a collision. */
-
-/* The CSS-only path. `.lw-reveal` reveals itself; `.lw-reveal-group` reveals its
-   children in sequence. A group is not a nested `.lw-reveal` — an element that
-   both reveals and staggers its children would need two `animation`s on one box,
-   and the shorthand resets `animation-timeline`. */
-@supports (animation-timeline: view()) {
-  /* ⚠ `screen and`, and it is not decoration. A scroll-driven reveal hides its
-     subject until the subject is scrolled into view — and PRINT NEVER SCROLLS.
-     Without this the printed page is BLANK below the first band: measured at
-     26 of 26 band children at opacity 0 under `emulateMedia({media:'print'})`.
-     `prefers-reduced-motion` does not help, because a printer has no such
-     preference. The same hole existed in `.lw-flow` from v1.6.0 and is fixed
-     with it below. A PDF, a print preview and a screenshot renderer are all
-     readers that cannot scroll; the static state has to be complete for them
-     too, which is the rule this whole file is written to. */
-  @media screen and (prefers-reduced-motion: no-preference) {
-    .lw-reveal:not([data-reveal]),
-    .lw-reveal-group > :not([data-reveal]) {
-      animation: lwReveal linear both;
-      animation-timeline: view();
-      /* ⚠ PERCENTAGES, and v3.1.2 tried LENGTHS and had to be reverted — the
-         reasoning is worth keeping so nobody tries it a third time.
-
-         The known weakness of a percentage here is real: an offset into `entry`
-         is a percentage of the entry PHASE, and that phase is exactly the
-         subject's block size. So a subject taller than the scrollport is still
-         fading with a screenful of it on screen — measured in the flagship
-         consumer at 0.52 on a comparison matrix.
-
-         A length looked like the fix: fixed scroll distance, height-independent,
-         and it tested clean on a tall subject. It is WRONG, because the range is
-         clamped to the phase. A SHORT subject's entry phase is only as long as
-         the subject, so `entry 320px` lands past the end of a 120px heading's
-         range and the animation never reaches its end keyframe. Measured after
-         shipping it: 32 elements stuck at **opacity 0, permanently**, on one
-         page — content invisible to a reader who had scrolled all the way to it.
-         That is far worse than the dimming it set out to fix.
-
-         So the range stays proportional, and the rule the consumer follows is
-         the real fix: put this on SMALL children — a heading block, a card grid
-         — never on a band whose children are page-sized. A percentage range is
-         correct for a subject about a screen tall or less, which is what a
-         revealed thing should be anyway. */
-      animation-range:
-        entry calc(10% + var(--lw-reveal-i, 0) * var(--lw-reveal-step, 5%))
-        entry calc(64% + var(--lw-reveal-i, 0) * var(--lw-reveal-step, 5%));
-    }
-    .lw-reveal-group > :nth-child(2) { --lw-reveal-i: 1; }
-    .lw-reveal-group > :nth-child(3) { --lw-reveal-i: 2; }
-    .lw-reveal-group > :nth-child(4) { --lw-reveal-i: 3; }
-    .lw-reveal-group > :nth-child(5) { --lw-reveal-i: 4; }
-    .lw-reveal-group > :nth-child(6) { --lw-reveal-i: 5; }
-    .lw-reveal-group > :nth-child(7) { --lw-reveal-i: 6; }
-    .lw-reveal-group > :nth-child(8) { --lw-reveal-i: 7; }
-    .lw-reveal-group > :nth-child(n+9) { --lw-reveal-i: 8; }
-  }
-}
-
-/* The JS path, for a consumer already holding `useReveal`'s `shown`. The element
-   ships with NO `data-reveal`; a script adds `"pending"` on mount and flips it to
-   `"shown"`. Script absent, script broken, observer never fires — the attribute
-   never lands and the element was never hidden.
-
-   A transition, not an animation, so a flip mid-flight retargets from where the
-   box actually is rather than restarting. `--lw-dur-lg` is legitimate here: this
-   path has a real clock. */
-@media screen and (prefers-reduced-motion: no-preference) {
-  .lw-reveal[data-reveal],
-  .lw-reveal-group > [data-reveal] {
-    transition:
-      opacity var(--lw-dur-lg) var(--lw-ease-out),
-      transform var(--lw-dur-lg) var(--lw-ease-out);
-  }
-  .lw-reveal[data-reveal="pending"],
-  .lw-reveal-group > [data-reveal="pending"] {
-    opacity: 0;
-    transform: translate3d(0, var(--lw-reveal-shift, 12px), 0);
-  }
-  .lw-reveal[data-reveal="shown"],
-  .lw-reveal-group > [data-reveal="shown"] {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@keyframes lwReveal {
-  from { opacity: 0; transform: translate3d(0, var(--lw-reveal-shift, 12px), 0); }
-  to { opacity: 1; transform: none; }
-}
-
-/* SPOTLIGHT — the paint for `useSpotlight()`, which writes `--lw-mx` / `--lw-my`
-   as 0–100% via rAF and already stands itself down on a coarse pointer and under
-   reduced motion. Until now it wrote two custom properties into the void.
-
-   The highlight is an `::after` on `--lw-z-local-1` rather than a background on
-   the box itself: a card's own ground is frequently a gradient or a token that
-   the theme re-points, and painting over it would fight both. `pointer-events:
-   none` so the highlight never eats a click on the card it decorates.
-
-   The 50% fallbacks matter — before the first pointer move, and forever on a
-   device that has no pointer, the properties are unset. Centred is the resting
-   state; a missing fallback would resolve the gradient at 0,0 and park a bright
-   corner on every untouched card. */
-.lw-spotlight { position: relative; isolation: isolate; }
-.lw-spotlight::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: var(--lw-z-local-1);
-  border-radius: inherit;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity var(--lw-dur-md) var(--lw-ease-out);
-  background: radial-gradient(
-    var(--lw-spotlight-size, 26rem) circle at var(--lw-mx, 50%) var(--lw-my, 50%),
-    hsl(var(--lw-brand-500-c) / 0.10),
-    transparent 60%
-  );
-}
-.lw-spotlight:hover::after,
-.lw-spotlight:focus-within::after { opacity: 1; }
-@media (prefers-reduced-motion: reduce) {
-  .lw-spotlight::after { transition: none; }
-}
-
-/* =============================================================================
-   Console surface primitives (v0.6.0).
-
-   Additive building blocks for the interactive product console (the marketing
-   hero's "see CONNECT run" device). Each is a shell only — pair with the
-   .lw-btn/.lw-pill/.lw-console families above. Every color is an existing
-   --lw-* token; the code surface and its token spans are an ALWAYS-DARK island
-   (like .lw-section.dark), so they read identically in both site themes.
-   ============================================================================= */
-
-/* ===========================================================================
-   v0.6.0 layout primitives — the classes FeatureGrid / StoryCard / LogoRail
-   render. These lived site-local in leanwise-ai; they move into the package so
-   the components are self-contained (and so the Ladle docs site and other
-   consumers render them without each shipping a copy). Per-customer optical
-   sizing (`[data-mark='…']`) stays consumer-side: the package owns the base
-   cell, consumers tune their own marks.
-   =========================================================================== */
-
-/* ---- Feature grid — a 3-up hairline-divided grid (→ 1 col under --lw-bp-lg).
-   Each cell: optional mono index/eyebrow + optional icon, then heading + body. */
-.lw-features {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: var(--lw-line);
-  border: 1px solid var(--lw-line);
-  border-radius: var(--lw-radius-lg);
-  overflow: hidden;
-}
-/* --lw-bp-lg (1024px) — the same collapse point as Split, so a features band
-   and the layout around it never reflow one breakpoint apart. */
-@media (max-width: 1023.98px) { .lw-features { grid-template-columns: 1fr; } }
+.lw-features { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); }
 .lw-feature {
-  position: relative;
-  background: var(--lw-bg);
-  padding: 28px 26px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  transition: background var(--lw-dur-sm) var(--lw-ease-out);
+  display: flex; flex-direction: column; gap: 0.5rem; padding: 1.5rem;
+  border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--card); color: var(--card-foreground);
 }
-/* The brand spirit here is a measured rule, not a glow: a 2px brand edge draws in
-   across the top of the cell on hover. transform-origin:left + scaleX means it wipes
-   in like a progress bar rather than fading — instrument, not decoration. */
-.lw-feature::before {
-  content: "";
-  position: absolute; inset: 0 0 auto 0; height: 2px;
-  background: var(--lw-brand-500);
-  transform: scaleX(0); transform-origin: left;
-  transition: transform var(--lw-dur-sm) var(--lw-ease-out);
+.lw-feature h3 { margin: 0.25rem 0 0; font-size: var(--text-lg, 1.125rem); font-weight: 600; }
+.lw-feature p { margin: 0; color: var(--muted-foreground); }
+.lw-feature-icon {
+  display: grid; place-items: center; width: 2.5rem; height: 2.5rem;
+  border-radius: calc(var(--radius) * 0.8); background: var(--accent); color: var(--accent-foreground);
 }
-.lw-feature-interactive { cursor: pointer; }
-.lw-feature-interactive:hover, .lw-feature-interactive:focus-visible { background: var(--lw-bg-subtle); outline: none; }
-.lw-feature-interactive:hover::before, .lw-feature-interactive:focus-visible::before { transform: scaleX(1); }
-.lw-feature-interactive:focus-visible { box-shadow: inset 0 0 0 2px hsl(var(--lw-brand-500-c) / 0.45); }
+a.lw-feature { text-decoration: none; cursor: pointer; transition: border-color 0.15s, transform 0.15s; }
+a.lw-feature:hover { border-color: var(--primary); transform: translateY(-2px); }
 
-/* The index is the cell's spine: a mono numeral with a hairline running off it, so a
-   3-up grid reads as a numbered sequence rather than three unrelated boxes. */
-.lw-feature .num {
-  display: flex; align-items: center; gap: 10px;
-  font-family: var(--lw-font-mono);
-  font-size: var(--lw-text-2xs);
-  letter-spacing: 0.14em;
-  color: var(--lw-brand-text);
-}
-.lw-feature .num::after {
-  content: ""; height: 1px; flex: 1; background: var(--lw-line);
-  transition: background var(--lw-dur-sm) var(--lw-ease-out);
-}
-.lw-feature-interactive:hover .num::after { background: var(--lw-brand-line); }
-.lw-feature .icon { color: var(--lw-brand-text); display: inline-flex; font-size: 20px; line-height: 1; }
-.lw-feature h3 { font-size: 18px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; line-height: 1.25; }
-.lw-feature p { color: var(--lw-fg-subtle); font-size: 14px; line-height: 1.6; margin: 0; text-wrap: pretty; }
-/* Footer link pinned to the bottom so a row of unequal copy still aligns its actions. */
-.lw-feature .lw-feature-more {
-  margin-top: auto; padding-top: 14px;
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 13px; font-weight: var(--lw-fw-medium); color: var(--lw-brand-text);
-}
-.lw-feature .lw-feature-more .arrow { flex: none; transition: transform var(--lw-dur-sm) var(--lw-ease-out); }
-.lw-feature-interactive:hover .lw-feature-more .arrow { transform: translateX(3px); }
+.lw-stat-row { display: grid; gap: 2rem; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); }
+.lw-stat-value { font-size: var(--text-display-sm, clamp(1.75rem, 3.4vw, 3rem)); line-height: 1; font-weight: 600; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.lw-stat-label { margin-top: 0.5rem; color: var(--muted-foreground); font-size: var(--text-sm, 0.875rem); }
 
-:is(.dark, [data-band="dark"], .lw-band-dark) .lw-features { background: var(--lw-on-dark-fill); border-color: var(--lw-on-dark-line); }
-:is(.dark, [data-band="dark"], .lw-band-dark) .lw-feature { background: var(--lw-navy-deep); }
-:is(.dark, [data-band="dark"], .lw-band-dark) .lw-feature-interactive:hover { background: var(--lw-on-dark-fill); }
-.dark .lw-feature h3, [data-band="dark"] .lw-feature h3, .lw-band-dark .lw-feature h3 { color: var(--lw-on-dark); }
-.dark .lw-feature p, [data-band="dark"] .lw-feature p, .lw-band-dark .lw-feature p { color: var(--lw-on-dark-2); }
-.dark .lw-feature .num::after, [data-band="dark"] .lw-feature .num::after, .lw-band-dark .lw-feature .num::after { background: var(--lw-on-dark-fill-strong); }
+/* ---- Plans + compare -------------------------------------------------------- */
+
+.lw-plans { display: grid; gap: 1rem; align-items: stretch; grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); }
+.lw-plan {
+  position: relative; display: flex; flex-direction: column; gap: 1rem; padding: 1.75rem;
+  border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--card); color: var(--card-foreground);
+}
+.lw-plan-featured { border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary), 0 18px 40px -20px color-mix(in oklch, var(--primary) 45%, transparent); }
+.lw-plan-ribbon {
+  position: absolute; top: -0.75rem; inset-inline-start: 1.75rem; padding: 0.125rem 0.625rem;
+  border-radius: 999px; font-size: var(--text-xs, 0.75rem); font-weight: 600;
+  background: var(--cta); color: var(--cta-foreground);
+}
+.lw-plan-name { font-weight: 600; font-size: var(--text-lg, 1.125rem); }
+.lw-plan-desc { margin: 0; color: var(--muted-foreground); }
+.lw-plan-price { font-size: var(--text-3xl, 1.875rem); line-height: 1; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.lw-plan-price small { font-size: var(--text-sm, 0.875rem); font-weight: 400; color: var(--muted-foreground); }
+.lw-plan-features { display: grid; gap: 0.5rem; margin: 0; padding: 0; list-style: none; font-size: var(--text-sm, 0.875rem); }
+.lw-plan-features li { display: flex; gap: 0.5rem; }
+.lw-plan-features li::before { content: "✓"; color: var(--success); font-weight: 700; }
+.lw-plan-foot { margin-top: auto; }
+
+.lw-compare-scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); }
+.lw-compare { width: 100%; border-collapse: collapse; font-size: var(--text-sm, 0.875rem); }
+.lw-compare :is(th, td) { padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); text-align: center; }
+.lw-compare :is(th, td):first-child { text-align: start; }
+.lw-compare thead th { position: sticky; top: 0; background: var(--muted); font-weight: 600; }
+.lw-compare tbody th { font-weight: 400; }
+.lw-compare-group th { background: var(--muted); font-size: var(--text-xs, 0.75rem); text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted-foreground); }
+.lw-compare-yes { color: var(--success); font-weight: 700; }
+.lw-compare-no { color: var(--muted-foreground); }
+
+/* ---- Steps, quote, media ---------------------------------------------------- */
+
+.lw-steps { display: grid; gap: 1.5rem; margin: 0; padding: 0; list-style: none; counter-reset: lw-step; }
+.lw-steps-horizontal { grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); }
+.lw-step { display: grid; grid-template-columns: auto 1fr; gap: 0.25rem 1rem; counter-increment: lw-step; }
+.lw-step::before {
+  content: counter(lw-step); grid-row: span 2;
+  display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 999px;
+  font-family: var(--font-mono); font-size: var(--text-sm, 0.875rem); font-weight: 600;
+  background: var(--primary); color: var(--primary-foreground);
+}
+.lw-step-title { font-weight: 600; }
+.lw-step-body { color: var(--muted-foreground); }
+
+.lw-quote { margin: 0; max-width: 46rem; }
+.lw-quote blockquote { margin: 0; font-size: var(--text-2xl, 1.5rem); line-height: 1.4; font-weight: 500; letter-spacing: -0.015em; text-wrap: pretty; }
+.lw-quote-attrib { display: flex; align-items: center; gap: 0.75rem; margin-top: 1.25rem; font-size: var(--text-sm, 0.875rem); color: var(--muted-foreground); }
+.lw-quote-attrib strong { color: var(--foreground); font-weight: 600; }
+
+.lw-media-plate {
+  --plate-pad: clamp(0.5rem, 1.5vw, 1rem);
+  padding: var(--plate-pad); border: 1px solid var(--border);
+  border-radius: calc(var(--radius) + var(--plate-pad)); background: var(--muted);
+}
+.lw-media-plate > :is(img, video, picture) { display: block; width: 100%; height: auto; border-radius: var(--radius); }
+
+/* ---- Motion ----------------------------------------------------------------- */
+
+@keyframes lwGroundDrift { to { transform: translate3d(-3.5%, 2%, 0) scale(1.09); } }
+@keyframes lwCombPulse { from { opacity: calc(var(--lattice-alpha) * 0.6); } to { opacity: var(--lattice-alpha); } }
+@keyframes lwMarkBreathe { from { transform: translateY(-50%) scale(1); } to { transform: translateY(-50%) scale(1.04); } }
+@keyframes lwAurora { to { transform: translate3d(10%, 8%, 0) scale(1.15); } }
+@keyframes lwMarquee { to { transform: translateX(-100%); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .lw-feature::before { transition: none; }
-  .lw-feature-interactive:hover .lw-feature-more .arrow { transform: none; }
-}
-
-/* ---- Story card — a square mark/monogram tile + body. Hover lift/glow comes
-   from .lw-card-glow on the same element; do NOT add a competing border/transform
-   hover here (it would fight the brand border). */
-.lw-story {
-  background: var(--lw-bg);
-  border: 1px solid var(--lw-line);
-  border-radius: var(--lw-radius-md);
-  padding: 32px;
-  display: grid;
-  /* minmax(0, 1fr), not 1fr. `1fr` is `minmax(auto, 1fr)`, and an `auto` minimum
-     is the item's MIN-CONTENT — so a long unbroken token in the quote or the
-     result line grows the column past its share and the card past its grid
-     track. The zero floor lets the text column shrink and wrap, which is what a
-     text column should do. */
-  grid-template-columns: 64px minmax(0, 1fr);
-  gap: 20px;
-  align-items: start;
-}
-/* --lw-bp-sm (479.98px). At 320px the container is ~280px, and 64px of padding
-   plus a 64px logo plus a 20px gap leaves 132px for a heading, a quote and a
-   result line — narrower than the card's own type wants, so its min-content
-   pushed the card ~40px past the viewport and took the document with it. The
-   logo moves above the text and the padding comes in; nothing is dropped. */
-@media (max-width: 479.98px) {
-  .lw-story { padding: 20px; grid-template-columns: minmax(0, 1fr); gap: 16px; }
-}
-/* In a row of cards the tallest sets the height, so the body column has to fill it
-   and hang its result off the bottom — otherwise a short story leaves a block of
-   dead space under its outcome and reads as broken padding. */
-.lw-story > *:nth-child(2) { display: flex; flex-direction: column; height: 100%; }
-.lw-story .meta { margin-top: auto; }
-/* Two different jobs wearing one class: a customer LOGO tile must stay a neutral box
-   (the artwork brings its own color), but a MONOGRAM is a stand-in for artwork that
-   does not exist — as a grey box with grey initials it just looks unloaded. */
-.lw-story .logo {
-  width: 64px; height: 64px;
-  border-radius: var(--lw-radius-md);
-  background: var(--lw-bg-muted);
-  border: 1px solid var(--lw-line);
-  display: grid; place-items: center;
-  font-family: var(--lw-font-mono); font-size: var(--lw-text-2xs);
-  color: var(--lw-fg-muted);
-}
-.lw-monogram {
-  width: 56px; height: 56px;
-  border-radius: var(--lw-radius-md);
-  background: var(--lw-brand-500);
-  display: grid; place-items: center;
-  font-family: var(--lw-font-mono); font-size: 15px; font-weight: 600; letter-spacing: .04em;
-  color: var(--lw-on-brand);
-}
-.lw-story .logo img,
-.lw-monogram img { max-width: 48px; max-height: 32px; }
-.lw-story h3 { font-size: 18px; font-weight: 600; letter-spacing: -0.012em; margin: 0 0 8px; line-height: 1.3; text-wrap: balance; }
-.lw-story p { font-size: 14px; color: var(--lw-fg-subtle); line-height: 1.55; margin: 0 0 16px; }
-.lw-story .lw-story-quote {
-  margin: 0 0 16px; padding: 0; border: 0;
-  font-size: 15px; line-height: 1.55; color: var(--lw-fg); font-style: normal;
-}
-.lw-story .lw-story-quote cite {
-  display: block; margin-top: 8px;
-  font-family: var(--lw-font-mono); font-size: 12px; letter-spacing: 0.12em;
-  color: var(--lw-fg-subtle); font-style: normal;
-}
-.lw-story .meta {
-  display: flex; gap: 16px; flex-wrap: wrap;
-  font-family: var(--lw-font-mono); font-size: 12px; letter-spacing: 0.12em; color: var(--lw-fg-subtle);
-  padding-top: 12px; border-top: 1px solid var(--lw-line);
-}
-.lw-story .meta b { color: var(--lw-brand-text); font-weight: 500; }
-/* The spine that used to be declared here now lives in the shared `.lw-quote,
-   .lw-story .lw-story-quote` block in the editorial section at the foot of this
-   file — one drawing, one owner. It still lands after the `padding: 0; border: 0`
-   reset above (same specificity, later in source), so nothing about the story
-   card's quote changed. */
-.lw-story-result {
-  display: inline-flex; align-items: baseline; gap: 8px;
-  font-family: var(--lw-font-mono); font-size: 12.5px; letter-spacing: .04em;
-  padding: 6px 10px; border-radius: var(--lw-radius-sm);
-  background: var(--lw-cta-soft); color: var(--lw-cta-text);
-}
-.lw-story-result b { font-size: 15px; font-weight: 600; letter-spacing: -.01em; }
-.lw-story.lw-card-interactive:hover, .lw-story-interactive:hover { border-color: hsl(var(--lw-brand-500-c) / .55); box-shadow: var(--lw-shadow-md), var(--lw-brand-glow); transform: translateY(-2px); }
-.lw-story-interactive { cursor: pointer; transition: transform var(--lw-dur-sm) var(--lw-ease-out), border-color var(--lw-dur-sm) var(--lw-ease-out), box-shadow var(--lw-dur-sm) var(--lw-ease-out); }
-.lw-story-interactive:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); border-color: var(--lw-brand-500); }
-:is(.dark, [data-band="dark"], .lw-band-dark) .lw-story { background: var(--lw-navy-deep); border-color: var(--lw-on-dark-line); }
-.dark .lw-story .lw-story-quote, [data-band="dark"] .lw-story .lw-story-quote, .lw-band-dark .lw-story .lw-story-quote { color: var(--lw-on-dark); }
-.dark .lw-story h3, [data-band="dark"] .lw-story h3, .lw-band-dark .lw-story h3 { color: var(--lw-on-dark); }
-.dark .lw-story p, .dark .lw-story .meta, [data-band="dark"] .lw-story p, [data-band="dark"] .lw-story .meta, .lw-band-dark .lw-story p, .lw-band-dark .lw-story .meta { color: var(--lw-on-dark-2); }
-.dark .lw-story .meta, [data-band="dark"] .lw-story .meta, .lw-band-dark .lw-story .meta { border-top-color: var(--lw-on-dark-line); }
-@media (prefers-reduced-motion: reduce) { .lw-story-interactive:hover { transform: none; } }
-
-/* ===========================================================================
-   v1.3.0 — SITE CHROME + EDITORIAL
-   The five pieces every marketing site rebuilds locally: the footer, a steps /
-   timeline, a standalone pull quote, article chrome, and the announcement bar.
-
-   Every knob here is a LOCAL custom property with a fallback
-   (`var(--lw-steps-marker, 40px)`, `var(--lw-announce-h, 36px)`) — the same form
-   as `--lw-grid-min` and `--lw-split-rail`. They are not declared in tokens.css,
-   carry no DTCG kind, and so incur no obligation to re-point in every theme
-   scope. Nothing below needs a new design token.
-   =========================================================================== */
-
-/* ---- Site footer ----------------------------------------------------------
-   A DARK footer is `data-band="dark"` on the element, never a hard-coded navy
-   tier. The consumer that prompted this hard-coded `--lw-navy-900` and then had
-   to restate five child inks on top of it — and its own code comment recorded
-   that brand-500 as an 11px heading on that navy failed AA on every page, in
-   both locales. `[data-band="dark"]` re-points `--lw-brand-text` to brand-400
-   (and every other role with it) for free, so the heading below needs no dark
-   variant at all. That is the whole reason this component is worth shipping.
-
-   The vertical rhythm is the `.lw-section` clamp, declared once at the head of
-   this file. Only the ground and the hairline are set here. */
-.lw-footer {
-  background: var(--lw-bg-subtle);
-  color: var(--lw-fg);
-  border-block-start: 1px solid var(--lw-line);
-}
-
-/* The brand column is wide and soft-capped; the link columns are as many as fit.
-   `auto-fit` after one explicit track is deliberate — a site with three link
-   columns and a site with six both lay out without a variant class. */
-.lw-footer-grid {
-  display: grid;
-  grid-template-columns: minmax(220px, 1.6fr) repeat(auto-fit, minmax(140px, 1fr));
-  gap: var(--lw-space-32);
-}
-/* --lw-bp-md (768px). The brand column spans the full width and the link
-   columns flow under it — at this width 220px of brand beside 140px of links
-   leaves both too narrow to read. */
-@media (max-width: 767.98px) {
-  .lw-footer-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
-  .lw-footer-brand { grid-column: 1 / -1; }
-}
-
-.lw-footer-brand {
-  display: flex;
-  flex-direction: column;
-  gap: var(--lw-space-12);
-  align-items: flex-start;
-}
-/* 34ch, not the 60ch `.lw-measure` — a footer blurb sits in a narrow column and
-   a measure wider than its track does nothing. The long legal disclaimer at the
-   bottom is the one that composes `.lw-measure`. */
-.lw-footer-desc {
-  color: var(--lw-fg-muted);
-  max-inline-size: 34ch;
-  margin: 0;
-}
-
-.lw-footer-head {
-  font-family: var(--lw-font-mono);
-  font-size: var(--lw-text-xs);
-  font-weight: var(--lw-fw-medium);
-  letter-spacing: var(--lw-tracking-eyebrow);
-  /* Tracking opens every gap by one step, and a word gap starts far wider than a
-     letter gap — so without this the caps read as loose letters, not as words.
-     Same pairing as `.lw-eyebrow` and `.lw-pill`. */
-  word-spacing: var(--lw-word-spacing-caps);
-  text-transform: uppercase;
-  color: var(--lw-brand-text);
-  margin: 0 0 var(--lw-space-8);
-}
-
-/* Every link reserves the current-page rule as a transparent border, so marking
-   the current page shifts nothing. */
-.lw-footer-link {
-  display: block;
-  padding-block: var(--lw-space-4);
-  padding-inline-start: var(--lw-space-8);
-  border-inline-start: 2px solid transparent;
-  margin-inline-start: calc(var(--lw-space-8) * -1);
-  color: var(--lw-fg-muted);
-  text-decoration: none;
-  transition: color var(--lw-dur-xs) var(--lw-ease-out);
-}
-.lw-footer-link:hover { color: var(--lw-fg); }
-.lw-footer-link:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
-/* Touch. 33px rows, and a footer column is where a phone reader does most of
-   their tapping. REAL height rather than the `.lw-hit` ::after the bar's controls
-   use: these are stacked, so 44px hit boxes on 33px rows would overlap by 11px
-   and every link would steal a slice of its neighbour — a mis-tap that looks
-   like the site opening the wrong page at random. Padding, not a height, so a
-   wrapped label grows the row instead of overflowing it. */
-@media (pointer: coarse) {
-  .lw-footer-link { padding-block: var(--lw-space-12); }
-}
-/* Direction/state is never colour alone: the current page gets a WEIGHT step and
-   a brand rule as well as the ink lift. Not a `▸` glyph — a typed marker is an
-   icon drawn a second time in the font, and it would also be read aloud. */
-.lw-footer-link[aria-current] {
-  color: var(--lw-fg);
-  font-weight: var(--lw-fw-medium);
-  border-inline-start-color: var(--lw-brand-text);
-}
-
-/* An inert label in a link column — a shipping date, a "coming soon". It is
-   deliberately NOT in the pointer-affordance list: a pointer over text that does
-   nothing is a lie. */
-.lw-footer-note {
-  display: block;
-  padding-block: var(--lw-space-4);
-  padding-inline-start: var(--lw-space-8);
-  color: var(--lw-fg-subtle);
-}
-
-.lw-footer-bottom {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--lw-space-16);
-  margin-block-start: var(--lw-space-32);
-  padding-block-start: var(--lw-space-24);
-  border-block-start: 1px solid var(--lw-line);
-  font-family: var(--lw-font-mono);
-  font-size: var(--lw-text-xs);
-  color: var(--lw-fg-subtle);
-}
-/* The legal disclaimer is a real <p>; without a reset it would carry the UA's
-   1em block margins into a flex row and push the row apart. */
-.lw-footer-bottom p { margin: 0; }
-
-/* ---- Steps / timeline -----------------------------------------------------
-   One component for three things a marketing site keeps rebuilding: a company
-   timeline, a product roadmap, and a numbered "how it works".
-
-   DELIBERATELY NO STATE AXIS. `.lw-stepper` in product.css owns wizard state —
-   done / current / upcoming, with the ARIA that goes with it. A company timeline
-   has no state: every entry already happened. Two treatments of one interaction
-   is the bug this package exists to prevent, so the split is by MEANING (a
-   sequence of facts vs. a position in a flow), not by looks.
-
-   The marker text lives in the MARKUP, never in CSS `counter()` — same rule as
-   `FeatureGrid`'s `String(i+1).padStart(2,"0")`. Generated content is not
-   selectable and is announced inconsistently; a step number is content. */
-.lw-steps {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: var(--lw-space-24);
-}
-.lw-step {
-  position: relative;
-  display: grid;
-  /* The marker column is sized by the widest marker, floored at the circle
-     (v2.2.0). A `label` is a PILL that grows inline to fit its text, so a
-     phase name ("On the floor") no longer prints through the title below it;
-     the spine keeps leaving from the pill's start cap, whose centre is at
-     marker/2 whatever the pill's width. */
-  grid-template-columns: minmax(var(--lw-steps-marker, 40px), max-content) minmax(0, 1fr);
-  gap: var(--lw-space-16);
-  align-items: start;
-}
-/* The connecting spine, drawn from under the marker down to the next one. It is
-   a pseudo-element on the STEP rather than a border on the list, so the last
-   step can drop it without a modifier class. */
-.lw-step::before {
-  content: "";
-  position: absolute;
-  inset-block-start: var(--lw-steps-marker, 40px);
-  inset-inline-start: calc(var(--lw-steps-marker, 40px) / 2);
-  inline-size: 1px;
-  block-size: calc(100% + var(--lw-space-24) - var(--lw-steps-marker, 40px));
-  background: var(--lw-line);
-}
-.lw-step:last-child::before { content: none; }
-
-/* CLAUDE.md singles this pair out: every `background: var(--lw-brand-soft)` rule
-   pairs with `color: var(--lw-brand-on)`. `brand-text` is the LINK shade and
-   measures 3.98 on this tint. */
-.lw-step-marker {
-  /* A block with `line-height` = the marker, not a grid: `text-overflow` only
-     clips a block container's own line box, and a grid's text sits in an
-     anonymous item it cannot reach. Height is FIXED so every spine offset
-     below stays true; width is fit-content between the circle and the column,
-     and a label longer than the column ellipsises (Steps.jsx puts the full
-     text in `title`). `position: relative` paints the pill over the spine. */
-  position: relative;
-  display: block;
-  box-sizing: border-box;
-  inline-size: fit-content;
-  min-inline-size: var(--lw-steps-marker, 40px);
-  max-inline-size: 100%;
-  block-size: var(--lw-steps-marker, 40px);
-  line-height: var(--lw-steps-marker, 40px);
-  padding-inline: var(--lw-space-12);
-  text-align: center;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  border-radius: var(--lw-radius-pill);
-  background: var(--lw-brand-soft);
-  color: var(--lw-brand-on);
-  font-family: var(--lw-font-mono);
-  font-variant-numeric: tabular-nums;
-  font-size: var(--lw-text-xs);
-  font-weight: var(--lw-fw-medium);
-}
-.lw-step-title {
-  font-size: var(--lw-text-lead);
-  line-height: var(--lw-lh-snug);
-  font-weight: var(--lw-fw-semibold);
-  margin: 0;
-}
-.lw-step-body {
-  color: var(--lw-fg-subtle);
-  margin: var(--lw-space-4) 0 0;
-  text-wrap: pretty;
-}
-.lw-step-meta {
-  display: block;
-  font-family: var(--lw-font-mono);
-  font-size: var(--lw-text-xs);
-  color: var(--lw-fg-subtle);
-}
-
-/* Horizontal: the same steps as a row, with the spine rotated. The marker keeps
-   its column position, so the spine leaves its inline-end edge instead of its
-   block-end one. */
-.lw-steps-horizontal {
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(0, 1fr);
-}
-.lw-steps-horizontal .lw-step {
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--lw-space-12);
-  /* The row grid stretches every step to the tallest one, and a grid's rows
-     share that extra height by default — so a short step's title floated
-     35px below its pill while the tallest hugged it. Pack the rows at the
-     start and every title sits at one height across the row (v2.2.2). */
-  align-content: start;
-}
-.lw-steps-horizontal .lw-step::before {
-  inset-block-start: calc(var(--lw-steps-marker, 40px) / 2);
-  inset-inline-start: var(--lw-steps-marker, 40px);
-  inline-size: calc(100% + var(--lw-space-24) - var(--lw-steps-marker, 40px));
-  block-size: 1px;
-}
-/* --lw-bp-md (768px) — four steps across a phone is four one-word columns, so
-   the row reverts to the stack. One media query, and it restores the vertical
-   geometry wholesale rather than unsetting it property by property. */
-@media (max-width: 767.98px) {
-  .lw-steps-horizontal { grid-auto-flow: row; }
-  .lw-steps-horizontal .lw-step {
-    grid-template-columns: minmax(var(--lw-steps-marker, 40px), max-content) minmax(0, 1fr);
-    gap: var(--lw-space-16);
-  }
-  .lw-steps-horizontal .lw-step::before {
-    inset-block-start: var(--lw-steps-marker, 40px);
-    inset-inline-start: calc(var(--lw-steps-marker, 40px) / 2);
-    inline-size: 1px;
-    block-size: calc(100% + var(--lw-space-24) - var(--lw-steps-marker, 40px));
-  }
-}
-
-/* ---- Quote ----------------------------------------------------------------
-   ONE declaration block, TWO selectors. `.lw-story-quote` (the quote inside a
-   case-study card) drew this spine itself; a standalone pull quote in a
-   testimonial band cannot be expressed by `StoryCard`, so it needs its own
-   class — and the moment it has one, the spine has two owners unless they share
-   the declaration. Sharing it is what stops a second treatment appearing.
-
-   A brand hairline down the start edge is the cheapest honest attribution: a
-   quote with no mark and no spine reads as a paragraph that happens to have
-   quotation marks. */
-.lw-quote,
-.lw-story .lw-story-quote {
-  position: relative;
-  padding-inline-start: var(--lw-space-16);
-  border-inline-start: 2px solid var(--lw-brand-line);
-}
-.lw-quote {
-  font-size: var(--lw-text-lead);
-  line-height: 1.5;
-  color: var(--lw-fg);
-  margin: 0;
-  font-style: normal;
-}
-.lw-quote-attrib {
-  display: block;
-  margin-block-start: var(--lw-space-8);
-  font-family: var(--lw-font-mono);
-  font-size: var(--lw-text-xs);
-  color: var(--lw-fg-subtle);
-  font-style: normal;
-}
-.lw-quote-attrib .name { color: var(--lw-fg); }
-
-/* ---- Article chrome -------------------------------------------------------
-   There is deliberately NO `.lw-article` grid and NO `.lw-post` card here.
-   The article + table-of-contents layout is `.lw-split`, which already collapses
-   at --lw-bp-lg; the index card is `.lw-card` + CardHead/CardBody/CardFoot +
-   `.lw-byline` inside a `Grid`. Both are compositions of classes this system
-   already ships, and CONTRIBUTING's first rule is to prove a thing is not
-   already here. What is genuinely missing is the three atoms below. */
-.lw-byline {
-  display: flex;
-  align-items: center;
-  gap: var(--lw-space-12);
-}
-.lw-byline .name {
-  font-weight: var(--lw-fw-medium);
-  color: var(--lw-fg);
-}
-.lw-byline .role,
-.lw-byline .date {
-  font-family: var(--lw-font-mono);
-  font-size: var(--lw-text-xs);
-  color: var(--lw-fg-subtle);
-}
-
-/* Category, h1, standfirst, tags — the parts stay `.lw-eyebrow` / `.lw-h1` /
-   `.lw-lead` / `.lw-pill`, so an article heading and a section heading are the
-   same type. This class is the rhythm between them and nothing else. */
-.lw-article-head {
-  display: flex;
-  flex-direction: column;
-  gap: var(--lw-space-16);
-}
-
-/* A `.lw-pill` that is a real link. The pill already carries the whole face; the
-   only thing missing was the affordance — and that lives on the consolidated
-   pointer list at the foot of base.css, never here, because a later
-   `cursor: default` silently cancels an earlier pointer and that list is what
-   stays last in the file. `.lw-pill-link` is on it as of v1.3.0. */
-.lw-pill-link:hover { border-color: var(--lw-brand-line); color: var(--lw-fg); }
-.lw-pill-link:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
-
-/* ---- Announcement bar -----------------------------------------------------
-   The coupling rule below is the entire reason this component belongs upstream.
-   A sticky bar under a sticky announcement is what every consumer gets wrong:
-   both claim `inset-block-start: 0`, so the header scrolls up UNDER the
-   announcement and its first line is eaten. The contract can only be stated here
-   because `.lw-topbar` is ours — a consumer that hand-rolls an announcement bar
-   has no way to reach into the package's header and offset it, so it re-declares
-   the header instead and inherits none of its later fixes. */
-.lw-announce {
-  position: sticky;
-  inset-block-start: 0;
-  z-index: var(--lw-z-nav);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--lw-space-8);
-  padding-block: var(--lw-space-8);
-  /* Room for the dismiss control at the inline-end, on BOTH sides, so the
-     message stays optically centred rather than centred-minus-a-button. */
-  padding-inline: var(--lw-space-32);
-  background: var(--lw-brand-soft);
-  color: var(--lw-brand-on);
-  font-family: var(--lw-font-mono);
-  font-size: var(--lw-text-xs);
-  text-align: center;
-}
-/* Inherit, not `--lw-brand-text`: the bar is a brand TINT, and the link must
-   read against that tint the same way the surrounding sentence does. Underline
-   carries the affordance instead of a colour change. */
-.lw-announce a { color: inherit; text-decoration: underline; }
-/* `position: sticky` already makes the bar a containing block for this. */
-.lw-announce .lw-icon-btn {
-  position: absolute;
-  inset-inline-end: var(--lw-space-8);
-  color: inherit;
-}
-.lw-announce + .lw-topbar { inset-block-start: var(--lw-announce-h, 36px); }
-
-/* ...and the same coupling has a second consequence, one layer further out.
-   `.lw-prose :is(h2,h3,h4)` carries `scroll-margin-block-start: 64px` in base.css
-   precisely so a #fragment link does not land a heading under the sticky header —
-   64px clears the 56px bar with a gap. Put an announcement above that header and
-   the sticky chrome becomes 36 + 56 = 92px, the 64px clearance is no longer
-   enough, and the heading arrives 27px UNDER the bar with its first line eaten:
-   exactly the failure the rule beside it was written to prevent, reintroduced by
-   the component that offsets the header.
-
-   Stated here rather than in base.css because the dependency only runs one way —
-   marketing knows about `.lw-topbar`, base must not know about `.lw-announce`.
-   `:root:has()` because a custom property cannot travel sideways: `.lw-announce`
-   is a SIBLING of the prose, not an ancestor, so it cannot hand a value down.
-
-   Measured, not reasoned: announce 35px + topbar 56px = 91px of chrome against a
-   heading landing at 64px. No specimen paired an announcement with a prose
-   document, which is why two releases of `.lw-prose` shipped over it.
-
-   ⚠ v3.1.0 turned this from a selector into a TOKEN RE-POINT, and that is the
-   whole improvement: it used to reach into `.lw-prose` specifically, so every
-   OTHER anchor target on an announced page — a `.lw-toc-sticky` rail, a
-   consumer's own `section[id]` — kept the un-offset value and stayed broken.
-   Re-pointing `--lw-anchor-offset` fixes all of them at once, and anything that
-   starts reading the token inherits the fix for free. */
-:root:has(.lw-announce) {
-  --lw-anchor-offset: calc(var(--lw-topbar-h) + var(--lw-announce-h, 36px) + var(--lw-space-8));
-}
-
-/* ===========================================================================
-   v1.3.0 — PRICING, COMPARISON, FLOW
-   Three patterns a marketing site rebuilds locally every time, and the last of
-   them is the expensive one: the consumer that prompted this ships EIGHT
-   one-off diagram components behind eight private CSS namespaces, none of them
-   contrast-tested and none of them holding the motion contract. `.lw-flow` is
-   the one owned drawing that replaces all eight.
-
-   Same knob discipline as the section above: every knob is a LOCAL custom
-   property with a fallback (`var(--lw-flow-edge, 28px)`), never declared in
-   tokens.css, so it carries no DTCG kind and no obligation to re-point in
-   every theme scope. NOTHING BELOW NEEDS A NEW DESIGN TOKEN.
-   =========================================================================== */
-
-/* ---- Plan cards -----------------------------------------------------------
-   The word "pricing" appeared nowhere in this package, so every consumer wrote
-   its own. The one that prompted this had `.lw-price.featured` restating FIVE
-   child colours to make one plan dark — the exact override pile that
-   `data-band="dark"` exists to delete.
-
-   `.lw-plan` COMPOSES `.lw-card` (`class="lw-card lw-plan"`). Border, radius,
-   padding and the hover/focus faces all come from there; this adds the column
-   geometry and nothing else. Restating any of them is how a card and a plan
-   card become two treatments of one surface.
-
-   THE CENTRAL RULE: **nothing here reserves a price slot.** `.lw-plan` is a
-   flex column with a gap, so a card whose consumer publishes no price simply
-   has no `.lw-plan-price` child and closes up — complete, not pending. There is
-   no `min-block-size`, no empty-state placeholder, no `content: "—"`. The
-   primary consumer publishes no price, no currency and no range; a component
-   that reserved the slot would force it to invent one, and an invented price is
-   a fabrication, which is the failure mode that site keeps relapsing into. */
-.lw-plan {
-  display: flex;
-  flex-direction: column;
-  gap: var(--lw-space-16);
-  /* Fills its grid track, so a row of plans with unequal feature counts still
-     has one baseline for the CTA. `<Grid min={280}>` already stretches. */
-  block-size: 100%;
-  /* Containing block for the ribbon. */
-  position: relative;
-}
-
-.lw-plan-name {
-  font-size: var(--lw-text-h3);
-  line-height: var(--lw-lh-snug);
-  font-weight: var(--lw-fw-semibold);
-  letter-spacing: var(--lw-tracking-tight);
-  margin: 0;
-}
-.lw-plan-tagline {
-  display: block;
-  font-family: var(--lw-font-mono);
-  font-size: var(--lw-text-xs);
-  color: var(--lw-fg-subtle);
-}
-
-/* Baseline-aligned so the unit and the period sit on the number's baseline
-   rather than its box. Wraps, because a long currency + period pair on a narrow
-   track otherwise pushes the card wider than its track. */
-.lw-plan-price {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: var(--lw-space-8);
-}
-/* Tabular figures so two plans in a row have their digits on the same rhythm —
-   proportional figures make 9 narrower than 0 and the column reads ragged. */
-.lw-plan .price {
-  font-size: var(--lw-text-h2);
-  line-height: var(--lw-lh-tight);
-  font-weight: var(--lw-fw-semibold);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: var(--lw-tracking-tighter);
-  color: var(--lw-fg);
-}
-.lw-plan .unit,
-.lw-plan .period {
-  font-size: var(--lw-text-sm);
-  color: var(--lw-fg-subtle);
-}
-.lw-plan-desc {
-  color: var(--lw-fg-muted);
-  margin: 0;
-  text-wrap: pretty;
-}
-
-.lw-plan-features {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--lw-space-8);
-}
-/* An excluded row is NEVER colour alone. It carries a DIFFERENT GLYPH (minus,
-   not check), a muted ink, and an `.lw-sr-only` word — so it survives
-   greyscale, a colour-blind reader and a screen reader, in that order. The
-   glyphs are `<Icon name>`; a typed `✓`/`–` would be the same drawing a second
-   time, in the font, and would be read aloud as punctuation. */
-.lw-plan-feature {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--lw-space-8);
-}
-.lw-plan-feature .lw-icon {
-  flex: none;
-  /* Optically centres the glyph on the first line of a wrapping label. */
-  margin-block-start: 2px;
-}
-.lw-plan-feature[data-included="true"] .lw-icon { color: var(--lw-brand-text); }
-.lw-plan-feature[data-included="false"] { color: var(--lw-fg-muted); }
-.lw-plan-feature[data-included="false"] .lw-icon { color: var(--lw-fg-subtle); }
-
-/* Pins the single CTA to the bottom of the tallest card in the row. */
-.lw-plan-foot { margin-block-start: auto; }
-
-/* The featured plan adds a brand edge and a lift — and NOTHING else. It does
-   not paint itself navy: a consumer that wants a dark featured plan writes
-   `data-band="dark"` on the card, and every child ink re-points with zero
-   overrides. That is the whole fix for the five restated child colours. */
-.lw-plan-featured {
-  border-color: var(--lw-brand-500);
-  box-shadow: var(--lw-shadow-md), var(--lw-brand-glow);
-}
-
-/* Positions an existing `.lw-pill` — it already carries the face, including the
-   opaque `--lw-bg` ground that keeps the card's own border from showing
-   through. This class is position and stacking only. */
-.lw-plan-ribbon {
-  position: absolute;
-  inset-block-start: 0;
-  inset-inline-end: var(--lw-space-16);
-  transform: translateY(-50%);
-  z-index: var(--lw-z-local-1);
-}
-
-/* The head of a plans section: an eyebrow, a `Segmented` billing period and an
-   optional savings `.lw-pill`. It is a COMPOSITION, not a component — see the
-   two deliberate non-additions recorded in the README and CHANGELOG. */
-.lw-plans-head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--lw-space-16);
-}
-
-/* ---- Comparison matrix ----------------------------------------------------
-   Distinct from `.lw-table`, and the split is by MEANING: `.lw-table` is a DATA
-   table (rows are records, cells are values, it sorts and paginates). This is a
-   FEATURE MATRIX — rows are capabilities, columns are plans, and every cell is
-   the same yes/no. They look alike and behave nothing alike, which is why one
-   class cannot serve both without growing a modifier for every difference.
-
-   `border-collapse: separate` is load-bearing, not a style: a sticky cell in a
-   collapsed table loses its borders to the collapse model and the header's
-   hairline scrolls away from the header. */
-.lw-compare-scroll {
-  overflow-x: auto;
-  /* Stops an inline overscroll at the end of the matrix from chaining to the
-     page and swiping the browser back. */
-  overscroll-behavior-inline: contain;
-  /* REQUIRED, and it is not a nicety — without it the whole PAGE scrolls sideways
-     on a phone.
-
-     `overflow` does NOT clip an absolutely-positioned descendant whose containing
-     block lies outside the scroller. Every truthy/falsy cell in this matrix carries a
-     `.lw-sr-only` span so the state is never colour alone (README rule 6), and
-     `.lw-sr-only` is `position: absolute`. With the scroller `position: static` those
-     spans resolve against an ancestor further up, escape the clip, and extend the
-     document's scrollable width — measured at 478px against a 375px viewport on a
-     five-column matrix. So the accessibility affordance was silently breaking the
-     mobile layout, which is why neither a width cap nor `overflow: hidden` fixed it
-     and only a containing block did.
-
-     `position: relative` is the minimal fix. Verified: the sticky row and column
-     headers still pin correctly with it. */
-  position: relative;
-}
-.lw-compare {
-  inline-size: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  font-size: var(--lw-text-sm);
-}
-.lw-compare caption {
-  caption-side: top;
-  text-align: start;
-  color: var(--lw-fg-subtle);
-  font-size: var(--lw-text-xs);
-  padding-block-end: var(--lw-space-12);
-}
-.lw-compare :is(th, td) {
-  padding: var(--lw-space-12) var(--lw-space-16);
-  border-block-end: 1px solid var(--lw-line);
-  text-align: start;
-  vertical-align: top;
-}
-
-/* EVERY sticky cell needs an opaque ground, or the content it is meant to pin
-   over scrolls straight under it. The three z-indexes are TOKENS — the CSS
-   self-check fails a literal, and the ordering matters: the corner overlaps
-   both axes, so it must outrank the column header, which must outrank the row
-   header it slides across. */
-.lw-compare th[scope="col"] {
-  position: sticky;
-  inset-block-start: 0;
-  z-index: var(--lw-z-local-2);
-  background: var(--lw-bg);
-  color: var(--lw-fg);
-  font-weight: var(--lw-fw-semibold);
-}
-.lw-compare th[scope="row"] {
-  position: sticky;
-  inset-inline-start: 0;
-  z-index: var(--lw-z-local-1);
-  background: var(--lw-bg);
-  color: var(--lw-fg-muted);
-  font-weight: var(--lw-fw-medium);
-  text-align: start;
-}
-.lw-compare-corner {
-  position: sticky;
-  inset-block-start: 0;
-  inset-inline-start: 0;
-  z-index: var(--lw-z-local-3);
-  background: var(--lw-bg);
-}
-
-/* A section-label row. It spans every column, so no column can occlude it and
-   it needs no inline sticky of its own — the ROW header is the one that has to
-   survive an inline scroll. */
-.lw-compare-group th {
-  font-family: var(--lw-font-mono);
-  font-size: var(--lw-text-xs);
-  font-weight: var(--lw-fw-medium);
-  letter-spacing: var(--lw-tracking-eyebrow);
-  word-spacing: var(--lw-word-spacing-caps);
-  text-transform: uppercase;
-  background: var(--lw-bg-subtle);
-  color: var(--lw-fg-muted);
-}
-
-/* The highlighted column. Deliberately `--lw-bg-subtle`, NOT `--lw-brand-soft`:
-   `--lw-fg` on `--lw-brand-soft` is a pair nothing in this system composes
-   today, so choosing it would enter the derived contrast manifest as a
-   brand-new measurement in three scopes (light, `.dark`, media-dark) for a
-   decorative tint. `--lw-fg` on `--lw-bg-subtle` is already asserted. The brand
-   signal is carried by the `--lw-brand-line` edges instead, which is a
-   non-text 1.4.11 boundary rather than a text ground.
-
-   Listed AFTER the sticky rules and at equal specificity so it wins on the
-   column header too — `.lw-compare th[scope="col"]` is also (0,2,1). */
-.lw-compare :is(th, td)[data-featured] {
-  background: var(--lw-bg-subtle);
-  border-inline: 1px solid var(--lw-brand-line);
-}
-
-/* Two glyphs, not one colour — same contract as `.lw-plan-feature`, and each
-   carries its own `.lw-sr-only` word. `--lw-success` is a FILL and fails AA as
-   text; `--lw-success-on` is the theme-aware text variant. */
-.lw-compare-yes,
-.lw-compare-no {
-  display: inline-flex;
-  align-items: center;
-}
-.lw-compare-yes { color: var(--lw-success-on); }
-.lw-compare-no { color: var(--lw-fg-subtle); }
-
-/* ---- Flow -----------------------------------------------------------------
-   A chain of labelled nodes joined by edges: a processing pipeline, an
-   onboarding sequence, a roadmap. ONE drawing for all three, because the
-   consumer that prompted this had eight, and nothing rendered any two of them
-   side by side to show they were the same picture.
-
-   THE MOTION CONTRACT, which is why the eight kept regressing: the static
-   state — SSR, JS off, `prefers-reduced-motion` — is the COMPLETE diagram.
-   Every node and every edge fully drawn, every label at full ink. Scroll only
-   REPLAYS the draw-in. Everything animated is double-gated below.
-
-   AND: an inactive node is NEVER dimmed with `opacity`. Axe scores
-   reduced-opacity text as a contrast failure and the consumer shipped exactly
-   that bug once. The ACTIVE node is marked POSITIVELY — brand border, brand
-   glow, a weight step on its title and a brand lift on its label — and every
-   other node stays at full ink. Four signals, one of them non-colour, which is
-   the same answer `.lw-footer-link[aria-current]` reaches.
-
-   The grid alternates node / edge / node / edge because `grid-auto-columns`
-   REPEATS its track list — so one declaration sizes every node at 1fr and every
-   connector at its own width, with no per-child class and no `:nth-child`
-   sizing. */
-.lw-flow {
-  display: grid;
-  gap: var(--lw-space-16);
-  grid-auto-flow: var(--lw-flow-flow, column);
-  grid-auto-columns: minmax(0, 1fr) auto;
-  align-items: stretch;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-/* The stacked geometry is FIVE local knobs, so it is written once and set in
-   two places: `.lw-flow-vertical` (at every width) and the `--lw-bp-md` query
-   below. The alternative — restating the whole edge block inside the media
-   query — is how one drawing quietly becomes two. */
-.lw-flow-vertical {
-  --lw-flow-flow: row;
-  --lw-flow-edge-i: 1px;
-  --lw-flow-edge-b: var(--lw-flow-edge, 28px);
-  --lw-flow-seg-i: 100%;
-  --lw-flow-seg-b: 45%;
-}
-/* --lw-bp-md (768px). A four-node chain across a phone is four one-word
-   columns; below the breakpoint every flow is the stack. */
-@media (max-width: 767.98px) {
-  .lw-flow {
-    --lw-flow-flow: row;
-    --lw-flow-edge-i: 1px;
-    --lw-flow-edge-b: var(--lw-flow-edge, 28px);
-    --lw-flow-seg-i: 100%;
-    --lw-flow-seg-b: 45%;
-  }
-}
-
-/* Composes `.lw-card` (`class="lw-card lw-flow-node"`) — border, radius and
-   padding come from there and are not restated. */
-.lw-flow-node {
-  display: flex;
-  flex-direction: column;
-  gap: var(--lw-space-8);
-  /* A long `sub` line must wrap inside its track, not widen it. */
-  min-inline-size: 0;
-}
-.lw-flow-head {
-  display: flex;
-  align-items: center;
-  gap: var(--lw-space-8);
-  color: var(--lw-fg-subtle);
-}
-.lw-flow-title {
-  font-size: var(--lw-text-lead);
-  line-height: var(--lw-lh-snug);
-  font-weight: var(--lw-fw-medium);
-  margin: 0;
-  text-wrap: pretty;
-}
-.lw-flow-sub {
-  color: var(--lw-fg-subtle);
-  margin: 0;
-  text-wrap: pretty;
-}
-/* The node index / eyebrow, and an edge caption. Marker text lives in the
-   MARKUP, never CSS `counter()` — generated content is not selectable and is
-   announced inconsistently. Same rule as `FeatureGrid` and `Steps`. */
-.lw-flow-label {
-  font-family: var(--lw-font-mono);
-  font-size: var(--lw-text-xs);
-  font-variant-numeric: tabular-nums;
-  color: var(--lw-fg-subtle);
-}
-
-/* The current node. `[aria-current]` — a real ARIA state, not a class that only
-   changes colour, so the state exists for a screen reader whether or not the
-   CSS loads. */
-.lw-flow-node[aria-current] {
-  border-color: var(--lw-brand-500);
-  box-shadow: var(--lw-brand-glow);
-}
-.lw-flow-node[aria-current] .lw-flow-title { font-weight: var(--lw-fw-semibold); }
-.lw-flow-node[aria-current] .lw-flow-label { color: var(--lw-brand-text); }
-
-/* The connector. A 1px `--lw-line` rule with a brand-coloured leading segment,
-   not SVG stroke geometry: that needs a path with a known length, and a DOM
-   chain of arbitrary-height cards has no such path. (The `.lw-draw` /
-   `.lw-flow-line` scroll-timeline machinery this used to contrast itself with
-   was removed in v3.0.0 — nothing had ever rendered it.) Fully drawn in the
-   static state. */
-.lw-flow-edge {
-  position: relative;
-  align-self: center;
-  justify-self: center;
-  inline-size: var(--lw-flow-edge-i, var(--lw-flow-edge, 28px));
-  block-size: var(--lw-flow-edge-b, 1px);
-  background: var(--lw-line);
-}
-/* Logical insets, so an RTL chain leads from the correct end. */
-.lw-flow-edge::before {
-  content: "";
-  position: absolute;
-  inset-block-start: 0;
-  inset-inline-start: 0;
-  inline-size: var(--lw-flow-seg-i, 45%);
-  block-size: var(--lw-flow-seg-b, 100%);
-  background: var(--lw-brand-500);
-}
-
-/* THE DRAW-IN. Double-gated: a browser with no scroll timelines and a reader
-   who prefers reduced motion both get the complete diagram, because nothing
-   above this point is hidden or faded.
-
-   ONE keyframe, `lwFlowPulse` — verified unused before it was named, because a
-   keyframe name is GLOBAL and last-wins and no gate can see a collision.
-
-   NO `--lw-dur-*` AND NO `--lw-stagger` HERE, AND THAT IS NOT AN OVERSIGHT.
-   `animation-duration`, `animation-delay` and `animation-iteration-count` are
-   IGNORED while `animation-timeline` names a progress-based timeline — the
-   progress of the view range IS the clock (CSS Animations 2). A time token
-   written here would render as documentation of an intent the browser discards,
-   which is worse than none: the next reader would trust it. The per-sibling
-   offset therefore has to be a RANGE offset, and it is a local knob with a
-   fallback like every other knob in this file. The index comes from
-   `:nth-child`, not from a style attribute, so a vanilla-HTML consumer gets the
-   identical cascade — capped at 8, the same ceiling `useDeterministicCascade`
-   uses. A time-based pulse on the current node was drafted and cut: it is a
-   second `animation` on the same element as the draw-in, and the shorthand
-   resets `animation-timeline`, so the current node would have silently lost its
-   scroll binding — exactly the class of regression this section exists to
-   prevent. */
-@supports (animation-timeline: view()) {
-  /* `screen and` — see the note on `.lw-reveal`. This draw-in has hidden the
-     diagram on paper since v1.6.0; nothing measured print, so nothing saw it. */
-  @media screen and (prefers-reduced-motion: no-preference) {
-    .lw-flow > * {
-      animation: lwFlowPulse linear both;
-      animation-timeline: view();
-      animation-range:
-        entry calc(10% + var(--lw-flow-i, 0) * var(--lw-flow-step, 4%))
-        entry calc(70% + var(--lw-flow-i, 0) * var(--lw-flow-step, 4%));
-    }
-    .lw-flow > :nth-child(2) { --lw-flow-i: 1; }
-    .lw-flow > :nth-child(3) { --lw-flow-i: 2; }
-    .lw-flow > :nth-child(4) { --lw-flow-i: 3; }
-    .lw-flow > :nth-child(5) { --lw-flow-i: 4; }
-    .lw-flow > :nth-child(6) { --lw-flow-i: 5; }
-    .lw-flow > :nth-child(7) { --lw-flow-i: 6; }
-    .lw-flow > :nth-child(8) { --lw-flow-i: 7; }
-    .lw-flow > :nth-child(n+9) { --lw-flow-i: 8; }
-  }
-}
-@keyframes lwFlowPulse {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: none; }
-}
-
-/* ── THE BRANCHING FLOW (v1.6.0) ─────────────────────────────────────────────
-   Everything below is NEW selectors only; not one rule above it is touched, so
-   `flow.card.html` and every consumer of the chain form is pixel-identical.
-
-   A graph is laid on a LATTICE: node columns at the odd tracks, the gutters the
-   connectors route through at the even ones. `Flow` emits the two track lists as
-   custom properties because `repeat()` will not accept a `var()` count, and the
-   flagship consumer's spacing contract permits a `--lw-*` property on a marketing
-   page and nothing else.
-
-   Placement is `--lw-flow-c` / `--lw-flow-r` for the same reason it is not a
-   `grid-area`: the narrow-width collapse below is then a single rule that stops
-   READING them, rather than a second drawing of the same graph. */
-.lw-flow-graph {
-  grid-auto-flow: unset;
-  grid-template-columns: var(--lw-flow-tracks);
-  grid-template-rows: var(--lw-flow-row-tracks);
-  align-items: stretch;
-  /* `gap: 0`, and it is load-bearing. `.lw-flow`'s 16px gap is right for a chain,
-     where the connector is ONE centred element and the gaps fall outside it. On a
-     lattice the connector is a run of adjacent cells, and a gap between them cuts
-     every line into visibly detached segments — measured on the first render of
-     this card. The gutter TRACK is the spacing here, so there is nothing for a
-     gap to do but break the drawing. */
-  gap: 0;
-  --lw-flow-edge: var(--lw-flow-gutter, 40px);
-}
-.lw-flow-graph > * {
-  grid-column-start: var(--lw-flow-c);
-  grid-row-start: var(--lw-flow-r);
-}
-
-/* The connector tile. Two pseudo-elements, one per axis, sized by which arms the
-   cell has — which is the whole box-drawing vocabulary in eight rules rather
-   than eleven named corner classes. `~=` reads the space-separated token list
-   `Flow` emits from the direction mask. */
-.lw-flow-cell {
-  position: relative;
-  min-inline-size: 0;
-}
-.lw-flow-cell[data-edge~="l"]::before,
-.lw-flow-cell[data-edge~="r"]::before {
-  content: "";
-  position: absolute;
-  inset-block-start: calc(50% - 0.5px);
-  block-size: 1px;
-  inline-size: 50%;
-  background: var(--lw-line);
-}
-.lw-flow-cell[data-edge~="l"]::before { inset-inline-start: 0; }
-.lw-flow-cell[data-edge~="r"]::before { inset-inline-start: 50%; }
-/* Both arms is one rule, not two overlapping halves: a seam at the midpoint is
-   visible at fractional device pixel ratios. Higher specificity, so it wins. */
-.lw-flow-cell[data-edge~="l"][data-edge~="r"]::before { inset-inline-start: 0; inline-size: 100%; }
-
-.lw-flow-cell[data-edge~="u"]::after,
-.lw-flow-cell[data-edge~="d"]::after {
-  content: "";
-  position: absolute;
-  inset-inline-start: calc(50% - 0.5px);
-  inline-size: 1px;
-  block-size: 50%;
-  background: var(--lw-line);
-}
-.lw-flow-cell[data-edge~="u"]::after { inset-block-start: 0; }
-.lw-flow-cell[data-edge~="d"]::after { inset-block-start: 50%; }
-.lw-flow-cell[data-edge~="u"][data-edge~="d"]::after { inset-block-start: 0; block-size: 100%; }
-
-/* A loop back through the trunk. Dashed AND routed below every lane — two
-   signals, because line style alone is not a distinction a reader is obliged to
-   notice, and the successors table names it in words regardless. */
-.lw-flow-cell[data-edge-kind="back"]::before,
-.lw-flow-cell[data-edge-kind="back"]::after {
-  background: repeating-linear-gradient(
-    var(--lw-flow-back-angle, 90deg),
-    var(--lw-line) 0 4px,
-    transparent 4px 8px
-  );
-}
-.lw-flow-cell[data-edge-kind="back"]::after { --lw-flow-back-angle: 180deg; }
-
-/* Node shape vocabulary. Radius and border weight, NEVER colour alone — the same
-   rule the status glyphs follow, for the same reason. */
-.lw-flow-node[data-kind="input"],
-.lw-flow-node[data-kind="output"] { border-radius: var(--lw-radius-pill); }
-.lw-flow-node[data-kind="terminal"] { border-style: dashed; }
-
-/* --lw-bp-md (768px). The lattice is abandoned rather than shrunk: eight node
-   columns on a phone is eight one-word cards, which is the same judgement the
-   chain form already makes one screen up.
-
-   The nodes are emitted in column-major order, so the stack reads in dependency
-   order with no reordering. Branch DEPTH survives as a capped indent — capped,
-   because an uncapped `depth * step` is exactly the shrink-to-fit shape that has
-   escaped this system's viewport four times. Connectivity beyond depth is
-   carried by the successors table, which is in the DOM at every width. */
-@media (max-width: 767.98px) {
-  .lw-flow-graph {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: none;
-    grid-auto-flow: row;
-  }
-  .lw-flow-graph > * {
-    grid-column-start: auto;
-    grid-row-start: auto;
-  }
-  .lw-flow-graph > .lw-flow-cell { display: none; }
-  .lw-flow-graph > .lw-flow-node {
-    margin-inline-start: min(var(--lw-flow-depth, 0) * 12px, 36px);
-  }
+  :is(.lw-page-ground, .lw-page-dark, .lw-aurora, .lw-hero)::before,
+  :is(.lw-page-ground, .lw-page-dark, .lw-aurora, .lw-hero)::after,
+  .lw-logo-track { animation: none; }
+  .lw-logo-rail.marquee { flex-wrap: wrap; overflow: visible; mask: none; }
+  .lw-logo-track + .lw-logo-track { display: none; }
+  .lw-logo-item, a.lw-feature { transition: none; }
+}
+
+@media (forced-colors: active) {
+  :is(.lw-page-ground, .lw-page-dark, .lw-aurora, .lw-hero)::before,
+  :is(.lw-page-ground, .lw-page-dark, .lw-aurora, .lw-hero)::after { display: none; }
+  .lw-logo-item:not(.is-mono, .is-text) { background: CanvasText; }
 }
