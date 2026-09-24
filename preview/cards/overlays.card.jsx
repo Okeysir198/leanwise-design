@@ -76,7 +76,7 @@ lwCard("Overlays", "Every surface paints on --popover; the dialogs are shown non
     </Tooltip>
     </TooltipProvider>
     <Dialog open modal={false}>
-      <DialogContent className={`${PIN} top-8 right-8`} onOpenAutoFocus={(e) => e.preventDefault()}>
+      <DialogContent className={`${PIN} top-32 right-8`} onOpenAutoFocus={(e) => e.preventDefault()}>
         <DialogHeader>
           <DialogTitle>Invite members</DialogTitle>
           <DialogDescription>They join as viewers; change roles later.</DialogDescription>

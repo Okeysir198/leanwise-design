@@ -272,8 +272,8 @@
   .top-4 {
     top: calc(var(--spacing) * 4);
   }
-  .top-8 {
-    top: calc(var(--spacing) * 8);
+  .top-32 {
+    top: calc(var(--spacing) * 32);
   }
   .top-\[1px\] {
     top: 1px;

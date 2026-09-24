@@ -1,5 +1,5 @@
 // @dsCard group="Components" name="Buttons" subtitle="Stock shadcn Button: six variants, four sizes, the amber CTA, loading and disabled" viewport="1000x700"
-const { Button, Spinner } = window.LeanWiseDesign_f2d907;
+const { Button, Spinner, PlusIcon, CopyIcon } = window.LeanWiseDesign_f2d907;
 
 const VARIANTS = ["default", "secondary", "outline", "ghost", "link", "destructive"];
 
@@ -23,8 +23,9 @@ lwCard("Buttons", "Amber is a CTA — one per view: bg-cta text-cta-foreground o
       <div className="flex flex-wrap items-center gap-3">
         <Button size="sm">Small</Button>
         <Button>Default</Button>
+        <Button variant="outline"><CopyIcon />Copy link</Button>
         <Button size="lg">Large</Button>
-        <Button size="icon" variant="outline" aria-label="Add">+</Button>
+        <Button size="icon" variant="outline" aria-label="Add"><PlusIcon /></Button>
         <Button disabled><Spinner />Saving</Button>
         <Button disabled variant="outline">Disabled</Button>
       </div>
