@@ -49,11 +49,11 @@
     "README.md"
   ],
   "scripts": {
-    "gen": "node scripts/gen.mjs",
+    "gen": "node scripts/gen.mjs && node scripts/assets.mjs && node scripts/favicon.mjs",
     "test": "node --test test/*.test.mjs",
     "lint": "node scripts/check.mjs lint",
-    "check": "node scripts/gen.mjs --check && npm test && tsc --noEmit && node scripts/check.mjs lint && node scripts/check.mjs contrast && node scripts/check.mjs presence",
-    "check:ci": "npm run check && npm run check:pack && npm run check:a11y && npm run check:visual -- --self-test",
+    "check": "node scripts/gen.mjs --check && node scripts/assets.mjs --check && node scripts/favicon.mjs --check && npm test && tsc --noEmit && node scripts/check.mjs lint && node scripts/check.mjs contrast && node scripts/check.mjs presence && node scripts/affordance.mjs --self-test && node scripts/affordance.mjs && node scripts/templates.mjs",
+    "check:ci": "npm run check && npm run check:pack && npm run check:a11y && node scripts/forced-colors.mjs && npm run check:visual -- --self-test",
     "check:pack": "node scripts/check.mjs pack",
     "check:a11y": "node scripts/check.mjs a11y",
     "check:visual": "node scripts/check.mjs visual"
@@ -62,12 +62,19 @@
     "@tailwindcss/postcss": "^4.3.3",
     "@types/react": "^19.2.18",
     "axe-core": "^4.10.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "esbuild": "^0.27.7",
+    "lucide-react": "^0.544.0",
     "playwright": "^1.48.0",
     "postcss": "^8.5.25",
+    "radix-ui": "^1.4.3",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
+    "sonner": "^2.0.7",
+    "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.3.3",
+    "tw-animate-css": "^1.4.0",
     "typescript": "^5.6.0"
   },
   "peerDependencies": {

@@ -2,2738 +2,969 @@
   "namespace": "LeanWiseDesign_f2d907",
   "components": [
     {
-      "name": "ActivityFeed",
-      "sourcePath": "components/data/ActivityFeed.jsx"
+      "name": "toast",
+      "sourcePath": "node_modules/sonner"
     },
     {
-      "name": "BUCKET_LABELS",
-      "sourcePath": "components/data/ActivityFeed.jsx"
-    },
-    {
-      "name": "RELATIVE_LABELS",
-      "sourcePath": "components/data/ActivityFeed.jsx"
-    },
-    {
-      "name": "timeAgo",
-      "sourcePath": "components/data/ActivityFeed.jsx"
-    },
-    {
-      "name": "Console",
-      "sourcePath": "components/data/Console.jsx"
-    },
-    {
-      "name": "DataGrid",
-      "sourcePath": "components/data/DataGrid.jsx"
-    },
-    {
-      "name": "EmptyState",
-      "sourcePath": "components/data/EmptyState.jsx"
-    },
-    {
-      "name": "KpiTile",
-      "sourcePath": "components/data/KpiTile.jsx"
-    },
-    {
-      "name": "Pagination",
-      "sourcePath": "components/data/Pagination.jsx"
-    },
-    {
-      "name": "Progress",
-      "sourcePath": "components/data/Progress.jsx"
-    },
-    {
-      "name": "StateView",
-      "sourcePath": "components/data/StateView.jsx"
-    },
-    {
-      "name": "StatMeter",
-      "sourcePath": "components/data/StatMeter.jsx"
-    },
-    {
-      "name": "Table",
-      "sourcePath": "components/data/Table.jsx"
-    },
-    {
-      "name": "Checkbox",
-      "sourcePath": "components/forms/Checkbox.jsx"
-    },
-    {
-      "name": "Combobox",
-      "sourcePath": "components/forms/Combobox.jsx"
-    },
-    {
-      "name": "Field",
-      "sourcePath": "components/forms/Field.jsx"
+      "name": "AppShell",
+      "sourcePath": "preview/src/blocks/app-shell.tsx"
     },
     {
       "name": "FileUpload",
-      "sourcePath": "components/forms/FileUpload.jsx"
+      "sourcePath": "preview/src/blocks/file-upload.tsx"
     },
     {
-      "name": "formatBytes",
-      "sourcePath": "components/forms/FileUpload.jsx"
+      "name": "KpiTile",
+      "sourcePath": "preview/src/blocks/kpi-tile.tsx"
     },
     {
-      "name": "Input",
-      "sourcePath": "components/forms/Input.jsx"
+      "name": "StateView",
+      "sourcePath": "preview/src/blocks/state-view.tsx"
     },
     {
-      "name": "OtpInput",
-      "sourcePath": "components/forms/OtpInput.jsx"
+      "name": "cn",
+      "sourcePath": "preview/src/lib/utils.ts"
     },
     {
-      "name": "PasswordInput",
-      "sourcePath": "components/forms/PasswordInput.jsx"
+      "name": "AlertDialog",
+      "sourcePath": "preview/src/ui/alert-dialog.tsx"
     },
     {
-      "name": "Segmented",
-      "sourcePath": "components/forms/Segmented.jsx"
+      "name": "AlertDialogAction",
+      "sourcePath": "preview/src/ui/alert-dialog.tsx"
     },
     {
-      "name": "Select",
-      "sourcePath": "components/forms/Select.jsx"
+      "name": "AlertDialogCancel",
+      "sourcePath": "preview/src/ui/alert-dialog.tsx"
     },
     {
-      "name": "Switch",
-      "sourcePath": "components/forms/Switch.jsx"
+      "name": "AlertDialogContent",
+      "sourcePath": "preview/src/ui/alert-dialog.tsx"
     },
     {
-      "name": "Textarea",
-      "sourcePath": "components/forms/Textarea.jsx"
+      "name": "AlertDialogDescription",
+      "sourcePath": "preview/src/ui/alert-dialog.tsx"
     },
     {
-      "name": "Cluster",
-      "sourcePath": "components/layout/Cluster.jsx"
+      "name": "AlertDialogFooter",
+      "sourcePath": "preview/src/ui/alert-dialog.tsx"
     },
     {
-      "name": "Container",
-      "sourcePath": "components/layout/Container.jsx"
+      "name": "AlertDialogHeader",
+      "sourcePath": "preview/src/ui/alert-dialog.tsx"
     },
     {
-      "name": "Grid",
-      "sourcePath": "components/layout/Grid.jsx"
+      "name": "AlertDialogMedia",
+      "sourcePath": "preview/src/ui/alert-dialog.tsx"
     },
     {
-      "name": "Section",
-      "sourcePath": "components/layout/Section.jsx"
+      "name": "AlertDialogOverlay",
+      "sourcePath": "preview/src/ui/alert-dialog.tsx"
     },
     {
-      "name": "Split",
-      "sourcePath": "components/layout/Split.jsx"
+      "name": "AlertDialogPortal",
+      "sourcePath": "preview/src/ui/alert-dialog.tsx"
     },
     {
-      "name": "Stack",
-      "sourcePath": "components/layout/Stack.jsx"
+      "name": "AlertDialogTitle",
+      "sourcePath": "preview/src/ui/alert-dialog.tsx"
     },
     {
-      "name": "ArticleCard",
-      "sourcePath": "components/marketing/ArticleCard.jsx"
+      "name": "AlertDialogTrigger",
+      "sourcePath": "preview/src/ui/alert-dialog.tsx"
     },
     {
-      "name": "Byline",
-      "sourcePath": "components/marketing/Byline.jsx"
+      "name": "Alert",
+      "sourcePath": "preview/src/ui/alert.tsx"
     },
     {
-      "name": "CompareTable",
-      "sourcePath": "components/marketing/CompareTable.jsx"
+      "name": "AlertDescription",
+      "sourcePath": "preview/src/ui/alert.tsx"
     },
     {
-      "name": "FeatureGrid",
-      "sourcePath": "components/marketing/FeatureGrid.jsx"
-    },
-    {
-      "name": "Flow",
-      "sourcePath": "components/marketing/Flow.jsx"
-    },
-    {
-      "name": "Hero",
-      "sourcePath": "components/marketing/Hero.jsx"
-    },
-    {
-      "name": "LogoRail",
-      "sourcePath": "components/marketing/LogoRail.jsx"
-    },
-    {
-      "name": "PlanCard",
-      "sourcePath": "components/marketing/PlanCard.jsx"
-    },
-    {
-      "name": "Quote",
-      "sourcePath": "components/marketing/Quote.jsx"
-    },
-    {
-      "name": "SiteFooter",
-      "sourcePath": "components/marketing/SiteFooter.jsx"
-    },
-    {
-      "name": "Steps",
-      "sourcePath": "components/marketing/Steps.jsx"
-    },
-    {
-      "name": "StoryCard",
-      "sourcePath": "components/marketing/StoryCard.jsx"
-    },
-    {
-      "name": "AppBar",
-      "sourcePath": "components/nav/AppBar.jsx"
-    },
-    {
-      "name": "BottomNav",
-      "sourcePath": "components/nav/BottomNav.jsx"
-    },
-    {
-      "name": "Breadcrumbs",
-      "sourcePath": "components/nav/Breadcrumbs.jsx"
-    },
-    {
-      "name": "LocaleSwitcher",
-      "sourcePath": "components/nav/LocaleSwitcher.jsx"
-    },
-    {
-      "name": "NavMenu",
-      "sourcePath": "components/nav/NavMenu.jsx"
-    },
-    {
-      "name": "NavToggle",
-      "sourcePath": "components/nav/NavToggle.jsx"
-    },
-    {
-      "name": "Sidebar",
-      "sourcePath": "components/nav/Sidebar.jsx"
-    },
-    {
-      "name": "Tabs",
-      "sourcePath": "components/nav/Tabs.jsx"
-    },
-    {
-      "name": "THEME_LABELS",
-      "sourcePath": "components/nav/ThemeToggle.jsx"
-    },
-    {
-      "name": "ThemeToggle",
-      "sourcePath": "components/nav/ThemeToggle.jsx"
-    },
-    {
-      "name": "TopBar",
-      "sourcePath": "components/nav/TopBar.jsx"
-    },
-    {
-      "name": "Layer",
-      "sourcePath": "components/overlays/_layer.js"
-    },
-    {
-      "name": "LayerContext",
-      "sourcePath": "components/overlays/_layer.js"
-    },
-    {
-      "name": "Dialog",
-      "sourcePath": "components/overlays/Dialog.jsx"
-    },
-    {
-      "name": "Drawer",
-      "sourcePath": "components/overlays/Drawer.jsx"
-    },
-    {
-      "name": "Menu",
-      "sourcePath": "components/overlays/Menu.jsx"
-    },
-    {
-      "name": "OverlayProvider",
-      "sourcePath": "components/overlays/OverlayProvider.jsx"
-    },
-    {
-      "name": "Popover",
-      "sourcePath": "components/overlays/Popover.jsx"
-    },
-    {
-      "name": "Toast",
-      "sourcePath": "components/overlays/Toast.jsx"
-    },
-    {
-      "name": "ToastRegion",
-      "sourcePath": "components/overlays/Toast.jsx"
-    },
-    {
-      "name": "Tooltip",
-      "sourcePath": "components/overlays/Tooltip.jsx"
+      "name": "AlertTitle",
+      "sourcePath": "preview/src/ui/alert.tsx"
     },
     {
       "name": "Avatar",
-      "sourcePath": "components/primitives/Avatar.jsx"
+      "sourcePath": "preview/src/ui/avatar.tsx"
+    },
+    {
+      "name": "AvatarBadge",
+      "sourcePath": "preview/src/ui/avatar.tsx"
+    },
+    {
+      "name": "AvatarFallback",
+      "sourcePath": "preview/src/ui/avatar.tsx"
+    },
+    {
+      "name": "AvatarGroup",
+      "sourcePath": "preview/src/ui/avatar.tsx"
+    },
+    {
+      "name": "AvatarGroupCount",
+      "sourcePath": "preview/src/ui/avatar.tsx"
+    },
+    {
+      "name": "AvatarImage",
+      "sourcePath": "preview/src/ui/avatar.tsx"
+    },
+    {
+      "name": "Badge",
+      "sourcePath": "preview/src/ui/badge.tsx"
+    },
+    {
+      "name": "badgeVariants",
+      "sourcePath": "preview/src/ui/badge.tsx"
     },
     {
       "name": "Button",
-      "sourcePath": "components/primitives/Button.jsx"
+      "sourcePath": "preview/src/ui/button.tsx"
+    },
+    {
+      "name": "buttonVariants",
+      "sourcePath": "preview/src/ui/button.tsx"
     },
     {
       "name": "Card",
-      "sourcePath": "components/primitives/Card.jsx"
+      "sourcePath": "preview/src/ui/card.tsx"
     },
     {
-      "name": "CardBody",
-      "sourcePath": "components/primitives/Card.jsx"
+      "name": "CardAction",
+      "sourcePath": "preview/src/ui/card.tsx"
     },
     {
-      "name": "CardHead",
-      "sourcePath": "components/primitives/Card.jsx"
+      "name": "CardContent",
+      "sourcePath": "preview/src/ui/card.tsx"
+    },
+    {
+      "name": "CardDescription",
+      "sourcePath": "preview/src/ui/card.tsx"
+    },
+    {
+      "name": "CardFooter",
+      "sourcePath": "preview/src/ui/card.tsx"
+    },
+    {
+      "name": "CardHeader",
+      "sourcePath": "preview/src/ui/card.tsx"
     },
     {
       "name": "CardTitle",
-      "sourcePath": "components/primitives/Card.jsx"
+      "sourcePath": "preview/src/ui/card.tsx"
     },
     {
-      "name": "Chip",
-      "sourcePath": "components/primitives/Chip.jsx"
+      "name": "Checkbox",
+      "sourcePath": "preview/src/ui/checkbox.tsx"
     },
     {
-      "name": "Disclosure",
-      "sourcePath": "components/primitives/Disclosure.jsx"
+      "name": "Dialog",
+      "sourcePath": "preview/src/ui/dialog.tsx"
     },
     {
-      "name": "Eyebrow",
-      "sourcePath": "components/primitives/Eyebrow.jsx"
+      "name": "DialogClose",
+      "sourcePath": "preview/src/ui/dialog.tsx"
     },
     {
-      "name": "Icon",
-      "sourcePath": "components/primitives/Icon.jsx"
+      "name": "DialogContent",
+      "sourcePath": "preview/src/ui/dialog.tsx"
     },
     {
-      "name": "iconNames",
-      "sourcePath": "components/primitives/Icon.jsx"
+      "name": "DialogDescription",
+      "sourcePath": "preview/src/ui/dialog.tsx"
     },
     {
-      "name": "IconNames",
-      "sourcePath": "components/primitives/Icon.jsx"
+      "name": "DialogFooter",
+      "sourcePath": "preview/src/ui/dialog.tsx"
     },
     {
-      "name": "Prose",
-      "sourcePath": "components/primitives/Prose.jsx"
+      "name": "DialogHeader",
+      "sourcePath": "preview/src/ui/dialog.tsx"
+    },
+    {
+      "name": "DialogOverlay",
+      "sourcePath": "preview/src/ui/dialog.tsx"
+    },
+    {
+      "name": "DialogPortal",
+      "sourcePath": "preview/src/ui/dialog.tsx"
+    },
+    {
+      "name": "DialogTitle",
+      "sourcePath": "preview/src/ui/dialog.tsx"
+    },
+    {
+      "name": "DialogTrigger",
+      "sourcePath": "preview/src/ui/dialog.tsx"
+    },
+    {
+      "name": "DropdownMenu",
+      "sourcePath": "preview/src/ui/dropdown-menu.tsx"
+    },
+    {
+      "name": "DropdownMenuCheckboxItem",
+      "sourcePath": "preview/src/ui/dropdown-menu.tsx"
+    },
+    {
+      "name": "DropdownMenuContent",
+      "sourcePath": "preview/src/ui/dropdown-menu.tsx"
+    },
+    {
+      "name": "DropdownMenuGroup",
+      "sourcePath": "preview/src/ui/dropdown-menu.tsx"
+    },
+    {
+      "name": "DropdownMenuItem",
+      "sourcePath": "preview/src/ui/dropdown-menu.tsx"
+    },
+    {
+      "name": "DropdownMenuLabel",
+      "sourcePath": "preview/src/ui/dropdown-menu.tsx"
+    },
+    {
+      "name": "DropdownMenuPortal",
+      "sourcePath": "preview/src/ui/dropdown-menu.tsx"
+    },
+    {
+      "name": "DropdownMenuRadioGroup",
+      "sourcePath": "preview/src/ui/dropdown-menu.tsx"
+    },
+    {
+      "name": "DropdownMenuRadioItem",
+      "sourcePath": "preview/src/ui/dropdown-menu.tsx"
+    },
+    {
+      "name": "DropdownMenuSeparator",
+      "sourcePath": "preview/src/ui/dropdown-menu.tsx"
+    },
+    {
+      "name": "DropdownMenuShortcut",
+      "sourcePath": "preview/src/ui/dropdown-menu.tsx"
+    },
+    {
+      "name": "DropdownMenuSub",
+      "sourcePath": "preview/src/ui/dropdown-menu.tsx"
+    },
+    {
+      "name": "DropdownMenuSubContent",
+      "sourcePath": "preview/src/ui/dropdown-menu.tsx"
+    },
+    {
+      "name": "DropdownMenuSubTrigger",
+      "sourcePath": "preview/src/ui/dropdown-menu.tsx"
+    },
+    {
+      "name": "DropdownMenuTrigger",
+      "sourcePath": "preview/src/ui/dropdown-menu.tsx"
+    },
+    {
+      "name": "Empty",
+      "sourcePath": "preview/src/ui/empty.tsx"
+    },
+    {
+      "name": "EmptyContent",
+      "sourcePath": "preview/src/ui/empty.tsx"
+    },
+    {
+      "name": "EmptyDescription",
+      "sourcePath": "preview/src/ui/empty.tsx"
+    },
+    {
+      "name": "EmptyHeader",
+      "sourcePath": "preview/src/ui/empty.tsx"
+    },
+    {
+      "name": "EmptyMedia",
+      "sourcePath": "preview/src/ui/empty.tsx"
+    },
+    {
+      "name": "EmptyTitle",
+      "sourcePath": "preview/src/ui/empty.tsx"
+    },
+    {
+      "name": "Input",
+      "sourcePath": "preview/src/ui/input.tsx"
+    },
+    {
+      "name": "Label",
+      "sourcePath": "preview/src/ui/label.tsx"
+    },
+    {
+      "name": "Popover",
+      "sourcePath": "preview/src/ui/popover.tsx"
+    },
+    {
+      "name": "PopoverAnchor",
+      "sourcePath": "preview/src/ui/popover.tsx"
+    },
+    {
+      "name": "PopoverContent",
+      "sourcePath": "preview/src/ui/popover.tsx"
+    },
+    {
+      "name": "PopoverDescription",
+      "sourcePath": "preview/src/ui/popover.tsx"
+    },
+    {
+      "name": "PopoverHeader",
+      "sourcePath": "preview/src/ui/popover.tsx"
+    },
+    {
+      "name": "PopoverTitle",
+      "sourcePath": "preview/src/ui/popover.tsx"
+    },
+    {
+      "name": "PopoverTrigger",
+      "sourcePath": "preview/src/ui/popover.tsx"
+    },
+    {
+      "name": "Progress",
+      "sourcePath": "preview/src/ui/progress.tsx"
+    },
+    {
+      "name": "RadioGroup",
+      "sourcePath": "preview/src/ui/radio-group.tsx"
+    },
+    {
+      "name": "RadioGroupItem",
+      "sourcePath": "preview/src/ui/radio-group.tsx"
+    },
+    {
+      "name": "Select",
+      "sourcePath": "preview/src/ui/select.tsx"
+    },
+    {
+      "name": "SelectContent",
+      "sourcePath": "preview/src/ui/select.tsx"
+    },
+    {
+      "name": "SelectGroup",
+      "sourcePath": "preview/src/ui/select.tsx"
+    },
+    {
+      "name": "SelectItem",
+      "sourcePath": "preview/src/ui/select.tsx"
+    },
+    {
+      "name": "SelectLabel",
+      "sourcePath": "preview/src/ui/select.tsx"
+    },
+    {
+      "name": "SelectScrollDownButton",
+      "sourcePath": "preview/src/ui/select.tsx"
+    },
+    {
+      "name": "SelectScrollUpButton",
+      "sourcePath": "preview/src/ui/select.tsx"
+    },
+    {
+      "name": "SelectSeparator",
+      "sourcePath": "preview/src/ui/select.tsx"
+    },
+    {
+      "name": "SelectTrigger",
+      "sourcePath": "preview/src/ui/select.tsx"
+    },
+    {
+      "name": "SelectValue",
+      "sourcePath": "preview/src/ui/select.tsx"
+    },
+    {
+      "name": "Separator",
+      "sourcePath": "preview/src/ui/separator.tsx"
     },
     {
       "name": "Skeleton",
-      "sourcePath": "components/primitives/Skeleton.jsx"
+      "sourcePath": "preview/src/ui/skeleton.tsx"
     },
     {
-      "name": "RAIL_KEY",
-      "sourcePath": "hooks.js"
+      "name": "Toaster",
+      "sourcePath": "preview/src/ui/sonner.tsx"
     },
     {
-      "name": "THEME_EVENT",
-      "sourcePath": "hooks.js"
+      "name": "Spinner",
+      "sourcePath": "preview/src/ui/spinner.tsx"
     },
     {
-      "name": "THEME_KEY",
-      "sourcePath": "hooks.js"
+      "name": "Switch",
+      "sourcePath": "preview/src/ui/switch.tsx"
+    },
+    {
+      "name": "Table",
+      "sourcePath": "preview/src/ui/table.tsx"
+    },
+    {
+      "name": "TableBody",
+      "sourcePath": "preview/src/ui/table.tsx"
+    },
+    {
+      "name": "TableCaption",
+      "sourcePath": "preview/src/ui/table.tsx"
+    },
+    {
+      "name": "TableCell",
+      "sourcePath": "preview/src/ui/table.tsx"
+    },
+    {
+      "name": "TableFooter",
+      "sourcePath": "preview/src/ui/table.tsx"
+    },
+    {
+      "name": "TableHead",
+      "sourcePath": "preview/src/ui/table.tsx"
+    },
+    {
+      "name": "TableHeader",
+      "sourcePath": "preview/src/ui/table.tsx"
+    },
+    {
+      "name": "TableRow",
+      "sourcePath": "preview/src/ui/table.tsx"
+    },
+    {
+      "name": "Tabs",
+      "sourcePath": "preview/src/ui/tabs.tsx"
+    },
+    {
+      "name": "TabsContent",
+      "sourcePath": "preview/src/ui/tabs.tsx"
+    },
+    {
+      "name": "TabsList",
+      "sourcePath": "preview/src/ui/tabs.tsx"
+    },
+    {
+      "name": "tabsListVariants",
+      "sourcePath": "preview/src/ui/tabs.tsx"
+    },
+    {
+      "name": "TabsTrigger",
+      "sourcePath": "preview/src/ui/tabs.tsx"
+    },
+    {
+      "name": "Textarea",
+      "sourcePath": "preview/src/ui/textarea.tsx"
+    },
+    {
+      "name": "Tooltip",
+      "sourcePath": "preview/src/ui/tooltip.tsx"
+    },
+    {
+      "name": "TooltipContent",
+      "sourcePath": "preview/src/ui/tooltip.tsx"
+    },
+    {
+      "name": "TooltipProvider",
+      "sourcePath": "preview/src/ui/tooltip.tsx"
+    },
+    {
+      "name": "TooltipTrigger",
+      "sourcePath": "preview/src/ui/tooltip.tsx"
     }
   ],
   "startingPoints": [],
   "cards": [
     {
-      "path": "components/ai/ai.card.html",
-      "group": "AI",
-      "viewport": "1060x860",
-      "subtitle": "PromptInput, Message, SourceChip, ConfidenceMeter, AgentTrace — the vocabulary a generic system lacks",
-      "name": "AI surfaces"
+      "path": "preview/cards/colors.card.html",
+      "group": "Foundations",
+      "viewport": "1120x1180",
+      "subtitle": "shadcn roles, LeanWise roles and the brand ramp — toggle Dark to see every role re-point",
+      "name": "Colors"
     },
     {
-      "path": "components/ai/ToolCall.card.html",
-      "group": "AI",
-      "viewport": "1120x760",
-      "subtitle": "What the agent DID, what it wants to change, and the way back",
-      "name": "ToolCall, DiffReview, Artifact, Feedback"
+      "path": "preview/cards/shape.card.html",
+      "group": "Foundations",
+      "viewport": "1000x760",
+      "subtitle": "One --radius drives four steps; focus is a solid brand ring",
+      "name": "Radius, borders, focus"
     },
     {
-      "path": "preview/brand-logo.html",
-      "group": "Brand",
-      "subtitle": "Lockup, gradient mark, and the mono mark on three grounds",
-      "name": "Logo"
+      "path": "preview/cards/type.card.html",
+      "group": "Foundations",
+      "viewport": "1000x900",
+      "subtitle": "Geist and Geist Mono, the app scale and the fluid display sizes",
+      "name": "Type scale"
     },
     {
-      "path": "preview/colors-brand.html",
-      "group": "Colors",
-      "subtitle": "Cyan sampled from the mark. Each swatch carries the ink that actually passes on it.",
-      "name": "Brand ramp"
-    },
-    {
-      "path": "preview/colors-cta.html",
-      "group": "Colors",
-      "subtitle": "Amber, anchored on 400 (#FBC42D). One per view. Near-complementary to the cyan, which is what keeps it an accent.",
-      "name": "Accent ramp"
-    },
-    {
-      "path": "preview/colors-dark.html",
-      "group": "Colors",
-      "subtitle": "The same tokens on both grounds — brand changes tier between them, because it has to",
-      "name": "Light vs dark"
-    },
-    {
-      "path": "preview/colors-neutrals.html",
-      "group": "Colors",
-      "subtitle": "The navy anchor, the surface/text scale it grounds — and where the two navies disagree",
-      "name": "Neutrals & navy"
-    },
-    {
-      "path": "preview/colors-status.html",
-      "group": "Colors",
-      "subtitle": "Four states — success, warning (amber), danger, neutral. Each ships a fill, the ink that sits on it, a text tier and a soft tint",
-      "name": "Status"
-    },
-    {
-      "path": "preview/colors-surfaces.html",
-      "group": "Colors",
-      "subtitle": "Every ground a component can paint, against the page it sits on — the mismatch test",
-      "name": "Surfaces on the page"
-    },
-    {
-      "path": "components/data/Chart.card.html",
-      "group": "Data",
-      "viewport": "1080x680",
-      "subtitle": "Eight categorical series that lift a tier on dark — and the numbers behind every picture",
-      "name": "Charts, ActivityFeed"
-    },
-    {
-      "path": "components/data/data.card.html",
-      "group": "Data",
-      "viewport": "1060x1400",
-      "subtitle": "Table, KpiTile, EmptyState, Console — mono tabular numerics, hairline rows",
-      "name": "Data display"
-    },
-    {
-      "path": "components/data/Table-collapse.card.html",
-      "group": "Data",
-      "viewport": "1060x1180",
-      "subtitle": "collapse=\"cards\" under a container query, and the overflow hint every wide table gets",
-      "name": "Tables on phones"
-    },
-    {
-      "path": "components/data/DataGrid.card.html",
-      "group": "Data",
-      "viewport": "1120x720",
-      "subtitle": "Sticky header, pinned and resizable columns, bulk selection, windowed rows",
-      "name": "DataGrid, Pagination, filters"
-    },
-    {
-      "path": "components/data/StateView.card.html",
-      "group": "Data",
-      "viewport": "1080x700",
-      "subtitle": "Empty, loading, error, offline, denied — one set, shipped together",
-      "name": "The five states"
-    },
-    {
-      "path": "components/forms/Combobox.card.html",
-      "group": "Forms",
+      "path": "preview/cards/alert-dialog.card.html",
+      "group": "Components",
       "viewport": "1000x640",
-      "subtitle": "Single, multi and async — focus stays in the input, aria-activedescendant names the row",
-      "name": "Combobox"
+      "subtitle": "AlertDialog rendered open and modal — the one overlay that blocks the page",
+      "name": "Alert dialog"
     },
     {
-      "path": "components/forms/DatePicker.card.html",
-      "group": "Forms",
-      "viewport": "1080x700",
-      "subtitle": "Presets are the point of a range picker; a dropzone is a label around a real input",
-      "name": "DatePicker, FileUpload, Stepper"
+      "path": "preview/cards/buttons.card.html",
+      "group": "Components",
+      "viewport": "1000x700",
+      "subtitle": "Stock shadcn Button: six variants, four sizes, the amber CTA, loading and disabled",
+      "name": "Buttons"
     },
     {
-      "path": "components/forms/forms-states.card.html",
-      "group": "Forms",
-      "viewport": "1000x1240",
-      "subtitle": "Each control × rest / invalid / disabled / checked, both grounds — the state axis the composition card cannot show",
-      "name": "Controls — every state"
+      "path": "preview/cards/data.card.html",
+      "group": "Components",
+      "viewport": "1000x760",
+      "subtitle": "Table with status badges, Progress, Skeleton and Avatar",
+      "name": "Data"
     },
     {
-      "path": "components/forms/forms.card.html",
-      "group": "Forms",
+      "path": "preview/cards/feedback.card.html",
+      "group": "Components",
+      "viewport": "1100x900",
+      "subtitle": "Alert (default, info-soft, destructive), toast, Badge variants, Spinner and Empty",
+      "name": "Feedback"
+    },
+    {
+      "path": "preview/cards/forms.card.html",
+      "group": "Components",
       "viewport": "1000x820",
-      "subtitle": "Field, Input, Select, Textarea, Switch, Checkbox, Segmented — one control face, one focus treatment",
-      "name": "Form controls"
+      "subtitle": "Input, Textarea, Select, Checkbox, RadioGroup, Switch and Label — stock shadcn",
+      "name": "Forms"
     },
     {
-      "path": "components/forms/RichText.card.html",
-      "group": "Forms",
-      "viewport": "1000x600",
-      "subtitle": "The chrome is the system's; the editing engine is deliberately not",
-      "name": "RichText"
-    },
-    {
-      "path": "components/layout/layout.card.html",
-      "group": "Layout",
-      "viewport": "1000x680",
-      "subtitle": "Page, Stack, Cluster, Grid, Split, Section — four names cover almost every arrangement",
-      "name": "Layout primitives"
-    },
-    {
-      "path": "components/marketing/marketing.card.html",
-      "group": "Marketing",
-      "viewport": "1100x1600",
-      "subtitle": "Hero, FeatureGrid, StoryCard, LogoRail, Steps, Quote, Byline, ArticleCard — the no-fabrication rule enforced at runtime",
-      "name": "Marketing composites"
-    },
-    {
-      "path": "components/marketing/ground.card.html",
-      "group": "Marketing",
-      "viewport": "1100x2150",
-      "subtitle": "lw-page-light, lw-page-dark and lw-page-ground side by side — each stage paint-contained so the fixed glow and lattice layers stay inside it, which is what let the three grounds be measured for the first time",
-      "name": "Page grounds"
-    },
-    {
-      "path": "components/marketing/site-chrome.card.html",
-      "group": "Marketing",
-      "viewport": "1100x1180",
-      "subtitle": "AnnounceBar + TopBar + SiteFooter — the sticky-under-sticky contract, and a dark footer that is a band, not a navy tier",
-      "name": "Site chrome"
-    },
-    {
-      "path": "components/marketing/pricing.card.html",
-      "group": "Marketing",
-      "viewport": "1100x1500",
-      "subtitle": "PlanCard + CompareTable — a plan with NO price is a finished card, and every yes/no is two glyphs and a word",
-      "name": "Pricing"
-    },
-    {
-      "path": "components/marketing/flow.card.html",
-      "group": "Marketing",
-      "viewport": "1100x1250",
-      "subtitle": "One owned diagram replacing eight private ones — the static state IS the complete state, and the current node is marked positively, never by dimming the rest",
-      "name": "Flow"
-    },
-    {
-      "path": "components/marketing/flow-graph.card.html",
-      "group": "Marketing",
-      "viewport": "1100x1500",
-      "subtitle": "A fan-in, a fan-out and a loop — laid on a routing lattice, drawn with CSS borders, and carrying an sr-only successors table because the connectivity is the content",
-      "name": "Flow (branching)"
-    },
-    {
-      "path": "preview/motion.html",
-      "group": "Motion",
-      "subtitle": "Durations and easing — and the reduced-motion contract",
-      "name": "Motion"
-    },
-    {
-      "path": "components/nav/BottomNav.card.html",
-      "group": "Navigation",
-      "viewport": "900x620",
-      "subtitle": "Destinations only — and the home indicator reserved from a token, not a magic 34px",
-      "name": "BottomNav"
-    },
-    {
-      "path": "components/nav/CommandPalette.card.html",
-      "group": "Navigation",
-      "viewport": "960x620",
-      "subtitle": "A dialog, not a popover — the same modal shell, and it does not bind ⌘K for you",
-      "name": "CommandPalette"
-    },
-    {
-      "path": "components/nav/nav.card.html",
-      "group": "Navigation",
-      "viewport": "1060x700",
-      "subtitle": "TopBar, Sidebar, Tabs, Breadcrumbs, ThemeToggle — arrow-key tabs, collapsible rail",
+      "path": "preview/cards/navigation.card.html",
+      "group": "Components",
+      "viewport": "1000x640",
+      "subtitle": "Tabs (both list variants), Separator and Avatar in a page header",
       "name": "Navigation"
     },
     {
-      "path": "components/nav/TopBarMobile.card.html",
-      "group": "Navigation",
-      "viewport": "1060x900",
-      "subtitle": "The narrow-bar disclosure: a toggle in the bar, a panel under it, no top layer and no focus trap",
-      "name": "TopBar — mobile nav"
+      "path": "preview/cards/overlays.card.html",
+      "group": "Components",
+      "viewport": "1200x820",
+      "subtitle": "DropdownMenu, Popover, Tooltip and Dialog — rendered open",
+      "name": "Overlays"
     },
     {
-      "path": "components/overlays/Dialog-open.card.html",
-      "group": "Overlays",
-      "viewport": "1000x620",
-      "subtitle": "An open Dialog, measured — centred in the layer, over its own backdrop, focus inside",
-      "name": "Dialog (open)"
+      "path": "preview/cards/app-shell.card.html",
+      "group": "Blocks",
+      "viewport": "1200x760",
+      "subtitle": "Sidebar on the --sidebar roles, a header bar and a content well",
+      "name": "App shell"
     },
     {
-      "path": "components/overlays/Menu.card.html",
-      "group": "Overlays",
-      "viewport": "1000x620",
-      "subtitle": "One floating surface — menu, combobox, date and filter panels are all this plus contents",
-      "name": "Popover, Menu"
+      "path": "preview/cards/blocks.card.html",
+      "group": "Blocks",
+      "viewport": "1100x900",
+      "subtitle": "KpiTile, StateView (loading / empty / error) and FileUpload — built on stock primitives",
+      "name": "KPI, state, upload"
     },
     {
-      "path": "components/overlays/Menu-open.card.html",
-      "group": "Overlays",
-      "viewport": "1000x640",
-      "subtitle": "An open menu and an open popover, side by side — the dark pane's panel paints dark because the layer mirrors the trigger's scope",
-      "name": "Menu, open"
-    },
-    {
-      "path": "components/overlays/Tooltip.card.html",
-      "group": "Overlays",
-      "viewport": "1000x560",
-      "subtitle": "Radix Tooltip — role=tooltip and aria-describedby; the hint is read, not only seen",
-      "name": "Tooltip"
-    },
-    {
-      "path": "components/overlays/overlays.card.html",
-      "group": "Overlays",
-      "viewport": "1000x620",
-      "subtitle": "Radix Dialog in the overlay layer — focus trap, Esc, scroll lock and a click-to-close scrim",
-      "name": "Dialog, Drawer, Toast, Tooltip"
-    },
-    {
-      "path": "components/primitives/Button.card.html",
-      "group": "Primitives",
-      "viewport": "1000x900",
-      "subtitle": "6 variants × rest / hover / loading / disabled, both grounds — the matrix a composition card cannot show",
-      "name": "Button — every state"
-    },
-    {
-      "path": "components/primitives/Icon.card.html",
-      "group": "Primitives",
-      "viewport": "1000x900",
-      "subtitle": "Every glyph with its name, at the three control sizes, on both grounds",
-      "name": "Icon — the whole set"
-    },
-    {
-      "path": "components/primitives/primitives.card.html",
-      "group": "Primitives",
-      "viewport": "1000x1180",
-      "subtitle": "Button, Card, Chip, Eyebrow, Avatar, Skeleton mounted from _ds_bundle.js",
-      "name": "Primitives"
-    },
-    {
-      "path": "components/primitives/media.card.html",
-      "group": "Primitives",
-      "viewport": "1120x1120",
-      "subtitle": "The mat under a screenshot, whose own colours cannot follow the theme",
-      "name": "Figure & media plate"
-    },
-    {
-      "path": "components/primitives/prose.card.html",
-      "group": "Primitives",
-      "viewport": "1060x1500",
-      "subtitle": "The read surface for sanitized markdown, and the FAQ row that needs no JavaScript",
-      "name": "Prose & Disclosure"
-    },
-    {
-      "path": "preview/density.html",
-      "group": "Spacing",
-      "viewport": "980x560",
-      "subtitle": "One scale cannot serve a hero and a forty-row grid",
-      "name": "Density"
-    },
-    {
-      "path": "preview/spacing-radii.html",
-      "group": "Spacing",
-      "subtitle": "A 4px-based geometric scale — tight on controls, soft only on surfaces",
-      "name": "Radii"
-    },
-    {
-      "path": "preview/spacing-scale.html",
-      "group": "Spacing",
-      "subtitle": "The rhythm every layout composes from",
-      "name": "Spacing scale"
-    },
-    {
-      "path": "preview/spacing-shadows.html",
-      "group": "Spacing",
-      "subtitle": "Shadow tiers on a light ground",
-      "name": "Elevation"
-    },
-    {
-      "path": "preview/type-eyebrow.html",
-      "group": "Type",
-      "subtitle": "The signature label — mono, uppercase, wide-tracked, with the mark's hexagon",
-      "name": "Eyebrow"
-    },
-    {
-      "path": "preview/type-scale.html",
-      "group": "Type",
-      "subtitle": "Geist, self-hosted — every role with its measured size, weight and leading",
-      "name": "Type scale"
+      "path": "preview/cards/charts.card.html",
+      "group": "Charts",
+      "viewport": "1000x720",
+      "subtitle": "--chart-1..5 as swatches and a grouped bar chart; the order is the series order",
+      "name": "Chart palette"
     }
   ],
   "templates": [
     {
-      "name": "AI product app shell",
-      "description": "Branded collapsible rail with grouped session history, breadcrumbs and new-chat in the bar, citations in a dialog, provenance panel on demand — the VSS/Ask starting point.",
-      "folder": "templates/ai-app-shell",
-      "entryPath": "templates/ai-app-shell/AiAppShell.dc.html",
-      "thumbnail": {
-        "path": "templates/ai-app-shell/.thumbnail",
-        "kind": "captured"
-      }
-    },
-    {
-      "name": "Auth screens",
-      "description": "Sign in, SSO, two-factor, accept-invite and password reset — five screens on one split layout, with the error and locked-out states most auth flows leave until last.",
+      "name": "Sign in",
+      "description": "Split sign-in screen: email and password, SSO, an inline error that names the lockout rule, and a brand panel on wide screens.",
       "folder": "templates/auth",
-      "entryPath": "templates/auth/Auth.dc.html",
-      "thumbnail": {
-        "path": "templates/auth/.thumbnail",
-        "kind": "captured"
-      }
+      "entryPath": "templates/auth/Auth.dc.html"
     },
     {
-      "name": "Dashboard / analytics",
-      "description": "KPI tiles, a sortable data table, a run log and an empty state — mono tabular numerics throughout.",
+      "name": "App dashboard",
+      "description": "Sidebar app shell with KPI tiles, a chart on the chart palette, and a recent-activity list — the home screen of a LeanWise product.",
       "folder": "templates/dashboard",
-      "entryPath": "templates/dashboard/Dashboard.dc.html",
-      "thumbnail": {
-        "path": "templates/dashboard/.thumbnail",
-        "kind": "captured"
-      }
+      "entryPath": "templates/dashboard/Dashboard.dc.html"
     },
     {
-      "name": "Data export & reports",
-      "description": "The pattern for work that takes longer than a click: queue it, show real progress, deliver it somewhere, and make a failure retryable without rebuilding the request.",
-      "folder": "templates/export-report",
-      "entryPath": "templates/export-report/ExportReport.dc.html",
-      "thumbnail": {
-        "path": "templates/export-report/.thumbnail",
-        "kind": "captured"
-      }
+      "name": "Data table page",
+      "description": "A list page: title and primary action, search and status filter, a table with status badges and row selection, and pagination.",
+      "folder": "templates/data-table",
+      "entryPath": "templates/data-table/DataTable.dc.html"
     },
     {
-      "name": "Docs / spec page",
-      "description": "Three-column documentation page — nav rail, prose with code blocks and callouts, on-this-page index.",
-      "folder": "templates/docs-page",
-      "entryPath": "templates/docs-page/DocsPage.dc.html",
-      "thumbnail": {
-        "path": "templates/docs-page/.thumbnail",
-        "kind": "captured"
-      }
-    },
-    {
-      "name": "List → detail → edit",
-      "description": "The most common screen in any back-office: a filtered list, a detail view, an edit mode with an unsaved-changes guard, bulk actions and role-gated destructive controls.",
-      "folder": "templates/list-detail",
-      "entryPath": "templates/list-detail/ListDetail.dc.html",
-      "thumbnail": {
-        "path": "templates/list-detail/.thumbnail",
-        "kind": "captured"
-      }
-    },
-    {
-      "name": "Marketing landing page",
-      "description": "One continuous ground, light or dark, carrying the honeycomb left and the mark right with ambient drift; left-aligned hero, three guarantees, grounded-answer proof, use cases, one CTA. Placeholder cop",
+      "name": "Marketing landing",
+      "description": "Site header, a display-size hero with the one amber CTA, a feature grid, a navy proof band and a footer.",
       "folder": "templates/marketing-landing",
-      "entryPath": "templates/marketing-landing/MarketingLanding.dc.html",
-      "thumbnail": {
-        "path": "templates/marketing-landing/.thumbnail",
-        "kind": "captured"
-      }
+      "entryPath": "templates/marketing-landing/MarketingLanding.dc.html"
     },
     {
-      "name": "Onboarding wizard",
-      "description": "A multi-step form that validates per step, never loses work going back, resumes where you left off, and ends on a review screen that can still reach every field.",
-      "folder": "templates/onboarding-wizard",
-      "entryPath": "templates/onboarding-wizard/OnboardingWizard.dc.html",
-      "thumbnail": {
-        "path": "templates/onboarding-wizard/.thumbnail",
-        "kind": "captured"
-      }
-    },
-    {
-      "name": "Search + filter + results",
-      "description": "Faceted search with applied-filter chips, three distinct result states (no query / no results / results), and the empty-vs-no-results distinction most products get wrong.",
-      "folder": "templates/search-results",
-      "entryPath": "templates/search-results/SearchResults.dc.html",
-      "thumbnail": {
-        "path": "templates/search-results/.thumbnail",
-        "kind": "captured"
-      }
-    },
-    {
-      "name": "Settings & forms",
-      "description": "Sectioned settings page — Field/Input/Select/Switch with help, error and destructive-action patterns.",
+      "name": "Settings form",
+      "description": "Workspace settings: sectioned form with labelled fields, switches, a destructive zone, and a sticky save bar that appears once something changes.",
       "folder": "templates/settings",
-      "entryPath": "templates/settings/Settings.dc.html",
-      "thumbnail": {
-        "path": "templates/settings/.thumbnail",
-        "kind": "captured"
-      }
+      "entryPath": "templates/settings/Settings.dc.html"
     }
   ],
   "hasThumbnailHtml": true,
   "globalCssPaths": [
     "fonts.css",
-    "tokens.css"
+    "preview/preview.css"
   ],
   "tokens": [
     {
-      "name": "--lw-font-sans",
-      "value": "\"Geist\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif",
+      "name": "--radius",
+      "value": "0.625rem",
+      "kind": "radius",
+      "definedIn": "theme.css"
+    },
+    {
+      "name": "--font-sans",
+      "value": "\"Geist\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif",
       "kind": "fontFamily",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-font-mono",
-      "value": "\"Geist Mono\", ui-monospace, SFMono-Regular, \"SF Mono\", Menlo, monospace",
+      "name": "--font-mono",
+      "value": "\"Geist Mono\", ui-monospace, SFMono-Regular, Menlo, monospace",
       "kind": "fontFamily",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-font-display",
-      "value": "var(--lw-font-sans)",
-      "kind": "fontFamily",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-text-display",
-      "value": "clamp(40px, 6vw, 84px)",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-text-h1",
-      "value": "clamp(38px, 5vw, 72px)",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-text-h2",
-      "value": "clamp(28px, 3.4vw, 48px)",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-text-h3",
-      "value": "clamp(20px, 2vw, 27px)",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-text-lead",
-      "value": "clamp(16px, 1.2vw, 19px)",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-text-body",
-      "value": "16px",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-text-sm",
-      "value": "14px",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-text-xs",
-      "value": "12.5px",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-text-2xs",
-      "value": "12px",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-text-eyebrow",
-      "value": "var(--lw-text-2xs)",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-fw-regular",
-      "value": "400",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-fw-medium",
-      "value": "500",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-fw-semibold",
-      "value": "600",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-fw-bold",
-      "value": "700",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-lh-tight",
-      "value": "1.05",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-lh-snug",
-      "value": "1.2",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-lh-normal",
-      "value": "1.55",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-lh-relaxed",
-      "value": "1.7",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-tracking-tighter",
-      "value": "-0.035em",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-tracking-tight",
-      "value": "-0.022em",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-tracking-wide",
-      "value": "0.02em",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-tracking-eyebrow",
-      "value": "0.14em",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-word-spacing-caps",
-      "value": "0.10em",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-brand-50-c",
-      "value": "186.0 68.0% 96.0%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-brand-100-c",
-      "value": "185.5 66.0% 90.0%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-brand-200-c",
-      "value": "185.0 64.0% 80.0%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-brand-300-c",
-      "value": "184.5 60.0% 64.0%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-brand-400-c",
-      "value": "183.5 62.0% 47.5%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-brand-500-c",
-      "value": "185.0 82.0% 26.5%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-brand-600-c",
-      "value": "186.0 86.0% 21.0%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-brand-700-c",
-      "value": "187.0 88.0% 16.5%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-brand-50",
-      "value": "hsl(var(--lw-brand-50-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-brand-100",
-      "value": "hsl(var(--lw-brand-100-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-brand-200",
-      "value": "hsl(var(--lw-brand-200-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-brand-300",
-      "value": "hsl(var(--lw-brand-300-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-brand-400",
-      "value": "hsl(var(--lw-brand-400-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-brand-500",
-      "value": "hsl(var(--lw-brand-500-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-brand-600",
-      "value": "hsl(var(--lw-brand-600-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-brand-700",
-      "value": "hsl(var(--lw-brand-700-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-navy-700-c",
-      "value": "205.2 97.0% 23.5%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-navy-900-c",
-      "value": "213.0 72.0% 15.0%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-navy-deep-c",
-      "value": "217.0 66.0% 10.5%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-navy-paper-c",
-      "value": "220   48.8% 8.4%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-navy-raised-c",
-      "value": "221.4 46.0% 12.4%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-navy-inset-c",
-      "value": "221.1 45.2% 16.5%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-navy-inset-2-c",
-      "value": "221.1 45.2% 19.0%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-on-navy-1-c",
-      "value": "215   33.3% 92.9%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-on-navy-2-c",
-      "value": "218.7 21.7% 72.0%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-on-navy-3-c",
-      "value": "218.5 17.5% 58.8%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-on-navy-4-c",
-      "value": "218.5 17.5% 46.0%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-navy-line-1-c",
-      "value": "220.5 38.7% 21.8%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-navy-line-2-c",
-      "value": "220.5 38.7% 28.0%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-navy-line-control-c",
-      "value": "220.5 38.7% 48.0%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-logo-cyan-c",
-      "value": "187.6 88.0% 32.0%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-logo-cyan",
-      "value": "hsl(var(--lw-logo-cyan-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-logo-navy-ondark-c",
-      "value": "201.0 63.7% 57.8%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-logo-navy-ondark",
-      "value": "hsl(var(--lw-logo-navy-ondark-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-logo-cyan-ondark-c",
-      "value": "185.9 82.1% 75.9%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-logo-cyan-ondark",
-      "value": "hsl(var(--lw-logo-cyan-ondark-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-art-lattice-ondark-c",
-      "value": "185.9 71.1% 63.3%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-art-lattice-ondark",
-      "value": "hsl(var(--lw-art-lattice-ondark-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-art-mark-navy-c",
-      "value": "205.7 96.3% 21.4%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-art-mark-navy",
-      "value": "hsl(var(--lw-art-mark-navy-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-art-mark-navy-ondark-c",
-      "value": "204.8 69.7% 38.8%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-art-mark-navy-ondark",
-      "value": "hsl(var(--lw-art-mark-navy-ondark-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-art-mark-cyan-c",
-      "value": "185.3 79.3% 47.3%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-art-mark-cyan",
-      "value": "hsl(var(--lw-art-mark-cyan-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-art-mark-cyan-ondark-c",
-      "value": "185.9 83.6% 78.4%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-art-mark-cyan-ondark",
-      "value": "hsl(var(--lw-art-mark-cyan-ondark-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-sys-mac-red-c",
-      "value": "4.0 100% 67.5%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-sys-mac-amber-c",
-      "value": "41.0 99.0% 61.0%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-sys-mac-green-c",
-      "value": "135.0 66.0% 47.0%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-sys-mac-red",
-      "value": "hsl(var(--lw-sys-mac-red-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-sys-mac-amber",
-      "value": "hsl(var(--lw-sys-mac-amber-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-sys-mac-green",
-      "value": "hsl(var(--lw-sys-mac-green-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-navy-700",
-      "value": "hsl(var(--lw-navy-700-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-navy-900",
-      "value": "hsl(var(--lw-navy-900-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-navy-deep",
-      "value": "hsl(var(--lw-navy-deep-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-gradient-brand",
-      "value": "linear-gradient(135deg, hsl(var(--lw-navy-700-c)) 0%, hsl(var(--lw-brand-500-c)) 100%)",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-cta-300-c",
-      "value": "45.0 97.0% 70.0%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-cta-400-c",
-      "value": "44.0 96.0% 58.0%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-cta-500-c",
-      "value": "43.0 98.0% 50.0%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-cta-600-c",
-      "value": "38.0 95.0% 44.0%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-cta-soft-c",
-      "value": "46.0 100%  90.0%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-cta-700-c",
-      "value": "30.0 88.0% 27.0%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-cta-300",
-      "value": "hsl(var(--lw-cta-300-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-cta-400",
-      "value": "hsl(var(--lw-cta-400-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-cta-500",
-      "value": "hsl(var(--lw-cta-500-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-cta-600",
-      "value": "hsl(var(--lw-cta-600-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-cta-700",
-      "value": "hsl(var(--lw-cta-700-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-cta-soft",
-      "value": "hsl(var(--lw-cta-soft-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-surface-0-c",
-      "value": "0     0%    100%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-surface-1-c",
-      "value": "38    16.0% 96.4%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-surface-2-c",
-      "value": "38    13.0% 92.9%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-surface-3-c",
-      "value": "38    12.0% 89.5%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-surface-0",
-      "value": "hsl(var(--lw-surface-0-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-surface-1",
-      "value": "hsl(var(--lw-surface-1-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-surface-2",
-      "value": "hsl(var(--lw-surface-2-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-surface-3",
-      "value": "hsl(var(--lw-surface-3-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-text-1-c",
-      "value": "220   48.8% 8.4%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-text-2-c",
-      "value": "215   13.8% 34.1%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-text-3-c",
-      "value": "220    8.9% 41.5%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-text-4-c",
-      "value": "217.9 10.6% 64.9%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-text-1",
-      "value": "hsl(var(--lw-text-1-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-text-2",
-      "value": "hsl(var(--lw-text-2-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-text-3",
-      "value": "hsl(var(--lw-text-3-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-text-4",
-      "value": "hsl(var(--lw-text-4-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-border-1-c",
-      "value": "38  10.0% 85.8%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-border-2-c",
-      "value": "38   8.0% 77.5%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-border-control-c",
-      "value": "216 12.2% 57.0%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-border-1",
-      "value": "hsl(var(--lw-border-1-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-border-2",
-      "value": "hsl(var(--lw-border-2-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-success-c",
-      "value": "142.1 76.2% 36.3%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-success-soft-c",
-      "value": "140.6 84.2% 92.5%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-warning-c",
-      "value": "37.0  98.0% 50.0%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-warning-soft-c",
-      "value": "48.0  96.5% 88.8%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-danger-c",
-      "value": "0     72.2% 50.6%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-danger-soft-c",
-      "value": "0     93.3% 94.1%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-info-c",
-      "value": "258.0 52.0% 46.0%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-info-soft-c",
-      "value": "258.0 84.0% 95.0%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-neutral-c",
-      "value": "215.0 25.0% 34.0%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-neutral-soft-c",
-      "value": "213.0 30.0% 95.0%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-success-text-c",
-      "value": "142.8 64.2% 24.1%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-warning-text-c",
-      "value": "25.0  92.0% 28.0%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-danger-text-c",
-      "value": "0     73.7% 41.8%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-neutral-text-c",
-      "value": "215.0 30.0% 26.0%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-info-text-c",
-      "value": "258.0 58.0% 38.0%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-neutral",
-      "value": "hsl(var(--lw-neutral-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-neutral-soft",
-      "value": "hsl(var(--lw-neutral-soft-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-neutral-on",
-      "value": "hsl(var(--lw-neutral-on-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-success",
-      "value": "hsl(var(--lw-success-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-warning",
-      "value": "hsl(var(--lw-warning-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-danger",
-      "value": "hsl(var(--lw-danger-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-info",
-      "value": "hsl(var(--lw-info-c))",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-on-dark",
-      "value": "#FFFFFF",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-on-dark-1",
-      "value": "rgba(255, 255, 255, 0.92)",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-on-dark-2",
-      "value": "rgba(255, 255, 255, 0.70)",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-on-dark-3",
-      "value": "rgba(255, 255, 255, 0.48)",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-on-dark-wash",
-      "value": "rgba(255, 255, 255, 0.03)",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-on-dark-fill",
-      "value": "rgba(255, 255, 255, 0.06)",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-on-dark-fill-strong",
-      "value": "rgba(255, 255, 255, 0.16)",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-on-dark-line",
-      "value": "rgba(255, 255, 255, 0.14)",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-on-dark-line-strong",
-      "value": "rgba(255, 255, 255, 0.22)",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-on-dark-border",
-      "value": "rgba(255, 255, 255, 0.22)",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-on-dark-border-hover",
-      "value": "rgba(255, 255, 255, 0.45)",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-space-4",
-      "value": "4px",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-space-8",
-      "value": "8px",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-space-12",
-      "value": "12px",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-space-16",
-      "value": "16px",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-space-20",
-      "value": "20px",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-space-24",
-      "value": "24px",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-space-32",
-      "value": "32px",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-space-40",
-      "value": "40px",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-space-48",
-      "value": "48px",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-space-64",
-      "value": "64px",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-space-80",
-      "value": "80px",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-space-96",
-      "value": "96px",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-control-h-sm",
-      "value": "32px",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-control-h-md",
-      "value": "40px",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-control-h-lg",
-      "value": "48px",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-field-pad-x",
-      "value": "var(--lw-space-12)",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-row-h",
-      "value": "44px",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-cell-pad-y",
-      "value": "var(--lw-space-12)",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-card-pad",
-      "value": "var(--lw-space-24)",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-stack-gap",
-      "value": "var(--lw-space-16)",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-btn-pad-x-sm",
-      "value": "12px",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-btn-pad-x",
-      "value": "18px",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-btn-pad-x-lg",
-      "value": "24px",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-btn-gap",
-      "value": "8px",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-btn-tracking",
-      "value": "-0.005em",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-btn-icon-sm",
-      "value": "14px",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-btn-icon",
-      "value": "16px",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-btn-icon-lg",
-      "value": "18px",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-chip-pad-y",
-      "value": "5px",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-chip-pad-x",
-      "value": "9px",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-chip-gap",
-      "value": "5px",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-chip-text",
-      "value": "var(--lw-text-2xs)",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-chip-dot",
-      "value": "5px",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-th-text",
-      "value": "var(--lw-text-2xs)",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-th-tracking",
-      "value": "0.12em",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-cell-pad-x",
-      "value": "var(--lw-space-16)",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-switch-w",
-      "value": "38px",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-switch-h",
-      "value": "22px",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-switch-thumb",
-      "value": "16px",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-switch-inset",
-      "value": "2px",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-switch-gap",
-      "value": "10px",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-check-size",
-      "value": "16px",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-radius-xs",
-      "value": "2px",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-radius-sm",
-      "value": "4px",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-radius-md",
-      "value": "8px",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-radius-lg",
-      "value": "12px",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-radius-xl",
-      "value": "16px",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-radius-2xl",
-      "value": "24px",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-radius-pill",
-      "value": "999px",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-shadow-ink-c",
-      "value": "30 10% 10%",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-shadow-xs",
-      "value": "0 1px 0 hsl(var(--lw-shadow-ink-c) / 0.05)",
-      "kind": "shadow",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-shadow-sm",
-      "value": "0 1px 2px hsl(var(--lw-shadow-ink-c) / 0.06)",
-      "kind": "shadow",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-shadow-md",
-      "value": "0 6px 20px -8px hsl(var(--lw-shadow-ink-c) / 0.14), 0 1px 2px hsl(var(--lw-shadow-ink-c) / 0.05)",
-      "kind": "shadow",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-shadow-lg",
-      "value": "0 24px 56px -22px hsl(var(--lw-shadow-ink-c) / 0.22), 0 2px 6px hsl(var(--lw-shadow-ink-c) / 0.06)",
-      "kind": "shadow",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-shadow-xl",
-      "value": "0 32px 64px -24px hsl(var(--lw-shadow-ink-c) / 0.30), 0 4px 12px hsl(var(--lw-shadow-ink-c) / 0.08)",
-      "kind": "shadow",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-focus-ring",
-      "value": "0 0 0 2px var(--lw-brand-500)",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-focus-ring-danger",
-      "value": "0 0 0 2px var(--lw-danger-on)",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-brand-glow",
-      "value": "0 8px 24px -6px hsl(var(--lw-brand-500-c) / 0.25)",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-dur-xs",
-      "value": "100ms",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-dur-sm",
-      "value": "180ms",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-dur-md",
-      "value": "300ms",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-dur-lg",
-      "value": "500ms",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-dur-xl",
-      "value": "800ms",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-ease-out",
-      "value": "cubic-bezier(0.22, 1, 0.36, 1)",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-ease-in",
-      "value": "cubic-bezier(0.4, 0, 1, 1)",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-ease-in-out",
-      "value": "cubic-bezier(0.4, 0, 0.2, 1)",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-ease-emphasis",
-      "value": "cubic-bezier(0.16, 1, 0.3, 1)",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-ease-spring",
-      "value": "cubic-bezier(0.34, 1.56, 0.64, 1)",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-dur-loop-fast",
-      "value": "1.1s",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-dur-loop",
-      "value": "1.5s",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-dur-loop-slow",
-      "value": "2.4s",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-dur-ambient",
-      "value": "24s",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-dur-ambient-slow",
-      "value": "40s",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-ambient-play",
-      "value": "paused",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-topbar-h",
-      "value": "56px",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-anchor-offset",
-      "value": "calc(var(--lw-topbar-h) + var(--lw-space-8))",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-bp-xs",
-      "value": "360px",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-bp-sm",
-      "value": "480px",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-bp-md",
-      "value": "768px",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-bp-lg",
-      "value": "1024px",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-bp-xl",
-      "value": "1280px",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-bp-2xl",
-      "value": "1536px",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-col-max",
-      "value": "1200px",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-measure-prose",
-      "value": "68ch",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-measure",
-      "value": "60ch",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-measure-sm",
-      "value": "46ch",
-      "kind": "dimension",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-col-page",
-      "value": "1400px",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-pad-x",
-      "value": "clamp(20px, 4vw, 56px)",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-z-base",
-      "value": "0",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-z-local-1",
-      "value": "1",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-z-local-2",
-      "value": "2",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-z-local-3",
-      "value": "3",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-z-local-4",
-      "value": "4",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-z-raised",
-      "value": "10",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-z-nav",
-      "value": "50",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-z-overlay",
-      "value": "90",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-z-toast",
-      "value": "100",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-z-modal",
-      "value": "110",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-bg-c",
-      "value": "var(--lw-surface-0-c)",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-bg-subtle-c",
-      "value": "var(--lw-surface-1-c)",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-bg-muted-c",
-      "value": "var(--lw-surface-2-c)",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-bg-inset-c",
-      "value": "var(--lw-surface-3-c)",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-fg-c",
-      "value": "var(--lw-text-1-c)",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-fg-muted-c",
-      "value": "var(--lw-text-2-c)",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-fg-subtle-c",
-      "value": "var(--lw-text-3-c)",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-fg-faint-c",
-      "value": "var(--lw-text-4-c)",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-line-c",
-      "value": "var(--lw-border-1-c)",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-line-strong-c",
-      "value": "var(--lw-border-2-c)",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-line-control-c",
-      "value": "var(--lw-border-control-c)",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-brand-text-c",
-      "value": "var(--lw-brand-500-c)",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-cta-text-c",
-      "value": "var(--lw-cta-700-c)",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-brand-on-c",
-      "value": "var(--lw-brand-700-c)",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-success-on-c",
-      "value": "var(--lw-success-text-c)",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-warning-on-c",
-      "value": "var(--lw-warning-text-c)",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-danger-on-c",
-      "value": "var(--lw-danger-text-c)",
+      "name": "--brand-50",
+      "value": "oklch(0.982 0.013 211)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-info-on-c",
-      "value": "var(--lw-info-text-c)",
+      "name": "--brand-100",
+      "value": "oklch(0.958 0.028 211)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-neutral-on-c",
-      "value": "var(--lw-neutral-text-c)",
+      "name": "--brand-200",
+      "value": "oklch(0.915 0.05 211)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-on-brand-c",
-      "value": "0 0% 100%",
+      "name": "--brand-300",
+      "value": "oklch(0.85 0.075 211)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-on-cta-c",
-      "value": "220 48.8% 8.4%",
+      "name": "--brand-400",
+      "value": "oklch(0.76 0.095 211)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-on-status-c",
-      "value": "220 48.8% 8.4%",
+      "name": "--brand-500",
+      "value": "#0A8799",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-on-danger-c",
-      "value": "0 0% 100%",
+      "name": "--brand-600",
+      "value": "#0C727B",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-on-neutral-c",
-      "value": "0 0% 100%",
+      "name": "--brand-700",
+      "value": "oklch(0.43 0.073 212)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-on-info-c",
-      "value": "0 0% 100%",
+      "name": "--brand-800",
+      "value": "oklch(0.4 0.073 222)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-bg",
-      "value": "hsl(var(--lw-bg-c))",
+      "name": "--brand-900",
+      "value": "#024576",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-bg-subtle",
-      "value": "hsl(var(--lw-bg-subtle-c))",
+      "name": "--background",
+      "value": "oklch(1 0 0)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-bg-muted",
-      "value": "hsl(var(--lw-bg-muted-c))",
+      "name": "--foreground",
+      "value": "oklch(0.25 0.05 245)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-bg-inset",
-      "value": "hsl(var(--lw-bg-inset-c))",
+      "name": "--card",
+      "value": "oklch(1 0 0)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-fg",
-      "value": "hsl(var(--lw-fg-c))",
+      "name": "--card-foreground",
+      "value": "oklch(0.25 0.05 245)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-fg-muted",
-      "value": "hsl(var(--lw-fg-muted-c))",
+      "name": "--popover",
+      "value": "oklch(1 0 0)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-fg-subtle",
-      "value": "hsl(var(--lw-fg-subtle-c))",
+      "name": "--popover-foreground",
+      "value": "oklch(0.25 0.05 245)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-fg-faint",
-      "value": "hsl(var(--lw-fg-faint-c))",
+      "name": "--primary",
+      "value": "#0C727B",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-line",
-      "value": "hsl(var(--lw-line-c))",
+      "name": "--primary-foreground",
+      "value": "oklch(1 0 0)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-line-strong",
-      "value": "hsl(var(--lw-line-strong-c))",
+      "name": "--secondary",
+      "value": "#EEFAFC",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-line-control",
-      "value": "hsl(var(--lw-line-control-c))",
+      "name": "--secondary-foreground",
+      "value": "oklch(0.4 0.073 222)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-brand-text",
-      "value": "hsl(var(--lw-brand-text-c))",
+      "name": "--muted",
+      "value": "oklch(0.975 0.006 228)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-cta-text",
-      "value": "hsl(var(--lw-cta-text-c))",
+      "name": "--muted-foreground",
+      "value": "oklch(0.48 0.035 235)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-on-brand",
-      "value": "hsl(var(--lw-on-brand-c))",
+      "name": "--accent",
+      "value": "#D5F3F6",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-on-cta",
-      "value": "hsl(var(--lw-on-cta-c))",
+      "name": "--accent-foreground",
+      "value": "oklch(0.4 0.073 222)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-on-status",
-      "value": "hsl(var(--lw-on-status-c))",
+      "name": "--destructive",
+      "value": "oklch(0.53 0.19 27)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-on-danger",
-      "value": "hsl(var(--lw-on-danger-c))",
+      "name": "--destructive-foreground",
+      "value": "oklch(1 0 0)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-on-neutral",
-      "value": "hsl(var(--lw-on-neutral-c))",
+      "name": "--border",
+      "value": "oklch(0.9 0.018 211)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-scrim",
-      "value": "hsl(var(--lw-bg-c) / 0.55)",
+      "name": "--input",
+      "value": "oklch(0.64 0.045 211)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-brand-soft",
-      "value": "hsl(var(--lw-brand-500-c) / 0.14)",
+      "name": "--ring",
+      "value": "#0C727B",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-brand-line",
-      "value": "hsl(var(--lw-brand-500-c) / 0.34)",
+      "name": "--cta",
+      "value": "#FCB603",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-brand-on",
-      "value": "hsl(var(--lw-brand-on-c))",
+      "name": "--cta-foreground",
+      "value": "#024576",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-success-on",
-      "value": "hsl(var(--lw-success-on-c))",
+      "name": "--navy",
+      "value": "#024576",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-success-soft",
-      "value": "hsl(var(--lw-success-soft-c))",
+      "name": "--navy-foreground",
+      "value": "oklch(1 0 0)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-warning-on",
-      "value": "hsl(var(--lw-warning-on-c))",
+      "name": "--success",
+      "value": "oklch(0.53 0.11 165)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-warning-soft",
-      "value": "hsl(var(--lw-warning-soft-c))",
+      "name": "--success-foreground",
+      "value": "oklch(1 0 0)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-danger-on",
-      "value": "hsl(var(--lw-danger-on-c))",
+      "name": "--warning",
+      "value": "#FC9D03",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-info-on",
-      "value": "hsl(var(--lw-info-on-c))",
+      "name": "--warning-foreground",
+      "value": "#024576",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-info-soft",
-      "value": "hsl(var(--lw-info-soft-c))",
+      "name": "--info",
+      "value": "oklch(0.5 0.11 240)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-danger-soft",
-      "value": "hsl(var(--lw-danger-soft-c))",
+      "name": "--info-foreground",
+      "value": "oklch(1 0 0)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-chart-grid",
-      "value": "var(--lw-line)",
+      "name": "--chart-1",
+      "value": "#0C727B",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-chart-axis",
-      "value": "var(--lw-fg-subtle)",
+      "name": "--chart-2",
+      "value": "#024576",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-chart-1",
-      "value": "hsl(184.8 81.9% 27.6%)",
+      "name": "--chart-3",
+      "value": "#FCB603",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-chart-2",
-      "value": "hsl(205.1 93.1% 24.2%)",
+      "name": "--chart-4",
+      "value": "oklch(0.52 0.17 15)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-chart-3",
-      "value": "hsl(42.6 97.0% 46.2%)",
+      "name": "--chart-5",
+      "value": "oklch(0.56 0.13 125)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-chart-4",
-      "value": "hsl(262.1 51.0% 49.0%)",
+      "name": "--sidebar",
+      "value": "oklch(1 0 0)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-chart-5",
-      "value": "hsl(147.0 31.1% 47.8%)",
+      "name": "--sidebar-foreground",
+      "value": "oklch(0.25 0.05 245)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-chart-6",
-      "value": "hsl(7.2 79.3% 40.7%)",
+      "name": "--sidebar-primary",
+      "value": "#0C727B",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-chart-7",
-      "value": "hsl(195.9 54.7% 61.6%)",
+      "name": "--sidebar-primary-foreground",
+      "value": "oklch(1 0 0)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-chart-8",
-      "value": "hsl(311.8 31.5% 53.2%)",
+      "name": "--sidebar-accent",
+      "value": "#D5F3F6",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-chart-9",
-      "value": "hsl(89.9 54.1% 31.7%)",
+      "name": "--sidebar-accent-foreground",
+      "value": "oklch(0.4 0.073 222)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-chart-10",
-      "value": "hsl(25.6 31.5% 38.3%)",
+      "name": "--sidebar-border",
+      "value": "oklch(0.9 0.018 211)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-chart-11",
-      "value": "hsl(327.4 69.0% 40.4%)",
+      "name": "--sidebar-ring",
+      "value": "#0C727B",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-chart-12",
-      "value": "hsl(28.8 81.3% 43.2%)",
+      "name": "--info-soft",
+      "value": "oklch(0.965 0.018 240)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-diff-add",
-      "value": "hsl(140.0 60.0% 94.0%)",
+      "name": "--info-soft-foreground",
+      "value": "oklch(0.4 0.1 245)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-diff-add-line",
-      "value": "hsl(140.0 44.0% 74.0%)",
+      "name": "--info-border",
+      "value": "oklch(0.87 0.045 240)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-diff-del",
-      "value": "hsl(0 84.0% 95.5%)",
+      "name": "--destructive-soft",
+      "value": "oklch(0.965 0.016 25)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-diff-del-line",
-      "value": "hsl(0 62.0% 82.0%)",
+      "name": "--destructive-soft-foreground",
+      "value": "oklch(0.45 0.16 27)",
       "kind": "color",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     },
     {
-      "name": "--lw-diff-mod",
-      "value": "hsl(44.0 92.0% 92.0%)",
+      "name": "--destructive-border",
+      "value": "oklch(0.87 0.06 25)",
       "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-diff-mod-line",
-      "value": "hsl(44.0 70.0% 72.0%)",
-      "kind": "color",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-safe-top",
-      "value": "env(safe-area-inset-top, 0px)",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-safe-right",
-      "value": "env(safe-area-inset-right, 0px)",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-safe-bottom",
-      "value": "env(safe-area-inset-bottom, 0px)",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-safe-left",
-      "value": "env(safe-area-inset-left, 0px)",
-      "kind": "other",
-      "definedIn": "tokens.css"
-    },
-    {
-      "name": "--lw-bottom-nav-h",
-      "value": "56px",
-      "kind": "other",
-      "definedIn": "tokens.css"
+      "definedIn": "theme.css"
     }
   ],
   "themes": [
     {
       "selector": ".dark",
       "label": "Dark"
-    },
-    {
-      "selector": ".lw-band-dark",
-      "label": "Band Dark"
-    },
-    {
-      "selector": "[data-band=\"dark\"]",
-      "label": "Band Dark"
-    },
-    {
-      "selector": "[data-density=\"comfortable\"]",
-      "label": "Density Comfortable"
-    },
-    {
-      "selector": "[data-density=\"compact\"]",
-      "label": "Density Compact"
-    },
-    {
-      "selector": "[data-theme=\"dark\"]",
-      "label": "Theme Dark"
     }
   ],
   "fonts": [
@@ -2853,7 +1084,7 @@
       "family": "Geist",
       "status": "ok",
       "tokens": [
-        "--lw-font-sans"
+        "--font-sans"
       ],
       "path": "fonts.css"
     },
@@ -2861,7 +1092,7 @@
       "family": "Geist Mono",
       "status": "ok",
       "tokens": [
-        "--lw-font-mono"
+        "--font-mono"
       ],
       "path": "fonts.css"
     }

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="../../preview/_vendor/react.js"></script>
+<script src="../../preview/_vendor/react-dom.js"></script>
+<script src="../_shared/support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Data table page" description="A list page: title and primary action, search and status filter, a table with status badges and row selection, and pagination." -->
+<helmet><script src="../_shared/ds-base.js"></script></helmet>
+<a class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-background focus:px-3 focus:py-2" href="#main">Skip to content</a>
+<div class="bg-background text-foreground min-h-svh font-sans">
+<header class="flex h-14 items-center gap-3 border-b px-6">
+<span class="text-primary font-semibold">LeanWise AI</span>
+<span class="text-muted-foreground" aria-hidden="true">/</span>
+<span class="text-sm font-medium">Sources</span>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="64px,32px" variant="ghost" size="sm" className="ml-auto" onClick="{{ toggleTheme }}" data-theme-toggle="">{{ themeLabel }}</x-import>
+</header>
+<main id="main" class="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-8">
+<div class="flex flex-wrap items-end justify-between gap-4">
+<div class="flex flex-col gap-1">
+<h1 class="text-2xl font-semibold tracking-tight">Sources</h1>
+<p class="text-muted-foreground text-sm">{{ summary }}</p>
+</div>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="120px,36px">Add source</x-import>
+</div>
+<div class="flex flex-wrap items-center gap-3">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Input" hint-size="280px,36px" className="w-72" placeholder="Filter sources" aria-label="Filter sources" value="{{ query }}" onChange="{{ setQuery }}"></x-import>
+<div role="group" aria-label="Status" class="flex gap-1">
+<sc-for list="{{ filters }}" as="f" hint-placeholder-count="4">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="64px,32px" size="sm" variant="{{ f.variant }}" aria-pressed="{{ f.pressed }}" onClick="{{ f.pick }}">{{ f.label }}</x-import>
+</sc-for>
+</div>
+</div>
+<div class="overflow-x-auto rounded-lg border">
+<table class="w-full caption-bottom text-sm">
+<thead class="[&_tr]:border-b">
+<tr>
+<th class="text-foreground h-10 px-4 text-left font-medium">Source</th>
+<th class="text-foreground h-10 px-2 text-left font-medium">Owner</th>
+<th class="text-foreground h-10 px-2 text-right font-medium">Docs</th>
+<th class="text-foreground h-10 px-2 text-right font-medium">Hit rate</th>
+<th class="text-foreground h-10 px-4 text-left font-medium">Status</th>
+</tr>
+</thead>
+<tbody>
+<sc-for list="{{ rows }}" as="r" hint-placeholder-count="6">
+<tr class="hover:bg-muted/50 border-b last:border-0">
+<td class="px-4 py-2.5 font-medium">{{ r.name }}</td>
+<td class="text-muted-foreground px-2 py-2.5">{{ r.owner }}</td>
+<td class="px-2 py-2.5 text-right tabular-nums">{{ r.docs }}</td>
+<td class="px-2 py-2.5 text-right tabular-nums">{{ r.hit }}</td>
+<td class="px-4 py-2.5"><x-import component-from-global-scope="LeanWiseDesign_f2d907.Badge" hint-size="56px,22px" className="{{ r.badge }}">{{ r.status }}</x-import></td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+<sc-if value="{{ empty }}" hint-placeholder-val="{{ false }}">
+<p class="text-muted-foreground p-8 text-center text-sm">No sources match that filter.</p>
+</sc-if>
+</div>
+<nav aria-label="Pagination" class="flex items-center justify-between text-sm">
+<span class="text-muted-foreground">Page 1 of 1</span>
+<div class="flex gap-2">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="80px,32px" size="sm" variant="outline" disabled="{{ true }}">Previous</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="64px,32px" size="sm" variant="outline" disabled="{{ true }}">Next</x-import>
+</div>
+</nav>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:820}}">
+const BADGE = {
+  Live: "border-transparent bg-success text-success-foreground",
+  Syncing: "border-transparent bg-info-soft text-info-soft-foreground",
+  Stale: "border-transparent bg-warning text-warning-foreground",
+  Failed: "border-transparent bg-destructive-soft text-destructive-soft-foreground",
+};
+const ROWS = [
+  { name: "Contracts / 2024", owner: "R. Okafor", docs: "1,284", hit: "94.2%", status: "Live" },
+  { name: "Policy handbook", owner: "J. Tran", docs: "312", hit: "88.7%", status: "Live" },
+  { name: "Contracts / 2023", owner: "R. Okafor", docs: "1,109", hit: "86.1%", status: "Syncing" },
+  { name: "Support transcripts", owner: "M. Lee", docs: "9,015", hit: "71.4%", status: "Stale" },
+  { name: "HR procedures", owner: "J. Tran", docs: "204", hit: "90.3%", status: "Live" },
+  { name: "Legacy wiki", owner: "M. Lee", docs: "476", hit: "—", status: "Failed" },
+];
+
+class Component extends DCLogic {
+  state = { theme: "light", query: "", status: "All" };
+
+  componentDidUpdate() { document.documentElement.classList.toggle("dark", this.state.theme === "dark"); }
+
+  renderVals() {
+    const s = this.state;
+    const q = s.query.toLowerCase();
+    const rows = ROWS
+      .filter((r) => (s.status === "All" || r.status === s.status) && r.name.toLowerCase().includes(q))
+      .map((r) => ({ ...r, badge: BADGE[r.status] }));
+    return {
+      themeLabel: s.theme === "dark" ? "Light" : "Dark",
+      toggleTheme: () => this.setState({ theme: s.theme === "dark" ? "light" : "dark" }),
+      summary: `${ROWS.length} sources · ${rows.length} shown`,
+      query: s.query,
+      setQuery: (e) => this.setState({ query: e.target.value }),
+      filters: ["All", "Live", "Stale", "Failed"].map((label) => ({
+        label,
+        variant: s.status === label ? "secondary" : "ghost",
+        pressed: s.status === label ? "true" : "false",
+        pick: () => this.setState({ status: label }),
+      })),
+      rows,
+      empty: rows.length === 0,
+    };
+  }
+}
+</script>
+</body>
+</html>
