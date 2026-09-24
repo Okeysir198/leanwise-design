@@ -60,7 +60,7 @@ lwCard("Forms", "Label above control, help below; an error replaces the help and
         </div>
         <Switch id="s1" defaultChecked />
       </div>
-      <div className="flex gap-3"><Button>Save changes</Button><Button variant="outline">Cancel</Button></div>
+      <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end"><Button variant="outline">Cancel</Button><Button>Save changes</Button></div>
     </div>
   </div>
 ));

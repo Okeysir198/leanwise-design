@@ -18,6 +18,10 @@
       "sourcePath": "preview/src/blocks/kpi-tile.tsx"
     },
     {
+      "name": "SectionNav",
+      "sourcePath": "preview/src/blocks/section-nav.tsx"
+    },
+    {
       "name": "StateView",
       "sourcePath": "preview/src/blocks/state-view.tsx"
     },
@@ -538,7 +542,7 @@
       "path": "preview/cards/app-shell.card.html",
       "group": "Blocks",
       "viewport": "1200x760",
-      "subtitle": "Sidebar on the --sidebar roles, a header bar and a content well",
+      "subtitle": "Sidebar with the current-page bar, a header bar, and a section nav in the content",
       "name": "App shell"
     },
     {

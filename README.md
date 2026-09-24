@@ -9,7 +9,7 @@ What ships:
 | Path | What it is |
 |---|---|
 | `theme.css` | The whole theme for Tailwind v4 + shadcn: every role as a CSS variable, light and `.dark`, registered as utilities (`bg-primary`, `bg-cta`, `text-muted-foreground`…), the type scale, the radius, the solid focus ring, pointer cursors |
-| `r/*.json`, `registry.json` | The shadcn registry: `leanwise-theme`, `leanwise-font`, `leanwise-font-mono`, `leanwise-base`, and the blocks `kpi-tile`, `state-view`, `file-upload`, `app-shell` |
+| `r/*.json`, `registry.json` | The shadcn registry: `leanwise-theme`, `leanwise-font`, `leanwise-font-mono`, `leanwise-base`, and the blocks `kpi-tile`, `state-view`, `file-upload`, `app-shell`, `section-nav` |
 | `marketing.css` | Plain-CSS layer for marketing sites (hero, sections, plans, footer), over theme variables only |
 | `fonts.css`, `fonts/` | Geist + Geist Mono, self-hosted, Vietnamese subsets included |
 | `assets/` | Logo mark, lockups, favicon, hero artwork |
@@ -43,7 +43,7 @@ A Tailwind v4 app with shadcn:
 
 ```bash
 npx shadcn@latest init --base radix
-npm i github:Okeysir198/leanwise-design#v5.0.0
+npm i github:Okeysir198/leanwise-design#v5.1.0
 ```
 
 In your global CSS, after Tailwind:
@@ -62,7 +62,7 @@ Add the registry to `components.json`:
 ```json
 {
   "registries": {
-    "@leanwise": "https://raw.githubusercontent.com/Okeysir198/leanwise-design/v5.0.0/r/{name}.json"
+    "@leanwise": "https://raw.githubusercontent.com/Okeysir198/leanwise-design/v5.1.0/r/{name}.json"
   }
 }
 ```
@@ -87,6 +87,13 @@ Dark mode is the `.dark` class on an ancestor (shadcn's convention). `useTheme()
   `assets/logo-mark.svg` alone, `assets/logo-favicon.svg` for the tab. Never recolour it.
 - **One CTA per view.** Amber is the single high-energy action on a screen. Everything else
   is the default (cyan) button or quieter. `lw-token-lint` counts `variant="cta"` per file.
+- **Action order follows shadcn.** Button groups sit on the right with the primary action
+  last: `Cancel` then `Save`. Use the stock `DialogFooter`/`AlertDialogFooter`/`SheetFooter`;
+  elsewhere use `flex flex-col-reverse gap-2 sm:flex-row sm:justify-end`, which stacks full
+  width with the primary on top on phones.
+- **Selected states.** App sidebar: the current page (`data-active="true"`) gets the stock
+  tint plus a 3px brand bar from `theme.css`. Inside the content, use the `@leanwise/section-nav`
+  block: a thin rail with a brand segment. Menus and dropdowns keep the stock tint only.
 - **Ink follows the fill.** White on cyan and on navy; navy on amber and on warning.
 - **Focus is a solid brand ring**, never faded. `theme.css` states it unlayered, so it wins
   over the `ring-ring/50` stock components carry — no component needs editing.

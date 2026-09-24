@@ -17,6 +17,8 @@ const FOCUS_FIELDS =
 const POINTER =
   'button:not(:disabled), [role="button"]:not([aria-disabled="true"]), [role="tab"], [role="menuitem"], [role="menuitemcheckbox"], [role="menuitemradio"], [role="option"], [role="switch"], [role="checkbox"], [role="radio"], a[href], summary, select, label[for], input[type="checkbox"], input[type="radio"]';
 
+export const SIDEBAR_ACTIVE = '[data-sidebar="menu-button"][data-active="true"], [data-sidebar="menu-sub-button"][data-active="true"]';
+
 const block = (name, title, description, registryDependencies, dependencies = []) => ({
   name,
   type: "registry:block",
@@ -85,6 +87,7 @@ export const ITEMS = [
     css: {
       "@layer base": {
         [POINTER]: { cursor: "pointer" },
+        [SIDEBAR_ACTIVE]: { "box-shadow": "inset 3px 0 0 var(--sidebar-primary)" },
       },
       /* Unlayered on purpose: beats the layered ring-ring/50 utilities of stock components. */
       ":focus-visible": { outline: "2px solid var(--ring)", "outline-offset": "2px" },
@@ -104,6 +107,7 @@ export const ITEMS = [
   block("kpi-tile", "KPI tile", "A metric on a Card: label, value, trend delta, hint.", ["card"], ["class-variance-authority", "lucide-react"]),
   block("state-view", "State view", "Empty, loading and error states on shadcn Empty.", ["empty", "spinner"], ["lucide-react"]),
   block("file-upload", "File upload", "Drop zone + browse button + removable file list.", ["button"], ["lucide-react"]),
+  block("section-nav", "Section nav", "In-page section navigation: a thin rail, the current section marked by a brand segment.", []),
   block("app-shell", "App shell", "Collapsible sidebar nav and a sticky top bar on shadcn Sidebar.", ["sidebar", "separator"]),
 ];
 

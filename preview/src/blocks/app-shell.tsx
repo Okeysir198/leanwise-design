@@ -28,6 +28,8 @@ function AppShell({ brand, nav, header, footer, children, className }: AppShellP
                   key={it.label}
                   href={it.href ?? "#"}
                   aria-current={it.current ? "page" : undefined}
+                  data-sidebar="menu-button"
+                  data-active={it.current ? "true" : undefined}
                   className={cn(
                     "flex h-9 items-center gap-2 rounded-md px-2 text-sm [&_svg]:size-4",
                     it.current

@@ -228,6 +228,11 @@
   a[href], summary, select, label[for], input[type="checkbox"], input[type="radio"] {
     cursor: pointer;
   }
+  /* The current page in the app sidebar: stock tint plus a brand bar on the leading edge. */
+  [data-sidebar="menu-button"][data-active="true"],
+  [data-sidebar="menu-sub-button"][data-active="true"] {
+    box-shadow: inset 3px 0 0 var(--sidebar-primary);
+  }
 }
 
 /* Focus is a SOLID brand ring, never faded. Deliberately UNLAYERED: an unlayered

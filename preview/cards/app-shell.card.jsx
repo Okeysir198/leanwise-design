@@ -1,5 +1,5 @@
-// @dsCard group="Blocks" name="App shell" subtitle="Sidebar on the --sidebar roles, a header bar and a content well" viewport="1200x760"
-const { AppShell, Button, Input, KpiTile, Avatar, AvatarFallback } = window.LeanWiseDesign_f2d907;
+// @dsCard group="Blocks" name="App shell" subtitle="Sidebar with the current-page bar, a header bar, and a section nav in the content" viewport="1200x760"
+const { AppShell, SectionNav, Button, Input, KpiTile, Avatar, AvatarFallback } = window.LeanWiseDesign_f2d907;
 
 const NAV = [
   { group: "Workspace", items: [
@@ -24,6 +24,15 @@ lwCard("App shell", "One rail for the whole product; only the current item chang
         <KpiTile label="Questions" value="12,480" delta="+8.2%" />
         <KpiTile label="Hit rate" value="91.4%" delta="+1.1 pt" />
         <KpiTile label="Latency" value="1.8 s" delta="+0.3 s" trend="down" />
+      </div>
+      <div className="mt-6 grid grid-cols-[180px_1fr] gap-7">
+        <SectionNav aria-label="Overview sections" items={[
+          { title: "Summary", href: "#summary", current: true },
+          { title: "Sources", href: "#sources" },
+          { title: "Evaluations", href: "#evaluations" },
+          { title: "Usage", href: "#usage" },
+        ]} />
+        <p className="text-muted-foreground text-sm">The sidebar marks the current page with a tint and a brand bar; the section nav marks the current section on a thin rail.</p>
       </div>
     </AppShell>
   </div>

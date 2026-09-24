@@ -311,6 +311,9 @@
         "@layer base": {
           "button:not(:disabled), [role=\"button\"]:not([aria-disabled=\"true\"]), [role=\"tab\"], [role=\"menuitem\"], [role=\"menuitemcheckbox\"], [role=\"menuitemradio\"], [role=\"option\"], [role=\"switch\"], [role=\"checkbox\"], [role=\"radio\"], a[href], summary, select, label[for], input[type=\"checkbox\"], input[type=\"radio\"]": {
             "cursor": "pointer"
+          },
+          "[data-sidebar=\"menu-button\"][data-active=\"true\"], [data-sidebar=\"menu-sub-button\"][data-active=\"true\"]": {
+            "box-shadow": "inset 3px 0 0 var(--sidebar-primary)"
           }
         },
         ":focus-visible": {
@@ -386,6 +389,20 @@
           "path": "registry/blocks/file-upload.tsx",
           "type": "registry:component",
           "target": "components/file-upload.tsx"
+        }
+      ]
+    },
+    {
+      "name": "section-nav",
+      "type": "registry:block",
+      "title": "Section nav",
+      "description": "In-page section navigation: a thin rail, the current section marked by a brand segment.",
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/blocks/section-nav.tsx",
+          "type": "registry:component",
+          "target": "components/section-nav.tsx"
         }
       ]
     },
