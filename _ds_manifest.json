@@ -126,36 +126,12 @@
       "sourcePath": "preview/src/lib/utils.ts"
     },
     {
-      "name": "AppSidebar",
-      "sourcePath": "preview/src/shadcn-blocks/dashboard-01/components/app-sidebar.tsx"
-    },
-    {
-      "name": "ChartAreaInteractive",
-      "sourcePath": "preview/src/shadcn-blocks/dashboard-01/components/chart-area-interactive.tsx"
-    },
-    {
-      "name": "description",
-      "sourcePath": "preview/src/shadcn-blocks/dashboard-01/components/chart-area-interactive.tsx"
-    },
-    {
-      "name": "DataTable",
-      "sourcePath": "preview/src/shadcn-blocks/dashboard-01/components/data-table.tsx"
-    },
-    {
-      "name": "schema",
-      "sourcePath": "preview/src/shadcn-blocks/dashboard-01/components/data-table.tsx"
-    },
-    {
-      "name": "SectionCards",
-      "sourcePath": "preview/src/shadcn-blocks/dashboard-01/components/section-cards.tsx"
-    },
-    {
-      "name": "SiteHeader",
-      "sourcePath": "preview/src/shadcn-blocks/dashboard-01/components/site-header.tsx"
-    },
-    {
       "name": "LoginForm",
-      "sourcePath": "preview/src/shadcn-blocks/login-02/components/login-form.tsx"
+      "sourcePath": "preview/src/shadcn-blocks/login-04/components/login-form.tsx"
+    },
+    {
+      "name": "AppSidebar",
+      "sourcePath": "preview/src/shadcn-blocks/sidebar-07/components/app-sidebar.tsx"
     },
     {
       "name": "Accordion",
@@ -1314,13 +1290,13 @@
   "templates": [
     {
       "name": "Sign in",
-      "description": "shadcn login-02 on the LeanWise theme: brand mark, the stock LoginForm (email, password, GitHub) and an image panel on wide screens.",
+      "description": "shadcn login-04 on the LeanWise theme: the stock LoginForm card (email, password, Apple/Google/Meta) beside an image panel on wide screens, centred on the muted ground.",
       "folder": "templates/auth",
       "entryPath": "templates/auth/Auth.dc.html"
     },
     {
       "name": "App dashboard",
-      "description": "shadcn dashboard-01 on the LeanWise theme: inset sidebar, site header, KPI section cards, the interactive area chart and the sortable data table.",
+      "description": "shadcn sidebar-07 on the LeanWise theme: the collapsible-to-icons AppSidebar (team switcher, nav, projects, user), an inset with trigger, separator and breadcrumb, and the stock placeholder grid.",
       "folder": "templates/dashboard",
       "entryPath": "templates/dashboard/Dashboard.dc.html"
     },

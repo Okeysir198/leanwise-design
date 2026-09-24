@@ -9,49 +9,46 @@
 </head>
 <body>
 <x-dc>
-<!-- @template name="App dashboard" description="shadcn dashboard-01 on the LeanWise theme: inset sidebar, site header, KPI section cards, the interactive area chart and the sortable data table." -->
+<!-- @template name="App dashboard" description="shadcn sidebar-07 on the LeanWise theme: the collapsible-to-icons AppSidebar (team switcher, nav, projects, user), an inset with trigger, separator and breadcrumb, and the stock placeholder grid." -->
 <helmet><script src="../_shared/ds-base.js"></script></helmet>
 <a class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-background focus:px-3 focus:py-2" href="#main">Skip to content</a>
 <div class="font-sans">
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.SidebarProvider" hint-size="100%,100%" style="{{ shellVars }}">
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.AppSidebar" hint-size="288px,100%" variant="inset"></x-import>
-<main id="main" data-slot="sidebar-inset" class="bg-background relative flex w-full flex-1 flex-col md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2">
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.SiteHeader" hint-size="100%,48px"></x-import>
-<div class="flex flex-1 flex-col">
-<div class="@container/main flex flex-1 flex-col gap-2">
-<div class="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.SectionCards" hint-size="100%,190px"></x-import>
-<div class="px-4 lg:px-6">
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.ChartAreaInteractive" hint-size="100%,380px"></x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.SidebarProvider" hint-size="100%,100%">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.AppSidebar" hint-size="256px,100%"></x-import>
+<main id="main" data-slot="sidebar-inset" class="relative flex w-full flex-1 flex-col bg-background md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2">
+<header class="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+<div class="flex items-center gap-2 px-4">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.SidebarTrigger" hint-size="28px,28px" className="-ml-1"></x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Separator" hint-size="1px,16px" orientation="vertical" className="mr-2 data-[orientation=vertical]:h-4"></x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Breadcrumb" hint-size="260px,20px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.BreadcrumbList" hint-size="260px,20px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.BreadcrumbItem" hint-size="150px,20px" className="hidden md:block">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.BreadcrumbLink" hint-size="150px,20px" href="#">Build Your Application</x-import>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.BreadcrumbSeparator" hint-size="14px,14px" className="hidden md:block"></x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.BreadcrumbItem" hint-size="100px,20px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.BreadcrumbPage" hint-size="100px,20px">Data Fetching</x-import>
+</x-import>
+</x-import>
+</x-import>
 </div>
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.DataTable" hint-size="100%,560px" data="{{ rows }}"></x-import>
+</header>
+<div class="flex flex-1 flex-col gap-4 p-4 pt-0">
+<div class="grid auto-rows-min gap-4 md:grid-cols-3">
+<div class="aspect-video rounded-xl bg-muted/50"></div>
+<div class="aspect-video rounded-xl bg-muted/50"></div>
+<div class="aspect-video rounded-xl bg-muted/50"></div>
 </div>
-</div>
+<div class="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min"></div>
 </div>
 </main>
 </x-import>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900}}">
-const ROWS = [
-  ["Cover page", "Cover page", "In Process", "18", "5", "Eddie Lake"],
-  ["Table of contents", "Table of contents", "Done", "29", "24", "Eddie Lake"],
-  ["Executive summary", "Narrative", "Done", "10", "13", "Eddie Lake"],
-  ["Technical approach", "Narrative", "Done", "27", "23", "Jamik Tashpulatov"],
-  ["Design", "Narrative", "In Process", "2", "16", "Jamik Tashpulatov"],
-  ["Capabilities", "Narrative", "In Process", "20", "8", "Jamik Tashpulatov"],
-  ["Integration with existing systems", "Narrative", "In Process", "19", "21", "Jamik Tashpulatov"],
-  ["Innovation and advantages", "Narrative", "Done", "25", "26", "Assign reviewer"],
-  ["Overview of EMR's innovative solutions", "Technical content", "Done", "7", "23", "Assign reviewer"],
-  ["Advanced algorithms and machine learning", "Narrative", "Done", "30", "28", "Assign reviewer"],
-];
-
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:820}}">
 class Component extends DCLogic {
   renderVals() {
-    return {
-      shellVars: { "--sidebar-width": "calc(var(--spacing) * 72)", "--header-height": "calc(var(--spacing) * 12)" },
-      rows: ROWS.map(([header, type, status, target, limit, reviewer], i) => ({ id: i + 1, header, type, status, target, limit, reviewer })),
-    };
+    return {};
   }
 }
 </script>

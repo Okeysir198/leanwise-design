@@ -9,32 +9,19 @@
 </head>
 <body>
 <x-dc>
-<!-- @template name="Sign in" description="shadcn login-02 on the LeanWise theme: brand mark, the stock LoginForm (email, password, GitHub) and an image panel on wide screens." -->
+<!-- @template name="Sign in" description="shadcn login-04 on the LeanWise theme: the stock LoginForm card (email, password, Apple/Google/Meta) beside an image panel on wide screens, centred on the muted ground." -->
 <helmet><script src="../_shared/ds-base.js"></script></helmet>
 <a class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-background focus:px-3 focus:py-2" href="#main">Skip to content</a>
-<div class="bg-background text-foreground grid min-h-svh font-sans lg:grid-cols-2">
-<div class="flex flex-col gap-4 p-6 md:p-10">
-<div class="flex justify-center gap-2 md:justify-start">
-<a href="#home" class="flex items-center gap-2 font-medium">
-<img src="../../assets/logo-mark.svg" alt="" class="size-6">
-LeanWise AI
-</a>
-</div>
-<main id="main" class="flex flex-1 items-center justify-center">
-<div class="w-full max-w-xs">
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.LoginForm" hint-size="320px,420px" onSubmit="{{ submit }}"></x-import>
+<main id="main" class="flex min-h-svh flex-col items-center justify-center bg-muted p-6 font-sans md:p-10">
+<div class="w-full max-w-sm md:max-w-4xl">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.LoginForm" hint-size="100%,560px"></x-import>
 </div>
 </main>
-</div>
-<div class="bg-muted relative hidden lg:block">
-<img src="../../assets/hex-lattice.svg" alt="" class="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale">
-</div>
-</div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:820}}">
 class Component extends DCLogic {
   renderVals() {
-    return { submit: (e) => e.preventDefault() };
+    return {};
   }
 }
 </script>
