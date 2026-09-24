@@ -4,12 +4,14 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildThemeCss } from "./lib/theme.mjs";
+import { registryOutputs } from "./lib/registry.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const check = process.argv.includes("--check");
 
 const outputs = {
   "theme.css": buildThemeCss,
+  ...registryOutputs(ROOT),
 };
 
 let stale = 0;

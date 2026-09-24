@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "state-view",
+  "type": "registry:block",
+  "title": "State view",
+  "description": "Empty, loading and error states on shadcn Empty.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "empty",
+    "spinner"
+  ],
+  "files": [
+    {
+      "path": "registry/blocks/state-view.tsx",
+      "type": "registry:component",
+      "target": "components/state-view.tsx",
+      "content": "import * as React from \"react\"\nimport { AlertCircleIcon, InboxIcon } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\nimport {\n  Empty,\n  EmptyContent,\n  EmptyDescription,\n  EmptyHeader,\n  EmptyMedia,\n  EmptyTitle,\n} from \"@/components/ui/empty\"\nimport { Spinner } from \"@/components/ui/spinner\"\n\ntype StateViewProps = Omit<React.ComponentProps<typeof Empty>, \"title\"> & {\n  state: \"empty\" | \"loading\" | \"error\"\n  title?: React.ReactNode\n  description?: React.ReactNode\n  icon?: React.ReactNode\n  /** Buttons or links: \"Create one\", \"Retry\". */\n  action?: React.ReactNode\n}\n\nconst DEFAULT_TITLE = { empty: \"Nothing here yet\", loading: \"Loading\", error: \"Something went wrong\" }\n\nfunction StateView({ state, title, description, icon, action, className, ...props }: StateViewProps) {\n  const media =\n    icon ??\n    (state === \"loading\" ? (\n      <Spinner className=\"size-5\" />\n    ) : state === \"error\" ? (\n      <AlertCircleIcon />\n    ) : (\n      <InboxIcon />\n    ))\n  return (\n    <Empty\n      data-slot=\"state-view\"\n      data-state={state}\n      role={state === \"error\" ? \"alert\" : state === \"loading\" ? \"status\" : undefined}\n      aria-busy={state === \"loading\" || undefined}\n      className={className}\n      {...props}\n    >\n      <EmptyHeader>\n        <EmptyMedia variant=\"icon\" className={cn(state === \"error\" && \"bg-destructive-soft text-destructive-soft-foreground\")}>\n          {media}\n        </EmptyMedia>\n        <EmptyTitle>{title ?? DEFAULT_TITLE[state]}</EmptyTitle>\n        {description != null && <EmptyDescription>{description}</EmptyDescription>}\n      </EmptyHeader>\n      {action != null && <EmptyContent>{action}</EmptyContent>}\n    </Empty>\n  )\n}\n\nexport { StateView, type StateViewProps }\n"
+    }
+  ]
+}
