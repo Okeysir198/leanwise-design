@@ -28,7 +28,7 @@ export function luminance(c) {
 
 /**
  * Contrast between a foreground and its background. If the foreground has alpha
- * (the --lw-on-dark* tier), it is composited OVER the background first — that is
+ * it is composited OVER the background first — that is
  * the color the viewer actually perceives, and the only honest basis for the ratio.
  */
 export function contrast(fg, bg) {

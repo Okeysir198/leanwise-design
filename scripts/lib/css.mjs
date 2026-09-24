@@ -11,7 +11,7 @@
  *   selector    the prelude, trimmed
  *   body        the full text between the braces, INCLUDING nested children
  *   directBody  the same with every nested child excised — what you almost
- *               always want, because `declarationsIn(body)` on a parent
+ *               always want, because reading `body` on a parent
  *               otherwise merges its descendants' declarations upward with no
  *               marker. The contrast gate dodged that with its own nesting
  *               checks and DTCG dodged it only for at-rules; a plain nested
@@ -101,33 +101,10 @@ export function splitRules(src) {
 export const stripComments = (raw) => raw.replace(/\/\*[\s\S]*?\*\//g, "");
 
 /**
- * Custom-property declarations in one rule body, as { bareName: value } with
- * the `--lw-` prefix removed.
- *
- * The final declaration in a block may omit its semicolon; requiring one
- * dropped that token silently, and a dropped channel reads downstream as
- * "unresolved" rather than as the authoring slip it is.
- */
-export function declarationsIn(body) {
-  const out = {};
-  const re = /--lw-([a-z0-9-]+)\s*:\s*([^;]+)(?:;|$)/g;
-  let m;
-  while ((m = re.exec(body))) out[m[1]] = m[2].trim();
-  return out;
-}
-
-/**
  * Split a selector PRELUDE on its top-level commas only — `:is(a, b) .x` is one
  * selector, `[data-x="a,b"]` is one selector, `:where(.a, .b)` is one selector
  * whose MEMBERS are `.a` and `.b` (call this again on the text inside the
  * parens to get them). Depth-aware on parentheses, brackets and quotes.
- *
- * The contrast gate used to match theme blocks with regexes of the shape
- * `^:where\((?![^)]*\.lw-band-light)[^)]*\.lw-band-dark\b[^)]*\)$`, which
- * cannot see past a nested paren: `:where(html:not(.dark) .x, .y)` matched
- * nothing, so an author who scoped a band entry got "theme block not found"
- * from a gate that had nothing to say about scoping. Membership is a list
- * question; answer it by splitting the list.
  */
 export function splitSelectorList(prelude) {
   const out = [];
