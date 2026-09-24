@@ -7,6 +7,12 @@
 
   function Chrome({ title, subtitle, children }) {
     const [dark, setDark] = R.useState(root.classList.contains("dark"));
+    /* The host (Claude Design's theme switch) toggles `.dark` itself: follow it. */
+    R.useEffect(() => {
+      const mo = new MutationObserver(() => setDark(root.classList.contains("dark")));
+      mo.observe(root, { attributes: true, attributeFilter: ["class"] });
+      return () => mo.disconnect();
+    }, []);
     const toggle = () => { root.classList.toggle("dark", !dark); setDark(!dark); };
     return R.createElement("div", { className: "flex min-h-svh flex-col gap-6 p-8" },
       R.createElement("header", { className: "flex items-start justify-between gap-6" },

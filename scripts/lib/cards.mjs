@@ -29,6 +29,8 @@ export async function openCard(page, file, url) {
     await page.goto(url, { waitUntil: "load" });
     await page.addStyleTag({ content: "*,*::before,*::after{animation:none!important;transition:none!important}" });
     await page.evaluate(() => document.fonts.ready);
+    /* Recharts animates in JS (not CSS), so the style tag above cannot stop it: let it settle. */
+    if (await page.evaluate(() => !!document.querySelector(".recharts-wrapper"))) await page.waitForTimeout(2000);
     const kids = await page.evaluate(() => document.body.querySelectorAll("*").length);
     if (errors.length) throw new Error(`${file} threw while rendering:\n  ${errors.join("\n  ")}`);
     if (!kids) throw new Error(`${file} rendered no elements`);

@@ -50,11 +50,31 @@
       "sourcePath": "node_modules/lucide-react"
     },
     {
+      "name": "DatabaseIcon",
+      "sourcePath": "node_modules/lucide-react"
+    },
+    {
       "name": "FileTextIcon",
       "sourcePath": "node_modules/lucide-react"
     },
     {
+      "name": "FlaskConicalIcon",
+      "sourcePath": "node_modules/lucide-react"
+    },
+    {
+      "name": "GalleryVerticalEndIcon",
+      "sourcePath": "node_modules/lucide-react"
+    },
+    {
+      "name": "HomeIcon",
+      "sourcePath": "node_modules/lucide-react"
+    },
+    {
       "name": "InfoIcon",
+      "sourcePath": "node_modules/lucide-react"
+    },
+    {
+      "name": "MessageSquareIcon",
       "sourcePath": "node_modules/lucide-react"
     },
     {
@@ -74,7 +94,19 @@
       "sourcePath": "node_modules/lucide-react"
     },
     {
+      "name": "TrendingDownIcon",
+      "sourcePath": "node_modules/lucide-react"
+    },
+    {
+      "name": "TrendingUpIcon",
+      "sourcePath": "node_modules/lucide-react"
+    },
+    {
       "name": "UserIcon",
+      "sourcePath": "node_modules/lucide-react"
+    },
+    {
+      "name": "UsersIcon",
       "sourcePath": "node_modules/lucide-react"
     },
     {

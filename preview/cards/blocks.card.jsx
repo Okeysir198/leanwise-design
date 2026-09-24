@@ -1,7 +1,7 @@
 // @dsCard group="Blocks" name="Section cards, state, upload" subtitle="Stock dashboard-01 section cards, StateView (loading / empty / error) and FileUpload" viewport="1100x900"
 const {
   Card, CardHeader, CardDescription, CardTitle, CardAction, CardFooter, Badge, Button,
-  StateView, FileUpload,
+  StateView, FileUpload, TrendingUpIcon, TrendingDownIcon,
 } = window.LeanWiseDesign_f2d907;
 
 const METRICS = [
@@ -25,20 +25,20 @@ lwCard("Section cards, state, upload", "Blocks compose stock primitives; they ad
             <CardDescription>{m.label}</CardDescription>
             <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">{m.value}</CardTitle>
             <CardAction>
-              <Badge variant="outline">{m.delta}</Badge>
+              <Badge variant="outline">{m.up ? <TrendingUpIcon /> : <TrendingDownIcon />}{m.delta}</Badge>
             </CardAction>
           </CardHeader>
           <CardFooter className="flex-col items-start gap-1.5 text-sm">
-            <div className="line-clamp-1 flex gap-2 font-medium">{m.line}</div>
+            <div className="line-clamp-1 flex gap-2 font-medium">{m.line} {m.up ? <TrendingUpIcon className="size-4" /> : <TrendingDownIcon className="size-4" />}</div>
             <div className="text-muted-foreground">{m.note}</div>
           </CardFooter>
         </Card>
       ))}
     </div>
     <div className="grid grid-cols-3 gap-4">
-      <StateView state="loading" />
-      <StateView state="empty" title="No answers yet" description="Ask a question to see it here." action={<Button>Ask a question</Button>} />
-      <StateView state="error" description="The search index is unreachable." action={<Button variant="outline">Retry</Button>} />
+      <StateView className="border border-dashed" state="loading" description="Fetching the latest answers." />
+      <StateView className="border border-dashed" state="empty" title="No answers yet" description="Ask a question to see it here." action={<Button>Ask a question</Button>} />
+      <StateView className="border border-dashed" state="error" description="The search index is unreachable." action={<Button variant="outline">Retry</Button>} />
     </div>
     <FileUpload value={FILES} onValueChange={() => {}} multiple progress={[64]} hint="PDF or DOCX, up to 25 MB" />
   </>

@@ -4,15 +4,13 @@
 import fs from "node:fs";
 import path from "node:path";
 import { ramp, themes } from "../../src/palette.mjs";
-import { RADIUS } from "./theme.mjs";
+import { RADIUS, FOCUS_CONTROLS, FOCUS_FIELDS } from "./theme.mjs";
 
 const HOMEPAGE = "https://github.com/Okeysir198/leanwise-design";
 const NS = "@leanwise";
 
 const rampVars = Object.fromEntries(Object.entries(ramp).map(([k, v]) => [`brand-${k}`, v]));
 
-const FOCUS_FIELDS =
-  ':is(input, textarea, select, [data-slot="input"], [data-slot="textarea"], [data-slot="select-trigger"], [data-slot="input-group"]):focus-visible';
 
 const POINTER =
   'button:not(:disabled), [role="button"]:not([aria-disabled="true"]), [role="tab"], [role="menuitem"], [role="menuitemcheckbox"], [role="menuitemradio"], [role="option"], [role="switch"], [role="checkbox"], [role="radio"], a[href], summary, select, label[for], input[type="checkbox"], input[type="radio"]';
@@ -88,10 +86,11 @@ export const ITEMS = [
       "@layer base": {
         [POINTER]: { cursor: "pointer" },
         [SIDEBAR_ACTIVE]: { "box-shadow": "inset 3px 0 0 var(--sidebar-primary)" },
+        /* Layered so a stock outline-hidden (menus, popovers, command lists) still wins. */
+        ":focus-visible": { outline: "2px solid var(--ring)", "outline-offset": "2px" },
       },
-      /* Unlayered on purpose: beats the layered ring-ring/50 utilities of stock components. */
-      ":focus-visible": { outline: "2px solid var(--ring)", "outline-offset": "2px" },
-      "[data-slot]:focus-visible": {
+      /* Unlayered on purpose: beats the layered ring-ring/50 utilities of stock controls. */
+      [`${FOCUS_CONTROLS}:focus-visible`]: {
         outline: "none",
         "--tw-ring-color": "var(--ring)",
         "box-shadow": "0 0 0 2px var(--background), 0 0 0 4px var(--ring)",

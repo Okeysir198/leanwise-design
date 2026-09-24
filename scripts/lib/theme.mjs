@@ -21,6 +21,20 @@ export const TYPE = {
   display: ["clamp(2.375rem, 5vw, 4.5rem)", "1.05"],
 };
 
+/* Stock slots that are controls and carry a focus ring. */
+export const FOCUS_CONTROLS =
+  ':is([data-slot="button"], [data-slot$="-trigger"]:not([data-slot$="sub-trigger"]), [data-slot="checkbox"], [data-slot="radio-group-item"], ' +
+  '[data-slot="switch"], [data-slot="toggle"], [data-slot="toggle-group-item"], [data-slot="slider-thumb"], ' +
+  '[data-slot="badge"], [data-slot="sidebar-menu-button"], [data-slot="sidebar-menu-sub-button"], ' +
+  '[data-slot="pagination-link"], [data-slot="alert-dialog-action"], [data-slot="alert-dialog-cancel"], ' +
+  '[data-slot="dialog-close"], [data-slot="sheet-close"], [data-slot="sidebar-menu-action"], ' +
+  '[data-slot="sidebar-group-action"], [data-slot="sidebar-rail"], [data-slot="navigation-menu-link"])';
+/* Stock field slots, native fields outside any slot, and the input group around its control. */
+export const FOCUS_FIELDS =
+  ':is([data-slot="input"], [data-slot="textarea"], [data-slot="select-trigger"], [data-slot="native-select"], [data-slot="sidebar-input"], ' +
+  'input:not([data-slot]):not([type="checkbox"]):not([type="radio"]), textarea:not([data-slot]), select:not([data-slot])):focus-visible, ' +
+  '[data-slot="input-group"]:has([data-slot="input-group-control"]:focus-visible)';
+
 export const RADIUS = "0.625rem";
 
 const decl = (obj, indent = "  ") =>
@@ -104,20 +118,26 @@ ${decl(typeScale)}
   }
 }
 
-/* Focus is a SOLID brand ring, never faded. Deliberately UNLAYERED: an unlayered
-   rule beats every @layer rule, so it wins over the \`ring-ring/50\` utilities stock
-   shadcn components carry — no component has to be forked to get it. */
-:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
+/* Focus is a SOLID brand ring, never faded.
+   1. The generic outline sits in @layer base, so a stock \`outline-hidden\` on a menu,
+      popover or command list still wins: content surfaces show no ring.
+   2. The ring override is UNLAYERED so it beats the \`ring-ring/50\` utilities stock
+      controls carry — but only on CONTROLS (stock gives them a ring), never on a
+      *-content surface or an item that marks focus with a background.
+   3. Fields: border + 1px ring. A borderless input inside a composite (Command, the
+      input-group control) is not a field; its group is. */
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
 }
-[data-slot]:focus-visible {
+${FOCUS_CONTROLS}:focus-visible {
   outline: none;
   --tw-ring-color: var(--ring);
   box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring);
 }
-:is(input, textarea, select, [data-slot="input"], [data-slot="textarea"],
-    [data-slot="select-trigger"], [data-slot="input-group"]):focus-visible {
+${FOCUS_FIELDS} {
   outline: none;
   border-color: var(--ring);
   box-shadow: 0 0 0 1px var(--ring);
