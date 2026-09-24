@@ -9,63 +9,114 @@
 </head>
 <body>
 <x-dc>
-<!-- @template name="Settings form" description="Workspace settings: sectioned form with labelled fields, switches, a destructive zone, and a sticky save bar that appears once something changes." -->
+<!-- @template name="Settings form" description="Workspace settings: Card sections built from Field, switches as horizontal Fields, a destructive delete behind an AlertDialog, and an unsaved-changes bar that appears once something changes." -->
 <helmet><script src="../_shared/ds-base.js"></script></helmet>
 <a class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-background focus:px-3 focus:py-2" href="#main">Skip to content</a>
 <div class="bg-background text-foreground min-h-svh font-sans">
 <header class="flex h-14 items-center gap-3 border-b px-6">
-<span class="text-primary font-semibold">LeanWise AI</span>
-<span class="text-muted-foreground" aria-hidden="true">/</span>
-<span class="text-sm font-medium">Settings</span>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Breadcrumb" hint-size="200px,20px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.BreadcrumbList" hint-size="200px,20px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.BreadcrumbItem" hint-size="80px,20px"><x-import component-from-global-scope="LeanWiseDesign_f2d907.BreadcrumbLink" hint-size="80px,20px" href="#">LeanWise AI</x-import></x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.BreadcrumbSeparator" hint-size="14px,14px"></x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.BreadcrumbItem" hint-size="80px,20px"><x-import component-from-global-scope="LeanWiseDesign_f2d907.BreadcrumbPage" hint-size="80px,20px">Settings</x-import></x-import>
+</x-import>
+</x-import>
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="64px,32px" variant="ghost" size="sm" className="ml-auto" onClick="{{ toggleTheme }}" data-theme-toggle="">{{ themeLabel }}</x-import>
 </header>
-<main id="main" class="mx-auto flex max-w-3xl flex-col gap-8 px-6 py-10">
+<main id="main" class="mx-auto flex max-w-3xl flex-col gap-6 px-6 py-10">
 <div class="flex flex-col gap-1">
 <h1 class="text-2xl font-semibold tracking-tight">Workspace settings</h1>
 <p class="text-muted-foreground text-sm">Changes apply to every member of Acme Legal.</p>
 </div>
-<section class="bg-card text-card-foreground grid gap-6 rounded-xl border p-6 shadow-sm md:grid-cols-[1fr_2fr]" aria-labelledby="gen-h">
-<div class="flex flex-col gap-1"><h2 id="gen-h" class="font-semibold">General</h2><p class="text-muted-foreground text-sm">How the workspace appears to members.</p></div>
-<div class="flex flex-col gap-5">
-<div class="flex flex-col gap-2">
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.Label" hint-size="120px,16px" htmlFor="ws-name">Workspace name</x-import>
+
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Card" hint-size="100%,320px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.CardHeader" hint-size="100%,48px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.CardTitle" hint-size="120px,20px">General</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.CardDescription" hint-size="240px,20px">How the workspace appears to members.</x-import>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.CardContent" hint-size="100%,200px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.FieldGroup" hint-size="100%,200px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Field" hint-size="100%,60px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.FieldLabel" hint-size="120px,16px" htmlFor="ws-name">Workspace name</x-import>
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.Input" hint-size="100%,36px" id="ws-name" value="{{ name }}" onChange="{{ setName }}"></x-import>
-</div>
-<div class="flex flex-col gap-2">
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.Label" hint-size="120px,16px" htmlFor="ws-desc">Description</x-import>
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.Textarea" hint-size="100%,72px" id="ws-desc" defaultValue="Contracts, policies and support knowledge." onChange="{{ markDirty }}"></x-import>
-<p class="text-muted-foreground text-xs">Shown on the invite screen.</p>
-</div>
-</div>
-</section>
-<section class="bg-card text-card-foreground grid gap-6 rounded-xl border p-6 shadow-sm md:grid-cols-[1fr_2fr]" aria-labelledby="sec-h">
-<div class="flex flex-col gap-1"><h2 id="sec-h" class="font-semibold">Security</h2><p class="text-muted-foreground text-sm">Sign-in and data rules.</p></div>
-<div class="flex flex-col divide-y">
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Field" hint-size="100%,110px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.FieldLabel" hint-size="120px,16px" htmlFor="ws-desc">Description</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Textarea" hint-size="100%,72px" id="ws-desc" aria-describedby="ws-desc-help" defaultValue="Contracts, policies and support knowledge." onChange="{{ markDirty }}"></x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.FieldDescription" hint-size="200px,16px" id="ws-desc-help">Shown on the invite screen.</x-import>
+</x-import>
+</x-import>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.CardFooter" hint-size="100%,52px" className="justify-end gap-2 border-t">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="80px,36px" variant="outline" onClick="{{ discard }}">Cancel</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="80px,36px" onClick="{{ discard }}">Save</x-import>
+</x-import>
+</x-import>
+
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Card" hint-size="100%,300px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.CardHeader" hint-size="100%,48px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.CardTitle" hint-size="120px,20px">Security</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.CardDescription" hint-size="240px,20px">Sign-in and data rules.</x-import>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.CardContent" hint-size="100%,200px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.FieldGroup" hint-size="100%,200px">
 <sc-for list="{{ toggles }}" as="t" hint-placeholder-count="3">
-<div class="flex items-center justify-between gap-6 py-4 first:pt-0 last:pb-0">
-<div class="flex flex-col gap-1"><label for="{{ t.id }}" class="text-sm font-medium">{{ t.label }}</label><span class="text-muted-foreground text-xs">{{ t.help }}</span></div>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Field" hint-size="100%,48px" orientation="horizontal">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.FieldContent" hint-size="100%,40px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.FieldLabel" hint-size="160px,16px" htmlFor="{{ t.id }}">{{ t.label }}</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.FieldDescription" hint-size="240px,16px">{{ t.help }}</x-import>
+</x-import>
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.Switch" hint-size="32px,18px" id="{{ t.id }}" defaultChecked="{{ t.on }}" onCheckedChange="{{ markDirty }}"></x-import>
-</div>
+</x-import>
 </sc-for>
-</div>
-</section>
-<section class="border-destructive-border flex flex-col gap-4 rounded-xl border p-6 md:flex-row md:items-center md:justify-between" aria-labelledby="danger-h">
-<div class="flex flex-col gap-1"><h2 id="danger-h" class="font-semibold">Delete workspace</h2><p class="text-muted-foreground text-sm">Removes every source, answer and member. This cannot be undone.</p></div>
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="150px,36px" variant="destructive">Delete workspace</x-import>
-</section>
+</x-import>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.CardFooter" hint-size="100%,52px" className="justify-end gap-2 border-t">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="80px,36px" variant="outline" onClick="{{ discard }}">Cancel</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="80px,36px" onClick="{{ discard }}">Save</x-import>
+</x-import>
+</x-import>
+
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Card" hint-size="100%,180px" className="border-destructive-border">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.CardHeader" hint-size="100%,48px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.CardTitle" hint-size="160px,20px">Delete workspace</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.CardDescription" hint-size="320px,20px">Removes every source, answer and member. This cannot be undone.</x-import>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.CardFooter" hint-size="100%,52px" className="justify-end border-t">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.AlertDialog" hint-size="150px,36px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.AlertDialogTrigger" hint-size="150px,36px" className="{{ destructiveButton }}">Delete workspace</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.AlertDialogContent" hint-size="480px,200px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.AlertDialogHeader" hint-size="100%,80px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.AlertDialogTitle" hint-size="240px,20px">Delete Acme Legal?</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.AlertDialogDescription" hint-size="100%,40px">Every source, answer and member is removed permanently. This cannot be undone.</x-import>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.AlertDialogFooter" hint-size="100%,36px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.AlertDialogCancel" hint-size="80px,36px">Cancel</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.AlertDialogAction" hint-size="150px,36px" variant="destructive">Delete workspace</x-import>
+</x-import>
+</x-import>
+</x-import>
+</x-import>
+</x-import>
+
 <sc-if value="{{ dirty }}" hint-placeholder-val="{{ false }}">
-<div class="bg-popover text-popover-foreground sticky bottom-4 flex items-center justify-between gap-4 rounded-xl border p-4 shadow-lg">
-<span class="text-sm">You have unsaved changes.</span>
-<div class="flex gap-2">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Card" hint-size="100%,72px" className="sticky bottom-4 py-0 shadow-lg" role="region" aria-label="Unsaved changes">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Item" hint-size="100%,72px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.ItemContent" hint-size="200px,40px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.ItemTitle" hint-size="200px,20px">You have unsaved changes</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.ItemDescription" hint-size="240px,16px">Save to apply them to every member.</x-import>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.ItemActions" hint-size="200px,36px">
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="80px,36px" variant="outline" onClick="{{ discard }}">Discard</x-import>
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="110px,36px" onClick="{{ discard }}">Save changes</x-import>
-</div>
-</div>
+</x-import>
+</x-import>
+</x-import>
 </sc-if>
 </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:1100}}">
 class Component extends DCLogic {
   state = { theme: "light", name: "Acme Legal", dirty: true };
 
@@ -81,6 +132,7 @@ class Component extends DCLogic {
       markDirty: () => this.setState({ dirty: true }),
       discard: () => this.setState({ dirty: false }),
       dirty: s.dirty,
+      destructiveButton: window.LeanWiseDesign_f2d907?.buttonVariants({ variant: "destructive" }) ?? "",
       toggles: [
         { id: "sso", label: "Require single sign-on", help: "Members sign in through your SAML provider.", on: true },
         { id: "cite", label: "Always cite sources", help: "Answers without a citation are withheld.", on: true },

@@ -1,66 +1,154 @@
-// @dsCard group="Components" name="Forms" subtitle="Input, Textarea, Select, Checkbox, RadioGroup, Switch and Label — stock shadcn" viewport="1000x820"
+// @dsCard group="Components" name="Forms" subtitle="Field, FieldSet and FieldGroup over Input, Select, Checkbox, RadioGroup and Switch, plus a react-hook-form + zod form — stock shadcn" viewport="1100x1180"
 const {
-  Input, Textarea, Label, Checkbox, Switch, RadioGroup, RadioGroupItem,
+  Field, FieldGroup, FieldSet, FieldLegend, FieldLabel, FieldDescription, FieldError, FieldSeparator, FieldContent,
+  Input, Textarea, Checkbox, Switch, RadioGroup, RadioGroupItem,
   Select, SelectTrigger, SelectValue, SelectContent, SelectItem, Button,
+  Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter,
+  useForm, Controller, zodResolver, z,
 } = window.LeanWiseDesign_f2d907;
 
-function Field({ id, label, help, error, children }) {
+const inviteSchema = z.object({
+  email: z.string().email("Enter a valid email address."),
+  note: z.string().min(10, "Add at least 10 characters so they know why.").max(200, "Keep it under 200 characters."),
+});
+
+function InviteForm() {
+  const form = useForm({
+    resolver: zodResolver(inviteSchema),
+    defaultValues: { email: "", note: "" },
+    mode: "onTouched",
+  });
+  React.useEffect(() => { form.trigger(); }, []);
+  const onSubmit = () => form.reset();
   return (
-    <div className="flex flex-col gap-2">
-      <Label htmlFor={id}>{label}</Label>
-      {children}
-      {help && !error && <p className="text-muted-foreground text-xs">{help}</p>}
-      {error && <p className="text-destructive text-xs">{error}</p>}
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>Invite a member</CardTitle>
+        <CardDescription>react-hook-form + zod: the error is wired with aria-invalid and aria-describedby.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form id="invite-form" onSubmit={form.handleSubmit(onSubmit)}>
+          <FieldGroup>
+            <Controller
+              name="email"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="invite-email">Email</FieldLabel>
+                  <Input {...field} id="invite-email" type="email" data-a11y-expect="color-contrast" aria-invalid={fieldState.invalid}
+                    aria-describedby={fieldState.invalid ? "invite-email-error" : undefined} autoComplete="off" />
+                  {fieldState.invalid && <FieldError id="invite-email-error" errors={[fieldState.error]} />}
+                </Field>
+              )}
+            />
+            <Controller
+              name="note"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="invite-note">Note</FieldLabel>
+                  <Textarea {...field} id="invite-note" rows={3} data-a11y-expect="color-contrast" aria-invalid={fieldState.invalid}
+                    aria-describedby={fieldState.invalid ? "invite-note-error" : "invite-note-help"} />
+                  {fieldState.invalid
+                    ? <FieldError id="invite-note-error" errors={[fieldState.error]} />
+                    : <FieldDescription id="invite-note-help">Included in the invite email.</FieldDescription>}
+                </Field>
+              )}
+            />
+          </FieldGroup>
+        </form>
+      </CardContent>
+      <CardFooter className="justify-end gap-2">
+        <Button type="button" variant="outline" onClick={() => form.reset()}>Reset</Button>
+        <Button type="submit" form="invite-form">Send invite</Button>
+      </CardFooter>
+    </Card>
   );
 }
 
-lwCard("Forms", "Label above control, help below; an error replaces the help and sets aria-invalid.", (
+lwCard("Forms", "Field owns the label, description and error; horizontal Field for switches and checkboxes. Actions right-aligned, primary last.", (
   <div className="grid grid-cols-2 gap-10">
-    <div className="flex flex-col gap-5">
-      <Field id="f-name" label="Workspace name" help="Shown to everyone you invite.">
-        <Input id="f-name" defaultValue="Acme Legal" />
-      </Field>
-      <Field id="f-email" label="Billing email" error="Enter a valid email address.">
-        <Input id="f-email" type="email" defaultValue="billing@" aria-invalid="true" />
-      </Field>
-      <Field id="f-region" label="Data region">
-        <Select defaultValue="sg">
-          <SelectTrigger id="f-region" className="w-full"><SelectValue /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="sg">Singapore</SelectItem>
-            <SelectItem value="eu">Frankfurt</SelectItem>
-            <SelectItem value="us">Virginia</SelectItem>
-          </SelectContent>
-        </Select>
-      </Field>
-      <Field id="f-notes" label="Notes">
-        <Textarea id="f-notes" placeholder="Anything the team should know" />
-      </Field>
-      <Input disabled placeholder="Disabled" aria-label="Disabled input" />
-    </div>
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-3">
-        <span className="text-sm font-medium">Notifications</span>
-        <div className="flex items-center gap-2"><Checkbox id="c1" defaultChecked /><Label htmlFor="c1">Weekly digest</Label></div>
-        <div className="flex items-center gap-2"><Checkbox id="c2" /><Label htmlFor="c2">Failed ingests</Label></div>
-        <div className="flex items-center gap-2"><Checkbox id="c3" disabled /><Label htmlFor="c3">Billing (admin only)</Label></div>
-      </div>
-      <div className="flex flex-col gap-3">
-        <span className="text-sm font-medium" id="r-label">Answer style</span>
-        <RadioGroup defaultValue="cited" aria-labelledby="r-label">
-          <div className="flex items-center gap-2"><RadioGroupItem value="cited" id="r1" /><Label htmlFor="r1">Cited</Label></div>
-          <div className="flex items-center gap-2"><RadioGroupItem value="brief" id="r2" /><Label htmlFor="r2">Brief</Label></div>
-        </RadioGroup>
-      </div>
-      <div className="flex items-center justify-between rounded-lg border p-4">
-        <div className="flex flex-col gap-1">
-          <Label htmlFor="s1">Single sign-on</Label>
-          <span className="text-muted-foreground text-xs">Require SAML for every member.</span>
-        </div>
-        <Switch id="s1" defaultChecked />
-      </div>
-      <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end"><Button variant="outline">Cancel</Button><Button>Save changes</Button></div>
+    <form onSubmit={(e) => e.preventDefault()}>
+      <FieldGroup>
+        <FieldSet>
+          <FieldLegend>Workspace</FieldLegend>
+          <FieldDescription>Shown to everyone you invite.</FieldDescription>
+          <FieldGroup>
+            <Field>
+              <FieldLabel htmlFor="f-name">Workspace name</FieldLabel>
+              <Input id="f-name" defaultValue="Acme Legal" />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="f-region">Data region</FieldLabel>
+              <Select defaultValue="sg">
+                <SelectTrigger id="f-region"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="sg">Singapore</SelectItem>
+                  <SelectItem value="eu">Frankfurt</SelectItem>
+                  <SelectItem value="us">Virginia</SelectItem>
+                </SelectContent>
+              </Select>
+              <FieldDescription>Where documents and embeddings are stored.</FieldDescription>
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="f-notes">Notes</FieldLabel>
+              <Textarea id="f-notes" placeholder="Anything the team should know" />
+            </Field>
+            <Field data-disabled="true">
+              <FieldLabel htmlFor="f-id">Workspace ID</FieldLabel>
+              <Input id="f-id" disabled defaultValue="ws_7f3a91" />
+            </Field>
+          </FieldGroup>
+        </FieldSet>
+        <FieldSeparator />
+        <FieldSet>
+          <FieldLegend variant="label">Notifications</FieldLegend>
+          <FieldGroup data-slot="checkbox-group">
+            <Field orientation="horizontal">
+              <Checkbox id="c1" defaultChecked />
+              <FieldLabel htmlFor="c1" className="font-normal">Weekly digest</FieldLabel>
+            </Field>
+            <Field orientation="horizontal">
+              <Checkbox id="c2" />
+              <FieldLabel htmlFor="c2" className="font-normal">Failed ingests</FieldLabel>
+            </Field>
+            <Field orientation="horizontal" data-disabled="true">
+              <Checkbox id="c3" disabled />
+              <FieldLabel htmlFor="c3" className="font-normal">Billing (admin only)</FieldLabel>
+            </Field>
+          </FieldGroup>
+        </FieldSet>
+      </FieldGroup>
+    </form>
+    <div className="flex flex-col gap-8">
+      <FieldGroup>
+        <FieldSet>
+          <FieldLegend variant="label">Answer style</FieldLegend>
+          <RadioGroup defaultValue="cited">
+            <Field orientation="horizontal">
+              <RadioGroupItem value="cited" id="r1" />
+              <FieldLabel htmlFor="r1" className="font-normal">Cited</FieldLabel>
+            </Field>
+            <Field orientation="horizontal">
+              <RadioGroupItem value="brief" id="r2" />
+              <FieldLabel htmlFor="r2" className="font-normal">Brief</FieldLabel>
+            </Field>
+          </RadioGroup>
+        </FieldSet>
+        <FieldSeparator />
+        <Field orientation="horizontal">
+          <FieldContent>
+            <FieldLabel htmlFor="s1">Single sign-on</FieldLabel>
+            <FieldDescription>Require SAML for every member.</FieldDescription>
+          </FieldContent>
+          <Switch id="s1" defaultChecked />
+        </Field>
+        <Field orientation="horizontal" className="justify-end">
+          <Button variant="outline" type="button">Cancel</Button>
+          <Button type="submit">Save changes</Button>
+        </Field>
+      </FieldGroup>
+      <InviteForm />
     </div>
   </div>
 ));
