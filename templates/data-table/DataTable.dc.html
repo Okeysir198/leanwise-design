@@ -9,14 +9,18 @@
 </head>
 <body>
 <x-dc>
-<!-- @template name="Data table page" description="A list page: title and primary action, search and status filter, a table with status badges and row selection, and pagination." -->
+<!-- @template name="Data table page" description="A list page on the stock data-table pattern (TanStack Table): breadcrumb header, title and primary action, text filter and status ToggleGroup, selectable and sortable rows with a row-actions menu, Empty for no results, and pagination." -->
 <helmet><script src="../_shared/ds-base.js"></script></helmet>
 <a class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-background focus:px-3 focus:py-2" href="#main">Skip to content</a>
 <div class="bg-background text-foreground min-h-svh font-sans">
 <header class="flex h-14 items-center gap-3 border-b px-6">
-<span class="text-primary font-semibold">LeanWise AI</span>
-<span class="text-muted-foreground" aria-hidden="true">/</span>
-<span class="text-sm font-medium">Sources</span>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Breadcrumb" hint-size="220px,20px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.BreadcrumbList" hint-size="220px,20px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.BreadcrumbItem" hint-size="80px,20px"><x-import component-from-global-scope="LeanWiseDesign_f2d907.BreadcrumbLink" hint-size="80px,20px" href="#">LeanWise AI</x-import></x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.BreadcrumbSeparator" hint-size="14px,14px"></x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.BreadcrumbItem" hint-size="80px,20px"><x-import component-from-global-scope="LeanWiseDesign_f2d907.BreadcrumbPage" hint-size="80px,20px">Sources</x-import></x-import>
+</x-import>
+</x-import>
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="64px,32px" variant="ghost" size="sm" className="ml-auto" onClick="{{ toggleTheme }}" data-theme-toggle="">{{ themeLabel }}</x-import>
 </header>
 <main id="main" class="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-8">
@@ -28,47 +32,77 @@
 <x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="120px,36px">Add source</x-import>
 </div>
 <div class="flex flex-wrap items-center gap-3">
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.Input" hint-size="280px,36px" className="w-72" placeholder="Filter sources" aria-label="Filter sources" value="{{ query }}" onChange="{{ setQuery }}"></x-import>
-<div role="group" aria-label="Status" class="flex gap-1">
-<sc-for list="{{ filters }}" as="f" hint-placeholder-count="4">
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="64px,32px" size="sm" variant="{{ f.variant }}" aria-pressed="{{ f.pressed }}" onClick="{{ f.pick }}">{{ f.label }}</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Input" hint-size="280px,36px" className="max-w-xs" placeholder="Filter sources…" aria-label="Filter sources" value="{{ query }}" onChange="{{ setQuery }}"></x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.ToggleGroup" hint-size="320px,32px" type="single" variant="outline" size="sm" aria-label="Status" value="{{ status }}" onValueChange="{{ setStatus }}">
+<sc-for list="{{ filters }}" as="f" hint-placeholder-count="5">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.ToggleGroupItem" hint-size="64px,32px" value="{{ f.value }}">{{ f.label }}</x-import>
 </sc-for>
+</x-import>
 </div>
-</div>
-<div class="overflow-x-auto rounded-lg border">
-<table class="w-full caption-bottom text-sm">
-<thead class="[&_tr]:border-b">
-<tr>
-<th class="text-foreground h-10 px-4 text-left font-medium">Source</th>
-<th class="text-foreground h-10 px-2 text-left font-medium">Owner</th>
-<th class="text-foreground h-10 px-2 text-right font-medium">Docs</th>
-<th class="text-foreground h-10 px-2 text-right font-medium">Hit rate</th>
-<th class="text-foreground h-10 px-4 text-left font-medium">Status</th>
-</tr>
-</thead>
-<tbody>
-<sc-for list="{{ rows }}" as="r" hint-placeholder-count="6">
-<tr class="hover:bg-muted/50 border-b last:border-0">
-<td class="px-4 py-2.5 font-medium">{{ r.name }}</td>
-<td class="text-muted-foreground px-2 py-2.5">{{ r.owner }}</td>
-<td class="px-2 py-2.5 text-right tabular-nums">{{ r.docs }}</td>
-<td class="px-2 py-2.5 text-right tabular-nums">{{ r.hit }}</td>
-<td class="px-4 py-2.5"><x-import component-from-global-scope="LeanWiseDesign_f2d907.Badge" hint-size="56px,22px" className="{{ r.badge }}">{{ r.status }}</x-import></td>
-</tr>
+<div class="overflow-hidden rounded-md border">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Table" hint-size="100%,320px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.TableHeader" hint-size="100%,40px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.TableRow" hint-size="100%,40px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.TableHead" hint-size="32px,40px" className="w-10">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Checkbox" hint-size="16px,16px" checked="{{ allChecked }}" onCheckedChange="{{ toggleAll }}" aria-label="Select all"></x-import>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.TableHead" hint-size="200px,40px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="100px,32px" variant="ghost" onClick="{{ sortSource }}" aria-label="{{ sortLabel }}">Source<x-import component-from-global-scope="LeanWiseDesign_f2d907.ArrowUpDownIcon" hint-size="16px,16px"></x-import></x-import>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.TableHead" hint-size="120px,40px">Owner</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.TableHead" hint-size="80px,40px" className="text-right">Docs</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.TableHead" hint-size="80px,40px" className="text-right">Hit rate</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.TableHead" hint-size="80px,40px">Status</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.TableHead" hint-size="40px,40px" className="w-12"><span class="sr-only">Actions</span></x-import>
+</x-import>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.TableBody" hint-size="100%,280px">
+<sc-for list="{{ rows }}" as="r" hint-placeholder-count="5">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.TableRow" hint-size="100%,48px" data-state="{{ r.state }}">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.TableCell" hint-size="32px,40px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Checkbox" hint-size="16px,16px" checked="{{ r.selected }}" onCheckedChange="{{ r.toggle }}" aria-label="{{ r.selectLabel }}"></x-import>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.TableCell" hint-size="200px,40px" className="font-medium">{{ r.name }}</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.TableCell" hint-size="120px,40px" className="text-muted-foreground">{{ r.owner }}</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.TableCell" hint-size="80px,40px" className="text-right tabular-nums">{{ r.docs }}</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.TableCell" hint-size="80px,40px" className="text-right tabular-nums">{{ r.hit }}</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.TableCell" hint-size="80px,40px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Badge" hint-size="56px,22px" className="{{ r.badge }}">{{ r.status }}</x-import>
+</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.TableCell" hint-size="40px,40px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.DropdownMenu" hint-size="32px,32px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.DropdownMenuTrigger" hint-size="32px,32px" className="{{ iconButton }}" aria-label="{{ r.menuLabel }}"><x-import component-from-global-scope="LeanWiseDesign_f2d907.MoreHorizontalIcon" hint-size="16px,16px"></x-import></x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.DropdownMenuContent" hint-size="180px,140px" align="end">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.DropdownMenuLabel" hint-size="160px,28px">Actions</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.DropdownMenuItem" hint-size="160px,32px">Re-index now</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.DropdownMenuItem" hint-size="160px,32px">Copy source ID</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.DropdownMenuSeparator" hint-size="160px,1px"></x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.DropdownMenuItem" hint-size="160px,32px" variant="destructive">Remove source</x-import>
+</x-import>
+</x-import>
+</x-import>
+</x-import>
 </sc-for>
-</tbody>
-</table>
 <sc-if value="{{ empty }}" hint-placeholder-val="{{ false }}">
-<p class="text-muted-foreground p-8 text-center text-sm">No sources match that filter.</p>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.TableRow" hint-size="100%,160px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.TableCell" hint-size="100%,160px" colSpan="{{ 7 }}" className="p-0">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Empty" hint-size="100%,160px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.EmptyHeader" hint-size="240px,60px">
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.EmptyTitle" hint-size="120px,20px">No results</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.EmptyDescription" hint-size="240px,20px">No sources match that filter.</x-import>
+</x-import>
+</x-import>
+</x-import>
+</x-import>
 </sc-if>
+</x-import>
+</x-import>
 </div>
-<nav aria-label="Pagination" class="flex items-center justify-between text-sm">
-<span class="text-muted-foreground">Page 1 of 1</span>
-<div class="flex gap-2">
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="80px,32px" size="sm" variant="outline" disabled="{{ true }}">Previous</x-import>
-<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="64px,32px" size="sm" variant="outline" disabled="{{ true }}">Next</x-import>
+<div class="flex items-center justify-end gap-2">
+<p class="text-muted-foreground flex-1 text-sm">{{ selectedText }}</p>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="80px,32px" size="sm" variant="outline" disabled="{{ noPrev }}" onClick="{{ prev }}">Previous</x-import>
+<x-import component-from-global-scope="LeanWiseDesign_f2d907.Button" hint-size="64px,32px" size="sm" variant="outline" disabled="{{ noNext }}" onClick="{{ next }}">Next</x-import>
 </div>
-</nav>
 </main>
 </div>
 </x-dc>
@@ -79,40 +113,93 @@ const BADGE = {
   Stale: "border-transparent bg-warning text-warning-foreground",
   Failed: "border-transparent bg-destructive-soft text-destructive-soft-foreground",
 };
-const ROWS = [
-  { name: "Contracts / 2024", owner: "R. Okafor", docs: "1,284", hit: "94.2%", status: "Live" },
-  { name: "Policy handbook", owner: "J. Tran", docs: "312", hit: "88.7%", status: "Live" },
-  { name: "Contracts / 2023", owner: "R. Okafor", docs: "1,109", hit: "86.1%", status: "Syncing" },
-  { name: "Support transcripts", owner: "M. Lee", docs: "9,015", hit: "71.4%", status: "Stale" },
-  { name: "HR procedures", owner: "J. Tran", docs: "204", hit: "90.3%", status: "Live" },
-  { name: "Legacy wiki", owner: "M. Lee", docs: "476", hit: "—", status: "Failed" },
+const DATA = [
+  { id: "s1", name: "Contracts / 2024", owner: "R. Okafor", docs: 1284, hit: 94.2, status: "Live" },
+  { id: "s2", name: "Policy handbook", owner: "J. Tran", docs: 312, hit: 88.7, status: "Live" },
+  { id: "s3", name: "Contracts / 2023", owner: "R. Okafor", docs: 1109, hit: 86.1, status: "Syncing" },
+  { id: "s4", name: "Support transcripts", owner: "M. Lee", docs: 9015, hit: 71.4, status: "Stale" },
+  { id: "s5", name: "HR procedures", owner: "J. Tran", docs: 204, hit: 90.3, status: "Live" },
+  { id: "s6", name: "Legacy wiki", owner: "M. Lee", docs: 476, hit: null, status: "Failed" },
+  { id: "s7", name: "Sales playbooks", owner: "R. Okafor", docs: 88, hit: 79.5, status: "Live" },
+];
+const COLUMNS = [
+  { accessorKey: "name" },
+  { accessorKey: "owner" },
+  { accessorKey: "docs" },
+  { accessorKey: "hit" },
+  { accessorKey: "status", filterFn: (row, id, v) => v === "all" || row.getValue(id) === v },
 ];
 
 class Component extends DCLogic {
-  state = { theme: "light", query: "", status: "All" };
+  state = {
+    theme: "light",
+    tableState: { sorting: [], columnFilters: [], rowSelection: { s1: true }, pagination: { pageIndex: 0, pageSize: 5 } },
+  };
 
   componentDidUpdate() { document.documentElement.classList.toggle("dark", this.state.theme === "dark"); }
 
+  table() {
+    const NS = window.LeanWiseDesign_f2d907;
+    if (!NS) return null;
+    if (!this._table) {
+      this._table = NS.createTable({
+        data: DATA, columns: COLUMNS, getRowId: (r) => r.id,
+        state: this.state.tableState,
+        onStateChange: () => {}, renderFallbackValue: null,
+        getCoreRowModel: NS.getCoreRowModel(), getSortedRowModel: NS.getSortedRowModel(),
+        getFilteredRowModel: NS.getFilteredRowModel(), getPaginationRowModel: NS.getPaginationRowModel(),
+      });
+    }
+    this._table.setOptions((prev) => ({
+      ...prev,
+      state: this.state.tableState,
+      onStateChange: (u) => this.setState((s) => ({ tableState: typeof u === "function" ? u(s.tableState) : u })),
+    }));
+    return this._table;
+  }
+
   renderVals() {
     const s = this.state;
-    const q = s.query.toLowerCase();
-    const rows = ROWS
-      .filter((r) => (s.status === "All" || r.status === s.status) && r.name.toLowerCase().includes(q))
-      .map((r) => ({ ...r, badge: BADGE[r.status] }));
-    return {
+    const t = this.table();
+    const theme = {
       themeLabel: s.theme === "dark" ? "Light" : "Dark",
       toggleTheme: () => this.setState({ theme: s.theme === "dark" ? "light" : "dark" }),
-      summary: `${ROWS.length} sources · ${rows.length} shown`,
-      query: s.query,
-      setQuery: (e) => this.setState({ query: e.target.value }),
-      filters: ["All", "Live", "Stale", "Failed"].map((label) => ({
-        label,
-        variant: s.status === label ? "secondary" : "ghost",
-        pressed: s.status === label ? "true" : "false",
-        pick: () => this.setState({ status: label }),
-      })),
+    };
+    if (!t) return { ...theme, rows: [], filters: [] };
+    const NS = window.LeanWiseDesign_f2d907;
+    const status = t.getColumn("status").getFilterValue() ?? "all";
+    const sorted = t.getColumn("name").getIsSorted();
+    const rows = t.getRowModel().rows.map((row) => {
+      const r = row.original;
+      return {
+        name: r.name, owner: r.owner, status: r.status, badge: BADGE[r.status],
+        docs: r.docs.toLocaleString("en-US"), hit: r.hit == null ? "—" : `${r.hit}%`,
+        selected: row.getIsSelected(), state: row.getIsSelected() ? "selected" : undefined,
+        toggle: (v) => row.toggleSelected(!!v),
+        selectLabel: `Select ${r.name}`, menuLabel: `Open menu for ${r.name}`,
+      };
+    });
+    return {
+      ...theme,
+      summary: `${DATA.length} sources · ${t.getFilteredRowModel().rows.length} shown`,
+      query: t.getColumn("name").getFilterValue() ?? "",
+      setQuery: (e) => t.getColumn("name").setFilterValue(e.target.value),
+      status,
+      setStatus: (v) => t.getColumn("status").setFilterValue(v || "all"),
+      filters: [["all", "All"], ["Live", "Live"], ["Stale", "Stale"], ["Failed", "Failed"], ["Archived", "Archived"]]
+        .map(([value, label]) => ({ value, label })),
+      allChecked: t.getIsAllPageRowsSelected() || (t.getIsSomePageRowsSelected() && "indeterminate"),
+      toggleAll: (v) => t.toggleAllPageRowsSelected(!!v),
+      sortSource: () => t.getColumn("name").toggleSorting(sorted === "asc"),
+      sortLabel: `Sort by source${sorted ? ` (${sorted === "asc" ? "ascending" : "descending"})` : ""}`,
+      iconButton: NS.buttonVariants({ variant: "ghost", size: "icon" }) + " size-8",
       rows,
       empty: rows.length === 0,
+      selectedText: `${t.getFilteredSelectedRowModel().rows.length} of ${t.getFilteredRowModel().rows.length} row(s) selected.`,
+      noPrev: !t.getCanPreviousPage(),
+      noNext: !t.getCanNextPage(),
+      prev: () => t.previousPage(),
+      next: () => t.nextPage(),
     };
   }
 }

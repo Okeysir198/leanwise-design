@@ -1,23 +1,23 @@
-// @dsCard group="Components" name="Navigation" subtitle="Tabs (both list variants), Separator and Avatar in a page header" viewport="1000x640"
+// @dsCard group="Components" name="Navigation" subtitle="Breadcrumb, Tabs (both list variants) and Pagination — stock shadcn" viewport="1000x640"
 const {
+  Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator, BreadcrumbEllipsis,
   Tabs, TabsList, TabsTrigger, TabsContent, Separator,
-  Avatar, AvatarFallback, AvatarGroup, Button,
+  Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationPrevious, PaginationNext, PaginationEllipsis,
 } = window.LeanWiseDesign_f2d907;
 
-lwCard("Navigation", "Tabs switch views of one object; the sidebar (see Blocks) switches objects.", (
+lwCard("Navigation", "Breadcrumb says where you are, Tabs switch views of one object, Pagination moves through a list.", (
   <>
-    <div className="flex items-center justify-between">
-      <div className="flex items-center gap-3 text-sm">
-        <a href="#" className="text-muted-foreground hover:text-foreground">Workspace</a>
-        <span className="text-muted-foreground" aria-hidden>/</span>
-        <span className="font-medium">Sources</span>
-      </div>
-      <AvatarGroup>
-        <Avatar><AvatarFallback>RO</AvatarFallback></Avatar>
-        <Avatar><AvatarFallback>JT</AvatarFallback></Avatar>
-        <Avatar><AvatarFallback>ML</AvatarFallback></Avatar>
-      </AvatarGroup>
-    </div>
+    <Breadcrumb>
+      <BreadcrumbList>
+        <BreadcrumbItem><BreadcrumbLink href="#">Workspace</BreadcrumbLink></BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem><BreadcrumbEllipsis /></BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem><BreadcrumbLink href="#">Sources</BreadcrumbLink></BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem><BreadcrumbPage>Contracts / 2024</BreadcrumbPage></BreadcrumbItem>
+      </BreadcrumbList>
+    </Breadcrumb>
     <Separator />
     <Tabs defaultValue="overview">
       <TabsList>
@@ -40,12 +40,15 @@ lwCard("Navigation", "Tabs switch views of one object; the sidebar (see Blocks) 
       <TabsContent value="week" className="pt-2 text-sm">This week</TabsContent>
       <TabsContent value="month" className="pt-2 text-sm">This month</TabsContent>
     </Tabs>
-    <div className="flex items-center gap-2">
-      <Button variant="outline" size="sm">Previous</Button>
-      <Button variant="outline" size="sm" aria-current="page" className="bg-accent">1</Button>
-      <Button variant="ghost" size="sm">2</Button>
-      <Button variant="ghost" size="sm">3</Button>
-      <Button variant="outline" size="sm">Next</Button>
-    </div>
+    <Pagination>
+      <PaginationContent>
+        <PaginationItem><PaginationPrevious href="#" /></PaginationItem>
+        <PaginationItem><PaginationLink href="#">1</PaginationLink></PaginationItem>
+        <PaginationItem><PaginationLink href="#" isActive>2</PaginationLink></PaginationItem>
+        <PaginationItem><PaginationLink href="#">3</PaginationLink></PaginationItem>
+        <PaginationItem><PaginationEllipsis /></PaginationItem>
+        <PaginationItem><PaginationNext href="#" /></PaginationItem>
+      </PaginationContent>
+    </Pagination>
   </>
 ));

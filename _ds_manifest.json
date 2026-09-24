@@ -2,8 +2,104 @@
   "namespace": "LeanWiseDesign_f2d907",
   "components": [
     {
+      "name": "zodResolver",
+      "sourcePath": "node_modules/@hookform/resolvers/zod"
+    },
+    {
+      "name": "createTable",
+      "sourcePath": "node_modules/@tanstack/react-table"
+    },
+    {
+      "name": "flexRender",
+      "sourcePath": "node_modules/@tanstack/react-table"
+    },
+    {
+      "name": "getCoreRowModel",
+      "sourcePath": "node_modules/@tanstack/react-table"
+    },
+    {
+      "name": "getFilteredRowModel",
+      "sourcePath": "node_modules/@tanstack/react-table"
+    },
+    {
+      "name": "getPaginationRowModel",
+      "sourcePath": "node_modules/@tanstack/react-table"
+    },
+    {
+      "name": "getSortedRowModel",
+      "sourcePath": "node_modules/@tanstack/react-table"
+    },
+    {
+      "name": "useReactTable",
+      "sourcePath": "node_modules/@tanstack/react-table"
+    },
+    {
+      "name": "AlertCircleIcon",
+      "sourcePath": "node_modules/lucide-react"
+    },
+    {
+      "name": "ArrowUpDownIcon",
+      "sourcePath": "node_modules/lucide-react"
+    },
+    {
+      "name": "CheckCircle2Icon",
+      "sourcePath": "node_modules/lucide-react"
+    },
+    {
+      "name": "InfoIcon",
+      "sourcePath": "node_modules/lucide-react"
+    },
+    {
+      "name": "MoreHorizontalIcon",
+      "sourcePath": "node_modules/lucide-react"
+    },
+    {
+      "name": "SearchIcon",
+      "sourcePath": "node_modules/lucide-react"
+    },
+    {
+      "name": "Controller",
+      "sourcePath": "node_modules/react-hook-form"
+    },
+    {
+      "name": "useForm",
+      "sourcePath": "node_modules/react-hook-form"
+    },
+    {
+      "name": "Area",
+      "sourcePath": "node_modules/recharts"
+    },
+    {
+      "name": "AreaChart",
+      "sourcePath": "node_modules/recharts"
+    },
+    {
+      "name": "Bar",
+      "sourcePath": "node_modules/recharts"
+    },
+    {
+      "name": "BarChart",
+      "sourcePath": "node_modules/recharts"
+    },
+    {
+      "name": "CartesianGrid",
+      "sourcePath": "node_modules/recharts"
+    },
+    {
+      "name": "XAxis",
+      "sourcePath": "node_modules/recharts"
+    },
+    {
+      "name": "YAxis",
+      "sourcePath": "node_modules/recharts"
+    },
+    {
       "name": "toast",
       "sourcePath": "node_modules/sonner"
+    },
+    {
+      "name": "z",
+      "sourcePath": "node_modules/zod"
     },
     {
       "name": "AppShell",
@@ -122,6 +218,50 @@
       "sourcePath": "preview/src/ui/badge.tsx"
     },
     {
+      "name": "Breadcrumb",
+      "sourcePath": "preview/src/ui/breadcrumb.tsx"
+    },
+    {
+      "name": "BreadcrumbEllipsis",
+      "sourcePath": "preview/src/ui/breadcrumb.tsx"
+    },
+    {
+      "name": "BreadcrumbItem",
+      "sourcePath": "preview/src/ui/breadcrumb.tsx"
+    },
+    {
+      "name": "BreadcrumbLink",
+      "sourcePath": "preview/src/ui/breadcrumb.tsx"
+    },
+    {
+      "name": "BreadcrumbList",
+      "sourcePath": "preview/src/ui/breadcrumb.tsx"
+    },
+    {
+      "name": "BreadcrumbPage",
+      "sourcePath": "preview/src/ui/breadcrumb.tsx"
+    },
+    {
+      "name": "BreadcrumbSeparator",
+      "sourcePath": "preview/src/ui/breadcrumb.tsx"
+    },
+    {
+      "name": "ButtonGroup",
+      "sourcePath": "preview/src/ui/button-group.tsx"
+    },
+    {
+      "name": "ButtonGroupSeparator",
+      "sourcePath": "preview/src/ui/button-group.tsx"
+    },
+    {
+      "name": "ButtonGroupText",
+      "sourcePath": "preview/src/ui/button-group.tsx"
+    },
+    {
+      "name": "buttonGroupVariants",
+      "sourcePath": "preview/src/ui/button-group.tsx"
+    },
+    {
       "name": "Button",
       "sourcePath": "preview/src/ui/button.tsx"
     },
@@ -156,6 +296,30 @@
     {
       "name": "CardTitle",
       "sourcePath": "preview/src/ui/card.tsx"
+    },
+    {
+      "name": "ChartContainer",
+      "sourcePath": "preview/src/ui/chart.tsx"
+    },
+    {
+      "name": "ChartLegend",
+      "sourcePath": "preview/src/ui/chart.tsx"
+    },
+    {
+      "name": "ChartLegendContent",
+      "sourcePath": "preview/src/ui/chart.tsx"
+    },
+    {
+      "name": "ChartStyle",
+      "sourcePath": "preview/src/ui/chart.tsx"
+    },
+    {
+      "name": "ChartTooltip",
+      "sourcePath": "preview/src/ui/chart.tsx"
+    },
+    {
+      "name": "ChartTooltipContent",
+      "sourcePath": "preview/src/ui/chart.tsx"
     },
     {
       "name": "Checkbox",
@@ -286,12 +450,156 @@
       "sourcePath": "preview/src/ui/empty.tsx"
     },
     {
+      "name": "Field",
+      "sourcePath": "preview/src/ui/field.tsx"
+    },
+    {
+      "name": "FieldContent",
+      "sourcePath": "preview/src/ui/field.tsx"
+    },
+    {
+      "name": "FieldDescription",
+      "sourcePath": "preview/src/ui/field.tsx"
+    },
+    {
+      "name": "FieldError",
+      "sourcePath": "preview/src/ui/field.tsx"
+    },
+    {
+      "name": "FieldGroup",
+      "sourcePath": "preview/src/ui/field.tsx"
+    },
+    {
+      "name": "FieldLabel",
+      "sourcePath": "preview/src/ui/field.tsx"
+    },
+    {
+      "name": "FieldLegend",
+      "sourcePath": "preview/src/ui/field.tsx"
+    },
+    {
+      "name": "FieldSeparator",
+      "sourcePath": "preview/src/ui/field.tsx"
+    },
+    {
+      "name": "FieldSet",
+      "sourcePath": "preview/src/ui/field.tsx"
+    },
+    {
+      "name": "FieldTitle",
+      "sourcePath": "preview/src/ui/field.tsx"
+    },
+    {
+      "name": "InputGroup",
+      "sourcePath": "preview/src/ui/input-group.tsx"
+    },
+    {
+      "name": "InputGroupAddon",
+      "sourcePath": "preview/src/ui/input-group.tsx"
+    },
+    {
+      "name": "InputGroupButton",
+      "sourcePath": "preview/src/ui/input-group.tsx"
+    },
+    {
+      "name": "InputGroupInput",
+      "sourcePath": "preview/src/ui/input-group.tsx"
+    },
+    {
+      "name": "InputGroupText",
+      "sourcePath": "preview/src/ui/input-group.tsx"
+    },
+    {
+      "name": "InputGroupTextarea",
+      "sourcePath": "preview/src/ui/input-group.tsx"
+    },
+    {
       "name": "Input",
       "sourcePath": "preview/src/ui/input.tsx"
     },
     {
+      "name": "Item",
+      "sourcePath": "preview/src/ui/item.tsx"
+    },
+    {
+      "name": "ItemActions",
+      "sourcePath": "preview/src/ui/item.tsx"
+    },
+    {
+      "name": "ItemContent",
+      "sourcePath": "preview/src/ui/item.tsx"
+    },
+    {
+      "name": "ItemDescription",
+      "sourcePath": "preview/src/ui/item.tsx"
+    },
+    {
+      "name": "ItemFooter",
+      "sourcePath": "preview/src/ui/item.tsx"
+    },
+    {
+      "name": "ItemGroup",
+      "sourcePath": "preview/src/ui/item.tsx"
+    },
+    {
+      "name": "ItemHeader",
+      "sourcePath": "preview/src/ui/item.tsx"
+    },
+    {
+      "name": "ItemMedia",
+      "sourcePath": "preview/src/ui/item.tsx"
+    },
+    {
+      "name": "ItemSeparator",
+      "sourcePath": "preview/src/ui/item.tsx"
+    },
+    {
+      "name": "ItemTitle",
+      "sourcePath": "preview/src/ui/item.tsx"
+    },
+    {
       "name": "Label",
       "sourcePath": "preview/src/ui/label.tsx"
+    },
+    {
+      "name": "NativeSelect",
+      "sourcePath": "preview/src/ui/native-select.tsx"
+    },
+    {
+      "name": "NativeSelectOptGroup",
+      "sourcePath": "preview/src/ui/native-select.tsx"
+    },
+    {
+      "name": "NativeSelectOption",
+      "sourcePath": "preview/src/ui/native-select.tsx"
+    },
+    {
+      "name": "Pagination",
+      "sourcePath": "preview/src/ui/pagination.tsx"
+    },
+    {
+      "name": "PaginationContent",
+      "sourcePath": "preview/src/ui/pagination.tsx"
+    },
+    {
+      "name": "PaginationEllipsis",
+      "sourcePath": "preview/src/ui/pagination.tsx"
+    },
+    {
+      "name": "PaginationItem",
+      "sourcePath": "preview/src/ui/pagination.tsx"
+    },
+    {
+      "name": "PaginationLink",
+      "sourcePath": "preview/src/ui/pagination.tsx"
+    },
+    {
+      "name": "PaginationNext",
+      "sourcePath": "preview/src/ui/pagination.tsx"
+    },
+    {
+      "name": "PaginationPrevious",
+      "sourcePath": "preview/src/ui/pagination.tsx"
     },
     {
       "name": "Popover",
@@ -450,6 +758,22 @@
       "sourcePath": "preview/src/ui/textarea.tsx"
     },
     {
+      "name": "ToggleGroup",
+      "sourcePath": "preview/src/ui/toggle-group.tsx"
+    },
+    {
+      "name": "ToggleGroupItem",
+      "sourcePath": "preview/src/ui/toggle-group.tsx"
+    },
+    {
+      "name": "Toggle",
+      "sourcePath": "preview/src/ui/toggle.tsx"
+    },
+    {
+      "name": "toggleVariants",
+      "sourcePath": "preview/src/ui/toggle.tsx"
+    },
+    {
       "name": "Tooltip",
       "sourcePath": "preview/src/ui/tooltip.tsx"
     },
@@ -506,29 +830,29 @@
     {
       "path": "preview/cards/data.card.html",
       "group": "Components",
-      "viewport": "1000x760",
-      "subtitle": "Table with status badges, Progress, Skeleton and Avatar",
+      "viewport": "1100x1000",
+      "subtitle": "Data table (TanStack): selection, sorting, row actions, status filter, pagination and Empty — plus Progress, Skeleton and Avatar",
       "name": "Data"
     },
     {
       "path": "preview/cards/feedback.card.html",
       "group": "Components",
       "viewport": "1100x900",
-      "subtitle": "Alert (default, info-soft, destructive), toast, Badge variants, Spinner and Empty",
+      "subtitle": "Alert (default, info-soft, destructive), Sonner toast, Badge variants, Spinner and Empty",
       "name": "Feedback"
     },
     {
       "path": "preview/cards/forms.card.html",
       "group": "Components",
-      "viewport": "1000x820",
-      "subtitle": "Input, Textarea, Select, Checkbox, RadioGroup, Switch and Label — stock shadcn",
+      "viewport": "1100x1180",
+      "subtitle": "Field, FieldSet and FieldGroup over Input, Select, Checkbox, RadioGroup and Switch, plus a react-hook-form + zod form — stock shadcn",
       "name": "Forms"
     },
     {
       "path": "preview/cards/navigation.card.html",
       "group": "Components",
       "viewport": "1000x640",
-      "subtitle": "Tabs (both list variants), Separator and Avatar in a page header",
+      "subtitle": "Breadcrumb, Tabs (both list variants) and Pagination — stock shadcn",
       "name": "Navigation"
     },
     {
@@ -555,9 +879,9 @@
     {
       "path": "preview/cards/charts.card.html",
       "group": "Charts",
-      "viewport": "1000x720",
-      "subtitle": "--chart-1..5 as swatches and a grouped bar chart; the order is the series order",
-      "name": "Chart palette"
+      "viewport": "1100x820",
+      "subtitle": "Stock Chart (ChartContainer, ChartTooltip, ChartLegend) over recharts; series colours are --chart-1..5 in series order",
+      "name": "Charts"
     }
   ],
   "templates": [
@@ -575,7 +899,7 @@
     },
     {
       "name": "Data table page",
-      "description": "A list page: title and primary action, search and status filter, a table with status badges and row selection, and pagination.",
+      "description": "A list page on the stock data-table pattern (TanStack Table): breadcrumb header, title and primary action, text filter and status ToggleGroup, selectable and sortable rows with a row-actions menu, Empty for no results, and pagination.",
       "folder": "templates/data-table",
       "entryPath": "templates/data-table/DataTable.dc.html"
     },
@@ -587,7 +911,7 @@
     },
     {
       "name": "Settings form",
-      "description": "Workspace settings: sectioned form with labelled fields, switches, a destructive zone, and a sticky save bar that appears once something changes.",
+      "description": "Workspace settings: Card sections built from Field, switches as horizontal Fields, a destructive delete behind an AlertDialog, and an unsaved-changes bar that appears once something changes.",
       "folder": "templates/settings",
       "entryPath": "templates/settings/Settings.dc.html"
     }
