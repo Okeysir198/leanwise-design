@@ -35,7 +35,7 @@ function InviteForm() {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="invite-email">Email</FieldLabel>
-                  <Input {...field} id="invite-email" type="email" data-a11y-expect="color-contrast" aria-invalid={fieldState.invalid}
+                  <Input {...field} id="invite-email" type="email" aria-invalid={fieldState.invalid}
                     aria-describedby={fieldState.invalid ? "invite-email-error" : undefined} autoComplete="off" />
                   {fieldState.invalid && <FieldError id="invite-email-error" errors={[fieldState.error]} />}
                 </Field>
@@ -47,7 +47,7 @@ function InviteForm() {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="invite-note">Note</FieldLabel>
-                  <Textarea {...field} id="invite-note" rows={3} data-a11y-expect="color-contrast" aria-invalid={fieldState.invalid}
+                  <Textarea {...field} id="invite-note" rows={3} aria-invalid={fieldState.invalid}
                     aria-describedby={fieldState.invalid ? "invite-note-error" : "invite-note-help"} />
                   {fieldState.invalid
                     ? <FieldError id="invite-note-error" errors={[fieldState.error]} />

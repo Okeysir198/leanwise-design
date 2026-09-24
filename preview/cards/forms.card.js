@@ -58,7 +58,6 @@
             ...field,
             id: "invite-email",
             type: "email",
-            "data-a11y-expect": "color-contrast",
             "aria-invalid": fieldState.invalid,
             "aria-describedby": fieldState.invalid ? "invite-email-error" : void 0,
             autoComplete: "off"
@@ -76,7 +75,6 @@
             ...field,
             id: "invite-note",
             rows: 3,
-            "data-a11y-expect": "color-contrast",
             "aria-invalid": fieldState.invalid,
             "aria-describedby": fieldState.invalid ? "invite-note-error" : "invite-note-help"
           }

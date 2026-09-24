@@ -28,6 +28,8 @@ export function pairsFor(t) {
      (text-destructive, description text-destructive/90, on card or the soft tint). */
   for (const s of ["muted", "background"]) pairs.push(["foreground", s, FLOORS.text, 0.6, "light"]);
   for (const s of ["card", "destructive-soft"]) for (const a of [1, 0.9]) pairs.push(["destructive", s, FLOORS.text, a]);
+  /* An invalid stock Input/Textarea in dark: destructive text on its bg-input/30 fill over a card. */
+  pairs.push(["destructive", "input/30@card", FLOORS.text, 1, "dark"]);
   return pairs;
 }
 
@@ -42,8 +44,11 @@ export function checkContrast({ ANCHORS, ramp, themes, themeCss }) {
       need(k in t, `${name}: role --${k} is missing (present in ${other})`);
 
     for (const [fg, bg, floor, alpha = 1, only] of pairsFor(t)) {
-      if (!(fg in t) || !(bg in t) || (only && only !== name)) continue;
-      const b = toRgb(t[bg]), f = toRgb(t[fg]).map((c, i) => alpha * c + (1 - alpha) * b[i]);
+      const [tint, pct, base] = bg.match(/^([a-z-]+)\/(\d+)@([a-z-]+)$/)?.slice(1) ?? [];
+      if (!(fg in t) || !((tint ? base : bg) in t) || (only && only !== name)) continue;
+      const b = tint
+        ? toRgb(t[tint]).map((c, i) => (pct / 100) * c + (1 - pct / 100) * toRgb(t[base])[i])
+        : toRgb(t[bg]), f = toRgb(t[fg]).map((c, i) => alpha * c + (1 - alpha) * b[i]);
       const r = cr(f, b);
       need(r >= floor, `${name}: --${fg}${alpha < 1 ? `/${alpha * 100}` : ""} on --${bg} is ${r.toFixed(2)}:1 (< ${floor})`);
     }
