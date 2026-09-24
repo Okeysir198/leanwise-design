@@ -57,6 +57,9 @@ lwCard("Feedback", "Inline alerts sit in the flow; toasts confirm what already h
       </EmptyHeader>
       <EmptyContent><Button>Add a source</Button></EmptyContent>
     </Empty>
-    <Toasts />
+    <div className="relative col-span-2 h-60 overflow-hidden rounded-xl border border-dashed [transform:translateZ(0)]">
+      <p className="text-muted-foreground p-4 text-sm">Toasts appear in the corner of the page.</p>
+      <Toasts />
+    </div>
   </div>
 ));

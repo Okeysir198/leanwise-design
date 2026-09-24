@@ -353,6 +353,9 @@
   .order-last {
     order: 9999;
   }
+  .col-span-2 {
+    grid-column: span 2 / span 2;
+  }
   .col-start-2 {
     grid-column-start: 2;
   }
@@ -581,6 +584,9 @@
   }
   .h-24 {
     height: calc(var(--spacing) * 24);
+  }
+  .h-60 {
+    height: calc(var(--spacing) * 60);
   }
   .h-\[calc\(100\%-1px\)\] {
     height: calc(100% - 1px);
@@ -846,6 +852,9 @@
   }
   .rotate-45 {
     rotate: 45deg;
+  }
+  .\[transform\:translateZ\(0\)\] {
+    transform: translateZ(0);
   }
   .transform {
     transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);
