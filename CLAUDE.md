@@ -107,24 +107,8 @@ claim: re-derive every colour here and run `npm run check` before trusting it.
 
 ## Consumers
 
-Enumerate; never trust a list:
-
-```bash
-for d in /srv/share/01_project-dev/*/ /srv/share/01_project-dev/*/frontend/ \
-         /srv/share/01_project-dev/*/app/ /srv/share/01_project-dev/*/apps/web/; do
-  pin=$(grep -o '"@leanwise/design": *"[^"]*"' "$d/package.json" 2>/dev/null | sed 's/.*: *"//;s/"$//')
-  [ -n "$pin" ] && printf '%-46s %s\n' "${d#/srv/share/01_project-dev/}" "$pin"
-done | sort -u
-grep '@leanwise/design' ~/Documents/01_Personal/personal-mcp-server/mcp-manage/package.json
-```
-
-`mcp-manage` lives outside the tree, so the loop cannot see it. It uses the `lw-subset` bin,
-which v5 does not ship (it subset `tokens.css`); it stays on its v4 pin until it moves to
-`theme.css`.
-
-Before bumping a consumer: `npx lw-token-lint <consumer>/src`.
+Before bumping a consumer's pin: `npx lw-token-lint <consumer>/src`.
 
 ## Ownership
 
-LeanWise code → personal account **Okeysir198**, never the Vietsol org. Git dep:
-`github:Okeysir198/leanwise-design#<tag>`.
+Git dep: `github:Okeysir198/leanwise-design#<tag>`.
