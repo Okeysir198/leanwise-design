@@ -22,5 +22,5 @@ test("focus: the unlayered ring names controls only, never a content surface or 
   assert.ok(all.length >= 10, "read the selector lists");
   for (const s of all) assert.ok(!SURFACE.test(s), `${s} is a surface/item, not a control`);
   assert.ok(css.includes(FOCUS_FIELDS), "theme.css carries FOCUS_FIELDS");
-  assert.ok(!/:is\([^)]*\binput\b(?!:not)/.test(FOCUS_FIELDS), "bare input would ring the borderless CommandInput");
+  assert.ok(!/[\s,(]input(?!:not|-)\b/.test(FOCUS_FIELDS), "bare input would ring the borderless CommandInput");
 });

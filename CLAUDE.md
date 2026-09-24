@@ -24,7 +24,10 @@ The repo is also the working copy of a Claude Design project
   chroma < 0.02). Status (`destructive`, `success`, `warning`, `info`, `cta`) and `chart-*`
   are the only exceptions.
 - **Ink follows the fill** — white on cyan/navy, navy on amber/warning.
-- **Focus is a solid ring**, stated unlayered in `theme.css` so it beats stock `ring-ring/50`.
+- **Focus is a solid ring** on CONTROLS, stated unlayered in `theme.css` so it beats stock
+  `ring-ring/50`; the generic outline is in `@layer base` so stock `outline-hidden` on menus,
+  popovers and command lists wins. Selector lists: `FOCUS_CONTROLS`/`FOCUS_FIELDS` in
+  `scripts/lib/theme.mjs`, pinned by `test/focus.test.mjs`.
 - **Under Tailwind v4 an unknown utility emits NOTHING.** Presence (does it compile?) is the
   only honest test; `check presence` does it for every role.
 - **Every check refuses to pass vacuously**, and every check was sabotaged (break → red →
