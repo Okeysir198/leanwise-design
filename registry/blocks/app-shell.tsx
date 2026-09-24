@@ -6,74 +6,80 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
-  SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarInset,
   SidebarMenu,
+  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
+  SidebarRail,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 
 type AppShellNavItem = {
   title: string
-  href: string
-  icon?: React.ComponentType<{ className?: string }>
-  active?: boolean
+  url: string
+  icon?: React.ComponentType
+  isActive?: boolean
+  badge?: React.ReactNode
 }
+
+type AppShellNavGroup = { label?: string; items: AppShellNavItem[] }
 
 type AppShellProps = React.ComponentProps<typeof SidebarProvider> & {
-  brand: React.ReactNode
-  nav: AppShellNavItem[]
-  /** Right side of the top bar: search, theme toggle, account menu. */
-  actions?: React.ReactNode
-  /** Page title or breadcrumb, left of the top bar. */
-  heading?: React.ReactNode
+  /** Sidebar header: logo, team switcher. */
+  brand?: React.ReactNode
+  nav: AppShellNavGroup[]
+  /** Sidebar footer: the user menu. */
   footer?: React.ReactNode
+  /** Header, after the trigger: a stock Breadcrumb. */
+  breadcrumb?: React.ReactNode
+  /** Header, right side: search, theme toggle, primary action. */
+  actions?: React.ReactNode
 }
 
-function AppShell({ brand, nav, actions, heading, footer, children, className, ...props }: AppShellProps) {
+/* The shape of the stock sidebar-07 block, with the nav passed in as data. */
+function AppShell({ brand, nav, footer, breadcrumb, actions, children, ...props }: AppShellProps) {
   return (
-    <SidebarProvider data-slot="app-shell" className={className} {...props}>
+    <SidebarProvider {...props}>
       <Sidebar collapsible="icon">
-        <SidebarHeader>{brand}</SidebarHeader>
+        {brand != null && <SidebarHeader>{brand}</SidebarHeader>}
         <SidebarContent>
-          <SidebarGroup>
-            <SidebarGroupContent>
+          {nav.map((group, i) => (
+            <SidebarGroup key={group.label ?? i}>
+              {group.label != null && <SidebarGroupLabel>{group.label}</SidebarGroupLabel>}
               <SidebarMenu>
-                {nav.map(({ title, href, icon: Icon, active }) => (
-                  <SidebarMenuItem key={href}>
-                    <SidebarMenuButton asChild isActive={active} tooltip={title}>
-                      <a href={href} aria-current={active ? "page" : undefined}>
-                        {Icon && <Icon />}
-                        <span>{title}</span>
+                {group.items.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild isActive={item.isActive} tooltip={item.title}>
+                      <a href={item.url} aria-current={item.isActive ? "page" : undefined}>
+                        {item.icon && <item.icon />}
+                        <span>{item.title}</span>
                       </a>
                     </SidebarMenuButton>
+                    {item.badge != null && <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>}
                   </SidebarMenuItem>
                 ))}
               </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
+            </SidebarGroup>
+          ))}
         </SidebarContent>
         {footer != null && <SidebarFooter>{footer}</SidebarFooter>}
+        <SidebarRail />
       </Sidebar>
       <SidebarInset>
-        <header
-          data-slot="app-shell-header"
-          className="bg-background/80 sticky top-0 z-10 flex h-14 shrink-0 items-center gap-2 border-b px-4 backdrop-blur"
-        >
+        <header className="flex h-16 shrink-0 items-center gap-2 px-4 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
           <SidebarTrigger className="-ml-1" />
-          <Separator orientation="vertical" className="mr-2 h-4 self-center" />
-          <div className="min-w-0 flex-1 truncate font-medium">{heading}</div>
-          {actions}
+          <Separator orientation="vertical" className="mr-2 data-[orientation=vertical]:h-4" />
+          {breadcrumb}
+          {actions != null && <div className="ml-auto flex items-center gap-2">{actions}</div>}
         </header>
-        <main data-slot="app-shell-main" className="flex-1 p-4 md:p-6">
-          {children}
-        </main>
+        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   )
 }
 
-export { AppShell, type AppShellNavItem, type AppShellProps }
+export { AppShell, type AppShellNavGroup, type AppShellNavItem, type AppShellProps }

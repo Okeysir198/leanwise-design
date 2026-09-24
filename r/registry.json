@@ -331,27 +331,7 @@
           "box-shadow": "0 0 0 1px var(--ring)"
         }
       },
-      "docs": "The call to action is amber, one per view, on the stock Button: <Button className=\"bg-cta text-cta-foreground hover:bg-cta/90\">. Status fills: bg-success/warning/info/destructive with their -foreground; soft callouts: bg-info-soft text-info-soft-foreground border-info-border."
-    },
-    {
-      "name": "kpi-tile",
-      "type": "registry:block",
-      "title": "KPI tile",
-      "description": "A metric on a Card: label, value, trend delta, hint.",
-      "dependencies": [
-        "class-variance-authority",
-        "lucide-react"
-      ],
-      "registryDependencies": [
-        "card"
-      ],
-      "files": [
-        {
-          "path": "registry/blocks/kpi-tile.tsx",
-          "type": "registry:component",
-          "target": "components/kpi-tile.tsx"
-        }
-      ]
+      "docs": "The call to action is amber, one per view, on the stock Button: <Button className=\"bg-cta text-cta-foreground hover:bg-cta/90\">. Status fills: bg-success/warning/info/destructive with their -foreground; soft callouts: bg-info-soft text-info-soft-foreground border-info-border. Metric tiles: the stock dashboard-01 block (npx shadcn add dashboard-01, or copy its section-cards.tsx)."
     },
     {
       "name": "state-view",
@@ -377,12 +357,15 @@
       "name": "file-upload",
       "type": "registry:block",
       "title": "File upload",
-      "description": "Drop zone + browse button + removable file list.",
+      "description": "Drop zone on Empty + browse button + removable file list on Item, with optional Progress.",
       "dependencies": [
         "lucide-react"
       ],
       "registryDependencies": [
-        "button"
+        "button",
+        "empty",
+        "item",
+        "progress"
       ],
       "files": [
         {
@@ -410,10 +393,11 @@
       "name": "app-shell",
       "type": "registry:block",
       "title": "App shell",
-      "description": "Collapsible sidebar nav and a sticky top bar on shadcn Sidebar.",
+      "description": "The stock sidebar-07 shape with the nav as data: collapsible Sidebar, grouped menu with badges, rail, and a header with trigger + Breadcrumb slot.",
       "registryDependencies": [
         "sidebar",
-        "separator"
+        "separator",
+        "breadcrumb"
       ],
       "files": [
         {

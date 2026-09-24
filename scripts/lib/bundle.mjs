@@ -1,4 +1,4 @@
-/* The Claude Design preview surface, generated from preview/src + the cards + templates:
+/* The Claude Design preview surface, generated from preview/src + registry/blocks + the cards + templates:
      preview/_vendor/     React 19 + ReactDOM 19 as classic scripts (window.React / ReactDOM)
      _ds_bundle.js        classic <script>; exposes window.LeanWiseDesign_f2d907
      preview/preview.css  Tailwind v4 + theme.css over everything the preview renders
@@ -40,8 +40,11 @@ function resolvePlugin(ROOT) {
       b.onLoad({ filter: /.*/, namespace: "shim" }, (a) => ({ contents: SHIMS[a.path], loader: "js" }));
       b.onResolve({ filter: /^(cn|@\/lib\/utils)$/ }, () => ({ path: ts(path.join(src, "lib/utils")) }));
       b.onResolve({ filter: /^next-themes$/ }, () => ({ path: ts(path.join(src, "shims/next-themes")) }));
-      b.onResolve({ filter: /^@\/(registry\/new-york-v4\/)?ui\// }, (a) => ({
+      b.onResolve({ filter: /^@\/(registry\/new-york-v4|components)\/ui\// }, (a) => ({
         path: ts(path.join(src, "ui", a.path.replace(/^.*\/ui\//, ""))),
+      }));
+      b.onResolve({ filter: /^@\/(registry\/new-york-v4\/)?hooks\// }, (a) => ({
+        path: ts(path.join(src, "hooks", a.path.replace(/^.*\/hooks\//, ""))),
       }));
     },
   };
@@ -53,7 +56,8 @@ const version = (ROOT, pkg) =>
 /** Which file each exposed name comes from, by esbuild's own export analysis. */
 async function exportMap(ROOT) {
   const index = fs.readFileSync(path.join(ROOT, ENTRY), "utf8");
-  const files = [...index.matchAll(/export \* from "\.\/([^"]+)"/g)].map((m) => `${SRC}/${m[1]}.tsx`);
+  const files = [...index.matchAll(/export \* from "(\.\.?\/[^"]+)"/g)]
+    .map((m) => path.posix.normalize(`${SRC}/${m[1]}.tsx`));
   const probe = await esbuild.build({
     entryPoints: files, absWorkingDir: ROOT, bundle: false, write: false, metafile: true,
     format: "esm", outdir: "probe", jsx: "preserve", tsconfigRaw: { compilerOptions: {} },
@@ -118,6 +122,7 @@ export async function buildPreviewCss(ROOT) {
     '@import "tw-animate-css";',
     '@import "../theme.css";',
     '@source "./src";',
+    '@source "../registry/blocks";',
     '@source "./cards";',
     '@source "../templates/*/*.dc.html";',
     "",

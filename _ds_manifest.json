@@ -6,26 +6,6 @@
       "sourcePath": "node_modules/sonner"
     },
     {
-      "name": "AppShell",
-      "sourcePath": "preview/src/blocks/app-shell.tsx"
-    },
-    {
-      "name": "FileUpload",
-      "sourcePath": "preview/src/blocks/file-upload.tsx"
-    },
-    {
-      "name": "KpiTile",
-      "sourcePath": "preview/src/blocks/kpi-tile.tsx"
-    },
-    {
-      "name": "SectionNav",
-      "sourcePath": "preview/src/blocks/section-nav.tsx"
-    },
-    {
-      "name": "StateView",
-      "sourcePath": "preview/src/blocks/state-view.tsx"
-    },
-    {
       "name": "cn",
       "sourcePath": "preview/src/lib/utils.ts"
     },
@@ -120,6 +100,34 @@
     {
       "name": "badgeVariants",
       "sourcePath": "preview/src/ui/badge.tsx"
+    },
+    {
+      "name": "Breadcrumb",
+      "sourcePath": "preview/src/ui/breadcrumb.tsx"
+    },
+    {
+      "name": "BreadcrumbEllipsis",
+      "sourcePath": "preview/src/ui/breadcrumb.tsx"
+    },
+    {
+      "name": "BreadcrumbItem",
+      "sourcePath": "preview/src/ui/breadcrumb.tsx"
+    },
+    {
+      "name": "BreadcrumbLink",
+      "sourcePath": "preview/src/ui/breadcrumb.tsx"
+    },
+    {
+      "name": "BreadcrumbList",
+      "sourcePath": "preview/src/ui/breadcrumb.tsx"
+    },
+    {
+      "name": "BreadcrumbPage",
+      "sourcePath": "preview/src/ui/breadcrumb.tsx"
+    },
+    {
+      "name": "BreadcrumbSeparator",
+      "sourcePath": "preview/src/ui/breadcrumb.tsx"
     },
     {
       "name": "Button",
@@ -290,6 +298,46 @@
       "sourcePath": "preview/src/ui/input.tsx"
     },
     {
+      "name": "Item",
+      "sourcePath": "preview/src/ui/item.tsx"
+    },
+    {
+      "name": "ItemActions",
+      "sourcePath": "preview/src/ui/item.tsx"
+    },
+    {
+      "name": "ItemContent",
+      "sourcePath": "preview/src/ui/item.tsx"
+    },
+    {
+      "name": "ItemDescription",
+      "sourcePath": "preview/src/ui/item.tsx"
+    },
+    {
+      "name": "ItemFooter",
+      "sourcePath": "preview/src/ui/item.tsx"
+    },
+    {
+      "name": "ItemGroup",
+      "sourcePath": "preview/src/ui/item.tsx"
+    },
+    {
+      "name": "ItemHeader",
+      "sourcePath": "preview/src/ui/item.tsx"
+    },
+    {
+      "name": "ItemMedia",
+      "sourcePath": "preview/src/ui/item.tsx"
+    },
+    {
+      "name": "ItemSeparator",
+      "sourcePath": "preview/src/ui/item.tsx"
+    },
+    {
+      "name": "ItemTitle",
+      "sourcePath": "preview/src/ui/item.tsx"
+    },
+    {
       "name": "Label",
       "sourcePath": "preview/src/ui/label.tsx"
     },
@@ -378,6 +426,134 @@
       "sourcePath": "preview/src/ui/separator.tsx"
     },
     {
+      "name": "Sheet",
+      "sourcePath": "preview/src/ui/sheet.tsx"
+    },
+    {
+      "name": "SheetClose",
+      "sourcePath": "preview/src/ui/sheet.tsx"
+    },
+    {
+      "name": "SheetContent",
+      "sourcePath": "preview/src/ui/sheet.tsx"
+    },
+    {
+      "name": "SheetDescription",
+      "sourcePath": "preview/src/ui/sheet.tsx"
+    },
+    {
+      "name": "SheetFooter",
+      "sourcePath": "preview/src/ui/sheet.tsx"
+    },
+    {
+      "name": "SheetHeader",
+      "sourcePath": "preview/src/ui/sheet.tsx"
+    },
+    {
+      "name": "SheetTitle",
+      "sourcePath": "preview/src/ui/sheet.tsx"
+    },
+    {
+      "name": "SheetTrigger",
+      "sourcePath": "preview/src/ui/sheet.tsx"
+    },
+    {
+      "name": "Sidebar",
+      "sourcePath": "preview/src/ui/sidebar.tsx"
+    },
+    {
+      "name": "SidebarContent",
+      "sourcePath": "preview/src/ui/sidebar.tsx"
+    },
+    {
+      "name": "SidebarFooter",
+      "sourcePath": "preview/src/ui/sidebar.tsx"
+    },
+    {
+      "name": "SidebarGroup",
+      "sourcePath": "preview/src/ui/sidebar.tsx"
+    },
+    {
+      "name": "SidebarGroupAction",
+      "sourcePath": "preview/src/ui/sidebar.tsx"
+    },
+    {
+      "name": "SidebarGroupContent",
+      "sourcePath": "preview/src/ui/sidebar.tsx"
+    },
+    {
+      "name": "SidebarGroupLabel",
+      "sourcePath": "preview/src/ui/sidebar.tsx"
+    },
+    {
+      "name": "SidebarHeader",
+      "sourcePath": "preview/src/ui/sidebar.tsx"
+    },
+    {
+      "name": "SidebarInput",
+      "sourcePath": "preview/src/ui/sidebar.tsx"
+    },
+    {
+      "name": "SidebarInset",
+      "sourcePath": "preview/src/ui/sidebar.tsx"
+    },
+    {
+      "name": "SidebarMenu",
+      "sourcePath": "preview/src/ui/sidebar.tsx"
+    },
+    {
+      "name": "SidebarMenuAction",
+      "sourcePath": "preview/src/ui/sidebar.tsx"
+    },
+    {
+      "name": "SidebarMenuBadge",
+      "sourcePath": "preview/src/ui/sidebar.tsx"
+    },
+    {
+      "name": "SidebarMenuButton",
+      "sourcePath": "preview/src/ui/sidebar.tsx"
+    },
+    {
+      "name": "SidebarMenuItem",
+      "sourcePath": "preview/src/ui/sidebar.tsx"
+    },
+    {
+      "name": "SidebarMenuSkeleton",
+      "sourcePath": "preview/src/ui/sidebar.tsx"
+    },
+    {
+      "name": "SidebarMenuSub",
+      "sourcePath": "preview/src/ui/sidebar.tsx"
+    },
+    {
+      "name": "SidebarMenuSubButton",
+      "sourcePath": "preview/src/ui/sidebar.tsx"
+    },
+    {
+      "name": "SidebarMenuSubItem",
+      "sourcePath": "preview/src/ui/sidebar.tsx"
+    },
+    {
+      "name": "SidebarProvider",
+      "sourcePath": "preview/src/ui/sidebar.tsx"
+    },
+    {
+      "name": "SidebarRail",
+      "sourcePath": "preview/src/ui/sidebar.tsx"
+    },
+    {
+      "name": "SidebarSeparator",
+      "sourcePath": "preview/src/ui/sidebar.tsx"
+    },
+    {
+      "name": "SidebarTrigger",
+      "sourcePath": "preview/src/ui/sidebar.tsx"
+    },
+    {
+      "name": "useSidebar",
+      "sourcePath": "preview/src/ui/sidebar.tsx"
+    },
+    {
       "name": "Skeleton",
       "sourcePath": "preview/src/ui/skeleton.tsx"
     },
@@ -464,6 +640,22 @@
     {
       "name": "TooltipTrigger",
       "sourcePath": "preview/src/ui/tooltip.tsx"
+    },
+    {
+      "name": "AppShell",
+      "sourcePath": "registry/blocks/app-shell.tsx"
+    },
+    {
+      "name": "FileUpload",
+      "sourcePath": "registry/blocks/file-upload.tsx"
+    },
+    {
+      "name": "SectionNav",
+      "sourcePath": "registry/blocks/section-nav.tsx"
+    },
+    {
+      "name": "StateView",
+      "sourcePath": "registry/blocks/state-view.tsx"
     }
   ],
   "startingPoints": [],
@@ -542,15 +734,15 @@
       "path": "preview/cards/app-shell.card.html",
       "group": "Blocks",
       "viewport": "1200x760",
-      "subtitle": "Sidebar with the current-page bar, a header bar, and a section nav in the content",
+      "subtitle": "Stock sidebar-07 shape: sidebar with the current-page bar, breadcrumb header, section nav in the content",
       "name": "App shell"
     },
     {
       "path": "preview/cards/blocks.card.html",
       "group": "Blocks",
       "viewport": "1100x900",
-      "subtitle": "KpiTile, StateView (loading / empty / error) and FileUpload — built on stock primitives",
-      "name": "KPI, state, upload"
+      "subtitle": "Stock dashboard-01 section cards, StateView (loading / empty / error) and FileUpload",
+      "name": "Section cards, state, upload"
     },
     {
       "path": "preview/cards/charts.card.html",

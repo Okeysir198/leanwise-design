@@ -14,10 +14,11 @@ function SectionNav({
 }: React.ComponentProps<"nav"> & { items: SectionNavItem[] }) {
   return (
     <nav data-slot="section-nav" aria-label={ariaLabel} className={cn("text-sm", className)} {...props}>
-      <ul className="border-border flex flex-col border-l">
+      <ul data-slot="section-nav-list" className="border-border flex flex-col border-l">
         {items.map((item) => (
           <li key={item.href}>
             <a
+              data-slot="section-nav-link"
               href={item.href}
               aria-current={item.current ? "page" : undefined}
               className={cn(

@@ -102,13 +102,12 @@ export const ITEMS = [
         "box-shadow": "0 0 0 1px var(--ring)",
       },
     },
-    docs: "The call to action is amber, one per view, on the stock Button: <Button className=\"bg-cta text-cta-foreground hover:bg-cta/90\">. Status fills: bg-success/warning/info/destructive with their -foreground; soft callouts: bg-info-soft text-info-soft-foreground border-info-border.",
+    docs: "The call to action is amber, one per view, on the stock Button: <Button className=\"bg-cta text-cta-foreground hover:bg-cta/90\">. Status fills: bg-success/warning/info/destructive with their -foreground; soft callouts: bg-info-soft text-info-soft-foreground border-info-border. Metric tiles: the stock dashboard-01 block (npx shadcn add dashboard-01, or copy its section-cards.tsx).",
   },
-  block("kpi-tile", "KPI tile", "A metric on a Card: label, value, trend delta, hint.", ["card"], ["class-variance-authority", "lucide-react"]),
   block("state-view", "State view", "Empty, loading and error states on shadcn Empty.", ["empty", "spinner"], ["lucide-react"]),
-  block("file-upload", "File upload", "Drop zone + browse button + removable file list.", ["button"], ["lucide-react"]),
+  block("file-upload", "File upload", "Drop zone on Empty + browse button + removable file list on Item, with optional Progress.", ["button", "empty", "item", "progress"], ["lucide-react"]),
   block("section-nav", "Section nav", "In-page section navigation: a thin rail, the current section marked by a brand segment.", []),
-  block("app-shell", "App shell", "Collapsible sidebar nav and a sticky top bar on shadcn Sidebar.", ["sidebar", "separator"]),
+  block("app-shell", "App shell", "The stock sidebar-07 shape with the nav as data: collapsible Sidebar, grouped menu with badges, rail, and a header with trigger + Breadcrumb slot.", ["sidebar", "separator", "breadcrumb"]),
 ];
 
 const SCHEMA = "https://ui.shadcn.com/schema/registry.json";

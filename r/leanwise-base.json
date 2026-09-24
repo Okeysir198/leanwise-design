@@ -158,5 +158,5 @@
       "box-shadow": "0 0 0 1px var(--ring)"
     }
   },
-  "docs": "The call to action is amber, one per view, on the stock Button: <Button className=\"bg-cta text-cta-foreground hover:bg-cta/90\">. Status fills: bg-success/warning/info/destructive with their -foreground; soft callouts: bg-info-soft text-info-soft-foreground border-info-border."
+  "docs": "The call to action is amber, one per view, on the stock Button: <Button className=\"bg-cta text-cta-foreground hover:bg-cta/90\">. Status fills: bg-success/warning/info/destructive with their -foreground; soft callouts: bg-info-soft text-info-soft-foreground border-info-border. Metric tiles: the stock dashboard-01 block (npx shadcn add dashboard-01, or copy its section-cards.tsx)."
 }

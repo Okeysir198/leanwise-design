@@ -9,7 +9,7 @@ What ships:
 | Path | What it is |
 |---|---|
 | `theme.css` | The whole theme for Tailwind v4 + shadcn: every role as a CSS variable, light and `.dark`, registered as utilities (`bg-primary`, `bg-cta`, `text-muted-foreground`…), the type scale, the radius, the solid focus ring, pointer cursors |
-| `r/*.json`, `registry.json` | The shadcn registry: `leanwise-theme`, `leanwise-font`, `leanwise-font-mono`, `leanwise-base`, and the blocks `kpi-tile`, `state-view`, `file-upload`, `app-shell`, `section-nav` |
+| `r/*.json`, `registry.json` | The shadcn registry: `leanwise-theme`, `leanwise-font`, `leanwise-font-mono`, `leanwise-base`, and the blocks `state-view`, `file-upload`, `app-shell`, `section-nav` |
 | `marketing.css` | Plain-CSS layer for marketing sites (hero, sections, plans, footer), over theme variables only |
 | `fonts.css`, `fonts/` | Geist + Geist Mono, self-hosted, Vietnamese subsets included |
 | `assets/` | Logo mark, lockups, favicon, hero artwork |
@@ -71,7 +71,7 @@ Then install the base and whatever blocks you need:
 
 ```bash
 npx shadcn add @leanwise/leanwise-base
-npx shadcn add @leanwise/app-shell @leanwise/kpi-tile
+npx shadcn add @leanwise/app-shell dashboard-01   # metric tiles: stock section-cards
 npx shadcn add button card dialog table   # stock, as always
 ```
 
