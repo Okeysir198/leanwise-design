@@ -4,7 +4,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { ramp, themes } from "../../src/palette.mjs";
-import { RADIUS, FOCUS_CONTROLS, FOCUS_FIELDS } from "./theme.mjs";
+import { RADIUS, FOCUS_CONTROLS, FOCUS_FIELDS, stockOverridesObject } from "./theme.mjs";
 
 const HOMEPAGE = "https://github.com/Okeysir198/leanwise-design";
 const NS = "@leanwise";
@@ -88,16 +88,7 @@ export const ITEMS = [
         /* Layered so a stock outline-hidden (menus, popovers, command lists) still wins. */
         ":focus-visible": { outline: "2px solid var(--ring)", "outline-offset": "2px" },
       },
-      /* Unlayered: beats the stock ScrollArea thumb's bg-border without forking it. */
-      '[data-slot="scroll-area-thumb"]': { "background-color": "var(--scrollbar)" },
-      '[data-slot="switch"][data-state="unchecked"]': { "background-color": "var(--switch-track)" },
-      '[data-slot="dialog-content"].bg-background, [data-slot="alert-dialog-content"].bg-background, [data-slot="sheet-content"].bg-background, [data-slot="drawer-content"].bg-background': { "background-color": "var(--popover)" },
-      /* Compact card density, keyed on the stock default so call-site padding still wins. */
-      '[data-slot="card"].py-6': { "padding-block": "1rem" },
-      '[data-slot="card"].gap-6': { gap: "1rem" },
-      '[data-slot="card-header"].px-6, [data-slot="card-content"].px-6, [data-slot="card-footer"].px-6': { "padding-inline": "1rem" },
-      '[data-slot="card-header"].border-b[class~="[.border-b]:pb-6"]': { "padding-bottom": "1rem" },
-      '[data-slot="card-footer"].border-t[class~="[.border-t]:pt-6"]': { "padding-top": "1rem" },
+      ...stockOverridesObject(),
       "@media (pointer: coarse)": { '[data-slot="sidebar-wrapper"]': { "--sidebar-width-icon": "3.75rem !important" } },
       /* Unlayered on purpose: beats the layered ring-ring/50 utilities of stock controls. */
       [`${FOCUS_CONTROLS}:focus-visible`]: {

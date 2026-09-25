@@ -2,6 +2,44 @@
    from src/palette.mjs. Also the one place the non-colour scales live. */
 import { ramp, themes } from "../../src/palette.mjs";
 
+/**
+ * Unlayered overrides of STOCK shadcn defaults, keyed on the stock class so a call-site
+ * utility (tailwind-merge drops the default) still wins. ONE table: theme.css prints it,
+ * the registry's leanwise-base spreads it, and test/stock-keys.test.mjs fails when a
+ * `keys` class disappears from the stock source (a shadcn bump would otherwise make the
+ * rule silently match nothing).
+ */
+export const STOCK_OVERRIDES = [
+  { why: "The stock ScrollArea thumb paints bg-border, too faint to find on a card.",
+    sel: ['[data-slot="scroll-area-thumb"]'], decl: { "background-color": "var(--scrollbar)" },
+    keys: [["scroll-area", 'data-slot="scroll-area-thumb"']] },
+  { why: "Compact card density (16px, not stock 24px) for data-dense screens.",
+    sel: ['[data-slot="card"].py-6'], decl: { "padding-block": "1rem" }, keys: [["card", "py-6"]] },
+  { sel: ['[data-slot="card"].gap-6'], decl: { gap: "1rem" }, keys: [["card", "gap-6"]] },
+  { sel: ['[data-slot="card-header"].px-6', '[data-slot="card-content"].px-6', '[data-slot="card-footer"].px-6'],
+    decl: { "padding-inline": "1rem" }, keys: [["card", "px-6"]] },
+  { sel: ['[data-slot="card-header"].border-b[class~="[.border-b]:pb-6"]'], decl: { "padding-bottom": "1rem" },
+    keys: [["card", "[.border-b]:pb-6"]] },
+  { sel: ['[data-slot="card-footer"].border-t[class~="[.border-t]:pt-6"]'], decl: { "padding-top": "1rem" },
+    keys: [["card", "[.border-t]:pt-6"]] },
+  { why: 'Stock Switch paints "off" with --input, a teal-grey too close to the primary "on".',
+    sel: ['[data-slot="switch"][data-state="unchecked"]'], decl: { "background-color": "var(--switch-track)" },
+    keys: [["switch", "data-[state=unchecked]:bg-input"]] },
+  { why: "Overlays sit on the elevated popover surface, not the tinted page ground.",
+    sel: ['[data-slot="dialog-content"].bg-background', '[data-slot="alert-dialog-content"].bg-background',
+          '[data-slot="sheet-content"].bg-background', '[data-slot="drawer-content"].bg-background'],
+    decl: { "background-color": "var(--popover)" },
+    keys: [["dialog", "bg-background"], ["alert-dialog", "bg-background"], ["sheet", "bg-background"]] },
+];
+
+/** `{selector: declarations}` for the registry's cssVars/css object. */
+export const stockOverridesObject = () =>
+  Object.fromEntries(STOCK_OVERRIDES.map((r) => [r.sel.join(", "), r.decl]));
+
+const STOCK_OVERRIDES_CSS = STOCK_OVERRIDES.map((r) =>
+  `${r.why ? `/* ${r.why} */\n` : ""}${r.sel.join(",\n")} {\n${Object.entries(r.decl)
+    .map(([k, v]) => `  ${k}: ${v};`).join("\n")}\n}\n`).join("\n");
+
 export const FONTS = {
   sans: '"Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif',
   mono: '"Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace',
@@ -124,35 +162,7 @@ ${decl(typeScale)}
   }
 }
 
-/* The stock ScrollArea thumb paints \`bg-border\`, too faint to find on a card. Unlayered,
-   so it beats that utility without forking the component. */
-[data-slot="scroll-area-thumb"] {
-  background-color: var(--scrollbar);
-}
-
-/* Compact card density (16px, not stock 24px) for data-dense screens. Keyed on the stock
-   default class, so it only applies while that default survives: a call-site p-0 / py-8 /
-   gap-2 replaces it (tailwind-merge) and wins. Unlayered, so it beats the stock utility. */
-[data-slot="card"].py-6 { padding-block: 1rem; }
-[data-slot="card"].gap-6 { gap: 1rem; }
-[data-slot="card-header"].px-6,
-[data-slot="card-content"].px-6,
-[data-slot="card-footer"].px-6 { padding-inline: 1rem; }
-[data-slot="card-header"].border-b[class~="[.border-b]:pb-6"] { padding-bottom: 1rem; }
-[data-slot="card-footer"].border-t[class~="[.border-t]:pt-6"] { padding-top: 1rem; }
-
-/* Stock Switch paints "off" with --input, a teal-grey too close to the primary "on".
-   Unlayered so it beats the stock data-[state=unchecked]:bg-input utilities. */
-[data-slot="switch"][data-state="unchecked"] { background-color: var(--switch-track); }
-
-/* Overlays sit on the elevated popover surface, not the tinted page ground (stock paints
-   bg-background, which read as a grey sheet in light and sank in dark). Keyed on the stock
-   class so a call-site bg-* still wins. */
-[data-slot="dialog-content"].bg-background,
-[data-slot="alert-dialog-content"].bg-background,
-[data-slot="sheet-content"].bg-background,
-[data-slot="drawer-content"].bg-background { background-color: var(--popover); }
-
+${STOCK_OVERRIDES_CSS}
 /* On touch the collapsed sidebar rail widens so its menu buttons clear 44px. Stock
    SidebarProvider sets --sidebar-width-icon as an inline style, which only !important
    in a stylesheet can override. */
