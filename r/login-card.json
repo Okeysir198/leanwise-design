@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "login-card",
+  "type": "registry:block",
+  "title": "Login card",
+  "description": "One-column sign-in page: a single Card centred on the muted ground, logo + title + description header, a notice slot and the form.",
+  "registryDependencies": [
+    "card"
+  ],
+  "files": [
+    {
+      "path": "registry/blocks/login-card.tsx",
+      "type": "registry:component",
+      "target": "components/login-card.tsx",
+      "content": "import * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { Card, CardContent, CardDescription, CardHeader, CardTitle } from \"@/components/ui/card\"\n\ntype LoginCardProps = Omit<React.ComponentProps<\"div\">, \"title\"> & {\n  /** Brand mark above the title, e.g. <img src=\"/brand/logo-icon.png\" className=\"size-12\" />. */\n  logo?: React.ReactNode\n  title: React.ReactNode\n  description?: React.ReactNode\n  /** Rendered between the header and the form: an Alert for a failed sign-in. */\n  notice?: React.ReactNode\n  /** The form — stock Label + Input fields and one full-width primary Button. */\n  children: React.ReactNode\n}\n\n/**\n * One-column sign-in page: muted ground, a single max-w-sm Card centred on both axes\n * (the shadcn login-02 frame without the image column). Inputs and buttons stay stock.\n */\nfunction LoginCard({ logo, title, description, notice, children, className, ...props }: LoginCardProps) {\n  return (\n    <div\n      data-slot=\"login-card\"\n      className={cn(\"flex min-h-svh w-full items-center justify-center bg-muted p-6 md:p-10\", className)}\n      {...props}\n    >\n      <Card className=\"w-full max-w-sm\">\n        <CardHeader className=\"items-center text-center\">\n          {logo ? <div className=\"mb-2 flex justify-center\">{logo}</div> : null}\n          <CardTitle className=\"text-2xl\">{title}</CardTitle>\n          {description ? <CardDescription className=\"text-balance\">{description}</CardDescription> : null}\n        </CardHeader>\n        <CardContent className=\"flex flex-col gap-4\">\n          {notice}\n          {children}\n        </CardContent>\n      </Card>\n    </div>\n  )\n}\n\nexport { LoginCard }\n"
+    }
+  ]
+}

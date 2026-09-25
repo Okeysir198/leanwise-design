@@ -434,6 +434,22 @@
       ]
     },
     {
+      "name": "login-card",
+      "type": "registry:block",
+      "title": "Login card",
+      "description": "One-column sign-in page: a single Card centred on the muted ground, logo + title + description header, a notice slot and the form.",
+      "registryDependencies": [
+        "card"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/login-card.tsx",
+          "type": "registry:component",
+          "target": "components/login-card.tsx"
+        }
+      ]
+    },
+    {
       "name": "app-shell",
       "type": "registry:block",
       "title": "App shell",

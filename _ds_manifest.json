@@ -1182,6 +1182,10 @@
       "sourcePath": "registry/blocks/file-upload.tsx"
     },
     {
+      "name": "LoginCard",
+      "sourcePath": "registry/blocks/login-card.tsx"
+    },
+    {
       "name": "SectionNav",
       "sourcePath": "registry/blocks/section-nav.tsx"
     },

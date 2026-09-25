@@ -108,6 +108,7 @@ export const ITEMS = [
   block("state-view", "State view", "Empty, loading and error states on shadcn Empty.", ["empty", "spinner"], ["lucide-react"]),
   block("file-upload", "File upload", "Drop zone on Empty + browse button + removable file list on Item, with optional Progress.", ["button", "empty", "item", "progress"], ["lucide-react"]),
   block("section-nav", "Section nav", "In-page section navigation: a thin rail, the current section marked by a brand segment.", []),
+  block("login-card", "Login card", "One-column sign-in page: a single Card centred on the muted ground, logo + title + description header, a notice slot and the form.", ["card"]),
   block("app-shell", "App shell", "The stock sidebar-07 shape with the nav as data: collapsible Sidebar, grouped menu with badges, rail, and a header with trigger + Breadcrumb slot.", ["sidebar", "separator", "breadcrumb"]),
 ];
 

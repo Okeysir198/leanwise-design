@@ -9,7 +9,7 @@ What ships:
 | Path | What it is |
 |---|---|
 | `theme.css` | The whole theme for Tailwind v4 + shadcn: every role as a CSS variable, light and `.dark`, registered as utilities (`bg-primary`, `bg-cta`, `text-muted-foreground`…), the type scale, the radius, the solid focus ring, pointer cursors |
-| `r/*.json`, `registry.json` | The shadcn registry: `leanwise-theme`, `leanwise-font`, `leanwise-font-mono`, `leanwise-base`, and the blocks `state-view`, `file-upload`, `app-shell`, `section-nav` |
+| `r/*.json`, `registry.json` | The shadcn registry: `leanwise-theme`, `leanwise-font`, `leanwise-font-mono`, `leanwise-base`, and the blocks `state-view`, `file-upload`, `app-shell`, `section-nav`, `login-card` (one-column sign-in) |
 | `marketing.css` | Plain-CSS layer for marketing sites (hero, sections, plans, footer), over theme variables only |
 | `fonts.css`, `fonts/` | Geist + Geist Mono, self-hosted, Vietnamese subsets included |
 | `assets/` | Logo mark, lockups, favicon, hero artwork |
@@ -43,7 +43,7 @@ A Tailwind v4 app with shadcn:
 
 ```bash
 npx shadcn@latest init --base radix
-npm i github:Okeysir198/leanwise-design#v5.5.0
+npm i github:Okeysir198/leanwise-design#v5.6.0
 ```
 
 In your global CSS, after Tailwind:
@@ -66,7 +66,7 @@ Add the registry to `components.json`:
 ```json
 {
   "registries": {
-    "@leanwise": "https://raw.githubusercontent.com/Okeysir198/leanwise-design/v5.5.0/r/{name}.json"
+    "@leanwise": "https://raw.githubusercontent.com/Okeysir198/leanwise-design/v5.6.0/r/{name}.json"
   }
 }
 ```

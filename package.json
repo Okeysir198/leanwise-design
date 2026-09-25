@@ -1,6 +1,6 @@
 {
   "name": "@leanwise/design",
-  "version": "5.5.0",
+  "version": "5.6.0",
   "description": "LeanWise brand as a shadcn/ui theme and registry: theme.css for Tailwind v4, brand registry items, marketing layer.",
   "license": "UNLICENSED",
   "type": "module",
