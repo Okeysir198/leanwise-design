@@ -58,7 +58,7 @@ lwCard("App shell", "One rail for the whole product; only the current item chang
           { title: "Evaluations", href: "#evaluations" },
           { title: "Usage", href: "#usage" },
         ]} />
-        <p className="text-muted-foreground text-sm">The sidebar marks the current page with a tint and a brand bar; the section nav marks the current section on a thin rail.</p>
+        <p className="text-muted-foreground text-sm">The sidebar marks the current page with the stock tint; the section nav marks the current section on a thin rail.</p>
       </div>
     </AppShell>
   </div>

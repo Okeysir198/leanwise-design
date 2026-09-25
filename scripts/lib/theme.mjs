@@ -111,11 +111,16 @@ ${decl(typeScale)}
   a[href], summary, select, label[for], input[type="checkbox"], input[type="radio"] {
     cursor: pointer;
   }
-  /* The current page in the app sidebar: stock tint plus a brand bar on the leading edge. */
-  [data-sidebar="menu-button"][data-active="true"],
-  [data-sidebar="menu-sub-button"][data-active="true"] {
-    box-shadow: inset 3px 0 0 var(--sidebar-primary);
+  /* Native scrollbars take the thumb role and follow the theme (color-scheme). */
+  html {
+    scrollbar-color: var(--scrollbar) transparent;
   }
+}
+
+/* The stock ScrollArea thumb paints \`bg-border\`, too faint to find on a card. Unlayered,
+   so it beats that utility without forking the component. */
+[data-slot="scroll-area-thumb"] {
+  background-color: var(--scrollbar);
 }
 
 /* Focus is a SOLID brand ring, never faded.

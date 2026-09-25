@@ -74,7 +74,7 @@ node scripts/check.mjs visual --record | --compare [--dir d] [--report-only]
 | check | asserts |
 |---|---|
 | `lint` | no raw hex, no Tailwind palette class, no `[var(--x)]`, ≤1 `variant="cta"` per file |
-| `contrast` | text pairs ≥4.5 in both themes; `input`/`ring`/`primary` ≥3:1 on every surface; role parity light⇄dark; anchors exact in palette and theme.css; chart-1..5 pairwise dE76 ≥19 normal and ≥15 worst dichromacy; brand hue band |
+| `contrast` | text pairs ≥4.5 in both themes; `SEPARATIONS` (card/page, selected/hover, scroll thumb, sidebar active) above their floors; `input`/`ring`/`primary` ≥3:1 on every surface; role parity light⇄dark; anchors exact in palette and theme.css; chart-1..5 pairwise dE76 ≥19 normal and ≥15 worst dichromacy; brand hue band |
 | `presence` | every role/ramp/type/radius utility compiles through Tailwind + theme.css |
 | `a11y` | axe (WCAG 2.1 A/AA) over every `@dsCard` page, light and `.dark`; serious/critical fail. A node may opt out of one rule with `data-a11y-expect="<rule-id>"` |
 | `visual` | every card x light/dark, per-shot soft/strong pixel rules; `--record` a baseline, then `--compare` |

@@ -31,8 +31,9 @@ follow its component guidance.
   other action is the default (cyan) button or quieter.
 - **Action order is shadcn's**: right-aligned, primary last (`Cancel`, `Save`). Use the stock
   dialog/sheet footers, or `flex flex-col-reverse gap-2 sm:flex-row sm:justify-end`.
-- **Selected states**: app sidebar = stock `isActive` (theme adds the brand bar); in-content
-  sections = `@leanwise/section-nav`; menus keep the stock tint.
+- **Selected states**: app sidebar = stock `isActive`; a selected row/list item =
+  `bg-selected` (never `bg-accent`, which is hover); in-content sections =
+  `@leanwise/section-nav`; menus keep the stock tint.
 - **Alerts and callouts are soft**: `bg-info-soft text-info-soft-foreground border-info-border`,
   and the `destructive-soft` trio for errors. Solid status fills are for badges.
 - **Dark mode is `.dark`** on an ancestor; every role already has a dark value. Never write

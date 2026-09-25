@@ -59,6 +59,6 @@
       { title: "Sources", href: "#sources" },
       { title: "Evaluations", href: "#evaluations" },
       { title: "Usage", href: "#usage" }
-    ] }), /* @__PURE__ */ React.createElement("p", { className: "text-muted-foreground text-sm" }, "The sidebar marks the current page with a tint and a brand bar; the section nav marks the current section on a thin rail."))
+    ] }), /* @__PURE__ */ React.createElement("p", { className: "text-muted-foreground text-sm" }, "The sidebar marks the current page with the stock tint; the section nav marks the current section on a thin rail."))
   )));
 })();

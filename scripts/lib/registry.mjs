@@ -15,7 +15,6 @@ const rampVars = Object.fromEntries(Object.entries(ramp).map(([k, v]) => [`brand
 const POINTER =
   'button:not(:disabled), [role="button"]:not([aria-disabled="true"]), [role="tab"], [role="menuitem"], [role="menuitemcheckbox"], [role="menuitemradio"], [role="option"], [role="switch"], [role="checkbox"], [role="radio"], a[href], summary, select, label[for], input[type="checkbox"], input[type="radio"]';
 
-export const SIDEBAR_ACTIVE = '[data-sidebar="menu-button"][data-active="true"], [data-sidebar="menu-sub-button"][data-active="true"]';
 
 const block = (name, title, description, registryDependencies, dependencies = []) => ({
   name,
@@ -79,16 +78,18 @@ export const ITEMS = [
     name: "leanwise-base",
     type: "registry:theme",
     title: "LeanWise base",
-    description: "Theme + fonts + the two behaviours stock shadcn lacks: a pointer cursor on every interactive element and a solid brand focus ring.",
+    description: "Theme + fonts + the behaviours stock shadcn lacks: a pointer cursor on every interactive element, a solid brand focus ring, and a findable scroll thumb.",
     registryDependencies: [`${NS}/leanwise-font`, `${NS}/leanwise-font-mono`],
     cssVars,
     css: {
       "@layer base": {
         [POINTER]: { cursor: "pointer" },
-        [SIDEBAR_ACTIVE]: { "box-shadow": "inset 3px 0 0 var(--sidebar-primary)" },
+        html: { "scrollbar-color": "var(--scrollbar) transparent" },
         /* Layered so a stock outline-hidden (menus, popovers, command lists) still wins. */
         ":focus-visible": { outline: "2px solid var(--ring)", "outline-offset": "2px" },
       },
+      /* Unlayered: beats the stock ScrollArea thumb's bg-border without forking it. */
+      '[data-slot="scroll-area-thumb"]': { "background-color": "var(--scrollbar)" },
       /* Unlayered on purpose: beats the layered ring-ring/50 utilities of stock controls. */
       [`${FOCUS_CONTROLS}:focus-visible`]: {
         outline: "none",

@@ -9,6 +9,18 @@ const SURFACES = ["background", "card", "popover", "muted", "secondary", "sideba
 const NON_TEXT = ["input", "ring", "sidebar-ring", "primary"];
 const STATUS = /^(cta|warning|success|info|destructive)(-|$)/;
 const CHART = /^chart-\d$/;
+/* Surfaces and states that must read as different from what they sit on or next to:
+   [a, b, floor, onlyTheme?]. A card on the page, a selected row against hover, a scroll
+   thumb on a card. Below these the two look the same and the state is invisible. */
+export const SEPARATIONS = [
+  ["card", "background", 1.03, "light"], ["card", "background", 1.12, "dark"],
+  ["muted", "card", 1.08], ["muted", "background", 1.06],
+  ["secondary", "card", 1.15],
+  ["selected", "card", 1.25], ["selected", "accent", 1.1], ["selected", "muted", 1.12],
+  ["sidebar-accent", "sidebar", 1.2],
+  ["scrollbar", "card", 1.9], ["scrollbar", "background", 1.9],
+  ["border", "card", 1.25],
+];
 export const FLOORS = { text: 4.5, nonText: 3, chartNormal: 19, chartCvd: 15, spiritHue: [190, 260], spiritChroma: 0.02 };
 
 export function pairsFor(t) {
@@ -51,6 +63,14 @@ export function checkContrast({ ANCHORS, ramp, themes, themeCss }) {
         : toRgb(t[bg]), f = toRgb(t[fg]).map((c, i) => alpha * c + (1 - alpha) * b[i]);
       const r = cr(f, b);
       need(r >= floor, `${name}: --${fg}${alpha < 1 ? `/${alpha * 100}` : ""} on --${bg} is ${r.toFixed(2)}:1 (< ${floor})`);
+    }
+
+    for (const [a, b, floor, only] of SEPARATIONS) {
+      if (only && only !== name) continue;
+      need(a in t && b in t, `${name}: separation --${a}/--${b} names a missing role`);
+      if (!(a in t && b in t)) continue;
+      const r = cr(toRgb(t[a]), toRgb(t[b]));
+      need(r >= floor, `${name}: --${a} vs --${b} is ${r.toFixed(2)}:1 (< ${floor}); the two read as the same surface`);
     }
 
     const charts = Object.keys(t).filter((k) => CHART.test(k)).sort();

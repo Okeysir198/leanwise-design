@@ -43,7 +43,7 @@ A Tailwind v4 app with shadcn:
 
 ```bash
 npx shadcn@latest init --base radix
-npm i github:Okeysir198/leanwise-design#v5.2.2
+npm i github:Okeysir198/leanwise-design#v5.3.0
 ```
 
 In your global CSS, after Tailwind:
@@ -62,7 +62,7 @@ Add the registry to `components.json`:
 ```json
 {
   "registries": {
-    "@leanwise": "https://raw.githubusercontent.com/Okeysir198/leanwise-design/v5.2.2/r/{name}.json"
+    "@leanwise": "https://raw.githubusercontent.com/Okeysir198/leanwise-design/v5.3.0/r/{name}.json"
   }
 }
 ```
@@ -91,9 +91,12 @@ Dark mode is the `.dark` class on an ancestor (shadcn's convention). `useTheme()
   last: `Cancel` then `Save`. Use the stock `DialogFooter`/`AlertDialogFooter`/`SheetFooter`;
   elsewhere use `flex flex-col-reverse gap-2 sm:flex-row sm:justify-end`, which stacks full
   width with the primary on top on phones.
-- **Selected states.** App sidebar: the current page (`data-active="true"`) gets the stock
-  tint plus a 3px brand bar from `theme.css`. Inside the content, use the `@leanwise/section-nav`
-  block: a thin rail with a brand segment. Menus and dropdowns keep the stock tint only.
+- **Selected states.** App sidebar: stock `isActive` (the `sidebar-accent` tint). A selected
+  table row or list item: `data-[state=selected]:bg-selected` (the `selected` role, distinct
+  from the `accent` hover). Inside the content, use the `@leanwise/section-nav` block. Menus
+  and dropdowns keep the stock tint.
+- **Scrollbars** use the `scrollbar` role: `theme.css` points native scrollbars and the stock
+  `ScrollArea` thumb at it, so no component is edited.
 - **Ink follows the fill.** White on cyan and on navy; navy on amber and on warning.
 - **Focus is a solid brand ring**, never faded. `theme.css` states it unlayered, so it wins
   over the `ring-ring/50` stock components carry — no component needs editing.
