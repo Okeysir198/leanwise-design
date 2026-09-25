@@ -4138,6 +4138,11 @@
 [data-slot="scroll-area-thumb"] {
   background-color: var(--scrollbar);
 }
+@media (pointer: coarse) {
+  [data-slot="sidebar-wrapper"] {
+    --sidebar-width-icon: 3.75rem !important;
+  }
+}
 @layer base {
   :focus-visible {
     outline: 2px solid var(--ring);

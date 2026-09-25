@@ -90,6 +90,7 @@ export const ITEMS = [
       },
       /* Unlayered: beats the stock ScrollArea thumb's bg-border without forking it. */
       '[data-slot="scroll-area-thumb"]': { "background-color": "var(--scrollbar)" },
+      "@media (pointer: coarse)": { '[data-slot="sidebar-wrapper"]': { "--sidebar-width-icon": "3.75rem !important" } },
       /* Unlayered on purpose: beats the layered ring-ring/50 utilities of stock controls. */
       [`${FOCUS_CONTROLS}:focus-visible`]: {
         outline: "none",

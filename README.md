@@ -43,7 +43,7 @@ A Tailwind v4 app with shadcn:
 
 ```bash
 npx shadcn@latest init --base radix
-npm i github:Okeysir198/leanwise-design#v5.4.2
+npm i github:Okeysir198/leanwise-design#v5.5.0
 ```
 
 In your global CSS, after Tailwind:
@@ -54,6 +54,10 @@ In your global CSS, after Tailwind:
 @import "@leanwise/design/theme.css";
 ```
 
+To make raw Tailwind palette classes (`bg-emerald-500`) compile to nothing, import
+`@leanwise/design/theme-strict.css` instead of `theme.css`: the same theme with the stock
+palette cleared (`white`, `black`, `transparent`, `current` stay).
+
 `theme.css` replaces the colour block `shadcn init` writes into your CSS — delete that block
 (`:root`, `.dark`, `@theme inline`) so there is one source.
 
@@ -62,7 +66,7 @@ Add the registry to `components.json`:
 ```json
 {
   "registries": {
-    "@leanwise": "https://raw.githubusercontent.com/Okeysir198/leanwise-design/v5.4.2/r/{name}.json"
+    "@leanwise": "https://raw.githubusercontent.com/Okeysir198/leanwise-design/v5.5.0/r/{name}.json"
   }
 }
 ```

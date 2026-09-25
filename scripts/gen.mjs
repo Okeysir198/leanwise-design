@@ -13,6 +13,7 @@ const check = process.argv.includes("--check");
 
 const outputs = {
   "theme.css": buildThemeCss,
+  "theme-strict.css": () => buildThemeCss({ strict: true }),
   "tokens.json": buildTokensJson,
   ...registryOutputs(ROOT),
 };

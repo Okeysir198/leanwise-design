@@ -1,6 +1,6 @@
 {
   "name": "@leanwise/design",
-  "version": "5.4.2",
+  "version": "5.5.0",
   "description": "LeanWise brand as a shadcn/ui theme and registry: theme.css for Tailwind v4, brand registry items, marketing layer.",
   "license": "UNLICENSED",
   "type": "module",
@@ -9,6 +9,7 @@
   ],
   "exports": {
     "./theme.css": "./theme.css",
+    "./theme-strict.css": "./theme-strict.css",
     "./marketing.css": "./marketing.css",
     "./fonts.css": "./fonts.css",
     "./fonts/*": "./fonts/*",
@@ -31,6 +32,7 @@
   },
   "files": [
     "theme.css",
+    "theme-strict.css",
     "marketing.css",
     "fonts.css",
     "fonts",
