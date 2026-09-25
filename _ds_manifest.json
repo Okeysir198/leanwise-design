@@ -1849,7 +1849,7 @@
     },
     {
       "name": "--switch-track",
-      "value": "oklch(0.8 0.012 230)",
+      "value": "oklch(0.68 0.015 230)",
       "kind": "color",
       "definedIn": "theme.css"
     }

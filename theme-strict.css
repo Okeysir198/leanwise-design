@@ -89,7 +89,7 @@
   --review-soft: #E8E5F9;
   --review-soft-foreground: #533CA0;
   --review-border: #C8C1EF;
-  --switch-track: oklch(0.8 0.012 230);
+  --switch-track: oklch(0.68 0.015 230);
 }
 
 .dark {
@@ -162,7 +162,7 @@
   --review-soft: #2E3561;
   --review-soft-foreground: #BDB2ED;
   --review-border: #4C4A86;
-  --switch-track: oklch(0.45 0.02 240);
+  --switch-track: oklch(0.55 0.02 240);
 }
 
 @theme inline {

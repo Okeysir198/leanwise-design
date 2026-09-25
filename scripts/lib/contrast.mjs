@@ -20,7 +20,7 @@ export const SEPARATIONS = [
   ["sidebar-accent", "sidebar", 1.2],
   ["scrollbar", "card", 1.9], ["scrollbar", "background", 1.9],
   ["border", "card", 1.25],
-  ["switch-track", "card", 1.4], ["switch-track", "primary", 1.6],
+  ["switch-track", "card", 2.5], ["switch-track", "primary", 1.3],
 ];
 export const FLOORS = { text: 4.5, nonText: 3, chartNormal: 19, chartCvd: 15, spiritHue: [190, 260], spiritChroma: 0.02 };
 
