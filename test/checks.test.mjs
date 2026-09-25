@@ -43,7 +43,7 @@ test("contrast: sabotage goes red", () => {
 test("lint: catches each rule, passes clean source, refuses nothing", () => {
   const dir = mkdtempSync(join(tmpdir(), "lw-lint-"));
   try {
-    writeFileSync(join(dir, "ok.tsx"), 'export const A = () => <Button className="bg-primary text-primary-foreground" variant="cta" />;\n');
+    writeFileSync(join(dir, "ok.tsx"), 'export const A = () => <Button className="bg-primary text-primary-foreground w-[var(--sidebar-width)] h-[var(--radix-select-trigger-height)]" variant="cta" />;\n');
     assert.deepEqual(lint([dir]).problems, []);
     writeFileSync(join(dir, "bad.tsx"), [
       'const a = "#0c727b";',

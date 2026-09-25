@@ -1,6 +1,13 @@
 /* The consumer token lint: a deny-list over app source. */
 import { readdirSync, readFileSync, statSync } from "node:fs";
-import { extname, join, relative } from "node:path";
+import { dirname, extname, join, relative } from "node:path";
+import { fileURLToPath } from "node:url";
+
+/* The theme's colour roles. Only these are flagged inside an arbitrary value: a layout
+   var such as stock shadcn's `w-[var(--sidebar-width)]` or `h-[var(--radix-…)]` is not a
+   theme colour and has no registered utility to use instead. */
+const TOKENS = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), "..", "..", "tokens.json"), "utf8"));
+const ROLES = new Set([...Object.keys(TOKENS.light), ...Object.keys(TOKENS.brand).map((k) => `brand-${k}`)]);
 
 const EXT = new Set([".tsx", ".ts", ".jsx", ".js", ".mdx", ".html", ".vue", ".svelte"]);
 const PALETTES = "slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose";
@@ -12,8 +19,8 @@ export const RULES = [
     skipLine: /^\s*(\/\/|\*|\/\*)|&#/ },
   { id: "palette-class", re: new RegExp(`\\b(?:${PREFIX})-(?:${PALETTES})-\\d{2,3}\\b`, "g"),
     msg: "raw Tailwind palette class — use a theme role (bg-success, text-destructive…)" },
-  { id: "arbitrary-var", re: /\[[^\]\s]*var\(--[\w-]+/g,
-    msg: "theme var reached through an arbitrary value — use the registered utility (bg-primary)" },
+  { id: "arbitrary-var", re: /\[[^\]\s]*var\(--([\w-]+)/g, keep: (m) => ROLES.has(m[1]),
+    msg: "theme colour reached through an arbitrary value — use the registered utility (bg-primary)" },
 ];
 
 export function walk(p, out = []) {
@@ -37,7 +44,8 @@ export function lint(paths, cwd = process.cwd()) {
       src.split("\n").forEach((line, i) => {
         for (const r of RULES) {
           if (r.skipLine?.test(line)) continue;
-          for (const hit of new Set(line.match(r.re) ?? [])) problems.push(`${rel}:${i + 1}  [${r.id}]  ${hit}  — ${r.msg}`);
+          const hits = r.keep ? [...line.matchAll(r.re)].filter(r.keep).map((m) => m[0]) : line.match(r.re) ?? [];
+          for (const hit of new Set(hits)) problems.push(`${rel}:${i + 1}  [${r.id}]  ${hit}  — ${r.msg}`);
         }
       });
       const ctas = (src.match(/variant=\{?["']cta["']\}?/g) ?? []).length;
