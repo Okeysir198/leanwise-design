@@ -130,6 +130,17 @@ ${decl(typeScale)}
   background-color: var(--scrollbar);
 }
 
+/* Compact card density (16px, not stock 24px) for data-dense screens. Keyed on the stock
+   default class, so it only applies while that default survives: a call-site p-0 / py-8 /
+   gap-2 replaces it (tailwind-merge) and wins. Unlayered, so it beats the stock utility. */
+[data-slot="card"].py-6 { padding-block: 1rem; }
+[data-slot="card"].gap-6 { gap: 1rem; }
+[data-slot="card-header"].px-6,
+[data-slot="card-content"].px-6,
+[data-slot="card-footer"].px-6 { padding-inline: 1rem; }
+[data-slot="card-header"].border-b { padding-bottom: 1rem; }
+[data-slot="card-footer"].border-t { padding-top: 1rem; }
+
 /* On touch the collapsed sidebar rail widens so its menu buttons clear 44px. Stock
    SidebarProvider sets --sidebar-width-icon as an inline style, which only !important
    in a stylesheet can override. */

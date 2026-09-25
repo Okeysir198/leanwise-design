@@ -90,6 +90,12 @@ export const ITEMS = [
       },
       /* Unlayered: beats the stock ScrollArea thumb's bg-border without forking it. */
       '[data-slot="scroll-area-thumb"]': { "background-color": "var(--scrollbar)" },
+      /* Compact card density, keyed on the stock default so call-site padding still wins. */
+      '[data-slot="card"].py-6': { "padding-block": "1rem" },
+      '[data-slot="card"].gap-6': { gap: "1rem" },
+      '[data-slot="card-header"].px-6, [data-slot="card-content"].px-6, [data-slot="card-footer"].px-6': { "padding-inline": "1rem" },
+      '[data-slot="card-header"].border-b': { "padding-bottom": "1rem" },
+      '[data-slot="card-footer"].border-t': { "padding-top": "1rem" },
       "@media (pointer: coarse)": { '[data-slot="sidebar-wrapper"]': { "--sidebar-width-icon": "3.75rem !important" } },
       /* Unlayered on purpose: beats the layered ring-ring/50 utilities of stock controls. */
       [`${FOCUS_CONTROLS}:focus-visible`]: {
