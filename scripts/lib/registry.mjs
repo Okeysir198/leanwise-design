@@ -90,6 +90,8 @@ export const ITEMS = [
       },
       /* Unlayered: beats the stock ScrollArea thumb's bg-border without forking it. */
       '[data-slot="scroll-area-thumb"]': { "background-color": "var(--scrollbar)" },
+      '[data-slot="switch"][data-state="unchecked"]': { "background-color": "var(--switch-track)" },
+      '[data-slot="dialog-content"].bg-background, [data-slot="alert-dialog-content"].bg-background, [data-slot="sheet-content"].bg-background, [data-slot="drawer-content"].bg-background': { "background-color": "var(--popover)" },
       /* Compact card density, keyed on the stock default so call-site padding still wins. */
       '[data-slot="card"].py-6': { "padding-block": "1rem" },
       '[data-slot="card"].gap-6': { gap: "1rem" },

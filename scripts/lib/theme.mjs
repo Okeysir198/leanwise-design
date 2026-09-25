@@ -141,6 +141,18 @@ ${decl(typeScale)}
 [data-slot="card-header"].border-b[class~="[.border-b]:pb-6"] { padding-bottom: 1rem; }
 [data-slot="card-footer"].border-t[class~="[.border-t]:pt-6"] { padding-top: 1rem; }
 
+/* Stock Switch paints "off" with --input, a teal-grey too close to the primary "on".
+   Unlayered so it beats the stock data-[state=unchecked]:bg-input utilities. */
+[data-slot="switch"][data-state="unchecked"] { background-color: var(--switch-track); }
+
+/* Overlays sit on the elevated popover surface, not the tinted page ground (stock paints
+   bg-background, which read as a grey sheet in light and sank in dark). Keyed on the stock
+   class so a call-site bg-* still wins. */
+[data-slot="dialog-content"].bg-background,
+[data-slot="alert-dialog-content"].bg-background,
+[data-slot="sheet-content"].bg-background,
+[data-slot="drawer-content"].bg-background { background-color: var(--popover); }
+
 /* On touch the collapsed sidebar rail widens so its menu buttons clear 44px. Stock
    SidebarProvider sets --sidebar-width-icon as an inline style, which only !important
    in a stylesheet can override. */

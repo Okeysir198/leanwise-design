@@ -4069,6 +4069,7 @@
   --review-soft: #E8E5F9;
   --review-soft-foreground: #533CA0;
   --review-border: #C8C1EF;
+  --switch-track: oklch(0.8 0.012 230);
 }
 .dark {
   color-scheme: dark;
@@ -4140,6 +4141,7 @@
   --review-soft: #2E3561;
   --review-soft-foreground: #BDB2ED;
   --review-border: #4C4A86;
+  --switch-track: oklch(0.45 0.02 240);
 }
 @layer base {
   * {
@@ -4178,6 +4180,12 @@
 }
 [data-slot="card-footer"].border-t[class~="[.border-t]:pt-6"] {
   padding-top: 1rem;
+}
+[data-slot="switch"][data-state="unchecked"] {
+  background-color: var(--switch-track);
+}
+[data-slot="dialog-content"].bg-background, [data-slot="alert-dialog-content"].bg-background, [data-slot="sheet-content"].bg-background, [data-slot="drawer-content"].bg-background {
+  background-color: var(--popover);
 }
 @media (pointer: coarse) {
   [data-slot="sidebar-wrapper"] {

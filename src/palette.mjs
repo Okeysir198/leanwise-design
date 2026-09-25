@@ -94,6 +94,8 @@ export const themes = {
     "review-soft": "#E8E5F9",
     "review-soft-foreground": "#533CA0",
     "review-border": "#C8C1EF",
+    /* Unchecked Switch track: neutral, so off never reads as a dim "on". */
+    "switch-track": "oklch(0.8 0.012 230)",
   },
   dark: {
     "background": "oklch(0.2 0.045 248)",
@@ -164,5 +166,6 @@ export const themes = {
     "review-soft": "#2E3561",
     "review-soft-foreground": "#BDB2ED",
     "review-border": "#4C4A86",
+    "switch-track": "oklch(0.45 0.02 240)",
   },
 };

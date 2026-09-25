@@ -1846,6 +1846,12 @@
       "value": "#C8C1EF",
       "kind": "color",
       "definedIn": "theme.css"
+    },
+    {
+      "name": "--switch-track",
+      "value": "oklch(0.8 0.012 230)",
+      "kind": "color",
+      "definedIn": "theme.css"
     }
   ],
   "themes": [
