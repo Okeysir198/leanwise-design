@@ -1780,6 +1780,42 @@
       "value": "oklch(0.87 0.08 72)",
       "kind": "color",
       "definedIn": "theme.css"
+    },
+    {
+      "name": "--diff-add",
+      "value": "#E7F9ED",
+      "kind": "color",
+      "definedIn": "theme.css"
+    },
+    {
+      "name": "--diff-add-line",
+      "value": "#A0DAB3",
+      "kind": "color",
+      "definedIn": "theme.css"
+    },
+    {
+      "name": "--diff-del",
+      "value": "#FDEAEA",
+      "kind": "color",
+      "definedIn": "theme.css"
+    },
+    {
+      "name": "--diff-del-line",
+      "value": "#EEB5B5",
+      "kind": "color",
+      "definedIn": "theme.css"
+    },
+    {
+      "name": "--diff-mod",
+      "value": "#FDF3D8",
+      "kind": "color",
+      "definedIn": "theme.css"
+    },
+    {
+      "name": "--diff-mod-line",
+      "value": "#EACF86",
+      "kind": "color",
+      "definedIn": "theme.css"
     }
   ],
   "themes": [

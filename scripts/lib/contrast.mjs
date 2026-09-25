@@ -7,7 +7,7 @@ import { deltaE76, deltaE76Cvd } from "./color.mjs";
 const SURFACES = ["background", "card", "popover", "muted", "secondary", "sidebar"];
 /* Non-text UI (WCAG 1.4.11): control boundaries and the focus ring. */
 const NON_TEXT = ["input", "ring", "sidebar-ring", "primary"];
-const STATUS = /^(cta|warning|success|info|destructive)(-|$)/;
+const STATUS = /^(cta|warning|success|info|destructive|diff)(-|$)/
 const CHART = /^chart-\d$/;
 /* Surfaces and states that must read as different from what they sit on or next to:
    [a, b, floor, onlyTheme?]. A card on the page, a selected row against hover, a scroll
@@ -35,6 +35,8 @@ export function pairsFor(t) {
     for (const n of NON_TEXT) if (t[n]) pairs.push([n, s, FLOORS.nonText]);
   }
   for (const link of ["primary", "destructive"]) pairs.push([link, "background", FLOORS.text]);
+  /* Heatmap / diff cells carry body text (text-foreground) on their ground. */
+  for (const d of ["diff-add", "diff-del", "diff-mod"]) if (t[d]) pairs.push(["foreground", d, FLOORS.text]);
   /* Alpha inks stock components paint, composited over what they sit on:
      inactive Tabs trigger (text-foreground/60, light) and the destructive Alert
      (text-destructive, description text-destructive/90, on card or the soft tint). */

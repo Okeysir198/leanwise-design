@@ -76,6 +76,12 @@
   --warning-soft: oklch(0.97 0.035 75);
   --warning-soft-foreground: oklch(0.45 0.1 60);
   --warning-border: oklch(0.87 0.08 72);
+  --diff-add: #E7F9ED;
+  --diff-add-line: #A0DAB3;
+  --diff-del: #FDEAEA;
+  --diff-del-line: #EEB5B5;
+  --diff-mod: #FDF3D8;
+  --diff-mod-line: #EACF86;
 }
 
 .dark {
@@ -137,6 +143,12 @@
   --warning-soft: oklch(0.29 0.05 70);
   --warning-soft-foreground: oklch(0.87 0.1 75);
   --warning-border: oklch(0.44 0.08 70);
+  --diff-add: #112D1F;
+  --diff-add-line: #2C6347;
+  --diff-del: #391414;
+  --diff-del-line: #723131;
+  --diff-mod: #362A11;
+  --diff-mod-line: #6E582B;
 }
 
 @theme inline {
@@ -197,6 +209,12 @@
   --color-warning-soft: var(--warning-soft);
   --color-warning-soft-foreground: var(--warning-soft-foreground);
   --color-warning-border: var(--warning-border);
+  --color-diff-add: var(--diff-add);
+  --color-diff-add-line: var(--diff-add-line);
+  --color-diff-del: var(--diff-del);
+  --color-diff-del-line: var(--diff-del-line);
+  --color-diff-mod: var(--diff-mod);
+  --color-diff-mod-line: var(--diff-mod-line);
   --color-brand-50: var(--brand-50);
   --color-brand-100: var(--brand-100);
   --color-brand-200: var(--brand-200);

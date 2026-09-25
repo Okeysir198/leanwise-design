@@ -43,7 +43,7 @@ A Tailwind v4 app with shadcn:
 
 ```bash
 npx shadcn@latest init --base radix
-npm i github:Okeysir198/leanwise-design#v5.7.1
+npm i github:Okeysir198/leanwise-design#v5.8.0
 ```
 
 In your global CSS, after Tailwind:
@@ -66,7 +66,7 @@ Add the registry to `components.json`:
 ```json
 {
   "registries": {
-    "@leanwise": "https://raw.githubusercontent.com/Okeysir198/leanwise-design/v5.7.1/r/{name}.json"
+    "@leanwise": "https://raw.githubusercontent.com/Okeysir198/leanwise-design/v5.8.0/r/{name}.json"
   }
 }
 ```
@@ -137,6 +137,7 @@ Every role is a CSS variable in `:root` and `.dark`, and a Tailwind colour: `bg-
 | `success-soft`, `warning-soft` (+ `-soft-foreground`, `-border`) | Status chips and callouts |
 | `selected` (+ `-foreground`) | A selected table row or list item; distinct from the `accent` hover |
 | `scrollbar` | Scroll thumbs (native and `ScrollArea`); set by `theme.css` |
+| `diff-add` / `diff-del` / `diff-mod` (+ `-line`) | Opaque diff and heatmap cell grounds: matched, mismatched, not found. Body text sits on them |
 | `cta` (+ `-foreground`) | The amber call to action — one per view |
 | `navy` (+ `-foreground`) | Brand dark panels and bands |
 | `border` | Dividers, card edges |

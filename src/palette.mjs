@@ -81,6 +81,13 @@ export const themes = {
     "warning-soft": "oklch(0.97 0.035 75)",
     "warning-soft-foreground": "oklch(0.45 0.1 60)",
     "warning-border": "oklch(0.87 0.08 72)",
+    /* Heatmap / diff cell grounds (v1 values): opaque, one hue per outcome. */
+    "diff-add": "#E7F9ED",
+    "diff-add-line": "#A0DAB3",
+    "diff-del": "#FDEAEA",
+    "diff-del-line": "#EEB5B5",
+    "diff-mod": "#FDF3D8",
+    "diff-mod-line": "#EACF86",
   },
   dark: {
     "background": "oklch(0.2 0.045 248)",
@@ -140,5 +147,11 @@ export const themes = {
     "warning-soft": "oklch(0.29 0.05 70)",
     "warning-soft-foreground": "oklch(0.87 0.1 75)",
     "warning-border": "oklch(0.44 0.08 70)",
+    "diff-add": "#112D1F",
+    "diff-add-line": "#2C6347",
+    "diff-del": "#391414",
+    "diff-del-line": "#723131",
+    "diff-mod": "#362A11",
+    "diff-mod-line": "#6E582B",
   },
 };
