@@ -138,8 +138,8 @@ ${decl(typeScale)}
 [data-slot="card-header"].px-6,
 [data-slot="card-content"].px-6,
 [data-slot="card-footer"].px-6 { padding-inline: 1rem; }
-[data-slot="card-header"].border-b { padding-bottom: 1rem; }
-[data-slot="card-footer"].border-t { padding-top: 1rem; }
+[data-slot="card-header"].border-b[class~="[.border-b]:pb-6"] { padding-bottom: 1rem; }
+[data-slot="card-footer"].border-t[class~="[.border-t]:pt-6"] { padding-top: 1rem; }
 
 /* On touch the collapsed sidebar rail widens so its menu buttons clear 44px. Stock
    SidebarProvider sets --sidebar-width-icon as an inline style, which only !important

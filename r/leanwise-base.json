@@ -177,10 +177,10 @@
     "[data-slot=\"card-header\"].px-6, [data-slot=\"card-content\"].px-6, [data-slot=\"card-footer\"].px-6": {
       "padding-inline": "1rem"
     },
-    "[data-slot=\"card-header\"].border-b": {
+    "[data-slot=\"card-header\"].border-b[class~=\"[.border-b]:pb-6\"]": {
       "padding-bottom": "1rem"
     },
-    "[data-slot=\"card-footer\"].border-t": {
+    "[data-slot=\"card-footer\"].border-t[class~=\"[.border-t]:pt-6\"]": {
       "padding-top": "1rem"
     },
     "@media (pointer: coarse)": {
