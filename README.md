@@ -43,7 +43,7 @@ A Tailwind v4 app with shadcn:
 
 ```bash
 npx shadcn@latest init --base radix
-npm i github:Okeysir198/leanwise-design#v5.3.0
+npm i github:Okeysir198/leanwise-design#v5.4.0
 ```
 
 In your global CSS, after Tailwind:
@@ -62,7 +62,7 @@ Add the registry to `components.json`:
 ```json
 {
   "registries": {
-    "@leanwise": "https://raw.githubusercontent.com/Okeysir198/leanwise-design/v5.3.0/r/{name}.json"
+    "@leanwise": "https://raw.githubusercontent.com/Okeysir198/leanwise-design/v5.4.0/r/{name}.json"
   }
 }
 ```
@@ -104,9 +104,9 @@ Dark mode is the `.dark` class on an ancestor (shadcn's convention). `useTheme()
   every surface) so a text field reads as a field.
 - **Pointer cursor** on everything interactive — buttons, tabs, menu items, options,
   switches, links, `summary`. `theme.css` sets it.
-- **Info and error messages are soft.** Use `bg-info-soft text-info-soft-foreground
-  border-info-border` (and the `destructive-soft` trio) for alerts and callouts; the solid
-  fills are for badges and buttons.
+- **Messages and status chips are soft.** Use a soft trio, e.g. `bg-info-soft
+  text-info-soft-foreground border-info-border`, for alerts, callouts and status chips
+  (`info`, `success`, `warning`, `destructive`); the solid fills are for badges and buttons.
 - **Charts** use `chart-1`..`chart-5`, checked for separation under normal vision and all
   three dichromacies.
 
@@ -128,6 +128,9 @@ Every role is a CSS variable in `:root` and `.dark`, and a Tailwind colour: `bg-
 | `info` (+ `-foreground`) | Informational fill |
 | `info-soft`, `info-soft-foreground`, `info-border` | Info alerts and callouts |
 | `success`, `warning` (+ `-foreground`) | Status fills |
+| `success-soft`, `warning-soft` (+ `-soft-foreground`, `-border`) | Status chips and callouts |
+| `selected` (+ `-foreground`) | A selected table row or list item; distinct from the `accent` hover |
+| `scrollbar` | Scroll thumbs (native and `ScrollArea`); set by `theme.css` |
 | `cta` (+ `-foreground`) | The amber call to action — one per view |
 | `navy` (+ `-foreground`) | Brand dark panels and bands |
 | `border` | Dividers, card edges |

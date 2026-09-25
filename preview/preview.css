@@ -4048,6 +4048,12 @@
   --destructive-soft: oklch(0.965 0.016 25);
   --destructive-soft-foreground: oklch(0.45 0.16 27);
   --destructive-border: oklch(0.87 0.06 25);
+  --success-soft: oklch(0.965 0.025 165);
+  --success-soft-foreground: oklch(0.42 0.09 165);
+  --success-border: oklch(0.86 0.06 165);
+  --warning-soft: oklch(0.97 0.035 75);
+  --warning-soft-foreground: oklch(0.45 0.1 60);
+  --warning-border: oklch(0.87 0.08 72);
 }
 .dark {
   color-scheme: dark;
@@ -4102,6 +4108,12 @@
   --destructive-soft: oklch(0.28 0.06 25);
   --destructive-soft-foreground: oklch(0.85 0.08 25);
   --destructive-border: oklch(0.42 0.1 25);
+  --success-soft: oklch(0.28 0.05 165);
+  --success-soft-foreground: oklch(0.85 0.1 165);
+  --success-border: oklch(0.42 0.08 165);
+  --warning-soft: oklch(0.29 0.05 70);
+  --warning-soft-foreground: oklch(0.87 0.1 75);
+  --warning-border: oklch(0.44 0.08 70);
 }
 @layer base {
   * {

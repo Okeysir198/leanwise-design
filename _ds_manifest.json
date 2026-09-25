@@ -1740,6 +1740,42 @@
       "value": "oklch(0.87 0.06 25)",
       "kind": "color",
       "definedIn": "theme.css"
+    },
+    {
+      "name": "--success-soft",
+      "value": "oklch(0.965 0.025 165)",
+      "kind": "color",
+      "definedIn": "theme.css"
+    },
+    {
+      "name": "--success-soft-foreground",
+      "value": "oklch(0.42 0.09 165)",
+      "kind": "color",
+      "definedIn": "theme.css"
+    },
+    {
+      "name": "--success-border",
+      "value": "oklch(0.86 0.06 165)",
+      "kind": "color",
+      "definedIn": "theme.css"
+    },
+    {
+      "name": "--warning-soft",
+      "value": "oklch(0.97 0.035 75)",
+      "kind": "color",
+      "definedIn": "theme.css"
+    },
+    {
+      "name": "--warning-soft-foreground",
+      "value": "oklch(0.45 0.1 60)",
+      "kind": "color",
+      "definedIn": "theme.css"
+    },
+    {
+      "name": "--warning-border",
+      "value": "oklch(0.87 0.08 72)",
+      "kind": "color",
+      "definedIn": "theme.css"
     }
   ],
   "themes": [

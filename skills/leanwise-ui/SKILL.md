@@ -35,7 +35,8 @@ follow its component guidance.
   `bg-selected` (never `bg-accent`, which is hover); in-content sections =
   `@leanwise/section-nav`; menus keep the stock tint.
 - **Alerts and callouts are soft**: `bg-info-soft text-info-soft-foreground border-info-border`,
-  and the `destructive-soft` trio for errors. Solid status fills are for badges.
+  and the `success-soft`, `warning-soft`, `destructive-soft` trios; status chips use the
+  same trios. Solid status fills are for badges.
 - **Dark mode is `.dark`** on an ancestor; every role already has a dark value. Never write
   `dark:` colour overrides with literal colours.
 - **A role that does not exist is a change to `@leanwise/design`** (`src/palette.mjs`), not
