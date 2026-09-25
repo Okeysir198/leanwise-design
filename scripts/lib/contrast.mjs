@@ -42,6 +42,9 @@ export function pairsFor(t) {
   for (const s of ["card", "destructive-soft"]) for (const a of [1, 0.9]) pairs.push(["destructive", s, FLOORS.text, a]);
   /* An invalid stock Input/Textarea in dark: destructive text on its bg-input/30 fill over a card. */
   pairs.push(["destructive", "input/30@card", FLOORS.text, 1, "dark"]);
+  /* The stock destructive Button/Badge in dark: text-white on dark:bg-destructive/60 over
+     the page and over a card (navy-foreground is white in both themes). */
+  for (const s of ["background", "card"]) pairs.push(["navy-foreground", `destructive/60@${s}`, FLOORS.text, 1, "dark"]);
   return pairs;
 }
 
