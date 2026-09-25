@@ -7,7 +7,7 @@ import { deltaE76, deltaE76Cvd } from "./color.mjs";
 const SURFACES = ["background", "card", "popover", "muted", "secondary", "sidebar"];
 /* Non-text UI (WCAG 1.4.11): control boundaries and the focus ring. */
 const NON_TEXT = ["input", "ring", "sidebar-ring", "primary"];
-const STATUS = /^(cta|warning|success|info|destructive|diff)(-|$)/
+const STATUS = /^(cta|warning|success|info|destructive|diff|review)(-|$)/
 const CHART = /^chart-\d$/;
 /* Surfaces and states that must read as different from what they sit on or next to:
    [a, b, floor, onlyTheme?]. A card on the page, a selected row against hover, a scroll

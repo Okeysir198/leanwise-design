@@ -1816,6 +1816,36 @@
       "value": "#EACF86",
       "kind": "color",
       "definedIn": "theme.css"
+    },
+    {
+      "name": "--review",
+      "value": "#6B45C4",
+      "kind": "color",
+      "definedIn": "theme.css"
+    },
+    {
+      "name": "--review-foreground",
+      "value": "#FFFFFF",
+      "kind": "color",
+      "definedIn": "theme.css"
+    },
+    {
+      "name": "--review-soft",
+      "value": "#E8E5F9",
+      "kind": "color",
+      "definedIn": "theme.css"
+    },
+    {
+      "name": "--review-soft-foreground",
+      "value": "#533CA0",
+      "kind": "color",
+      "definedIn": "theme.css"
+    },
+    {
+      "name": "--review-border",
+      "value": "#C8C1EF",
+      "kind": "color",
+      "definedIn": "theme.css"
     }
   ],
   "themes": [

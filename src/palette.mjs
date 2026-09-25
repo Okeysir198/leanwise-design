@@ -88,6 +88,12 @@ export const themes = {
     "diff-del-line": "#EEB5B5",
     "diff-mod": "#FDF3D8",
     "diff-mod-line": "#EACF86",
+    /* Fifth status, violet (the v1 chart-4 hue): a second-phase / review state. */
+    "review": "#6B45C4",
+    "review-foreground": "#FFFFFF",
+    "review-soft": "#E8E5F9",
+    "review-soft-foreground": "#533CA0",
+    "review-border": "#C8C1EF",
   },
   dark: {
     "background": "oklch(0.2 0.045 248)",
@@ -153,5 +159,10 @@ export const themes = {
     "diff-del-line": "#723131",
     "diff-mod": "#362A11",
     "diff-mod-line": "#6E582B",
+    "review": "#997BE0",
+    "review-foreground": "oklch(0.2 0.045 248)",
+    "review-soft": "#2E3561",
+    "review-soft-foreground": "#BDB2ED",
+    "review-border": "#4C4A86",
   },
 };
