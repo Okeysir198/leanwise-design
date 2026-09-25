@@ -21,13 +21,16 @@ The repo is also the working copy of a Claude Design project
 - **Three anchors are exact**: cyan `#0C727B` = primary, navy `#024576`, amber `#FCB603` = cta.
   Everything else is OKLCH derived from the logo gradient.
 - **Non-status, non-chart colours stay in the brand hue band** (OKLCH hue 190–260, or
-  chroma < 0.02). Status (`destructive`, `success`, `warning`, `info`, `cta`) and `chart-*`
-  are the only exceptions.
+  chroma < 0.02). Status (`destructive`, `success`, `warning`, `info`, `cta`, `review`, `diff-*`)
+  and `chart-*` are the only exceptions.
 - **Ink follows the fill** — white on cyan/navy, navy on amber/warning.
 - **Focus is a solid ring** on CONTROLS, stated unlayered in `theme.css` so it beats stock
   `ring-ring/50`; the generic outline is in `@layer base` so stock `outline-hidden` on menus,
   popovers and command lists wins. Selector lists: `FOCUS_CONTROLS`/`FOCUS_FIELDS` in
   `scripts/lib/theme.mjs`, pinned by `test/focus.test.mjs`.
+- **Stock-default overrides are one table**, `STOCK_OVERRIDES` in `scripts/lib/theme.mjs`. It feeds
+  `theme.css` and `leanwise-base`, and each rule keys on the stock class so a call-site utility wins.
+  `test/stock-keys.test.mjs` fails if shadcn renames a key. Add new overrides there, never in two places.
 - **Under Tailwind v4 an unknown utility emits NOTHING.** Presence (does it compile?) is the
   only honest test; `check presence` does it for every role.
 - **Every check refuses to pass vacuously**, and every check was sabotaged (break → red →
