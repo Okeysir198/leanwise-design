@@ -1441,7 +1441,7 @@
     },
     {
       "name": "--background",
-      "value": "oklch(0.982 0.005 228)",
+      "value": "oklch(1 0 0)",
       "kind": "color",
       "definedIn": "theme.css"
     },
@@ -1645,7 +1645,7 @@
     },
     {
       "name": "--sidebar",
-      "value": "oklch(1 0 0)",
+      "value": "oklch(0.97 0.008 225)",
       "kind": "color",
       "definedIn": "theme.css"
     },
@@ -1669,7 +1669,7 @@
     },
     {
       "name": "--sidebar-accent",
-      "value": "oklch(0.915 0.05 211)",
+      "value": "oklch(0.895 0.055 211)",
       "kind": "color",
       "definedIn": "theme.css"
     },

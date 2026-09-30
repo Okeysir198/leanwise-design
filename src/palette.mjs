@@ -24,7 +24,7 @@ export const ramp = {
 
 export const themes = {
   light: {
-    "background": "oklch(0.982 0.005 228)",
+    "background": "oklch(1 0 0)",
     "foreground": "oklch(0.21 0.05 245)",
     "card": "oklch(1 0 0)",
     "card-foreground": "oklch(0.21 0.05 245)",
@@ -58,11 +58,11 @@ export const themes = {
     "chart-3": "#FCB603",
     "chart-4": "oklch(0.52 0.17 15)",
     "chart-5": "oklch(0.56 0.13 125)",
-    "sidebar": "oklch(1 0 0)",
+    "sidebar": "oklch(0.97 0.008 225)",
     "sidebar-foreground": "oklch(0.21 0.05 245)",
     "sidebar-primary": "#0C727B",
     "sidebar-primary-foreground": "oklch(1 0 0)",
-    "sidebar-accent": "oklch(0.915 0.05 211)",
+    "sidebar-accent": "oklch(0.895 0.055 211)",
     "sidebar-accent-foreground": "oklch(0.4 0.073 222)",
     "sidebar-border": "oklch(0.88 0.02 211)",
     "sidebar-ring": "#0C727B",

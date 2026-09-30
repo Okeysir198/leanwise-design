@@ -13,7 +13,8 @@ const CHART = /^chart-\d$/;
    [a, b, floor, onlyTheme?]. A card on the page, a selected row against hover, a scroll
    thumb on a card. Below these the two look the same and the state is invisible. */
 export const SEPARATIONS = [
-  ["card", "background", 1.03, "light"], ["card", "background", 1.12, "dark"],
+  ["border", "background", 1.25, "light"], ["card", "background", 1.12, "dark"],
+  ["sidebar", "background", 1.03, "light"],
   ["muted", "card", 1.08], ["muted", "background", 1.06],
   ["secondary", "card", 1.15],
   ["selected", "card", 1.25], ["selected", "accent", 1.1], ["selected", "muted", 1.12],
