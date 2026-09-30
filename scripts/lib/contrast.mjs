@@ -21,6 +21,7 @@ export const SEPARATIONS = [
   ["scrollbar", "card", 1.9], ["scrollbar", "background", 1.9],
   ["border", "card", 1.25],
   ["switch-track", "card", 2.5], ["switch-track", "primary", 1.3],
+  ["primary-border", "background", 1.4], ["primary-border", "accent", 1.25], ["accent-border", "accent", 1.2],
 ];
 export const FLOORS = { text: 4.5, nonText: 3, chartNormal: 19, chartCvd: 15, spiritHue: [190, 260], spiritChroma: 0.02 };
 
@@ -28,20 +29,22 @@ export function pairsFor(t) {
   const pairs = [];
   for (const role of Object.keys(t)) {
     const fg = `${role}-foreground`;
-    if (t[fg]) pairs.push([fg, role, FLOORS.text]);
+    if (t[fg] && !CHART.test(role)) pairs.push([fg, role, FLOORS.text]);
   }
   for (const s of SURFACES) {
     if (!t[s]) continue;
     for (const ink of ["foreground", "muted-foreground"]) pairs.push([ink, s, FLOORS.text]);
     for (const n of NON_TEXT) if (t[n]) pairs.push([n, s, FLOORS.nonText]);
   }
+  /* Chart ink is text/icons in the series hue on a surface, not ink on the chart fill. */
+  for (const c of Object.keys(t).filter((k) => CHART.test(k)))
+    for (const s of [...SURFACES, "accent"]) if (t[s]) pairs.push([`${c}-foreground`, s, FLOORS.text]);
   for (const link of ["primary", "destructive"]) pairs.push([link, "background", FLOORS.text]);
   /* Heatmap / diff cells carry body text (text-foreground) on their ground. */
   for (const d of ["diff-add", "diff-del", "diff-mod"]) if (t[d]) pairs.push(["foreground", d, FLOORS.text]);
-  /* Alpha inks stock components paint, composited over what they sit on:
-     inactive Tabs trigger (text-foreground/60, light) and the destructive Alert
-     (text-destructive, description text-destructive/90, on card or the soft tint). */
-  for (const s of ["muted", "background"]) pairs.push(["foreground", s, FLOORS.text, 0.6, "light"]);
+  /* Alpha inks stock components paint, composited over what they sit on: the destructive
+     Alert (text-destructive, description text-destructive/90, on card or the soft tint).
+     The inactive Tabs trigger's text-foreground/60 is replaced by STOCK_OVERRIDES. */
   for (const s of ["card", "destructive-soft"]) for (const a of [1, 0.9]) pairs.push(["destructive", s, FLOORS.text, a]);
   /* An invalid stock Input/Textarea in dark: destructive text on its bg-input/30 fill over a card. */
   pairs.push(["destructive", "input/30@card", FLOORS.text, 1, "dark"]);
@@ -91,7 +94,7 @@ export function checkContrast({ ANCHORS, ramp, themes, themeCss }) {
     /* Brand spirit: everything that is not status or chart stays in the cyan-navy
        hue band, or is a near-neutral. */
     for (const [k, v] of Object.entries(t)) {
-      if (STATUS.test(k) || CHART.test(k)) continue;
+      if (STATUS.test(k) || CHART.test(k.replace(/-foreground$/, ""))) continue;
       const [, C, H] = toOk(v);
       const [lo, hi] = FLOORS.spiritHue;
       need(C < FLOORS.spiritChroma || (H >= lo && H <= hi),

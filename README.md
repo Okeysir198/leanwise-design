@@ -43,7 +43,7 @@ A Tailwind v4 app with shadcn:
 
 ```bash
 npx shadcn@latest init --base radix
-npm i github:Okeysir198/leanwise-design#v5.12.0
+npm i github:Okeysir198/leanwise-design#v5.13.0
 ```
 
 In your global CSS, after Tailwind:
@@ -66,7 +66,7 @@ Add the registry to `components.json`:
 ```json
 {
   "registries": {
-    "@leanwise": "https://raw.githubusercontent.com/Okeysir198/leanwise-design/v5.12.0/r/{name}.json"
+    "@leanwise": "https://raw.githubusercontent.com/Okeysir198/leanwise-design/v5.13.0/r/{name}.json"
   }
 }
 ```
@@ -115,7 +115,7 @@ Dark mode is the `.dark` class on an ancestor (shadcn's convention). `useTheme()
   text-info-soft-foreground border-info-border`, for alerts, callouts and status chips
   (`info`, `success`, `warning`, `destructive`); the solid fills are for badges and buttons.
 - **Charts** use `chart-1`..`chart-5`, checked for separation under normal vision and all
-  three dichromacies.
+  three dichromacies. Text or an icon in a series colour takes `text-chart-N-foreground`.
 
 ## Roles
 
@@ -127,9 +127,11 @@ Every role is a CSS variable in `:root` and `.dark`, and a Tailwind colour: `bg-
 | `background` / `foreground` | The page and its text |
 | `card`, `popover` (+ `-foreground`) | Raised surfaces |
 | `primary` (+ `-foreground`) | Cyan. Default buttons, links, selection |
+| `primary-border` | A cyan-tinted edge: a selected card or chip, a primary callout |
 | `secondary` (+ `-foreground`) | Quiet cyan-tinted buttons and chips |
 | `muted` / `muted-foreground` | Recessed surfaces; secondary text |
 | `accent` (+ `-foreground`) | Hover and active surface for ghost items — not a brand colour |
+| `accent-border` | The edge of an `accent` ground |
 | `destructive` (+ `-foreground`) | Errors, delete |
 | `destructive-soft`, `-soft-foreground`, `-border` | Error alerts and callouts |
 | `info` (+ `-foreground`) | Informational fill |
@@ -146,6 +148,7 @@ Every role is a CSS variable in `:root` and `.dark`, and a Tailwind colour: `bg-
 | `input` | Control boundaries (3:1) |
 | `ring` | Focus |
 | `chart-1` … `chart-5` | Data series |
+| `chart-1-foreground` … `chart-5-foreground` | A series colour as text or icon on any surface (legend labels, KPI deltas): 4.5:1. Not ink on the chart fill |
 | `sidebar`, `sidebar-foreground`, `sidebar-primary`(`-foreground`), `sidebar-accent`(`-foreground`), `sidebar-border`, `sidebar-ring` | shadcn's sidebar |
 | `brand-50` … `brand-900`, `brand` | The cyan ramp (`brand` = 600). For illustration and data, not UI state |
 
@@ -249,7 +252,7 @@ fails when it finds no source files, so a wrong path cannot pass.
 npm install
 npm run gen        # src/palette.mjs -> theme.css, tokens.json
 npm run check      # generated files current, tests, types, lint, contrast, presence
-npm run check:ci   # + pack, a11y, visual self-test (needs `npx playwright install chromium`)
+npm run check:ci   # + pack, a11y, rendered contrast, visual self-test (needs `npx playwright install chromium`)
 ```
 
 A new role is a change to `src/palette.mjs`, then `npm run gen` — never a local override in

@@ -138,5 +138,7 @@ export function brandVars(hex, scheme = "light") {
   out["--sidebar-primary-foreground"] = ink;
   out["--sidebar-ring"] = primary;
   out["--chart-1"] = primary;
+  out["--chart-1-foreground"] = scheme === "dark" ? primary : ramp[700];
+  out["--primary-border"] = scheme === "dark" ? ramp[700] : ramp[300];
   return out;
 }

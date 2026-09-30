@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* The checks. `node scripts/check.mjs <lint|contrast|presence|a11y|visual|pack> [...]`.
+/* The checks. `node scripts/check.mjs <lint|contrast|presence|a11y|rendered|visual|pack> [...]`.
    Every check refuses to pass vacuously: reading zero of what it measures fails. */
 import fs from "node:fs";
 import os from "node:os";
@@ -13,7 +13,7 @@ const [cmd, ...args] = process.argv.slice(2);
 const flag = (f) => args.includes(f);
 const opt = (f, d) => { const i = args.indexOf(f); return i >= 0 ? args[i + 1] : d; };
 
-const CHECKS = { lint, contrast, presence, a11y, visual, pack };
+const CHECKS = { lint, contrast, presence, a11y, rendered, visual, pack };
 if (!CHECKS[cmd]) {
   console.error(`usage: check.mjs <${Object.keys(CHECKS).join("|")}>`);
   process.exit(2);
@@ -99,6 +99,53 @@ async function a11y() {
     await browser.close();
   }
   return report("a11y", { problems, checked: scanned, minChecked: 2, summary: `a11y: ${cards.length} card(s) x light/dark clean.` });
+}
+
+/* ------------------------------------------------------------ rendered
+   Contrast as painted (alpha inks, opacity chains, icons and control borders at 3:1) over
+   every card x light/dark. --self-test: a fixture with text-muted-foreground/70 and an
+   opacity-50 icon must go red, and the same markup without them green. */
+async function rendered() {
+  const { probe, FLOORS } = await import("./lib/rendered-contrast.mjs");
+  const { chromium } = await import("playwright");
+  const browser = await chromium.launch();
+  const problems = [];
+  let checked = 0;
+  try {
+    const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+    if (flag("--self-test")) {
+      const { compile } = await import("./lib/tw.mjs");
+      const icon = (cls) => `<svg class="${cls}" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>`;
+      const bad = `<p class="text-muted-foreground/70">Hint text</p><span class="text-muted-foreground">${icon("size-4 opacity-50")}</span>`;
+      const good = `<p class="text-muted-foreground">Hint text</p><span class="text-muted-foreground">${icon("size-4")}</span>`;
+      const css = await compile(ROOT, ["text-muted-foreground/70", "text-muted-foreground", "opacity-50", "size-4", "bg-background"]);
+      const run = async (body) => {
+        await page.setContent(`<html><head><style>${css}</style></head><body class="bg-background">${body}</body></html>`);
+        return page.evaluate(probe, FLOORS);
+      };
+      const r = await run(bad), g = await run(good);
+      const need = (ok, msg) => { checked++; if (!ok) problems.push(msg); };
+      need(r.problems.some((m) => /^text .*muted-foreground\/70/.test(m)), `text-muted-foreground/70 was not caught: ${JSON.stringify(r)}`);
+      need(r.problems.some((m) => /^icon .*opacity-50/.test(m)), `opacity-50 svg was not caught: ${JSON.stringify(r)}`);
+      need(g.checked >= 2 && !g.problems.length, `clean fixture did not pass: ${JSON.stringify(g)}`);
+      return report("rendered --self-test", { problems, checked, minChecked: 3,
+        summary: `rendered contrast: fixture red (${r.problems.length}), clean fixture green (${g.checked} checked).` });
+    }
+    const { collectCards, openCard, setTheme } = await import("./lib/cards.mjs");
+    for (const card of collectCards(ROOT)) {
+      const rel = path.relative(ROOT, card);
+      await openCard(page, rel, pathToFileURL(card).href);
+      for (const dark of [false, true]) {
+        await setTheme(page, dark);
+        const r = await page.evaluate(probe, FLOORS);
+        checked += r.checked;
+        for (const m of r.problems) problems.push(`${rel} [${dark ? "dark" : "light"}] ${m}`);
+      }
+    }
+  } finally {
+    await browser.close();
+  }
+  return report("rendered", { problems, checked, minChecked: 200, summary: `rendered contrast: ${checked} painted inks hold.` });
 }
 
 /* -------------------------------------------------------------- visual

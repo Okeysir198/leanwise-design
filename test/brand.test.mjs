@@ -44,6 +44,13 @@ test("the ramp has ten tiers, light to dark", () => {
 test("a tenant never owns --accent, and emits only known vars", () => {
   const v = brandVars("#8A2BE2", "dark");
   for (const k of Object.keys(v)) {
-    assert.match(k, /^--(brand-\d+|primary|primary-foreground|ring|sidebar-primary|sidebar-primary-foreground|sidebar-ring|chart-1)$/);
+    assert.match(k, /^--(brand-\d+|primary|primary-foreground|ring|sidebar-primary|sidebar-primary-foreground|sidebar-ring|chart-1|chart-1-foreground|primary-border)$/);
+  }
+});
+
+test("a tenant's chart-1 ink stays readable on the page (>= 4.5:1)", () => {
+  for (const hex of ["#8A2BE2", "#E4572E", "#2E8B57", "#1E90FF", "#FFD700"]) {
+    const ink = brandVars(hex, "light")["--chart-1-foreground"];
+    assert.ok(contrast(ink, "#FFFFFF") >= 4.5, `${hex}: ${ink} ${contrast(ink, "#FFFFFF").toFixed(2)}`);
   }
 });

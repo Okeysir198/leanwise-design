@@ -1,6 +1,6 @@
 {
   "name": "@leanwise/design",
-  "version": "5.12.0",
+  "version": "5.13.0",
   "description": "LeanWise brand as a shadcn/ui theme and registry: theme.css for Tailwind v4, brand registry items, marketing layer.",
   "license": "UNLICENSED",
   "type": "module",
@@ -55,9 +55,10 @@
     "test": "node --test test/*.test.mjs",
     "lint": "node scripts/check.mjs lint",
     "check": "node scripts/gen.mjs --check && node scripts/assets.mjs --check && node scripts/favicon.mjs --check && npm test && tsc --noEmit && node scripts/check.mjs lint && node scripts/check.mjs contrast && node scripts/check.mjs presence && node scripts/affordance.mjs --self-test && node scripts/affordance.mjs && node scripts/templates.mjs",
-    "check:ci": "npm run check && npm run check:pack && npm run check:a11y && node scripts/forced-colors.mjs && npm run check:visual -- --self-test",
+    "check:ci": "npm run check && npm run check:pack && npm run check:a11y && npm run check:rendered && node scripts/forced-colors.mjs && npm run check:visual -- --self-test",
     "check:pack": "node scripts/check.mjs pack",
     "check:a11y": "node scripts/check.mjs a11y",
+    "check:rendered": "node scripts/check.mjs rendered --self-test && node scripts/check.mjs rendered",
     "check:visual": "node scripts/check.mjs visual"
   },
   "devDependencies": {

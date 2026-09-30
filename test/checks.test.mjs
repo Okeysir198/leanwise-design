@@ -36,6 +36,10 @@ test("contrast: sabotage goes red", () => {
   p = clone(); p.themes.light.primary = "#0C727C";
   fails(p, /anchor cyan/);
   fails(clone(), /anchor amber .* theme\.css/, themeCss.replaceAll("#FCB603", "#FCB604"));
+  p = clone(); p.themes.light["chart-3-foreground"] = p.themes.light["chart-3"];
+  fails(p, /light: --chart-3-foreground on --background/);
+  p = clone(); p.themes.dark["accent-border"] = p.themes.dark.accent;
+  fails(p, /dark: --accent-border vs --accent/);
   p = clone(); delete p.themes.dark.info;
   fails(p, /dark: role --info is missing/);
 });
@@ -69,5 +73,5 @@ test("tokens.json is DTCG, resolved to hex, anchors exact", () => {
 test("every check subcommand is wired into an npm script", () => {
   const pkg = JSON.parse(read("package.json"));
   const all = Object.values(pkg.scripts).join(" ");
-  for (const c of ["lint", "contrast", "presence", "a11y", "visual", "pack"]) assert.match(all, new RegExp(`check\\.mjs ${c}\\b`), c);
+  for (const c of ["lint", "contrast", "presence", "a11y", "rendered", "visual", "pack"]) assert.match(all, new RegExp(`check\\.mjs ${c}\\b`), c);
 });

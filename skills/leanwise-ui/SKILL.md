@@ -27,6 +27,8 @@ follow its component guidance.
 - **Theme roles only**: `bg-primary`, `text-muted-foreground`, `border-input`, `bg-cta`,
   `bg-info-soft`, `chart-1`… No hex, no `rgb()`, no Tailwind palette classes
   (`bg-blue-500`, `text-gray-600`), no `bg-[var(--x)]` arbitrary values.
+- **Series-coloured text or icons** take `text-chart-N-foreground`, never `text-chart-N`. Don't fade ink with
+  `text-<role>/70` or `opacity-*`: a muted ink at 70% or an `opacity-50` icon drops below AA.
 - **One CTA per view.** Amber `cta` is the single most important action on a screen; every
   other action is the default (cyan) button or quieter.
 - **Action order is shadcn's**: right-aligned, primary last (`Cancel`, `Save`). Use the stock

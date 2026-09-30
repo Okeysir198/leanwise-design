@@ -30,6 +30,13 @@ export const STOCK_OVERRIDES = [
           '[data-slot="sheet-content"].bg-background', '[data-slot="drawer-content"].bg-background'],
     decl: { "background-color": "var(--popover)" },
     keys: [["dialog", "bg-background"], ["alert-dialog", "bg-background"], ["sheet", "bg-background"]] },
+  { why: "Stock Select chevron is opacity-50: 2.2:1, under the 3:1 an icon needs.",
+    sel: ['[data-slot="select-trigger"] > svg.opacity-50'], decl: { opacity: "1" },
+    keys: [["select", "size-4 opacity-50"]] },
+  { why: "Stock inactive Tabs trigger is text-foreground/60: 4.5:1 exactly on muted, under once rendered.",
+    sel: ['[data-slot="tabs-trigger"].text-foreground\\/60:not([data-state="active"]):not(:hover)'],
+    decl: { color: "var(--muted-foreground)" },
+    keys: [["tabs", "text-foreground/60"]] },
 ];
 
 /** `{selector: declarations}` for the registry's cssVars/css object. */

@@ -44,7 +44,7 @@ The repo is also the working copy of a Claude Design project
 ```
 src/palette.mjs        THE source: ANCHORS, the cyan ramp, themes.light/.dark role maps
 scripts/gen.mjs        every generated file; --check fails on a stale one
-scripts/check.mjs      the checks: lint | contrast | presence | a11y | visual | pack
+scripts/check.mjs      the checks: lint | contrast | presence | a11y | rendered | visual | pack
 scripts/{assets,favicon,affordance,forced-colors,templates}.mjs   standalone generators/checks
 scripts/lib/           oklch, theme (theme.css), tokens-json, registry (r/), bundle (preview
                        bundle + preview.css + manifest), card-build, tw, contrast, lint, color,
@@ -69,7 +69,7 @@ templates/*/*.dc.html  Claude Design templates over the namespace (x-import)
 ```bash
 npm run gen         # theme.css, tokens.json, r/, preview bundle + cards + manifest, logo assets
 npm run check       # gen/assets --check, tests, tsc, lint, contrast, presence, affordance, templates
-npm run check:ci    # + pack, a11y, forced-colors, visual --self-test (needs `npx playwright install chromium`)
+npm run check:ci    # + pack, a11y, rendered, forced-colors, visual --self-test (needs `npx playwright install chromium`)
 npm run lint -- <dir>   # token lint (default: registry/)
 node scripts/check.mjs visual --record | --compare [--dir d] [--report-only]
 ```
@@ -77,9 +77,10 @@ node scripts/check.mjs visual --record | --compare [--dir d] [--report-only]
 | check | asserts |
 |---|---|
 | `lint` | no raw hex, no Tailwind palette class, no `[var(--x)]`, ≤1 `variant="cta"` per file |
-| `contrast` | text pairs ≥4.5 in both themes; `SEPARATIONS` (border/page in light, card/page in dark, selected/hover, scroll thumb, sidebar active) above their floors; `input`/`ring`/`primary` ≥3:1 on every surface; role parity light⇄dark; anchors exact in palette and theme.css; chart-1..5 pairwise dE76 ≥19 normal and ≥15 worst dichromacy; brand hue band |
+| `contrast` | text pairs ≥4.5 in both themes; `SEPARATIONS` (border/page in light, card/page in dark, selected/hover, scroll thumb, sidebar active) above their floors; `input`/`ring`/`primary` ≥3:1 on every surface; role parity light⇄dark; anchors exact in palette and theme.css; `chart-N-foreground` ≥4.5 on every surface; chart-1..5 pairwise dE76 ≥19 normal and ≥15 worst dichromacy; brand hue band |
 | `presence` | every role/ramp/type/radius utility compiles through Tailwind + theme.css |
 | `a11y` | axe (WCAG 2.1 A/AA) over every `@dsCard` page, light and `.dark`; serious/critical fail. A node may opt out of one rule with `data-a11y-expect="<rule-id>"` |
+| `rendered` | contrast AS PAINTED over every `@dsCard` page, light and dark: alpha inks and the element/ancestor `opacity` chain composited over stacked grounds; text ≥4.5 (large 3), `currentColor` svg icons and unchecked control borders ≥3; disabled exempt, opt-out `data-contrast-expect`. `--self-test`: `text-muted-foreground/70` + an `opacity-50` svg go red, the clean fixture green |
 | `visual` | every card x light/dark, per-shot soft/strong pixel rules; `--record` a baseline, then `--compare` |
 | `pack` | `npm pack`, install the tarball in a scratch app, resolve every export, compile theme.css from it, parse `r/`, run the bin both ways |
 
