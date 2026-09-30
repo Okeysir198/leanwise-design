@@ -459,6 +459,9 @@
         "[data-slot=\"select-trigger\"] > svg.opacity-50": {
           "opacity": "1"
         },
+        "[data-slot=\"native-select-icon\"].opacity-50": {
+          "opacity": "1"
+        },
         "[data-slot=\"tabs-trigger\"].text-foreground\\/60:not([data-state=\"active\"]):not(:hover)": {
           "color": "var(--muted-foreground)"
         },

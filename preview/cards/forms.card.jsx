@@ -1,8 +1,8 @@
-// @dsCard group="Components" name="Forms" subtitle="Field, FieldSet and FieldGroup over Input, Select, Checkbox, RadioGroup and Switch, plus a react-hook-form + zod form — stock shadcn" viewport="1100x1180"
+// @dsCard group="Components" name="Forms" subtitle="Field, FieldSet and FieldGroup over Input, Select, NativeSelect, Checkbox, RadioGroup and Switch, plus a react-hook-form + zod form — stock shadcn" viewport="1100x1180"
 const {
   Field, FieldGroup, FieldSet, FieldLegend, FieldLabel, FieldDescription, FieldError, FieldSeparator, FieldContent,
   Input, Textarea, Checkbox, Switch, RadioGroup, RadioGroupItem,
-  Select, SelectTrigger, SelectValue, SelectContent, SelectItem, Button,
+  Select, SelectTrigger, SelectValue, SelectContent, SelectItem, NativeSelect, NativeSelectOption, Button,
   Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter,
   useForm, Controller, zodResolver, z,
 } = window.LeanWiseDesign_f2d907;
@@ -89,6 +89,14 @@ lwCard("Forms", "Field owns the label, description and error; horizontal Field f
                 </SelectContent>
               </Select>
               <FieldDescription>Where documents and embeddings are stored.</FieldDescription>
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="f-retention">Retention</FieldLabel>
+              <NativeSelect id="f-retention" defaultValue="90">
+                <NativeSelectOption value="30">30 days</NativeSelectOption>
+                <NativeSelectOption value="90">90 days</NativeSelectOption>
+                <NativeSelectOption value="365">1 year</NativeSelectOption>
+              </NativeSelect>
             </Field>
             <Field>
               <FieldLabel htmlFor="f-notes">Notes</FieldLabel>

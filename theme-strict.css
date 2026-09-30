@@ -372,6 +372,11 @@
   opacity: 1;
 }
 
+/* Stock NativeSelect chevron is opacity-50: 2.2:1, under the 3:1 an icon needs. */
+[data-slot="native-select-icon"].opacity-50 {
+  opacity: 1;
+}
+
 /* Stock inactive Tabs trigger is text-foreground/60: 4.5:1 exactly on muted, under once rendered. */
 [data-slot="tabs-trigger"].text-foreground\/60:not([data-state="active"]):not(:hover) {
   color: var(--muted-foreground);

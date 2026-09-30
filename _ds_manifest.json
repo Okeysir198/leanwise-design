@@ -1270,7 +1270,7 @@
       "path": "preview/cards/forms.card.html",
       "group": "Components",
       "viewport": "1100x1180",
-      "subtitle": "Field, FieldSet and FieldGroup over Input, Select, Checkbox, RadioGroup and Switch, plus a react-hook-form + zod form — stock shadcn",
+      "subtitle": "Field, FieldSet and FieldGroup over Input, Select, NativeSelect, Checkbox, RadioGroup and Switch, plus a react-hook-form + zod form — stock shadcn",
       "name": "Forms"
     },
     {
