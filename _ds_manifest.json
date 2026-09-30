@@ -1645,7 +1645,7 @@
     },
     {
       "name": "--sidebar",
-      "value": "oklch(0.97 0.008 225)",
+      "value": "oklch(1 0 0)",
       "kind": "color",
       "definedIn": "theme.css"
     },

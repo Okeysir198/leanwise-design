@@ -43,7 +43,7 @@ A Tailwind v4 app with shadcn:
 
 ```bash
 npx shadcn@latest init --base radix
-npm i github:Okeysir198/leanwise-design#v5.11.0
+npm i github:Okeysir198/leanwise-design#v5.12.0
 ```
 
 In your global CSS, after Tailwind:
@@ -66,7 +66,7 @@ Add the registry to `components.json`:
 ```json
 {
   "registries": {
-    "@leanwise": "https://raw.githubusercontent.com/Okeysir198/leanwise-design/v5.11.0/r/{name}.json"
+    "@leanwise": "https://raw.githubusercontent.com/Okeysir198/leanwise-design/v5.12.0/r/{name}.json"
   }
 }
 ```
@@ -148,6 +148,12 @@ Every role is a CSS variable in `:root` and `.dark`, and a Tailwind colour: `bg-
 | `chart-1` … `chart-5` | Data series |
 | `sidebar`, `sidebar-foreground`, `sidebar-primary`(`-foreground`), `sidebar-accent`(`-foreground`), `sidebar-border`, `sidebar-ring` | shadcn's sidebar |
 | `brand-50` … `brand-900`, `brand` | The cyan ramp (`brand` = 600). For illustration and data, not UI state |
+
+**Surfaces are white in light mode.** The page, cards, popovers, the sidebar, panes, toolbars and
+panel headers all sit on `background`/`card` and separate by `border`, never by a tint. `muted`
+is for small recessed things only: table header rows, read-only quote boxes, placeholders, idle
+states — never a whole pane or toolbar strip. The one sanctioned large tint is a document viewer's
+canvas behind the page (`bg-muted/30`), so the white page keeps its edge.
 
 Never write a hex or a Tailwind palette class (`bg-blue-500`) in app code, and never reach a
 role through an arbitrary value (`bg-[var(--primary)]`) — use the utility.

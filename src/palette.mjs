@@ -58,7 +58,7 @@ export const themes = {
     "chart-3": "#FCB603",
     "chart-4": "oklch(0.52 0.17 15)",
     "chart-5": "oklch(0.56 0.13 125)",
-    "sidebar": "oklch(0.97 0.008 225)",
+    "sidebar": "oklch(1 0 0)",
     "sidebar-foreground": "oklch(0.21 0.05 245)",
     "sidebar-primary": "#0C727B",
     "sidebar-primary-foreground": "oklch(1 0 0)",
