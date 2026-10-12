@@ -43,9 +43,9 @@ export function pairsFor(t) {
   /* Heatmap / diff cells carry body text (text-foreground) on their ground. */
   for (const d of ["diff-add", "diff-del", "diff-mod"]) if (t[d]) pairs.push(["foreground", d, FLOORS.text]);
   /* Alpha inks stock components paint, composited over what they sit on: the destructive
-     Alert (text-destructive, description text-destructive/90, on card or the soft tint).
-     The inactive Tabs trigger's text-foreground/60 is replaced by STOCK_OVERRIDES. */
-  for (const s of ["card", "destructive-soft"]) for (const a of [1, 0.9]) pairs.push(["destructive", s, FLOORS.text, a]);
+     Alert title is text-destructive on card or the soft tint. (The description's stock
+     text-destructive/90 is overridden to the same full --destructive — see STOCK_OVERRIDES.) */
+  for (const s of ["card", "destructive-soft"]) pairs.push(["destructive", s, FLOORS.text]);
   /* An invalid stock Input/Textarea in dark: destructive text on its bg-input/30 fill over a card. */
   pairs.push(["destructive", "input/30@card", FLOORS.text, 1, "dark"]);
   /* The stock destructive Button/Badge in dark: text-white on dark:bg-destructive/60 over

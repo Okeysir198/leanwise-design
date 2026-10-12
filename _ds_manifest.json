@@ -1753,7 +1753,7 @@
     },
     {
       "name": "--info-soft",
-      "value": "oklch(0.965 0.018 240)",
+      "value": "oklch(0.93 0.05 240)",
       "kind": "color",
       "definedIn": "theme.css"
     },
@@ -1771,7 +1771,7 @@
     },
     {
       "name": "--destructive-soft",
-      "value": "oklch(0.965 0.016 25)",
+      "value": "oklch(0.93 0.045 25)",
       "kind": "color",
       "definedIn": "theme.css"
     },
@@ -1789,7 +1789,7 @@
     },
     {
       "name": "--success-soft",
-      "value": "oklch(0.965 0.025 165)",
+      "value": "oklch(0.93 0.05 165)",
       "kind": "color",
       "definedIn": "theme.css"
     },
@@ -1807,7 +1807,7 @@
     },
     {
       "name": "--warning-soft",
-      "value": "oklch(0.97 0.035 75)",
+      "value": "oklch(0.93 0.065 75)",
       "kind": "color",
       "definedIn": "theme.css"
     },

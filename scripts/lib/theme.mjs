@@ -40,6 +40,10 @@ export const STOCK_OVERRIDES = [
     sel: ['[data-slot="tabs-trigger"].text-foreground\\/60:not([data-state="active"]):not(:hover)'],
     decl: { color: "var(--muted-foreground)" },
     keys: [["tabs", "text-foreground/60"]] },
+  { why: "Stock Alert description is text-destructive/90: an alpha-faded fill ink that fails 4.5 on the deepened destructive-soft tint; full --destructive reads the same and passes.",
+    sel: ['[class*="alert-description"] [data-slot="alert-description"]'],
+    decl: { color: "var(--destructive)" },
+    keys: [["alert", "text-destructive/90"]] },
 ];
 
 /** `{selector: declarations}` for the registry's cssVars/css object. */
