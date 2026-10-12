@@ -49,14 +49,14 @@ scripts/{assets,favicon,affordance,forced-colors,templates}.mjs   standalone gen
 scripts/lib/           oklch, theme (theme.css), tokens-json, registry (r/), bundle (preview
                        bundle + preview.css + manifest), card-build, tw, contrast, lint, color,
                        png, cards, css, generated, parse, report
-theme.css tokens.json  GENERATED
+theme.css theme-strict.css tokens.json   GENERATED (theme-strict = theme without stock fallbacks; README)
 registry/ registry.json r/   shadcn registry source and its built items
 marketing.css          plain-CSS marketing layer over theme variables
 fonts.css fonts/ assets/   Geist, logo and artwork
 brand.js hooks.js      brandVars(hex, scheme); useTheme, useReducedMotion, THEME_KEY
 bin/lw-token-lint.mjs  the consumer lint
 skills/leanwise-ui/    the agent skill consumers copy
-registry/blocks/       OUR blocks (app-shell, state-view, file-upload, section-nav): the one
+registry/blocks/       OUR blocks (app-shell, state-view, file-upload, section-nav, login-card): the one
                        copy; the preview compiles them directly
 preview/src/ui/        stock new-york-v4 shadcn, UNMODIFIED; shadcn-blocks/ = stock blocks
                        (sidebar-07, login-04), unmodified; index.ts = the bundle namespace
@@ -138,6 +138,13 @@ with their sources. `get_file` caps at 256 KiB. Anything computed in the project
 claim: re-derive every colour here and run `npm run check` before trusting it.
 
 ## Consumers
+
+- **A consumer on the pre-shadcn line** (imports `tokens.css`/`reset.css`/`base.css`, uses
+  `.lw-*` classes, or a Tailwind v3 preset) cannot take a pin bump: this package ships none of
+  that. Moving it is a re-platform onto `theme.css` + shadcn, planned as such.
+- **A token-bridge consumer reads this repo's *source files* by path**, not the package, so
+  deleting or renaming a generated file breaks it silently. Grep the consumers for the file
+  name before removing or renaming any file here.
 
 Before bumping a consumer's pin: `npx lw-token-lint <consumer>/src`.
 
