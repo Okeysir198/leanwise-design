@@ -1,0 +1,30 @@
+# The browser-free gate. Consumers install from a git tag with no publish step,
+# so whatever lands on main is what they get. `npm ci` fails when
+# package-lock.json drifts from package.json. The chromium checks
+# (`npm run check:ci`) are not run here.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: npm run check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm run check
