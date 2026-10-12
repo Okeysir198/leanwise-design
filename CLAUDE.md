@@ -38,6 +38,8 @@ The repo is also the working copy of a Claude Design project
 - **Everything generated is committed**, because consumers install from a git tag and no
   publish step runs. Change the source, run the generator, commit both.
 - No history in code or docs: no "was", no version stories, no compat aliases.
+- **The repo is public: no machine paths, home directories, hostnames or private project names** in
+  any committed file. Refer to consumers generically.
 
 ## Layout
 
