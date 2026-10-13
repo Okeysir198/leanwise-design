@@ -206,6 +206,10 @@ without React.
 Dark follows `.dark`. Ambient motion is off unless an ancestor sets `data-ambient="on"`,
 and `prefers-reduced-motion` always stops it.
 
+`--header-h` sizes the sticky `.lw-site-header`, and `--anchor-offset` (header + `0.5rem`) is the
+`scroll-margin` on `.lw-section[id]` and `.lw-prose` headings, so a `#fragment` lands below the
+header. Re-point `--header-h` if your header is taller, e.g. with `.lw-announce` inside it.
+
 ## Per-tenant theming
 
 A tenant's accent colour re-points the brand roles for its workspace only:
