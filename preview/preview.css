@@ -2584,6 +2584,16 @@
   .aria-selected\:text-muted-foreground[aria-selected="true"] {
     color: var(--muted-foreground);
   }
+  .aria-\[current\=location\]\:border-primary[aria-current="location"] {
+    border-color: var(--primary);
+  }
+  .aria-\[current\=location\]\:font-medium[aria-current="location"] {
+    --tw-font-weight: var(--font-weight-medium);
+    font-weight: var(--font-weight-medium);
+  }
+  .aria-\[current\=location\]\:text-primary[aria-current="location"] {
+    color: var(--primary);
+  }
   .aria-\[current\=page\]\:border-primary[aria-current="page"] {
     border-color: var(--primary);
   }
