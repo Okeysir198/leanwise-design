@@ -1182,6 +1182,10 @@
       "sourcePath": "registry/blocks/file-upload.tsx"
     },
     {
+      "name": "Flow",
+      "sourcePath": "registry/blocks/flow.tsx"
+    },
+    {
       "name": "LoginCard",
       "sourcePath": "registry/blocks/login-card.tsx"
     },

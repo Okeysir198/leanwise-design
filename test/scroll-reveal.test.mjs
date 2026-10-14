@@ -18,13 +18,15 @@ function chainAt(idx) {
   return stack;
 }
 
-const uses = [...css.matchAll(/animation(?:-name)?\s*:[^;}]*\blwReveal\b/g)];
+// Every scroll-driven animation, not one by name: each hides content until scrolled to.
+// Declarations only: the @supports condition contains the same text in parentheses.
+const uses = [...css.matchAll(/(?<!\()animation-timeline\s*:\s*view\(\)/g)];
 
 test("the reveal is used", () => {
-  assert.ok(uses.length > 0, "no lwReveal animation found — the gate checks measure nothing");
+  assert.ok(uses.length >= 2, "expected the reveal and the flow draw-in — the gate checks measure too little");
 });
 
-test("every reveal sits inside both gates, screen only", () => {
+test("every scroll-driven animation sits inside both gates, screen only", () => {
   for (const m of uses) {
     const chain = chainAt(m.index).join(" | ");
     assert.match(chain, /@supports\s*\(\s*animation-timeline\s*:\s*view\(\)\s*\)/, `outside @supports: ${chain}`);
@@ -39,6 +41,8 @@ test("the range is a percentage, never a length", () => {
   for (const r of ranges) assert.doesNotMatch(r, /\d(px|rem|em|vh|svh|dvh)\b/, `a length range never finishes on a short element: ${r.trim()}`);
 });
 
-test("lwReveal is defined once", () => {
-  assert.equal((css.match(/@keyframes\s+lwReveal\b/g) ?? []).length, 1);
+test("each scroll-driven keyframe is defined once", () => {
+  for (const name of ["lwReveal", "lwFlowIn"]) {
+    assert.equal((css.match(new RegExp(`@keyframes\\s+${name}\\b`, "g")) ?? []).length, 1, name);
+  }
 });

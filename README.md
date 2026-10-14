@@ -9,7 +9,7 @@ What ships:
 | Path | What it is |
 |---|---|
 | `theme.css` | The whole theme for Tailwind v4 + shadcn: every role as a CSS variable, light and `.dark`, registered as utilities (`bg-primary`, `bg-cta`, `text-muted-foreground`…), the type scale, the radius, the solid focus ring, pointer cursors |
-| `r/*.json`, `registry.json` | The shadcn registry: `leanwise-theme`, `leanwise-font`, `leanwise-font-mono`, `leanwise-base`, and the blocks `state-view`, `file-upload`, `app-shell`, `section-nav`, `login-card` (one-column sign-in) |
+| `r/*.json`, `registry.json` | The shadcn registry: `leanwise-theme`, `leanwise-font`, `leanwise-font-mono`, `leanwise-base`, and the blocks `state-view`, `file-upload`, `app-shell`, `section-nav`, `flow`, `login-card` (one-column sign-in) |
 | `marketing.css` | Plain-CSS layer for marketing sites (hero, sections, plans, footer), over theme variables only |
 | `fonts.css`, `fonts/` | Geist + Geist Mono, self-hosted, Vietnamese subsets included |
 | `assets/` | Logo mark, lockups, favicon, hero artwork |
@@ -210,6 +210,12 @@ and `prefers-reduced-motion` always stops it.
 `--header-h` sizes the sticky `.lw-site-header`, and `--anchor-offset` (header + `0.5rem`) is the
 `scroll-margin` on `.lw-section[id]` and `.lw-prose` headings, so a `#fragment` lands below the
 header. Re-point `--header-h` if your header is taller, e.g. with `.lw-announce` inside it.
+
+`@leanwise/flow` (a registry block, styled by the `.lw-flow*` classes here) draws a pipeline or
+workflow. Edges between consecutive nodes give a chain of cards; any other edge gives a graph laid
+on a grid, whose connectors are CSS borders, so it renders on the server with no SVG and no
+measurement. A graph also renders a visually hidden successors table, which is what a screen
+reader gets, so it needs `label` and `tableLabels`. Below 768px both forms stack.
 
 `lw-reveal` fades an element in as it scrolls into view; `lw-reveal-group` staggers its
 children. Both are shown outright without view-timeline support, under reduced motion and in

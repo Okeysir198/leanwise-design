@@ -324,6 +324,98 @@ a.lw-feature:hover { border-color: var(--primary); transform: translateY(-2px); 
 
 /* ---- Motion ----------------------------------------------------------------- */
 
+/* Flow — the `.lw-flow*` classes the registry `flow` block emits.
+   Chain form: a row of cards joined by a short connector; a column below 768px.
+   Graph form: nodes on a lattice (tracks from the component), connectors drawn as
+   borders on the gutter cells, a single indented column below 768px. */
+.lw-flow {
+  display: grid; gap: 1rem; margin: 0; padding: 0; list-style: none;
+  grid-auto-flow: var(--flow-flow, column); grid-auto-columns: minmax(0, 1fr) auto; align-items: stretch;
+}
+.lw-flow-vertical { --flow-flow: row; --flow-edge-i: 1px; --flow-edge-b: var(--flow-edge, 28px); --flow-seg-i: 100%; --flow-seg-b: 45%; }
+@media (max-width: 767.98px) {
+  .lw-flow { --flow-flow: row; --flow-edge-i: 1px; --flow-edge-b: var(--flow-edge, 28px); --flow-seg-i: 100%; --flow-seg-b: 45%; }
+}
+.lw-flow-node {
+  display: flex; flex-direction: column; gap: 0.5rem; min-inline-size: 0; padding: 1.25rem;
+  border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--card); color: var(--card-foreground);
+}
+.lw-flow-head { display: flex; align-items: center; gap: 0.5rem; color: var(--muted-foreground); }
+.lw-flow-icon { display: inline-flex; }
+.lw-flow-icon > svg { width: 1rem; height: 1rem; }
+.lw-flow-index { font-family: var(--font-mono); font-size: var(--text-xs, 0.75rem); font-variant-numeric: tabular-nums; }
+.lw-flow-title { margin: 0; font-size: var(--text-lg, 1.125rem); line-height: 1.3; font-weight: 500; text-wrap: pretty; }
+.lw-flow-sub { margin: 0; color: var(--muted-foreground); text-wrap: pretty; }
+/* The current node is marked positively; the others keep full ink. */
+.lw-flow-node[aria-current] { border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary), 0 18px 40px -20px color-mix(in oklch, var(--primary) 45%, transparent); }
+.lw-flow-node[aria-current] .lw-flow-title { font-weight: 600; }
+.lw-flow-node[data-kind="input"], .lw-flow-node[data-kind="output"] { border-radius: 999px; padding-inline: 1.75rem; }
+.lw-flow-node[data-kind="terminal"] { border-style: dashed; }
+
+.lw-flow-edge {
+  position: relative; align-self: center; justify-self: center;
+  inline-size: var(--flow-edge-i, var(--flow-edge, 28px)); block-size: var(--flow-edge-b, 1px);
+  background: var(--border);
+}
+.lw-flow-edge::before {
+  content: ""; position: absolute; inset-block-start: 0; inset-inline-start: 0;
+  inline-size: var(--flow-seg-i, 45%); block-size: var(--flow-seg-b, 100%); background: var(--primary);
+}
+
+.lw-flow-graph {
+  grid-auto-flow: unset; grid-template-columns: var(--flow-tracks); grid-template-rows: var(--flow-row-tracks);
+  /* The gutter tracks are the spacing; a grid gap would cut every connector into dashes. */
+  gap: 0; --flow-edge: var(--flow-gutter, 40px);
+}
+.lw-flow-graph > * { grid-column-start: var(--flow-c); grid-row-start: var(--flow-r); }
+.lw-flow-cell { position: relative; min-inline-size: 0; }
+.lw-flow-cell[data-edge~="l"]::before, .lw-flow-cell[data-edge~="r"]::before {
+  content: ""; position: absolute; inset-block-start: calc(50% - 0.5px); block-size: 1px; inline-size: 50%; background: var(--border);
+}
+.lw-flow-cell[data-edge~="l"]::before { inset-inline-start: 0; }
+.lw-flow-cell[data-edge~="r"]::before { inset-inline-start: 50%; }
+.lw-flow-cell[data-edge~="l"][data-edge~="r"]::before { inset-inline-start: 0; inline-size: 100%; }
+.lw-flow-cell[data-edge~="u"]::after, .lw-flow-cell[data-edge~="d"]::after {
+  content: ""; position: absolute; inset-inline-start: calc(50% - 0.5px); inline-size: 1px; block-size: 50%; background: var(--border);
+}
+.lw-flow-cell[data-edge~="u"]::after { inset-block-start: 0; }
+.lw-flow-cell[data-edge~="d"]::after { inset-block-start: 50%; }
+.lw-flow-cell[data-edge~="u"][data-edge~="d"]::after { inset-block-start: 0; block-size: 100%; }
+.lw-flow-cell[data-edge-kind="back"]::before,
+.lw-flow-cell[data-edge-kind="back"]::after {
+  background: repeating-linear-gradient(var(--flow-back-angle, 90deg), var(--border) 0 4px, transparent 4px 8px);
+}
+.lw-flow-cell[data-edge-kind="back"]::after { --flow-back-angle: 180deg; }
+@media (max-width: 767.98px) {
+  .lw-flow-graph { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; grid-auto-flow: row; gap: 1rem; }
+  .lw-flow-graph > * { grid-column-start: auto; grid-row-start: auto; }
+  .lw-flow-graph > .lw-flow-cell { display: none; }
+  .lw-flow-graph > .lw-flow-node { margin-inline-start: min(var(--flow-depth, 0) * 12px, 36px); }
+}
+
+/* The draw-in: the same gate and the same percentage range as the scroll reveal
+   below, for the same reasons — print and reduced motion get the whole diagram. */
+@supports (animation-timeline: view()) {
+  @media screen and (prefers-reduced-motion: no-preference) {
+    .lw-flow > * {
+      animation: lwFlowIn linear both;
+      animation-timeline: view();
+      animation-range:
+        entry calc(10% + var(--flow-i, 0) * var(--flow-step, 4%))
+        entry calc(70% + var(--flow-i, 0) * var(--flow-step, 4%));
+    }
+    .lw-flow > :nth-child(2) { --flow-i: 1; }
+    .lw-flow > :nth-child(3) { --flow-i: 2; }
+    .lw-flow > :nth-child(4) { --flow-i: 3; }
+    .lw-flow > :nth-child(5) { --flow-i: 4; }
+    .lw-flow > :nth-child(6) { --flow-i: 5; }
+    .lw-flow > :nth-child(7) { --flow-i: 6; }
+    .lw-flow > :nth-child(8) { --flow-i: 7; }
+    .lw-flow > :nth-child(n+9) { --flow-i: 8; }
+  }
+}
+
 /* Scroll reveal, CSS only. `.lw-reveal` fades itself in as it enters the viewport;
    `.lw-reveal-group` does the same to its children in sequence.
 
@@ -363,6 +455,7 @@ a.lw-feature:hover { border-color: var(--primary); transform: translateY(-2px); 
 @keyframes lwMarkBreathe { from { transform: translateY(-50%) scale(1); } to { transform: translateY(-50%) scale(1.04); } }
 @keyframes lwAurora { to { transform: translate3d(10%, 8%, 0) scale(1.15); } }
 @keyframes lwMarquee { to { transform: translateX(-100%); } }
+@keyframes lwFlowIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 @keyframes lwReveal { from { opacity: 0; transform: translate3d(0, var(--reveal-shift, 12px), 0); } to { opacity: 1; transform: none; } }
 
 @media (prefers-reduced-motion: reduce) {

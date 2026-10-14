@@ -543,6 +543,20 @@
       ]
     },
     {
+      "name": "flow",
+      "type": "registry:block",
+      "title": "Flow",
+      "description": "A pipeline or workflow diagram: a chain of cards, or a branching graph drawn with CSS on a grid, server-rendered, with a hidden successors table. Styled by marketing.css.",
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/blocks/flow.tsx",
+          "type": "registry:component",
+          "target": "components/flow.tsx"
+        }
+      ]
+    },
+    {
       "name": "login-card",
       "type": "registry:block",
       "title": "Login card",

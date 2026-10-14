@@ -245,6 +245,9 @@
   .relative {
     position: relative;
   }
+  .static {
+    position: static;
+  }
   .sticky {
     position: sticky;
   }
@@ -789,6 +792,9 @@
   }
   .basis-full {
     flex-basis: 100%;
+  }
+  .table-fixed {
+    table-layout: fixed;
   }
   .caption-bottom {
     caption-side: bottom;
@@ -3733,6 +3739,15 @@
   }
   .\[\&\>button\]\:hidden > button {
     display: none;
+  }
+  .\[\&\>caption\]\:absolute > caption {
+    position: absolute;
+  }
+  .\[\&\>caption\]\:w-px > caption {
+    width: 1px;
+  }
+  .\[\&\>caption\]\:overflow-hidden > caption {
+    overflow: hidden;
   }
   .\[\&\>input\]\:flex-1 > input {
     flex: 1;
