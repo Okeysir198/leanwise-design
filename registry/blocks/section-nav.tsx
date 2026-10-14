@@ -5,7 +5,9 @@ import { cn } from "@/lib/utils"
 type SectionNavItem = { title: string; href: string; current?: boolean }
 
 /* In-page section navigation (settings sections, docs contents): a thin rail with
-   the current section marked by a brand segment. Lighter than the app sidebar. */
+   the current section marked by a brand segment. Lighter than the app sidebar.
+   A #hash item is a place on this page, so it is aria-current="location"; "page"
+   would claim it points at the page the reader is on. A route item stays "page". */
 function SectionNav({
   items,
   className,
@@ -20,10 +22,11 @@ function SectionNav({
             <a
               data-slot="section-nav-link"
               href={item.href}
-              aria-current={item.current ? "page" : undefined}
+              aria-current={item.current ? (item.href.startsWith("#") ? "location" : "page") : undefined}
               className={cn(
                 "text-muted-foreground hover:text-foreground -ml-px block border-l-2 border-transparent px-3.5 py-1.5 transition-colors",
-                "aria-[current=page]:border-primary aria-[current=page]:text-primary aria-[current=page]:font-medium"
+                "aria-[current=page]:border-primary aria-[current=page]:text-primary aria-[current=page]:font-medium",
+                "aria-[current=location]:border-primary aria-[current=location]:text-primary aria-[current=location]:font-medium"
               )}
             >
               {item.title}

@@ -207,6 +207,10 @@ without React.
 Dark follows `.dark`. Ambient motion is off unless an ancestor sets `data-ambient="on"`,
 and `prefers-reduced-motion` always stops it.
 
+`--header-h` sizes the sticky `.lw-site-header`, and `--anchor-offset` (header + `0.5rem`) is the
+`scroll-margin` on `.lw-section[id]` and `.lw-prose` headings, so a `#fragment` lands below the
+header. Re-point `--header-h` if your header is taller, e.g. with `.lw-announce` inside it.
+
 `lw-reveal` fades an element in as it scrolls into view; `lw-reveal-group` staggers its
 children. Both are shown outright without view-timeline support, under reduced motion and in
 print. Use them on small children (a heading block, a card grid), never on a page-sized band:
