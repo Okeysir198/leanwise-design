@@ -202,6 +202,7 @@ without React.
 | `lw-plans`, `lw-plan`, `lw-plan-featured`, `lw-compare` | Pricing and comparison |
 | `lw-stat-row`, `lw-logo-rail`, `lw-quote`, `lw-media-plate`, `lw-prose` | Proof and content |
 | `lw-footer`, `lw-cookie` | Footer and consent |
+| `lw-reveal`, `lw-reveal-group` | Scroll reveal, CSS only |
 
 Dark follows `.dark`. Ambient motion is off unless an ancestor sets `data-ambient="on"`,
 and `prefers-reduced-motion` always stops it.
@@ -209,6 +210,11 @@ and `prefers-reduced-motion` always stops it.
 `--header-h` sizes the sticky `.lw-site-header`, and `--anchor-offset` (header + `0.5rem`) is the
 `scroll-margin` on `.lw-section[id]` and `.lw-prose` headings, so a `#fragment` lands below the
 header. Re-point `--header-h` if your header is taller, e.g. with `.lw-announce` inside it.
+
+`lw-reveal` fades an element in as it scrolls into view; `lw-reveal-group` staggers its
+children. Both are shown outright without view-timeline support, under reduced motion and in
+print. Use them on small children (a heading block, a card grid), never on a page-sized band:
+the fade is proportional to the element's height, so a very tall one is still fading while read.
 
 ## Per-tenant theming
 
