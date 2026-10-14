@@ -1,35 +1,10 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
-import path from "node:path";
-import esbuild from "esbuild";
-import { ROOT } from "./_root.mjs";
+import { renderBlock } from "./_render.mjs";
 
 // Renders the shipped block, not a copy of its logic. aria-current="page" on a
 // #hash link tells a screen reader the link points at the page it is on.
-async function renderNav(items) {
-  const out = await esbuild.build({
-    stdin: {
-      contents: `import { SectionNav } from "./registry/blocks/section-nav.tsx";
-        import { createElement } from "react";
-        import { renderToStaticMarkup } from "react-dom/server";
-        export default (items) => renderToStaticMarkup(createElement(SectionNav, { items }));`,
-      resolveDir: ROOT,
-      loader: "tsx",
-    },
-    alias: { "@/lib/utils": path.join(ROOT, "preview/src/lib/utils.ts") },
-    bundle: true, write: false, format: "esm", platform: "node", jsx: "automatic",
-    external: ["react", "react-dom", "react-dom/server", "clsx", "tailwind-merge"],
-  });
-  const tmp = path.join(ROOT, "node_modules", `.section-nav-${process.pid}.mjs`);
-  fs.writeFileSync(tmp, out.outputFiles[0].text);
-  try {
-    const mod = await import(tmp);
-    return mod.default(items);
-  } finally {
-    fs.rmSync(tmp, { force: true });
-  }
-}
+const renderNav = (items) => renderBlock("registry/blocks/section-nav.tsx", "SectionNav", { items });
 
 const current = (html) => [...html.matchAll(/<a[^>]*href="([^"]*)"[^>]*aria-current="([^"]*)"|<a[^>]*aria-current="([^"]*)"[^>]*href="([^"]*)"/g)]
   .map((m) => (m[1] ? [m[1], m[2]] : [m[4], m[3]]));
