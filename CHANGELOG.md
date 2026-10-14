@@ -16,6 +16,19 @@ pinned inside that older range; `CLAUDE.md` §Consumers is the enumerated pin ta
 
 ## [Unreleased]
 
+## [4.4.0] — 2026-10-14
+
+**A page could not repeat its one action in the same colour.**
+
+### Added
+- **`lw-token-lint-allow multiple-cta`** — a named exemption for the one-amber rule. The rule
+  counts `variant="cta"` per FILE, which is stricter than the per-VIEW contract it enforces: a
+  long page that repeats its single action in a closing band, far below the hero and never on
+  screen with it, had to style the same action two ways. The repeat now carries the pragma on
+  its line or the line above. The rule must be named — the bare `lw-token-lint-allow` that
+  silences `arbitrary-token` does not reach this one — and a third, unmarked amber still fails.
+  The rule had no tests; `test/token-lint.test.mjs` adds five.
+
 ## [4.3.0] — 2026-09-22
 
 **The card was the same colour as the page, and the gate had no way to ask.**

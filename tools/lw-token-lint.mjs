@@ -22,6 +22,13 @@
  *                                   text colors. Use the real utility (`bg-primary`).
  *   4. >1 CTA per view            — "one amber per view" is the whole point of having
  *                                   an amber. A doc cannot enforce it; this can.
+ *                                   Counted per file, which is stricter than per view:
+ *                                   a long page can repeat its one action far below
+ *                                   the first, never on screen together. That repeat
+ *                                   carries `lw-token-lint-allow multiple-cta` on its
+ *                                   line or the line above. The rule must be NAMED —
+ *                                   the bare `lw-token-lint-allow` of rule 3 does not
+ *                                   reach this one.
  *
  * CSS rules (self-check on base.css / marketing.css / product.css):
  *   5. raw duration               — a .lw-* rule using a raw <n>s/<n>ms instead of a
@@ -72,6 +79,7 @@ const EXT = new Set([".tsx", ".ts", ".jsx", ".js"]);
 
 /** Files allowed to define the primitives (they legitimately name the raw tokens). */
 const ALLOW_CTA_DEF = /components\/ui\/button\.tsx$/;
+const ALLOW_MULTIPLE_CTA = /lw-token-lint-allow multiple-cta\b/;
 
 const RULES = [
   {
@@ -144,11 +152,13 @@ for (const file of walk(target)) {
   }
 
   // Rule 4: the one-amber-per-view rule. Counted per file, since a route file
-  // is a view. The Button definition itself is exempt.
+  // is a view. The Button definition itself is exempt, and so is a reviewed
+  // repeat (see the header).
   if (!ALLOW_CTA_DEF.test(rel)) {
-    const ctas = (src.match(/variant=["']cta["']/g) ?? []).length;
+    const exempt = (i) => ALLOW_MULTIPLE_CTA.test(lines[i]) || (i > 0 && ALLOW_MULTIPLE_CTA.test(lines[i - 1]));
+    const ctas = lines.reduce((n, line, i) => n + (exempt(i) ? 0 : (line.match(/variant=["']cta["']/g) ?? []).length), 0);
     if (ctas > 1) {
-      console.error(`${rel}  [multiple-cta]  ${ctas} × variant="cta"\n    The amber CTA is the one high-energy action on a view. Demote the others to the default (teal) variant.`);
+      console.error(`${rel}  [multiple-cta]  ${ctas} × variant="cta"\n    The amber CTA is the one high-energy action on a view. Demote the others to the default (teal) variant — or, for a repeat never on screen with the first, mark it \`lw-token-lint-allow multiple-cta\`.`);
       violations++;
     }
   }

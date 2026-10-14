@@ -71,7 +71,7 @@ what is still open. `CONTRIBUTING.md` points back here — the checklist lives i
 ## Install
 
 ```jsonc
-"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v4.3.0" }
+"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v4.4.0" }
 ```
 
 ```css
@@ -1039,7 +1039,10 @@ the packed `bin` then silently goes missing in a pnpm install.
 
 The lint fails on raw hex, on Tailwind palette escapes (`bg-emerald-500`), on arbitrary-value
 token access (`bg-[hsl(var(--primary))]` — use `bg-primary`), and on more than one
-`variant="cta"` per view. **It is the load-bearing part of this package.** A shared token file
+`variant="cta"` per view. It counts per file, so a long page that repeats its one action far
+below the first — never on screen together — marks the repeat with
+`lw-token-lint-allow multiple-cta` on its line or the line above; the rule must be named.
+**It is the load-bearing part of this package.** A shared token file
 does not make products consistent on its own; nothing stops a dev writing `bg-emerald-500`
 next to it.
 

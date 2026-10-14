@@ -578,7 +578,8 @@ from `dist/`; (4) run `node tools/lw-token-lint.mjs <consumer>/src` — the TSX 
 - Don't edit a specimen to suit a gate. That is how a gate quietly stops measuring.
 - Don't ship with a gate red, and don't add a consumer-side escape hatch (`// lw-token-lint-allow`) without
   a reviewer — it disables the arbitrary-token rule for that line, which exists because of a real
-  `--accent` footgun.
+  `--accent` footgun. `lw-token-lint-allow multiple-cta` is the separate, named escape for a second
+  amber that is never on screen with the first; the bare form does not reach it.
 - Don't grow this into a shadcn replacement. Each consumer owns its own shadcn copy for `Button`/`Select`/
   form primitives; this package owns the *contract* those copies render against. A component that needs a
   token belongs here; one that needs product logic does not.
