@@ -14,7 +14,7 @@ project's own numbering. No `v1.0.x` tag exists in this repository — the tag l
 is summarised in the `[0.x]` section at the foot and lives in `git`. Two consumers are still
 pinned inside that older range; `CLAUDE.md` §Consumers is the enumerated pin table.
 
-## [Unreleased]
+## [4.5.0] — 2026-10-17
 
 **A before/after read as two equal opinions, and an icon could not say what it meant.**
 
