@@ -19,6 +19,18 @@ function Scale() {
     <div className="s" key={s}><Icon name="spark" size={s} /><span>{s}</span></div>
   ));
 }
+/* Tone ink: the glyph still draws in currentColor — the class only picks which
+   tone token feeds it. Inherited ink on the left of each pair, judged ink on
+   the right, so the sheet measures the delta and not just the colour. */
+function Tones() {
+  return [["success","check"],["warning","alert"],["danger","alert"],["info","info"]].map(([t,n]) => (
+    <div className="s" key={t}>
+      <Icon name={n} size={20} /><Icon name={n} size={20} tone={t} />
+      <span>{t}</span>
+    </div>
+  ));
+}
 ReactDOM.createRoot(document.getElementById("light")).render(<Sheet />);
 ReactDOM.createRoot(document.getElementById("dark")).render(<Sheet />);
 ReactDOM.createRoot(document.getElementById("scale")).render(<Scale />);
+ReactDOM.createRoot(document.getElementById("tones")).render(<Tones />);

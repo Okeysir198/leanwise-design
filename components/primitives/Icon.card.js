@@ -8,6 +8,10 @@ function Sheet() {
 function Scale() {
   return [14, 16, 17, 19, 20].map((s) => /* @__PURE__ */ React.createElement("div", { className: "s", key: s }, /* @__PURE__ */ React.createElement(Icon, { name: "spark", size: s }), /* @__PURE__ */ React.createElement("span", null, s)));
 }
+function Tones() {
+  return [["success", "check"], ["warning", "alert"], ["danger", "alert"], ["info", "info"]].map(([t, n]) => /* @__PURE__ */ React.createElement("div", { className: "s", key: t }, /* @__PURE__ */ React.createElement(Icon, { name: n, size: 20 }), /* @__PURE__ */ React.createElement(Icon, { name: n, size: 20, tone: t }), /* @__PURE__ */ React.createElement("span", null, t)));
+}
 ReactDOM.createRoot(document.getElementById("light")).render(/* @__PURE__ */ React.createElement(Sheet, null));
 ReactDOM.createRoot(document.getElementById("dark")).render(/* @__PURE__ */ React.createElement(Sheet, null));
 ReactDOM.createRoot(document.getElementById("scale")).render(/* @__PURE__ */ React.createElement(Scale, null));
+ReactDOM.createRoot(document.getElementById("tones")).render(/* @__PURE__ */ React.createElement(Tones, null));

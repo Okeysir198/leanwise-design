@@ -6,6 +6,13 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  * icon inherits the ink of whatever it sits in and can never introduce a colour
  * the tokens do not know about.
  *
+ * `tone` is the one opt-out, and it keeps that rule rather than breaking it:
+ * the glyph still draws in `currentColor`; the tone class only chooses WHICH
+ * token feeds it — the judgement vocabulary, never a hex. A bare `alert` beside
+ * failure copy reads as decoration; a `danger` alert reads as the judgement.
+ * The shape still carries the meaning (rule 6): colour is the second cue, not
+ * the only one.
+ *
  * Paths, never a font: an icon font ships one glyph height for every icon and
  * fails visibly while the font loads. Sized in px because icons align to text,
  * not to the space scale.
@@ -169,7 +176,7 @@ const UNKNOWN = ["M5.5 5.5h13v13h-13z", "M9.4 9.4l5.2 5.2", "M14.6 9.4l-5.2 5.2"
    twice per render under StrictMode — and rebuilt the 80-name list each time. */
 const warned = new Set();
 
-export function Icon({ name, size = 16, strokeWidth = 1.6, label, className, style, ...rest }) {
+export function Icon({ name, size = 16, strokeWidth = 1.6, tone, label, className, style, ...rest }) {
   const known = ICONS[name];
   // Loud AND visible. The warning is what caught nine silently-missing glyphs, so
   // it stays; but the slot now draws UNKNOWN rather than returning null, because
@@ -195,7 +202,7 @@ export function Icon({ name, size = 16, strokeWidth = 1.6, label, className, sty
   // (`.lw-btn svg { width: 16px }`) outranks a presentation attribute, which
   // silently made `size` inert inside buttons. Inline keeps `size` authoritative.
   return (
-    <svg className={cx("lw-icon", className)} width={size} height={size} viewBox="0 0 24 24"
+    <svg className={cx("lw-icon", tone && `lw-icon-${tone}`, className)} width={size} height={size} viewBox="0 0 24 24"
       style={{ width: size, height: size, ...style }}
       fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round"
       role={label ? "img" : undefined} aria-label={label} aria-hidden={label ? undefined : "true"}

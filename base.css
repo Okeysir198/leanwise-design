@@ -553,6 +553,22 @@ table.visually-hidden > caption,
    product.css — which is the whole argument for making a specimen load exactly
    what its documented recipe loads. */
 .lw-icon { flex: none; display: inline-block; vertical-align: -0.14em; }
+/* TONE INK (v4.4.1) — the one opt-out of "an icon inherits the ink it sits in",
+   and it keeps the rule rather than breaking it: the glyph still draws in
+   currentColor, these classes only choose WHICH token feeds it. A bare `alert`
+   beside failure copy reads as decoration; a danger alert reads as the
+   judgement it is. The shape still carries the meaning (rule 6) — colour is the
+   second cue, never the only one, which is why this is ink on a glyph and not a
+   tint on a surface: the glyph was already there saying the thing.
+
+   `-on` for the same reason the invalid-input border takes it: theme-aware,
+   text-tier, and never a fill pressed into mark duty. No `brand` and no `cta`:
+   a glyph that carries the BRAND is decoration, and decoration is what the
+   inherited ink already provides. */
+.lw-icon-success { color: var(--lw-success-on); }
+.lw-icon-warning { color: var(--lw-warning-on); }
+.lw-icon-danger  { color: var(--lw-danger-on); }
+.lw-icon-info    { color: var(--lw-info-on); }
 
 /* ---- Icon button --------------------------------------------------------- */
 
@@ -711,6 +727,26 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
   border-color: transparent;
   box-shadow: inset 0 0 0 1.5px var(--lw-brand-500);
 }
+/* TONE (v4.4.1) — the judgement a card carries on its own surface. A marketing
+   before/after pair rendered as two equal cards reads as two opinions, not as
+   failure versus success; the ring is what says which column is which without
+   shouting over the copy.
+
+   Same geometry as selection, deliberately: an inset ring costs no layout, so a
+   tone'd card cannot shift a grid row, and the border keeps its neutral line
+   (selection swaps it for the ring; a judgement has no reason to).
+
+   The `-on` tier, not the fill and not `-text`: the fills fail as marks on
+   paper (they are for carrying ink, and danger's is the one that takes WHITE),
+   and the `-text` tiers are light-theme-only — tokens.css says so itself, in
+   the comment that retired them from component use. `-on` re-points per theme,
+   and `aria-invalid` input borders already set this exact precedent.
+
+   No text repaint, on purpose. Body copy keeps --lw-fg-muted; a card whose
+   prose turns green has a louder judgement than argument. */
+.lw-card-success { box-shadow: inset 0 0 0 1.5px var(--lw-success-on); }
+.lw-card-warning { box-shadow: inset 0 0 0 1.5px var(--lw-warning-on); }
+.lw-card-danger  { box-shadow: inset 0 0 0 1.5px var(--lw-danger-on); }
 /* Equal-height cards on one row. auto-fit + stretch is what keeps footers aligned.
    `min(240px, 100%)` for the same reason as `.lw-grid` above: a definite track
    minimum wider than its container overflows the page rather than shrinking. */

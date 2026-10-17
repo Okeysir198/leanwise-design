@@ -1,11 +1,11 @@
 import { jsx } from "react/jsx-runtime";
 const cx = (...a) => a.filter(Boolean).join(" ");
-function Card({ interactive = false, glow = false, selected, as, className, children, ...rest }) {
+function Card({ interactive = false, glow = false, tone, selected, as, className, children, ...rest }) {
   const Tag = as || (interactive ? rest.href ? "a" : "button" : "div");
   return /* @__PURE__ */ jsx(
     Tag,
     {
-      className: cx("lw-card", interactive && "lw-card-interactive", glow && "lw-card-glow", className),
+      className: cx("lw-card", interactive && "lw-card-interactive", glow && "lw-card-glow", tone && `lw-card-${tone}`, className),
       "aria-pressed": interactive && selected != null ? !!selected : void 0,
       "data-selected": selected ? "true" : void 0,
       type: Tag === "button" ? "button" : void 0,

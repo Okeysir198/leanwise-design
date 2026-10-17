@@ -139,7 +139,7 @@ const ICONS = {
 };
 const UNKNOWN = ["M5.5 5.5h13v13h-13z", "M9.4 9.4l5.2 5.2", "M14.6 9.4l-5.2 5.2"];
 const warned = /* @__PURE__ */ new Set();
-function Icon({ name, size = 16, strokeWidth = 1.6, label, className, style, ...rest }) {
+function Icon({ name, size = 16, strokeWidth = 1.6, tone, label, className, style, ...rest }) {
   const known = ICONS[name];
   if (!known && !warned.has(name) && typeof console !== "undefined") {
     warned.add(name);
@@ -149,7 +149,7 @@ function Icon({ name, size = 16, strokeWidth = 1.6, label, className, style, ...
   return /* @__PURE__ */ jsx(
     "svg",
     {
-      className: cx("lw-icon", className),
+      className: cx("lw-icon", tone && `lw-icon-${tone}`, className),
       width: size,
       height: size,
       viewBox: "0 0 24 24",

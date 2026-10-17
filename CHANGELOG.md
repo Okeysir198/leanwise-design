@@ -16,6 +16,23 @@ pinned inside that older range; `CLAUDE.md` §Consumers is the enumerated pin ta
 
 ## [Unreleased]
 
+**A before/after read as two equal opinions, and an icon could not say what it meant.**
+
+### Added
+- **`Card tone`** — the judgement a card carries on its own surface: a static inset ring
+  (`success | warning | danger`), the same geometry as selection (no layout, cannot shift a grid
+  row), on the `-on` tier so it re-points per theme — the `aria-invalid` border precedent. It
+  deliberately does not repaint the text: body copy keeps `--lw-fg-muted`, because a judgement
+  that recolours the prose is louder than the prose. A marketing before/after pair rendered as
+  two identical cards read as two opinions; the ring is what says which column is which.
+- **`Icon tone`** — the one opt-out of "an icon inherits the ink it sits in", and it keeps the
+  rule rather than breaking it: the glyph still draws in `currentColor`, the tone class
+  (`success | warning | danger | info`) only picks which token feeds it. No `brand`, no `cta` —
+  a glyph carrying the brand is decoration, and the inherited ink already provides that. The
+  shape still carries the meaning; colour is the second cue, never the only one.
+- Both are policed by `check:tone` (two new emitter rows) and shown on the `primitives` and
+  `Icon` specimen cards, so the browser gates measure them.
+
 ## [4.4.0] — 2026-10-14
 
 **A page could not repeat its one action in the same colour.**
