@@ -1,10 +1,14 @@
 import * as React from "react";
+import type { Tone } from "../_tone";
 
 export interface CardProps extends React.HTMLAttributes<HTMLElement> {
   /** Adds pointer, focus ring and press state, and makes it a real control. */
   interactive?: boolean;
   /** Hover lift + brand halo. Opt-in; stands down under reduced motion. */
   glow?: boolean;
+  /** The judgement the card itself carries: a static inset tone ring. Does not
+   *  repaint the text — the prose keeps its own ink. */
+  tone?: Extract<Tone, "success" | "warning" | "danger">;
   selected?: boolean;
   href?: string;
   /**

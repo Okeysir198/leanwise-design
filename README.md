@@ -235,7 +235,7 @@ rule; every transform stands down under `prefers-reduced-motion`.
 | Component | Purpose |
 |---|---|
 | `Button` | `variant`: brand · cta · ink · ghost · danger · link. `size`: sm/md/lg. `iconOnly`, `loading`. **`type` defaults to `"button"`** — the submit control of a `<form>` says `type="submit"`. Forwards its ref |
-| `Card` | The surface. `interactive` makes it a real control, not a div with a click handler |
+| `Card` | The surface. `interactive` makes it a real control, not a div with a click handler. `tone` carries a judgement as a static inset ring (success · warning · danger) — same geometry as selection, and it never repaints the text |
 | `CardHead` | The card's header row — title on the left, controls on the right |
 | `CardTitle` | The card's heading. `as` picks the heading level; the size does not change with it |
 | `CardBody` | The card's copy, on the body scale |
@@ -243,7 +243,7 @@ rule; every transform stands down under `prefers-reduced-motion`.
 | `Eyebrow` | The signature mono/uppercase label, tipped with a hexagon node |
 | `Avatar` | Initials by default; an image only when there is one |
 | `Skeleton` | `shape` or `lines={n}`. Shaped like the thing it replaces |
-| `Icon` | The icon set — `IconNames.length` glyphs, the count that cannot go stale. One 24-grid, one stroke weight, `currentColor` only. `name` `size` `label`. The ONLY place an icon path is drawn: components name a glyph, they never redraw one |
+| `Icon` | The icon set — `IconNames.length` glyphs, the count that cannot go stale. One 24-grid, one stroke weight, `currentColor` only. `name` `size` `tone` `label` — `tone` picks which tone token feeds the inherited ink. The ONLY place an icon path is drawn: components name a glyph, they never redraw one |
 | `Disclosure` | A native `<details>`/`<summary>` row — the FAQ pattern, complete with **zero JavaScript**, so it opens before hydration and with JS off. Uncontrolled: `defaultOpen` applies once and the browser owns the state; observe `onToggle`. No height animation, because `<details>` cannot animate its own height portably — only the chevron moves |
 | `Prose` | The read surface for sanitized markdown HTML. Puts one class on one wrapper and styles the DESCENDANTS, so it takes `dangerouslySetInnerHTML` without knowing which elements the author used. `measure`: prose (68ch) / narrow (46ch); a third width is `--lw-prose-max`. It needs **no dark-ground rules at all** — every value is a role, so `.lw-band-dark` re-points the whole article |
 | `.lw-icon-btn` | Class, not a component: the borderless icon control. Owns the 28px hit area, hover ink and brand focus ring — use it instead of hand-styling a bare `<button>` |

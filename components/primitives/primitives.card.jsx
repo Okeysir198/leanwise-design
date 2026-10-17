@@ -32,6 +32,17 @@ function Demo() {
         </Card>
         <Card><CardHead><CardTitle>Loading</CardTitle></CardHead><Skeleton lines={3} /></Card>
       </div>
+      <span className="lbl-eyebrow">card tone — the judgement the surface carries</span>
+      <div className="lw-grid" style={{"--lw-grid-min":"200px"}}>
+        <Card tone="danger">
+          <CardHead><CardTitle>Where packs fail</CardTitle><Chip tone="danger">failed</Chip></CardHead>
+          <CardBody><Icon name="alert" size={14} tone="danger" /> The ring says which column this is; the prose keeps its own ink.</CardBody>
+        </Card>
+        <Card tone="success">
+          <CardHead><CardTitle>With LeanWise</CardTitle><Chip tone="success">passing</Chip></CardHead>
+          <CardBody><Icon name="check" size={14} tone="success" /> Same geometry as selection — no layout, no repaint of the body copy.</CardBody>
+        </Card>
+      </div>
     </>
   );
 }

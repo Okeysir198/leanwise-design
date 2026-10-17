@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { Tone } from "../_tone";
 
 /** GENERATED from Icon.jsx by `npm run dts` — do not hand-edit.
  *  It was hand-maintained until v1.2 and had drifted to 46 of the 78 real glyphs,
@@ -27,6 +28,9 @@ export interface IconProps extends Omit<React.SVGAttributes<SVGSVGElement>, "chi
   /** Px, because icons align to text rather than to the space scale. */
   size?: number;
   strokeWidth?: number;
+  /** The judgement the glyph itself carries. Still `currentColor` underneath —
+   *  the class only picks which tone token feeds the ink. Default: inherit. */
+  tone?: Extract<Tone, "success" | "warning" | "danger" | "info">;
   /** Names the icon for assistive tech. Only when the icon is the sole content
    *  of a control — otherwise it stays decorative (`aria-hidden`). */
   label?: string;
