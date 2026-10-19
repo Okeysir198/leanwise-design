@@ -16,6 +16,8 @@ pinned inside that older range; `CLAUDE.md` §Consumers is the enumerated pin ta
 
 ## [Unreleased]
 
+## [4.6.0] — 2026-10-20
+
 **A passage that had to read as one thought could only become a dark band, or shout.**
 
 ### Added
