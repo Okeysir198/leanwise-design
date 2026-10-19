@@ -35,6 +35,8 @@ export { Split } from "./components/layout/Split";
 export type { SplitProps } from "./components/layout/Split";
 export { Section } from "./components/layout/Section";
 export type { SectionProps } from "./components/layout/Section";
+export { Panel } from "./components/layout/Panel";
+export type { PanelProps } from "./components/layout/Panel";
 export { Field } from "./components/forms/Field";
 export type { FieldProps } from "./components/forms/Field";
 export { Input } from "./components/forms/Input";

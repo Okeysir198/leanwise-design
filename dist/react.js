@@ -13,6 +13,7 @@ import { Cluster } from "./components/layout/Cluster.js";
 import { Grid } from "./components/layout/Grid.js";
 import { Split } from "./components/layout/Split.js";
 import { Section } from "./components/layout/Section.js";
+import { Panel } from "./components/layout/Panel.js";
 import { Field } from "./components/forms/Field.js";
 import { Input } from "./components/forms/Input.js";
 import { PasswordInput } from "./components/forms/PasswordInput.js";
@@ -106,6 +107,7 @@ export {
   OtpInput,
   OverlayProvider,
   Pagination,
+  Panel,
   PasswordInput,
   PlanCard,
   Popover,

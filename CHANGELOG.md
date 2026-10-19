@@ -14,6 +14,20 @@ project's own numbering. No `v1.0.x` tag exists in this repository — the tag l
 is summarised in the `[0.x]` section at the foot and lives in `git`. Two consumers are still
 pinned inside that older range; `CLAUDE.md` §Consumers is the enumerated pin table.
 
+## [Unreleased]
+
+**A passage that had to read as one thought could only become a dark band, or shout.**
+
+### Added
+- **`Panel`** — the inset emphasis surface: the deepest neutral tier (`--lw-bg-inset`) as a
+  container, `--lw-radius-xl` (the token the scale reserved for "panels, modals"), a hairline,
+  and deliberately NO lift shadow — an inset surface is recessed into the page, and elevation
+  would say the opposite. Emphasis by ground, not by tint, border weight or a coloured fill;
+  the token re-points per theme, so the component has no theme branches. One role, no props
+  beyond `as`; the interior is composed with Stack/Cluster. Motivated by leanwise-ai #11: the
+  positioning band needed to carry weight without becoming a dark band (which the one-ground
+  rule there forbids) or tinting copy the vocabulary has no token for.
+
 ## [4.5.0] — 2026-10-17
 
 **A before/after read as two equal opinions, and an icon could not say what it meant.**
