@@ -553,7 +553,7 @@ table.visually-hidden > caption,
    product.css — which is the whole argument for making a specimen load exactly
    what its documented recipe loads. */
 .lw-icon { flex: none; display: inline-block; vertical-align: -0.14em; }
-/* TONE INK (v4.4.1) — the one opt-out of "an icon inherits the ink it sits in",
+/* TONE INK (v4.5.0) — the one opt-out of "an icon inherits the ink it sits in",
    and it keeps the rule rather than breaking it: the glyph still draws in
    currentColor, these classes only choose WHICH token feeds it. A bare `alert`
    beside failure copy reads as decoration; a danger alert reads as the
@@ -727,7 +727,7 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
   border-color: transparent;
   box-shadow: inset 0 0 0 1.5px var(--lw-brand-500);
 }
-/* TONE (v4.4.1) — the judgement a card carries on its own surface. A marketing
+/* TONE (v4.5.0) — the judgement a card carries on its own surface. A marketing
    before/after pair rendered as two equal cards reads as two opinions, not as
    failure versus success; the ring is what says which column is which without
    shouting over the copy.
@@ -752,6 +752,33 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
    minimum wider than its container overflows the page rather than shrinking. */
 .lw-card-grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); align-items: stretch; }
 .lw-card-grid > .lw-card { height: 100%; }
+
+/* ---- Panel — the inset emphasis surface ----------------------------------- */
+
+/* The deepest neutral tier as a container. A passage that must read as ONE
+   thought, set apart from the page without becoming a dark band, recesses the
+   ground behind its content: the inset tier is a step deeper than the card's
+   subtle tier, so content separates harder against it — emphasis by ground,
+   not by tint, border weight or a coloured fill. The token re-points per theme
+   (surface-3 light / navy-inset-2 dark), which is the entire theming story.
+
+   NO lift shadow, on purpose. Every other surface here (card, popover, toast)
+   carries --lw-shadow-* because it is RAISED; an inset surface is recessed
+   into the page, and a shadow under it would say the opposite of where it
+   sits. The hairline plus the tone step is the whole edge.
+
+   radius-xl is the token the scale reserved for "panels, modals" — one step
+   rounder than a card, because a panel is one surface holding a composition,
+   not a peer in a grid of equals. The interior rhythm (32px pad / 16px gap)
+   is one step up from Card's 20px / 12px for the same reason: it holds
+   display type, not 13.5px body copy. */
+.lw-panel {
+  background: var(--lw-bg-inset);
+  border: 1px solid var(--lw-line);
+  border-radius: var(--lw-radius-xl);
+  padding: var(--lw-space-32);
+  display: flex; flex-direction: column; gap: var(--lw-space-16);
+}
 
 /* Chip — the card's status atom. Reads a status family's soft tint + text tier, so
    it re-points on dark with no conditional. */

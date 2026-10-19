@@ -71,7 +71,7 @@ what is still open. `CONTRIBUTING.md` points back here — the checklist lives i
 ## Install
 
 ```jsonc
-"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v4.4.0" }
+"dependencies": { "@leanwise/design": "github:Okeysir198/leanwise-design#v4.5.0" }
 ```
 
 ```css
@@ -258,6 +258,7 @@ rule; every transform stands down under `prefers-reduced-motion`.
 | `Grid` | Auto-fit columns. `min` is the only knob — no breakpoint needed |
 | `Split` | Main column + rail. Collapses at `--lw-bp-lg` |
 | `Section` | A page band. `dark` flips every descendant's ink |
+| `Panel` | The inset emphasis surface — deepest neutral tier, recessed, no lift. One thought set apart without a dark band |
 
 ### Forms — `components/forms/`
 

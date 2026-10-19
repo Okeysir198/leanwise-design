@@ -114,6 +114,10 @@
       "sourcePath": "components/layout/Grid.jsx"
     },
     {
+      "name": "Panel",
+      "sourcePath": "components/layout/Panel.jsx"
+    },
+    {
       "name": "Section",
       "sourcePath": "components/layout/Section.jsx"
     },

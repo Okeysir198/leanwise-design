@@ -1,6 +1,6 @@
 const LW = window.LeanWiseDesign_f2d907;
 
-const { Stack, Cluster, Grid, Split } = LW;
+const { Stack, Cluster, Grid, Split, Panel } = LW;
 const B = ({children}) => <div className="demo">{children}</div>;
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Stack gap={24}>
@@ -11,5 +11,13 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       {[1,2,3,4,5].map(i=><B key={i}>col {i}</B>)}</Grid></div>
     <div><span className="lbl-eyebrow">Split rail=260 — one column below 1024px</span><Split rail={260} style={{marginTop:8}}>
       <B>main</B><B>rail</B></Split></div>
+    <div><span className="lbl-eyebrow">Panel — the inset emphasis surface, beside a Card for the tier step</span>
+      <Grid min={220} style={{marginTop:8}}>
+        <Panel>
+          <div style={{fontSize:15,fontWeight:600}}>One thought, set apart</div>
+          <div className="demo">The inset tier recesses the ground behind the copy — emphasis by ground, not by tint or a lift.</div>
+        </Panel>
+        {LW.Card ? <LW.Card><div className="demo">Card — the subtle tier, a peer in a grid of equals.</div></LW.Card> : <B>Card slot</B>}
+      </Grid></div>
   </Stack>
 );

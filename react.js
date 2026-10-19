@@ -27,6 +27,7 @@ export { Cluster } from "./components/layout/Cluster.jsx";
 export { Grid } from "./components/layout/Grid.jsx";
 export { Split } from "./components/layout/Split.jsx";
 export { Section } from "./components/layout/Section.jsx";
+export { Panel } from "./components/layout/Panel.jsx";
 
 /* forms */
 export { Field } from "./components/forms/Field.jsx";
