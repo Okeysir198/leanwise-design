@@ -16,6 +16,15 @@ pinned inside that older range; `CLAUDE.md` §Consumers is the enumerated pin ta
 
 ## [Unreleased]
 
+### Fixed
+- **`Flow` graph nodes no longer wear the input/output capsule.** A lattice node is a tall
+  card (head, title, sub), and the 999px pill curved ~20px into the first text row — the head
+  sat against the border closer than the card's own padding, and every upper line sat nearer
+  the edge than the lower ones. Graph input/output nodes now take `--lw-radius-2xl` (24px),
+  still visibly rounder than a `step` node's 12px so the shape vocabulary survives; the chain
+  form keeps the pill, whose one-liner nodes are the shape it was drawn for. Reported against
+  leanwise-ai `/product#workflow` ("What you hand over").
+
 ## [4.6.0] — 2026-10-20
 
 **A passage that had to read as one thought could only become a dark band, or shout.**
