@@ -16,6 +16,8 @@ pinned inside that older range; `CLAUDE.md` §Consumers is the enumerated pin ta
 
 ## [Unreleased]
 
+## [4.6.1] — 2026-10-21
+
 ### Fixed
 - **`Flow` graph nodes no longer wear the input/output capsule.** A lattice node is a tall
   card (head, title, sub), and the 999px pill curved ~20px into the first text row — the head
