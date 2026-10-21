@@ -16,6 +16,24 @@ pinned inside that older range; `CLAUDE.md` §Consumers is the enumerated pin ta
 
 ## [Unreleased]
 
+### Added
+- **`StatGrid` — the stat strip whose numbers line up across tiles.** A `StatMeter` tile is a
+  flex column, and the tiles flow independently, so a label that wraps pushes that tile's
+  number below its siblings' — and which label wraps is a property of the language, not the
+  design (Vietnamese runs a third longer than English). Inside `StatGrid` each tile subgrids
+  its rows — three, four with a bar — so eyebrow sits against eyebrow and number against
+  number at any label length. Without subgrid the tile stays the flex column it always was.
+  Motivated by leanwise-ai `/` ("the 4 boxes do not have aligned numbers").
+- **`Grid` `alignRows` — the same child at the same height in every card of a row.** A
+  before/after pair whose bullets sit against each other, at any text length, in any locale;
+  on plain `Grid` two cards read as two columns that happen to share a top edge. The count
+  comes from the consumer (`alignRows={5}`) because CSS cannot count a card's children, and
+  any wrapper between a card and the aligned children must be `display: contents`. Without
+  subgrid the card is the column it always was.
+- **`.lw-measure-center` — the 60ch measure, centred.** `max-width` sets a ceiling, not a
+  position: `.lw-measure` on a full-width panel left ~500px of dead space to its right. A
+  statement read as one thought is centred on the page, not left-aligned to the column.
+
 ## [4.6.1] — 2026-10-21
 
 ### Fixed

@@ -211,6 +211,19 @@ table.visually-hidden > caption,
 .lw-grid { display: grid; gap: var(--lw-space-16); grid-template-columns: repeat(auto-fit, minmax(min(var(--lw-grid-min, 240px), 100%), 1fr)); align-items: stretch; }
 .lw-grid-24 { gap: var(--lw-space-24); }
 
+/* ALIGNED ROWS — every card in a row spans the same shared tracks, so the same
+   child sits at the same height in each of them: a before/after pair whose
+   bullets sit against each other, at any text length, in any locale. A card on
+   its own is a flex column, and the cards flow independently — whichever card
+   wraps first pushes ITS rows down, so two cards read as two columns that
+   happen to share a top edge rather than one comparison. The row count comes
+   from --lw-align-rows (Grid's `alignRows` prop) because CSS cannot count a
+   card's children; a wrapper between the card and the aligned children must be
+   display: contents, or it becomes the one row that holds all of them. Without
+   subgrid the card is a grid stacking its children in rows — the same column
+   it always was, at the same height it would have had. */
+.lw-grid-align > .lw-card { display: grid; grid-row: span var(--lw-align-rows, 1); grid-template-rows: subgrid; }
+
 /* SPLIT — a main column and a fixed-ish rail that collapses to one column.
    1024px is --lw-bp-lg; a two-pane app cannot hold two panes below it. */
 .lw-split { display: grid; gap: var(--lw-space-24); grid-template-columns: minmax(0, 1fr) var(--lw-split-rail, 320px); align-items: start; }
@@ -1519,6 +1532,10 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
 .lw-mt-8 { margin-top: var(--lw-space-32); }
 .lw-measure { max-width: var(--lw-measure); }
 .lw-measure-sm { max-width: var(--lw-measure-sm); }
+/* The measured column, centred — a statement read as one thought, not a column
+   entry. max-width is repeated rather than composed so the pair stays greppable
+   with .lw-measure; margin-inline works in both writing modes. */
+.lw-measure-center { max-width: var(--lw-measure); margin-inline: auto; }
 
 /* FIGURE — a diagram or an image with a caption that is ABOUT it.
    `<figcaption>` is not a paragraph that happens to follow a picture; a screen

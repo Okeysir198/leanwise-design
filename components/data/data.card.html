@@ -28,6 +28,9 @@ so a colour-blind reader gets the same information as everyone else.</p></header
 <p class="sub">The number stays mono with <span class="mono">tabular-nums</span> so a count-up cannot
   reflow the layout, and the markup still ships the <b>final</b> value — no-JS and reduced-motion both
   render the correct number.</p>
+<p class="sub">In <span class="mono">StatGrid</span> the tiles share their row tracks: a label that
+  wraps (the first one, deliberately) does not push its number below its sibling's — eyebrow against
+  eyebrow, number against number, at any label length, in any language.</p>
 <h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--lw-fg)">Chip &amp; table</h2>
 <p class="sub">Chip contrast, measured live:
   <span class="mono">success</span> <span class="mono" data-ratio="success-on on success-soft"></span>:1 ·

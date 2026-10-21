@@ -46,6 +46,7 @@ export { FileUpload, formatBytes } from "./components/forms/FileUpload.jsx";
 export { Table } from "./components/data/Table.jsx";
 export { KpiTile } from "./components/data/KpiTile.jsx";
 export { StatMeter } from "./components/data/StatMeter.jsx";
+export { StatGrid } from "./components/data/StatGrid.jsx";
 export { EmptyState } from "./components/data/EmptyState.jsx";
 export { StateView } from "./components/data/StateView.jsx";
 export { Console } from "./components/data/Console.jsx";
