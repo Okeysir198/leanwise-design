@@ -16,6 +16,8 @@ pinned inside that older range; `CLAUDE.md` §Consumers is the enumerated pin ta
 
 ## [Unreleased]
 
+## [4.6.2] — 2026-10-22
+
 ### Added
 - **`StatGrid` — the stat strip whose numbers line up across tiles.** A `StatMeter` tile is a
   flex column, and the tiles flow independently, so a label that wraps pushes that tile's
