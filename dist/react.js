@@ -28,6 +28,7 @@ import { FileUpload, formatBytes } from "./components/forms/FileUpload.js";
 import { Table } from "./components/data/Table.js";
 import { KpiTile } from "./components/data/KpiTile.js";
 import { StatMeter } from "./components/data/StatMeter.js";
+import { StatGrid } from "./components/data/StatGrid.js";
 import { EmptyState } from "./components/data/EmptyState.js";
 import { StateView } from "./components/data/StateView.js";
 import { Console } from "./components/data/Console.js";
@@ -122,6 +123,7 @@ export {
   Skeleton,
   Split,
   Stack,
+  StatGrid,
   StatMeter,
   StateView,
   Steps,

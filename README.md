@@ -255,7 +255,7 @@ rule; every transform stands down under `prefers-reduced-motion`.
 | `Container` | The 1200px reading column |
 | `Stack` | Vertical rhythm. `gap` = a spacing token |
 | `Cluster` | A wrapping row. `justify`, `align` |
-| `Grid` | Auto-fit columns. `min` is the only knob — no breakpoint needed |
+| `Grid` | Auto-fit columns. `min` is the only knob — no breakpoint needed. `alignRows` shares row tracks between the cards, so the same child sits at the same height in every card |
 | `Split` | Main column + rail. Collapses at `--lw-bp-lg` |
 | `Section` | A page band. `dark` flips every descendant's ink |
 | `Panel` | The inset emphasis surface — deepest neutral tier, recessed, no lift. One thought set apart without a dark band |
@@ -283,6 +283,7 @@ rule; every transform stands down under `prefers-reduced-motion`.
 | `Table` | `columns` + `rows`. A column with `num` gets mono tabular-nums, right-aligned. `sortable` + `onSort` renders the header as a real button with a caret. `collapse="cards"` + `detailsLabel` turns each row into a card below `--lw-bp-md` of **container** width — one DOM, a container query, explicit roles; see §Responsive |
 | `KpiTile` | `icon` + `accent` draw a tinted subject chip; the delta sits on the number's baseline beside it. `accent` is the SUBJECT's family, `tone` judges the movement — two different facts |
 | `StatMeter` | A number with a unit, a bar and a target marker — a reading, not a decoration |
+| `StatGrid` | The stat strip whose tiles share their row tracks — eyebrow against eyebrow, number against number, at any label length. Takes every `Grid` prop |
 | `EmptyState` | `icon` (a glyph name) `title` `description` `action` — exactly one action |
 | `StateView` | **The five states as one set**: empty · loading · error · offline · denied. Shipping only `empty` is how the other four get invented per product. `error`/`offline` announce with `role="alert"`; `loading` uses `role="status"` + `aria-busy` |
 | `Console` | `lines[].cells` renders aligned subgrid columns (`num` right-aligns); `text` stays free-running and spans the stream. Never pad mono text with runs of spaces |

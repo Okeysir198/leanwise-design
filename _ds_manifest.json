@@ -46,6 +46,10 @@
       "sourcePath": "components/data/StateView.jsx"
     },
     {
+      "name": "StatGrid",
+      "sourcePath": "components/data/StatGrid.jsx"
+    },
+    {
       "name": "StatMeter",
       "sourcePath": "components/data/StatMeter.jsx"
     },

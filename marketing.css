@@ -735,6 +735,18 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 .lw-stat-tile .lw-stat .n { font-size: 32px; }
 .lw-stat-tile:not(.lw-card-interactive):not([role="button"]) { cursor: default; }
 .lw-stat-tile.lw-card-interactive .lw-bar .fill { transition: width var(--lw-dur-lg) var(--lw-ease-out), background var(--lw-dur-sm) var(--lw-ease-out); }
+/* STAT GRID — the tiles in a row share their tracks, so the number rows line up
+   across tiles. A tile on its own is a flex column, and the tiles flow
+   independently: a label that wraps (and WHICH label wraps is a property of the
+   language, not the design) pushes that tile's number below its siblings', so
+   the strip reads as crooked numbers. Inside .lw-stat-grid the tile subgrids
+   three rows — four when it carries a bar — and each row becomes the height of
+   its tallest sibling. A tile with no foot keeps the border its siblings' rows
+   give it; the slack sits inside the border, which is the right trade — an
+   unequal border is visible, slack is not. Where subgrid is unsupported the
+   declarations fall away to the flex tile, exactly yesterday's rendering. */
+.lw-stat-grid > .lw-stat-tile { display: grid; grid-template-rows: subgrid; grid-row: span var(--lw-stat-rows, 3); }
+.lw-stat-grid > .lw-stat-tile:has(.lw-bar) { --lw-stat-rows: 4; }
 .dark .lw-stat .n, [data-band="dark"] .lw-stat .n, .lw-band-dark .lw-stat .n { color: var(--lw-on-dark); }
 .dark .lw-stat .l, [data-band="dark"] .lw-stat .l, .lw-band-dark .lw-stat .l { color: var(--lw-on-dark-3); }
 :is(.dark, [data-band="dark"], .lw-band-dark) .lw-bar { background: var(--lw-on-dark-fill); }

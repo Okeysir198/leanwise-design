@@ -1,6 +1,6 @@
 const LW = window.LeanWiseDesign_f2d907;
 
-const { Table, KpiTile, StatMeter, EmptyState, Console, Grid, Stack, Button, Chip, Icon } = LW;
+const { Table, KpiTile, StatMeter, StatGrid, EmptyState, Console, Grid, Stack, Button, Chip, Icon } = LW;
 
 /* The `CodeBlock` wrapper was removed in v3.0.0 (no consumer imported it).
    `.lw-code` is one of the larger surfaces in the package and is authored
@@ -46,13 +46,18 @@ function Demo() {
         <KpiTile label="Grounded" icon="shield" accent="success" value="97.3%" delta="0.4pt" direction="up" />
         <KpiTile label="p95 latency" icon="clock" value="840ms" delta="60ms" direction="down" tone="success" />
       </Grid>
-      <Grid min={190}>
+      <StatGrid min={190}>
+        {/* StatGrid, not Grid: the tiles share their row tracks, so the first
+            label — long on purpose, to wrap at this tile width — does not push
+            its number below its sibling's. Eyebrow against eyebrow, number
+            against number. The KpiTile row above stays on plain Grid: row
+            alignment is opted into per strip, not a cost every grid pays. */}
         {/* The delta carries no ▲: `direction` draws the arrow from the icon set,
             so a typed triangle would be a second, differently-drawn arrow beside
             the real one — and the one that never picks up a stroke-weight change. */}
-        <StatMeter label="controls current" value="94" unit="%" delta="6 pts" direction="up" percent={94} target={90} foot="Target 90% · 30-day trend" interactive />
+        <StatMeter label="controls current, rolling window" value="94" unit="%" delta="6 pts" direction="up" percent={94} target={90} foot="Target 90% · 30-day trend" interactive />
         <StatMeter label="evidence expiring" value="6" delta="4" direction="up" percent={18} tone="warning" foot="Of 34 artefacts · next in 9 days" interactive />
-      </Grid>
+      </StatGrid>
       <Table columns={cols} rows={rows} caption="Indexed sources" />
       {/* `cells`, not a space-padded string: the fields align because they ARE
           columns. Padding mono text with runs of spaces looks aligned in the

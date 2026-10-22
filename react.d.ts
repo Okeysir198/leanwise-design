@@ -65,6 +65,7 @@ export { KpiTile } from "./components/data/KpiTile";
 export type { KpiTileProps } from "./components/data/KpiTile";
 export { StatMeter } from "./components/data/StatMeter";
 export type { StatMeterProps } from "./components/data/StatMeter";
+export { StatGrid } from "./components/data/StatGrid";
 export { EmptyState } from "./components/data/EmptyState";
 export type { EmptyStateProps } from "./components/data/EmptyState";
 export { StateView } from "./components/data/StateView";
