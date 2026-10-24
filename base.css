@@ -227,12 +227,22 @@ table.visually-hidden > caption,
    draws a rule on its own start and top edges as a shadow, and the grid clips
    the ones that land on its outer edge, so the first column and the first row
    lose theirs at ANY column count: no :nth-child guess, no breakpoint to keep in
-   step with --lw-grid-min. The cost is that every child pads both sides, so the
-   first column's text sits one pad in from the column edge. (0,2,0) so a card
-   child gives up its own surface — the rules are the surface. */
-.lw-grid.lw-grid-ruled { gap: 0; overflow: hidden; border-block: 1px solid var(--lw-line); }
+   step with --lw-grid-min. (0,2,0) so a card child gives up its own surface —
+   the rules are the surface.
+
+   The outer columns' text sits flush with the column edges, like every heading
+   above it: the grid reaches one pad into the gutter on each side and clips
+   that pad off, so every child can pad both sides and the outer padding is the
+   part cut away. The pad never exceeds --lw-pad-x, so the reach stays inside
+   the page gutter at every width. */
+.lw-grid.lw-grid-ruled {
+  --lw-ruled-pad: min(var(--lw-space-24), var(--lw-pad-x));
+  gap: 0; border-block: 1px solid var(--lw-line);
+  margin-inline: calc(-1 * var(--lw-ruled-pad));
+  clip-path: inset(0 var(--lw-ruled-pad));
+}
 .lw-grid.lw-grid-ruled > * {
-  padding: var(--lw-space-24);
+  padding: var(--lw-space-24) var(--lw-ruled-pad);
   background: none; border: 0; border-radius: 0;
   box-shadow: -1px 0 0 var(--lw-line), 0 -1px 0 var(--lw-line);
 }
@@ -241,6 +251,8 @@ table.visually-hidden > caption,
    1024px is --lw-bp-lg; a two-pane app cannot hold two panes below it. */
 .lw-split { display: grid; gap: var(--lw-space-24); grid-template-columns: minmax(0, 1fr) var(--lw-split-rail, 320px); align-items: start; }
 .lw-split-start { grid-template-columns: var(--lw-split-rail, 280px) minmax(0, 1fr); }
+/* column-gap only: once the split collapses, the stacked rows keep the 24px rhythm. */
+.lw-split-48 { column-gap: var(--lw-space-48); } .lw-split-96 { column-gap: var(--lw-space-96); }
 /* --lw-bp-lg (1024px) — the rail has no room beside the main column below it. */
 @media (max-width: 1023.98px) { .lw-split, .lw-split-start { grid-template-columns: minmax(0, 1fr); } }
 
@@ -496,6 +508,13 @@ table.visually-hidden > caption,
   font-weight: var(--lw-fw-medium);
 }
 .lw-btn-link:hover { border-bottom-color: var(--lw-brand-500); }
+/* A text link is prose that points somewhere: in a column narrower than its
+   label it wraps like prose and grows to fit, where a filled button would keep
+   its one line and its declared height. One line, it is the same 40px box. */
+.lw-btn-link {
+  white-space: normal; height: auto; min-height: var(--lw-control-h-md);
+  text-align: start; max-inline-size: 100%;
+}
 
 /* DANGER = destructive confirms. The one fill that takes white ink. */
 .lw-btn-danger { background: var(--lw-danger); color: var(--lw-on-danger); }
@@ -770,6 +789,32 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
 
    No text repaint, on purpose. Body copy keeps --lw-fg-muted; a card whose
    prose turns green has a louder judgement than argument. */
+/* DIVIDED — a card read as rows: the head and every row padded edge to edge
+   with a hairline between, so a list inside it reads as a table of statements.
+   Rows are the card's children and any <li> under a display: contents wrapper,
+   which is what Grid alignRows asks for. A tone becomes a bar along the top
+   instead of a ring: the ring around a ruled list boxed every row twice. */
+.lw-card-divided { padding: 0; gap: 0; }
+.lw-card-divided > *, .lw-card-divided li { padding: var(--lw-space-16) var(--lw-space-24); }
+/* The rows are the content, not a card's footnote: body size, full ink. */
+.lw-card-divided li { font-size: var(--lw-text-body); color: var(--lw-fg); }
+.lw-card-divided > * + *, .lw-card-divided li { border-block-start: 1px solid var(--lw-line); }
+.lw-card-divided.lw-card-success { box-shadow: inset 0 3px 0 var(--lw-success), var(--lw-shadow-xs); }
+.lw-card-divided.lw-card-warning { box-shadow: inset 0 3px 0 var(--lw-warning), var(--lw-shadow-xs); }
+.lw-card-divided.lw-card-danger  { box-shadow: inset 0 3px 0 var(--lw-danger), var(--lw-shadow-xs); }
+/* INDEX — the 01 / 02 / 03 beside a numbered row. Mono, tabular, brand ink;
+   inside a toned card it takes the card's judgement as text (the -on tier).
+   Leave it EMPTY and it counts itself — a CSS counter scoped to the ruled grid
+   or divided card around it — so the number is drawing, not text: no screen
+   reader announces "zero one", and no text scan reads "03" as a quantity of
+   whatever word comes next. Text written into it still wins. */
+.lw-grid-ruled, .lw-card-divided { counter-reset: lw-index; }
+.lw-index { counter-increment: lw-index; }
+.lw-index:empty::before { content: counter(lw-index, decimal-leading-zero); }
+.lw-index { flex-shrink: 0; font-family: var(--lw-font-mono); font-size: var(--lw-text-sm); font-weight: var(--lw-fw-semibold); font-variant-numeric: tabular-nums; color: var(--lw-brand-text); }
+.lw-card-success .lw-index { color: var(--lw-success-on); }
+.lw-card-warning .lw-index { color: var(--lw-warning-on); }
+.lw-card-danger .lw-index { color: var(--lw-danger-on); }
 .lw-card-dashed { background: none; box-shadow: none; border-style: dashed; border-color: var(--lw-line-strong); }
 .lw-card-success { box-shadow: inset 0 0 0 1.5px var(--lw-success-on); }
 .lw-card-warning { box-shadow: inset 0 0 0 1.5px var(--lw-warning-on); }
@@ -806,6 +851,10 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
   padding: var(--lw-space-32);
   display: flex; flex-direction: column; gap: var(--lw-space-16);
 }
+/* Raised: the same panel one tier lighter, for a passage set apart beside
+   cards rather than recessed below them — the inset tier read as a disabled
+   block next to a row of raised cards. */
+.lw-panel-raised { background: var(--lw-bg-subtle); }
 
 /* Chip — the card's status atom. Reads a status family's soft tint + text tier, so
    it re-points on dark with no conditional. */
@@ -1550,6 +1599,8 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
    entry. max-width is repeated rather than composed so the pair stays greppable
    with .lw-measure; margin-inline works in both writing modes. */
 .lw-measure-center { max-width: var(--lw-measure); margin-inline: auto; }
+.lw-text-center { text-align: center; }
+.lw-text-center:is(.lw-stack, .lw-cluster) { align-items: center; justify-content: center; }
 
 /* FIGURE — a diagram or an image with a caption that is ABOUT it.
    `<figcaption>` is not a paragraph that happens to follow a picture; a screen
@@ -1573,6 +1624,17 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
   flex-direction: column;
   gap: var(--lw-space-16);
 }
+/* A figure that is one object — label, picture and caption on one surface —
+   rather than a picture with words around it. The plate inside lightens to the
+   page so the mat still reads against the frame. */
+.lw-figure-framed {
+  padding: var(--lw-space-20) var(--lw-space-24) var(--lw-space-16);
+  background: var(--lw-bg-subtle);
+  border: 1px solid var(--lw-line);
+  border-radius: var(--lw-radius-xl);
+  gap: var(--lw-space-12);
+}
+.lw-figure-framed > .lw-media-plate { background: var(--lw-bg); --lw-media-plate-pad: var(--lw-space-8); }
 /* ⚠ `block-size: auto`, and it is not cosmetic. `reset.css` gives every image
    `max-width: 100%` but deliberately not a height rule, so an `<img>` carrying
    real `width`/`height` attributes — which it must, or the page reflows on load —

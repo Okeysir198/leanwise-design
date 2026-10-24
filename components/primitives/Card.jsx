@@ -16,12 +16,15 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  * `dashed` is the surface for something that does not exist yet: no fill, a
  * dashed outline. A concept beside a shipping product must not wear the same
  * card, or the row claims they are equals.
+ *
+ * `divided` reads the card as rows — the head and each row edge to edge with a
+ * hairline between — and turns a tone into a bar along the top.
  */
-export function Card({ interactive = false, glow = false, tone, dashed = false, selected, as, className, children, ...rest }) {
+export function Card({ interactive = false, glow = false, tone, dashed = false, divided = false, selected, as, className, children, ...rest }) {
   const Tag = as || (interactive ? (rest.href ? "a" : "button") : "div");
   return (
     <Tag
-      className={cx("lw-card", interactive && "lw-card-interactive", glow && "lw-card-glow", tone && `lw-card-${tone}`, dashed && "lw-card-dashed", className)}
+      className={cx("lw-card", interactive && "lw-card-interactive", glow && "lw-card-glow", tone && `lw-card-${tone}`, dashed && "lw-card-dashed", divided && "lw-card-divided", className)}
       /* aria-pressed, not aria-selected: the latter is only valid on
          gridcell/option/row/tab, so on a div or a button it was invalid and
          ignored. data-selected drives the CSS either way. */

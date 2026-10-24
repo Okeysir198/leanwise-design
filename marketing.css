@@ -190,7 +190,10 @@
   background-position: left top;
   background-size: 132px 76.2px;
   mask-image: radial-gradient(50rem 38rem at 2% 4%, #000 6%, transparent 80%);
-  opacity: var(--lw-ground-alpha);
+  /* --lw-ground-comb-scale dims the lattice without re-deriving the per-theme
+     alphas: 1 is the designed weight, 0.5 half of it, in both themes and
+     through the pulse (the keyframes read it too). */
+  opacity: calc(var(--lw-ground-alpha) * var(--lw-ground-comb-scale, 1));
   animation: var(--lw-ground-comb) calc(var(--lw-dur-ambient) / 2) var(--lw-ease-in-out) infinite alternate;
   animation-play-state: var(--lw-ambient-play);
 }
@@ -245,12 +248,12 @@
   to { transform: translate3d(-3.5%, 2%, 0) scale(1.09); }
 }
 @keyframes lwCombPulseDark {
-  from { opacity: 0.24; }
-  to { opacity: 0.52; }
+  from { opacity: calc(0.24 * var(--lw-ground-comb-scale, 1)); }
+  to { opacity: calc(0.52 * var(--lw-ground-comb-scale, 1)); }
 }
 @keyframes lwCombPulseLight {
-  from { opacity: 0.38; }
-  to { opacity: 0.7; }
+  from { opacity: calc(0.38 * var(--lw-ground-comb-scale, 1)); }
+  to { opacity: calc(0.7 * var(--lw-ground-comb-scale, 1)); }
 }
 @keyframes lwSheen {
   from { transform: translate3d(0, 0, 0); }
@@ -486,11 +489,15 @@
   .lw-hero-split > .lw-container > :not(.lw-eyebrow, .lw-h1, .lw-lead, .lw-hero-actions) {
     grid-column: 1 / -1; margin-top: var(--lw-space-32);
   }
-  /* The mark sits at the upper right, which is exactly where the split puts
-     the lead and the actions; the full-width aside is the artefact here. */
-  .lw-hero-split::after,
-  :is(.lw-page-dark, .lw-page-light, .lw-page-ground) .lw-hero-split::after { display: none; }
 }
+/* The mark sits at the upper right, which is exactly where the split puts the
+   lead and the actions — and stacked, behind them. The full-width aside is the
+   artefact here, at every width. */
+.lw-hero-split::after,
+:is(.lw-page-dark, .lw-page-light, .lw-page-ground) .lw-hero-split::after { display: none; }
+/* The split title is display type on a short measure; an italic run inside it
+   reads as a second voice. The emphasis stays the brand ink, upright. */
+.lw-hero-split .lw-h1 em { font-style: normal; }
 .lw-hero-compact::before {
   mask-image: radial-gradient(34rem 20rem at 82% 0%, #000 8%, transparent 76%);
 }
@@ -767,6 +774,12 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
    declarations fall away to the flex tile, exactly yesterday's rendering. */
 .lw-stat-grid > .lw-stat-tile { display: grid; grid-template-rows: subgrid; grid-row: span var(--lw-stat-rows, 3); }
 .lw-stat-grid > .lw-stat-tile:has(.lw-bar) { --lw-stat-rows: 4; }
+/* A ruled strip is a headline row, not a dashboard: the number is display type
+   — the sans at up to 48px — where a tile's is the 32px readout. */
+.lw-stat-grid.lw-grid-ruled .lw-stat .n {
+  font-family: var(--lw-font-display); font-weight: var(--lw-fw-bold);
+  font-size: clamp(32px, 3.4vw, 48px); letter-spacing: -0.03em; line-height: 1;
+}
 .dark .lw-stat .n, [data-band="dark"] .lw-stat .n, .lw-band-dark .lw-stat .n { color: var(--lw-on-dark); }
 .dark .lw-stat .l, [data-band="dark"] .lw-stat .l, .lw-band-dark .lw-stat .l { color: var(--lw-on-dark-3); }
 :is(.dark, [data-band="dark"], .lw-band-dark) .lw-bar { background: var(--lw-on-dark-fill); }

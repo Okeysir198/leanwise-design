@@ -16,6 +16,30 @@ pinned inside that older range; `CLAUDE.md` §Consumers is the enumerated pin ta
 
 ## [Unreleased]
 
+### Added
+- **`--lw-ground-comb-scale`** — dims the page ground's honeycomb without re-deriving the
+  per-theme alphas; the pulse keyframes read it too. `1` is the designed weight.
+- **`Panel` `raised`** — the panel one tier lighter, for a passage set beside cards.
+- **`Card` `divided`** — the card as rows, edge to edge with hairlines between (children, and
+  `<li>`s under a `display: contents` wrapper, so it composes with `Grid alignRows`). Rows
+  set at body size in full ink; a tone becomes a bar along the top. With it, **`.lw-index`** — the mono 01/02/03 beside a numbered
+  row, inked by the card's tone. Left empty it counts itself (a CSS counter scoped to the
+  ruled grid or divided card), so the number is drawing rather than text.
+- **`Split` `gap`** (24 · 48 · 96) and **`.lw-text-center`**.
+- **`.lw-figure-framed`** — label, picture and caption on one surface.
+
+### Changed
+- **`Grid` `ruled`: the outer columns sit flush with the column edges**, like the headings
+  above them. The grid reaches one pad (at most `--lw-pad-x`) into each gutter and clips it off.
+- **`StatGrid` `ruled` numbers are display type** — the sans, bold, up to 48px — not the 32px
+  mono tile readout.
+- **`.lw-btn-link` wraps like prose** in a column narrower than its label, growing past its
+  40px instead of running off the column; one line, it is the same box.
+- **`Hero` `split`**: an `<em>` in the title stays upright, and the mark stands down at every
+  width, not only above `--lw-bp-lg`.
+
+Motivated by leanwise-ai `/` matching its approved mockup.
+
 ## [4.7.0] — 2026-10-24
 
 ### Added

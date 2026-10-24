@@ -12,6 +12,9 @@ export interface CardProps extends React.HTMLAttributes<HTMLElement> {
   /** A dashed outline and no fill: the surface for something not built yet,
    *  so it never reads as the equal of the solid card beside it. */
   dashed?: boolean;
+  /** Rows edge to edge with hairlines between (children, and `<li>`s under a
+   *  `display: contents` wrapper). A `tone` becomes a bar along the top. */
+  divided?: boolean;
   selected?: boolean;
   href?: string;
   /**

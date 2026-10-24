@@ -1,6 +1,8 @@
 import * as React from "react";
 
 export interface PanelProps extends React.HTMLAttributes<HTMLElement> {
+  /** One tier lighter (the card surface) — for a panel set beside cards. */
+  raised?: boolean;
   as?: string;
 }
 /**
