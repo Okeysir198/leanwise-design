@@ -16,6 +16,8 @@ pinned inside that older range; `CLAUDE.md` §Consumers is the enumerated pin ta
 
 ## [Unreleased]
 
+## [4.8.0] — 2026-10-24
+
 ### Added
 - **`--lw-ground-comb-scale`** — dims the page ground's honeycomb without re-deriving the
   per-theme alphas; the pulse keyframes read it too. `1` is the designed weight.
