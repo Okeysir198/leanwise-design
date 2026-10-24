@@ -471,6 +471,26 @@
 .lw-hero-compact {
   padding: clamp(36px, 4vw, 60px) 0 clamp(28px, 3vw, 44px);
 }
+/* SPLIT — title left, lead and actions right, the aside across the full width
+   below. Placed by class, not by :nth-child, so a hero without an eyebrow keeps
+   its grid; anything that is not one of the four named parts is the aside. */
+@media (min-width: 1024px) {
+  .lw-hero-split > .lw-container {
+    display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    column-gap: var(--lw-space-48); row-gap: var(--lw-space-20); align-items: end;
+  }
+  .lw-hero-split > .lw-container > .lw-eyebrow { grid-column: 1; grid-row: 1; justify-self: start; }
+  .lw-hero-split > .lw-container > .lw-h1 { grid-column: 1; grid-row: 2 / span 2; margin: 0; }
+  .lw-hero-split > .lw-container > .lw-lead { grid-column: 2; grid-row: 2; margin: 0; }
+  .lw-hero-split > .lw-container > .lw-hero-actions { grid-column: 2; grid-row: 3; margin-top: 0; justify-self: start; }
+  .lw-hero-split > .lw-container > :not(.lw-eyebrow, .lw-h1, .lw-lead, .lw-hero-actions) {
+    grid-column: 1 / -1; margin-top: var(--lw-space-32);
+  }
+  /* The mark sits at the upper right, which is exactly where the split puts
+     the lead and the actions; the full-width aside is the artefact here. */
+  .lw-hero-split::after,
+  :is(.lw-page-dark, .lw-page-light, .lw-page-ground) .lw-hero-split::after { display: none; }
+}
 .lw-hero-compact::before {
   mask-image: radial-gradient(34rem 20rem at 82% 0%, #000 8%, transparent 76%);
 }

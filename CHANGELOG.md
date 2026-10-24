@@ -16,6 +16,24 @@ pinned inside that older range; `CLAUDE.md` §Consumers is the enumerated pin ta
 
 ## [Unreleased]
 
+### Added
+- **`Hero` `split` — title left, lead and actions right, the aside full-width below.** The
+  stacked hero hands a wide artefact the same column as its prose; a 990×235 status crop at
+  half width shrank its labels past reading. Placed by class, so a hero without an eyebrow
+  keeps the grid; one column again below 1024px (`--lw-bp-lg`); the hero mark stands down in split mode, since the
+  lead and actions now hold the corner it draws in.
+- **`Grid` `ruled` — hairlines instead of gaps.** Children sit flush with a rule between every
+  pair, across and down. Each child draws its start and top rule as a shadow and the grid
+  clips the ones on its outer edge, so the rules follow the reflow at any column count with
+  no breakpoint. `.lw-card` children (a `StatGrid`'s tiles) give up their own surface.
+- **`Card` `dashed` — the surface for something not built yet.** No fill, a dashed
+  `--lw-line-strong` outline; a concept beside a shipping product must not wear its card.
+- **`.lw-media-plate-scroll` — a wide picture that scrolls rather than shrinks.** Below
+  `--lw-media-min` (default 640px) the plate scrolls sideways; above it the image is as fluid
+  as before. The plate becomes a scroll region, so it takes `tabindex="0"`, a role and a name.
+
+Motivated by the leanwise-ai `/` redesign.
+
 ## [4.6.2] — 2026-10-22
 
 ### Added

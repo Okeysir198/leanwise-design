@@ -235,7 +235,7 @@ rule; every transform stands down under `prefers-reduced-motion`.
 | Component | Purpose |
 |---|---|
 | `Button` | `variant`: brand · cta · ink · ghost · danger · link. `size`: sm/md/lg. `iconOnly`, `loading`. **`type` defaults to `"button"`** — the submit control of a `<form>` says `type="submit"`. Forwards its ref |
-| `Card` | The surface. `interactive` makes it a real control, not a div with a click handler. `tone` carries a judgement as a static inset ring (success · warning · danger) — same geometry as selection, and it never repaints the text |
+| `Card` | The surface. `interactive` makes it a real control, not a div with a click handler. `tone` carries a judgement as a static inset ring (success · warning · danger) — same geometry as selection, and it never repaints the text. `dashed` is the surface for something not built yet |
 | `CardHead` | The card's header row — title on the left, controls on the right |
 | `CardTitle` | The card's heading. `as` picks the heading level; the size does not change with it |
 | `CardBody` | The card's copy, on the body scale |
@@ -255,7 +255,7 @@ rule; every transform stands down under `prefers-reduced-motion`.
 | `Container` | The 1200px reading column |
 | `Stack` | Vertical rhythm. `gap` = a spacing token |
 | `Cluster` | A wrapping row. `justify`, `align` |
-| `Grid` | Auto-fit columns. `min` is the only knob — no breakpoint needed. `alignRows` shares row tracks between the cards, so the same child sits at the same height in every card |
+| `Grid` | Auto-fit columns. `min` is the only knob — no breakpoint needed. `alignRows` shares row tracks between the cards, so the same child sits at the same height in every card. `ruled` trades the gap for hairlines that follow the reflow |
 | `Split` | Main column + rail. Collapses at `--lw-bp-lg` |
 | `Section` | A page band. `dark` flips every descendant's ink |
 | `Panel` | The inset emphasis surface — deepest neutral tier, recessed, no lift. One thought set apart without a dark band |
@@ -363,7 +363,7 @@ are how the rules stay under `check:a11y` and `check:visual`, and both are the m
 
 | Component | Purpose |
 |---|---|
-| `Hero` | The hero band, and **a real dark BAND**: `.lw-hero-dark` is in `tokens.css`'s band-selector list, so every role token inside it re-points and no consumer has to hand-add `data-band="dark"` any more. On its own: navy ground, honeycomb texture, the mark oversized at the upper right. Inside `.lw-page-dark` it goes transparent and the page owns the background (`assets/hero-mark.svg`, `assets/hero-mark-ink.svg`, `assets/hex-lattice.svg`, `assets/hex-lattice-ink.svg` — copy all four) |
+| `Hero` | The hero band, and **a real dark BAND**: `.lw-hero-dark` is in `tokens.css`'s band-selector list, so every role token inside it re-points and no consumer has to hand-add `data-band="dark"` any more. On its own: navy ground, honeycomb texture, the mark oversized at the upper right. Inside `.lw-page-dark` it goes transparent and the page owns the background (`assets/hero-mark.svg`, `assets/hero-mark-ink.svg`, `assets/hex-lattice.svg`, `assets/hex-lattice-ink.svg` — copy all four). `split` puts the title left, lead and actions right, and the aside full-width below |
 | `FeatureGrid` | Numbered features; the brand edge draws in on hover |
 | `StoryCard` | The quote renders **only** with quote + person + role |
 | `LogoRail` | Marks are masked to one ink through the image's ALPHA — supply a transparent single-colour silhouette, or a JPEG / white-card PNG / opaque-white lettering masks to a solid blob. `mode="mono"` (per rail or per logo) draws a multi-tone raster under `grayscale()` instead. A mark without `src` degrades to a mono wordmark. `marquee` for a slow loop; static under reduced motion |
@@ -523,6 +523,10 @@ the picture's own four square corners sitting inside it. The surface is a **role
 no `prefers-color-scheme` query near it; that would be the wrong question in a consumer whose
 theme is `[data-theme]` on `<html>`. On light the mat sits one step below the page, on dark one
 step above it. `--lw-media-plate-pad` is the one knob.
+
+A picture whose words stop being readable when it shrinks takes `.lw-media-plate-scroll`
+beside it: below `--lw-media-min` (640px) the plate scrolls sideways instead of shrinking. It
+is then a scroll region, so give it `tabindex="0"`, a role and a name.
 
 **It is not `.lw-browser-frame`, and rule 9 below is not violated by having both** — they make
 different claims. A toolbar, three dots and an address pill assert that you are looking at a
