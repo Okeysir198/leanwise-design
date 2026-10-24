@@ -16,6 +16,8 @@ pinned inside that older range; `CLAUDE.md` §Consumers is the enumerated pin ta
 
 ## [Unreleased]
 
+## [4.7.0] — 2026-10-24
+
 ### Added
 - **`Hero` `split` — title left, lead and actions right, the aside full-width below.** The
   stacked hero hands a wide artefact the same column as its prose; a 990×235 status crop at
