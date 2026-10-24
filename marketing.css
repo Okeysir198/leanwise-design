@@ -1310,7 +1310,9 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
    columns flow under it — at this width 220px of brand beside 140px of links
    leaves both too narrow to read. */
 @media (max-width: 767.98px) {
-  .lw-footer-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+  /* 96px tracks and a 16px column gutter put three link columns on one row on
+     an ordinary phone; at 140px the third fell to a row of its own (2 + 1). */
+  .lw-footer-grid { grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); column-gap: var(--lw-space-16); }
   .lw-footer-brand { grid-column: 1 / -1; }
 }
 
@@ -1328,6 +1330,20 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
   max-inline-size: 34ch;
   margin: 0;
 }
+.lw-footer-contact {
+  margin: 0;
+  font-size: var(--lw-text-sm);
+  color: var(--lw-fg-muted);
+}
+/* Underlined: in muted prose with no other cue, an un-underlined mailbox is a
+   link nobody finds. */
+.lw-footer-contact a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--lw-line-strong);
+  text-underline-offset: 3px;
+}
+.lw-footer-contact a:hover { color: var(--lw-fg); text-decoration-color: currentColor; }
 
 .lw-footer-head {
   font-family: var(--lw-font-mono);
@@ -1344,13 +1360,15 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 }
 
 /* Every link reserves the current-page rule as a transparent border, so marking
-   the current page shifts nothing. */
+   the current page shifts nothing. The negative margin takes back the padding
+   AND the 2px rule, so the label sits flush under its heading — it was 2px in,
+   and a note (which has no rule) 8px in, so one column held three left edges. */
 .lw-footer-link {
   display: block;
   padding-block: var(--lw-space-4);
   padding-inline-start: var(--lw-space-8);
   border-inline-start: 2px solid transparent;
-  margin-inline-start: calc(var(--lw-space-8) * -1);
+  margin-inline-start: calc((var(--lw-space-8) + 2px) * -1);
   color: var(--lw-fg-muted);
   text-decoration: none;
   transition: color var(--lw-dur-xs) var(--lw-ease-out);
@@ -1381,7 +1399,6 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
 .lw-footer-note {
   display: block;
   padding-block: var(--lw-space-4);
-  padding-inline-start: var(--lw-space-8);
   color: var(--lw-fg-subtle);
 }
 
@@ -1394,8 +1411,10 @@ a.lw-logo-item:focus-visible, .lw-logo-item-interactive:focus-visible {
   margin-block-start: var(--lw-space-32);
   padding-block-start: var(--lw-space-24);
   border-block-start: 1px solid var(--lw-line);
-  font-family: var(--lw-font-mono);
+  /* The sans, not the mono: a disclaimer is sentences, and mono at 12px set a
+     five-line paragraph as a block of code. */
   font-size: var(--lw-text-xs);
+  line-height: var(--lw-lh-relaxed);
   color: var(--lw-fg-subtle);
 }
 /* The legal disclaimer is a real <p>; without a reset it would carry the UA's

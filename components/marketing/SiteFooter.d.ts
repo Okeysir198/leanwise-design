@@ -18,6 +18,8 @@ export interface SiteFooterProps extends React.HTMLAttributes<HTMLElement> {
   brand?: React.ReactNode;
   /** One-line blurb under the brand, capped at 34ch by `.lw-footer-desc`. */
   desc?: React.ReactNode;
+  /** One line under the blurb — a place, a mailbox. Links inside it are plain anchors. */
+  contact?: React.ReactNode;
   columns?: FooterColumn[];
   /** The long legal disclaimer. Rendered in the bottom row, capped by `.lw-measure`. */
   legal?: React.ReactNode;

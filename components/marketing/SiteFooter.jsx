@@ -27,8 +27,12 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  * a "coming soon") rendered as a <span>, with no pointer and no tab stop. An
  * `external` entry opens in a new tab and says so with a named icon rather than
  * a typed `↗`.
+ *
+ * `contact` is the one line of where-and-how-to-reach-us under the blurb — a
+ * place and a mailbox are facts about the company, not a column of
+ * destinations, and a column of two notes and one link read as a broken list.
  */
-export function SiteFooter({ brand, desc, columns = [], legal, bottom, dark = false, linkAs = "a", className, children, ...rest }) {
+export function SiteFooter({ brand, desc, contact, columns = [], legal, bottom, dark = false, linkAs = "a", className, children, ...rest }) {
   const Link = linkAs;
   return (
     <footer className={cx("lw-footer", className)} data-band={dark ? "dark" : undefined} {...rest}>
@@ -37,6 +41,7 @@ export function SiteFooter({ brand, desc, columns = [], legal, bottom, dark = fa
           <div className="lw-footer-brand">
             {brand}
             {desc && <p className="lw-footer-desc">{desc}</p>}
+            {contact && <p className="lw-footer-contact">{contact}</p>}
           </div>
           {columns.map((col, i) => (
             /* Keyed by index, not heading: two columns may legitimately share a
