@@ -1,13 +1,14 @@
 import { jsx, jsxs } from "react/jsx-runtime";
 import { Icon } from "../primitives/Icon.js";
 const cx = (...a) => a.filter(Boolean).join(" ");
-function SiteFooter({ brand, desc, columns = [], legal, bottom, dark = false, linkAs = "a", className, children, ...rest }) {
+function SiteFooter({ brand, desc, contact, columns = [], legal, bottom, dark = false, linkAs = "a", className, children, ...rest }) {
   const Link = linkAs;
   return /* @__PURE__ */ jsx("footer", { className: cx("lw-footer", className), "data-band": dark ? "dark" : void 0, ...rest, children: /* @__PURE__ */ jsxs("div", { className: "lw-container", children: [
     /* @__PURE__ */ jsxs("div", { className: "lw-footer-grid", children: [
       /* @__PURE__ */ jsxs("div", { className: "lw-footer-brand", children: [
         brand,
-        desc && /* @__PURE__ */ jsx("p", { className: "lw-footer-desc", children: desc })
+        desc && /* @__PURE__ */ jsx("p", { className: "lw-footer-desc", children: desc }),
+        contact && /* @__PURE__ */ jsx("p", { className: "lw-footer-contact", children: contact })
       ] }),
       columns.map((col, i) => (
         /* Keyed by index, not heading: two columns may legitimately share a

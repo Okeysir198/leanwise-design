@@ -16,6 +16,19 @@ pinned inside that older range; `CLAUDE.md` §Consumers is the enumerated pin ta
 
 ## [Unreleased]
 
+### Added
+- **`SiteFooter` `contact`** — one line under the blurb for a place and a mailbox, instead of a
+  column of two notes and one link.
+
+### Fixed
+- **Footer column alignment.** Link labels sat 2px in from their heading (the reserved
+  current-page rule was not taken back) and notes 8px in, so one column held three left edges.
+  Both now sit flush under the heading.
+- **Three footer link columns stay on one row on a phone** (96px tracks, 16px column gutter);
+  at 140px the third fell to a row of its own.
+- **Footer small print is set in the sans.** Mono at 12px made a five-line disclaimer read as
+  code.
+
 ## [4.8.0] — 2026-10-24
 
 ### Added
