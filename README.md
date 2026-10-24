@@ -235,7 +235,7 @@ rule; every transform stands down under `prefers-reduced-motion`.
 | Component | Purpose |
 |---|---|
 | `Button` | `variant`: brand · cta · ink · ghost · danger · link. `size`: sm/md/lg. `iconOnly`, `loading`. **`type` defaults to `"button"`** — the submit control of a `<form>` says `type="submit"`. Forwards its ref |
-| `Card` | The surface. `interactive` makes it a real control, not a div with a click handler. `tone` carries a judgement as a static inset ring (success · warning · danger) — same geometry as selection, and it never repaints the text. `dashed` is the surface for something not built yet |
+| `Card` | The surface. `interactive` makes it a real control, not a div with a click handler. `tone` carries a judgement as a static inset ring (success · warning · danger) — same geometry as selection, and it never repaints the text. `dashed` is the surface for something not built yet. `divided` reads it as rows with hairlines between; `.lw-index` numbers them |
 | `CardHead` | The card's header row — title on the left, controls on the right |
 | `CardTitle` | The card's heading. `as` picks the heading level; the size does not change with it |
 | `CardBody` | The card's copy, on the body scale |
@@ -255,10 +255,10 @@ rule; every transform stands down under `prefers-reduced-motion`.
 | `Container` | The 1200px reading column |
 | `Stack` | Vertical rhythm. `gap` = a spacing token |
 | `Cluster` | A wrapping row. `justify`, `align` |
-| `Grid` | Auto-fit columns. `min` is the only knob — no breakpoint needed. `alignRows` shares row tracks between the cards, so the same child sits at the same height in every card. `ruled` trades the gap for hairlines that follow the reflow |
-| `Split` | Main column + rail. Collapses at `--lw-bp-lg` |
+| `Grid` | Auto-fit columns. `min` is the only knob — no breakpoint needed. `alignRows` shares row tracks between the cards, so the same child sits at the same height in every card. `ruled` trades the gap for hairlines that follow the reflow, first column flush |
+| `Split` | Main column + rail. Collapses at `--lw-bp-lg`. `gap` widens the gutter (48 · 96) |
 | `Section` | A page band. `dark` flips every descendant's ink |
-| `Panel` | The inset emphasis surface — deepest neutral tier, recessed, no lift. One thought set apart without a dark band |
+| `Panel` | The inset emphasis surface — deepest neutral tier, recessed, no lift. One thought set apart without a dark band. `raised` lifts it one tier, for a panel beside cards |
 
 ### Forms — `components/forms/`
 
