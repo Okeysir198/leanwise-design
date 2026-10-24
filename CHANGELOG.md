@@ -16,6 +16,8 @@ pinned inside that older range; `CLAUDE.md` §Consumers is the enumerated pin ta
 
 ## [Unreleased]
 
+## [4.9.0] — 2026-10-24
+
 ### Added
 - **`SiteFooter` `contact`** — one line under the blurb for a place and a mailbox, instead of a
   column of two notes and one link.
