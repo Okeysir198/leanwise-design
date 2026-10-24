@@ -12,12 +12,16 @@ const cx = (...a) => a.filter(Boolean).join(" ");
  * (no layout, cannot shift a grid row), and it does not repaint the text: body
  * copy keeps `--lw-fg-muted`, because a judgement that recolours the prose is
  * louder than the prose. `glow` stays what it was — the hover affordance.
+ *
+ * `dashed` is the surface for something that does not exist yet: no fill, a
+ * dashed outline. A concept beside a shipping product must not wear the same
+ * card, or the row claims they are equals.
  */
-export function Card({ interactive = false, glow = false, tone, selected, as, className, children, ...rest }) {
+export function Card({ interactive = false, glow = false, tone, dashed = false, selected, as, className, children, ...rest }) {
   const Tag = as || (interactive ? (rest.href ? "a" : "button") : "div");
   return (
     <Tag
-      className={cx("lw-card", interactive && "lw-card-interactive", glow && "lw-card-glow", tone && `lw-card-${tone}`, className)}
+      className={cx("lw-card", interactive && "lw-card-interactive", glow && "lw-card-glow", tone && `lw-card-${tone}`, dashed && "lw-card-dashed", className)}
       /* aria-pressed, not aria-selected: the latter is only valid on
          gridcell/option/row/tab, so on a div or a button it was invalid and
          ignored. data-selected drives the CSS either way. */

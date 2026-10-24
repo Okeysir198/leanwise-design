@@ -15,6 +15,13 @@ export interface GridProps extends React.HTMLAttributes<HTMLElement> {
    * grid stacking its children — the column it always was.
    */
   alignRows?: number;
+  /**
+   * Hairlines instead of gaps: flush children, a rule between every pair in
+   * both directions, top and bottom rules on the grid. The rules follow the
+   * reflow, so there is no breakpoint to keep in step. `.lw-card` children
+   * drop their own fill, border and radius — the rules are the surface.
+   */
+  ruled?: boolean;
   as?: string;
 }
 export declare function Grid(props: GridProps): React.JSX.Element;

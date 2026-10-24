@@ -15,5 +15,9 @@ export interface HeroProps extends Omit<React.HTMLAttributes<HTMLElement>, "titl
    *  use it everywhere that is not the landing page, so a site does not open
    *  five pages with the identical band. */
   compact?: boolean;
+  /** Title left, lead and actions right, the aside full-width below. Use it
+   *  when the aside is a wide picture that a half column would shrink past
+   *  reading. Stacks to the ordinary hero below 1024px (--lw-bp-lg). */
+  split?: boolean;
 }
 export declare function Hero(props: HeroProps): React.JSX.Element;

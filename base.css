@@ -223,6 +223,19 @@ table.visually-hidden > caption,
    subgrid the card is a grid stacking its children in rows — the same column
    it always was, at the same height it would have had. */
 .lw-grid-align > .lw-card { display: grid; grid-row: span var(--lw-align-rows, 1); grid-template-rows: subgrid; }
+/* RULED — hairlines instead of gaps, and the rules follow the reflow. Each child
+   draws a rule on its own start and top edges as a shadow, and the grid clips
+   the ones that land on its outer edge, so the first column and the first row
+   lose theirs at ANY column count: no :nth-child guess, no breakpoint to keep in
+   step with --lw-grid-min. The cost is that every child pads both sides, so the
+   first column's text sits one pad in from the column edge. (0,2,0) so a card
+   child gives up its own surface — the rules are the surface. */
+.lw-grid.lw-grid-ruled { gap: 0; overflow: hidden; border-block: 1px solid var(--lw-line); }
+.lw-grid.lw-grid-ruled > * {
+  padding: var(--lw-space-24);
+  background: none; border: 0; border-radius: 0;
+  box-shadow: -1px 0 0 var(--lw-line), 0 -1px 0 var(--lw-line);
+}
 
 /* SPLIT — a main column and a fixed-ish rail that collapses to one column.
    1024px is --lw-bp-lg; a two-pane app cannot hold two panes below it. */
@@ -757,6 +770,7 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
 
    No text repaint, on purpose. Body copy keeps --lw-fg-muted; a card whose
    prose turns green has a louder judgement than argument. */
+.lw-card-dashed { background: none; box-shadow: none; border-style: dashed; border-color: var(--lw-line-strong); }
 .lw-card-success { box-shadow: inset 0 0 0 1.5px var(--lw-success-on); }
 .lw-card-warning { box-shadow: inset 0 0 0 1.5px var(--lw-warning-on); }
 .lw-card-danger  { box-shadow: inset 0 0 0 1.5px var(--lw-danger-on); }
@@ -1630,6 +1644,13 @@ button.lw-empty { text-align: start; font: inherit; color: inherit; }
   margin-inline: auto;
   border-radius: var(--lw-radius-md);
 }
+/* A wide picture whose words stop being readable when it shrinks: below
+   --lw-media-min the plate scrolls sideways instead. min-inline-size beats
+   max-inline-size, so it stays fluid down to that floor and no further. The
+   plate is then a scroll region — give it tabindex="0", a role and a name. */
+.lw-media-plate-scroll { overflow-x: auto; }
+.lw-media-plate-scroll > img { min-inline-size: var(--lw-media-min, 640px); }
+.lw-media-plate-scroll:focus-visible { outline: none; box-shadow: var(--lw-focus-ring); }
 
 /* The flexible gap in a row of controls — the thing that pushes what follows to
    the trailing edge. It was written six ways: inline in Artifact's footer, and

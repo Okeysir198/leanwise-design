@@ -9,6 +9,9 @@ export interface CardProps extends React.HTMLAttributes<HTMLElement> {
   /** The judgement the card itself carries: a static inset tone ring. Does not
    *  repaint the text — the prose keeps its own ink. */
   tone?: Extract<Tone, "success" | "warning" | "danger">;
+  /** A dashed outline and no fill: the surface for something not built yet,
+   *  so it never reads as the equal of the solid card beside it. */
+  dashed?: boolean;
   selected?: boolean;
   href?: string;
   /**
