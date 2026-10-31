@@ -34,7 +34,7 @@ follow its component guidance.
 - **Action order is shadcn's**: right-aligned, primary last (`Cancel`, `Save`). Use the stock
   dialog/sheet footers, or `flex flex-col-reverse gap-2 sm:flex-row sm:justify-end`.
 - **Selected states**: app sidebar = stock `isActive`; a selected row/list item =
-  `bg-selected` (never `bg-accent`, which is hover); in-content sections =
+  `bg-selected` (never `bg-accent`); a row under the pointer = `hover:bg-row-hover`; in-content sections =
   `@leanwise/section-nav`; menus keep the stock tint.
 - **Alerts and callouts are soft**: `bg-info-soft text-info-soft-foreground border-info-border`,
   and the `success-soft`, `warning-soft`, `destructive-soft` trios; status chips use the

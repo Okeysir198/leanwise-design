@@ -83,8 +83,9 @@
       "sidebar-accent-foreground": "oklch(0.4 0.073 222)",
       "sidebar-border": "oklch(0.88 0.02 211)",
       "sidebar-ring": "#0C727B",
-      "selected": "oklch(0.9 0.055 211)",
+      "selected": "oklch(0.912 0.05 211)",
       "selected-foreground": "oklch(0.21 0.05 245)",
+      "row-hover": "oklch(0.975 0.013 211)",
       "scrollbar": "oklch(0.76 0.04 211)",
       "info-soft": "oklch(0.93 0.05 240)",
       "info-soft-foreground": "oklch(0.4 0.1 245)",
@@ -163,6 +164,7 @@
       "sidebar-ring": "#2EBBC4",
       "selected": "oklch(0.39 0.075 214)",
       "selected-foreground": "oklch(0.965 0.01 211)",
+      "row-hover": "oklch(0.33 0.06 225)",
       "scrollbar": "oklch(0.52 0.06 214)",
       "info-soft": "oklch(0.28 0.05 240)",
       "info-soft-foreground": "oklch(0.85 0.07 235)",
@@ -235,6 +237,9 @@
     },
     "[data-slot=\"tabs-trigger\"].text-foreground\\/60:not([data-state=\"active\"]):not(:hover)": {
       "color": "var(--muted-foreground)"
+    },
+    "[data-slot=\"badge\"].bg-secondary:not(:focus-visible)": {
+      "border-color": "var(--accent-border)"
     },
     "[class*=\"alert-description\"] [data-slot=\"alert-description\"]": {
       "color": "var(--destructive)"

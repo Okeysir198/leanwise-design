@@ -43,7 +43,7 @@ A Tailwind v4 app with shadcn:
 
 ```bash
 npx shadcn@latest init --base radix
-npm i github:Okeysir198/leanwise-design#v5.15.0
+npm i github:Okeysir198/leanwise-design#v5.16.0
 ```
 
 In your global CSS, after Tailwind:
@@ -66,7 +66,7 @@ Add the registry to `components.json`:
 ```json
 {
   "registries": {
-    "@leanwise": "https://raw.githubusercontent.com/Okeysir198/leanwise-design/v5.15.0/r/{name}.json"
+    "@leanwise": "https://raw.githubusercontent.com/Okeysir198/leanwise-design/v5.16.0/r/{name}.json"
   }
 }
 ```
@@ -97,7 +97,7 @@ Dark mode is the `.dark` class on an ancestor (shadcn's convention). `useTheme()
   width with the primary on top on phones.
 - **Selected states.** App sidebar: stock `isActive` (the `sidebar-accent` tint). A selected
   table row or list item: `data-[state=selected]:bg-selected` (the `selected` role, distinct
-  from the `accent` hover). Inside the content, use the `@leanwise/section-nav` block. Menus
+  from the `row-hover` tint a row shows under the pointer). Inside the content, use the `@leanwise/section-nav` block. Menus
   and dropdowns keep the stock tint.
 - **Scrollbars** use the `scrollbar` role: `theme.css` points native scrollbars and the stock
   `ScrollArea` thumb at it, so no component is edited.
@@ -138,7 +138,8 @@ Every role is a CSS variable in `:root` and `.dark`, and a Tailwind colour: `bg-
 | `info-soft`, `info-soft-foreground`, `info-border` | Info alerts and callouts |
 | `success`, `warning` (+ `-foreground`) | Status fills |
 | `success-soft`, `warning-soft` (+ `-soft-foreground`, `-border`) | Status chips and callouts |
-| `selected` (+ `-foreground`) | A selected table row or list item; distinct from the `accent` hover |
+| `selected` (+ `-foreground`) | A selected table row or list item; distinct from `row-hover` |
+| `row-hover` | The tint of a table row or list item under the pointer: `hover:bg-row-hover`, paler than `selected` |
 | `scrollbar` | Scroll thumbs (native and `ScrollArea`); set by `theme.css` |
 | `diff-add` / `diff-del` / `diff-mod` (+ `-line`) | Opaque diff and heatmap cell grounds: matched, mismatched, not found. Body text sits on them |
 | `review` (+ `-foreground`, `-soft`, `-soft-foreground`, `-border`) | Fifth status, violet: a second-phase / review state |

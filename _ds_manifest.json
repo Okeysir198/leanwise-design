@@ -1739,13 +1739,19 @@
     },
     {
       "name": "--selected",
-      "value": "oklch(0.9 0.055 211)",
+      "value": "oklch(0.912 0.05 211)",
       "kind": "color",
       "definedIn": "theme.css"
     },
     {
       "name": "--selected-foreground",
       "value": "oklch(0.21 0.05 245)",
+      "kind": "color",
+      "definedIn": "theme.css"
+    },
+    {
+      "name": "--row-hover",
+      "value": "oklch(0.975 0.013 211)",
       "kind": "color",
       "definedIn": "theme.css"
     },

@@ -16,7 +16,7 @@ export const SEPARATIONS = [
   ["border", "background", 1.25, "light"], ["card", "background", 1.12, "dark"],
   ["muted", "card", 1.08], ["muted", "background", 1.06],
   ["secondary", "card", 1.15],
-  ["selected", "card", 1.25], ["selected", "accent", 1.1], ["selected", "muted", 1.12],
+  ["selected", "card", 1.25], ["selected", "row-hover", 1.1], ["selected", "muted", 1.12], ["row-hover", "card", 1.05],
   ["sidebar-accent", "sidebar", 1.2],
   ["scrollbar", "card", 1.9], ["scrollbar", "background", 1.9],
   ["border", "card", 1.25],
