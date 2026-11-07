@@ -29,7 +29,7 @@ export const STOCK_OVERRIDES = [
     keys: [["alert", "text-destructive/90"]] },
   { why: "Stock Command search icon is opacity-50: 2.0:1 on the popover, under the 3:1 an icon needs.",
     sel: ['[data-slot="command-input-wrapper"] svg.opacity-50'], decl: { opacity: "1" },
-    keys: [["command", "size-3.5 shrink-0 opacity-50"]] },
+    keys: [["command", "size-4 shrink-0 opacity-50"]] },
   { why: "Stock dark invalid fields fade the border to destructive/50: 2.7:1, under the 3:1 a control boundary needs.",
     sel: ['.dark [data-slot="input"][aria-invalid="true"]', '.dark [data-slot="textarea"][aria-invalid="true"]',
           '.dark [data-slot="native-select"][aria-invalid="true"]', '.dark [data-slot="select-trigger"][aria-invalid="true"]',

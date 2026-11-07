@@ -56,12 +56,12 @@ In your global CSS, after Tailwind:
 @import "@leanwise/design/theme.css";
 ```
 
-The components are shadcn's **Mira** style: `"style": "radix-mira"` and `"iconLibrary": "lucide"`
-in `components.json`, with Geist from this package. Three things stock Mira needs:
+The components are shadcn's **Nova** style: `"style": "radix-nova"` and `"iconLibrary": "lucide"`
+in `components.json`, with Geist from this package. Three things stock Nova needs:
 
 - `shadcn/tailwind.css` defines `data-checked:`, `data-open:` and their siblings. Without it
   Tailwind emits nothing for them and those states silently lose their styles.
-- A `TooltipProvider` at the app root: Mira's `Tooltip` does not bring its own.
+- A `TooltipProvider` at the app root: Nova's `Tooltip` does not bring its own.
 - A `Command` inside `CommandDialog`.
 
 To make raw Tailwind palette classes (`bg-emerald-500`) compile to nothing, import

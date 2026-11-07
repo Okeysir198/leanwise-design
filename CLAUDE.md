@@ -60,7 +60,7 @@ bin/lw-token-lint.mjs  the consumer lint
 skills/leanwise-ui/    the agent skill consumers copy
 registry/blocks/       OUR blocks (app-shell, state-view, file-upload, section-nav, login-card): the one
                        copy; the preview compiles them directly
-preview/src/ui/        stock radix-mira shadcn (lucide), UNMODIFIED; shadcn-blocks/ = stock blocks
+preview/src/ui/        stock radix-nova shadcn (lucide), UNMODIFIED; shadcn-blocks/ = stock blocks
                        (sidebar-07, login-04), unmodified; index.ts = the bundle namespace
 preview/cards/*.card.jsx   card sources -> generated .card.js/.card.html (@dsCard marker)
 templates/*/*.dc.html  Claude Design templates over the namespace (x-import)
@@ -91,7 +91,7 @@ node scripts/check.mjs visual --record | --compare [--dir d] [--report-only]
 ## Adding a stock component or block
 
 1. Search shadcn first (MCP in `.mcp.json`). Install it with `npx shadcn add <name>` in a scratch
-   project whose `components.json` has `"style": "radix-mira"` and `"iconLibrary": "lucide"`, and
+   project whose `components.json` has `"style": "radix-nova"` and `"iconLibrary": "lucide"`, and
    copy the output UNMODIFIED into `preview/src/ui/` (blocks: `preview/src/shadcn-blocks/<block>/`).
    The raw registry JSON holds `IconPlaceholder`, so it cannot be copied directly. Add npm deps
    as devDependencies.
