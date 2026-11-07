@@ -46,11 +46,12 @@ export function pairsFor(t) {
      Alert title is text-destructive on card or the soft tint. (The description's stock
      text-destructive/90 is overridden to the same full --destructive — see STOCK_OVERRIDES.) */
   for (const s of ["card", "destructive-soft"]) pairs.push(["destructive", s, FLOORS.text]);
-  /* An invalid stock Input/Textarea in dark: destructive text on its bg-input/30 fill over a card. */
+  /* An invalid field in dark: Field's data-invalid makes the stock Input/Textarea text destructive,
+     on its bg-input/30 fill over a card. */
   pairs.push(["destructive", "input/30@card", FLOORS.text, 1, "dark"]);
-  /* The stock destructive Button/Badge in dark: text-white on dark:bg-destructive/60 over
-     the page and over a card (navy-foreground is white in both themes). */
-  for (const s of ["background", "card"]) pairs.push(["navy-foreground", `destructive/60@${s}`, FLOORS.text, 1, "dark"]);
+  /* The stock destructive Button/Badge in dark: text-destructive on dark:bg-destructive/20,
+     over the page and over a card or popover. */
+  for (const s of ["background", "card", "popover"]) pairs.push(["destructive", `destructive/20@${s}`, FLOORS.text, 1, "dark"]);
   return pairs;
 }
 

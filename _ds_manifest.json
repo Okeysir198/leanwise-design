@@ -1647,7 +1647,7 @@
     },
     {
       "name": "--chart-3",
-      "value": "#FCB603",
+      "value": "oklch(0.66 0.15 80)",
       "kind": "color",
       "definedIn": "theme.css"
     },
@@ -1905,7 +1905,13 @@
     },
     {
       "name": "--switch-track",
-      "value": "oklch(0.68 0.015 230)",
+      "value": "oklch(0.64 0.015 230)",
+      "kind": "color",
+      "definedIn": "theme.css"
+    },
+    {
+      "name": "--field",
+      "value": "oklch(0.978 0.006 225)",
       "kind": "color",
       "definedIn": "theme.css"
     }

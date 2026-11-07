@@ -155,6 +155,7 @@ Every role is a CSS variable in `:root` and `.dark`, and a Tailwind colour: `bg-
 | `navy` (+ `-foreground`) | Brand dark panels and bands |
 | `border` | Dividers, card edges |
 | `input` | Control boundaries (3:1) |
+| `field` | The faint ground of a filled input, select or text area: `bg-field` |
 | `ring` | Focus |
 | `chart-1` … `chart-5` | Data series |
 | `chart-1-foreground` … `chart-5-foreground` | A series colour as text or icon on any surface (legend labels, KPI deltas): 4.5:1. Not ink on the chart fill |
