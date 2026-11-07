@@ -15,18 +15,13 @@ import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { ROOT } from "./lib/generated.mjs";
 import { report } from "./lib/report.mjs";
+import { openBrowser } from "./lib/browser.mjs";
+import { served } from "./lib/cards.mjs";
 
 /* theme.css's :root/.dark variable blocks, without the Tailwind at-rules. */
 function themeVars() {
   const css = readFileSync(join(ROOT, "theme.css"), "utf8");
   return [...css.matchAll(/^(:root|\.dark)\s*\{[^}]*\}/gm)].map((m) => m[0]).join("\n");
-}
-
-let chromium;
-try { ({ chromium } = await import("playwright")); }
-catch {
-  console.error("forced-colors: needs playwright. `npm i -D playwright && npx playwright install chromium`.");
-  process.exit(1);
 }
 
 const WRAPPERS = [".lw-page-ground", ".lw-page-dark", ".lw-aurora", ".lw-hero"];
@@ -62,7 +57,7 @@ async function readBoth(browser, url, selectors) {
     const page = await ctx.newPage();
     const errors = [];
     page.on("pageerror", (e) => errors.push(e.message));
-    await page.goto(url, { waitUntil: "load", timeout: 60000 });
+    await page.goto(served(url), { waitUntil: "load", timeout: 60000 });
     for (const s of selectors) (out[s] ??= {})[mode] = await measure(page, s);
     if (errors.length) (out.__errors ??= []).push(...errors);
     await ctx.close();
@@ -99,7 +94,7 @@ function judge(readings, selectors) {
   return { problems, checked };
 }
 
-const browser = await chromium.launch();
+const browser = await openBrowser();
 try {
   if (process.argv.includes("--self-test")) {
     const fake = (display, before) => ({

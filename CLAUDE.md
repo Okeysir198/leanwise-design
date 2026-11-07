@@ -60,7 +60,7 @@ bin/lw-token-lint.mjs  the consumer lint
 skills/leanwise-ui/    the agent skill consumers copy
 registry/blocks/       OUR blocks (app-shell, state-view, file-upload, section-nav, login-card): the one
                        copy; the preview compiles them directly
-preview/src/ui/        stock new-york-v4 shadcn, UNMODIFIED; shadcn-blocks/ = stock blocks
+preview/src/ui/        stock radix-mira shadcn (lucide), UNMODIFIED; shadcn-blocks/ = stock blocks
                        (sidebar-07, login-04), unmodified; index.ts = the bundle namespace
 preview/cards/*.card.jsx   card sources -> generated .card.js/.card.html (@dsCard marker)
 templates/*/*.dc.html  Claude Design templates over the namespace (x-import)
@@ -90,9 +90,11 @@ node scripts/check.mjs visual --record | --compare [--dir d] [--report-only]
 
 ## Adding a stock component or block
 
-1. Search shadcn first (MCP in `.mcp.json`). Copy the item's files from
-   `https://ui.shadcn.com/r/styles/new-york-v4/<name>.json` UNMODIFIED into `preview/src/ui/`
-   (blocks: `preview/src/shadcn-blocks/<block>/`); add npm deps as devDependencies.
+1. Search shadcn first (MCP in `.mcp.json`). Install it with `npx shadcn add <name>` in a scratch
+   project whose `components.json` has `"style": "radix-mira"` and `"iconLibrary": "lucide"`, and
+   copy the output UNMODIFIED into `preview/src/ui/` (blocks: `preview/src/shadcn-blocks/<block>/`).
+   The raw registry JSON holds `IconPlaceholder`, so it cannot be copied directly. Add npm deps
+   as devDependencies.
 2. Export it from `preview/src/index.ts`, `npm run gen`, `npm run check && npm run check:a11y`.
 3. An a11y failure is fixed in the card markup or `src/palette.mjs`, never in a stock file.
 
@@ -102,6 +104,8 @@ node scripts/check.mjs visual --record | --compare [--dir d] [--report-only]
   consumers edit it after `shadcn add`.
 - Stock data-table and blocks use TanStack Table **v9** (`useTable`, `FlexRender`); templates,
   which cannot call hooks, use `constructTable`.
+- The rendered checks launch headless Chromium. Where that software-renders, serve the repo root
+  over http and attach to a headful browser: `LW_CDP=<cdp url> LW_CARDS_URL=<http url>`.
 - Templates need a literal `<main>` and must be served over http (`python3 -m http.server`).
 - UI rules live in README §Brand: action order (right-aligned, primary last), sidebar
   current-page bar via `data-active`, `@leanwise/section-nav` in content, pointer cursor.

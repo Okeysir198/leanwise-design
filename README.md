@@ -43,16 +43,26 @@ A Tailwind v4 app with shadcn:
 
 ```bash
 npx shadcn@latest init --base radix
-npm i github:Okeysir198/leanwise-design#v5.16.0
+npm i github:Okeysir198/leanwise-design#v6.0.0
 ```
 
 In your global CSS, after Tailwind:
 
 ```css
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 @import "@leanwise/design/fonts.css";
 @import "@leanwise/design/theme.css";
 ```
+
+The components are shadcn's **Mira** style: `"style": "radix-mira"` and `"iconLibrary": "lucide"`
+in `components.json`, with Geist from this package. Three things stock Mira needs:
+
+- `shadcn/tailwind.css` defines `data-checked:`, `data-open:` and their siblings. Without it
+  Tailwind emits nothing for them and those states silently lose their styles.
+- A `TooltipProvider` at the app root: Mira's `Tooltip` does not bring its own.
+- A `Command` inside `CommandDialog`.
 
 To make raw Tailwind palette classes (`bg-emerald-500`) compile to nothing, import
 `@leanwise/design/theme-strict.css` instead of `theme.css`: the same theme with the stock
@@ -66,7 +76,7 @@ Add the registry to `components.json`:
 ```json
 {
   "registries": {
-    "@leanwise": "https://raw.githubusercontent.com/Okeysir198/leanwise-design/v5.16.0/r/{name}.json"
+    "@leanwise": "https://raw.githubusercontent.com/Okeysir198/leanwise-design/v6.0.0/r/{name}.json"
   }
 }
 ```
@@ -101,9 +111,7 @@ Dark mode is the `.dark` class on an ancestor (shadcn's convention). `useTheme()
   and dropdowns keep the stock tint.
 - **Scrollbars** use the `scrollbar` role: `theme.css` points native scrollbars and the stock
   `ScrollArea` thumb at it, so no component is edited.
-- **Switch off** uses the neutral `switch-track` role; **dialogs, sheets and drawers** sit on `popover`. Both keyed on the stock classes, no component edited.
-- **Cards are compact**: 16px padding and section gap, not stock 24px. `theme.css` keys the
-  rule on the stock default classes, so a card given its own `p-0`, `py-8` or `gap-2` keeps it.
+- **Switch off** uses the neutral `switch-track` role, keyed on the stock class, no component edited.
 - **Ink follows the fill.** White on cyan and on navy; navy on amber and on warning.
 - **Focus is a solid brand ring**, never faded. `theme.css` states it unlayered, so it wins
   over the `ring-ring/50` stock components carry — no component needs editing.

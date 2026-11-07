@@ -1,30 +1,19 @@
 "use client"
 
 import * as React from "react"
-import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  Map,
-  PieChart,
-  Settings2,
-  SquareTerminal,
-} from "lucide-react"
 
-import { NavMain } from "@/registry/new-york-v4/blocks/sidebar-07/components/nav-main"
-import { NavProjects } from "@/registry/new-york-v4/blocks/sidebar-07/components/nav-projects"
-import { NavUser } from "@/registry/new-york-v4/blocks/sidebar-07/components/nav-user"
-import { TeamSwitcher } from "@/registry/new-york-v4/blocks/sidebar-07/components/team-switcher"
+import { NavMain } from "@/components/nav-main"
+import { NavProjects } from "@/components/nav-projects"
+import { NavUser } from "@/components/nav-user"
+import { TeamSwitcher } from "@/components/team-switcher"
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from "@/registry/new-york-v4/ui/sidebar"
+} from "@/components/ui/sidebar"
+import { GalleryVerticalEndIcon, AudioLinesIcon, TerminalIcon, TerminalSquareIcon, BotIcon, BookOpenIcon, Settings2Icon, FrameIcon, PieChartIcon, MapIcon } from "lucide-react"
 
 // This is sample data.
 const data = {
@@ -36,17 +25,26 @@ const data = {
   teams: [
     {
       name: "Acme Inc",
-      logo: GalleryVerticalEnd,
+      logo: (
+        <GalleryVerticalEndIcon
+        />
+      ),
       plan: "Enterprise",
     },
     {
       name: "Acme Corp.",
-      logo: AudioWaveform,
+      logo: (
+        <AudioLinesIcon
+        />
+      ),
       plan: "Startup",
     },
     {
       name: "Evil Corp.",
-      logo: Command,
+      logo: (
+        <TerminalIcon
+        />
+      ),
       plan: "Free",
     },
   ],
@@ -54,7 +52,10 @@ const data = {
     {
       title: "Playground",
       url: "#",
-      icon: SquareTerminal,
+      icon: (
+        <TerminalSquareIcon
+        />
+      ),
       isActive: true,
       items: [
         {
@@ -74,7 +75,10 @@ const data = {
     {
       title: "Models",
       url: "#",
-      icon: Bot,
+      icon: (
+        <BotIcon
+        />
+      ),
       items: [
         {
           title: "Genesis",
@@ -93,7 +97,10 @@ const data = {
     {
       title: "Documentation",
       url: "#",
-      icon: BookOpen,
+      icon: (
+        <BookOpenIcon
+        />
+      ),
       items: [
         {
           title: "Introduction",
@@ -116,7 +123,10 @@ const data = {
     {
       title: "Settings",
       url: "#",
-      icon: Settings2,
+      icon: (
+        <Settings2Icon
+        />
+      ),
       items: [
         {
           title: "General",
@@ -141,17 +151,26 @@ const data = {
     {
       name: "Design Engineering",
       url: "#",
-      icon: Frame,
+      icon: (
+        <FrameIcon
+        />
+      ),
     },
     {
       name: "Sales & Marketing",
       url: "#",
-      icon: PieChart,
+      icon: (
+        <PieChartIcon
+        />
+      ),
     },
     {
       name: "Travel",
       url: "#",
-      icon: Map,
+      icon: (
+        <MapIcon
+        />
+      ),
     },
   ],
 }

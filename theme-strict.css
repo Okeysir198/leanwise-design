@@ -334,50 +334,9 @@
   background-color: var(--scrollbar);
 }
 
-/* Compact card density (16px, not stock 24px) for data-dense screens. */
-[data-slot="card"].py-6 {
-  padding-block: 1rem;
-}
-
-[data-slot="card"].gap-6 {
-  gap: 1rem;
-}
-
-[data-slot="card-header"].px-6,
-[data-slot="card-content"].px-6,
-[data-slot="card-footer"].px-6 {
-  padding-inline: 1rem;
-}
-
-[data-slot="card-header"].border-b[class~="[.border-b]:pb-6"] {
-  padding-bottom: 1rem;
-}
-
-[data-slot="card-footer"].border-t[class~="[.border-t]:pt-6"] {
-  padding-top: 1rem;
-}
-
 /* Stock Switch paints "off" with --input, a teal-grey too close to the primary "on". */
 [data-slot="switch"][data-state="unchecked"] {
   background-color: var(--switch-track);
-}
-
-/* Overlays sit on the elevated popover surface, not the tinted page ground. */
-[data-slot="dialog-content"].bg-background,
-[data-slot="alert-dialog-content"].bg-background,
-[data-slot="sheet-content"].bg-background,
-[data-slot="drawer-content"].bg-background {
-  background-color: var(--popover);
-}
-
-/* Stock Select chevron is opacity-50: 2.2:1, under the 3:1 an icon needs. */
-[data-slot="select-trigger"] > svg.opacity-50 {
-  opacity: 1;
-}
-
-/* Stock NativeSelect chevron is opacity-50: 2.2:1, under the 3:1 an icon needs. */
-[data-slot="native-select-icon"].opacity-50 {
-  opacity: 1;
 }
 
 /* Stock inactive Tabs trigger is text-foreground/60: 4.5:1 exactly on muted, under once rendered. */
@@ -393,6 +352,21 @@
 /* Stock Alert description is text-destructive/90: an alpha-faded fill ink that fails 4.5 on the deepened destructive-soft tint; full --destructive reads the same and passes. */
 [class*="alert-description"] [data-slot="alert-description"] {
   color: var(--destructive);
+}
+
+/* Stock Command search icon is opacity-50: 2.0:1 on the popover, under the 3:1 an icon needs. */
+[data-slot="command-input-wrapper"] svg.opacity-50 {
+  opacity: 1;
+}
+
+/* Stock dark invalid fields fade the border to destructive/50: 2.7:1, under the 3:1 a control boundary needs. */
+.dark [data-slot="input"][aria-invalid="true"],
+.dark [data-slot="textarea"][aria-invalid="true"],
+.dark [data-slot="native-select"][aria-invalid="true"],
+.dark [data-slot="select-trigger"][aria-invalid="true"],
+.dark [data-slot="checkbox"][aria-invalid="true"],
+.dark [data-slot="radio-group-item"][aria-invalid="true"] {
+  border-color: var(--destructive);
 }
 
 /* On touch the collapsed sidebar rail widens so its menu buttons clear 44px. Stock

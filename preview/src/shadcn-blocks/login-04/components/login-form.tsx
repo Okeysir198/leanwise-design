@@ -1,15 +1,15 @@
 import { cn } from "cn"
 
-import { Button } from "@/registry/new-york-v4/ui/button"
-import { Card, CardContent } from "@/registry/new-york-v4/ui/card"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
 import {
   Field,
   FieldDescription,
   FieldGroup,
   FieldLabel,
   FieldSeparator,
-} from "@/registry/new-york-v4/ui/field"
-import { Input } from "@/registry/new-york-v4/ui/input"
+} from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
 
 export function LoginForm({
   className,

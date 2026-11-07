@@ -234,6 +234,10 @@
       "sourcePath": "preview/src/ui/alert.tsx"
     },
     {
+      "name": "AlertAction",
+      "sourcePath": "preview/src/ui/alert.tsx"
+    },
+    {
       "name": "AlertDescription",
       "sourcePath": "preview/src/ui/alert.tsx"
     },

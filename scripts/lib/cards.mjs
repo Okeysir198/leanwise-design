@@ -20,13 +20,19 @@ export function collectCards(ROOT) {
   return found.sort();
 }
 
+/* `LW_CARDS_URL` serves the repo root over http, for a browser that cannot read this checkout. */
+export const served = (url) =>
+  process.env.LW_CARDS_URL
+    ? process.env.LW_CARDS_URL + new URL(url).pathname.slice(process.cwd().length)
+    : url;
+
 /* Load a card, wait for fonts, fail on any uncaught page error or an empty body. */
 export async function openCard(page, file, url) {
   const errors = [];
   const onErr = (e) => errors.push(String(e));
   page.on("pageerror", onErr);
   try {
-    await page.goto(url, { waitUntil: "load" });
+    await page.goto(served(url), { waitUntil: "load" });
     await page.addStyleTag({ content: "*,*::before,*::after{animation:none!important;transition:none!important}" });
     await page.evaluate(() => document.fonts.ready);
     /* Recharts animates in JS (not CSS), so the style tag above cannot stop it: let it settle. */

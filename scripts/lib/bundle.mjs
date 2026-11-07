@@ -40,13 +40,15 @@ function resolvePlugin(ROOT) {
       b.onLoad({ filter: /.*/, namespace: "shim" }, (a) => ({ contents: SHIMS[a.path], loader: "js" }));
       b.onResolve({ filter: /^(cn|@\/lib\/utils)$/ }, () => ({ path: ts(path.join(src, "lib/utils")) }));
       b.onResolve({ filter: /^next-themes$/ }, () => ({ path: ts(path.join(src, "shims/next-themes")) }));
-      b.onResolve({ filter: /^@\/(registry\/new-york-v4|components)\/ui\// }, (a) => ({
+      b.onResolve({ filter: /^@\/components\/ui\// }, (a) => ({
         path: ts(path.join(src, "ui", a.path.replace(/^.*\/ui\//, ""))),
       }));
-      b.onResolve({ filter: /^@\/(registry\/new-york-v4\/)?blocks\// }, (a) => ({
-        path: ts(path.join(src, "shadcn-blocks", a.path.replace(/^.*\/blocks\//, ""))),
-      }));
-      b.onResolve({ filter: /^@\/(registry\/new-york-v4\/)?hooks\// }, (a) => ({
+      b.onResolve({ filter: /^@\/components\/[^/]+$/ }, (a) => {
+        const name = a.path.replace(/^.*\//, "");
+        const block = name === "login-form" ? "login-04" : "sidebar-07";
+        return { path: ts(path.join(src, "shadcn-blocks", block, "components", name)) };
+      });
+      b.onResolve({ filter: /^@\/hooks\// }, (a) => ({
         path: ts(path.join(src, "hooks", a.path.replace(/^.*\/hooks\//, ""))),
       }));
     },
@@ -123,6 +125,7 @@ export async function buildPreviewCss(ROOT) {
   const entry = [
     '@import "tailwindcss" source(none);',
     '@import "tw-animate-css";',
+    '@import "shadcn/tailwind.css";',
     '@import "../theme.css";',
     '@source "./src";',
     '@source "../registry/blocks";',

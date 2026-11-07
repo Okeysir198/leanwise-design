@@ -1,7 +1,7 @@
 // @dsCard group="Components" name="Command palette" subtitle="CommandDialog opened by ⌘K — groups, shortcuts and an empty state" viewport="1200x720"
 const {
   Button, Kbd, KbdGroup,
-  CommandDialog, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandShortcut,
+  Command, CommandDialog, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandShortcut,
   SearchIcon, FileTextIcon, PlusIcon, UserIcon, CreditCardIcon, SettingsIcon,
 } = window.LeanWiseDesign_f2d907;
 
@@ -12,6 +12,7 @@ lwCard("Command palette", "The stock CommandDialog, rendered open. The trigger s
       <KbdGroup className="ml-auto"><Kbd>⌘</Kbd><Kbd>K</Kbd></KbdGroup>
     </Button>
     <CommandDialog open modal={false}>
+      <Command>
       <CommandInput placeholder="Type a command or search…" />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
@@ -26,6 +27,7 @@ lwCard("Command palette", "The stock CommandDialog, rendered open. The trigger s
           <CommandItem><SettingsIcon />Settings<CommandShortcut>⌘S</CommandShortcut></CommandItem>
         </CommandGroup>
       </CommandList>
+      </Command>
     </CommandDialog>
   </div>
 ));

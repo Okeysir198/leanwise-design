@@ -17,6 +17,7 @@ import {
   SidebarRail,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
+import { TooltipProvider } from "@/components/ui/tooltip"
 
 type AppShellNavItem = {
   title: string
@@ -43,7 +44,8 @@ type AppShellProps = React.ComponentProps<typeof SidebarProvider> & {
 /* The shape of the stock sidebar-07 block, with the nav passed in as data. */
 function AppShell({ brand, nav, footer, breadcrumb, actions, children, ...props }: AppShellProps) {
   return (
-    <SidebarProvider {...props}>
+    <TooltipProvider>
+      <SidebarProvider {...props}>
       <Sidebar collapsible="icon">
         {brand != null && <SidebarHeader>{brand}</SidebarHeader>}
         <SidebarContent>
@@ -78,7 +80,8 @@ function AppShell({ brand, nav, footer, breadcrumb, actions, children, ...props 
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
       </SidebarInset>
-    </SidebarProvider>
+      </SidebarProvider>
+    </TooltipProvider>
   )
 }
 

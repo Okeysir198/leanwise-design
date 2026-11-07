@@ -7,6 +7,7 @@ import path from "node:path";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { report } from "./lib/report.mjs";
+import { openBrowser } from "./lib/browser.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const [cmd, ...args] = process.argv.slice(2);
@@ -64,10 +65,9 @@ async function presence() {
 /* ---------------------------------------------------------------- a11y */
 async function a11y() {
   const { collectCards, openCard, setTheme } = await import("./lib/cards.mjs");
-  const { chromium } = await import("playwright");
   const axe = fs.readFileSync(path.join(path.dirname(fileURLToPath(await import.meta.resolve("axe-core"))), "axe.min.js"), "utf8");
   const cards = collectCards(ROOT);
-  const browser = await chromium.launch();
+  const browser = await openBrowser();
   const problems = [];
   let scanned = 0;
   try {
@@ -107,8 +107,7 @@ async function a11y() {
    opacity-50 icon must go red, and the same markup without them green. */
 async function rendered() {
   const { probe, FLOORS } = await import("./lib/rendered-contrast.mjs");
-  const { chromium } = await import("playwright");
-  const browser = await chromium.launch();
+  const browser = await openBrowser();
   const problems = [];
   let checked = 0;
   try {
@@ -156,9 +155,8 @@ async function visual() {
   const { compareShots, decodePng, encodePng } = await import("./lib/png.mjs");
   const dir = path.resolve(opt("--dir", path.join(ROOT, ".visual")));
   const { collectCards, openCard, setTheme } = await import("./lib/cards.mjs");
-  const { chromium } = await import("playwright");
   const cards = collectCards(ROOT);
-  const browser = await chromium.launch();
+  const browser = await openBrowser();
   const shots = new Map();
   try {
     const page = await browser.newPage({ viewport: { width: 1200, height: 800 } });
