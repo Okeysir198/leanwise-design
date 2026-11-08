@@ -16,3 +16,16 @@ test("every STOCK_OVERRIDES key still exists in the stock component source", () 
     }
   assert.deepEqual(missing, []);
 });
+
+/* The coarse-pointer target floor is the one rule a desk check cannot see: it applies only
+   under `(pointer: coarse)`. Pin that theme.css carries it for the controls a thumb hits. */
+test("theme.css gives every stock control a 44px target on a coarse pointer", () => {
+  const css = fs.readFileSync(path.join(ROOT, "theme.css"), "utf8");
+  const blocks = [...css.matchAll(/@media \(pointer: coarse\) \{([\s\S]*?)\n\}/g)].map((m) => m[1]);
+  const floor = blocks.find((b) => b.includes("min-height: 2.75rem"));
+  assert.ok(floor, "no coarse-pointer min-height block in theme.css");
+  for (const slot of ["button", "input", "select-trigger", "tabs-trigger", "dropdown-menu-item", "item"])
+    assert.ok(floor.includes(`[data-slot="${slot}"]`), `the coarse floor misses ${slot}`);
+  assert.ok(blocks.some((b) => b.includes('[data-size^="icon"]') && b.includes("min-width: 2.75rem")), "icon buttons are not 44px wide on touch");
+  assert.ok(blocks.some((b) => b.includes('[data-slot="checkbox"]::after') && b.includes("inset: -0.875rem")), "checkbox hit area is not 44px on touch");
+});

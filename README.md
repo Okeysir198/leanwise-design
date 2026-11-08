@@ -117,6 +117,9 @@ Dark mode is the `.dark` class on an ancestor (shadcn's convention). `useTheme()
   over the `ring-ring/50` stock components carry — no component needs editing.
 - **Borders** are quiet (`border`); **control boundaries** are stronger (`input`, 3:1 on
   every surface) so a text field reads as a field.
+- **Touch targets are 44px.** On a coarse pointer (phone, tablet) `theme.css` gives every stock
+  control, menu item and link row a 44px minimum, square icon buttons 44px wide, and the
+  checkbox, radio and switch a 44px hit area; a mouse keeps Nova's density. No component is edited.
 - **Pointer cursor** on everything interactive — buttons, tabs, menu items, options,
   switches, links, `summary`. `theme.css` sets it.
 - **Messages and status chips are soft.** Use a soft trio, e.g. `bg-info-soft
