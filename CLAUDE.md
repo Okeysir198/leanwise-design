@@ -50,7 +50,7 @@ scripts/check.mjs      the checks: lint | contrast | presence | a11y | rendered 
 scripts/{assets,favicon,affordance,forced-colors,templates}.mjs   standalone generators/checks
 scripts/lib/           oklch, theme (theme.css), tokens-json, registry (r/), bundle (preview
                        bundle + preview.css + manifest), card-build, tw, contrast, lint, color,
-                       png, cards, css, generated, parse, report
+                       png, cards, css, generated, parse, report, browser, rendered-contrast
 theme.css theme-strict.css tokens.json   GENERATED (theme-strict = theme without stock fallbacks; README)
 registry/ registry.json r/   shadcn registry source and its built items
 marketing.css          plain-CSS marketing layer over theme variables
@@ -110,6 +110,8 @@ node scripts/check.mjs visual --record | --compare [--dir d] [--report-only]
 - UI rules live in README §Brand: action order (right-aligned, primary last), sidebar
   current-page bar via `data-active`, `@leanwise/section-nav` in content, pointer cursor.
 - If git has no identity configured, commit with `git -c user.name=… -c user.email=…`.
+- `check` failing with "Can't resolve 'shadcn/tailwind.css'" means `node_modules` is older than
+  the lockfile: `npm ci`.
 
 ## Releasing
 
@@ -127,7 +129,9 @@ Never move a published tag — cut the next version.
 
 ## Claude Design sync
 
-`DesignSync` reads and writes the project. It is not reachable from subagents — main loop only.
+`DesignSync` reads and writes the project. It is not reachable from subagents — main loop only,
+and it needs `/design-login` first. A fresh project takes every tracked file except
+`CLAUDE.md`, `.claude/`, `.github/`, `.gitignore` and `.mcp.json`.
 
 1. **Version probe first**: `get_file package.json`, read `version`.
 2. **The plan**: `git diff --name-status v<that>..HEAD`. `A`/`M` lines are writes, `D` lines
@@ -142,12 +146,14 @@ Never move a published tag — cut the next version.
 `node_modules/`. Push generated files (`theme.css`, `tokens.json`, `r/`, `registry.json`)
 with their sources. `get_file` caps at 256 KiB. Anything computed in the project is a
 claim: re-derive every colour here and run `npm run check` before trusting it.
+`NAMESPACE` in `scripts/lib/bundle.mjs` is the global every card and template resolves; it is
+a fixed name, not the project id, and renaming it regenerates all of them.
 
 ## Consumers
 
 - **A consumer on the pre-shadcn line** (imports `tokens.css`/`reset.css`/`base.css`, uses
-  `.lw-*` classes, or a Tailwind v3 preset) cannot take a pin bump: this package ships none of
-  that. Moving it is a re-platform onto `theme.css` + shadcn, planned as such.
+  `.lw-*` app-component classes, or a Tailwind v3 preset) cannot take a pin bump: this package
+  ships none of that. Its only `.lw-*` classes are `marketing.css`'s. Moving it is a re-platform onto `theme.css` + shadcn, planned as such.
 - **A token-bridge consumer reads this repo's *source files* by path**, not the package, so
   deleting or renaming a generated file breaks it silently. Grep the consumers for the file
   name before removing or renaming any file here.
