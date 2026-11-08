@@ -7,7 +7,7 @@ stock shadcn on Tailwind v4, import `theme.css`, and install `@leanwise/*` regis
 `package.json` is the authority for the version. README.md is the user-facing doc.
 
 The repo is also the working copy of a Claude Design project
-(`f2d90781-f891-45e3-bc88-ddb55e6f9444`); see "Claude Design sync".
+(`d0a984d2-b71b-40df-b4b8-e3e7d03f41ee`); see "Claude Design sync".
 
 ## Rules
 
