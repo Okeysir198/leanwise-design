@@ -7,7 +7,7 @@ import { ramp, themes } from "../../src/palette.mjs";
  * utility (tailwind-merge drops the default) still wins. ONE table: theme.css prints it,
  * the registry's leanwise-base spreads it, and test/stock-keys.test.mjs fails when a
  * `keys` class disappears from the stock source (a shadcn bump would otherwise make the
- * rule silently match nothing).
+ * rule silently match nothing). `media` wraps a rule in that media query.
  */
 export const STOCK_OVERRIDES = [
   { why: "The stock ScrollArea thumb paints bg-border, too faint to find on a card.",
@@ -38,15 +38,28 @@ export const STOCK_OVERRIDES = [
     keys: [["input", "dark:aria-invalid:border-destructive/50"], ["textarea", "dark:aria-invalid:border-destructive/50"],
            ["native-select", "dark:aria-invalid:border-destructive/50"], ["select", "dark:aria-invalid:border-destructive/50"],
            ["checkbox", "dark:aria-invalid:border-destructive/50"], ["radio-group", "dark:aria-invalid:border-destructive/50"]] },
+  { why: "On touch the collapsed sidebar rail widens so its menu buttons clear 44px. Stock SidebarProvider sets --sidebar-width-icon as an inline style, which only !important in a stylesheet can override.",
+    media: "(pointer: coarse)",
+    sel: ['[data-slot="sidebar-wrapper"]'], decl: { "--sidebar-width-icon": "3.75rem !important" },
+    keys: [["sidebar", '"--sidebar-width-icon": SIDEBAR_WIDTH_ICON']] },
 ];
 
 /** `{selector: declarations}` for the registry's cssVars/css object. */
-export const stockOverridesObject = () =>
-  Object.fromEntries(STOCK_OVERRIDES.map((r) => [r.sel.join(", "), r.decl]));
+export const stockOverridesObject = () => {
+  const out = {};
+  for (const r of STOCK_OVERRIDES) {
+    const into = r.media ? (out[`@media ${r.media}`] ??= {}) : out;
+    into[r.sel.join(", ")] = r.decl;
+  }
+  return out;
+};
+
+const ruleCss = (r, pad) =>
+  `${r.sel.map((s) => pad + s).join(",\n")} {\n${Object.entries(r.decl)
+    .map(([k, v]) => `${pad}  ${k}: ${v};`).join("\n")}\n${pad}}\n`;
 
 const STOCK_OVERRIDES_CSS = STOCK_OVERRIDES.map((r) =>
-  `${r.why ? `/* ${r.why} */\n` : ""}${r.sel.join(",\n")} {\n${Object.entries(r.decl)
-    .map(([k, v]) => `  ${k}: ${v};`).join("\n")}\n}\n`).join("\n");
+  `${r.why ? `/* ${r.why} */\n` : ""}${r.media ? `@media ${r.media} {\n${ruleCss(r, "  ")}}\n` : ruleCss(r, "")}`).join("\n");
 
 export const FONTS = {
   sans: '"Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif',
@@ -171,15 +184,6 @@ ${decl(typeScale)}
 }
 
 ${STOCK_OVERRIDES_CSS}
-/* On touch the collapsed sidebar rail widens so its menu buttons clear 44px. Stock
-   SidebarProvider sets --sidebar-width-icon as an inline style, which only !important
-   in a stylesheet can override. */
-@media (pointer: coarse) {
-  [data-slot="sidebar-wrapper"] {
-    --sidebar-width-icon: 3.75rem !important;
-  }
-}
-
 /* Focus is a SOLID brand ring, never faded.
    1. The generic outline sits in @layer base, so a stock \`outline-hidden\` on a menu,
       popover or command list still wins: content surfaces show no ring.

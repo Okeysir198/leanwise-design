@@ -89,7 +89,6 @@ export const ITEMS = [
         ":focus-visible": { outline: "2px solid var(--ring)", "outline-offset": "2px" },
       },
       ...stockOverridesObject(),
-      "@media (pointer: coarse)": { '[data-slot="sidebar-wrapper"]': { "--sidebar-width-icon": "3.75rem !important" } },
       /* Unlayered on purpose: beats the layered ring-ring/50 utilities of stock controls. */
       [`${FOCUS_CONTROLS}:focus-visible`]: {
         outline: "none",

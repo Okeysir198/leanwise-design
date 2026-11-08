@@ -364,9 +364,7 @@
   border-color: var(--destructive);
 }
 
-/* On touch the collapsed sidebar rail widens so its menu buttons clear 44px. Stock
-   SidebarProvider sets --sidebar-width-icon as an inline style, which only !important
-   in a stylesheet can override. */
+/* On touch the collapsed sidebar rail widens so its menu buttons clear 44px. Stock SidebarProvider sets --sidebar-width-icon as an inline style, which only !important in a stylesheet can override. */
 @media (pointer: coarse) {
   [data-slot="sidebar-wrapper"] {
     --sidebar-width-icon: 3.75rem !important;

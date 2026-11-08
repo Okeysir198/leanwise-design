@@ -58,8 +58,8 @@ fonts.css fonts/ assets/   Geist, logo and artwork
 brand.js hooks.js      brandVars(hex, scheme); useTheme, useReducedMotion, THEME_KEY
 bin/lw-token-lint.mjs  the consumer lint
 skills/leanwise-ui/    the agent skill consumers copy
-registry/blocks/       OUR blocks (app-shell, state-view, file-upload, section-nav, login-card): the one
-                       copy; the preview compiles them directly
+registry/blocks/       OUR blocks (app-shell, state-view, file-upload, section-nav, login-card, flow):
+                       the one copy; the preview compiles them directly
 preview/src/ui/        stock radix-nova shadcn (lucide), UNMODIFIED; shadcn-blocks/ = stock blocks
                        (sidebar-07, login-04), unmodified; index.ts = the bundle namespace
 preview/cards/*.card.jsx   card sources -> generated .card.js/.card.html (@dsCard marker)
