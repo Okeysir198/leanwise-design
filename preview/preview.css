@@ -4779,10 +4779,10 @@
   [data-slot="sidebar-wrapper"] {
     --sidebar-width-icon: 3.75rem !important;
   }
-  [data-slot="button"], [data-slot="input"], [data-slot="native-select"], [data-slot="select-trigger"], [data-slot="input-group"], [data-slot="toggle"], [data-slot="toggle-group-item"], [data-slot="tabs-trigger"], [data-slot="pagination-link"], [data-slot="accordion-trigger"], [data-slot="sidebar-menu-button"], [data-slot="dropdown-menu-item"], [data-slot="dropdown-menu-checkbox-item"], [data-slot="dropdown-menu-radio-item"], [data-slot="dropdown-menu-sub-trigger"], [data-slot="context-menu-item"], [data-slot="select-item"], [data-slot="command-item"], a[data-slot="item"], button[data-slot="item"] {
+  [data-slot="button"], [data-slot="input"], [data-slot="native-select"], [data-slot="select-trigger"], [data-slot="input-group"], [data-slot="toggle"], [data-slot="toggle-group-item"], [data-slot="tabs-trigger"], [data-slot="pagination-link"], [data-slot="accordion-trigger"], [data-slot="sidebar-menu-button"], [data-slot="dropdown-menu-item"], [data-slot="dropdown-menu-checkbox-item"], [data-slot="dropdown-menu-radio-item"], [data-slot="dropdown-menu-sub-trigger"], [data-slot="context-menu-item"], [data-slot="select-item"], [data-slot="command-item"], a[data-slot="item"], button[data-slot="item"], button[data-slot$="-trigger"][data-size] {
     min-height: 2.75rem;
   }
-  [data-slot="button"][data-size^="icon"], [data-slot="pagination-link"][data-size^="icon"] {
+  [data-slot="button"][data-size^="icon"], [data-slot="pagination-link"][data-size^="icon"], button[data-slot$="-trigger"][data-size^="icon"] {
     min-width: 2.75rem;
   }
   [data-slot="tabs-list"] {

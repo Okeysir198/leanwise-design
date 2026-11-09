@@ -26,6 +26,8 @@ test("theme.css gives every stock control a 44px target on a coarse pointer", ()
   assert.ok(floor, "no coarse-pointer min-height block in theme.css");
   for (const slot of ["button", "input", "select-trigger", "tabs-trigger", "dropdown-menu-item", "item"])
     assert.ok(floor.includes(`[data-slot="${slot}"]`), `the coarse floor misses ${slot}`);
+  // A Button inside a menu trigger loses `data-slot="button"` to the trigger's own slot.
+  assert.ok(floor.includes('button[data-slot$="-trigger"][data-size]'), "a Button used as a trigger misses the floor");
   assert.ok(blocks.some((b) => b.includes('[data-size^="icon"]') && b.includes("min-width: 2.75rem")), "icon buttons are not 44px wide on touch");
   assert.ok(blocks.some((b) => b.includes('[data-slot="checkbox"]::after') && b.includes("inset: -0.875rem")), "checkbox hit area is not 44px on touch");
 });

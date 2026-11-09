@@ -379,7 +379,7 @@
   }
 }
 
-/* On touch every stock control reaches a 44px target (WCAG 2.5.5, the platform guidelines) for a thumb or a gloved finger; a mouse keeps Nova's density. min-height, so a taller control is untouched and a call-site height still sets the desk size. */
+/* On touch every stock control reaches a 44px target (WCAG 2.5.5, the platform guidelines) for a thumb or a gloved finger; a mouse keeps Nova's density. min-height, so a taller control is untouched and a call-site height still sets the desk size. A Button used as a menu, popover or dialog trigger (`asChild`) has its slot replaced by the trigger's own, so `button[data-slot$="-trigger"][data-size]` keeps it on the floor. */
 @media (pointer: coarse) {
   [data-slot="button"],
   [data-slot="input"],
@@ -400,7 +400,8 @@
   [data-slot="select-item"],
   [data-slot="command-item"],
   a[data-slot="item"],
-  button[data-slot="item"] {
+  button[data-slot="item"],
+  button[data-slot$="-trigger"][data-size] {
     min-height: 2.75rem;
   }
 }
@@ -408,7 +409,8 @@
 /* On touch a square icon control is 44px wide as well as tall. */
 @media (pointer: coarse) {
   [data-slot="button"][data-size^="icon"],
-  [data-slot="pagination-link"][data-size^="icon"] {
+  [data-slot="pagination-link"][data-size^="icon"],
+  button[data-slot$="-trigger"][data-size^="icon"] {
     min-width: 2.75rem;
   }
 }
