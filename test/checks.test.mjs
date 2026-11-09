@@ -44,6 +44,21 @@ test("contrast: sabotage goes red", () => {
   fails(p, /dark: role --info is missing/);
 });
 
+test("contrast: the extended chart ramp and the syntax roles are required", () => {
+  let p = clone(); delete p.themes.light["chart-9"];
+  fails(p, /light: role --chart-9 is missing/);
+  p = clone(); for (const t of Object.values(p.themes)) delete t["chart-12"];
+  fails(p, /expected chart-6\.\.12/);
+  p = clone(); for (const t of Object.values(p.themes)) delete t["syntax-string"];
+  fails(p, /expected syntax-\* roles/);
+  p = clone(); p.themes.dark["syntax-keyword"] = "oklch(0.45 0.1 11)";
+  fails(p, /dark: --syntax-keyword on --muted .* \(< 4\.5\)/);
+  p = clone(); p.themes.light["syntax-string"] = "oklch(0.52 0.13 78)";
+  fails(p, /light: syntax-keyword\/syntax-string dE/);
+  p = clone(); p.themes.light["syntax-number"] = "oklch(0.9 0.05 25)";
+  fails(p, /light: --syntax-number on --muted .* \(< 4\.5\)/);
+});
+
 test("lint: catches each rule, passes clean source, refuses nothing", () => {
   const dir = mkdtempSync(join(tmpdir(), "lw-lint-"));
   try {

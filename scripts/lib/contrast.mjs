@@ -8,7 +8,10 @@ const SURFACES = ["background", "card", "popover", "muted", "secondary", "sideba
 /* Non-text UI (WCAG 1.4.11): control boundaries and the focus ring. */
 const NON_TEXT = ["input", "ring", "sidebar-ring", "primary"];
 const STATUS = /^(cta|warning|success|info|destructive|diff|review)(-|$)/
-const CHART = /^chart-\d$/;
+const CHART = /^chart-[1-5]$/;
+/* Series 6..12 and the code colours: outside the brand hue band by design. */
+const CHART_EXT = /^chart-(?:[6-9]|1[0-2])$/;
+const SYNTAX = /^syntax-/;
 /* Surfaces and states that must read as different from what they sit on or next to:
    [a, b, floor, onlyTheme?]. A card on the page, a selected row against hover, a scroll
    thumb on a card. Below these the two look the same and the state is invisible. */
@@ -23,7 +26,7 @@ export const SEPARATIONS = [
   ["switch-track", "card", 2.5], ["switch-track", "primary", 1.3],
   ["primary-border", "background", 1.4], ["primary-border", "accent", 1.25], ["accent-border", "accent", 1.2],
 ];
-export const FLOORS = { text: 4.5, nonText: 3, chartNormal: 19, chartCvd: 15, spiritHue: [190, 260], spiritChroma: 0.02 };
+export const FLOORS = { text: 4.5, nonText: 3, chartNormal: 19, chartCvd: 15, syntaxNormal: 16, syntaxCvd: 12, spiritHue: [190, 260], spiritChroma: 0.02 };
 
 export function pairsFor(t) {
   const pairs = [];
@@ -39,6 +42,8 @@ export function pairsFor(t) {
   /* Chart ink is text/icons in the series hue on a surface, not ink on the chart fill. */
   for (const c of Object.keys(t).filter((k) => CHART.test(k)))
     for (const s of [...SURFACES, "accent"]) if (t[s]) pairs.push([`${c}-foreground`, s, FLOORS.text]);
+  /* Code colours are text on the code surface (muted), its lowest-contrast ground. */
+  for (const c of Object.keys(t).filter((k) => SYNTAX.test(k))) pairs.push([c, "muted", FLOORS.text]);
   for (const link of ["primary", "destructive"]) pairs.push([link, "background", FLOORS.text]);
   /* Heatmap / diff cells carry body text (text-foreground) on their ground. */
   for (const d of ["diff-add", "diff-del", "diff-mod"]) if (t[d]) pairs.push(["foreground", d, FLOORS.text]);
@@ -92,10 +97,24 @@ export function checkContrast({ ANCHORS, ramp, themes, themeCss }) {
       need(c.d >= FLOORS.chartCvd, `${name}: ${charts[i]}/${charts[j]} dE ${c.d.toFixed(1)} under ${c.kind} (< ${FLOORS.chartCvd})`);
     }
 
+    const ext = Object.keys(t).filter((k) => CHART_EXT.test(k));
+    need(ext.length === 7, `${name}: expected chart-6..12, found ${ext.length}`);
+    need(Object.keys(t).filter((k) => SYNTAX.test(k)).length === 6, `${name}: expected syntax-* roles keyword, string, function, number, variable, builtin`);
+
+    /* Code colours must tell apart, in colour and for colour-blind readers (a role may repeat another's value, e.g. builtin and function). */
+    const syn = Object.keys(t).filter((k) => SYNTAX.test(k)).sort();
+    for (let i = 0; i < syn.length; i++) for (let j = i + 1; j < syn.length; j++) {
+      if (t[syn[i]] === t[syn[j]]) continue;
+      const a = obj(toRgb(t[syn[i]])), b = obj(toRgb(t[syn[j]]));
+      const n = deltaE76(a, b), c = deltaE76Cvd(a, b);
+      need(n >= FLOORS.syntaxNormal, `${name}: ${syn[i]}/${syn[j]} dE ${n.toFixed(1)} (< ${FLOORS.syntaxNormal}, normal vision)`);
+      need(c.d >= FLOORS.syntaxCvd, `${name}: ${syn[i]}/${syn[j]} dE ${c.d.toFixed(1)} under ${c.kind} (< ${FLOORS.syntaxCvd})`);
+    }
+
     /* Brand spirit: everything that is not status or chart stays in the cyan-navy
        hue band, or is a near-neutral. */
     for (const [k, v] of Object.entries(t)) {
-      if (STATUS.test(k) || CHART.test(k.replace(/-foreground$/, ""))) continue;
+      if (STATUS.test(k) || SYNTAX.test(k) || CHART_EXT.test(k) || CHART.test(k.replace(/-foreground$/, ""))) continue;
       const [, C, H] = toOk(v);
       const [lo, hi] = FLOORS.spiritHue;
       need(C < FLOORS.spiritChroma || (H >= lo && H <= hi),
