@@ -398,11 +398,11 @@
   }
 }
 
-/* On touch a square icon control is 44px wide as well as tall. */
+/* On touch every Button is 44px wide as well as tall: a square icon one, and a short one whose label is hidden on phones (`sr-only sm:not-sr-only`). A labelled Button is already wider, so min-width changes nothing there. */
 @media (pointer: coarse) {
-  [data-slot="button"][data-size^="icon"],
-  [data-slot="pagination-link"][data-size^="icon"],
-  button[data-slot$="-trigger"][data-size^="icon"] {
+  [data-slot="button"],
+  button[data-slot$="-trigger"][data-size],
+  [data-slot="pagination-link"][data-size^="icon"] {
     min-width: 2.75rem;
   }
 }
