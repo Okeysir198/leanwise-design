@@ -88,7 +88,7 @@
       "syntax-number": "oklch(0.34 0.14 195)",
       "syntax-variable": "oklch(0.46 0.08 255)",
       "syntax-builtin": "oklch(0.52 0.11 205)",
-      "sidebar": "oklch(0.985 0.008 205)",
+      "sidebar": "oklch(1 0 0)",
       "sidebar-foreground": "oklch(0.21 0.05 245)",
       "sidebar-primary": "#0C727B",
       "sidebar-primary-foreground": "oklch(1 0 0)",

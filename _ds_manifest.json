@@ -1773,7 +1773,7 @@
     },
     {
       "name": "--sidebar",
-      "value": "oklch(0.985 0.008 205)",
+      "value": "oklch(1 0 0)",
       "kind": "color",
       "definedIn": "theme.css"
     },
