@@ -1497,25 +1497,25 @@
     },
     {
       "name": "--secondary",
-      "value": "oklch(0.925 0.035 211)",
+      "value": "oklch(0.935 0.03 205)",
       "kind": "color",
       "definedIn": "theme.css"
     },
     {
       "name": "--secondary-foreground",
-      "value": "oklch(0.4 0.073 222)",
+      "value": "oklch(0.4 0.07 215)",
       "kind": "color",
       "definedIn": "theme.css"
     },
     {
       "name": "--muted",
-      "value": "oklch(0.958 0.026 211)",
+      "value": "oklch(0.958 0.022 205)",
       "kind": "color",
       "definedIn": "theme.css"
     },
     {
       "name": "--muted-foreground",
-      "value": "oklch(0.48 0.035 235)",
+      "value": "oklch(0.48 0.03 215)",
       "kind": "color",
       "definedIn": "theme.css"
     },
@@ -1527,7 +1527,7 @@
     },
     {
       "name": "--accent-foreground",
-      "value": "oklch(0.4 0.073 222)",
+      "value": "oklch(0.4 0.07 215)",
       "kind": "color",
       "definedIn": "theme.css"
     },
@@ -1557,7 +1557,7 @@
     },
     {
       "name": "--border",
-      "value": "oklch(0.88 0.02 211)",
+      "value": "oklch(0.88 0.02 205)",
       "kind": "color",
       "definedIn": "theme.css"
     },
@@ -1773,7 +1773,7 @@
     },
     {
       "name": "--sidebar",
-      "value": "oklch(1 0 0)",
+      "value": "oklch(0.985 0.008 205)",
       "kind": "color",
       "definedIn": "theme.css"
     },
@@ -1797,19 +1797,19 @@
     },
     {
       "name": "--sidebar-accent",
-      "value": "oklch(0.895 0.055 211)",
+      "value": "oklch(0.9 0.05 205)",
       "kind": "color",
       "definedIn": "theme.css"
     },
     {
       "name": "--sidebar-accent-foreground",
-      "value": "oklch(0.4 0.073 222)",
+      "value": "oklch(0.4 0.07 215)",
       "kind": "color",
       "definedIn": "theme.css"
     },
     {
       "name": "--sidebar-border",
-      "value": "oklch(0.88 0.02 211)",
+      "value": "oklch(0.88 0.02 205)",
       "kind": "color",
       "definedIn": "theme.css"
     },
@@ -1821,7 +1821,7 @@
     },
     {
       "name": "--selected",
-      "value": "oklch(0.912 0.05 211)",
+      "value": "oklch(0.915 0.045 205)",
       "kind": "color",
       "definedIn": "theme.css"
     },
@@ -1833,7 +1833,7 @@
     },
     {
       "name": "--row-hover",
-      "value": "oklch(0.975 0.013 211)",
+      "value": "oklch(0.972 0.012 205)",
       "kind": "color",
       "definedIn": "theme.css"
     },
@@ -1989,7 +1989,7 @@
     },
     {
       "name": "--field",
-      "value": "oklch(0.978 0.006 225)",
+      "value": "oklch(0.98 0.007 205)",
       "kind": "color",
       "definedIn": "theme.css"
     }
