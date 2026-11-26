@@ -39,6 +39,11 @@ follow its component guidance.
 - **Alerts and callouts are soft**: `bg-info-soft text-info-soft-foreground border-info-border`,
   and the `success-soft`, `warning-soft`, `destructive-soft` trios; status chips use the
   same trios. Solid status fills are for badges.
+- **A scroll or clip container flush to its controls takes `focus-room`**: the focus ring
+  sits 4px outside a control, and `overflow-x-auto`/`overflow-hidden` cut it (overflow-x-auto
+  clips all four sides). `focus-room` gives the ring that room without moving anything, on a
+  container with no padding or margin utilities of its own (wrap one that has them), e.g.
+  `<ul className="focus-room flex gap-1.5 overflow-x-auto">`.
 - **Dark mode is `.dark`** on an ancestor; every role already has a dark value. Never write
   `dark:` colour overrides with literal colours.
 - **A role that does not exist is a change to `@leanwise/design`** (`src/palette.mjs`), not
@@ -56,3 +61,12 @@ npx lw-token-lint src
 
 It fails on raw hex, palette classes, arbitrary `var()` and more than one `variant="cta"`
 per file. Run it before you finish, and fix what it reports rather than silencing it.
+
+For a page with a scroll strip, tab bar or other clipping container, sweep the running app
+in a browser you already started with `--remote-debugging-port`:
+
+```bash
+npx lw-focus-clip --cdp http://127.0.0.1:9222 http://localhost:3000/some-page
+```
+
+It fails on every focus ring a clipping ancestor cuts, at 390, 768 and 1280px.

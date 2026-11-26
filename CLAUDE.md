@@ -46,17 +46,19 @@ The repo is also the working copy of a Claude Design project
 ```
 src/palette.mjs        THE source: ANCHORS, the cyan ramp, themes.light/.dark role maps
 scripts/gen.mjs        every generated file; --check fails on a stale one
-scripts/check.mjs      the checks: lint | contrast | presence | a11y | rendered | visual | pack
+scripts/check.mjs      the checks: lint | contrast | presence | a11y | rendered | focus | visual | pack
 scripts/{assets,favicon,affordance,forced-colors,templates}.mjs   standalone generators/checks
 scripts/lib/           oklch, theme (theme.css), tokens-json, registry (r/), bundle (preview
                        bundle + preview.css + manifest), card-build, tw, contrast, lint, color,
-                       png, cards, css, generated, parse, report, browser, rendered-contrast
+                       png, cards, css, generated, parse, report, browser, rendered-contrast,
+                       focus-clip (the in-page probe shared by `check focus` and the bin)
 theme.css theme-strict.css tokens.json   GENERATED (theme-strict = theme without stock fallbacks; README)
 registry/ registry.json r/   shadcn registry source and its built items
 marketing.css          plain-CSS marketing layer over theme variables
 fonts.css fonts/ assets/   Geist, logo and artwork
 brand.js hooks.js      brandVars(hex, scheme); useTheme, useReducedMotion, THEME_KEY
 bin/lw-token-lint.mjs  the consumer lint
+bin/lw-focus-clip.mjs  the consumer focus-ring sweep over a running app (raw CDP, Node 22+)
 skills/leanwise-ui/    the agent skill consumers copy
 registry/blocks/       OUR blocks (app-shell, state-view, file-upload, section-nav, login-card, flow):
                        the one copy; the preview compiles them directly
@@ -71,7 +73,7 @@ templates/*/*.dc.html  Claude Design templates over the namespace (x-import)
 ```bash
 npm run gen         # theme.css, tokens.json, r/, preview bundle + cards + manifest, logo assets
 npm run check       # gen/assets --check, tests, tsc, lint, contrast, presence, affordance, templates
-npm run check:ci    # + pack, a11y, rendered, forced-colors, visual --self-test (needs `npx playwright install chromium`)
+npm run check:ci    # + pack, a11y, rendered, focus, forced-colors, visual --self-test (needs `npx playwright install chromium`)
 npm run lint -- <dir>   # token lint (default: registry/)
 node scripts/check.mjs visual --record | --compare [--dir d] [--report-only]
 ```
@@ -83,6 +85,7 @@ node scripts/check.mjs visual --record | --compare [--dir d] [--report-only]
 | `presence` | every role/ramp/type/radius utility compiles through Tailwind + theme.css |
 | `a11y` | axe (WCAG 2.1 A/AA) over every `@dsCard` page, light and `.dark`; serious/critical fail. A node may opt out of one rule with `data-a11y-expect="<rule-id>"` |
 | `rendered` | contrast AS PAINTED over every `@dsCard` page, light and dark: alpha inks and the element/ancestor `opacity` chain composited over stacked grounds; text ≥4.5 (large 3), `currentColor` svg icons and unchecked control borders ≥3; disabled exempt, opt-out `data-contrast-expect`. `--self-test`: `text-muted-foreground/70` + an `opacity-50` svg go red, the clean fixture green |
+| `focus` | every focus ring painted whole over every `@dsCard` page at its declared viewport: each control in the Tab order is focused and a ring (only what focus adds) cut by a scroll/clip ancestor on its containing-block chain fails; opt-out `data-focus-expect`. `--self-test`: an unpadded `overflow-x-auto` strip goes red (outline and box-shadow rings), the same strips with `focus-room` green, and `lw-focus-clip` agrees over CDP. Without `LW_CDP` it launches with a debug port (9339) for the bin |
 | `visual` | every card x light/dark, per-shot soft/strong pixel rules; `--record` a baseline, then `--compare` |
 | `pack` | `npm pack`, install the tarball in a scratch app, resolve every export, compile theme.css from it, parse `r/`, run the bin both ways |
 

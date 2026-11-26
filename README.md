@@ -8,7 +8,7 @@ What ships:
 
 | Path | What it is |
 |---|---|
-| `theme.css` | The whole theme for Tailwind v4 + shadcn: every role as a CSS variable, light and `.dark`, registered as utilities (`bg-primary`, `bg-cta`, `text-muted-foreground`…), the type scale, the radius, the solid focus ring, pointer cursors |
+| `theme.css` | The whole theme for Tailwind v4 + shadcn: every role as a CSS variable, light and `.dark`, registered as utilities (`bg-primary`, `bg-cta`, `text-muted-foreground`…), the type scale, the radius, the solid focus ring and `focus-room`, pointer cursors |
 | `r/*.json`, `registry.json` | The shadcn registry: `leanwise-theme`, `leanwise-font`, `leanwise-font-mono`, `leanwise-base`, and the blocks `state-view`, `file-upload`, `app-shell`, `section-nav`, `flow`, `login-card` (one-column sign-in) |
 | `marketing.css` | Plain-CSS layer for marketing sites (hero, sections, plans, footer), over theme variables only |
 | `fonts.css`, `fonts/` | Geist + Geist Mono, self-hosted, Vietnamese subsets included |
@@ -115,6 +115,12 @@ Dark mode is the `.dark` class on an ancestor (shadcn's convention). `useTheme()
 - **Ink follows the fill.** White on cyan and on navy; navy on amber and on warning.
 - **Focus is a solid brand ring**, never faded. `theme.css` states it unlayered, so it wins
   over the `ring-ring/50` stock components carry — no component needs editing.
+- **Focus has room.** The ring sits 4px outside the control, so a scroll or clip container
+  flush to its controls cuts it — `overflow-x-auto` clips all four sides. Put the `focus-room`
+  utility on that container (`<ul className="focus-room flex gap-1.5 overflow-x-auto">`): it
+  adds padding equal to the ring's reach and cancels it with a negative margin, so a container
+  with no padding or margin utilities of its own does not move (wrap one that has them). Stock components already pad their scroll areas. `npx lw-focus-clip` finds the cut
+  rings on a running app (see [The lint](#the-lint)).
 - **Borders** are quiet (`border`); **control boundaries** are stronger (`input`, 3:1 on
   every surface) so a text field reads as a field.
 - **Touch targets are 44px.** On a coarse pointer (phone, tablet) `theme.css` gives every stock
@@ -263,7 +269,8 @@ For Claude Code and other agents building LeanWise UIs:
 - **The `leanwise-ui` skill** — `skills/leanwise-ui/SKILL.md` in this package: the
   shadcn-first order, theme roles only, one CTA per view. Copy it into your app's
   `.claude/skills/`.
-- **The lint** — `npx lw-token-lint src` before every commit.
+- **The lint** — `npx lw-token-lint src` before every commit; `npx lw-focus-clip` over pages
+  with scroll strips.
 
 ## The lint
 
@@ -275,13 +282,22 @@ Fails on a raw hex, a Tailwind palette class (`bg-blue-500`), a role reached thr
 arbitrary value (`bg-[var(--primary)]`), or more than one `variant="cta"` in a file. It also
 fails when it finds no source files, so a wrong path cannot pass.
 
+```bash
+npx lw-focus-clip --cdp http://127.0.0.1:9222 [--widths 390,768,1280] <page-url>...
+```
+
+Sweeps running pages, at each width, for focus rings a scroll or clip container cuts. It
+drives a browser you already run with `--remote-debugging-port` (or `LW_CDP`) and never
+launches one. Fix what it names with `focus-room`; a node meant to clip opts out with
+`data-focus-expect="<why>"`.
+
 ## Developing this package
 
 ```bash
 npm install
 npm run gen        # src/palette.mjs -> theme.css, tokens.json
 npm run check      # generated files current, tests, types, lint, contrast, presence
-npm run check:ci   # + pack, a11y, rendered contrast, visual self-test (needs `npx playwright install chromium`)
+npm run check:ci   # + pack, a11y, rendered contrast, focus clip, visual self-test (needs `npx playwright install chromium`)
 ```
 
 A new role is a change to `src/palette.mjs`, then `npm run gen` — never a local override in

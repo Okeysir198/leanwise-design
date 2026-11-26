@@ -3,7 +3,7 @@
   "name": "leanwise-base",
   "type": "registry:theme",
   "title": "LeanWise base",
-  "description": "Theme + fonts + the behaviours stock shadcn lacks: a pointer cursor on every interactive element, a solid brand focus ring, and a findable scroll thumb.",
+  "description": "Theme + fonts + the behaviours stock shadcn lacks: a pointer cursor on every interactive element, a solid brand focus ring, focus-room for scroll strips, and a findable scroll thumb.",
   "registryDependencies": [
     "@leanwise/leanwise-font",
     "@leanwise/leanwise-font-mono"
@@ -275,6 +275,11 @@
       "outline": "none",
       "--tw-ring-color": "var(--ring)",
       "box-shadow": "0 0 0 2px var(--background), 0 0 0 4px var(--ring)"
+    },
+    "@utility focus-room": {
+      "padding": "4px",
+      "margin": "-4px",
+      "scroll-padding": "4px"
     },
     ":is([data-slot=\"input\"], [data-slot=\"textarea\"], [data-slot=\"select-trigger\"], [data-slot=\"native-select\"], [data-slot=\"sidebar-input\"], input:not([data-slot]):not([type=\"checkbox\"]):not([type=\"radio\"]), textarea:not([data-slot]), select:not([data-slot])):focus-visible, [data-slot=\"input-group\"]:has([data-slot=\"input-group-control\"]:focus-visible)": {
       "outline": "none",

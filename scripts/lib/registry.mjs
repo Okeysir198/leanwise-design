@@ -4,7 +4,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { ramp, themes } from "../../src/palette.mjs";
-import { RADIUS, FOCUS_CONTROLS, FOCUS_FIELDS, stockOverridesObject } from "./theme.mjs";
+import { RADIUS, FOCUS_CONTROLS, FOCUS_FIELDS, FOCUS_OUTLINE, FOCUS_RING_SHADOW, FOCUS_ROOM, stockOverridesObject } from "./theme.mjs";
 
 const HOMEPAGE = "https://github.com/Okeysir198/leanwise-design";
 const NS = "@leanwise";
@@ -78,7 +78,7 @@ export const ITEMS = [
     name: "leanwise-base",
     type: "registry:theme",
     title: "LeanWise base",
-    description: "Theme + fonts + the behaviours stock shadcn lacks: a pointer cursor on every interactive element, a solid brand focus ring, and a findable scroll thumb.",
+    description: "Theme + fonts + the behaviours stock shadcn lacks: a pointer cursor on every interactive element, a solid brand focus ring, focus-room for scroll strips, and a findable scroll thumb.",
     registryDependencies: [`${NS}/leanwise-font`, `${NS}/leanwise-font-mono`],
     cssVars,
     css: {
@@ -86,15 +86,17 @@ export const ITEMS = [
         [POINTER]: { cursor: "pointer" },
         html: { "scrollbar-color": "var(--scrollbar) transparent" },
         /* Layered so a stock outline-hidden (menus, popovers, command lists) still wins. */
-        ":focus-visible": { outline: "2px solid var(--ring)", "outline-offset": "2px" },
+        ":focus-visible": FOCUS_OUTLINE,
       },
       ...stockOverridesObject(),
       /* Unlayered on purpose: beats the layered ring-ring/50 utilities of stock controls. */
       [`${FOCUS_CONTROLS}:focus-visible`]: {
         outline: "none",
         "--tw-ring-color": "var(--ring)",
-        "box-shadow": "0 0 0 2px var(--background), 0 0 0 4px var(--ring)",
+        "box-shadow": FOCUS_RING_SHADOW,
       },
+      /* Room for the ring inside a scroll/clip container that sits flush to its controls. */
+      "@utility focus-room": FOCUS_ROOM,
       [FOCUS_FIELDS]: {
         outline: "none",
         "border-color": "var(--ring)",

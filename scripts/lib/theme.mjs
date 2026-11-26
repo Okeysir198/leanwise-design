@@ -86,9 +86,13 @@ export const stockOverridesObject = () => {
   return out;
 };
 
+/* Declarations, one per line; `decl` writes custom properties. */
+const css = (obj, indent = "  ", pre = "") =>
+  Object.entries(obj).map(([k, v]) => `${indent}${pre}${k}: ${v};`).join("\n");
+const decl = (obj, indent) => css(obj, indent, "--");
+
 const ruleCss = (r, pad) =>
-  `${r.sel.map((s) => pad + s).join(",\n")} {\n${Object.entries(r.decl)
-    .map(([k, v]) => `${pad}  ${k}: ${v};`).join("\n")}\n${pad}}\n`;
+  `${r.sel.map((s) => pad + s).join(",\n")} {\n${css(r.decl, pad + "  ")}\n${pad}}\n`;
 
 const STOCK_OVERRIDES_CSS = STOCK_OVERRIDES.map((r) =>
   `${r.why ? `/* ${r.why} */\n` : ""}${r.media ? `@media ${r.media} {\n${ruleCss(r, "  ")}}\n` : ruleCss(r, "")}`).join("\n");
@@ -112,6 +116,18 @@ export const TYPE = {
   display: ["clamp(2.375rem, 5vw, 4.5rem)", "1.05"],
 };
 
+/* The focus ring's geometry. Both rings reach FOCUS_REACH px beyond the border box: the
+   outline is RING_PX wide at a RING_PX offset, the control ring is a RING_PX background gap
+   then RING_PX of ring. `focus-room` gives a scroll/clip container exactly that much room. */
+const RING_PX = 2;
+export const FOCUS_REACH = 2 * RING_PX;
+export const FOCUS_OUTLINE = { outline: `${RING_PX}px solid var(--ring)`, "outline-offset": `${RING_PX}px` };
+export const FOCUS_RING_SHADOW = `0 0 0 ${RING_PX}px var(--background), 0 0 0 ${FOCUS_REACH}px var(--ring)`;
+/* Padding = the ring's reach, cancelled by a negative margin so nothing moves. Chromium
+   centres a control it scrolls into view on focus; scroll-padding covers engines that align
+   it to the nearest edge instead. */
+export const FOCUS_ROOM = { padding: `${FOCUS_REACH}px`, margin: `-${FOCUS_REACH}px`, "scroll-padding": `${FOCUS_REACH}px` };
+
 /* Stock slots that are controls and carry a focus ring. */
 export const FOCUS_CONTROLS =
   ':is([data-slot="button"], [data-slot$="-trigger"]:not([data-slot$="sub-trigger"]), [data-slot="checkbox"], [data-slot="radio-group-item"], ' +
@@ -128,8 +144,6 @@ export const FOCUS_FIELDS =
 
 export const RADIUS = "0.625rem";
 
-const decl = (obj, indent = "  ") =>
-  Object.entries(obj).map(([k, v]) => `${indent}--${k}: ${v};`).join("\n");
 
 /* Every palette role, plus the ramp, becomes a Tailwind colour utility. */
 const colorNames = Object.keys(themes.light);
@@ -226,14 +240,18 @@ ${STOCK_OVERRIDES_CSS}
       input-group control) is not a field; its group is. */
 @layer base {
   :focus-visible {
-    outline: 2px solid var(--ring);
-    outline-offset: 2px;
+${css(FOCUS_OUTLINE, "    ")}
   }
 }
 ${FOCUS_CONTROLS}:focus-visible {
   outline: none;
   --tw-ring-color: var(--ring);
-  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring);
+  box-shadow: ${FOCUS_RING_SHADOW};
+}
+/* A scroll or clip container flush to its controls cuts the ring (overflow-x-auto clips all
+   four sides). \`focus-room\` on that container gives the ring room without moving anything. */
+@utility focus-room {
+${css(FOCUS_ROOM)}
 }
 ${FOCUS_FIELDS} {
   outline: none;

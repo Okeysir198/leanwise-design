@@ -489,6 +489,13 @@
   --tw-ring-color: var(--ring);
   box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring);
 }
+/* A scroll or clip container flush to its controls cuts the ring (overflow-x-auto clips all
+   four sides). `focus-room` on that container gives the ring room without moving anything. */
+@utility focus-room {
+  padding: 4px;
+  margin: -4px;
+  scroll-padding: 4px;
+}
 :is([data-slot="input"], [data-slot="textarea"], [data-slot="select-trigger"], [data-slot="native-select"], [data-slot="sidebar-input"], input:not([data-slot]):not([type="checkbox"]):not([type="radio"]), textarea:not([data-slot]), select:not([data-slot])):focus-visible, [data-slot="input-group"]:has([data-slot="input-group-control"]:focus-visible) {
   outline: none;
   border-color: var(--ring);

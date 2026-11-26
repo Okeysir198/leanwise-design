@@ -24,3 +24,14 @@ test("focus: the unlayered ring names controls only, never a content surface or 
   assert.ok(css.includes(FOCUS_FIELDS), "theme.css carries FOCUS_FIELDS");
   assert.ok(!/[\s,(]input(?!:not|-)\b/.test(FOCUS_FIELDS), "bare input would ring the borderless CommandInput");
 });
+
+test("focus: focus-room's room equals the reach of both rings in theme.css", () => {
+  const px = (re) => [...(css.match(re)?.[1] ?? "").matchAll(/-?[\d.]+px/g)].map((m) => parseFloat(m[0]));
+  const room = px(/@utility focus-room \{([^}]*)\}/);
+  const [width, offset] = px(/@layer base \{\s*:focus-visible \{([^}]*)\}/);
+  const ring = Math.max(...px(/:focus-visible \{\s*outline: none;[^}]*box-shadow:([^;]*);/));
+  assert.ok(room.length === 3 && room[0] > 0, "read @utility focus-room");
+  assert.deepEqual(room, [room[0], -room[0], room[0]], "padding, negative margin, scroll-padding");
+  assert.equal(width + offset, room[0], "outline width + offset");
+  assert.equal(ring, room[0], "the control ring's outer spread");
+});

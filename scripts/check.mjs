@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* The checks. `node scripts/check.mjs <lint|contrast|presence|a11y|rendered|visual|pack> [...]`.
+/* The checks. `node scripts/check.mjs <lint|contrast|presence|a11y|rendered|focus|visual|pack> [...]`.
    Every check refuses to pass vacuously: reading zero of what it measures fails. */
 import fs from "node:fs";
 import os from "node:os";
@@ -14,7 +14,7 @@ const [cmd, ...args] = process.argv.slice(2);
 const flag = (f) => args.includes(f);
 const opt = (f, d) => { const i = args.indexOf(f); return i >= 0 ? args[i + 1] : d; };
 
-const CHECKS = { lint, contrast, presence, a11y, rendered, visual, pack };
+const CHECKS = { lint, contrast, presence, a11y, rendered, focus, visual, pack };
 if (!CHECKS[cmd]) {
   console.error(`usage: check.mjs <${Object.keys(CHECKS).join("|")}>`);
   process.exit(2);
@@ -49,7 +49,7 @@ async function presence() {
   const classes = [
     ...colors.flatMap((c) => [`bg-${c}`, `text-${c}`, `border-${c}`, `ring-${c}`, `fill-${c}`]),
     ...Object.keys(TYPE).map((k) => `text-${k}`),
-    "font-sans", "font-mono", "rounded-sm", "rounded-md", "rounded-lg", "rounded-xl", "dark:bg-primary",
+    "focus-room", "font-sans", "font-mono", "rounded-sm", "rounded-md", "rounded-lg", "rounded-xl", "dark:bg-primary",
   ];
   const css = await compile(ROOT, classes);
   /* Exact selector: `.bg-cta` must not be satisfied by `.bg-cta-foreground`. */
@@ -145,6 +145,82 @@ async function rendered() {
     await browser.close();
   }
   return report("rendered", { problems, checked, minChecked: 200, summary: `rendered contrast: ${checked} painted inks hold.` });
+}
+
+/* --------------------------------------------------------------- focus
+   Every focus ring painted whole: no scroll/clip ancestor cuts it, over every card at its
+   declared viewport. --self-test: controls flush in an unpadded overflow-x-auto strip go
+   red (outline path and box-shadow path); the same strip, and a long one focus has to
+   scroll, go green with focus-room; and the consumer bin, driven over CDP, agrees. */
+async function focus() {
+  const { probe } = await import("./lib/focus-clip.mjs");
+  /* The bin needs a CDP endpoint: the attached browser's, or one this launch opens. */
+  const DEBUG_PORT = 9339;
+  const browser = await openBrowser({ debugPort: DEBUG_PORT });
+  const problems = [];
+  let checked = 0;
+  const need = (ok, msg) => { checked++; if (!ok) problems.push(msg); };
+  const sweep = async (page) => {
+    await page.keyboard.press("Shift"); /* keyboard modality: programmatic focus then shows :focus-visible */
+    return page.evaluate(probe);
+  };
+  try {
+    const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+    if (flag("--self-test")) {
+      const { compile } = await import("./lib/tw.mjs");
+      /* A decorative shadow at rest is not a ring: the "Fifth" pill keeps the green strips honest. */
+      const pill = (t) => `<li><a href="#${t}" class="inline-flex min-h-9 items-center rounded-full px-3 whitespace-nowrap${t === "Fifth" ? " shadow-lg" : ""}">${t}</a></li>`;
+      const strip = (room, extra = []) => `<nav class="p-6"><ul class="${room} flex max-w-60 gap-1.5 overflow-x-auto">${pill("First")}` +
+        `<li><button data-slot="button" class="inline-flex h-9 items-center rounded-md px-3">Second</button></li>${extra.map(pill).join("")}</ul></nav>`;
+      const LONG = ["Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth"];
+      const css = await compile(ROOT, ["focus-room", "flex", "max-w-60", "gap-1.5", "overflow-x-auto", "p-6", "inline-flex",
+        "min-h-9", "h-9", "items-center", "rounded-full", "rounded-md", "px-3", "whitespace-nowrap", "shadow-lg", "bg-background"]);
+      const html = (body) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>strip</title><style>${css}</style></head><body class="bg-background"><main>${body}</main></body></html>`;
+      const run = async (body) => { await page.setContent(html(body)); return sweep(page); };
+      const r = await run(strip("")), g = await run(strip("focus-room")), gl = await run(strip("focus-room", LONG));
+      need(r.problems.some((m) => /^a "First" ring .*cut on .*top/.test(m)), `outline ring in an unpadded strip was not caught: ${JSON.stringify(r)}`);
+      need(r.problems.some((m) => /^button\[data-slot=button\].* ring .*cut on/.test(m)), `box-shadow ring in an unpadded strip was not caught: ${JSON.stringify(r)}`);
+      need(g.checked >= 2 && !g.problems.length, `the strip with focus-room did not pass: ${JSON.stringify(g)}`);
+      need(gl.checked >= 8 && !gl.problems.length, `the long strip with focus-room did not pass: ${JSON.stringify(gl)}`);
+      /* The consumer bin: its own CDP driver (tab, load wait, key press) over the same fixtures,
+         at two widths of a #fragment URL (the second load is a same-document navigation).
+         Async on purpose: Playwright holds new tabs paused until it resumes them, which a
+         blocked event loop never does. */
+      const { promisify } = await import("node:util");
+      const execFileAsync = promisify((await import("node:child_process")).execFile);
+      const bin = async (body) => {
+        const url = `data:text/html;base64,${Buffer.from(html(body)).toString("base64")}`;
+        /* The bin speaks http to /json/*; a ws:// LW_CDP names the same host. */
+        const cdp = process.env.LW_CDP ? new URL(process.env.LW_CDP.replace(/^ws/, "http")).origin : `http://127.0.0.1:${DEBUG_PORT}`;
+        try {
+          const { stdout } = await execFileAsync(process.execPath, [path.join(ROOT, "bin/lw-focus-clip.mjs"), "--cdp", cdp, "--widths", "390,1280", `${url}#top`], { timeout: 60000 });
+          return { code: 0, out: stdout };
+        } catch (e) { return { code: e.code, out: `${e.stdout}${e.stderr}` }; }
+      };
+      const br = await bin(strip("")), bg = await bin(strip("focus-room", LONG));
+      need(br.code === 1 && /cut on/.test(br.out), `lw-focus-clip passed the unpadded strip (exit ${br.code}): ${br.out}`);
+      need(bg.code === 0 && /painted whole/.test(bg.out), `lw-focus-clip failed the focus-room strip (exit ${bg.code}): ${bg.out}`);
+      return report("focus --self-test", { problems, checked, minChecked: 6,
+        summary: `focus clip: unpadded strip red (${r.problems.length}), focus-room strips green (${g.checked + gl.checked} checked); lw-focus-clip agrees.` });
+    }
+    const { collectCards, openCard } = await import("./lib/cards.mjs");
+    const { readCardMeta } = await import("./lib/card-build.mjs");
+    const viewports = new Map(readCardMeta(ROOT).map((c) => [c.path, c.viewport]));
+    for (const card of collectCards(ROOT)) {
+      const rel = path.relative(ROOT, card);
+      /* At the card's own declared viewport: a card is a fixture at that size. */
+      const [width, height] = (viewports.get(rel) ?? "").split("x").map(Number);
+      if (!(width > 0 && height > 0)) { problems.push(`${rel}: no viewport="WxH" in its @dsCard marker`); continue; }
+      await page.setViewportSize({ width, height });
+      await openCard(page, rel, pathToFileURL(card).href);
+      const r = await sweep(page);
+      checked += r.checked;
+      for (const m of r.problems) problems.push(`${rel} [${width}px] ${m}`);
+    }
+  } finally {
+    await browser.close();
+  }
+  return report("focus", { problems, checked, minChecked: 100, summary: `focus clip: ${checked} focus rings painted whole.` });
 }
 
 /* -------------------------------------------------------------- visual
@@ -257,6 +333,11 @@ async function pack() {
     let caught = false;
     try { execFileSync(path.join(app, "node_modules/.bin/lw-token-lint"), ["src"], { cwd: app, stdio: "pipe" }); } catch { caught = true; }
     need(caught, "lw-token-lint from the tarball passed a raw palette class");
+    /* No browser here: with no arguments it must print usage and exit 2, which proves its
+       imports resolve from the tarball. The sweep itself is `check focus`. */
+    let usage = -1;
+    try { execFileSync(path.join(app, "node_modules/.bin/lw-focus-clip"), [], { cwd: app, stdio: "pipe", env: { ...process.env, LW_CDP: "" } }); usage = 0; } catch (e) { usage = e.status; }
+    need(usage === 2, `lw-focus-clip from the tarball exited ${usage} with no arguments, not 2 (usage)`);
   } finally {
     fs.rmSync(tmp, { recursive: true, force: true });
   }
