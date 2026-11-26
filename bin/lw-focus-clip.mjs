@@ -80,7 +80,17 @@ try {
     for (const width of widths) {
       await tab.send("Emulation.setDeviceMetricsOverride", { width, height: 900, deviceScaleFactor: 1, mobile: width < 768 });
       try { await tab.navigate(url); } catch (e) { problems.push(`${url} [${width}px] did not load: ${e.message}`); continue; }
-      await evaluate(tab.send, "document.fonts.ready.then(() => new Promise((r) => setTimeout(r, 50)))");
+      /* A client-rendered page draws its controls after load: wait for fonts, then until the
+         control count is non-zero and steady for 500ms (10s at most). */
+      await evaluate(tab.send, `document.fonts.ready.then(() => new Promise((done) => {
+        let last = -1, steady = 0;
+        const t0 = Date.now(), tick = setInterval(() => {
+          const n = document.querySelectorAll("a[href], button, input, select, textarea, [tabindex]").length;
+          steady = n > 0 && n === last ? steady + 1 : 0;
+          last = n;
+          if (steady >= 5 || Date.now() - t0 > 10000) { clearInterval(tick); done(); }
+        }, 100);
+      }))`);
       /* A real key press: programmatic focus then shows :focus-visible, as it does for Tab. */
       for (const type of ["keyDown", "keyUp"]) await tab.send("Input.dispatchKeyEvent", { type, key: "Shift", code: "ShiftLeft", windowsVirtualKeyCode: 16 });
       const r = await evaluate(tab.send, `(${probe})()`);

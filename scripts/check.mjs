@@ -183,13 +183,15 @@ async function focus() {
       need(g.checked >= 2 && !g.problems.length, `the strip with focus-room did not pass: ${JSON.stringify(g)}`);
       need(gl.checked >= 8 && !gl.problems.length, `the long strip with focus-room did not pass: ${JSON.stringify(gl)}`);
       /* The consumer bin: its own CDP driver (tab, load wait, key press) over the same fixtures,
-         at two widths of a #fragment URL (the second load is a same-document navigation).
+         rendered late, at two widths of a #fragment URL (the second is a same-document navigation).
          Async on purpose: Playwright holds new tabs paused until it resumes them, which a
          blocked event loop never does. */
       const { promisify } = await import("node:util");
       const execFileAsync = promisify((await import("node:child_process")).execFile);
+      /* Rendered 400ms after load, as a client-rendered page is: the bin must wait for it. */
+      const late = (body) => html(`<script>setTimeout(() => { document.querySelector("main").innerHTML = ${JSON.stringify(body)}; }, 400)</script>`);
       const bin = async (body) => {
-        const url = `data:text/html;base64,${Buffer.from(html(body)).toString("base64")}`;
+        const url = `data:text/html;base64,${Buffer.from(late(body)).toString("base64")}`;
         /* The bin speaks http to /json/*; a ws:// LW_CDP names the same host. */
         const cdp = process.env.LW_CDP ? new URL(process.env.LW_CDP.replace(/^ws/, "http")).origin : `http://127.0.0.1:${DEBUG_PORT}`;
         try {

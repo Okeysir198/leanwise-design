@@ -119,7 +119,8 @@ Dark mode is the `.dark` class on an ancestor (shadcn's convention). `useTheme()
   flush to its controls cuts it — `overflow-x-auto` clips all four sides. Put the `focus-room`
   utility on that container (`<ul className="focus-room flex gap-1.5 overflow-x-auto">`): it
   adds padding equal to the ring's reach and cancels it with a negative margin, so a container
-  with no padding or margin utilities of its own does not move (wrap one that has them). Stock components already pad their scroll areas. `npx lw-focus-clip` finds the cut
+  with no padding or margin utilities of its own does not move (wrap one that has them). A
+  border on that container moves out with the margin: put it on the children instead. Stock components already pad their scroll areas. `npx lw-focus-clip` finds the cut
   rings on a running app (see [The lint](#the-lint)).
 - **Borders** are quiet (`border`); **control boundaries** are stronger (`input`, 3:1 on
   every surface) so a text field reads as a field.
@@ -288,7 +289,8 @@ npx lw-focus-clip --cdp http://127.0.0.1:9222 [--widths 390,768,1280] <page-url>
 
 Sweeps running pages, at each width, for focus rings a scroll or clip container cuts. It
 drives a browser you already run with `--remote-debugging-port` (or `LW_CDP`) and never
-launches one. Fix what it names with `focus-room`; a node meant to clip opts out with
+launches one; it waits for a client-rendered page to draw its controls. Restart a dev server
+after bumping the package, or it may keep serving the old `theme.css`. Fix what it names with `focus-room`; a node meant to clip opts out with
 `data-focus-expect="<why>"`.
 
 ## Developing this package
