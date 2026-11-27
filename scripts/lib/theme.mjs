@@ -2,12 +2,26 @@
    from src/palette.mjs. Also the one place the non-colour scales live. */
 import { ramp, themes } from "../../src/palette.mjs";
 
+/* The focus ring's geometry. Both rings reach FOCUS_REACH px beyond the border box: the
+   outline is RING_PX wide at a RING_PX offset, the control ring is a RING_PX background gap
+   then RING_PX of ring. `focus-room` gives a scroll/clip container exactly that much room. */
+const RING_PX = 2;
+export const FOCUS_REACH = 2 * RING_PX;
+export const FOCUS_OUTLINE = { outline: `${RING_PX}px solid var(--ring)`, "outline-offset": `${RING_PX}px` };
+export const FOCUS_RING_SHADOW = `0 0 0 ${RING_PX}px var(--background), 0 0 0 ${FOCUS_REACH}px var(--ring)`;
+/* Padding = the ring's reach, cancelled by a negative margin so nothing moves. Chromium
+   centres a control it scrolls into view on focus; scroll-padding covers engines that align
+   it to the nearest edge instead. */
+export const FOCUS_ROOM = { padding: `${FOCUS_REACH}px`, margin: `-${FOCUS_REACH}px`, "scroll-padding": `${FOCUS_REACH}px` };
+
 /**
- * Unlayered overrides of STOCK shadcn defaults, keyed on the stock class so a call-site
- * utility (tailwind-merge drops the default) still wins. ONE table: theme.css prints it,
+ * Overrides of STOCK shadcn defaults, keyed on the stock class so a call-site utility
+ * (tailwind-merge drops the default) still wins. ONE table: theme.css prints it,
  * the registry's leanwise-base spreads it, and test/stock-keys.test.mjs fails when a
  * `keys` class disappears from the stock source (a shadcn bump would otherwise make the
- * rule silently match nothing). `media` wraps a rule in that media query.
+ * rule silently match nothing). `media` wraps a rule in that media query; `layer` puts
+ * it in that cascade layer (unlayered otherwise): a rule keyed on a slot alone, which a
+ * call-site utility on the same element must still beat.
  */
 export const STOCK_OVERRIDES = [
   { why: "The stock ScrollArea thumb paints bg-border, too faint to find on a card.",
@@ -74,13 +88,22 @@ export const STOCK_OVERRIDES = [
     sel: ['[data-slot="checkbox"]::after', '[data-slot="radio-group-item"]::after', '[data-slot="switch"]::after'],
     decl: { inset: "-0.875rem" },
     keys: [["checkbox", "after:-inset-y-2"], ["radio-group", "after:-inset-y-2"], ["switch", "after:-inset-y-2"]] },
+  { why: "A focusable stock table row is as wide as its scroller, so no room fits the outline around it: it is drawn inside the row's edge. Layered, beside the generic outline, so a call-site ring or outline utility still wins.",
+    layer: "base",
+    sel: ['[data-slot="table-row"]:focus-visible'], decl: { "outline-offset": `-${FOCUS_REACH}px` },
+    keys: [["table", 'data-slot="table-row"']] },
+  { why: "A table wider than its container scrolls a focused cell control into view; an engine that aligns it to the edge leaves the ring this room.",
+    layer: "base",
+    sel: ['[data-slot="table-container"]'], decl: { "scroll-padding": `${FOCUS_REACH}px` },
+    keys: [["table", 'data-slot="table-container"']] },
 ];
 
 /** `{selector: declarations}` for the registry's cssVars/css object. */
 export const stockOverridesObject = () => {
   const out = {};
   for (const r of STOCK_OVERRIDES) {
-    const into = r.media ? (out[`@media ${r.media}`] ??= {}) : out;
+    const at = r.media ? `@media ${r.media}` : r.layer ? `@layer ${r.layer}` : null;
+    const into = at ? (out[at] ??= {}) : out;
     into[r.sel.join(", ")] = r.decl;
   }
   return out;
@@ -94,8 +117,10 @@ const decl = (obj, indent) => css(obj, indent, "--");
 const ruleCss = (r, pad) =>
   `${r.sel.map((s) => pad + s).join(",\n")} {\n${css(r.decl, pad + "  ")}\n${pad}}\n`;
 
-const STOCK_OVERRIDES_CSS = STOCK_OVERRIDES.map((r) =>
-  `${r.why ? `/* ${r.why} */\n` : ""}${r.media ? `@media ${r.media} {\n${ruleCss(r, "  ")}}\n` : ruleCss(r, "")}`).join("\n");
+const STOCK_OVERRIDES_CSS = STOCK_OVERRIDES.map((r) => {
+  const at = r.media ? `@media ${r.media}` : r.layer ? `@layer ${r.layer}` : null;
+  return `${r.why ? `/* ${r.why} */\n` : ""}${at ? `${at} {\n${ruleCss(r, "  ")}}\n` : ruleCss(r, "")}`;
+}).join("\n");
 
 export const FONTS = {
   sans: '"Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif',
@@ -115,18 +140,6 @@ export const TYPE = {
   "display-sm": ["clamp(1.75rem, 3.4vw, 3rem)", "1.1"],
   display: ["clamp(2.375rem, 5vw, 4.5rem)", "1.05"],
 };
-
-/* The focus ring's geometry. Both rings reach FOCUS_REACH px beyond the border box: the
-   outline is RING_PX wide at a RING_PX offset, the control ring is a RING_PX background gap
-   then RING_PX of ring. `focus-room` gives a scroll/clip container exactly that much room. */
-const RING_PX = 2;
-export const FOCUS_REACH = 2 * RING_PX;
-export const FOCUS_OUTLINE = { outline: `${RING_PX}px solid var(--ring)`, "outline-offset": `${RING_PX}px` };
-export const FOCUS_RING_SHADOW = `0 0 0 ${RING_PX}px var(--background), 0 0 0 ${FOCUS_REACH}px var(--ring)`;
-/* Padding = the ring's reach, cancelled by a negative margin so nothing moves. Chromium
-   centres a control it scrolls into view on focus; scroll-padding covers engines that align
-   it to the nearest edge instead. */
-export const FOCUS_ROOM = { padding: `${FOCUS_REACH}px`, margin: `-${FOCUS_REACH}px`, "scroll-padding": `${FOCUS_REACH}px` };
 
 /* Stock slots that are controls and carry a focus ring. */
 export const FOCUS_CONTROLS =

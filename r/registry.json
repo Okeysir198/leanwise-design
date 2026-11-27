@@ -490,6 +490,12 @@
           ":focus-visible": {
             "outline": "2px solid var(--ring)",
             "outline-offset": "2px"
+          },
+          "[data-slot=\"table-row\"]:focus-visible": {
+            "outline-offset": "-4px"
+          },
+          "[data-slot=\"table-container\"]": {
+            "scroll-padding": "4px"
           }
         },
         "[data-slot=\"scroll-area-thumb\"]": {

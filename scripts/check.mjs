@@ -151,9 +151,10 @@ async function rendered() {
    Every focus ring painted whole: no scroll/clip ancestor cuts it, over every card at its
    declared viewport. --self-test: controls flush in an unpadded overflow-x-auto strip go
    red (outline path and box-shadow path); the same strip, and a long one focus has to
-   scroll, go green with focus-room; and the consumer bin, driven over CDP, agrees. */
+   scroll, go green with focus-room; a focusable stock table row keeps its outline inside the
+   row (red without the row's slot); and the consumer bin, driven over CDP, agrees. */
 async function focus() {
-  const { probe } = await import("./lib/focus-clip.mjs");
+  const { probe, FOCUSABLE } = await import("./lib/focus-clip.mjs");
   /* The bin needs a CDP endpoint: the attached browser's, or one this launch opens. */
   const DEBUG_PORT = 9339;
   const browser = await openBrowser({ debugPort: DEBUG_PORT });
@@ -162,7 +163,7 @@ async function focus() {
   const need = (ok, msg) => { checked++; if (!ok) problems.push(msg); };
   const sweep = async (page) => {
     await page.keyboard.press("Shift"); /* keyboard modality: programmatic focus then shows :focus-visible */
-    return page.evaluate(probe);
+    return page.evaluate(probe, FOCUSABLE);
   };
   try {
     const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
@@ -173,7 +174,11 @@ async function focus() {
       const strip = (room, extra = []) => `<nav class="p-6"><ul class="${room} flex max-w-60 gap-1.5 overflow-x-auto">${pill("First")}` +
         `<li><button data-slot="button" class="inline-flex h-9 items-center rounded-md px-3">Second</button></li>${extra.map(pill).join("")}</ul></nav>`;
       const LONG = ["Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth"];
-      const css = await compile(ROOT, ["focus-room", "flex", "max-w-60", "gap-1.5", "overflow-x-auto", "p-6", "inline-flex",
+      /* A focusable row in a stock-shaped Table: theme.css draws its outline inside the row.
+         Without the row's slot the same row gets the generic outline, which the container cuts. */
+      const table = (slot) => `<div data-slot="table-container" class="relative w-full overflow-x-auto"><table class="w-full">` +
+        `<tbody><tr ${slot ? 'data-slot="table-row" ' : ""}tabindex="0" class="border-b"><td class="p-2">Row</td><td class="p-2">Cell</td></tr></tbody></table></div>`;
+      const css = await compile(ROOT, ["relative", "w-full", "border-b", "p-2", "focus-room", "flex", "max-w-60", "gap-1.5", "overflow-x-auto", "p-6", "inline-flex",
         "min-h-9", "h-9", "items-center", "rounded-full", "rounded-md", "px-3", "whitespace-nowrap", "shadow-lg", "bg-background"]);
       const html = (body) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>strip</title><style>${css}</style></head><body class="bg-background"><main>${body}</main></body></html>`;
       const run = async (body) => { await page.setContent(html(body)); return sweep(page); };
@@ -182,6 +187,9 @@ async function focus() {
       need(r.problems.some((m) => /^button\[data-slot=button\].* ring .*cut on/.test(m)), `box-shadow ring in an unpadded strip was not caught: ${JSON.stringify(r)}`);
       need(g.checked >= 2 && !g.problems.length, `the strip with focus-room did not pass: ${JSON.stringify(g)}`);
       need(gl.checked >= 8 && !gl.problems.length, `the long strip with focus-room did not pass: ${JSON.stringify(gl)}`);
+      const tb = await run(table(false)), tr = await run(table(true));
+      need(tb.problems.some((m) => /^tr .*cut on .*left.*right/.test(m)), `a focusable row's outer outline was not caught: ${JSON.stringify(tb)}`);
+      need(tr.focused === 1 && !tr.problems.length, `a focusable stock table row did not keep its outline inside: ${JSON.stringify(tr)}`);
       /* The consumer bin: its own CDP driver (tab, load wait, key press) over the same fixtures,
          rendered late, at two widths of a #fragment URL (the second is a same-document navigation).
          Async on purpose: Playwright holds new tabs paused until it resumes them, which a
@@ -189,7 +197,7 @@ async function focus() {
       const { promisify } = await import("node:util");
       const execFileAsync = promisify((await import("node:child_process")).execFile);
       /* Rendered 400ms after load, as a client-rendered page is: the bin must wait for it. */
-      const late = (body) => html(`<script>setTimeout(() => { document.querySelector("main").innerHTML = ${JSON.stringify(body)}; }, 400)</script>`);
+      const late = (body) => html(`<script>setTimeout(() => { document.querySelector("main").innerHTML = ${JSON.stringify(body).replace(/</g, "\\u003c")}; }, 400)</script>`);
       const bin = async (body) => {
         const url = `data:text/html;base64,${Buffer.from(late(body)).toString("base64")}`;
         /* The bin speaks http to /json/*; a ws:// LW_CDP names the same host. */
@@ -203,7 +211,7 @@ async function focus() {
       need(br.code === 1 && /cut on/.test(br.out), `lw-focus-clip passed the unpadded strip (exit ${br.code}): ${br.out}`);
       need(bg.code === 0 && /painted whole/.test(bg.out), `lw-focus-clip failed the focus-room strip (exit ${bg.code}): ${bg.out}`);
       return report("focus --self-test", { problems, checked, minChecked: 6,
-        summary: `focus clip: unpadded strip red (${r.problems.length}), focus-room strips green (${g.checked + gl.checked} checked); lw-focus-clip agrees.` });
+        summary: `focus clip: unpadded strip red (${r.problems.length}), focus-room strips green (${g.checked + gl.checked} checked), table row inset; lw-focus-clip agrees.` });
     }
     const { collectCards, openCard } = await import("./lib/cards.mjs");
     const { readCardMeta } = await import("./lib/card-build.mjs");

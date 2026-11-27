@@ -6,7 +6,7 @@
    Each page is loaded at every width, put in keyboard modality, and every control in the Tab
    order is focused; a ring a clipping ancestor cuts is a problem. The fix is `focus-room` on
    that container. A node may opt out with data-focus-expect="<why>". */
-import { probe } from "../scripts/lib/focus-clip.mjs";
+import { probe, FOCUSABLE } from "../scripts/lib/focus-clip.mjs";
 import { report } from "../scripts/lib/report.mjs";
 
 const argv = process.argv.slice(2);
@@ -76,6 +76,9 @@ try {
      focused page so a browser window behind another still answers :focus-visible. */
   await tab.send("Page.bringToFront");
   await tab.send("Emulation.setFocusEmulationEnabled", { enabled: true });
+  /* Measure what the server serves now, not a stylesheet the browser cached last run. */
+  await tab.send("Network.enable");
+  await tab.send("Network.setCacheDisabled", { cacheDisabled: true });
   for (const url of urls) {
     for (const width of widths) {
       await tab.send("Emulation.setDeviceMetricsOverride", { width, height: 900, deviceScaleFactor: 1, mobile: width < 768 });
@@ -85,7 +88,7 @@ try {
       await evaluate(tab.send, `document.fonts.ready.then(() => new Promise((done) => {
         let last = -1, steady = 0;
         const t0 = Date.now(), tick = setInterval(() => {
-          const n = document.querySelectorAll("a[href], button, input, select, textarea, [tabindex]").length;
+          const n = document.querySelectorAll(${JSON.stringify(FOCUSABLE)}).length;
           steady = n > 0 && n === last ? steady + 1 : 0;
           last = n;
           if (steady >= 5 || Date.now() - t0 > 10000) { clearInterval(tick); done(); }
@@ -93,7 +96,7 @@ try {
       }))`);
       /* A real key press: programmatic focus then shows :focus-visible, as it does for Tab. */
       for (const type of ["keyDown", "keyUp"]) await tab.send("Input.dispatchKeyEvent", { type, key: "Shift", code: "ShiftLeft", windowsVirtualKeyCode: 16 });
-      const r = await evaluate(tab.send, `(${probe})()`);
+      const r = await evaluate(tab.send, `(${probe})(${JSON.stringify(FOCUSABLE)})`);
       if (!r.focused) problems.push(`${url} [${width}px] no control took :focus-visible — this page was not measured`);
       checked += r.checked;
       for (const m of r.problems) problems.push(`${url} [${width}px] ${m}`);

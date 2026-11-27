@@ -470,6 +470,20 @@
   }
 }
 
+/* A focusable stock table row is as wide as its scroller, so no room fits the outline around it: it is drawn inside the row's edge. Layered, beside the generic outline, so a call-site ring or outline utility still wins. */
+@layer base {
+  [data-slot="table-row"]:focus-visible {
+    outline-offset: -4px;
+  }
+}
+
+/* A table wider than its container scrolls a focused cell control into view; an engine that aligns it to the edge leaves the ring this room. */
+@layer base {
+  [data-slot="table-container"] {
+    scroll-padding: 4px;
+  }
+}
+
 /* Focus is a SOLID brand ring, never faded.
    1. The generic outline sits in @layer base, so a stock `outline-hidden` on a menu,
       popover or command list still wins: content surfaces show no ring.

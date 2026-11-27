@@ -28,6 +28,8 @@ const block = (name, title, description, registryDependencies, dependencies = []
 
 /* shadcn overwrites a project's existing vars only for the theme item named on
    the command line, so leanwise-base carries the vars itself. */
+/* Layered stock overrides join the item's own @layer base block. */
+const { "@layer base": baseOverrides = {}, ...overrides } = stockOverridesObject();
 const cssVars = {
   theme: {
     "color-brand": "var(--brand-600)",
@@ -87,8 +89,9 @@ export const ITEMS = [
         html: { "scrollbar-color": "var(--scrollbar) transparent" },
         /* Layered so a stock outline-hidden (menus, popovers, command lists) still wins. */
         ":focus-visible": FOCUS_OUTLINE,
+        ...baseOverrides,
       },
-      ...stockOverridesObject(),
+      ...overrides,
       /* Unlayered on purpose: beats the layered ring-ring/50 utilities of stock controls. */
       [`${FOCUS_CONTROLS}:focus-visible`]: {
         outline: "none",

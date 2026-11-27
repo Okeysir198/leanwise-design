@@ -42,9 +42,11 @@ follow its component guidance.
 - **A scroll or clip container flush to its controls takes `focus-room`**: the focus ring
   sits 4px outside a control, and `overflow-x-auto`/`overflow-hidden` cut it (overflow-x-auto
   clips all four sides). `focus-room` gives the ring that room without moving anything, on a
-  container with no padding, margin or border of its own (wrap one that has them, or move the
-  border onto the children), e.g.
-  `<ul className="focus-room flex gap-1.5 overflow-x-auto">`.
+  container with no padding, margin or border of its own (wrap one that has them, move the
+  border onto the children, or keep a padded scroller's padding and add `scroll-p-1`), e.g.
+  `<ul className="focus-room flex gap-1.5 overflow-x-auto">`. A focusable `TableRow` keeps
+  the theme's inset outline: never give a full-width row an outer `focus-visible:ring-*`
+  (use `ring-inset` if it needs a ring).
 - **Dark mode is `.dark`** on an ancestor; every role already has a dark value. Never write
   `dark:` colour overrides with literal colours.
 - **A role that does not exist is a change to `@leanwise/design`** (`src/palette.mjs`), not

@@ -4,8 +4,10 @@
    its tabbable sibling's geometry), lets the browser scroll it into view as Tab does, reads
    the ring's reach from computed style, and compares the ring with the padding box of each
    clipping ancestor on its containing-block chain. Opt out with data-focus-expect="<why>".
-   Returns { problems, checked, focused }. Serialised into the page: no module scope. */
-export function probe(focusable = 'a[href], area[href], button, input:not([type="hidden"]), select, textarea, summary, iframe, [contenteditable=""], [contenteditable="true"], [tabindex]') {
+   Returns { problems, checked, focused }. Serialised into the page: no module scope, so the
+   selector comes in as an argument. */
+export const FOCUSABLE = 'a[href], area[href], button, input:not([type="hidden"]), select, textarea, summary, iframe, [contenteditable=""], [contenteditable="true"], [tabindex]';
+export function probe(focusable) {
   const px = (v) => parseFloat(v) || 0;
   const clear = (c) => /transparent|rgba\([^)]*,\s*0\)|\/\s*0\)/.test(c);
   /* What paints outside the border box: the outline, and each outer box-shadow, keyed so a

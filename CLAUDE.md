@@ -31,6 +31,8 @@ The repo is also the working copy of a Claude Design project
 - **Stock-default overrides are one table**, `STOCK_OVERRIDES` in `scripts/lib/theme.mjs`. It feeds
   `theme.css` and `leanwise-base`, and each rule keys on the stock class so a call-site utility wins.
   `test/stock-keys.test.mjs` fails if shadcn renames a key. Add new overrides there, never in two places.
+  An entry is unlayered unless it sets `layer: "base"`: a rule keyed on a slot alone (the table row's
+  inset outline) must stay beatable by a call-site utility.
 - **Under Tailwind v4 an unknown utility emits NOTHING.** Presence (does it compile?) is the
   only honest test; `check presence` does it for every role.
 - **Every check refuses to pass vacuously**, and every check was sabotaged (break → red →
@@ -85,7 +87,7 @@ node scripts/check.mjs visual --record | --compare [--dir d] [--report-only]
 | `presence` | every role/ramp/type/radius utility compiles through Tailwind + theme.css |
 | `a11y` | axe (WCAG 2.1 A/AA) over every `@dsCard` page, light and `.dark`; serious/critical fail. A node may opt out of one rule with `data-a11y-expect="<rule-id>"` |
 | `rendered` | contrast AS PAINTED over every `@dsCard` page, light and dark: alpha inks and the element/ancestor `opacity` chain composited over stacked grounds; text ≥4.5 (large 3), `currentColor` svg icons and unchecked control borders ≥3; disabled exempt, opt-out `data-contrast-expect`. `--self-test`: `text-muted-foreground/70` + an `opacity-50` svg go red, the clean fixture green |
-| `focus` | every focus ring painted whole over every `@dsCard` page at its declared viewport: each control in the Tab order is focused and a ring (only what focus adds) cut by a scroll/clip ancestor on its containing-block chain fails; opt-out `data-focus-expect`. `--self-test`: an unpadded `overflow-x-auto` strip goes red (outline and box-shadow rings), the same strips with `focus-room` green, and `lw-focus-clip` agrees over CDP. Without `LW_CDP` it launches with a debug port (9339) for the bin |
+| `focus` | every focus ring painted whole over every `@dsCard` page at its declared viewport: each control in the Tab order is focused and a ring (only what focus adds) cut by a scroll/clip ancestor on its containing-block chain fails; opt-out `data-focus-expect`. `--self-test`: an unpadded `overflow-x-auto` strip goes red (outline and box-shadow rings), the same strips with `focus-room` green, a focusable stock table row keeps its outline inside (red without its slot), and `lw-focus-clip` agrees over CDP. Without `LW_CDP` it launches with a debug port (9339) for the bin |
 | `visual` | every card x light/dark, per-shot soft/strong pixel rules; `--record` a baseline, then `--compare` |
 | `pack` | `npm pack`, install the tarball in a scratch app, resolve every export, compile theme.css from it, parse `r/`, run the bin both ways |
 
